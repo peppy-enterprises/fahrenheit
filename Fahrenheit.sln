@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CoreLib", "Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB330934-FE4A-4788-8029-CF2073D8500D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{395F4045-232F-4AEC-A32B-F2FE35480B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{395F4045-232F-4AEC-A32B-F2FE35480B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{395F4045-232F-4AEC-A32B-F2FE35480B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{395F4045-232F-4AEC-A32B-F2FE35480B61}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {182E3C11-B2A0-462A-9AAA-8449D60C3D12}
+	EndGlobalSection
+EndGlobal

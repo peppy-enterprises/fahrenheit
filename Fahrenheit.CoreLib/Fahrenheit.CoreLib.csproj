@@ -1,0 +1,38 @@
+<Project>
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <BaseIntermediateOutputPath>..\obj\Fahrenheit.CoreLib</BaseIntermediateOutputPath>
+        <BaseOutputPath>..\build\Fahrenheit.CoreLib</BaseOutputPath>
+        <AssemblyName>fhcorlib</AssemblyName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <Target Name="CopyAfterBuild" AfterTargets="Build">
+        <PropertyGroup>
+            <CopyToDir>..\build\localdeploy</CopyToDir>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <ProjectFiles Include="$(TargetDir)\*.*" />
+        </ItemGroup>
+
+        <Message Text="Copying to $(CopyToDir)" Importance="High" />
+
+        <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(CopyToDir)" />
+
+        <Message Text="Copied build files to $(CopyToDir)." Importance="High" />
+    </Target>
+
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+    <ItemGroup>
+      <None Include="..\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
+
+</Project>
