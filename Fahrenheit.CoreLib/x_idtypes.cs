@@ -12,6 +12,7 @@ global using T_XBtlVoiceId    = System.UInt32; // x_idbtlvo
 global using T_XCamTargetId   = System.Int16;  // x_idcam
 global using T_XCamMoveType   = System.Byte;   // x_idcam
 global using T_XCamSplineType = System.Byte;   // x_idcam
+global using T_XChrStatId     = System.Int32;  // x_idchrstat
 global using T_XEComId        = System.UInt16; // x_idecom
 global using T_XItemId        = System.UInt16; // x_iditem
 global using T_XMonId         = System.UInt16; // x_idmon

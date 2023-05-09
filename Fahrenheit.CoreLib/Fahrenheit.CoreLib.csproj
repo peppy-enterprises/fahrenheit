@@ -1,21 +1,26 @@
-<Project>
+﻿<Project>
 
+    <!-- ASSEMBLY BASIC PROPERTIES -->
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <BaseIntermediateOutputPath>..\obj\Fahrenheit.CoreLib</BaseIntermediateOutputPath>
-        <BaseOutputPath>..\build\Fahrenheit.CoreLib</BaseOutputPath>
+        <BaseIntermediateOutputPath>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <BaseOutputPath>$(SolutionDir)\artifacts\build\$(MSBuildProjectName)</BaseOutputPath>
         <AssemblyName>fhcorlib</AssemblyName>
+        <AssemblyTitle>Fahrenheit Core Library</AssemblyTitle>
+        <Product>Fahrenheit Core Library</Product>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+    <!-- LOCAL TESTING COPY TASK -->
     <Target Name="CopyAfterBuild" AfterTargets="Build">
         <PropertyGroup>
-            <CopyToDir>..\build\localdeploy</CopyToDir>
+            <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
         </PropertyGroup>
 
         <ItemGroup>
@@ -29,9 +34,11 @@
         <Message Text="Copied build files to $(CopyToDir)." Importance="High" />
     </Target>
 
+    <!-- SDK REFERENCES -->
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
     <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-    
+
+    <!-- SHARED FILE LINKS -->
     <ItemGroup>
       <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
