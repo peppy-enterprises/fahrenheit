@@ -3,7 +3,7 @@
   <CheatEntries>
     <CheatEntry>
       <ID>1</ID>
-      <Description>"MsGetChr (PC = 0x0, LEN = 0xF90)"</Description>
+      <Description>"MsChr (0xF90)"</Description>
       <Options moManualExpandCollapse="1" moAllowManualCollapseAndExpand="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
@@ -827,7 +827,7 @@
         </CheatEntry>
         <CheatEntry>
           <ID>107</ID>
-          <Description>"??? (0xF88)"</Description>
+          <Description>"MsChrItemStruct (?)"</Description>
           <Options moManualExpandCollapse="1" moAllowManualCollapseAndExpand="1"/>
           <ShowAsSigned>0</ShowAsSigned>
           <GroupHeader>1</GroupHeader>
