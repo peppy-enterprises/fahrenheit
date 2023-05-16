@@ -1,5 +1,6 @@
 ﻿namespace Fahrenheit.CoreLib;
 
+#pragma warning disable CS0649
 internal struct LVec3f
 {
     /* [fkelava 24/4/23 09:38]
@@ -33,3 +34,4 @@ internal struct Mat4f
     public Vec4f z;
     public Vec4f w;
 }
+#pragma warning restore CS0649

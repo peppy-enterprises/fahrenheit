@@ -6,24 +6,28 @@
  * of any primitive declaration here, in one spot. You should follow this approach when adding new constants.
  */
 
-global using T_XBtlId         = System.UInt32; // x_idbtl
-global using T_XBtlMapId      = System.UInt16; // x_idbtlmap
-global using T_XBtlVoiceId    = System.UInt32; // x_idbtlvo
-global using T_XCamTargetId   = System.Int16;  // x_idcam
+// X
 global using T_XCamMoveType   = System.Byte;   // x_idcam
 global using T_XCamSplineType = System.Byte;   // x_idcam
+global using T_XBtlPlySaveId  = System.Byte;   // x_idplysave
+global using T_XSeTypeId      = System.Byte;   // x_idsetype
+global using T_XCamTargetId   = System.Int16;  // x_idcam
 global using T_XChrStatId     = System.Int32;  // x_idchrstat
-global using T_XEComId        = System.UInt16; // x_idecom
+global using T_XTargetId      = System.Int32;  // x_idtgt
+global using T_XBtlMapId      = System.UInt16; // x_idbtlmap
 global using T_XItemId        = System.UInt16; // x_iditem
 global using T_XMonId         = System.UInt16; // x_idmon
-global using T_XMotId         = System.UInt32; // x_idmot-*
 global using T_XStdMotId      = System.UInt16; // x_idmotstd
 global using T_XNpcId         = System.UInt16; // x_idnpc
 global using T_XObjId         = System.UInt16; // x_idobj
 global using T_XPcId          = System.UInt16; // x_idpc
 global using T_XPComId        = System.UInt16; // x_idpcom
-global using T_XBtlPlySaveId  = System.Byte;   // x_idplysave
-global using T_XSeTypeId      = System.Byte;   // x_idsetype
 global using T_XSklId         = System.UInt16; // x_idskl
 global using T_XSumId         = System.UInt16; // x_idsum
-global using T_XTargetId      = System.Int32;  // x_idtgt
+global using T_X2PComId       = System.UInt16; // x2_idpcoms
+global using T_XBtlId         = System.UInt32; // x_idbtl
+global using T_XBtlVoiceId    = System.UInt32; // x_idbtlvo
+global using T_XMotId         = System.UInt32; // x_idmot-*
+
+// X-2
+global using T_X2BtlId        = System.UInt32; // x2_idbtl

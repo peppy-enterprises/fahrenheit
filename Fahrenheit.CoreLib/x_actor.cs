@@ -2,8 +2,6 @@
  * Based entirely on my own observations of game memory and decompilation.
  */
 
-using System.Runtime.InteropServices;
-
 namespace Fahrenheit.CoreLib;
 
 [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Auto, Pack = 4, Size = 0x880)]

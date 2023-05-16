@@ -6,5 +6,5 @@ dotnet_diagnostic.CS8981.severity = suggestion
 # Exempt any global using file from Code Cleanup
 # v. https://github.com/dotnet/roslyn/issues/3705#issuecomment-570687450
 
-[*_idtypes.cs]
+[*_typedefs.cs]
 generated_code = true
