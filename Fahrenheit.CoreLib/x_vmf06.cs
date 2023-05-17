@@ -1,11 +1,11 @@
-﻿/* [fkelava 7/5/2023 11:17]
+﻿/* [fkelava 7/5/23 11:17]
  * Source: MS Store ver.
  * Header: __ATEL_FUNCTION_LIST_6__
  * 
  * /ffx_ps2/ffx/proj2/chr/ath/battle/atelcam.ath
  */
 
-/* [fkelava 7/5/2023 17:00]
+/* [fkelava 7/5/23 17:00]
  * The internal VM call table is split into 16 segments called 'funcspaces'.
  * 
  * F00 -> "CommFunc"

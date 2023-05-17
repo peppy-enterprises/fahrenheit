@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* [fkelava 7/5/23 17:04]
+ * Unlike some parts, this one is my original work.
+ */
+
+using System;
 
 namespace Fahrenheit.CoreLib;
 

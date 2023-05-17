@@ -1,6 +1,6 @@
 ﻿namespace Fahrenheit.CoreLib;
 
-/* [fkelava 7/5/2023 13:14]
+/* [fkelava 7/5/23 13:14]
  * Located in the executable at +852E00h.
  * 
  * This discovery was originally made by ffgriever (https://gitlab.com/ffgriever). These definitions are taken from his code wholesale.
