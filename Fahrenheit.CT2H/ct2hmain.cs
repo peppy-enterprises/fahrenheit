@@ -18,6 +18,9 @@ internal class Program
         Option<string> optDefaultNamespace = new Option<string>("--ns", "Set the namespace of the resulting C# file.");
         Option<string> optFilePath         = new Option<string>("--src", "Set the path to the source file.");
 
+        optDefaultNamespace.IsRequired = true;
+        optFilePath.IsRequired         = true;
+
         RootCommand rootCmd = new RootCommand("Process a cheat table and create a C# code file.")
         {
             optDefaultNamespace, 

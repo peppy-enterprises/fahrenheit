@@ -9,45 +9,45 @@
 
 namespace Fahrenheit.CoreLib;
 
-public static class FhXCamTargetId
+public enum FhXCamTargetId : T_XCamTargetId
 {
-    public const T_XCamTargetId CAM_CHR_NOP         = -1;
-    public const T_XCamTargetId CAM_CHR_ACTIVE      = -2;
-    public const T_XCamTargetId CAM_CHR_TARGET      = -3;
-    public const T_XCamTargetId CAM_CHR_TARGET_NOW  = -4;
-    public const T_XCamTargetId CAM_CHR_ALL         = -5;
-    public const T_XCamTargetId CAM_CHR_PARTY1      = -6;
-    public const T_XCamTargetId CAM_CHR_PARTY2      = -7;
-    public const T_XCamTargetId CAM_CHR_PARTY3      = -8;
-    public const T_XCamTargetId CAM_CHR_PARTY4      = -9;
-    public const T_XCamTargetId CAM_CHR_PARTY5      = -10;
-    public const T_XCamTargetId CAM_CHR_PARTY6      = -11;
-    public const T_XCamTargetId CAM_CHR_PARTY7      = -12;
-    public const T_XCamTargetId CAM_CHR_OWN         = -13;
-    public const T_XCamTargetId CAM_CHR_ALL_PLY     = -14;
-    public const T_XCamTargetId CAM_CHR_ALL_MON     = -15;
-    public const T_XCamTargetId CAM_CHR_OWN_TARGET  = -16;
-    public const T_XCamTargetId CAM_CHR_REACTION    = -17;
-    public const T_XCamTargetId CAM_CHR_INPUT       = -18;
-    public const T_XCamTargetId CAM_CHR_OWN_TARGET0 = -26;
+    CAM_CHR_NOP         = -1,
+    CAM_CHR_ACTIVE      = -2,
+    CAM_CHR_TARGET      = -3,
+    CAM_CHR_TARGET_NOW  = -4,
+    CAM_CHR_ALL         = -5,
+    CAM_CHR_PARTY1      = -6,
+    CAM_CHR_PARTY2      = -7,
+    CAM_CHR_PARTY3      = -8,
+    CAM_CHR_PARTY4      = -9,
+    CAM_CHR_PARTY5      = -10,
+    CAM_CHR_PARTY6      = -11,
+    CAM_CHR_PARTY7      = -12,
+    CAM_CHR_OWN         = -13,
+    CAM_CHR_ALL_PLY     = -14,
+    CAM_CHR_ALL_MON     = -15,
+    CAM_CHR_OWN_TARGET  = -16,
+    CAM_CHR_REACTION    = -17,
+    CAM_CHR_INPUT       = -18,
+    CAM_CHR_OWN_TARGET0 = -26,
 }
 
-public static class FhXCamMoveType
+public enum FhXCamMoveType : T_XCamMoveType
 {
-    public const T_XCamMoveType CAM_MOVE_X      = 1;
-    public const T_XCamMoveType CAM_MOVE_Y      = 2;
-    public const T_XCamMoveType CAM_MOVE_Z      = 4;
-    public const T_XCamMoveType CAM_MOVE_THETA  = 1;
-    public const T_XCamMoveType CAM_MOVE_PHI    = 2;
-    public const T_XCamMoveType CAM_MOVE_LEN    = 4;
-    public const T_XCamMoveType CAM_MOVE_POS    = (CAM_MOVE_X + CAM_MOVE_Y + CAM_MOVE_Z);
-    public const T_XCamMoveType CAM_MOVE_ROLL   = 8;
-    public const T_XCamMoveType CAM_MOVE_SCRDPT = 16;
+    CAM_MOVE_X      = 1,
+    CAM_MOVE_Y      = 2,
+    CAM_MOVE_Z      = 4,
+    CAM_MOVE_THETA  = 1,
+    CAM_MOVE_PHI    = 2,
+    CAM_MOVE_LEN    = 4,
+    CAM_MOVE_POS    = (CAM_MOVE_X + CAM_MOVE_Y + CAM_MOVE_Z),
+    CAM_MOVE_ROLL   = 8,
+    CAM_MOVE_SCRDPT = 16,
 }
 
-public static class FhXCamSplineType
+public enum FhXCamSplineType : T_XCamSplineType
 {
-    public const T_XCamSplineType CAM_SPLINE_2       = 2;
-    public const T_XCamSplineType CAM_SPLINE_3       = 3;
-    public const T_XCamSplineType CAM_SPLINE_TANGENT = 4;
+    CAM_SPLINE_2       = 2,
+    CAM_SPLINE_3       = 3,
+    CAM_SPLINE_TANGENT = 4,
 }
