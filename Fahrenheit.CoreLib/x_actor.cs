@@ -5,7 +5,7 @@
 namespace Fahrenheit.CoreLib;
 
 [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Auto, Pack = 4, Size = 0x880)]
-internal unsafe struct FhXActor
+public unsafe struct FhXActor
 {
     [FieldOffset(0x0)]   public ushort chr_id;
     [FieldOffset(0x2)]   public ushort chr_enabled;

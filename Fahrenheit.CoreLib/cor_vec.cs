@@ -1,7 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib;
 
 #pragma warning disable CS0649
-internal struct LVec3f
+public struct LVec3f
 {
     /* [fkelava 24/4/23 09:38]
      * `latched` vec3f
@@ -12,14 +12,14 @@ internal struct LVec3f
     public float latch;
 }
 
-internal struct Vec3f
+public struct Vec3f
 {
     public float x;
     public float y;
     public float z;
 }
 
-internal struct Vec4f
+public struct Vec4f
 {
     public float x;
     public float y;
@@ -27,7 +27,7 @@ internal struct Vec4f
     public float w;
 }
 
-internal struct Mat4f
+public struct Mat4f
 {
     public Vec4f x;
     public Vec4f y;
