@@ -68,7 +68,7 @@ internal class Program
                     continue;
 
                 StringBuilder sb = new StringBuilder();
-                string        fn = Path.Join(CT2CSConfig.DestPath, $"{node.Name}-{Guid.NewGuid()}.g.cs");
+                string        fn = Path.Join(CT2CSConfig.DestPath, $"{Path.GetFileName(config.SrcPath)}-{Guid.NewGuid()}.g.cs");
 
                 if (!stn.TryEmitStruct(sb))
                     throw new Exception("E_EMIT_FAULT");

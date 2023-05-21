@@ -12,9 +12,9 @@
     <PropertyGroup>
         <BaseIntermediateOutputPath>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <BaseOutputPath>$(SolutionDir)\artifacts\build\$(MSBuildProjectName)</BaseOutputPath>
-        <AssemblyName>fhct2h</AssemblyName>
-        <AssemblyTitle>Fahrenheit CT2H Tool</AssemblyTitle>
-        <Product>Fahrenheit CT2H Tool</Product>
+        <AssemblyName>fhct2cs</AssemblyName>
+        <AssemblyTitle>Fahrenheit CT2CS Tool</AssemblyTitle>
+        <Product>Fahrenheit CT2CS Tool</Product>
     </PropertyGroup>
 
     <!-- LOCAL TESTING COPY TASK -->

@@ -2,10 +2,10 @@
 
 namespace Fahrenheit.CoreLib;
 
-public abstract class FhCharset
+public abstract partial class FhCharset
 {
-    protected const char InvalidChar = char.MaxValue;
-    protected const byte InvalidByte = byte.MaxValue;
+    public const char InvalidChar = char.MaxValue;
+    public const byte InvalidByte = byte.MaxValue;
 
     public bool ToBytes(in ReadOnlySpan<char> src, in Span<byte> dest)
     {
@@ -33,23 +33,4 @@ public abstract class FhCharset
 
     public abstract char ToChar(byte b);
     public abstract byte ToByte(char c);
-}
-
-public sealed class FhCharsetEn : FhCharset
-{
-    public override byte ToByte(char c)
-    {
-        return c switch
-        {
-            _ => InvalidByte
-        };
-    }
-
-    public override char ToChar(byte b)
-    {
-        return b switch
-        {
-            _ => InvalidChar
-        };
-    }
 }
