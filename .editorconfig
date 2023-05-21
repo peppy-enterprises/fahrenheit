@@ -8,3 +8,6 @@ dotnet_diagnostic.CS8981.severity = suggestion
 
 [*_typedefs.cs]
 generated_code = true
+
+[*.g.cs]
+generated_code = true

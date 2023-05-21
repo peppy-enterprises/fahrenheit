@@ -3,7 +3,7 @@
   <CheatEntries>
     <CheatEntry>
       <ID>1</ID>
-      <Description>"MsChr (0xF90)"</Description>
+      <Description>"FhXChr (0xF90)"</Description>
       <Options moManualExpandCollapse="1" moAllowManualCollapseAndExpand="1"/>
       <ShowAsSigned>0</ShowAsSigned>
       <GroupHeader>1</GroupHeader>
@@ -827,7 +827,7 @@
         </CheatEntry>
         <CheatEntry>
           <ID>107</ID>
-          <Description>"MsChrItemStruct (?)"</Description>
+          <Description>"FhXItemMem (0x118)"</Description>
           <Options moManualExpandCollapse="1" moAllowManualCollapseAndExpand="1"/>
           <ShowAsSigned>0</ShowAsSigned>
           <GroupHeader>1</GroupHeader>
@@ -1857,7 +1857,7 @@
         </CheatEntry>
         <CheatEntry>
           <ID>219</ID>
-          <Description>"stat_near_motion (250)"</Description>
+          <Description>"stat_near_motion_set (250)"</Description>
           <ShowAsSigned>1</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>+44B</Address>
