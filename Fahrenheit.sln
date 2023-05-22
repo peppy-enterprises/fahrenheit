@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CT2CS", "Fahrenh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.H2CS", "Fahrenheit.H2CS\Fahrenheit.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.DEdit", "Fahrenheit.DEdit\Fahrenheit.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.DEdit", "Fahrenheit.DEdit\Fahrenheit.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,19 +9,24 @@ using System.CommandLine;
 using System.IO;
 using System.Text;
 
+using Fahrenheit.CoreLib;
+
 namespace Fahrenheit.DEdit;
 
 internal class Program
 {
     static void Main(string[] args)
     {
+        Console.WriteLine($"{nameof(Fahrenheit)}.{nameof(DEdit)} [commit ID {FhRsrc.CommitHash[..^1]}]\n");
+        Console.WriteLine($"Started with args: {string.Join(' ', args)}\n");
+
         Option<FhDEditMode> optMode     = new Option<FhDEditMode>("--mode", "Select the DEdit operating mode.");
         Option<string>      optDefNs    = new Option<string>("--ns", "Set the namespace of the resulting C# file, if reading a charset.");
         Option<string>      optFilePath = new Option<string>("--src", "Set the path to the source file.");
         Option<string>      optDestPath = new Option<string>("--dest", "Set the folder where the C#/text file should be written.");
+        Option<FhCharsetId> optCharSet  = new Option<FhCharsetId>("--cs", "Set the charset that should be used for the input file.");
 
         optMode.IsRequired     = true;
-        optDefNs.IsRequired    = true;
         optFilePath.IsRequired = true;
         optDestPath.IsRequired = true;
 
@@ -30,14 +35,16 @@ internal class Program
             optMode,
             optDefNs, 
             optFilePath,
-            optDestPath
+            optDestPath,
+            optCharSet
         };
 
         rootCmd.SetHandler(DEditMain, new DEditArgsBinder(
             optMode,
             optDefNs,
             optFilePath,
-            optDestPath));
+            optDestPath,
+            optCharSet));
 
         rootCmd.Invoke(args);
         return;
@@ -63,6 +70,12 @@ internal class Program
 
     static void DEditDecompile()
     {
+        if (DEditConfig.Decompile?.CharSet == FhCharsetId.INVALID)
+        {
+            Console.WriteLine("E_MISSING_CHARSET: Specify --cs at the command line.");
+            return;
+        }
+
         string sfn       = Path.GetFileName(DEditConfig.SrcPath);
         bool   isMDict   = sfn == "macrodic.dcp";
         string dfnSuffix = isMDict ? "FFX_MACRODICT" : "FFX_DIALOGUE";
@@ -107,6 +120,8 @@ internal class Program
         {
             for (int i = 0; i < FhMacroDictHeader.MACRO_DICT_SECTION_NB; i++)
             {
+                sb.AppendLine($"\n--- SECTION {i} ---");
+
                 int                offset = header.sectionOffset[i];
                 ReadOnlySpan<byte> slice  = dialogue[offset..];
 
@@ -118,6 +133,7 @@ internal class Program
                 if (readCount != idxCount) throw new Exception("E_MARSHAL_FAULT");
 
                 sb.Append(slice.ReadMacroDict(idxArray));
+                sb.AppendLine($"--- END SECTION {i} ---\n");
             }
         }
 

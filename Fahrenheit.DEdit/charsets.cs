@@ -64,7 +64,7 @@ internal static class FhDEditCharsets
  * Source file: {{Path.GetFileName(DEditConfig.SrcPath)}}
  */
 
-namespace {{DEditConfig.DefaultNamespace}};
+namespace {{DEditConfig.CharsetReader?.DefaultNamespace ?? throw new Exception("E_MISSING_NAMESPACE: Specify --ns at the command line.")}};
 
 public abstract partial class FhCharset
 {

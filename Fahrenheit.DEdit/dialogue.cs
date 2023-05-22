@@ -70,11 +70,21 @@ internal static class FhDialogueExtensions
             if (b < 0x30)
                 sb.Append($"\\0x{b:X} ");
             else if (b < 0xFF)
-                sb.Append(FhCharset.Us.ToChar(b));
+                sb.Append(ResolveChar(b));
             else throw new Exception("E_MALFORMED_INPUT");
         }
         
         sb.AppendLine();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static char ResolveChar(byte b)
+    {
+        return DEditConfig.Decompile!.CharSet switch
+        {
+            FhCharsetId.US => FhCharset.Us.ToChar(b),
+            _              => throw new Exception("E_INVALID_CHARSET_ID")
+        };
     }
 
     public static string ReadDialogue(this ReadOnlySpan<byte> dialogue, in FhDialogueIndex[] indices)

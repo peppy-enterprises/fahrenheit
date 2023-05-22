@@ -3,6 +3,8 @@ using System.CommandLine;
 using System.CommandLine.Binding;
 using System.IO;
 
+using Fahrenheit.CoreLib;
+
 namespace Fahrenheit.DEdit;
 
 internal enum FhDEditMode
@@ -15,23 +17,25 @@ internal enum FhDEditMode
 internal static class DEditConfig
 {
     public static FhDEditMode Mode;
-    public static string      DefaultNamespace = string.Empty;
-    public static string      SrcPath          = string.Empty;
-    public static string      DestPath         = string.Empty;
+    public static string      SrcPath  = string.Empty;
+    public static string      DestPath = string.Empty;
+    
+    public static DEditCharsetReaderConfig? CharsetReader;
+    public static DEditDecompileConfig?     Decompile;
 
     public static void CLIRead(FhDEditArgs args)
     {
         Mode             = args.Mode;
-        DefaultNamespace = args.DefaultNamespace;
         SrcPath          = args.SrcPath;
         DestPath         = Directory.Exists(args.DestPath) ? args.DestPath : throw new Exception("E_INVALID_DEST_DIR");
+
+        CharsetReader = new DEditCharsetReaderConfig(args.DefaultNamespace);
+        Decompile     = new DEditDecompileConfig(args.CharSet);
     }
 }
 
-internal sealed record FhDEditArgs(FhDEditMode Mode,
-                                   string      DefaultNamespace,
-                                   string      SrcPath,
-                                   string      DestPath);
+internal sealed record DEditCharsetReaderConfig(string? DefaultNamespace);
+internal sealed record DEditDecompileConfig(FhCharsetId CharSet);
 
 internal class DEditArgsBinder : BinderBase<FhDEditArgs>
 {
@@ -39,25 +43,40 @@ internal class DEditArgsBinder : BinderBase<FhDEditArgs>
     private readonly Option<string>      _optDefNs;
     private readonly Option<string>      _optSrcPath;
     private readonly Option<string>      _optDestPath;
+    private readonly Option<FhCharsetId> _optCharSet;
 
     public DEditArgsBinder(Option<FhDEditMode> optMode,
                            Option<string>      optDefNs, 
                            Option<string>      optFilePath,
-                           Option<string>      optDestPath)
+                           Option<string>      optDestPath,
+                           Option<FhCharsetId> optCharSet)
     {
         _optMode     = optMode;
         _optDefNs    = optDefNs;
         _optSrcPath  = optFilePath;
         _optDestPath = optDestPath;
+        _optCharSet  = optCharSet;
     }
 
     protected override FhDEditArgs GetBoundValue(BindingContext bindingContext)
     {
+        // Mandatory
         FhDEditMode mode     = bindingContext.ParseResult.GetValueForOption(_optMode);
-        string      defNs    = bindingContext.ParseResult.GetValueForOption(_optDefNs) ?? throw new Exception("E_CLI_ARG_NULL");
         string      srcPath  = bindingContext.ParseResult.GetValueForOption(_optSrcPath) ?? throw new Exception("E_CLI_ARG_NULL");
         string      destPath = bindingContext.ParseResult.GetValueForOption(_optDestPath) ?? throw new Exception("E_CLI_ARG_NULL");
 
-        return new FhDEditArgs(mode, defNs, srcPath, destPath);
+        // ReadCharsets mandatory
+        string? defNs = bindingContext.ParseResult.GetValueForOption(_optDefNs);
+
+        // Decompile mandatory
+        FhCharsetId charSet = bindingContext.ParseResult.GetValueForOption(_optCharSet);
+
+        return new FhDEditArgs(mode, srcPath, destPath, defNs, charSet);
     }
 }
+
+internal sealed record FhDEditArgs(FhDEditMode Mode,
+                                   string      SrcPath,
+                                   string      DestPath,
+                                   string?     DefaultNamespace,
+                                   FhCharsetId CharSet);

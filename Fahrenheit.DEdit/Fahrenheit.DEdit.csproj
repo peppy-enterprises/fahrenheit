@@ -6,6 +6,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<!-- ASSEMBLY ADDITIONAL PROPERTIES -->
@@ -15,7 +16,6 @@
 		<AssemblyName>fhdedit</AssemblyName>
 		<AssemblyTitle>Fahrenheit Dialogue Editor</AssemblyTitle>
 		<Product>Fahrenheit Dialogue Editor</Product>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<!-- LOCAL TESTING COPY TASK -->
