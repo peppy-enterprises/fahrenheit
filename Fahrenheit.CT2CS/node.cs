@@ -220,7 +220,7 @@ public static class FhCheatEntryExtensions
     public static string VarNameFromDescr(this FhCtEntry ce)
     {
         string descr = ce.Description;
-        return descr[0..descr.IndexOf(' ')];
+        return descr.Contains(' ') ? descr[0..descr.IndexOf(' ')] : descr;
     }
 
     public static string StructSizeFromDescr(this FhCtEntry ce)
