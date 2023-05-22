@@ -15,6 +15,7 @@
 		<AssemblyName>fhdedit</AssemblyName>
 		<AssemblyTitle>Fahrenheit Dialogue Editor</AssemblyTitle>
 		<Product>Fahrenheit Dialogue Editor</Product>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<!-- LOCAL TESTING COPY TASK -->

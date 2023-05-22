@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Fahrenheit.CoreLib;
 
-internal static class FhMarshal
+public static class FhMarshal
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ToBytes<T>(in ReadOnlySpan<T> src, in Span<byte> dest, out int bytesWritten) where T : struct

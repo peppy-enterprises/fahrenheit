@@ -7,6 +7,7 @@
 using System;
 using System.CommandLine;
 using System.IO;
+using System.Text;
 
 namespace Fahrenheit.DEdit;
 
@@ -44,9 +45,6 @@ internal class Program
 
     static void DEditReadCharset()
     {
-        if (!File.Exists(DEditConfig.SrcPath))
-            throw new Exception("E_INVALID_PATH");
-
         string sfn = Path.GetFileName(DEditConfig.SrcPath);
         string dfn = Path.Join(DEditConfig.DestPath, $"{sfn}-{Guid.NewGuid()}.g.cs");
         string cs  = FhDEditCharsets.EmitCharset();
@@ -63,14 +61,82 @@ internal class Program
         Console.WriteLine($"Charset {sfn}: Output is at {dfn}.");
     }
 
+    static void DEditDecompile()
+    {
+        string sfn       = Path.GetFileName(DEditConfig.SrcPath);
+        bool   isMDict   = sfn == "macrodic.dcp";
+        string dfnSuffix = isMDict ? "FFX_MACRODICT" : "FFX_DIALOGUE";
+        string dfn       = Path.Join(DEditConfig.DestPath, $"{sfn}-{Guid.NewGuid()}.{dfnSuffix}");
+
+        ReadOnlySpan<byte> dialogue = File.ReadAllBytes(DEditConfig.SrcPath);
+
+        string diastr = isMDict 
+            ? DEditDecompileMacroDict(dialogue) 
+            : DEditDecompileDialogue(dialogue);
+
+        using (FileStream fs = File.Open(dfn, FileMode.CreateNew))
+        {
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                sw.Write(diastr);
+            }
+        }
+
+        Console.WriteLine(diastr);
+        Console.WriteLine($"{(isMDict ? "Macro dictionary" : "Dialogue")} {sfn}: Output is at {dfn}.");
+    }
+
+    static string DEditDecompileDialogue(in ReadOnlySpan<byte> dialogue)
+    {
+        int               idxCount = dialogue.GetDialogueIndexCount();
+        FhDialogueIndex[] idxArray = new FhDialogueIndex[idxCount];
+
+        dialogue.ReadDialogueIndices(in idxArray, out int readCount);
+
+        if (readCount != idxCount) throw new Exception("E_MARSHAL_FAULT");
+
+        return dialogue.ReadDialogue(idxArray);
+    }
+
+    static string DEditDecompileMacroDict(in ReadOnlySpan<byte> dialogue)
+    {
+        FhMacroDictHeader header = dialogue.GetMacroDictHeader();
+        StringBuilder     sb     = new StringBuilder();
+
+        unsafe
+        {
+            for (int i = 0; i < FhMacroDictHeader.MACRO_DICT_SECTION_NB; i++)
+            {
+                int                offset = header.sectionOffset[i];
+                ReadOnlySpan<byte> slice  = dialogue[offset..];
+
+                int                idxCount = slice.GetMacroDictIndexCount();
+                FhMacroDictIndex[] idxArray = new FhMacroDictIndex[idxCount];
+
+                slice.ReadMacroDictIndices(in idxArray, out int readCount);
+
+                if (readCount != idxCount) throw new Exception("E_MARSHAL_FAULT");
+
+                sb.Append(slice.ReadMacroDict(idxArray));
+            }
+        }
+
+        return sb.ToString();
+    }
+
     static void DEditMain(FhDEditArgs config)
     {
         DEditConfig.CLIRead(config);
+
+        if (!File.Exists(DEditConfig.SrcPath))
+            throw new Exception("E_INVALID_PATH");
 
         switch (DEditConfig.Mode)
         {
             case FhDEditMode.ReadCharsets:
                 DEditReadCharset(); break;
+            case FhDEditMode.Decompile:
+                DEditDecompile(); break;
         }
     }
 }
