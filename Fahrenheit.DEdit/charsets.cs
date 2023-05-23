@@ -21,6 +21,8 @@ internal static class FhDEditCharsets
 
     public static string EmitCharset()
     {
+        string ns = DEditConfig.CharsetReader?.DefaultNamespace ?? throw new Exception("E_MISSING_NAMESPACE: Specify --ns at the command line.");
+
         StringBuilder tbsb  = new StringBuilder(); // ToByte switch
         StringBuilder tcsb  = new StringBuilder(); // ToChar switch
         string        csstr = File.ReadAllText(DEditConfig.SrcPath);
@@ -64,7 +66,7 @@ internal static class FhDEditCharsets
  * Source file: {{Path.GetFileName(DEditConfig.SrcPath)}}
  */
 
-namespace {{DEditConfig.CharsetReader?.DefaultNamespace ?? throw new Exception("E_MISSING_NAMESPACE: Specify --ns at the command line.")}};
+namespace {{ns}};
 
 public abstract partial class FhCharset
 {

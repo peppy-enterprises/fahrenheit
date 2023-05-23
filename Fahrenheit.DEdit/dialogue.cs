@@ -80,6 +80,7 @@ internal static class FhDialogueExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static char ResolveChar(byte b)
     {
+        // We check that CharSet is not invalid in DEditDecompile().
         return DEditConfig.Decompile!.CharSet switch
         {
             FhCharsetId.US => FhCharset.Us.ToChar(b),
