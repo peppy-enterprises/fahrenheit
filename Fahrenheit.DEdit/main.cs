@@ -17,7 +17,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine($"{nameof(Fahrenheit)}.{nameof(DEdit)} [commit ID {FhRsrc.CommitHash[..^1]}]\n");
+        Console.WriteLine($"{nameof(Fahrenheit)}.{nameof(DEdit)}\n");
         Console.WriteLine($"Started with args: {string.Join(' ', args)}\n");
 
         Option<FhDEditMode> optMode     = new Option<FhDEditMode>("--mode", "Select the DEdit operating mode.");
@@ -54,7 +54,8 @@ internal class Program
     {
         string sfn = Path.GetFileName(DEditConfig.SrcPath);
         string dfn = Path.Join(DEditConfig.DestPath, $"{sfn}-{Guid.NewGuid()}.g.cs");
-        string cs  = FhDEditCharsets.EmitCharset();
+        string ns  = DEditConfig.CharsetReader?.DefaultNamespace ?? throw new Exception("FH_E_MISSING_NAMESPACE: Specify --ns at the command line.");
+        string cs  = FhCharsetGenerator.EmitCharset(DEditConfig.SrcPath, ns);
 
         using (FileStream fs = File.Open(dfn, FileMode.CreateNew))
         {

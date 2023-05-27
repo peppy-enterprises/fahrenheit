@@ -43,28 +43,4 @@
         <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
-    <!-- RESOURCES -->
-    <ItemGroup>
-        <Compile Update="FhRsrc.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>FhRsrc.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <EmbeddedResource Update="FhRsrc.resx">
-            <Generator>PublicResXFileCodeGenerator</Generator>
-            <LastGenOutput>FhRsrc.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-    </ItemGroup>
-
-    <!-- PRE-BUILD - GENERATE COMMIT HASH -->
-    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-        <PropertyGroup>
-            <CommitHashFileName>$(SolutionDir)\CommitHash.txt</CommitHashFileName>	
-        </PropertyGroup>
-        
-        <Exec Command="git rev-parse HEAD &gt; $(CommitHashFileName)" />
-    </Target>
-
 </Project>
