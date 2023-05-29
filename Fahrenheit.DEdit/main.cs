@@ -6,6 +6,7 @@
 
 using System;
 using System.CommandLine;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -71,7 +72,9 @@ internal class Program
 
     static void DEditDecompile()
     {
-        if (DEditConfig.Decompile?.CharSet == FhCharsetId.INVALID)
+        FhCharsetId cs = DEditConfig.Decompile!.CharSet;
+
+        if (cs == FhCharsetId.INVALID)
         {
             Console.WriteLine("E_MISSING_CHARSET: Specify --cs at the command line.");
             return;
@@ -85,8 +88,8 @@ internal class Program
         ReadOnlySpan<byte> dialogue = File.ReadAllBytes(DEditConfig.SrcPath);
 
         string diastr = isMDict 
-            ? DEditDecompileMacroDict(dialogue) 
-            : DEditDecompileDialogue(dialogue);
+            ? DEditDecompileMacroDict(dialogue, cs) 
+            : DEditDecompileDialogue(dialogue, cs);
 
         using (FileStream fs = File.Open(dfn, FileMode.CreateNew))
         {
@@ -100,7 +103,7 @@ internal class Program
         Console.WriteLine($"{(isMDict ? "Macro dictionary" : "Dialogue")} {sfn}: Output is at {dfn}.");
     }
 
-    static string DEditDecompileDialogue(in ReadOnlySpan<byte> dialogue)
+    static string DEditDecompileDialogue(in ReadOnlySpan<byte> dialogue, FhCharsetId cs)
     {
         int               idxCount = dialogue.GetDialogueIndexCount();
         FhDialogueIndex[] idxArray = new FhDialogueIndex[idxCount];
@@ -109,21 +112,21 @@ internal class Program
 
         if (readCount != idxCount) throw new Exception("E_MARSHAL_FAULT");
 
-        return dialogue.ReadDialogue(idxArray);
+        return dialogue.ReadDialogue(cs, idxArray);
     }
 
-    static string DEditDecompileMacroDict(in ReadOnlySpan<byte> dialogue)
+    static string DEditDecompileMacroDict(in ReadOnlySpan<byte> dialogue, FhCharsetId cs)
     {
         FhMacroDictHeader header = dialogue.GetMacroDictHeader();
         StringBuilder     sb     = new StringBuilder();
 
         unsafe
         {
-            for (int i = 0; i < FhMacroDictHeader.MACRO_DICT_SECTION_NB; i++)
+            for (int i = 0; i < FhMacroDictHeader.MD_SECTION_NR; i++)
             {
                 sb.AppendLine($"\n--- SECTION {i} ---");
 
-                int                offset = header.sectionOffset[i];
+                int                offset = header.SectionOffsets[i];
                 ReadOnlySpan<byte> slice  = dialogue[offset..];
 
                 int                idxCount = slice.GetMacroDictIndexCount();
@@ -133,7 +136,7 @@ internal class Program
 
                 if (readCount != idxCount) throw new Exception("E_MARSHAL_FAULT");
 
-                sb.Append(slice.ReadMacroDict(idxArray));
+                sb.Append(slice.ReadMacroDict(cs, idxArray));
                 sb.AppendLine($"--- END SECTION {i} ---\n");
             }
         }
@@ -144,6 +147,7 @@ internal class Program
     static void DEditMain(FhDEditArgs config)
     {
         DEditConfig.CLIRead(config);
+        Stopwatch perfSwatch = Stopwatch.StartNew();
 
         if (!File.Exists(DEditConfig.SrcPath))
             throw new Exception("E_INVALID_PATH");
@@ -155,5 +159,8 @@ internal class Program
             case FhDEditMode.Decompile:
                 DEditDecompile(); break;
         }
+
+        perfSwatch.Stop();
+        Console.WriteLine($"PERF: Operation complete in {perfSwatch.ElapsedMilliseconds} ms");
     }
 }

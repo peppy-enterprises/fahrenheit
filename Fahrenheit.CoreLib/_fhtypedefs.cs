@@ -6,6 +6,10 @@
  * of any primitive declaration here, in one spot. You should follow this approach when adding new constants.
  */
 
+// Common
+global using T_FhDialogueOptionCount = System.Byte;
+global using T_FhDialoguePos         = System.UInt16;
+
 // X
 global using T_XCamMoveType   = System.Byte;   // x_idcam
 global using T_XCamSplineType = System.Byte;   // x_idcam

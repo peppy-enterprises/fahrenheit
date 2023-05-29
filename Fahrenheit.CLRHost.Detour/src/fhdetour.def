@@ -1,0 +1,14 @@
+LIBRARY fhdetour
+EXPORTS
+	DetourAttach
+	DetourDetach
+	DetourTransactionBegin
+	DetourTransactionCommit
+	DetourUpdateThread
+	DetourIsHelperProcess
+	DetourFinishHelperProcess
+	DetourRestoreAfterWith
+	DetourCreateProcessWithDllExA
+	DetourCreateProcessWithDllExW
+	DetourCreateProcessWithDllsA
+	DetourCreateProcessWithDllsW

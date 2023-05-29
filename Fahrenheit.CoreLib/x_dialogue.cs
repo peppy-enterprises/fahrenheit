@@ -3,38 +3,17 @@ using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-using Fahrenheit.CoreLib;
+namespace Fahrenheit.CoreLib;
 
-namespace Fahrenheit.DEdit;
-
-public readonly struct FhDialogueIndex
-{
-    public readonly T_FhDialoguePos         index;
-    public readonly byte                    __0x03;
-    public readonly T_FhDialogueOptionCount optionCount;
-}
-
-public unsafe struct FhMacroDictHeader
-{
-    public const int MACRO_DICT_SECTION_NB = 16;
-    public fixed int sectionOffset[MACRO_DICT_SECTION_NB];
-}
-
-public readonly struct FhMacroDictIndex
-{
-    public readonly T_FhDialoguePos index;
-}
-
-internal static class FhDialogueExtensions
+public static class FhDialogueUtil
 {
     public static FhMacroDictHeader GetMacroDictHeader(this in ReadOnlySpan<byte> dialogue)
     {
-        FhMacroDictHeader       header;
-        Span<FhMacroDictHeader> destSpan = new Span<FhMacroDictHeader>(ref header);
+        FhMacroDictHeader header = new FhMacroDictHeader();
 
-        FhMarshal.FromBytes(dialogue[0..0x40], destSpan, 0x40, out int count);
+        FhMarshal.FromBytes(dialogue[0..FhMacroDictHeader.MD_HEADER_SIZE], header.SectionOffsets.AsSpan(), FhMacroDictHeader.MD_HEADER_SIZE, out int count);
 
-        return destSpan[0];
+        return header;
     }
 
     public static int GetDialogueIndexCount(this in ReadOnlySpan<byte> dialogue)
@@ -59,51 +38,51 @@ internal static class FhDialogueExtensions
         FhMarshal.FromBytes<FhMacroDictIndex>(dialogue[0..endpos], callerArray, endpos, out count);
     }
 
-    internal static void ReadLineInternal(this in ReadOnlySpan<byte> dialogue, in StringBuilder sb, T_FhDialoguePos start, T_FhDialoguePos end)
+    internal static void ReadLineInternal(this in ReadOnlySpan<byte> dialogue, in FhCharsetId cs, in StringBuilder sb, T_FhDialoguePos start, T_FhDialoguePos end)
     {
         ReadOnlySpan<byte> slice = dialogue[start..end];
-        
+
         if (slice.Length == 0) return;
-        
+
         foreach (byte b in slice)
         {
             if (b < 0x30)
                 sb.Append($"\\0x{b:X} ");
             else if (b < 0xFF)
-                sb.Append(ResolveChar(b));
+                sb.Append(ResolveChar(cs, b));
             else throw new Exception("E_MALFORMED_INPUT");
         }
-        
+
         sb.AppendLine();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static char ResolveChar(byte b)
+    internal static char ResolveChar(FhCharsetId cs, byte b)
     {
         // We check that CharSet is not invalid in DEditDecompile().
-        return DEditConfig.Decompile!.CharSet switch
+        return cs switch
         {
             FhCharsetId.US => FhCharset.Us.ToChar(b),
             _              => throw new Exception("E_INVALID_CHARSET_ID")
         };
     }
 
-    public static string ReadDialogue(this ReadOnlySpan<byte> dialogue, in FhDialogueIndex[] indices)
+    public static string ReadDialogue(this ReadOnlySpan<byte> dialogue, FhCharsetId cs, in FhDialogueIndex[] indices)
     {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < indices.Length - 1; i++)
-            dialogue.ReadLineInternal(sb, indices[i].index, indices[i + 1].index);
-        
+            dialogue.ReadLineInternal(cs, sb, indices[i].index, indices[i + 1].index);
+
         return sb.ToString();
     }
 
-    public static string ReadMacroDict(this ReadOnlySpan<byte> dialogue, in FhMacroDictIndex[] indices)
+    public static string ReadMacroDict(this ReadOnlySpan<byte> dialogue, FhCharsetId cs, in FhMacroDictIndex[] indices)
     {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < indices.Length - 1; i++)
-            dialogue.ReadLineInternal(sb, indices[i].index, indices[i + 1].index);
+            dialogue.ReadLineInternal(cs, sb, indices[i].index, indices[i + 1].index);
 
         return sb.ToString();
     }
