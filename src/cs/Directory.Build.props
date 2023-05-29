@@ -1,0 +1,10 @@
+<Project>
+    <Import Project="$(SolutionDir)\Directory.Build.props" />
+
+    <!-- ARTIFACT PATH DEFINITION -->
+    <PropertyGroup>
+		<BaseIntermediateOutputPath>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+		<BaseOutputPath>$(SolutionDir)\artifacts\build\$(MSBuildProjectName)\</BaseOutputPath>
+		<Copyright>© Fran 'peppy' Kelava</Copyright>
+	</PropertyGroup>
+</Project>

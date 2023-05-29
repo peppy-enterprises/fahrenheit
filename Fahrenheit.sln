@@ -3,26 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CoreLib", "Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB330934-FE4A-4788-8029-CF2073D8500D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CT2CS", "Fahrenheit.CT2CS\Fahrenheit.CT2CS.csproj", "{732FDF80-DAC5-4E93-804D-9ECF346E90E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CoreLib", "src\cs\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.H2CS", "Fahrenheit.H2CS\Fahrenheit.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CT2CS", "src\cs\Fahrenheit.CT2CS\Fahrenheit.CT2CS.csproj", "{732FDF80-DAC5-4E93-804D-9ECF346E90E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.DEdit", "Fahrenheit.DEdit\Fahrenheit.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.H2CS", "src\cs\Fahrenheit.H2CS\Fahrenheit.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Loader", "Fahrenheit.CLRHost.Loader\Fahrenheit.CLRHost.Loader.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.DEdit", "src\cs\Fahrenheit.DEdit\Fahrenheit.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Detour", "Fahrenheit.CLRHost.Detour\Fahrenheit.CLRHost.Detour.vcxproj", "{DE90A6C1-504F-45BD-A4F9-8129755F3E7C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Loader", "src\cpp\Fahrenheit.CLRHost.Loader\Fahrenheit.CLRHost.Loader.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Launcher", "Fahrenheit.CLRHost.Launcher\Fahrenheit.CLRHost.Launcher.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Detour", "src\cpp\Fahrenheit.CLRHost.Detour\Fahrenheit.CLRHost.Detour.vcxproj", "{DE90A6C1-504F-45BD-A4F9-8129755F3E7C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CLRHost", "Fahrenheit.CLRHost\Fahrenheit.CLRHost.csproj", "{F3F4FFE6-A34C-4E95-866B-E37C26B632F4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Launcher", "src\cpp\Fahrenheit.CLRHost.Launcher\Fahrenheit.CLRHost.Launcher.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CLRHost", "src\cs\Fahrenheit.CLRHost\Fahrenheit.CLRHost.csproj", "{F3F4FFE6-A34C-4E95-866B-E37C26B632F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

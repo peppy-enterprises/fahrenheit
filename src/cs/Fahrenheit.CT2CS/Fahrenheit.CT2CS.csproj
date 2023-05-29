@@ -10,38 +10,19 @@
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <BaseIntermediateOutputPath>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-        <BaseOutputPath>$(SolutionDir)\artifacts\build\$(MSBuildProjectName)</BaseOutputPath>
         <AssemblyName>fhct2cs</AssemblyName>
         <AssemblyTitle>Fahrenheit CT2CS Tool</AssemblyTitle>
         <Product>Fahrenheit CT2CS Tool</Product>
     </PropertyGroup>
-
-    <!-- LOCAL TESTING COPY TASK -->
-    <Target Name="CopyAfterBuild" AfterTargets="Build">
-        <PropertyGroup>
-            <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
-        </PropertyGroup>
-
-        <ItemGroup>
-            <ProjectFiles Include="$(TargetDir)\*.*" />
-        </ItemGroup>
-
-        <Message Text="Copying to $(CopyToDir)" Importance="High" />
-
-        <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(CopyToDir)" />
-
-        <Message Text="Copied build files to $(CopyToDir)." Importance="High" />
-    </Target>
-
+	
     <!-- SDK REFERENCES -->
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
     <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
-    <!-- SHARED FILE LINKS -->
-    <ItemGroup>
-        <None Include="..\.editorconfig" Link=".editorconfig" />
-    </ItemGroup>
+	<!-- SHARED FILE LINKS -->
+	<ItemGroup>
+		<None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>

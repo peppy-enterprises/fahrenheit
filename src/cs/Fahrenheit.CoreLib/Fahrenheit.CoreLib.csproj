@@ -1,0 +1,27 @@
+﻿<Project>
+
+    <!-- ASSEMBLY BASIC PROPERTIES -->
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
+    <PropertyGroup>
+        <AssemblyName>fhcorlib</AssemblyName>
+        <AssemblyTitle>Fahrenheit Core Library</AssemblyTitle>
+        <Product>Fahrenheit Core Library</Product>
+    </PropertyGroup>
+
+    <!-- SDK REFERENCES -->
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+	<!-- SHARED FILE LINKS -->
+	<ItemGroup>
+		<None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+</Project>
