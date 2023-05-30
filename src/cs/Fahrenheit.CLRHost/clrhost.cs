@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -39,8 +40,17 @@ public static class FhCLRHost
         }
     }
 
-    public static int Start(string arguments)
+    // public delegate int ComponentEntryPoint(IntPtr args, int sizeBytes);
+    public static int InitCLRHostPlugins(IntPtr args, int size)
     {
+        using (FileStream fs = File.Open("clrhost.log", FileMode.OpenOrCreate))
+        {
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                sw.Write($"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()} - CLRHOSTINIT");
+            }
+        }
+
         return 0;
     }
 

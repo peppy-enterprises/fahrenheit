@@ -24,6 +24,9 @@
     <ClInclude Include="inc\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fhdetour.cpp">
@@ -37,5 +40,10 @@
     <None Include="src\fhdetour.def">
       <Filter>Source Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="inc\fhdetour.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

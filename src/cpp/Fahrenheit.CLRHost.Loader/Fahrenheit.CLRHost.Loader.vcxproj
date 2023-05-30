@@ -106,6 +106,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -128,6 +129,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,6 +148,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -168,6 +171,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -178,6 +182,8 @@
   <ItemGroup>
     <ClInclude Include="inc\framework.h" />
     <ClInclude Include="inc\pch.h" />
+    <ClInclude Include="inc\pinvokecache.h" />
+    <ClInclude Include="inc\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp" />
@@ -187,9 +193,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\pinvokecache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\fhclrldr.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="inc\fhclrldr.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

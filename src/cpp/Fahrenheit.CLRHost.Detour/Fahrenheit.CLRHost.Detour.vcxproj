@@ -22,6 +22,7 @@
     <ClInclude Include="inc\fhdetour.h" />
     <ClInclude Include="inc\framework.h" />
     <ClInclude Include="inc\pch.h" />
+    <ClInclude Include="inc\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fhdetour.cpp" />
@@ -34,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\fhdetour.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="inc\fhdetour.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

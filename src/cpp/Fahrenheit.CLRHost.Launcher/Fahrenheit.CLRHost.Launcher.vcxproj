@@ -159,12 +159,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fahrenheit.CLRHost.Detour\Fahrenheit.CLRHost.Detour.vcxproj">
       <Project>{de90a6c1-504f-45bd-a4f9-8129755f3e7c}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="inc\fhlaunch.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

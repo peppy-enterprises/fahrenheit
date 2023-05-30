@@ -5,6 +5,7 @@
     <PropertyGroup>
 		<BaseIntermediateOutputPath>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
 		<BaseOutputPath>$(SolutionDir)\artifacts\build\$(MSBuildProjectName)\</BaseOutputPath>
-		<Copyright>© Fran 'peppy' Kelava</Copyright>
+		<Copyright>(C) 2023 Fran 'peppy' Kelava</Copyright>
+		<Company>https://github.com/fkelava/fahrenheit</Company>
 	</PropertyGroup>
 </Project>
