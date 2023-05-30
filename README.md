@@ -14,9 +14,9 @@ The knowledge gathered by the project underpins many tools for the game, such as
 do not reference Fahrenheit libraries directly; instead, they reimplement the bits they need
 and tune them for their specific purposes.
 
-Fahrenheit, generally, is the place where mod/tool developers find the specific information they need. If you
-want neatly packaged tools, you are probably looking for something that _implements_ Fahrenheit rather
-than this project itself.
+Fahrenheit, generally, is the place where mod/tool developers find the specific information they need. 
+If you want neatly packaged tools, you are probably looking for something that _implements_ Fahrenheit, not 
+this project itself.
 
 ## Why?
 Many people have made tremendous efforts to tackle this game over the years, and some have even
@@ -26,7 +26,7 @@ Even when they did, their knowledge may have been lost to time and is exceptiona
 
 Fahrenheit is an attempt to put an end to this. It aims not only to exceed all these efforts in scope,
 but also to finally place them in the open where they will be free for others to analyze, improve, learn from,
-and use for whatever purpose.
+and use.
 
 ## What is currently included?
 Please consult each individual project's `README` for specific information.
@@ -40,6 +40,8 @@ Intended only for `CoreLib` development.
 - `Fahrenheit.H2CS`: Converts specific C headers to C#.
 Intended only for `CoreLib` development.
 - `Fahrenheit.DEdit`: A dialogue and character set viewer/editor.
+- `Fahrenheit.CLRHost.*`: A reimplementation of [citronneur/detours.net](https://github.com/citronneur/detours.net)
+for .NET (Core). Allows detouring with C# code.
 
 ## Can I contribute?
 Yes. Feel free to join us in the #modding channel of the 
@@ -47,6 +49,9 @@ Yes. Feel free to join us in the #modding channel of the
 
 ## License
 Fahrenheit is licensed under the [MIT](https://github.com/fkelava/fahrenheit/blob/main/LICENSE.txt) license.
+
+For third-party code license notices, please see 
+[THIRD-PARTY-NOTICES](https://github.com/fkelava/fahrenheit/blob/main/THIRD-PARTY-NOTICES.txt).
 
 ## Associated and/or derived projects
 You should check out the following projects if you want finished mods or approachable tools.

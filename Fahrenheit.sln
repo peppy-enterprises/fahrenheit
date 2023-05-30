@@ -6,6 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB330934-FE4A-4788-8029-CF2073D8500D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		README.md = README.md
+		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CoreLib", "src\cs\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
