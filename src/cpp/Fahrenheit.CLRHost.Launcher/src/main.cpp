@@ -6,7 +6,7 @@ int wmain(int argc, wchar_t* argv[ ])
     PROCESS_INFORMATION processInfo;
     STARTUPINFO         startupInfo = { 0 };
 
-    LPCWSTR szExePath = L"D:\\ffx\\ffx.exe";
+    LPCWSTR szExePath = L"..\\..\\ffx.exe";
     LPCSTR  szDllPath = "fhclrldr.dll";
 
     if (!DetourCreateProcessWithDlls(

@@ -41,7 +41,7 @@ public static class FhCLRHost
     }
 
     // public delegate int ComponentEntryPoint(IntPtr args, int sizeBytes);
-    public static int InitCLRHostPlugins(IntPtr args, int size)
+    public static int CLRHostInit(IntPtr args, int size)
     {
         using (FileStream fs = File.Open("clrhost.log", FileMode.OpenOrCreate))
         {

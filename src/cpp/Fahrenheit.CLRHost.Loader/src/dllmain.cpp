@@ -15,6 +15,7 @@
 #include <string.h>
 #include <assert.h>
 #include <iostream>
+#include <direct.h>
 
 // .NET hosting headers
 #include <nethost.h>
@@ -194,6 +195,8 @@ static int DetourMain(void)
     assert(pos != string_t::npos);
     root_path = root_path.substr(0, pos + 1);
 
+    string_t fh_bin_path = root_path + L"\\fahrenheit\\bin\\";
+
     //
     // STEP 1: Load HostFxr and get exported hosting functions
     //
@@ -206,7 +209,7 @@ static int DetourMain(void)
     //
     // STEP 2: Initialize and start the .NET Core runtime
     //
-    const string_t config_path = root_path + STR("fhclrhost.runtimeconfig.json");
+    const string_t config_path = fh_bin_path + STR("fhclrhost.runtimeconfig.json");
 
     load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
     load_assembly_and_get_function_pointer = get_dotnet_load_assembly(config_path.c_str());
@@ -217,25 +220,26 @@ static int DetourMain(void)
     //
     // STEP 3: Load managed assembly and get function pointer to a managed method
     //
-    const string_t dotnetlib_path     = root_path + STR("fhclrhost.dll");
+    const string_t dotnetlib_path     = fh_bin_path + STR("fhclrhost.dll");
     const char_t*  dotnet_type        = STR("Fahrenheit.CLRHost.FhCLRHost, fhclrhost");
-    const char_t*  dotnet_type_method = STR("InitCLRHostPlugins");
+    const char_t*  dotnet_type_method = STR("CLRHostInit");
 
     // <SnippetLoadAndGet>
     // Function pointer to managed delegate
-    component_entry_point_fn clrhoststart = nullptr;
+    component_entry_point_fn clrhostinit = nullptr;
     int rc = load_assembly_and_get_function_pointer(
         dotnetlib_path.c_str(),
         dotnet_type,
         dotnet_type_method,
         nullptr /*delegate_type_name*/,
         nullptr,
-        (void**)&clrhoststart);
+        (void**)&clrhostinit);
     // </SnippetLoadAndGet>
-    assert(rc == 0);
-    assert(clrhoststart != nullptr && "Failure: load_assembly_and_get_function_pointer()");
+    assert(rc == 0 && clrhostinit != nullptr && "Failure: load_assembly_and_get_function_pointer()");
 
-    clrhoststart(nullptr, 0);
+    clrhostinit(nullptr, 0);
+    // return the working directory to the executable, now that bootstrapping is complete
+    assert(_wchdir(root_path.c_str()) == 0);
 
     return ffxMain();
 }
