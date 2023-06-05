@@ -12,7 +12,7 @@ public sealed record FhXVMInstruction(string Name, uint OperandType, uint Operan
 
 public static partial class FhXVM
 {
-    public static FhXVMInstruction[] Instructions =
+    public static readonly FhXVMInstruction[] Instructions =
     {
         new FhXVMInstruction("NOP", 0, 0, 0, 0),
         new FhXVMInstruction("OPLOR", 1, 1, 1, 0),

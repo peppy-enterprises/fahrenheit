@@ -28,10 +28,10 @@ global using T_XPcId          = System.UInt16; // x_idpc
 global using T_XPComId        = System.UInt16; // x_idpcom
 global using T_XSklId         = System.UInt16; // x_idskl
 global using T_XSumId         = System.UInt16; // x_idsum
-global using T_X2PComId       = System.UInt16; // x2_idpcoms
 global using T_XBtlId         = System.UInt32; // x_idbtl
 global using T_XBtlVoiceId    = System.UInt32; // x_idbtlvo
 global using T_XMotId         = System.UInt32; // x_idmot-*
 
 // X-2
+global using T_X2PComId       = System.UInt16; // x2_idpcom
 global using T_X2BtlId        = System.UInt32; // x2_idbtl

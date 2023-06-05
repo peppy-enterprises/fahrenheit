@@ -3,6 +3,9 @@
 # CS8981: The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
 dotnet_diagnostic.CS8981.severity = suggestion
 
+# IDE0071: Interpolation can be simplified.
+dotnet_diagnostic.IDE0071.severity = silent
+
 # Exempt any global using file from Code Cleanup
 # v. https://github.com/dotnet/roslyn/issues/3705#issuecomment-570687450
 

@@ -46,13 +46,13 @@ internal class Program
         StringBuilder sb = new StringBuilder();
         string        fn = Path.Join(H2CSConfig.DestPath, $"{Path.GetFileName(config.SrcPath)}-{Guid.NewGuid()}.g.cs");
 
-        //using (FileStream fs = File.Open(fn, FileMode.CreateNew))
-        //{
-        //    using (StreamWriter sw = new StreamWriter(fs))
-        //    {
-        //        sw.Write(sb.ToString());
-        //    }
-        //}
+        using (FileStream fs = File.Open(fn, FileMode.CreateNew))
+        {
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                sw.Write(sb.ToString());
+            }
+        }
 
         Console.WriteLine(sb.ToString());
     }

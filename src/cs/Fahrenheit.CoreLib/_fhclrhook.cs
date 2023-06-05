@@ -5,10 +5,10 @@ namespace Fahrenheit.CoreLib;
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class FhHookAttribute : Attribute
 {
-    public nint Address      { get; init; }
+    public int  Address      { get; init; }
     public Type DelegateType { get; init; }
 
-    public FhHookAttribute(nint addr, Type delegateType)
+    public FhHookAttribute(int addr, Type delegateType)
     {
         Address      = addr;
         DelegateType = delegateType;

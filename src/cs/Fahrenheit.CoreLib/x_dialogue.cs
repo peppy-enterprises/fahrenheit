@@ -11,7 +11,7 @@ public static class FhDialogueUtil
     {
         FhMacroDictHeader header = new FhMacroDictHeader();
 
-        FhMarshal.FromBytes(dialogue[0..FhMacroDictHeader.MD_HEADER_SIZE], header.SectionOffsets.AsSpan(), FhMacroDictHeader.MD_HEADER_SIZE, out int count);
+        FhMarshal.FromBytes(dialogue[0..FhMacroDictHeader.MD_HEADER_SIZE], header.SectionOffsets.AsSpan(), FhMacroDictHeader.MD_HEADER_SIZE, out _);
 
         return header;
     }

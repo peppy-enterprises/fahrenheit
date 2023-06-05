@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Fahrenheit.CoreLib;
 
@@ -24,7 +25,37 @@ public sealed record FhDirLink
 
 public static class FhRuntimeConst
 {
-    internal const string _clrPluginsDirName = "clrplugins";
-    internal const string _confDirName       = "config";
-    internal const string _diagLogDirName    = "diaglog";
+    internal const string _clrHooksDirName = "clrhooks";
+    internal const string _cppHooksDirName = "cpphooks";
+    internal const string _modulesDirName  = "modules";
+    internal const string _confDirName     = "config";
+    internal const string _diagLogDirName  = "diaglog";
+    internal const string _rsrcDirName     = "rsrc";
+
+    static FhRuntimeConst()
+    {
+        string cwdParent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
+                           throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
+
+        string clrHooksDirPath = Path.Join(cwdParent, _clrHooksDirName);
+        string cppHooksDirPath = Path.Join(cwdParent, _cppHooksDirName);
+        string modulesDirPath  = Path.Join(cwdParent, _modulesDirName);
+        string confDirPath     = Path.Join(cwdParent, _confDirName);
+        string diagLogDirPath  = Path.Join(cwdParent, _diagLogDirName);
+        string rsrcDirPath     = Path.Join(cwdParent, _rsrcDirName);
+
+        CLRHooksDir = new FhDirLink("$clrhookdir", clrHooksDirPath);
+        CPPHooksDir = new FhDirLink("$cpphookdir", cppHooksDirPath);
+        ModulesDir  = new FhDirLink("$modulesdir", modulesDirPath);
+        ConfigDir   = new FhDirLink("$confdir", confDirPath);
+        DiagLogDir  = new FhDirLink("$diaglogdir", diagLogDirPath);
+        RsrcDir     = new FhDirLink("$rsrcdir", rsrcDirPath);
+    }
+
+    public static readonly FhDirLink CLRHooksDir;
+    public static readonly FhDirLink CPPHooksDir;
+    public static readonly FhDirLink ModulesDir;
+    public static readonly FhDirLink ConfigDir;
+    public static readonly FhDirLink DiagLogDir;
+    public static readonly FhDirLink RsrcDir;
 }

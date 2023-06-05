@@ -103,9 +103,9 @@ public static unsafe partial class FhXVMCall
     public delegate int   camReq(int arg1, int arg2);
     public delegate int   btlMagicStart(int arg1);
     public delegate int   btlMagicEnd();
-    public delegate int   btlmes(int arg1, int arg2, int arg3, int arg4, int arg5);
-    public delegate int   btlmeswait(int arg1);
-    public delegate int   btlmesclose(int arg1);
+    public delegate int   btlMes(int arg1, int arg2, int arg3, int arg4, int arg5);
+    public delegate int   btlMesWait(int arg1);
+    public delegate int   btlMesClose(int arg1);
     public delegate int   btlDistTargetFrame(int arg1);
     public delegate int   btlSplineStart(int arg1);
     public delegate int   btlSplineRegist(int arg1, int arg2);
@@ -220,7 +220,7 @@ public static unsafe partial class FhXVMCall
     public delegate int   btlFadeOutWeapon();
     public delegate int   btlResetMotionSpeed();
     public delegate int   btlDistTargetFrameSpd(int arg1);
-    public delegate int   btlmesa(int arg1, int arg2);
+    public delegate int   btlMesA(int arg1, int arg2);
     public delegate int   btlSetSkipMode(int arg1);
     public delegate float btlGetCamWidth2(int arg1);
     public delegate float btlGetCamHeight2(int arg1);
