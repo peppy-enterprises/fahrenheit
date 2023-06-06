@@ -30,14 +30,18 @@ public static partial class FhCLRHost
 {
     private static void GetEligibleMethods(this Assembly assembly, in List<FhHookRecord> callerList)
     {
-        Type hookAttrType = typeof(FhHookAttribute);
+        callerList.Clear();
 
         foreach (Type type in assembly.GetExportedTypes())
         {
-            foreach (MethodInfo method in type.GetMethods())
+            foreach (MethodInfo method in type.GetMethods(BindingFlags.Static | BindingFlags.Public))
             {
-                if (method.GetCustomAttribute(hookAttrType) is not FhHookAttribute hookAttrib) continue;
-                callerList.Add(new FhHookRecord(method, hookAttrib));
+                FhHookAttribute? attr;
+
+                if ((attr = method.GetCustomAttribute<FhHookAttribute>()) == null) continue;
+                
+                FhLog.Log(LogLevel.Info, $"Detected valid hook {method.Name}.");
+                callerList.Add(new FhHookRecord(method, attr));
             }
         }
     }
@@ -50,6 +54,48 @@ public static partial class FhCLRHost
      */
     public static int CLRHostInit(IntPtr args, int size)
     {
+        List<FhHookRecord> records = new List<FhHookRecord>();
+
+        foreach (Assembly assem in FhLoader.LoadedPluginAssembliesCache)
+        {
+            FhLog.Log(LogLevel.Info, $"Entering host init for assembly {assem.GetName().Name?.ToUpperInvariant()}.");
+
+            assem.GetEligibleMethods(records);
+
+            foreach (FhHookRecord record in records)
+            {
+                MethodInfo method = record.Method;
+                Type       dtype  = record.Attribute.DelegateType;
+                string     mname  = record.Attribute.Target switch 
+                {
+                    HookTarget.X  => "FFX.exe",
+                    HookTarget.X2 => "FFX-2.exe",
+                    _             => throw new Exception("E_UNDEFINED_HOOK_TARGET")
+                };
+
+                FhLog.Log(LogLevel.Info, $"Hook record: module {mname} at 0x{record.Attribute.Offset.ToString("X8")}, apply hook {record.Method.Name}.");
+
+                FhCLRHostDelegateStore.Mine[method] = Delegate.CreateDelegate(dtype, method);
+
+                nint mbase = GetModuleHandle(mname);
+                if (mbase == nint.Zero) continue;
+
+                nint addr = mbase + record.Attribute.Offset;
+
+                FhLog.Log(LogLevel.Info, $"Module addr: 0x{mbase.ToString("X8")}, final address: 0x{addr.ToString("X8")}.");
+
+                DetourTransactionBegin();
+                DetourUpdateThread(GetCurrentThread());
+                DetourAttach(ref addr, Marshal.GetFunctionPointerForDelegate(FhCLRHostDelegateStore.Mine[method]));
+                DetourTransactionCommit();
+
+                // and so on patch IAT of clr module
+                DetoursPatchIAT(GetModuleHandle("coreclr.dll"), mbase, addr);
+
+                FhCLRHostDelegateStore.Real[method] = Marshal.GetDelegateForFunctionPointer(addr, dtype);
+            }
+        }
+
         return 0;
     }
 

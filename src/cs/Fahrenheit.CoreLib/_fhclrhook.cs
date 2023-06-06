@@ -2,15 +2,23 @@
 
 namespace Fahrenheit.CoreLib;
 
+public enum HookTarget
+{
+    X  = 1,
+    X2 = 2
+}
+
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class FhHookAttribute : Attribute
 {
-    public int  Address      { get; init; }
-    public Type DelegateType { get; init; }
+    public HookTarget Target       { get; init; }
+    public int        Offset       { get; init; }
+    public Type       DelegateType { get; init; }
 
-    public FhHookAttribute(int addr, Type delegateType)
+    public FhHookAttribute(HookTarget target, int addr, Type delegateType)
     {
-        Address      = addr;
+        Target       = target;
+        Offset       = addr;
         DelegateType = delegateType;
     }
 }

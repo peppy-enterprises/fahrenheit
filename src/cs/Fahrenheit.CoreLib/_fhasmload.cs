@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text.Json;
 
 namespace Fahrenheit.CoreLib;
 
 public static class FhLoader
 {
+    static FhLoader()
+    {
+        LoadModules(FhRuntimeConst.CLRHooksDir.Path, out _);
+        LoadModules(FhRuntimeConst.ModulesDir.Path, out _);
+    }
+
     public static List<Assembly> LoadedPluginAssembliesCache { get; } = new List<Assembly>();
 
     /// <summary>
@@ -64,7 +71,9 @@ public static class FhLoader
         }
 
         FhLog.Log(LogLevel.Info, $"Loading module {moduleName}.");
-        Assembly currentlyLoadingAssem = Assembly.LoadFrom(fullPath);
+
+        AssemblyLoadContext asmLoadCtx            = AssemblyLoadContext.GetLoadContext(typeof(FhLoader).Assembly) ?? throw new Exception("E_CANNOT_GET_OWN_ALC");
+        Assembly            currentlyLoadingAssem = asmLoadCtx.LoadFromAssemblyPath(fullPath);
 
         LoadedPluginAssembliesCache.Add(currentlyLoadingAssem);
 

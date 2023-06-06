@@ -1,5 +1,4 @@
 <Project>
-    <Import Project="$(SolutionDir)\Directory.Build.props" />
 
     <!-- ARTIFACT PATH DEFINITION -->
     <PropertyGroup>

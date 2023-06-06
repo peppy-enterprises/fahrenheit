@@ -25,6 +25,7 @@ public sealed record FhDirLink
 
 public static class FhRuntimeConst
 {
+    internal const string _binDirName      = "bin";
     internal const string _clrHooksDirName = "clrhooks";
     internal const string _cppHooksDirName = "cpphooks";
     internal const string _modulesDirName  = "modules";
@@ -37,6 +38,7 @@ public static class FhRuntimeConst
         string cwdParent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
                            throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
 
+        string binDirPath      = Path.Join(cwdParent, _binDirName);
         string clrHooksDirPath = Path.Join(cwdParent, _clrHooksDirName);
         string cppHooksDirPath = Path.Join(cwdParent, _cppHooksDirName);
         string modulesDirPath  = Path.Join(cwdParent, _modulesDirName);
@@ -44,6 +46,7 @@ public static class FhRuntimeConst
         string diagLogDirPath  = Path.Join(cwdParent, _diagLogDirName);
         string rsrcDirPath     = Path.Join(cwdParent, _rsrcDirName);
 
+        BinDir      = new FhDirLink("$bindir", binDirPath);
         CLRHooksDir = new FhDirLink("$clrhookdir", clrHooksDirPath);
         CPPHooksDir = new FhDirLink("$cpphookdir", cppHooksDirPath);
         ModulesDir  = new FhDirLink("$modulesdir", modulesDirPath);
@@ -52,6 +55,7 @@ public static class FhRuntimeConst
         RsrcDir     = new FhDirLink("$rsrcdir", rsrcDirPath);
     }
 
+    public static readonly FhDirLink BinDir;
     public static readonly FhDirLink CLRHooksDir;
     public static readonly FhDirLink CPPHooksDir;
     public static readonly FhDirLink ModulesDir;

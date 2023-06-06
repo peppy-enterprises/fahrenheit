@@ -393,31 +393,21 @@ public static class FhUtil
 
     internal static void EnterObject(this ref Utf8JsonReader reader)
     {
-        while (reader.TokenType != JsonTokenType.StartObject)
-        {
-            reader.Read();
-        }
-
+        while (reader.TokenType != JsonTokenType.StartObject) reader.Read();
         reader.Read();
     }
 
     internal static void EnterArray(this ref Utf8JsonReader reader)
     {
-        while (reader.TokenType != JsonTokenType.StartArray)
-        {
-            reader.Read();
-        }
-
+        while (reader.TokenType != JsonTokenType.StartArray) reader.Read();
         reader.Read();
     }
 
     internal static T DeserializeAndAdvance<T>(this ref Utf8JsonReader reader, string key)
     {
         if (reader.GetString() != key)
-        {
             throw new JsonException($"Expected {key}, got {reader.GetString()}.");
-        }
-
+        
         reader.Read();
         T tval = JsonSerializer.Deserialize<T>(ref reader, JsonOpts) ?? throw new JsonException();
         reader.Read();

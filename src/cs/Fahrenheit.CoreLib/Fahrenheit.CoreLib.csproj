@@ -15,6 +15,23 @@
         <Product>Fahrenheit Core Library</Product>
     </PropertyGroup>
 
+	<!-- LOCAL TESTING COPY TASK -->
+	<Target Name="CopyAfterBuild" AfterTargets="Build">
+		<PropertyGroup>
+			<CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
+		</PropertyGroup>
+
+		<ItemGroup>
+			<ProjectFiles Include="$(TargetDir)\*.*" />
+		</ItemGroup>
+
+		<Message Text="$(MSBuildProjectName): Copying to $(CopyToDir)." Importance="High" />
+
+		<Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(CopyToDir)" />
+
+		<Message Text="Copied build files to $(CopyToDir)." Importance="High" />
+	</Target>
+
     <!-- SDK REFERENCES -->
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
     <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />

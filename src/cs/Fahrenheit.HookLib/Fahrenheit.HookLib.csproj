@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
 
 	<!-- ASSEMBLY BASIC PROPERTIES -->
 	<PropertyGroup>
@@ -6,21 +6,21 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	    <PlatformTarget>x86</PlatformTarget>
+		<PlatformTarget>x86</PlatformTarget>
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 	</PropertyGroup>
 
 	<!-- ASSEMBLY ADDITIONAL PROPERTIES -->
 	<PropertyGroup>
-		<AssemblyName>fhclrhost</AssemblyName>
-		<AssemblyTitle>Fahrenheit CLR Host Interface</AssemblyTitle>
-		<Product>Fahrenheit CLR Host Interface</Product>
+		<AssemblyName>fhcshook</AssemblyName>
+		<AssemblyTitle>Fahrenheit C# Hook Library</AssemblyTitle>
+		<Product>Fahrenheit C# Hook Library</Product>
 	</PropertyGroup>
 
 	<!-- LOCAL TESTING COPY TASK -->
 	<Target Name="CopyAfterBuild" AfterTargets="Build">
 		<PropertyGroup>
-			<CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
+			<CopyToDir>$(SolutionDir)\artifacts\localdeploy\clrhooks</CopyToDir>
 		</PropertyGroup>
 
 		<ItemGroup>
@@ -45,7 +45,10 @@
 
 	<!-- PROJECT REFERENCES -->
 	<ItemGroup>
-		<ProjectReference Include="..\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj" />
+		<ProjectReference Include="..\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj">
+			<Private>false</Private>
+			<ExcludeAssets>runtime</ExcludeAssets>
+		</ProjectReference>
 	</ItemGroup>
 
 </Project>
