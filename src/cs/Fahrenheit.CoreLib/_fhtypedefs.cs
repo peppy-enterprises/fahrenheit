@@ -20,6 +20,7 @@ global using T_XChrStatId     = System.Int32;  // x_idchrstat
 global using T_XTargetId      = System.Int32;  // x_idtgt
 global using T_XBtlMapId      = System.UInt16; // x_idbtlmap
 global using T_XItemId        = System.UInt16; // x_iditem
+global using T_XMdlElemId     = System.Int32;  // x_idmdlelem
 global using T_XMonId         = System.UInt16; // x_idmon
 global using T_XStdMotId      = System.UInt16; // x_idmotstd
 global using T_XNpcId         = System.UInt16; // x_idnpc
