@@ -14,6 +14,7 @@
 
 namespace Fahrenheit.CoreLib;
 
+#pragma warning disable CA1069
 public enum FhXMdlElemId : T_XMdlElemId
 {
     // [h2cs 12/6/23 23:16] Header name: c001 
@@ -155,9 +156,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C001_ELEM_CHEST_1_UPV = 133,
     C001_ELEM_BODY = 134,
     C001_ELEM_LAND = 135,
-    C001_MODEL_NB = 2,
-    C001_MODEL_C001_00 = 0,
-    C001_MODEL_C001_01 = 1,
     // --- __c001_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c002 
@@ -305,10 +303,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C002_ELEM_R_ARM_CONT = 139,
     C002_ELEM_R_HAND_CONT = 140,
     C002_ELEM_R_HAND_UPV = 141,
-    C002_MODEL_NB = 3,
-    C002_MODEL_C002_00 = 0,
-    C002_MODEL_C002_01 = 1,
-    C002_MODEL_C002_00A = 2,
     // --- __c002_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c003 
@@ -467,12 +461,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C003_ELEM_L_HAND_UPV = 150,
     C003_ELEM_BODY = 151,
     C003_ELEM_LAND = 152,
-    C003_MODEL_NB = 5,
-    C003_MODEL_BODY_EMD = 0,
-    C003_MODEL_BODY_P3_EMD = 1,
-    C003_MODEL_BODY_P1_EMD = 2,
-    C003_MODEL_ERI_EMD = 3,
-    C003_MODEL_KAZARI_EMD = 4,
     // --- __c003_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c004 
@@ -634,8 +622,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C004_ELEM_I_ARM_CONT = 153,
     C004_ELEM_L_HAND_CONT = 154,
     C004_ELEM_L_HAND_UPV = 155,
-    C004_MODEL_NB = 1,
-    C004_MODEL_C004_00B = 0,
     // --- __c004_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c005 
@@ -775,8 +761,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C005_ELEM_HEAD_CON = 131,
     C005_ELEM_BODY = 132,
     C005_ELEM_LAND = 133,
-    C005_MODEL_NB = 1,
-    C005_MODEL_C005_00 = 0,
     // --- __c005_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c006 
@@ -963,11 +947,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C006_ELEM_FEMUR_CHN = 178,
     C006_ELEM_FEMUR = 179,
     C006_ELEM_FEMUR_EFF = 180,
-    C006_MODEL_NB = 4,
-    C006_MODEL_BODY_B2_EMD = 0,
-    C006_MODEL_BELT_A_EMD = 1,
-    C006_MODEL_KAZARI_EMD = 2,
-    C006_MODEL_BODY_A_EMD = 3,
     // --- __c006_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c007 
@@ -1135,10 +1114,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C007_ELEM_HEAD_CON1 = 159,
     C007_ELEM_BODY = 160,
     C007_ELEM_LAND = 161,
-    C007_MODEL_NB = 3,
-    C007_MODEL_BODY0 = 0,
-    C007_MODEL_BUHIN2 = 1,
-    C007_MODEL_BUHIN4 = 2,
     // --- __c007_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c008 
@@ -1300,11 +1275,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C008_ELEM_NECK_UPV = 153,
     C008_ELEM_BODY_2 = 154,
     C008_ELEM_LAND = 155,
-    C008_MODEL_NB = 4,
-    C008_MODEL_BODY = 0,
-    C008_MODEL_ASI = 1,
-    C008_MODEL_OBI = 2,
-    C008_MODEL_KAZARI = 3,
     // --- __c008_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c041 
@@ -1472,13 +1442,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C041_ELEM_HEAD_CON1 = 159,
     C041_ELEM_BODY = 160,
     C041_ELEM_LAND = 161,
-    C041_MODEL_NB = 6,
-    C041_MODEL_BODY0 = 0,
-    C041_MODEL_BUHIN2 = 1,
-    C041_MODEL_BUHIN4 = 2,
-    C041_MODEL_BUHIN0 = 3,
-    C041_MODEL_BUHIN5 = 4,
-    C041_MODEL_BODY1 = 5,
     // --- __c041_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c043 
@@ -1681,10 +1644,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C043_ELEM_R_ARM_CONT = 194,
     C043_ELEM_R_HAND_CONT = 195,
     C043_ELEM_R_HAND_UPV = 196,
-    C043_MODEL_NB = 3,
-    C043_MODEL_BODY_1 = 0,
-    C043_MODEL_ASI = 1,
-    C043_MODEL_KAZARI = 2,
     // --- __c043_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c044 
@@ -1831,9 +1790,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C044_ELEM_NECK_UPV = 138,
     C044_ELEM_BODY_2 = 139,
     C044_ELEM_LAND = 140,
-    C044_MODEL_NB = 2,
-    C044_MODEL_BODY = 0,
-    C044_MODEL_KAZARI = 1,
     // --- __c044_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c045 
@@ -1992,12 +1948,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C045_ELEM_L_HAND_UPV = 150,
     C045_ELEM_BODY = 151,
     C045_ELEM_LAND = 152,
-    C045_MODEL_NB = 5,
-    C045_MODEL_BODY_EMD = 0,
-    C045_MODEL_KAZARI_EMD = 1,
-    C045_MODEL_BODY_P3_EMD = 2,
-    C045_MODEL_ERI_EMD = 3,
-    C045_MODEL_BODY_P1_EMD = 4,
     // --- __c045_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c051 
@@ -2121,10 +2071,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C051_ELEM_NECK_CONT = 115,
     C051_ELEM_HIP_CONT = 116,
     C051_ELEM_BODY = 117,
-    C051_MODEL_NB = 3,
-    C051_MODEL_C001_00 = 0,
-    C051_MODEL_C001_01 = 1,
-    C051_MODEL_L_EYEBRO = 2,
     // --- __c051_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c101 
@@ -2347,10 +2293,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C101_ELEM_CHEST_1_UPV = 214,
     C101_ELEM_BODY = 215,
     C101_ELEM_LAND = 216,
-    C101_MODEL_NB = 3,
-    C101_MODEL_C101_EYEL_MWS = 0,
-    C101_MODEL_C101_EYER_MWS = 1,
-    C101_MODEL_C001_BODY_MWS = 2,
     // --- __c101_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c102 
@@ -2581,10 +2523,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C102_ELEM_R_ARM_CONT = 222,
     C102_ELEM_R_HAND_CONT = 223,
     C102_ELEM_R_HAND_UPV = 224,
-    C102_MODEL_NB = 3,
-    C102_MODEL_C102_EYER_MWS = 0,
-    C102_MODEL_C102_EYEL_MWS = 1,
-    C102_MODEL_C102_BODY_MWS = 2,
     // --- __c102_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c103 
@@ -2833,9 +2771,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C103_ELEM_L_HAND_UPV = 240,
     C103_ELEM_BODY = 241,
     C103_ELEM_LAND = 242,
-    C103_MODEL_NB = 2,
-    C103_MODEL_C103_EYEL_MWS = 0,
-    C103_MODEL_C103_BODY_MWS = 1,
     // --- __c103_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c104 
@@ -3073,10 +3008,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C104_ELEM_I_ARM_CONT = 229,
     C104_ELEM_L_HAND_CONT = 230,
     C104_ELEM_L_HAND_UPV = 231,
-    C104_MODEL_NB = 3,
-    C104_MODEL_C104_EYEL_MWS = 0,
-    C104_MODEL_C104_EYER_MWS = 1,
-    C104_MODEL_C104_BODY_MWS = 2,
     // --- __c104_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c105 
@@ -3300,10 +3231,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C105_ELEM_HEAD_CON = 215,
     C105_ELEM_BODY = 216,
     C105_ELEM_LAND = 217,
-    C105_MODEL_NB = 3,
-    C105_MODEL_C105_EYEL_MWS = 0,
-    C105_MODEL_C105_EYER_MWS = 1,
-    C105_MODEL_C105_BODY_MWS = 2,
     // --- __c105_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c106 
@@ -3569,9 +3496,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C106_ELEM_FEMUR_CHN = 257,
     C106_ELEM_FEMUR = 258,
     C106_ELEM_FEMUR_EFF = 259,
-    C106_MODEL_NB = 2,
-    C106_MODEL_C106_EYER_MWS = 0,
-    C106_MODEL_C106_BODY_MWS = 1,
     // --- __c106_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c107 
@@ -3821,10 +3745,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C107_ELEM_HEAD_CON1 = 241,
     C107_ELEM_BODY = 242,
     C107_ELEM_LAND = 243,
-    C107_MODEL_NB = 3,
-    C107_MODEL_C107_EYEL_MWS = 0,
-    C107_MODEL_C107_EYER_MWS = 1,
-    C107_MODEL_C107_BODY_MWS = 2,
     // --- __c107_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c108 
@@ -4068,10 +3988,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C108_ELEM_NECK_UPV = 235,
     C108_ELEM_BODY_2 = 236,
     C108_ELEM_LAND = 237,
-    C108_MODEL_NB = 3,
-    C108_MODEL_C108_EYEL_MWS = 0,
-    C108_MODEL_C108_EYER_MWS = 1,
-    C108_MODEL_C108_BODY_MWS = 2,
     // --- __c108_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c121 
@@ -4355,10 +4271,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C121_ELEM_R_ARM_CONT = 275,
     C121_ELEM_R_HAND_CONT = 276,
     C121_ELEM_R_HAND_UPV = 277,
-    C121_MODEL_NB = 3,
-    C121_MODEL_C121_EYER_MWS = 0,
-    C121_MODEL_C121_EYEL_MWS = 1,
-    C121_MODEL_C121_BODY_MWS = 2,
     // --- __c121_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c122 
@@ -4584,10 +4496,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C122_ELEM_NECK_UPV = 217,
     C122_ELEM_BODY_2 = 218,
     C122_ELEM_LAND = 219,
-    C122_MODEL_NB = 3,
-    C122_MODEL_C122_EYEL_MWS = 0,
-    C122_MODEL_C122_EYER_MWS = 1,
-    C122_MODEL_C122_BODY_MWS = 2,
     // --- __c122_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c901 
@@ -4810,10 +4718,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C901_ELEM_CHEST_1_UPV = 214,
     C901_ELEM_BODY = 215,
     C901_ELEM_LAND = 216,
-    C901_MODEL_NB = 3,
-    C901_MODEL_C101_EYEL_MWS = 0,
-    C901_MODEL_C101_EYER_MWS = 1,
-    C901_MODEL_C001_BODY_MWS = 2,
     // --- __c901_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c902 
@@ -5044,10 +4948,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C902_ELEM_R_ARM_CONT = 222,
     C902_ELEM_R_HAND_CONT = 223,
     C902_ELEM_R_HAND_UPV = 224,
-    C902_MODEL_NB = 3,
-    C902_MODEL_C102_EYER_MWS = 0,
-    C902_MODEL_C102_EYEL_MWS = 1,
-    C902_MODEL_C102_BODY_MWS = 2,
     // --- __c902_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c903 
@@ -5296,9 +5196,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C903_ELEM_L_HAND_UPV = 240,
     C903_ELEM_BODY = 241,
     C903_ELEM_LAND = 242,
-    C903_MODEL_NB = 2,
-    C903_MODEL_C103_EYEL_MWS = 0,
-    C903_MODEL_C103_BODY_MWS = 1,
     // --- __c903_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c904 
@@ -5536,10 +5433,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C904_ELEM_I_ARM_CONT = 229,
     C904_ELEM_L_HAND_CONT = 230,
     C904_ELEM_L_HAND_UPV = 231,
-    C904_MODEL_NB = 3,
-    C904_MODEL_C104_EYEL_MWS = 0,
-    C904_MODEL_C104_EYER_MWS = 1,
-    C904_MODEL_C104_BODY_MWS = 2,
     // --- __c904_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c905 
@@ -5763,10 +5656,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C905_ELEM_HEAD_CON = 215,
     C905_ELEM_BODY = 216,
     C905_ELEM_LAND = 217,
-    C905_MODEL_NB = 3,
-    C905_MODEL_C105_EYEL_MWS = 0,
-    C905_MODEL_C105_EYER_MWS = 1,
-    C905_MODEL_C105_BODY_MWS = 2,
     // --- __c905_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c906 
@@ -6032,9 +5921,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C906_ELEM_FEMUR_CHN = 257,
     C906_ELEM_FEMUR = 258,
     C906_ELEM_FEMUR_EFF = 259,
-    C906_MODEL_NB = 2,
-    C906_MODEL_C106_EYER_MWS = 0,
-    C906_MODEL_C106_BODY_MWS = 1,
     // --- __c906_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c907 
@@ -6284,10 +6170,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C907_ELEM_HEAD_CON1 = 241,
     C907_ELEM_BODY = 242,
     C907_ELEM_LAND = 243,
-    C907_MODEL_NB = 3,
-    C907_MODEL_C107_EYEL_MWS = 0,
-    C907_MODEL_C107_EYER_MWS = 1,
-    C907_MODEL_C107_BODY_MWS = 2,
     // --- __c907_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c908 
@@ -6531,10 +6413,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C908_ELEM_NECK_UPV = 235,
     C908_ELEM_BODY_2 = 236,
     C908_ELEM_LAND = 237,
-    C908_MODEL_NB = 3,
-    C908_MODEL_C108_EYEL_MWS = 0,
-    C908_MODEL_C108_EYER_MWS = 1,
-    C908_MODEL_C108_BODY_MWS = 2,
     // --- __c908_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c921 
@@ -6818,10 +6696,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C921_ELEM_R_ARM_CONT = 275,
     C921_ELEM_R_HAND_CONT = 276,
     C921_ELEM_R_HAND_UPV = 277,
-    C921_MODEL_NB = 3,
-    C921_MODEL_C121_EYER_MWS = 0,
-    C921_MODEL_C121_EYEL_MWS = 1,
-    C921_MODEL_C121_BODY_MWS = 2,
     // --- __c921_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c922 
@@ -7047,10 +6921,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C922_ELEM_NECK_UPV = 217,
     C922_ELEM_BODY_2 = 218,
     C922_ELEM_LAND = 219,
-    C922_MODEL_NB = 3,
-    C922_MODEL_C122_EYEL_MWS = 0,
-    C922_MODEL_C122_EYER_MWS = 1,
-    C922_MODEL_C122_BODY_MWS = 2,
     // --- __c922_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: c999 
@@ -7274,10 +7144,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     C999_ELEM_CHEST_1_UPV = 215,
     C999_ELEM_BODY = 216,
     C999_ELEM_LAND = 217,
-    C999_MODEL_NB = 3,
-    C999_MODEL_C001_BODY_MWS = 0,
-    C999_MODEL_C101_EYEL_MWS = 1,
-    C999_MODEL_C101_EYER_MWS = 2,
     // --- __c999_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f001 
@@ -7288,10 +7154,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F001_ELEM_URING = 2,
     F001_ELEM_RING = 3,
     F001_ELEM_F001_OBJ = 4,
-    F001_MODEL_NB = 3,
-    F001_MODEL_URING = 0,
-    F001_MODEL_RING = 1,
-    F001_MODEL_F001_OBJ = 2,
     // --- __f001_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f002 
@@ -7307,9 +7169,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F002_ELEM_F002_OBJ = 7,
     F002_ELEM_F002_FUTASHAPE1 = 8,
     F002_ELEM_F002_HAKOSHAPE1 = 9,
-    F002_MODEL_NB = 2,
-    F002_MODEL_F002_FUTASHAPE1 = 0,
-    F002_MODEL_F002_HAKOSHAPE1 = 1,
     // --- __f002_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f006 
@@ -7319,8 +7178,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F006_ELEM_NULL1 = 1,
     F006_ELEM_NULL_1 = 2,
     F006_ELEM_BALL = 3,
-    F006_MODEL_NB = 1,
-    F006_MODEL_BALL = 0,
     // --- __f006_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f007 
@@ -7359,10 +7216,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F007_ELEM_1_HIP = 30,
     F007_ELEM_1_TAIL = 31,
     F007_ELEM_EFF2_2 = 32,
-    F007_MODEL_NB = 3,
-    F007_MODEL_3 = 0,
-    F007_MODEL_2 = 1,
-    F007_MODEL_1 = 2,
     // --- __f007_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f008 
@@ -7380,8 +7233,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F008_ELEM_R_WING = 9,
     F008_ELEM_EFF11 = 10,
     F008_ELEM_M008 = 11,
-    F008_MODEL_NB = 1,
-    F008_MODEL_M008 = 0,
     // --- __f008_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f009 
@@ -7463,9 +7314,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F009_ELEM_CHN66 = 73,
     F009_ELEM_R_TOE = 74,
     F009_ELEM_EFF66 = 75,
-    F009_MODEL_NB = 2,
-    F009_MODEL_INU_EMD = 0,
-    F009_MODEL_COMB_LAMINA_EMD = 1,
     // --- __f009_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f010 
@@ -7536,9 +7384,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F010_ELEM_CHN55_2 = 62,
     F010_ELEM_R_FOOT_2 = 63,
     F010_ELEM_EFF55_2 = 64,
-    F010_MODEL_NB = 2,
-    F010_MODEL_F010 = 0,
-    F010_MODEL_F010_02 = 1,
     // --- __f010_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f011 
@@ -7546,8 +7391,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F011_ELEM_NB = 2,
     F011_ELEM_F011 = 0,
     F011_ELEM_F011_OBJ = 1,
-    F011_MODEL_NB = 1,
-    F011_MODEL_F011_OBJ = 0,
     // --- __f011_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f012 
@@ -7558,19 +7401,12 @@ public enum FhXMdlElemId : T_XMdlElemId
     F012_ELEM_F012_OBJ5 = 2,
     F012_ELEM_F012_OBJ3 = 3,
     F012_ELEM_F012_OBJ4 = 4,
-    F012_MODEL_NB = 4,
-    F012_MODEL_F012_OBJ = 0,
-    F012_MODEL_F012_OBJ5 = 1,
-    F012_MODEL_F012_OBJ3 = 2,
-    F012_MODEL_F012_OBJ4 = 3,
     // --- __f012_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f013 
     // --- __f013_ath START (4 entries) ---
     F013_ELEM_NB = 1,
     F013_ELEM_F013 = 0,
-    F013_MODEL_NB = 1,
-    F013_MODEL_F013 = 0,
     // --- __f013_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f015 
@@ -7578,8 +7414,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F015_ELEM_NB = 2,
     F015_ELEM_F015 = 0,
     F015_ELEM_F015_OBJ = 1,
-    F015_MODEL_NB = 1,
-    F015_MODEL_F015_OBJ = 0,
     // --- __f015_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f016 
@@ -7587,8 +7421,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F016_ELEM_NB = 2,
     F016_ELEM_F016_ROOT = 0,
     F016_ELEM_F016_MWS = 1,
-    F016_MODEL_NB = 1,
-    F016_MODEL_F016_MWS = 0,
     // --- __f016_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f017 
@@ -7597,9 +7429,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F017_ELEM_F017 = 0,
     F017_ELEM_F017_OBJ1 = 1,
     F017_ELEM_F017_OBJ2 = 2,
-    F017_MODEL_NB = 2,
-    F017_MODEL_F017_OBJ2 = 0,
-    F017_MODEL_F017_OBJ1 = 1,
     // --- __f017_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f018 
@@ -7608,9 +7437,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F018_ELEM_F018 = 0,
     F018_ELEM_OBJ1 = 1,
     F018_ELEM_OBJ2 = 2,
-    F018_MODEL_NB = 2,
-    F018_MODEL_OBJ1 = 0,
-    F018_MODEL_OBJ2 = 1,
     // --- __f018_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f021 
@@ -7618,8 +7444,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F021_ELEM_NB = 2,
     F021_ELEM_F021 = 0,
     F021_ELEM_BODY = 1,
-    F021_MODEL_NB = 1,
-    F021_MODEL_BODY = 0,
     // --- __f021_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f022 
@@ -7627,8 +7451,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F022_ELEM_NB = 2,
     F022_ELEM_F022 = 0,
     F022_ELEM_OBJ1 = 1,
-    F022_MODEL_NB = 1,
-    F022_MODEL_OBJ1 = 0,
     // --- __f022_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f023 
@@ -7695,8 +7517,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F023_ELEM_TAIL1 = 58,
     F023_ELEM_EFF4 = 59,
     F023_ELEM_TAIL2 = 60,
-    F023_MODEL_NB = 1,
-    F023_MODEL_MDL_1 = 0,
     // --- __f023_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f024 
@@ -7704,8 +7524,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F024_ELEM_NB = 2,
     F024_ELEM_F024 = 0,
     F024_ELEM_BODY = 1,
-    F024_MODEL_NB = 1,
-    F024_MODEL_BODY = 0,
     // --- __f024_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f027 
@@ -7715,10 +7533,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F027_ELEM_OBJ3 = 1,
     F027_ELEM_OBJ1 = 2,
     F027_ELEM_OBJ2 = 3,
-    F027_MODEL_NB = 3,
-    F027_MODEL_OBJ3 = 0,
-    F027_MODEL_OBJ1 = 1,
-    F027_MODEL_OBJ2 = 2,
     // --- __f027_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f028 
@@ -7727,9 +7541,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F028_ELEM_F028 = 0,
     F028_ELEM_OBJ2 = 1,
     F028_ELEM_OBJ1 = 2,
-    F028_MODEL_NB = 2,
-    F028_MODEL_OBJ2 = 0,
-    F028_MODEL_OBJ1 = 1,
     // --- __f028_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f029 
@@ -7805,8 +7616,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F029_ELEM_R_FOOT2_1 = 67,
     F029_ELEM_EFF189 = 68,
     F029_ELEM_F029 = 69,
-    F029_MODEL_NB = 1,
-    F029_MODEL_F029 = 0,
     // --- __f029_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f030 
@@ -7839,9 +7648,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F030_ELEM_EFF4 = 24,
     F030_ELEM_POAL_1 = 25,
     F030_ELEM_HAT = 26,
-    F030_MODEL_NB = 2,
-    F030_MODEL_POAL_1 = 0,
-    F030_MODEL_HAT = 1,
     // --- __f030_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f031 
@@ -7875,10 +7681,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F031_ELEM_POAL_1 = 25,
     F031_ELEM_HATA = 26,
     F031_ELEM_UE = 27,
-    F031_MODEL_NB = 3,
-    F031_MODEL_POAL_1 = 0,
-    F031_MODEL_HATA = 1,
-    F031_MODEL_UE = 2,
     // --- __f031_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f032 
@@ -7913,11 +7715,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F032_ELEM_MARU = 26,
     F032_ELEM_HIRA = 27,
     F032_ELEM_HIMO_1 = 28,
-    F032_MODEL_NB = 4,
-    F032_MODEL_HATAPOAL = 0,
-    F032_MODEL_MARU = 1,
-    F032_MODEL_HIRA = 2,
-    F032_MODEL_HIMO_1 = 3,
     // --- __f032_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f033 
@@ -7951,10 +7748,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F033_ELEM_POAL_1 = 25,
     F033_ELEM_HARI_1 = 26,
     F033_ELEM_HIMO = 27,
-    F033_MODEL_NB = 3,
-    F033_MODEL_POAL_1 = 0,
-    F033_MODEL_HARI_1 = 1,
-    F033_MODEL_HIMO = 2,
     // --- __f033_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f034 
@@ -7987,9 +7780,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F034_ELEM_EFF4 = 24,
     F034_ELEM_POAL = 25,
     F034_ELEM_HATA = 26,
-    F034_MODEL_NB = 2,
-    F034_MODEL_POAL = 0,
-    F034_MODEL_HATA = 1,
     // --- __f034_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f035 
@@ -8040,10 +7830,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F035_ELEM_POAL = 42,
     F035_ELEM_HIMO = 43,
     F035_ELEM_HATA = 44,
-    F035_MODEL_NB = 3,
-    F035_MODEL_POAL = 0,
-    F035_MODEL_HIMO = 1,
-    F035_MODEL_HATA = 2,
     // --- __f035_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f047 
@@ -8159,10 +7945,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F047_ELEM_SIPAF_SK = 107,
     F047_ELEM_SIPAF_SK20 = 108,
     F047_ELEM_SIPAF_SK21 = 109,
-    F047_MODEL_NB = 3,
-    F047_MODEL_SIPAF_SK = 0,
-    F047_MODEL_SIPAF_SK20 = 1,
-    F047_MODEL_SIPAF_SK21 = 2,
     // --- __f047_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f048 
@@ -8256,8 +8038,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F048_ELEM_UPNOSE = 85,
     F048_ELEM_EFF227 = 86,
     F048_ELEM_SIPAFKID_SK = 87,
-    F048_MODEL_NB = 1,
-    F048_MODEL_SIPAFKID_SK = 0,
     // --- __f048_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f049 
@@ -8303,8 +8083,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F049_ELEM_BIRA6 = 37,
     F049_ELEM_EFF15 = 38,
     F049_ELEM_F049 = 39,
-    F049_MODEL_NB = 1,
-    F049_MODEL_F049 = 0,
     // --- __f049_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f050 
@@ -8336,8 +8114,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F050_ELEM_BIRA4 = 23,
     F050_ELEM_EFF11 = 24,
     F050_ELEM_F050 = 25,
-    F050_MODEL_NB = 1,
-    F050_MODEL_F050 = 0,
     // --- __f050_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f051 
@@ -8464,9 +8240,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F051_ELEM_L_F_0 = 118,
     F051_ELEM_L_F_EX1 = 119,
     F051_ELEM_L_F_EX2 = 120,
-    F051_MODEL_NB = 2,
-    F051_MODEL_NECK_DEC1 = 0,
-    F051_MODEL_BOD = 1,
     // --- __f051_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f052 
@@ -8593,9 +8366,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F052_ELEM_R_F_0 = 118,
     F052_ELEM_R_F_EX1 = 119,
     F052_ELEM_R_F_EX2 = 120,
-    F052_MODEL_NB = 2,
-    F052_MODEL_BOD = 0,
-    F052_MODEL_NECK_DEC1 = 1,
     // --- __f052_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f053 
@@ -8649,9 +8419,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F053_ELEM_CHN46 = 45,
     F053_ELEM_R_FOOT = 46,
     F053_ELEM_EFF46 = 47,
-    F053_MODEL_NB = 2,
-    F053_MODEL_F053 = 0,
-    F053_MODEL_F053_1 = 1,
     // --- __f053_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f054 
@@ -8687,8 +8454,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F054_ELEM_SQTSPLITRT = 27,
     F054_ELEM_FIN = 28,
     F054_ELEM_EFF11 = 29,
-    F054_MODEL_NB = 1,
-    F054_MODEL_IRUKA_EMD = 0,
     // --- __f054_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f057 
@@ -8762,8 +8527,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F057_ELEM_ROPE2 = 65,
     F057_ELEM_ROPE1 = 66,
     F057_ELEM_EFF8 = 67,
-    F057_MODEL_NB = 1,
-    F057_MODEL_M_SLEIGH_BO_EMD = 0,
     // --- __f057_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f058 
@@ -8775,10 +8538,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F058_ELEM_OBJ1 = 3,
     F058_ELEM_OBJ3 = 4,
     F058_ELEM_OBJ2 = 5,
-    F058_MODEL_NB = 3,
-    F058_MODEL_OBJ1 = 0,
-    F058_MODEL_OBJ3 = 1,
-    F058_MODEL_OBJ2 = 2,
     // --- __f058_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f059 
@@ -8787,9 +8546,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F059_ELEM_F059_ROOT = 0,
     F059_ELEM_F059_T = 1,
     F059_ELEM_OBJ1 = 2,
-    F059_MODEL_NB = 2,
-    F059_MODEL_F059_T = 0,
-    F059_MODEL_OBJ1 = 1,
     // --- __f059_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f060 
@@ -8798,9 +8554,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F060_ELEM_F060_ROOT = 0,
     F060_ELEM_BASE = 1,
     F060_ELEM_F060_1 = 2,
-    F060_MODEL_NB = 2,
-    F060_MODEL_BASE = 0,
-    F060_MODEL_F060_1 = 1,
     // --- __f060_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f061 
@@ -8834,11 +8587,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F061_ELEM_OBJ02 = 25,
     F061_ELEM_OBJ04_4 = 26,
     F061_ELEM_OBJ03 = 27,
-    F061_MODEL_NB = 4,
-    F061_MODEL_OBJ01 = 0,
-    F061_MODEL_OBJ02 = 1,
-    F061_MODEL_OBJ04_4 = 2,
-    F061_MODEL_OBJ03 = 3,
     // --- __f061_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f062 
@@ -8872,11 +8620,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F062_ELEM_OBJ02 = 25,
     F062_ELEM_OBJ03_1_1 = 26,
     F062_ELEM_OBJ04 = 27,
-    F062_MODEL_NB = 4,
-    F062_MODEL_OBJ01_2 = 0,
-    F062_MODEL_OBJ02 = 1,
-    F062_MODEL_OBJ03_1_1 = 2,
-    F062_MODEL_OBJ04 = 3,
     // --- __f062_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f064 
@@ -8885,9 +8628,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F064_ELEM_F064 = 0,
     F064_ELEM_OBJ2 = 1,
     F064_ELEM_OBJ1 = 2,
-    F064_MODEL_NB = 2,
-    F064_MODEL_OBJ2 = 0,
-    F064_MODEL_OBJ1 = 1,
     // --- __f064_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f065 
@@ -8895,8 +8635,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F065_ELEM_NB = 2,
     F065_ELEM_F065 = 0,
     F065_ELEM_OBJ1 = 1,
-    F065_MODEL_NB = 1,
-    F065_MODEL_OBJ1 = 0,
     // --- __f065_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f069 
@@ -8905,9 +8643,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F069_ELEM_F069 = 0,
     F069_ELEM_F069_OBJ = 1,
     F069_ELEM_F069_BALL = 2,
-    F069_MODEL_NB = 2,
-    F069_MODEL_F069_OBJ = 0,
-    F069_MODEL_F069_BALL = 1,
     // --- __f069_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f072 
@@ -8974,8 +8709,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F072_ELEM_CHN22 = 58,
     F072_ELEM_R_FOOT = 59,
     F072_ELEM_EFF22 = 60,
-    F072_MODEL_NB = 1,
-    F072_MODEL_MDL_1 = 0,
     // --- __f072_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f073 
@@ -8993,8 +8726,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F073_ELEM_R_WING = 9,
     F073_ELEM_EFF3 = 10,
     F073_ELEM_F073 = 11,
-    F073_MODEL_NB = 1,
-    F073_MODEL_F073 = 0,
     // --- __f073_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f079 
@@ -9015,10 +8746,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F079_ELEM_GOGLE_OBJ = 12,
     F079_ELEM_GOGLE_BOX = 13,
     F079_ELEM_GOGLE_ITA = 14,
-    F079_MODEL_NB = 3,
-    F079_MODEL_GOGLE_OBJ = 0,
-    F079_MODEL_GOGLE_BOX = 1,
-    F079_MODEL_GOGLE_ITA = 2,
     // --- __f079_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f080 
@@ -9027,9 +8754,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F080_ELEM_F080 = 0,
     F080_ELEM_OBJ2 = 1,
     F080_ELEM_OBJ1 = 2,
-    F080_MODEL_NB = 2,
-    F080_MODEL_OBJ2 = 0,
-    F080_MODEL_OBJ1 = 1,
     // --- __f080_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f081 
@@ -9039,10 +8763,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F081_ELEM_F081_SARA = 1,
     F081_ELEM_F081_NIKU = 2,
     F081_ELEM_F081_GU = 3,
-    F081_MODEL_NB = 3,
-    F081_MODEL_F081_SARA = 0,
-    F081_MODEL_F081_NIKU = 1,
-    F081_MODEL_F081_GU = 2,
     // --- __f081_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f082 
@@ -9050,8 +8770,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F082_ELEM_NB = 2,
     F082_ELEM_F082 = 0,
     F082_ELEM_F082_OBJ = 1,
-    F082_MODEL_NB = 1,
-    F082_MODEL_F082_OBJ = 0,
     // --- __f082_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f084 
@@ -9062,10 +8780,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F084_ELEM_OPEN_FUTA = 2,
     F084_ELEM_BASE = 3,
     F084_ELEM_CLOSE_FUTA = 4,
-    F084_MODEL_NB = 3,
-    F084_MODEL_BASE = 0,
-    F084_MODEL_OPEN_FUTA = 1,
-    F084_MODEL_CLOSE_FUTA = 2,
     // --- __f084_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f085 
@@ -9093,11 +8807,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F085_ELEM_NULL7 = 19,
     F085_ELEM_NULL8 = 20,
     F085_ELEM_CHOKO = 21,
-    F085_MODEL_NB = 4,
-    F085_MODEL_ORI = 0,
-    F085_MODEL_BASYA = 1,
-    F085_MODEL_WA = 2,
-    F085_MODEL_TAZUNA = 3,
     // --- __f085_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f086 
@@ -9122,8 +8831,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F086_ELEM_PARTS01 = 16,
     F086_ELEM_PARTS02 = 17,
     F086_ELEM_CHOKO = 18,
-    F086_MODEL_NB = 1,
-    F086_MODEL_BASYA = 0,
     // --- __f086_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f087 
@@ -9141,8 +8848,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F087_ELEM_CHN5 = 9,
     F087_ELEM_DOWN = 10,
     F087_ELEM_EFF5 = 11,
-    F087_MODEL_NB = 1,
-    F087_MODEL_F087 = 0,
     // --- __f087_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f088 
@@ -9152,10 +8857,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F088_ELEM_HA = 1,
     F088_ELEM_TSUKA = 2,
     F088_ELEM_TSUBA = 3,
-    F088_MODEL_NB = 3,
-    F088_MODEL_HA = 0,
-    F088_MODEL_TSUKA = 1,
-    F088_MODEL_TSUBA = 2,
     // --- __f088_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f090 
@@ -9171,9 +8872,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F090_ELEM_F002_OBJ = 7,
     F090_ELEM_F002_FUTASHAPE1 = 8,
     F090_ELEM_F002_HAKOSHAPE1 = 9,
-    F090_MODEL_NB = 2,
-    F090_MODEL_F002_FUTASHAPE1 = 0,
-    F090_MODEL_F002_HAKOSHAPE1 = 1,
     // --- __f090_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f091 
@@ -9189,9 +8887,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F091_ELEM_F002_OBJ = 7,
     F091_ELEM_F002_FUTASHAPE1 = 8,
     F091_ELEM_F002_HAKOSHAPE1 = 9,
-    F091_MODEL_NB = 2,
-    F091_MODEL_F002_FUTASHAPE1 = 0,
-    F091_MODEL_F002_HAKOSHAPE1 = 1,
     // --- __f091_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f092 
@@ -9207,9 +8902,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F092_ELEM_F002_OBJ = 7,
     F092_ELEM_F002_FUTASHAPE1 = 8,
     F092_ELEM_F002_HAKOSHAPE1 = 9,
-    F092_MODEL_NB = 2,
-    F092_MODEL_F002_FUTASHAPE1 = 0,
-    F092_MODEL_F002_HAKOSHAPE1 = 1,
     // --- __f092_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f093 
@@ -9248,10 +8940,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F093_ELEM_3_HIP = 30,
     F093_ELEM_3_TAIL = 31,
     F093_ELEM_EFF2_9 = 32,
-    F093_MODEL_NB = 3,
-    F093_MODEL_2 = 0,
-    F093_MODEL_1 = 1,
-    F093_MODEL_3 = 2,
     // --- __f093_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f094 
@@ -9290,10 +8978,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F094_ELEM_3_HIP = 30,
     F094_ELEM_3_TAIL = 31,
     F094_ELEM_EFF2_9 = 32,
-    F094_MODEL_NB = 3,
-    F094_MODEL_1 = 0,
-    F094_MODEL_2 = 1,
-    F094_MODEL_3 = 2,
     // --- __f094_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f095 
@@ -9332,10 +9016,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F095_ELEM_3_HIP = 30,
     F095_ELEM_3_TAIL = 31,
     F095_ELEM_EFF2_1 = 32,
-    F095_MODEL_NB = 3,
-    F095_MODEL_2 = 0,
-    F095_MODEL_1 = 1,
-    F095_MODEL_3 = 2,
     // --- __f095_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f096 
@@ -9374,10 +9054,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F096_ELEM_1_HIP = 30,
     F096_ELEM_1_TAIL = 31,
     F096_ELEM_EFF2_1_1 = 32,
-    F096_MODEL_NB = 3,
-    F096_MODEL_2 = 0,
-    F096_MODEL_3 = 1,
-    F096_MODEL_1 = 2,
     // --- __f096_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f097 
@@ -9385,8 +9061,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F097_ELEM_NB = 2,
     F097_ELEM_F097 = 0,
     F097_ELEM_BODY = 1,
-    F097_MODEL_NB = 1,
-    F097_MODEL_BODY = 0,
     // --- __f097_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f098 
@@ -9395,9 +9069,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F098_ELEM_F098 = 0,
     F098_ELEM_HA = 1,
     F098_ELEM_TSUKA = 2,
-    F098_MODEL_NB = 2,
-    F098_MODEL_HA = 0,
-    F098_MODEL_TSUKA = 1,
     // --- __f098_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f099 
@@ -9431,8 +9102,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F099_ELEM_JNT8 = 25,
     F099_ELEM_EFF8 = 26,
     F099_ELEM_F099_OBJ = 27,
-    F099_MODEL_NB = 1,
-    F099_MODEL_F099_OBJ = 0,
     // --- __f099_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f100 
@@ -9453,8 +9122,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F100_ELEM_CHN4 = 12,
     F100_ELEM_FUSE = 13,
     F100_ELEM_EFF4 = 14,
-    F100_MODEL_NB = 1,
-    F100_MODEL_F100_OBJ = 0,
     // --- __f100_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f102 
@@ -9518,10 +9185,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F102_ELEM_SQTSPLITRT21 = 55,
     F102_ELEM_CHIN = 56,
     F102_ELEM_EFF21 = 57,
-    F102_MODEL_NB = 3,
-    F102_MODEL_F102 = 0,
-    F102_MODEL_URA3 = 1,
-    F102_MODEL_OMOTE3 = 2,
     // --- __f102_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f103 
@@ -9531,10 +9194,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F103_ELEM_TSUKA = 1,
     F103_ELEM_HA = 2,
     F103_ELEM_TSUBA = 3,
-    F103_MODEL_NB = 3,
-    F103_MODEL_TSUKA = 0,
-    F103_MODEL_HA = 1,
-    F103_MODEL_TSUBA = 2,
     // --- __f103_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f105 
@@ -9543,9 +9202,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F105_ELEM_F105 = 0,
     F105_ELEM_OBJ1 = 1,
     F105_ELEM_OBJ2 = 2,
-    F105_MODEL_NB = 2,
-    F105_MODEL_OBJ2 = 0,
-    F105_MODEL_OBJ1 = 1,
     // --- __f105_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f106 
@@ -9555,8 +9211,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F106_ELEM_EARTH = 1,
     F106_ELEM_ITEM = 2,
     F106_ELEM_F106_OBJ = 3,
-    F106_MODEL_NB = 1,
-    F106_MODEL_F106_OBJ = 0,
     // --- __f106_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f107 
@@ -9566,8 +9220,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F107_ELEM_EARTH = 1,
     F107_ELEM_ITEM = 2,
     F107_ELEM_F107_OBJ = 3,
-    F107_MODEL_NB = 1,
-    F107_MODEL_F107_OBJ = 0,
     // --- __f107_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f108 
@@ -9576,9 +9228,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F108_ELEM_F108 = 0,
     F108_ELEM_OBJ2 = 1,
     F108_ELEM_OBJ1 = 2,
-    F108_MODEL_NB = 2,
-    F108_MODEL_OBJ2 = 0,
-    F108_MODEL_OBJ1 = 1,
     // --- __f108_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f109 
@@ -9588,8 +9237,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F109_ELEM_F109_OBJ = 1,
     F109_ELEM_EARTH = 2,
     F109_ELEM_ITEM = 3,
-    F109_MODEL_NB = 1,
-    F109_MODEL_F109_OBJ = 0,
     // --- __f109_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f110 
@@ -9600,11 +9247,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F110_ELEM_SPR = 2,
     F110_ELEM_MOJI = 3,
     F110_ELEM_U_MOJI = 4,
-    F110_MODEL_NB = 4,
-    F110_MODEL_U_SHR = 0,
-    F110_MODEL_MOJI = 1,
-    F110_MODEL_U_MOJI = 2,
-    F110_MODEL_SPR = 3,
     // --- __f110_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f111 
@@ -9615,11 +9257,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F111_ELEM_SPR = 2,
     F111_ELEM_MOJI = 3,
     F111_ELEM_U_MOJI = 4,
-    F111_MODEL_NB = 4,
-    F111_MODEL_U_SHR = 0,
-    F111_MODEL_MOJI = 1,
-    F111_MODEL_U_MOJI = 2,
-    F111_MODEL_SPR = 3,
     // --- __f111_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f112 
@@ -9630,11 +9267,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F112_ELEM_SPR = 2,
     F112_ELEM_MOJI = 3,
     F112_ELEM_U_MOJI = 4,
-    F112_MODEL_NB = 4,
-    F112_MODEL_U_SHR = 0,
-    F112_MODEL_MOJI = 1,
-    F112_MODEL_U_MOJI = 2,
-    F112_MODEL_SPR = 3,
     // --- __f112_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f113 
@@ -9645,11 +9277,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F113_ELEM_SPR = 2,
     F113_ELEM_MOJI = 3,
     F113_ELEM_U_MOJI = 4,
-    F113_MODEL_NB = 4,
-    F113_MODEL_U_SHR = 0,
-    F113_MODEL_MOJI = 1,
-    F113_MODEL_U_MOJI = 2,
-    F113_MODEL_SPR = 3,
     // --- __f113_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f114 
@@ -9660,11 +9287,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F114_ELEM_SPR = 2,
     F114_ELEM_MOJI = 3,
     F114_ELEM_U_MOJI = 4,
-    F114_MODEL_NB = 4,
-    F114_MODEL_U_SHR = 0,
-    F114_MODEL_MOJI = 1,
-    F114_MODEL_U_MOJI = 2,
-    F114_MODEL_SPR = 3,
     // --- __f114_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f116 
@@ -9675,11 +9297,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F116_ELEM_SPR = 2,
     F116_ELEM_MOJI = 3,
     F116_ELEM_U_MOJI = 4,
-    F116_MODEL_NB = 4,
-    F116_MODEL_U_SHR = 0,
-    F116_MODEL_MOJI = 1,
-    F116_MODEL_U_MOJI = 2,
-    F116_MODEL_SPR = 3,
     // --- __f116_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f117 
@@ -9690,11 +9307,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F117_ELEM_SPR = 2,
     F117_ELEM_MOJI = 3,
     F117_ELEM_U_MOJI = 4,
-    F117_MODEL_NB = 4,
-    F117_MODEL_U_SHR = 0,
-    F117_MODEL_MOJI = 1,
-    F117_MODEL_U_MOJI = 2,
-    F117_MODEL_SPR = 3,
     // --- __f117_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f118 
@@ -9705,11 +9317,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F118_ELEM_SPR = 2,
     F118_ELEM_MOJI = 3,
     F118_ELEM_U_MOJI = 4,
-    F118_MODEL_NB = 4,
-    F118_MODEL_U_SHR = 0,
-    F118_MODEL_MOJI = 1,
-    F118_MODEL_U_MOJI = 2,
-    F118_MODEL_SPR = 3,
     // --- __f118_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f120 
@@ -9718,8 +9325,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F120_ELEM_F120 = 0,
     F120_ELEM_RIFT_MWS = 1,
     F120_ELEM_ITEM = 2,
-    F120_MODEL_NB = 1,
-    F120_MODEL_RIFT_MWS = 0,
     // --- __f120_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f122 
@@ -9727,8 +9332,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F122_ELEM_NB = 2,
     F122_ELEM_F122 = 0,
     F122_ELEM_OBJ1 = 1,
-    F122_MODEL_NB = 1,
-    F122_MODEL_OBJ1 = 0,
     // --- __f122_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f123 
@@ -9739,8 +9342,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F123_ELEM_TRN_MOT = 2,
     F123_ELEM_F050_SK = 3,
     F123_ELEM_F123 = 4,
-    F123_MODEL_NB = 1,
-    F123_MODEL_F123 = 0,
     // --- __f123_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f124 
@@ -9761,20 +9362,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F124_ELEM_G_02 = 12,
     F124_ELEM_NULL1 = 13,
     F124_ELEM_G_12 = 14,
-    F124_MODEL_NB = 13,
-    F124_MODEL_G_01 = 0,
-    F124_MODEL_G_13 = 1,
-    F124_MODEL_G_03 = 2,
-    F124_MODEL_G_04 = 3,
-    F124_MODEL_G_05 = 4,
-    F124_MODEL_G_06 = 5,
-    F124_MODEL_G_07 = 6,
-    F124_MODEL_G_08 = 7,
-    F124_MODEL_G_09 = 8,
-    F124_MODEL_G_10 = 9,
-    F124_MODEL_G_11 = 10,
-    F124_MODEL_G_02 = 11,
-    F124_MODEL_G_12 = 12,
     // --- __f124_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f125 
@@ -9788,11 +9375,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F125_ELEM_GAREKI04_MWS = 5,
     F125_ELEM_NULL1_3 = 6,
     F125_ELEM_GAREKI02_MWS = 7,
-    F125_MODEL_NB = 4,
-    F125_MODEL_GAREKI01_MWS = 0,
-    F125_MODEL_GAREKI03_MWS = 1,
-    F125_MODEL_GAREKI04_MWS = 2,
-    F125_MODEL_GAREKI02_MWS = 3,
     // --- __f125_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f126 
@@ -9812,8 +9394,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F126_ELEM_BODY_OBJ = 11,
     F126_ELEM_PARTS = 12,
     F126_ELEM_URA = 13,
-    F126_MODEL_NB = 1,
-    F126_MODEL_BODY_OBJ = 0,
     // --- __f126_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f127 
@@ -9821,8 +9401,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F127_ELEM_NB = 2,
     F127_ELEM_F127 = 0,
     F127_ELEM_BODY = 1,
-    F127_MODEL_NB = 1,
-    F127_MODEL_BODY = 0,
     // --- __f127_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f128 
@@ -9830,8 +9408,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F128_ELEM_NB = 2,
     F128_ELEM_F128 = 0,
     F128_ELEM_HIKU_LOW = 1,
-    F128_MODEL_NB = 1,
-    F128_MODEL_HIKU_LOW = 0,
     // --- __f128_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f147 
@@ -9898,67 +9474,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F147_ELEM_A2_MWS = 58,
     F147_ELEM_A1_MWS = 59,
     F147_ELEM_A0_MWS = 60,
-    F147_MODEL_NB = 60,
-    F147_MODEL_G5_MWS = 0,
-    F147_MODEL_G4_MWS = 1,
-    F147_MODEL_G3_MWS = 2,
-    F147_MODEL_G2_MWS = 3,
-    F147_MODEL_G1_MWS = 4,
-    F147_MODEL_G0_MWS = 5,
-    F147_MODEL_F6_MWS = 6,
-    F147_MODEL_F5_MWS = 7,
-    F147_MODEL_F4_MWS = 8,
-    F147_MODEL_F3_MWS = 9,
-    F147_MODEL_F2_MWS = 10,
-    F147_MODEL_F1_MWS = 11,
-    F147_MODEL_F0_MWS = 12,
-    F147_MODEL_E9_MWS = 13,
-    F147_MODEL_E8_MWS = 14,
-    F147_MODEL_E7_MWS = 15,
-    F147_MODEL_E6_MWS = 16,
-    F147_MODEL_E5_MWS = 17,
-    F147_MODEL_E4_MWS = 18,
-    F147_MODEL_E3_MWS = 19,
-    F147_MODEL_E2_MWS = 20,
-    F147_MODEL_E1_MWS = 21,
-    F147_MODEL_D9_MWS = 22,
-    F147_MODEL_D8_MWS = 23,
-    F147_MODEL_D7_MWS = 24,
-    F147_MODEL_D6_MWS = 25,
-    F147_MODEL_D5_MWS = 26,
-    F147_MODEL_D4_MWS = 27,
-    F147_MODEL_D3_MWS = 28,
-    F147_MODEL_D2_MWS = 29,
-    F147_MODEL_D1_MWS = 30,
-    F147_MODEL_D0_MWS = 31,
-    F147_MODEL_C9_MWS = 32,
-    F147_MODEL_C8_MWS = 33,
-    F147_MODEL_C7_MWS = 34,
-    F147_MODEL_C6_MWS = 35,
-    F147_MODEL_C5_MWS = 36,
-    F147_MODEL_C4_MWS = 37,
-    F147_MODEL_C3_MWS = 38,
-    F147_MODEL_C2_MWS = 39,
-    F147_MODEL_C1_MWS = 40,
-    F147_MODEL_C0_MWS = 41,
-    F147_MODEL_B7_MWS = 42,
-    F147_MODEL_B6_MWS = 43,
-    F147_MODEL_B5_MWS = 44,
-    F147_MODEL_B4_MWS = 45,
-    F147_MODEL_B3_MWS = 46,
-    F147_MODEL_B2_MWS = 47,
-    F147_MODEL_B1_MWS = 48,
-    F147_MODEL_B0_MWS = 49,
-    F147_MODEL_A9_MWS = 50,
-    F147_MODEL_A8_MWS = 51,
-    F147_MODEL_A7_MWS = 52,
-    F147_MODEL_A6_MWS = 53,
-    F147_MODEL_A5_MWS = 54,
-    F147_MODEL_A4_MWS = 55,
-    F147_MODEL_A3_MWS = 56,
-    F147_MODEL_A2_MWS = 57,
-    F147_MODEL_A1_MWS = 58,
-    F147_MODEL_A0_MWS = 59,
     // --- __f147_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f149 
@@ -9966,8 +9481,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F149_ELEM_NB = 2,
     F149_ELEM_F149 = 0,
     F149_ELEM_WARP_MWS = 1,
-    F149_MODEL_NB = 1,
-    F149_MODEL_WARP_MWS = 0,
     // --- __f149_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f150 
@@ -9975,8 +9488,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F150_ELEM_NB = 2,
     F150_ELEM_F150 = 0,
     F150_ELEM_F150_MWS = 1,
-    F150_MODEL_NB = 1,
-    F150_MODEL_F150_MWS = 0,
     // --- __f150_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f156 
@@ -9997,9 +9508,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F156_ELEM_EFF217 = 12,
     F156_ELEM_SIPAF_SK19 = 13,
     F156_ELEM_ITA = 14,
-    F156_MODEL_NB = 2,
-    F156_MODEL_SIPAF_SK19 = 0,
-    F156_MODEL_ITA = 1,
     // --- __f156_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f157 
@@ -10009,8 +9517,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F157_ELEM_EARTH = 1,
     F157_ELEM_SWICH = 2,
     F157_ELEM_F157_OBJ = 3,
-    F157_MODEL_NB = 1,
-    F157_MODEL_F157_OBJ = 0,
     // --- __f157_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f158 
@@ -10023,9 +9529,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F158_ELEM_N144_HOLN_2 = 4,
     F158_ELEM_N144_HOLN = 5,
     F158_ELEM_N144_HOL_N = 6,
-    F158_MODEL_NB = 2,
-    F158_MODEL_N144_HOLN_2 = 0,
-    F158_MODEL_N144_HOLN = 1,
     // --- __f158_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f159 
@@ -10036,8 +9539,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F159_ELEM_EARTH = 2,
     F159_ELEM_ITEM = 3,
     F159_ELEM_ITEM2 = 4,
-    F159_MODEL_NB = 1,
-    F159_MODEL_F159_OBJ = 0,
     // --- __f159_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f161 
@@ -10047,10 +9548,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F161_ELEM_BODY = 1,
     F161_ELEM_KEN = 2,
     F161_ELEM_OBJ = 3,
-    F161_MODEL_NB = 3,
-    F161_MODEL_BODY = 0,
-    F161_MODEL_KEN = 1,
-    F161_MODEL_OBJ = 2,
     // --- __f161_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f162 
@@ -10074,10 +9571,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F162_ELEM_R_TYRE = 15,
     F162_ELEM_PARTS01 = 16,
     F162_ELEM_PARTS02 = 17,
-    F162_MODEL_NB = 3,
-    F162_MODEL_BASYA = 0,
-    F162_MODEL_WA = 1,
-    F162_MODEL_TAZUNA = 2,
     // --- __f162_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f164 
@@ -10095,8 +9588,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F164_ELEM_R_WING = 9,
     F164_ELEM_EFF11 = 10,
     F164_ELEM_M008 = 11,
-    F164_MODEL_NB = 1,
-    F164_MODEL_M008 = 0,
     // --- __f164_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f165 
@@ -10114,8 +9605,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F165_ELEM_R_WING = 9,
     F165_ELEM_EFF11 = 10,
     F165_ELEM_M008 = 11,
-    F165_MODEL_NB = 1,
-    F165_MODEL_M008 = 0,
     // --- __f165_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f166 
@@ -10123,8 +9612,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F166_ELEM_NB = 2,
     F166_ELEM_F011 = 0,
     F166_ELEM_F011_OBJ = 1,
-    F166_MODEL_NB = 1,
-    F166_MODEL_F011_OBJ = 0,
     // --- __f166_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f167 
@@ -10178,9 +9665,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F167_ELEM_CHN46 = 45,
     F167_ELEM_R_FOOT = 46,
     F167_ELEM_EFF46 = 47,
-    F167_MODEL_NB = 2,
-    F167_MODEL_F053 = 0,
-    F167_MODEL_F053_1 = 1,
     // --- __f167_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f168 
@@ -10261,30 +9745,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F168_ELEM_B1 = 72,
     F168_ELEM_DAMY6 = 73,
     F168_ELEM_B1_MDL = 74,
-    F168_MODEL_NB = 23,
-    F168_MODEL_ZOU1_MDL_1 = 0,
-    F168_MODEL_ZOU2_MDL = 1,
-    F168_MODEL_ZOU3_MDL = 2,
-    F168_MODEL_ZOU4_MDL = 3,
-    F168_MODEL_D1_MDL = 4,
-    F168_MODEL_D2_MDL = 5,
-    F168_MODEL_D3_MDL = 6,
-    F168_MODEL_D4_MDL = 7,
-    F168_MODEL_D5_MDL = 8,
-    F168_MODEL_D6_MDL = 9,
-    F168_MODEL_D7_MDL = 10,
-    F168_MODEL_C1_MDL = 11,
-    F168_MODEL_C2_MDL = 12,
-    F168_MODEL_C3_MDL = 13,
-    F168_MODEL_C4_MDL = 14,
-    F168_MODEL_C5_MDL = 15,
-    F168_MODEL_C6_MDL = 16,
-    F168_MODEL_B5_MDL = 17,
-    F168_MODEL_B6_MDL = 18,
-    F168_MODEL_B4_MDL = 19,
-    F168_MODEL_B3_MDL = 20,
-    F168_MODEL_B2_MDL = 21,
-    F168_MODEL_B1_MDL = 22,
     // --- __f168_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f169 
@@ -10293,9 +9753,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F169_ELEM_F169 = 0,
     F169_ELEM_OBJ2 = 1,
     F169_ELEM_OBJ1 = 2,
-    F169_MODEL_NB = 2,
-    F169_MODEL_OBJ2 = 0,
-    F169_MODEL_OBJ1 = 1,
     // --- __f169_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f170 
@@ -10311,9 +9768,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F170_ELEM_F002_OBJ = 7,
     F170_ELEM_F002_FUTASHAPE1 = 8,
     F170_ELEM_F002_HAKOSHAPE1 = 9,
-    F170_MODEL_NB = 2,
-    F170_MODEL_F002_FUTASHAPE1 = 0,
-    F170_MODEL_F002_HAKOSHAPE1 = 1,
     // --- __f170_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f171 
@@ -10323,9 +9777,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F171_ELEM_EARTH = 1,
     F171_ELEM_URING = 2,
     F171_ELEM_RING = 3,
-    F171_MODEL_NB = 2,
-    F171_MODEL_URING = 0,
-    F171_MODEL_RING = 1,
     // --- __f171_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f172 
@@ -10340,9 +9791,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F172_ELEM_ENBAN_SKL = 6,
     F172_ELEM_HIKU_LOW = 7,
     F172_ELEM_ENBAN = 8,
-    F172_MODEL_NB = 2,
-    F172_MODEL_ENBAN = 0,
-    F172_MODEL_HIKU_LOW = 1,
     // --- __f172_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f173 
@@ -10375,9 +9823,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F173_ELEM_EFF4 = 24,
     F173_ELEM_POAL_1 = 25,
     F173_ELEM_HAT = 26,
-    F173_MODEL_NB = 2,
-    F173_MODEL_POAL_1 = 0,
-    F173_MODEL_HAT = 1,
     // --- __f173_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f174 
@@ -10385,8 +9830,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F174_ELEM_NB = 2,
     F174_ELEM_NULL1 = 0,
     F174_ELEM_GRID1 = 1,
-    F174_MODEL_NB = 1,
-    F174_MODEL_GRID1 = 0,
     // --- __f174_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f175 
@@ -10394,8 +9837,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F175_ELEM_NB = 2,
     F175_ELEM_F175 = 0,
     F175_ELEM_F175_OBJ = 1,
-    F175_MODEL_NB = 1,
-    F175_MODEL_F175_OBJ = 0,
     // --- __f175_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: f176 
@@ -10403,8 +9844,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     F176_ELEM_NB = 2,
     F176_ELEM_F176 = 0,
     F176_ELEM_F176_OBJ = 1,
-    F176_MODEL_NB = 1,
-    F176_MODEL_F176_OBJ = 0,
     // --- __f176_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k001 
@@ -10506,11 +9945,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K001_ELEM_EFF503 = 93,
     K001_ELEM_L_ITEM = 94,
     K001_ELEM_L_HAND_N = 95,
-    K001_MODEL_NB = 4,
-    K001_MODEL_OBJ2 = 0,
-    K001_MODEL_OBJ1 = 1,
-    K001_MODEL_OBJ3 = 2,
-    K001_MODEL_OBJ4 = 3,
     // --- __k001_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k002 
@@ -10584,8 +10018,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K002_ELEM_CHN15 = 65,
     K002_ELEM_CHIN = 66,
     K002_ELEM_EFF15 = 67,
-    K002_MODEL_NB = 1,
-    K002_MODEL_N027_OBJ = 0,
     // --- __k002_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k003 
@@ -10660,9 +10092,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K003_ELEM_CHN7 = 66,
     K003_ELEM_L_TOES = 67,
     K003_ELEM_EFF7 = 68,
-    K003_MODEL_NB = 2,
-    K003_MODEL_N028_OBJ = 0,
-    K003_MODEL_ITA_POLY = 1,
     // --- __k003_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k004 
@@ -10736,8 +10165,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K004_ELEM_CHN7 = 65,
     K004_ELEM_L_TOES = 66,
     K004_ELEM_EFF7 = 67,
-    K004_MODEL_NB = 1,
-    K004_MODEL_N029_OBJ = 0,
     // --- __k004_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k005 
@@ -10811,8 +10238,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K005_ELEM_L_FING = 65,
     K005_ELEM_EFF19 = 66,
     K005_ELEM_L_ITEM = 67,
-    K005_MODEL_NB = 1,
-    K005_MODEL_N031 = 0,
     // --- __k005_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k006 
@@ -10889,10 +10314,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K006_ELEM_CHN5 = 68,
     K006_ELEM_CHIN = 69,
     K006_ELEM_EFF5 = 70,
-    K006_MODEL_NB = 3,
-    K006_MODEL_BODY = 0,
-    K006_MODEL_KIRE = 1,
-    K006_MODEL_PORI = 2,
     // --- __k006_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k007 
@@ -10966,8 +10387,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K007_ELEM_R_FING = 65,
     K007_ELEM_EFF12 = 66,
     K007_ELEM_R_ITEM = 67,
-    K007_MODEL_NB = 1,
-    K007_MODEL_N032 = 0,
     // --- __k007_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k012 
@@ -11066,9 +10485,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K012_ELEM_L_HAIR_2 = 90,
     K012_ELEM_L_HAIR_3 = 91,
     K012_ELEM_EFF721 = 92,
-    K012_MODEL_NB = 2,
-    K012_MODEL_N035_1 = 0,
-    K012_MODEL_N035_2 = 1,
     // --- __k012_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k014 
@@ -11172,13 +10588,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K014_ELEM_CHN202 = 95,
     K014_ELEM_R_TOES = 96,
     K014_ELEM_EFF202 = 97,
-    K014_MODEL_NB = 6,
-    K014_MODEL_OBJ2 = 0,
-    K014_MODEL_OBJ3 = 1,
-    K014_MODEL_OBJ4 = 2,
-    K014_MODEL_OBJ5 = 3,
-    K014_MODEL_OBJ6 = 4,
-    K014_MODEL_OBJ1 = 5,
     // --- __k014_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k015 
@@ -11276,8 +10685,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K015_ELEM_EFF723 = 89,
     K015_ELEM_L_ITEM = 90,
     K015_ELEM_L_HAND_N = 91,
-    K015_MODEL_NB = 1,
-    K015_MODEL_N038_OBJ = 0,
     // --- __k015_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k016 
@@ -11377,10 +10784,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K016_ELEM_EFF723 = 91,
     K016_ELEM_L_ITEM = 92,
     K016_ELEM_L_HAND_N = 93,
-    K016_MODEL_NB = 3,
-    K016_MODEL_N055_OBJ = 0,
-    K016_MODEL_PARTS2 = 1,
-    K016_MODEL_BMERGE1 = 2,
     // --- __k016_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k017 
@@ -11481,11 +10884,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K017_ELEM_C_HAIR_2 = 92,
     K017_ELEM_C_HAIR_3 = 93,
     K017_ELEM_EFF21 = 94,
-    K017_MODEL_NB = 4,
-    K017_MODEL_N039_OBJ = 0,
-    K017_MODEL_BMERGE8 = 1,
-    K017_MODEL_BMERGE17 = 2,
-    K017_MODEL_BMERGE20 = 3,
     // --- __k017_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k101 
@@ -11567,10 +10965,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K101_ELEM_R_FING = 73,
     K101_ELEM_EFF20 = 74,
     K101_ELEM_R_ITEM = 75,
-    K101_MODEL_NB = 3,
-    K101_MODEL_N099_OBJ = 0,
-    K101_MODEL_N099_OPA = 1,
-    K101_MODEL_N099_OPB = 2,
     // --- __k101_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k102 
@@ -11662,9 +11056,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K102_ELEM_R_HAIR1 = 83,
     K102_ELEM_R_HAIR2 = 84,
     K102_ELEM_EFF10 = 85,
-    K102_MODEL_NB = 2,
-    K102_MODEL_BODY = 0,
-    K102_MODEL_KAZARI = 1,
     // --- __k102_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k103 
@@ -11756,9 +11147,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K103_ELEM_R_HAIR1 = 83,
     K103_ELEM_R_HAIR2 = 84,
     K103_ELEM_EFF10 = 85,
-    K103_MODEL_NB = 2,
-    K103_MODEL_BODY = 0,
-    K103_MODEL_KAZARI = 1,
     // --- __k103_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k104 
@@ -11854,9 +11242,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K104_ELEM_CHN27 = 87,
     K104_ELEM_R_FING = 88,
     K104_ELEM_EFF27 = 89,
-    K104_MODEL_NB = 2,
-    K104_MODEL_N102_OBJ = 0,
-    K104_MODEL_N102_OP = 1,
     // --- __k104_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k112 
@@ -11940,9 +11325,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K112_ELEM_SQTSPLITRT3 = 75,
     K112_ELEM_CHIN = 76,
     K112_ELEM_EFF10 = 77,
-    K112_MODEL_NB = 2,
-    K112_MODEL_BODY = 0,
-    K112_MODEL_KAZARI = 1,
     // --- __k112_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k113 
@@ -12026,9 +11408,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K113_ELEM_SQTSPLITRT3 = 75,
     K113_ELEM_CHIN = 76,
     K113_ELEM_EFF10_2 = 77,
-    K113_MODEL_NB = 2,
-    K113_MODEL_N028_OBJ = 0,
-    K113_MODEL_N028_OP = 1,
     // --- __k113_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k114 
@@ -12123,9 +11502,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K114_ELEM_SQTSPLITRT3 = 86,
     K114_ELEM_CHIN = 87,
     K114_ELEM_EFF10 = 88,
-    K114_MODEL_NB = 2,
-    K114_MODEL_BODY1 = 0,
-    K114_MODEL_OBJ2 = 1,
     // --- __k114_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k201 
@@ -12224,9 +11600,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K201_ELEM_L_HAIR_2 = 90,
     K201_ELEM_L_HAIR_3 = 91,
     K201_ELEM_EFF721 = 92,
-    K201_MODEL_NB = 2,
-    K201_MODEL_N075_OBJ = 0,
-    K201_MODEL_BMERGE27 = 1,
     // --- __k201_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k202 
@@ -12301,9 +11674,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K202_ELEM_R_FING = 66,
     K202_ELEM_EFF12 = 67,
     K202_ELEM_R_ITEM = 68,
-    K202_MODEL_NB = 2,
-    K202_MODEL_N150_OBJ = 0,
-    K202_MODEL_N150_OBJA = 1,
     // --- __k202_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k203 
@@ -12382,12 +11752,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K203_ELEM_R_FING = 70,
     K203_ELEM_EFF19_1 = 71,
     K203_ELEM_R_ITEM = 72,
-    K203_MODEL_NB = 5,
-    K203_MODEL_NECK_OBJ = 0,
-    K203_MODEL_BOTOM = 1,
-    K203_MODEL_CLOTH = 2,
-    K203_MODEL_BODY = 3,
-    K203_MODEL_FACE = 4,
     // --- __k203_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k204 
@@ -12462,9 +11826,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K204_ELEM_R_FING = 66,
     K204_ELEM_EFF12 = 67,
     K204_ELEM_R_ITEM = 68,
-    K204_MODEL_NB = 2,
-    K204_MODEL_N151_OBJ = 0,
-    K204_MODEL_N151_OP = 1,
     // --- __k204_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k212 
@@ -12564,10 +11925,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K212_ELEM_C_HAIR_2 = 91,
     K212_ELEM_C_HAIR_3 = 92,
     K212_ELEM_EFF701 = 93,
-    K212_MODEL_NB = 3,
-    K212_MODEL_N076_OBJ = 0,
-    K212_MODEL_BMERGE23 = 1,
-    K212_MODEL_BMERGE24 = 2,
     // --- __k212_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k213 
@@ -12644,11 +12001,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K213_ELEM_R_FING = 68,
     K213_ELEM_EFF27 = 69,
     K213_ELEM_R_ITEM = 70,
-    K213_MODEL_NB = 4,
-    K213_MODEL_N199_OBJ = 0,
-    K213_MODEL_N199_CLOTH = 1,
-    K213_MODEL_N199_NECK = 2,
-    K213_MODEL_N199_FACE = 3,
     // --- __k213_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k214 
@@ -12748,10 +12100,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K214_ELEM_R_FING = 91,
     K214_ELEM_EFF403 = 92,
     K214_ELEM_R_ITEM = 93,
-    K214_MODEL_NB = 3,
-    K214_MODEL_N078_OBJ = 0,
-    K214_MODEL_BMERGE34 = 1,
-    K214_MODEL_BMERGE35 = 2,
     // --- __k214_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k301 
@@ -12843,10 +12191,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K301_ELEM_L_ANT2 = 83,
     K301_ELEM_L_ANT3 = 84,
     K301_ELEM_EFF722 = 85,
-    K301_MODEL_NB = 3,
-    K301_MODEL_N210_OP = 0,
-    K301_MODEL_N210_SKARF = 1,
-    K301_MODEL_N210_T = 2,
     // --- __k301_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k302 
@@ -12937,9 +12281,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K302_ELEM_EFF725 = 82,
     K302_ELEM_HOPPE_X_N = 83,
     K302_ELEM_HOPPE_YZ_N = 84,
-    K302_MODEL_NB = 2,
-    K302_MODEL_N243_BODY = 0,
-    K302_MODEL_N243_OP = 1,
     // --- __k302_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k303 
@@ -13017,11 +12358,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K303_ELEM_L_FING = 69,
     K303_ELEM_EFF20_1 = 70,
     K303_ELEM_L_ITEM = 71,
-    K303_MODEL_NB = 4,
-    K303_MODEL_N211_BODY = 0,
-    K303_MODEL_N211_FACE = 1,
-    K303_MODEL_N211_MASK = 2,
-    K303_MODEL_N211_OP = 3,
     // --- __k303_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k304 
@@ -13098,10 +12434,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K304_ELEM_EFF12 = 68,
     K304_ELEM_L_ITEM = 69,
     K304_ELEM_L_HAND_N = 70,
-    K304_MODEL_NB = 3,
-    K304_MODEL_N060_OP = 0,
-    K304_MODEL_N060_LIP = 1,
-    K304_MODEL_N060_BODY = 2,
     // --- __k304_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k401 
@@ -13179,11 +12511,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K401_ELEM_CHN20 = 69,
     K401_ELEM_R_TOES = 70,
     K401_ELEM_EFF20 = 71,
-    K401_MODEL_NB = 4,
-    K401_MODEL_N144_BODY = 0,
-    K401_MODEL_N144_MANT = 1,
-    K401_MODEL_N144_HOLNSIDE = 2,
-    K401_MODEL_N144_OP = 3,
     // --- __k401_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k402 
@@ -13267,11 +12594,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K402_ELEM_CHN16 = 75,
     K402_ELEM_R_TOES = 76,
     K402_ELEM_EFF16 = 77,
-    K402_MODEL_NB = 4,
-    K402_MODEL_N145_BODY = 0,
-    K402_MODEL_N145_OP = 1,
-    K402_MODEL_N145_KAZARI = 2,
-    K402_MODEL_N145_TOSAKA = 3,
     // --- __k402_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k403 
@@ -13355,11 +12677,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K403_ELEM_CHN15 = 75,
     K403_ELEM_R_TOES = 76,
     K403_ELEM_EFF15 = 77,
-    K403_MODEL_NB = 4,
-    K403_MODEL_N146_BODY = 0,
-    K403_MODEL_N146_OP = 1,
-    K403_MODEL_N146_DRAMS = 2,
-    K403_MODEL_N146_TASUKI = 3,
     // --- __k403_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k501 
@@ -13450,11 +12767,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K501_ELEM_CHN27_1 = 82,
     K501_ELEM_R_CLOTH_1 = 83,
     K501_ELEM_EFF27 = 84,
-    K501_MODEL_NB = 4,
-    K501_MODEL_N255_OBJ = 0,
-    K501_MODEL_N255_CLOTH = 1,
-    K501_MODEL_N255_OP = 2,
-    K501_MODEL_N255_ARM = 3,
     // --- __k501_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k502 
@@ -13665,14 +12977,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K502_ELEM_AKS_R3 = 202,
     K502_ELEM_AKS_R4 = 203,
     K502_ELEM_EFF111 = 204,
-    K502_MODEL_NB = 7,
-    K502_MODEL_N248_OBJ = 0,
-    K502_MODEL_PARTS2 = 1,
-    K502_MODEL_PARTS4 = 2,
-    K502_MODEL_PARTS0 = 3,
-    K502_MODEL_KAMI = 4,
-    K502_MODEL_PARTS3 = 5,
-    K502_MODEL_PARTS1 = 6,
     // --- __k502_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k503 
@@ -13762,12 +13066,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K503_ELEM_CHN7 = 81,
     K503_ELEM_L_TOES = 82,
     K503_ELEM_EFF7 = 83,
-    K503_MODEL_NB = 5,
-    K503_MODEL_N250_OBJ = 0,
-    K503_MODEL_ERI_HAND = 1,
-    K503_MODEL_ITA_POLY = 2,
-    K503_MODEL_TAMA = 3,
-    K503_MODEL_ITA_POLY1 = 4,
     // --- __k503_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k504 
@@ -13868,11 +13166,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K504_ELEM_CHN25 = 92,
     K504_ELEM_R_TOES = 93,
     K504_ELEM_EFF25 = 94,
-    K504_MODEL_NB = 4,
-    K504_MODEL_N249_OBJ = 0,
-    K504_MODEL_N249_ARMER = 1,
-    K504_MODEL_N249_HELM = 2,
-    K504_MODEL_N249_MANT1 = 3,
     // --- __k504_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k505 
@@ -13956,13 +13249,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K505_ELEM_L_FING = 75,
     K505_ELEM_EFF22 = 76,
     K505_ELEM_L_ITEM = 77,
-    K505_MODEL_NB = 6,
-    K505_MODEL_N238_OBJ = 0,
-    K505_MODEL_N238_OBJA = 1,
-    K505_MODEL_N238_OBJB = 2,
-    K505_MODEL_N238_OBJC = 3,
-    K505_MODEL_N238_OBJD = 4,
-    K505_MODEL_N238_OBJE = 5,
     // --- __k505_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k998 
@@ -14212,12 +13498,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K998_ELEM_HEAD_CON1 = 241,
     K998_ELEM_BODY = 242,
     K998_ELEM_LAND = 243,
-    K998_MODEL_NB = 5,
-    K998_MODEL_C107_EYER_MWS = 0,
-    K998_MODEL_C107_EYEL_MWS = 1,
-    K998_MODEL_C107_HEAD_MWS = 2,
-    K998_MODEL_C107_BODY_MWS = 3,
-    K998_MODEL_C107_HAIR_MWS = 4,
     // --- __k998_ath END ---
 
     // [h2cs 12/6/23 23:16] Header name: k999 
@@ -14258,9 +13538,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     K999_ELEM_BOOK_RSD = 32,
     K999_ELEM_R_TARE = 33,
     K999_ELEM_ZZ_RSD = 34,
-    K999_MODEL_NB = 2,
-    K999_MODEL_BOOK_RSD = 0,
-    K999_MODEL_ZZ_RSD = 1,
     // --- __k999_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m001 
@@ -14358,8 +13635,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M001_ELEM_CHN313 = 89,
     M001_ELEM_R_FOOT2 = 90,
     M001_ELEM_EFF313 = 91,
-    M001_MODEL_NB = 1,
-    M001_MODEL_M002 = 0,
     // --- __m001_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m002 
@@ -14457,9 +13732,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M002_ELEM_CHN313 = 89,
     M002_ELEM_R_FOOT2 = 90,
     M002_ELEM_EFF313 = 91,
-    M002_MODEL_NB = 2,
-    M002_MODEL_M002 = 0,
-    M002_MODEL_M002_1 = 1,
     // --- __m002_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m003 
@@ -14557,9 +13829,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M003_ELEM_CHN313 = 89,
     M003_ELEM_R_FOOT2 = 90,
     M003_ELEM_EFF313 = 91,
-    M003_MODEL_NB = 2,
-    M003_MODEL_M002 = 0,
-    M003_MODEL_M002_1 = 1,
     // --- __m003_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m004 
@@ -14657,8 +13926,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M004_ELEM_CHN313 = 89,
     M004_ELEM_R_FOOT2 = 90,
     M004_ELEM_EFF313 = 91,
-    M004_MODEL_NB = 1,
-    M004_MODEL_M002 = 0,
     // --- __m004_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m005 
@@ -14756,8 +14023,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M005_ELEM_CHN313 = 89,
     M005_ELEM_R_FOOT2 = 90,
     M005_ELEM_EFF313 = 91,
-    M005_MODEL_NB = 1,
-    M005_MODEL_M002 = 0,
     // --- __m005_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m006 
@@ -14931,10 +14196,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M006_ELEM_L_FING3 = 165,
     M006_ELEM_EFF97 = 166,
     M006_ELEM_L_NULL = 167,
-    M006_MODEL_NB = 3,
-    M006_MODEL_BODY = 0,
-    M006_MODEL_ITA = 1,
-    M006_MODEL_HAIR = 2,
     // --- __m006_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m007 
@@ -15108,11 +14369,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M007_ELEM_L_FING3 = 165,
     M007_ELEM_EFF97 = 166,
     M007_ELEM_L_NULL = 167,
-    M007_MODEL_NB = 4,
-    M007_MODEL_TUNO = 0,
-    M007_MODEL_BODY = 1,
-    M007_MODEL_HAIR = 2,
-    M007_MODEL_ITA = 3,
     // --- __m007_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m008 
@@ -15286,11 +14542,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M008_ELEM_L_FING3 = 165,
     M008_ELEM_EFF97 = 166,
     M008_ELEM_L_NULL = 167,
-    M008_MODEL_NB = 4,
-    M008_MODEL_TUNO = 0,
-    M008_MODEL_BODY = 1,
-    M008_MODEL_HAIR = 2,
-    M008_MODEL_ITA = 3,
     // --- __m008_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m009 
@@ -15382,8 +14633,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M009_ELEM_TONG02 = 83,
     M009_ELEM_TONG03 = 84,
     M009_ELEM_EFF15 = 85,
-    M009_MODEL_NB = 1,
-    M009_MODEL_M009 = 0,
     // --- __m009_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m010 
@@ -15475,9 +14724,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M010_ELEM_TONG02 = 83,
     M010_ELEM_TONG03 = 84,
     M010_ELEM_EFF15 = 85,
-    M010_MODEL_NB = 2,
-    M010_MODEL_M009_01 = 0,
-    M010_MODEL_M009 = 1,
     // --- __m010_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m011 
@@ -15569,8 +14815,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M011_ELEM_TONG02 = 83,
     M011_ELEM_TONG03 = 84,
     M011_ELEM_EFF15 = 85,
-    M011_MODEL_NB = 1,
-    M011_MODEL_M009 = 0,
     // --- __m011_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m012 
@@ -15662,8 +14906,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M012_ELEM_TONG02 = 83,
     M012_ELEM_TONG03 = 84,
     M012_ELEM_EFF15 = 85,
-    M012_MODEL_NB = 1,
-    M012_MODEL_M009 = 0,
     // --- __m012_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m013 
@@ -15755,9 +14997,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M013_ELEM_TONG02 = 83,
     M013_ELEM_TONG03 = 84,
     M013_ELEM_EFF15 = 85,
-    M013_MODEL_NB = 2,
-    M013_MODEL_M009_01 = 0,
-    M013_MODEL_M009 = 1,
     // --- __m013_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m014 
@@ -15849,9 +15088,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M014_ELEM_TONG02 = 83,
     M014_ELEM_TONG03 = 84,
     M014_ELEM_EFF15 = 85,
-    M014_MODEL_NB = 2,
-    M014_MODEL_M009_01 = 0,
-    M014_MODEL_M009 = 1,
     // --- __m014_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m015 
@@ -15943,9 +15179,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M015_ELEM_TONG02 = 83,
     M015_ELEM_TONG03 = 84,
     M015_ELEM_EFF15 = 85,
-    M015_MODEL_NB = 2,
-    M015_MODEL_M009_01 = 0,
-    M015_MODEL_M009 = 1,
     // --- __m015_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m016 
@@ -16191,8 +15424,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M016_ELEM_R_B1_2_N = 237,
     M016_ELEM_M016 = 238,
     M016_ELEM_INSIDE = 239,
-    M016_MODEL_NB = 1,
-    M016_MODEL_INSIDE = 0,
     // --- __m016_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m017 
@@ -16438,8 +15669,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M017_ELEM_R_B1_2_N = 237,
     M017_ELEM_M016 = 238,
     M017_ELEM_INSIDE = 239,
-    M017_MODEL_NB = 1,
-    M017_MODEL_INSIDE = 0,
     // --- __m017_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m018 
@@ -16685,8 +15914,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M018_ELEM_R_B1_2_N = 237,
     M018_ELEM_M016 = 238,
     M018_ELEM_INSIDE = 239,
-    M018_MODEL_NB = 1,
-    M018_MODEL_INSIDE = 0,
     // --- __m018_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m019 
@@ -16932,8 +16159,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M019_ELEM_R_B1_2_N = 237,
     M019_ELEM_M016 = 238,
     M019_ELEM_INSIDE = 239,
-    M019_MODEL_NB = 1,
-    M019_MODEL_INSIDE = 0,
     // --- __m019_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m020 
@@ -17179,8 +16404,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M020_ELEM_R_B1_2_N = 237,
     M020_ELEM_M016 = 238,
     M020_ELEM_INSIDE = 239,
-    M020_MODEL_NB = 1,
-    M020_MODEL_INSIDE = 0,
     // --- __m020_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m021 
@@ -17426,8 +16649,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M021_ELEM_R_B1_2_N = 237,
     M021_ELEM_M016 = 238,
     M021_ELEM_INSIDE = 239,
-    M021_MODEL_NB = 1,
-    M021_MODEL_INSIDE = 0,
     // --- __m021_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m022 
@@ -17548,8 +16769,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M022_ELEM_CHN70 = 112,
     M022_ELEM_CHIN = 113,
     M022_ELEM_EFF70 = 114,
-    M022_MODEL_NB = 1,
-    M022_MODEL_M022 = 0,
     // --- __m022_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m023 
@@ -17670,9 +16889,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M023_ELEM_CHN70 = 112,
     M023_ELEM_CHIN = 113,
     M023_ELEM_EFF70 = 114,
-    M023_MODEL_NB = 2,
-    M023_MODEL_M022 = 0,
-    M023_MODEL_BMERGE1 = 1,
     // --- __m023_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m024 
@@ -17793,8 +17009,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M024_ELEM_CHN70 = 112,
     M024_ELEM_CHIN = 113,
     M024_ELEM_EFF70 = 114,
-    M024_MODEL_NB = 1,
-    M024_MODEL_M022 = 0,
     // --- __m024_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m025 
@@ -17915,9 +17129,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M025_ELEM_CHN70 = 112,
     M025_ELEM_CHIN = 113,
     M025_ELEM_EFF70 = 114,
-    M025_MODEL_NB = 2,
-    M025_MODEL_M022 = 0,
-    M025_MODEL_02 = 1,
     // --- __m025_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m026 
@@ -18038,9 +17249,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M026_ELEM_CHN70 = 112,
     M026_ELEM_CHIN = 113,
     M026_ELEM_EFF70 = 114,
-    M026_MODEL_NB = 2,
-    M026_MODEL_M022 = 0,
-    M026_MODEL_02 = 1,
     // --- __m026_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m027 
@@ -18161,10 +17369,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M027_ELEM_CHN70 = 112,
     M027_ELEM_CHIN = 113,
     M027_ELEM_EFF70 = 114,
-    M027_MODEL_NB = 3,
-    M027_MODEL_M022 = 0,
-    M027_MODEL_02 = 1,
-    M027_MODEL_BMERGE1 = 2,
     // --- __m027_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m028 
@@ -18285,8 +17489,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M028_ELEM_R_FOOT2 = 112,
     M028_ELEM_R_FOOT3 = 113,
     M028_ELEM_EFF2 = 114,
-    M028_MODEL_NB = 1,
-    M028_MODEL_M028 = 0,
     // --- __m028_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m029 
@@ -18407,8 +17609,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M029_ELEM_R_FOOT2 = 112,
     M029_ELEM_R_FOOT3 = 113,
     M029_ELEM_EFF2 = 114,
-    M029_MODEL_NB = 1,
-    M029_MODEL_M028 = 0,
     // --- __m029_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m030 
@@ -18529,8 +17729,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M030_ELEM_R_FOOT2 = 112,
     M030_ELEM_R_FOOT3 = 113,
     M030_ELEM_EFF2 = 114,
-    M030_MODEL_NB = 1,
-    M030_MODEL_M028 = 0,
     // --- __m030_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m031 
@@ -18637,8 +17835,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M031_ELEM_HARI = 98,
     M031_ELEM_NULL124 = 99,
     M031_ELEM_NULL125 = 100,
-    M031_MODEL_NB = 1,
-    M031_MODEL_M009 = 0,
     // --- __m031_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m032 
@@ -18745,8 +17941,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M032_ELEM_HARI = 98,
     M032_ELEM_NULL124 = 99,
     M032_ELEM_NULL125 = 100,
-    M032_MODEL_NB = 1,
-    M032_MODEL_M009 = 0,
     // --- __m032_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m033 
@@ -18853,8 +18047,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M033_ELEM_HARI = 98,
     M033_ELEM_NULL124 = 99,
     M033_ELEM_NULL125 = 100,
-    M033_MODEL_NB = 1,
-    M033_MODEL_M009 = 0,
     // --- __m033_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m034 
@@ -18961,8 +18153,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M034_ELEM_HARI = 98,
     M034_ELEM_NULL124 = 99,
     M034_ELEM_NULL125 = 100,
-    M034_MODEL_NB = 1,
-    M034_MODEL_M009 = 0,
     // --- __m034_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m035 
@@ -19166,9 +18356,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M035_ELEM_HAIR3 = 195,
     M035_ELEM_HAIR4 = 196,
     M035_ELEM_EFF26 = 197,
-    M035_MODEL_NB = 2,
-    M035_MODEL_M_035_EMD = 0,
-    M035_MODEL_WING_EMD = 1,
     // --- __m035_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m036 
@@ -19372,9 +18559,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M036_ELEM_HAIR3 = 195,
     M036_ELEM_HAIR4 = 196,
     M036_ELEM_EFF26 = 197,
-    M036_MODEL_NB = 2,
-    M036_MODEL_M_035_EMD = 0,
-    M036_MODEL_WING_EMD = 1,
     // --- __m036_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m037 
@@ -19578,9 +18762,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M037_ELEM_HAIR3 = 195,
     M037_ELEM_HAIR4 = 196,
     M037_ELEM_EFF26 = 197,
-    M037_MODEL_NB = 2,
-    M037_MODEL_M_035_EMD = 0,
-    M037_MODEL_WING_EMD = 1,
     // --- __m037_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m038 
@@ -19784,10 +18965,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M038_ELEM_HAIR3 = 195,
     M038_ELEM_HAIR4 = 196,
     M038_ELEM_EFF26 = 197,
-    M038_MODEL_NB = 3,
-    M038_MODEL_M_035_EMD = 0,
-    M038_MODEL_HAIR_EMD = 1,
-    M038_MODEL_WING_EMD = 2,
     // --- __m038_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m039 
@@ -19913,8 +19090,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M039_ELEM_HA_LL_2 = 117,
     M039_ELEM_HA_LL_1 = 118,
     M039_ELEM_EFF18_1 = 119,
-    M039_MODEL_NB = 1,
-    M039_MODEL_M039 = 0,
     // --- __m039_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m040 
@@ -20040,8 +19215,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M040_ELEM_HA_LL_2 = 117,
     M040_ELEM_HA_LL_1 = 118,
     M040_ELEM_EFF18_1 = 119,
-    M040_MODEL_NB = 1,
-    M040_MODEL_M039 = 0,
     // --- __m040_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m041 
@@ -20264,8 +19437,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M041_ELEM_NULL6 = 214,
     M041_ELEM_NULL5 = 215,
     M041_ELEM_NULL4 = 216,
-    M041_MODEL_NB = 1,
-    M041_MODEL_M006 = 0,
     // --- __m041_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m042 
@@ -20488,8 +19659,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M042_ELEM_NULL6 = 214,
     M042_ELEM_NULL5 = 215,
     M042_ELEM_NULL4 = 216,
-    M042_MODEL_NB = 1,
-    M042_MODEL_M006 = 0,
     // --- __m042_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m043 
@@ -20712,8 +19881,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M043_ELEM_NULL6 = 214,
     M043_ELEM_NULL5 = 215,
     M043_ELEM_NULL4 = 216,
-    M043_MODEL_NB = 1,
-    M043_MODEL_M006 = 0,
     // --- __m043_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m044 
@@ -20924,9 +20091,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M044_ELEM_H_F_1 = 202,
     M044_ELEM_H_F_2 = 203,
     M044_ELEM_EFF28 = 204,
-    M044_MODEL_NB = 2,
-    M044_MODEL_M044 = 0,
-    M044_MODEL_M044_ITA = 1,
     // --- __m044_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m045 
@@ -21137,9 +20301,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M045_ELEM_H_F_1 = 202,
     M045_ELEM_H_F_2 = 203,
     M045_ELEM_EFF28 = 204,
-    M045_MODEL_NB = 2,
-    M045_MODEL_M044 = 0,
-    M045_MODEL_M044_ITA = 1,
     // --- __m045_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m046 
@@ -21488,8 +20649,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M046_ELEM_HARA3 = 340,
     M046_ELEM_HARA2 = 341,
     M046_ELEM_HARA1 = 342,
-    M046_MODEL_NB = 1,
-    M046_MODEL_M046 = 0,
     // --- __m046_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m047 
@@ -21838,8 +20997,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M047_ELEM_HARA3 = 340,
     M047_ELEM_HARA2 = 341,
     M047_ELEM_HARA1 = 342,
-    M047_MODEL_NB = 1,
-    M047_MODEL_M046 = 0,
     // --- __m047_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m048 
@@ -21982,8 +21139,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M048_ELEM_L_INDEX2 = 134,
     M048_ELEM_L_INDEX3 = 135,
     M048_ELEM_EFF16 = 136,
-    M048_MODEL_NB = 1,
-    M048_MODEL_M048 = 0,
     // --- __m048_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m049 
@@ -22126,8 +21281,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M049_ELEM_L_INDEX2 = 134,
     M049_ELEM_L_INDEX3 = 135,
     M049_ELEM_EFF16 = 136,
-    M049_MODEL_NB = 1,
-    M049_MODEL_M048 = 0,
     // --- __m049_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m050 
@@ -22274,8 +21427,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M050_ELEM_NULL5 = 138,
     M050_ELEM_NULL7 = 139,
     M050_ELEM_NULL9 = 140,
-    M050_MODEL_NB = 1,
-    M050_MODEL_M050 = 0,
     // --- __m050_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m051 
@@ -22415,8 +21566,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M051_ELEM_L_HR1_1 = 131,
     M051_ELEM_L_HR1_2 = 132,
     M051_ELEM_EFF91 = 133,
-    M051_MODEL_NB = 1,
-    M051_MODEL_M051 = 0,
     // --- __m051_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m052 
@@ -22556,8 +21705,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M052_ELEM_L_HR1_1 = 131,
     M052_ELEM_L_HR1_2 = 132,
     M052_ELEM_EFF91 = 133,
-    M052_MODEL_NB = 1,
-    M052_MODEL_M051 = 0,
     // --- __m052_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m053 
@@ -22632,10 +21779,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M053_ELEM_TUNO_1_EMD = 66,
     M053_ELEM_TUNO_2_EMD = 67,
     M053_ELEM_TUNO_3_EMD = 68,
-    M053_MODEL_NB = 3,
-    M053_MODEL_RISING_EMD = 0,
-    M053_MODEL_TUNO_2_EMD = 1,
-    M053_MODEL_ITA_POLY_EMD = 2,
     // --- __m053_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m054 
@@ -22710,11 +21853,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M054_ELEM_TUNO_1_EMD = 66,
     M054_ELEM_TUNO_2_EMD = 67,
     M054_ELEM_TUNO_3_EMD = 68,
-    M054_MODEL_NB = 4,
-    M054_MODEL_RISING_EMD = 0,
-    M054_MODEL_TUNO_1_EMD = 1,
-    M054_MODEL_TUNO_3_EMD = 2,
-    M054_MODEL_ITA_POLY_EMD = 3,
     // --- __m054_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m055 
@@ -22836,8 +21974,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M055_ELEM_R_TOE1 = 113,
     M055_ELEM_R_TOE2 = 114,
     M055_ELEM_EFF152 = 115,
-    M055_MODEL_NB = 1,
-    M055_MODEL_M055 = 0,
     // --- __m055_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m056 
@@ -22959,9 +22095,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M056_ELEM_R_TOE1 = 113,
     M056_ELEM_R_TOE2 = 114,
     M056_ELEM_EFF152 = 115,
-    M056_MODEL_NB = 2,
-    M056_MODEL_M055 = 0,
-    M056_MODEL_M055_02 = 1,
     // --- __m056_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m057 
@@ -23083,9 +22216,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M057_ELEM_R_TOE1 = 113,
     M057_ELEM_R_TOE2 = 114,
     M057_ELEM_EFF152 = 115,
-    M057_MODEL_NB = 2,
-    M057_MODEL_M055 = 0,
-    M057_MODEL_M055_02 = 1,
     // --- __m057_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m058 
@@ -23169,8 +22299,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M058_ELEM_TAIL_5 = 75,
     M058_ELEM_TAIL_6 = 76,
     M058_ELEM_EFF28 = 77,
-    M058_MODEL_NB = 1,
-    M058_MODEL_TACO = 0,
     // --- __m058_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m059 
@@ -23280,8 +22408,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M059_ELEM_WING = 101,
     M059_ELEM_WNG_ARM = 102,
     M059_ELEM_WEB = 103,
-    M059_MODEL_NB = 1,
-    M059_MODEL_BOD = 0,
     // --- __m059_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m060 
@@ -23391,9 +22517,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M060_ELEM_WING = 101,
     M060_ELEM_WNG_ARM = 102,
     M060_ELEM_WEB = 103,
-    M060_MODEL_NB = 2,
-    M060_MODEL_BOD = 0,
-    M060_MODEL_PRICKLE2 = 1,
     // --- __m060_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m061 
@@ -23503,9 +22626,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M061_ELEM_WING = 101,
     M061_ELEM_WNG_ARM = 102,
     M061_ELEM_WEB = 103,
-    M061_MODEL_NB = 2,
-    M061_MODEL_BOD = 0,
-    M061_MODEL_PRICKLE1 = 1,
     // --- __m061_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m062 
@@ -23615,11 +22735,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M062_ELEM_WING = 101,
     M062_ELEM_WNG_ARM = 102,
     M062_ELEM_WEB = 103,
-    M062_MODEL_NB = 4,
-    M062_MODEL_BOD = 0,
-    M062_MODEL_WNG_ARM = 1,
-    M062_MODEL_WEB = 2,
-    M062_MODEL_WING = 3,
     // --- __m062_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m063 
@@ -23729,13 +22844,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M063_ELEM_WING = 101,
     M063_ELEM_WNG_ARM = 102,
     M063_ELEM_WEB = 103,
-    M063_MODEL_NB = 6,
-    M063_MODEL_BOD = 0,
-    M063_MODEL_PRICKLE1 = 1,
-    M063_MODEL_WNG_ARM = 2,
-    M063_MODEL_PRICKLE2 = 3,
-    M063_MODEL_WING = 4,
-    M063_MODEL_WEB = 5,
     // --- __m063_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m064 
@@ -24139,8 +23247,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M064_ELEM_LFOOT1_4 = 395,
     M064_ELEM_LFOOT1_5 = 396,
     M064_ELEM_EFF7_3 = 397,
-    M064_MODEL_NB = 1,
-    M064_MODEL_BODY = 0,
     // --- __m064_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m065 
@@ -24544,8 +23650,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M065_ELEM_LFOOT1_4 = 395,
     M065_ELEM_LFOOT1_5 = 396,
     M065_ELEM_EFF7_3 = 397,
-    M065_MODEL_NB = 1,
-    M065_MODEL_BODY = 0,
     // --- __m065_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m066 
@@ -24735,8 +23839,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M066_ELEM_CHN162 = 181,
     M066_ELEM_L_PANTU = 182,
     M066_ELEM_EFF162 = 183,
-    M066_MODEL_NB = 1,
-    M066_MODEL_OK_BODY = 0,
     // --- __m066_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m067 
@@ -24926,8 +24028,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M067_ELEM_CHN162 = 181,
     M067_ELEM_L_PANTU = 182,
     M067_ELEM_EFF162 = 183,
-    M067_MODEL_NB = 1,
-    M067_MODEL_OK_BODY = 0,
     // --- __m067_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m068 
@@ -25030,9 +24130,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M068_ELEM_TAIL1_2 = 94,
     M068_ELEM_TAIL2_2 = 95,
     M068_ELEM_EFF104 = 96,
-    M068_MODEL_NB = 2,
-    M068_MODEL_P_A_01 = 0,
-    M068_MODEL_P_A_02_1 = 1,
     // --- __m068_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m069 
@@ -25135,11 +24232,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M069_ELEM_TAIL1_2 = 94,
     M069_ELEM_TAIL2_2 = 95,
     M069_ELEM_EFF104 = 96,
-    M069_MODEL_NB = 4,
-    M069_MODEL_P_A_01_1 = 0,
-    M069_MODEL_P_A_02_2 = 1,
-    M069_MODEL_P_A_01_2 = 2,
-    M069_MODEL_P_A_02 = 3,
     // --- __m069_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m070 
@@ -25242,13 +24334,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M070_ELEM_TAIL1_2 = 94,
     M070_ELEM_TAIL2_2 = 95,
     M070_ELEM_EFF104 = 96,
-    M070_MODEL_NB = 6,
-    M070_MODEL_P_A_01_1 = 0,
-    M070_MODEL_P_A_02_2 = 1,
-    M070_MODEL_P_A_01 = 2,
-    M070_MODEL_P_A_02_1 = 3,
-    M070_MODEL_P_A_01_2 = 4,
-    M070_MODEL_P_A_02 = 5,
     // --- __m070_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m071 
@@ -25351,9 +24436,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M071_ELEM_TAIL1_2 = 94,
     M071_ELEM_TAIL2_2 = 95,
     M071_ELEM_EFF104 = 96,
-    M071_MODEL_NB = 2,
-    M071_MODEL_P_A_01 = 0,
-    M071_MODEL_P_A_02_1 = 1,
     // --- __m071_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m072 
@@ -25456,11 +24538,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M072_ELEM_TAIL1_2 = 94,
     M072_ELEM_TAIL2_2 = 95,
     M072_ELEM_EFF104 = 96,
-    M072_MODEL_NB = 4,
-    M072_MODEL_P_A_01_1 = 0,
-    M072_MODEL_P_A_02_2 = 1,
-    M072_MODEL_P_A_01_2 = 2,
-    M072_MODEL_P_A_02 = 3,
     // --- __m072_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m073 
@@ -25563,13 +24640,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M073_ELEM_TAIL1_2 = 94,
     M073_ELEM_TAIL2_2 = 95,
     M073_ELEM_EFF104 = 96,
-    M073_MODEL_NB = 6,
-    M073_MODEL_P_A_01_1 = 0,
-    M073_MODEL_P_A_02_2 = 1,
-    M073_MODEL_P_A_01 = 2,
-    M073_MODEL_P_A_02_1 = 3,
-    M073_MODEL_P_A_01_2 = 4,
-    M073_MODEL_P_A_02 = 5,
     // --- __m073_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m074 
@@ -25672,9 +24742,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M074_ELEM_TAIL1_2 = 94,
     M074_ELEM_TAIL2_2 = 95,
     M074_ELEM_EFF104 = 96,
-    M074_MODEL_NB = 2,
-    M074_MODEL_P_A_01 = 0,
-    M074_MODEL_P_A_02_1 = 1,
     // --- __m074_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m075 
@@ -25777,11 +24844,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M075_ELEM_TAIL1_2 = 94,
     M075_ELEM_TAIL2_2 = 95,
     M075_ELEM_EFF104 = 96,
-    M075_MODEL_NB = 4,
-    M075_MODEL_P_A_01_1 = 0,
-    M075_MODEL_P_A_02_2 = 1,
-    M075_MODEL_P_A_01_2 = 2,
-    M075_MODEL_P_A_02 = 3,
     // --- __m075_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m076 
@@ -25884,13 +24946,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M076_ELEM_TAIL1_2 = 94,
     M076_ELEM_TAIL2_2 = 95,
     M076_ELEM_EFF104 = 96,
-    M076_MODEL_NB = 6,
-    M076_MODEL_P_A_01_1 = 0,
-    M076_MODEL_P_A_02_2 = 1,
-    M076_MODEL_P_A_01 = 2,
-    M076_MODEL_P_A_02_1 = 3,
-    M076_MODEL_P_A_01_2 = 4,
-    M076_MODEL_P_A_02 = 5,
     // --- __m076_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m077 
@@ -25918,16 +24973,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M077_ELEM_EL_3_2 = 19,
     M077_ELEM_NULL3_1 = 20,
     M077_ELEM_EL_3_4 = 21,
-    M077_MODEL_NB = 9,
-    M077_MODEL_EL_4_4 = 0,
-    M077_MODEL_EL_4_3 = 1,
-    M077_MODEL_EL_4_2 = 2,
-    M077_MODEL_EL_3_1 = 3,
-    M077_MODEL_EL_2_1 = 4,
-    M077_MODEL_EL_4_1 = 5,
-    M077_MODEL_EL_3_3 = 6,
-    M077_MODEL_EL_3_2 = 7,
-    M077_MODEL_EL_3_4 = 8,
     // --- __m077_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m078 
@@ -25959,18 +25004,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M078_ELEM_EL_2_1 = 23,
     M078_ELEM_NULL3_1 = 24,
     M078_ELEM_EL_3_1_1 = 25,
-    M078_MODEL_NB = 11,
-    M078_MODEL_EL_4_1 = 0,
-    M078_MODEL_EL_4_4 = 1,
-    M078_MODEL_EL_4_3 = 2,
-    M078_MODEL_EL_4_2 = 3,
-    M078_MODEL_EL_3_1 = 4,
-    M078_MODEL_EL_1_1 = 5,
-    M078_MODEL_EL_2_1_1 = 6,
-    M078_MODEL_EL_1_2 = 7,
-    M078_MODEL_EL_3_3 = 8,
-    M078_MODEL_EL_2_1 = 9,
-    M078_MODEL_EL_3_1_1 = 10,
     // --- __m078_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m079 
@@ -25998,16 +25031,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M079_ELEM_EL_1_1 = 19,
     M079_ELEM_NULL3_1 = 20,
     M079_ELEM_EL_3_1 = 21,
-    M079_MODEL_NB = 9,
-    M079_MODEL_EL_1_2 = 0,
-    M079_MODEL_EL_2_2 = 1,
-    M079_MODEL_EL_3_4 = 2,
-    M079_MODEL_EL_2_1 = 3,
-    M079_MODEL_EL_2_3 = 4,
-    M079_MODEL_EL_3_3 = 5,
-    M079_MODEL_EL_3_2 = 6,
-    M079_MODEL_EL_1_1 = 7,
-    M079_MODEL_EL_3_1 = 8,
     // --- __m079_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m080 
@@ -26043,20 +25066,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M080_ELEM_EL_3_2 = 27,
     M080_ELEM_NULL3_2 = 28,
     M080_ELEM_EL_3_5 = 29,
-    M080_MODEL_NB = 13,
-    M080_MODEL_EL_4_7 = 0,
-    M080_MODEL_EL_3_4 = 1,
-    M080_MODEL_EL_4_6 = 2,
-    M080_MODEL_EL_4_5 = 3,
-    M080_MODEL_EL_4_4 = 4,
-    M080_MODEL_EL_4_3 = 5,
-    M080_MODEL_EL_4_2 = 6,
-    M080_MODEL_EL_4_1 = 7,
-    M080_MODEL_EL_3_1 = 8,
-    M080_MODEL_EL_2_1 = 9,
-    M080_MODEL_EL_3_3 = 10,
-    M080_MODEL_EL_3_2 = 11,
-    M080_MODEL_EL_3_5 = 12,
     // --- __m080_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m081 
@@ -26088,18 +25097,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M081_ELEM_EL_4_3 = 23,
     M081_ELEM_NULL11 = 24,
     M081_ELEM_EL_3_3 = 25,
-    M081_MODEL_NB = 11,
-    M081_MODEL_EL_1_1 = 0,
-    M081_MODEL_EL_2_1 = 1,
-    M081_MODEL_EL_3_1 = 2,
-    M081_MODEL_EL_4_1 = 3,
-    M081_MODEL_EL_2_2 = 4,
-    M081_MODEL_EL_1_2 = 5,
-    M081_MODEL_EL_4_2 = 6,
-    M081_MODEL_EL_3_2 = 7,
-    M081_MODEL_EL_4_4 = 8,
-    M081_MODEL_EL_4_3 = 9,
-    M081_MODEL_EL_3_3 = 10,
     // --- __m081_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m082 
@@ -26127,16 +25124,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M082_ELEM_EL_1_3 = 19,
     M082_ELEM_NULL3_1 = 20,
     M082_ELEM_EL_3_2 = 21,
-    M082_MODEL_NB = 9,
-    M082_MODEL_EL_3_1 = 0,
-    M082_MODEL_EL_3_3 = 1,
-    M082_MODEL_EL_3_4 = 2,
-    M082_MODEL_EL_1_1 = 3,
-    M082_MODEL_EL_2_1 = 4,
-    M082_MODEL_EL_1_2 = 5,
-    M082_MODEL_EL_1_4 = 6,
-    M082_MODEL_EL_1_3 = 7,
-    M082_MODEL_EL_3_2 = 8,
     // --- __m082_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m083 
@@ -26164,16 +25151,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M083_ELEM_EL_1_3 = 19,
     M083_ELEM_NULL3_1 = 20,
     M083_ELEM_EL_3_2 = 21,
-    M083_MODEL_NB = 9,
-    M083_MODEL_EL_3_1 = 0,
-    M083_MODEL_EL_3_3 = 1,
-    M083_MODEL_EL_3_4 = 2,
-    M083_MODEL_EL_1_1 = 3,
-    M083_MODEL_EL_2_1 = 4,
-    M083_MODEL_EL_1_2 = 5,
-    M083_MODEL_EL_1_4 = 6,
-    M083_MODEL_EL_1_3 = 7,
-    M083_MODEL_EL_3_2 = 8,
     // --- __m083_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m084 
@@ -26295,11 +25272,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M084_ELEM_SQTSPLITRT = 113,
     M084_ELEM_R_HAND3 = 114,
     M084_ELEM_EFF230 = 115,
-    M084_MODEL_NB = 4,
-    M084_MODEL_ITAPORI_EMD = 0,
-    M084_MODEL_M084_EMD = 1,
-    M084_MODEL_HA_KAKUSI_EMD = 2,
-    M084_MODEL_HA_EMD = 3,
     // --- __m084_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m085 
@@ -26526,8 +25498,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M085_ELEM_CHN113 = 218,
     M085_ELEM_R_FIN4 = 219,
     M085_ELEM_EFF113 = 220,
-    M085_MODEL_NB = 1,
-    M085_MODEL_BODAY = 0,
     // --- __m085_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m086 
@@ -26754,9 +25724,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M086_ELEM_CHN113 = 218,
     M086_ELEM_R_FIN4 = 219,
     M086_ELEM_EFF113 = 220,
-    M086_MODEL_NB = 2,
-    M086_MODEL_BMERGE2 = 0,
-    M086_MODEL_BODAY = 1,
     // --- __m086_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m087 
@@ -26894,12 +25861,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M087_ELEM_TONG2 = 129,
     M087_ELEM_TONG3 = 130,
     M087_ELEM_EFF35 = 131,
-    M087_MODEL_NB = 5,
-    M087_MODEL_BODY = 0,
-    M087_MODEL_SISI_HA1 = 1,
-    M087_MODEL_SISI_HA = 2,
-    M087_MODEL_SISI_KE = 3,
-    M087_MODEL_HANE = 4,
     // --- __m087_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m088 
@@ -27037,12 +25998,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M088_ELEM_TONG2 = 129,
     M088_ELEM_TONG3 = 130,
     M088_ELEM_EFF35 = 131,
-    M088_MODEL_NB = 5,
-    M088_MODEL_BODY = 0,
-    M088_MODEL_SISI_HA1 = 1,
-    M088_MODEL_SISI_HA = 2,
-    M088_MODEL_SISI_KE = 3,
-    M088_MODEL_HANE = 4,
     // --- __m088_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m089 
@@ -27169,8 +26124,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M089_ELEM_CHN421 = 118,
     M089_ELEM_SENAKANOKE = 119,
     M089_ELEM_EFF421 = 120,
-    M089_MODEL_NB = 1,
-    M089_MODEL_Z_EMD1 = 0,
     // --- __m089_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m090 
@@ -27297,8 +26250,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M090_ELEM_CHN421 = 118,
     M090_ELEM_SENAKANOKE = 119,
     M090_ELEM_EFF421 = 120,
-    M090_MODEL_NB = 1,
-    M090_MODEL_Z_EMD1 = 0,
     // --- __m090_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m091 
@@ -27419,9 +26370,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M091_ELEM_R_FOOT = 112,
     M091_ELEM_R_TOES = 113,
     M091_ELEM_EFF111 = 114,
-    M091_MODEL_NB = 2,
-    M091_MODEL_M091 = 0,
-    M091_MODEL_M091_4 = 1,
     // --- __m091_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m092 
@@ -27542,10 +26490,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M092_ELEM_R_FOOT = 112,
     M092_ELEM_R_TOES = 113,
     M092_ELEM_EFF111 = 114,
-    M092_MODEL_NB = 3,
-    M092_MODEL_M091 = 0,
-    M092_MODEL_M091_3 = 1,
-    M092_MODEL_M091_1 = 2,
     // --- __m092_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m093 
@@ -27666,10 +26610,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M093_ELEM_R_FOOT = 112,
     M093_ELEM_R_TOES = 113,
     M093_ELEM_EFF111 = 114,
-    M093_MODEL_NB = 3,
-    M093_MODEL_M091 = 0,
-    M093_MODEL_M091_3 = 1,
-    M093_MODEL_M091_1 = 2,
     // --- __m093_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m094 
@@ -27790,10 +26730,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M094_ELEM_R_FOOT = 112,
     M094_ELEM_R_TOES = 113,
     M094_ELEM_EFF111 = 114,
-    M094_MODEL_NB = 3,
-    M094_MODEL_M091 = 0,
-    M094_MODEL_M091_3 = 1,
-    M094_MODEL_M091_2 = 2,
     // --- __m094_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m095 
@@ -27872,9 +26808,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M095_ELEM_EFF11 = 70,
     M095_ELEM_M095_BODY_EMD = 71,
     M095_ELEM_ITA_F_EMD = 72,
-    M095_MODEL_NB = 2,
-    M095_MODEL_M095_BODY_EMD = 0,
-    M095_MODEL_ITA_F_EMD = 1,
     // --- __m095_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m096 
@@ -27985,10 +26918,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M096_ELEM_M096_02 = 102,
     M096_ELEM_M096_03 = 103,
     M096_ELEM_M096_04 = 104,
-    M096_MODEL_NB = 3,
-    M096_MODEL_M096 = 0,
-    M096_MODEL_M096_02 = 1,
-    M096_MODEL_M096_04 = 2,
     // --- __m096_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m097 
@@ -28099,10 +27028,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M097_ELEM_M096_02 = 102,
     M097_ELEM_M096_03 = 103,
     M097_ELEM_M096_04 = 104,
-    M097_MODEL_NB = 3,
-    M097_MODEL_M096 = 0,
-    M097_MODEL_M096_03 = 1,
-    M097_MODEL_M096_04 = 2,
     // --- __m097_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m098 
@@ -28213,9 +27138,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M098_ELEM_M096_02 = 102,
     M098_ELEM_M096_03 = 103,
     M098_ELEM_M096_04 = 104,
-    M098_MODEL_NB = 2,
-    M098_MODEL_M096 = 0,
-    M098_MODEL_M096_01 = 1,
     // --- __m098_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m099 
@@ -28450,10 +27372,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M099_ELEM_CHN64 = 226,
     M099_ELEM_R1_FIN1 = 227,
     M099_ELEM_SQTSPLITEF_4 = 228,
-    M099_MODEL_NB = 3,
-    M099_MODEL_BODY_OBJ = 0,
-    M099_MODEL_HONE_2 = 1,
-    M099_MODEL_OPT = 2,
     // --- __m099_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m100 
@@ -28688,11 +27606,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M100_ELEM_CHN64 = 226,
     M100_ELEM_R1_FIN1 = 227,
     M100_ELEM_SQTSPLITEF_4 = 228,
-    M100_MODEL_NB = 4,
-    M100_MODEL_BODY_OBJ = 0,
-    M100_MODEL_HONE_1 = 1,
-    M100_MODEL_HONE_2 = 2,
-    M100_MODEL_OPT = 3,
     // --- __m100_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m101 
@@ -28776,8 +27689,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M101_ELEM_TAIL_5 = 75,
     M101_ELEM_TAIL_6 = 76,
     M101_ELEM_EFF28 = 77,
-    M101_MODEL_NB = 1,
-    M101_MODEL_M101 = 0,
     // --- __m101_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m102 
@@ -28996,14 +27907,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M102_ELEM_CHN96 = 210,
     M102_ELEM_R_WA = 211,
     M102_ELEM_EFF96 = 212,
-    M102_MODEL_NB = 7,
-    M102_MODEL_M102 = 0,
-    M102_MODEL_L_TE = 1,
-    M102_MODEL_R_TE = 2,
-    M102_MODEL_BMERGE5 = 3,
-    M102_MODEL_M_GG01 = 4,
-    M102_MODEL_R_GG_02 = 5,
-    M102_MODEL_L_GG_02 = 6,
     // --- __m102_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m103 
@@ -29074,8 +27977,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M103_ELEM_L_B5_4 = 62,
     M103_ELEM_EFF113_4 = 63,
     M103_ELEM_M102_1 = 64,
-    M103_MODEL_NB = 1,
-    M103_MODEL_M102_1 = 0,
     // --- __m103_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m104 
@@ -29196,10 +28097,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M104_ELEM_SQTSPLITRT23 = 112,
     M104_ELEM_R_HANE = 113,
     M104_ELEM_EFF21 = 114,
-    M104_MODEL_NB = 3,
-    M104_MODEL_EATER_EMD1 = 0,
-    M104_MODEL_HANE_EMD1 = 1,
-    M104_MODEL_HANE_URA_EMD1 = 2,
     // --- __m104_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m105 
@@ -29441,10 +28338,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M105_ELEM_SHELL_C = 233,
     M105_ELEM_SHELL = 234,
     M105_ELEM_SHELL_L = 235,
-    M105_MODEL_NB = 3,
-    M105_MODEL_BOD = 0,
-    M105_MODEL_SHELL_AL = 1,
-    M105_MODEL_SHELL_PT = 2,
     // --- __m105_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m106 
@@ -29455,8 +28348,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M106_ELEM_TRN_MOT = 2,
     M106_ELEM_M106_SK = 3,
     M106_ELEM_OBJ = 4,
-    M106_MODEL_NB = 1,
-    M106_MODEL_OBJ = 0,
     // --- __m106_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m107 
@@ -29506,7 +28397,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M107_ELEM_R_FOOT3 = 41,
     M107_ELEM_R_FOOT4 = 42,
     M107_ELEM_EFF75 = 43,
-    M107_ELEM_MODEL = 44,
     M107_ELEM_CHN1 = 45,
     M107_ELEM_CHEST1 = 46,
     M107_ELEM_CHEST2 = 47,
@@ -29563,8 +28453,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M107_ELEM_EFF67 = 98,
     M107_ELEM_CHE2_NU = 99,
     M107_ELEM_CHE1_NU = 100,
-    M107_MODEL_NB = 1,
-    M107_MODEL_MODEL = 0,
     // --- __m107_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m108 
@@ -29614,7 +28502,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M108_ELEM_R_FOOT3 = 41,
     M108_ELEM_R_FOOT4 = 42,
     M108_ELEM_EFF75 = 43,
-    M108_ELEM_MODEL = 44,
     M108_ELEM_CHN1 = 45,
     M108_ELEM_CHEST1 = 46,
     M108_ELEM_CHEST2 = 47,
@@ -29671,8 +28558,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M108_ELEM_EFF67 = 98,
     M108_ELEM_CHE2_NU = 99,
     M108_ELEM_CHE1_NU = 100,
-    M108_MODEL_NB = 1,
-    M108_MODEL_MODEL = 0,
     // --- __m108_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m109 
@@ -29921,12 +28806,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M109_ELEM_M109_2 = 240,
     M109_ELEM_M109_3 = 241,
     M109_ELEM_BMERGE1 = 242,
-    M109_MODEL_NB = 5,
-    M109_MODEL_M109 = 0,
-    M109_MODEL_M109_2 = 1,
-    M109_MODEL_M109_3 = 2,
-    M109_MODEL_BMERGE1 = 3,
-    M109_MODEL_M109_1 = 4,
     // --- __m109_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m110 
@@ -29993,11 +28872,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M110_ELEM_R_HAND2 = 58,
     M110_ELEM_EFF52 = 59,
     M110_ELEM_M110_1 = 60,
-    M110_MODEL_NB = 4,
-    M110_MODEL_M110_2 = 0,
-    M110_MODEL_M110_4 = 1,
-    M110_MODEL_M110_3 = 2,
-    M110_MODEL_M110_1 = 3,
     // --- __m110_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m111 
@@ -30135,14 +29009,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M111_ELEM_L_FOOT2 = 129,
     M111_ELEM_EFF22_2 = 130,
     M111_ELEM_4 = 131,
-    M111_MODEL_NB = 7,
-    M111_MODEL_1 = 0,
-    M111_MODEL_3 = 1,
-    M111_MODEL_2 = 2,
-    M111_MODEL_OBJ2 = 3,
-    M111_MODEL_5 = 4,
-    M111_MODEL_01 = 5,
-    M111_MODEL_4 = 6,
     // --- __m111_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m112 
@@ -30304,8 +29170,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M112_ELEM_I_ARM_CONT = 153,
     M112_ELEM_L_HAND_CONT = 154,
     M112_ELEM_L_HAND_UPV = 155,
-    M112_MODEL_NB = 1,
-    M112_MODEL_C004_00B = 0,
     // --- __m112_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m113 
@@ -30323,10 +29187,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M113_ELEM_BO_1 = 9,
     M113_ELEM_BO_3 = 10,
     M113_ELEM_BO_2 = 11,
-    M113_MODEL_NB = 3,
-    M113_MODEL_BO_1 = 0,
-    M113_MODEL_BO_3 = 1,
-    M113_MODEL_BO_2 = 2,
     // --- __m113_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m114 
@@ -30500,9 +29360,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M114_ELEM_NULL6 = 165,
     M114_ELEM_BODY1 = 166,
     M114_ELEM_BODY2 = 167,
-    M114_MODEL_NB = 2,
-    M114_MODEL_BODY2 = 0,
-    M114_MODEL_BODY1 = 1,
     // --- __m114_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m115 
@@ -30534,9 +29391,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M115_ELEM_CHN78 = 23,
     M115_ELEM_HARI4 = 24,
     M115_ELEM_EFF78 = 25,
-    M115_MODEL_NB = 2,
-    M115_MODEL_M115 = 0,
-    M115_MODEL_M116 = 1,
     // --- __m115_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m116 
@@ -30617,9 +29471,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M116_ELEM_SQTSPLITRT11 = 72,
     M116_ELEM_L_TOES = 73,
     M116_ELEM_EFF8 = 74,
-    M116_MODEL_NB = 2,
-    M116_MODEL_BOD = 0,
-    M116_MODEL_ITA = 1,
     // --- __m116_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m117 
@@ -30883,12 +29734,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M117_ELEM_SQTSPLITRT46_1 = 255,
     M117_ELEM_L_FT4_3 = 256,
     M117_ELEM_EFF54_1_1 = 257,
-    M117_MODEL_NB = 5,
-    M117_MODEL_L_ARM_EMD_1 = 0,
-    M117_MODEL_R_ARM_EMD_1 = 1,
-    M117_MODEL_BODY_EMD_1 = 2,
-    M117_MODEL_OMOTE2 = 3,
-    M117_MODEL_URA2 = 4,
     // --- __m117_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m118 
@@ -30899,8 +29744,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M118_ELEM_TRN_MOT = 2,
     M118_ELEM_M106_SK = 3,
     M118_ELEM_OBJ = 4,
-    M118_MODEL_NB = 1,
-    M118_MODEL_OBJ = 0,
     // --- __m118_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m119 
@@ -31156,8 +29999,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M119_ELEM_R_B_4B = 247,
     M119_ELEM_R_B_4A = 248,
     M119_ELEM_EFF143 = 249,
-    M119_MODEL_NB = 1,
-    M119_MODEL_BOD = 0,
     // --- __m119_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m120 
@@ -31413,8 +30254,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M120_ELEM_R_B_4B = 247,
     M120_ELEM_R_B_4A = 248,
     M120_ELEM_EFF143 = 249,
-    M120_MODEL_NB = 1,
-    M120_MODEL_BOD = 0,
     // --- __m120_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m121 
@@ -31474,11 +30313,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M121_ELEM_BMERGE2 = 51,
     M121_ELEM_NULL1_5 = 52,
     M121_ELEM_BMERGE20 = 53,
-    M121_MODEL_NB = 4,
-    M121_MODEL_BMERGE2 = 0,
-    M121_MODEL_BMERGE6 = 1,
-    M121_MODEL_BMERGE5 = 2,
-    M121_MODEL_BMERGE20 = 3,
     // --- __m121_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m122 
@@ -31658,46 +30492,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M122_ELEM_UP_EMD = 171,
     M122_ELEM_COVER_EMD = 172,
     M122_ELEM_DAIZA_EMD = 173,
-    M122_MODEL_NB = 39,
-    M122_MODEL_R_4_FUTA_EMD = 0,
-    M122_MODEL_R_3_FUTA_EMD = 1,
-    M122_MODEL_R_2_FUTA_EMD = 2,
-    M122_MODEL_L_4_FUTA_EMD = 3,
-    M122_MODEL_L_3_FUTA_EMD = 4,
-    M122_MODEL_L_2_FUTA_EMD = 5,
-    M122_MODEL_BIT_EMD = 6,
-    M122_MODEL_SKART_EMD = 7,
-    M122_MODEL_L_FINGER_EMD = 8,
-    M122_MODEL_L_HAND_EMD = 9,
-    M122_MODEL_L_FORARM_EMD = 10,
-    M122_MODEL_L_UPARM_EMD = 11,
-    M122_MODEL_R_FINGER_EMD = 12,
-    M122_MODEL_R_HAND_EMD = 13,
-    M122_MODEL_R_FORARM_EMD = 14,
-    M122_MODEL_R_UPARM_EMD = 15,
-    M122_MODEL_L_TOE_EMD = 16,
-    M122_MODEL_L_FOOT_EMD = 17,
-    M122_MODEL_L_TIBIA_EMD = 18,
-    M122_MODEL_L_FEMUR_EMD = 19,
-    M122_MODEL_R_TOE_EMD = 20,
-    M122_MODEL_R_FOOT_EMD = 21,
-    M122_MODEL_R_TIBIA_EMD = 22,
-    M122_MODEL_R_FEMUR_EMD = 23,
-    M122_MODEL_JUSHIN_EMD = 24,
-    M122_MODEL_L_COVER_EMD = 25,
-    M122_MODEL_L_SHIELD_EMD = 26,
-    M122_MODEL_L_HOJO_EMD = 27,
-    M122_MODEL_R_COVER_EMD = 28,
-    M122_MODEL_R_SHIELD_EMD = 29,
-    M122_MODEL_R_HOJO_EMD = 30,
-    M122_MODEL_ARM_EMD = 31,
-    M122_MODEL_BIG_GUN_EMD_1 = 32,
-    M122_MODEL_BIG_GUN_EMD1 = 33,
-    M122_MODEL_L_GUN_EMD = 34,
-    M122_MODEL_R_GUN_EMD = 35,
-    M122_MODEL_UP_EMD = 36,
-    M122_MODEL_COVER_EMD = 37,
-    M122_MODEL_DAIZA_EMD = 38,
     // --- __m122_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m123 
@@ -31741,8 +30535,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M123_ELEM_FIN09 = 35,
     M123_ELEM_EFF6 = 36,
     M123_ELEM_M122_BIT_EMD = 37,
-    M123_MODEL_NB = 1,
-    M123_MODEL_M122_BIT_EMD = 0,
     // --- __m123_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m124 
@@ -31904,11 +30696,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M124_ELEM_NECK_UPV = 153,
     M124_ELEM_BODY_2 = 154,
     M124_ELEM_LAND = 155,
-    M124_MODEL_NB = 4,
-    M124_MODEL_BODY = 0,
-    M124_MODEL_ASI = 1,
-    M124_MODEL_OBI = 2,
-    M124_MODEL_KAZARI = 3,
     // --- __m124_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m125 
@@ -32150,9 +30937,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M125_ELEM_NULL4 = 233,
     M125_ELEM_KSA_N0 = 234,
     M125_ELEM_KUSA_N1 = 235,
-    M125_MODEL_NB = 2,
-    M125_MODEL_S007 = 0,
-    M125_MODEL_S007_3 = 1,
     // --- __m125_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m126 
@@ -32238,11 +31022,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M126_ELEM_CHN102 = 77,
     M126_ELEM_R_TAIL = 78,
     M126_ELEM_EFF102 = 79,
-    M126_MODEL_NB = 4,
-    M126_MODEL_M126_L = 0,
-    M126_MODEL_M126_R = 1,
-    M126_MODEL_M126_1 = 2,
-    M126_MODEL_M126_2 = 3,
     // --- __m126_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m127 
@@ -32297,9 +31076,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M127_ELEM_CHN179 = 46,
     M127_ELEM_TAIL7 = 47,
     M127_ELEM_EFF179 = 48,
-    M127_MODEL_NB = 2,
-    M127_MODEL_M127_1 = 0,
-    M127_MODEL_M127_2 = 1,
     // --- __m127_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m128 
@@ -32578,17 +31354,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M128_ELEM_TAIL7 = 270,
     M128_ELEM_TAIL8 = 271,
     M128_ELEM_EFF3 = 272,
-    M128_MODEL_NB = 10,
-    M128_MODEL_BODY_EMD = 0,
-    M128_MODEL_R_HANE_A_EMD = 1,
-    M128_MODEL_R_HANE_B_EMD = 2,
-    M128_MODEL_R_HANE_C_EMD = 3,
-    M128_MODEL_R_HANE_D_EMD = 4,
-    M128_MODEL_L_HANE_A_EMD = 5,
-    M128_MODEL_L_HANE_B_EMD = 6,
-    M128_MODEL_L_HANE_D_EMD = 7,
-    M128_MODEL_L_HANE_C_EMD = 8,
-    M128_MODEL_SHIPPO_ITA_EMD = 9,
     // --- __m128_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m129 
@@ -32727,8 +31492,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M129_ELEM_O_2 = 130,
     M129_ELEM_O_3 = 131,
     M129_ELEM_EFF5 = 132,
-    M129_MODEL_NB = 1,
-    M129_MODEL_BODY_OBJ = 0,
     // --- __m129_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m130 
@@ -33215,14 +31978,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M130_ELEM_GHOST_C3 = 478,
     M130_ELEM_GHOST_C4 = 479,
     M130_ELEM_EFF9 = 480,
-    M130_MODEL_NB = 7,
-    M130_MODEL_BODY = 0,
-    M130_MODEL_FANG = 1,
-    M130_MODEL_EYE_TONG = 2,
-    M130_MODEL_KAMI1 = 3,
-    M130_MODEL_GHOST = 4,
-    M130_MODEL_Y_KAMI = 5,
-    M130_MODEL_DOKURO = 6,
     // --- __m130_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m131 
@@ -33308,11 +32063,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M131_ELEM_CHN102 = 77,
     M131_ELEM_R_TAIL = 78,
     M131_ELEM_EFF102 = 79,
-    M131_MODEL_NB = 4,
-    M131_MODEL_M126_L = 0,
-    M131_MODEL_M126_R = 1,
-    M131_MODEL_M126_1 = 2,
-    M131_MODEL_M126_2 = 3,
     // --- __m131_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m132 
@@ -33579,43 +32329,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M132_ELEM_CHE_2 = 258,
     M132_ELEM_CHE_1 = 259,
     M132_ELEM_OBJ = 260,
-    M132_MODEL_NB = 36,
-    M132_MODEL_R_014 = 0,
-    M132_MODEL_R_013 = 1,
-    M132_MODEL_R_012 = 2,
-    M132_MODEL_R_010 = 3,
-    M132_MODEL_R_011 = 4,
-    M132_MODEL_R_09 = 5,
-    M132_MODEL_R_08 = 6,
-    M132_MODEL_R_07 = 7,
-    M132_MODEL_R_05 = 8,
-    M132_MODEL_R_04 = 9,
-    M132_MODEL_R_02 = 10,
-    M132_MODEL_R_03 = 11,
-    M132_MODEL_L_012 = 12,
-    M132_MODEL_L_011 = 13,
-    M132_MODEL_L_010 = 14,
-    M132_MODEL_L_09 = 15,
-    M132_MODEL_L_08 = 16,
-    M132_MODEL_L_07 = 17,
-    M132_MODEL_L_06 = 18,
-    M132_MODEL_L_05 = 19,
-    M132_MODEL_L_04 = 20,
-    M132_MODEL_L_03 = 21,
-    M132_MODEL_L_02 = 22,
-    M132_MODEL_L_01 = 23,
-    M132_MODEL_R_01 = 24,
-    M132_MODEL_R_06 = 25,
-    M132_MODEL__EXP_1_31 = 26,
-    M132_MODEL_BODY_04 = 27,
-    M132_MODEL_BODY_01 = 28,
-    M132_MODEL_BODY_05 = 29,
-    M132_MODEL_BODY_03 = 30,
-    M132_MODEL_BODY_02 = 31,
-    M132_MODEL_CHE_3 = 32,
-    M132_MODEL_CHE_2 = 33,
-    M132_MODEL_CHE_1 = 34,
-    M132_MODEL_OBJ = 35,
     // --- __m132_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m133 
@@ -33658,20 +32371,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M133_ELEM_NULL5 = 34,
     M133_ELEM_KUREN_WIRE = 35,
     M133_ELEM_BO_01 = 36,
-    M133_MODEL_NB = 13,
-    M133_MODEL_BO_04 = 0,
-    M133_MODEL_BO_13 = 1,
-    M133_MODEL_BO_11 = 2,
-    M133_MODEL_BO_10 = 3,
-    M133_MODEL_BO_09 = 4,
-    M133_MODEL_BO_8 = 5,
-    M133_MODEL_BO_7 = 6,
-    M133_MODEL_BO_6 = 7,
-    M133_MODEL_BO_5 = 8,
-    M133_MODEL_BO_03 = 9,
-    M133_MODEL_BO_02 = 10,
-    M133_MODEL_KUREN_WIRE = 11,
-    M133_MODEL_BO_01 = 12,
     // --- __m133_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m134 
@@ -33764,9 +32463,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M134_ELEM_R_HAIR1 = 84,
     M134_ELEM_R_HAIR2 = 85,
     M134_ELEM_EFF10 = 86,
-    M134_MODEL_NB = 2,
-    M134_MODEL_BODY = 0,
-    M134_MODEL_KAZARI = 1,
     // --- __m134_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m135 
@@ -33859,9 +32555,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M135_ELEM_R_HAIR1 = 84,
     M135_ELEM_R_HAIR2 = 85,
     M135_ELEM_EFF10 = 86,
-    M135_MODEL_NB = 2,
-    M135_MODEL_BODY = 0,
-    M135_MODEL_BMERGE2 = 1,
     // --- __m135_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m136 
@@ -34046,15 +32739,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M136_ELEM_ITA1 = 176,
     M136_ELEM_ITA2 = 177,
     M136_ELEM_BG = 178,
-    M136_MODEL_NB = 8,
-    M136_MODEL_CORE_SK1 = 0,
-    M136_MODEL_CORE_SK2 = 1,
-    M136_MODEL_CORE_SK3 = 2,
-    M136_MODEL_CORE_SK4 = 3,
-    M136_MODEL_SIN1 = 4,
-    M136_MODEL_MATI = 5,
-    M136_MODEL_ITA1 = 6,
-    M136_MODEL_ITA2 = 7,
     // --- __m136_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m137 
@@ -34239,15 +32923,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M137_ELEM_ITA1 = 176,
     M137_ELEM_ITA2 = 177,
     M137_ELEM_BG = 178,
-    M137_MODEL_NB = 8,
-    M137_MODEL_CORE_SK1 = 0,
-    M137_MODEL_CORE_SK2 = 1,
-    M137_MODEL_CORE_SK3 = 2,
-    M137_MODEL_CORE_SK4 = 3,
-    M137_MODEL_SIN1 = 4,
-    M137_MODEL_MATI = 5,
-    M137_MODEL_ITA1 = 6,
-    M137_MODEL_ITA2 = 7,
     // --- __m137_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m138 
@@ -34410,12 +33085,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M138_ELEM_CORE_SK2 = 154,
     M138_ELEM_CORE_SK3 = 155,
     M138_ELEM_CORE_SK4 = 156,
-    M138_MODEL_NB = 5,
-    M138_MODEL_CORE_SK = 0,
-    M138_MODEL_CORE_SK1 = 1,
-    M138_MODEL_CORE_SK2 = 2,
-    M138_MODEL_CORE_SK3 = 3,
-    M138_MODEL_CORE_SK4 = 4,
     // --- __m138_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m139 
@@ -34634,14 +33303,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M139_ELEM_CHN96 = 210,
     M139_ELEM_R_WA = 211,
     M139_ELEM_EFF96 = 212,
-    M139_MODEL_NB = 7,
-    M139_MODEL_M102 = 0,
-    M139_MODEL_L_GG_02 = 1,
-    M139_MODEL_M_GG01 = 2,
-    M139_MODEL_R_GG_02 = 3,
-    M139_MODEL_L_TE = 4,
-    M139_MODEL_R_TE = 5,
-    M139_MODEL_BMERGE5 = 6,
     // --- __m139_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m140 
@@ -34903,43 +33564,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M140_ELEM_L_ME7 = 253,
     M140_ELEM_M140_BO = 254,
     M140_ELEM_M140_C = 255,
-    M140_MODEL_NB = 36,
-    M140_MODEL_L1_HANE = 0,
-    M140_MODEL_L2_HANE = 1,
-    M140_MODEL_R1_HANE = 2,
-    M140_MODEL_R2_HANE = 3,
-    M140_MODEL_L_ME2 = 4,
-    M140_MODEL_L_ME6 = 5,
-    M140_MODEL_L_ME15 = 6,
-    M140_MODEL_L_ME10 = 7,
-    M140_MODEL_L_ME9 = 8,
-    M140_MODEL_L_ME13 = 9,
-    M140_MODEL_R_ME6 = 10,
-    M140_MODEL_R_ME15 = 11,
-    M140_MODEL_R_ME10 = 12,
-    M140_MODEL_R_ME9 = 13,
-    M140_MODEL_R_ME2 = 14,
-    M140_MODEL_R_ME13 = 15,
-    M140_MODEL_R_ME1 = 16,
-    M140_MODEL_R_ME12 = 17,
-    M140_MODEL_R_ME5 = 18,
-    M140_MODEL_R_ME3 = 19,
-    M140_MODEL_R_ME8 = 20,
-    M140_MODEL_R_ME11 = 21,
-    M140_MODEL_R_ME14 = 22,
-    M140_MODEL_R_ME4 = 23,
-    M140_MODEL_R_ME7 = 24,
-    M140_MODEL_L_ME1 = 25,
-    M140_MODEL_L_ME12 = 26,
-    M140_MODEL_L_ME5 = 27,
-    M140_MODEL_L_ME3 = 28,
-    M140_MODEL_L_ME8 = 29,
-    M140_MODEL_L_ME4 = 30,
-    M140_MODEL_L_ME11 = 31,
-    M140_MODEL_L_ME14 = 32,
-    M140_MODEL_L_ME7 = 33,
-    M140_MODEL_M140_BO = 34,
-    M140_MODEL_M140_C = 35,
     // --- __m140_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m141 
@@ -35014,9 +33638,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M141_ELEM_R_FING = 66,
     M141_ELEM_EFF12 = 67,
     M141_ELEM_R_ITEM = 68,
-    M141_MODEL_NB = 2,
-    M141_MODEL_N150_OBJ = 0,
-    M141_MODEL_N150_OBJA = 1,
     // --- __m141_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m142 
@@ -35190,29 +33811,12 @@ public enum FhXMdlElemId : T_XMdlElemId
     M142_ELEM_R_KEN = 165,
     M142_ELEM_EFF85 = 166,
     M142_ELEM_R_SWORD = 167,
-    M142_MODEL_NB = 14,
-    M142_MODEL_L_ARM = 0,
-    M142_MODEL_R_ARM = 1,
-    M142_MODEL_SENAKA = 2,
-    M142_MODEL_LWP_GIMIC = 3,
-    M142_MODEL_RWP_GIMIC = 4,
-    M142_MODEL_SEYMOUR1 = 5,
-    M142_MODEL_SEKI1 = 6,
-    M142_MODEL_SEKI2 = 7,
-    M142_MODEL_SEKI3 = 8,
-    M142_MODEL_SPIA = 9,
-    M142_MODEL_L_SWORD = 10,
-    M142_MODEL_R_SWORD = 11,
-    M142_MODEL_BODY = 12,
-    M142_MODEL_L_HIRE = 13,
     // --- __m142_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m143 
     // --- __m143_ath START (4 entries) ---
     M143_ELEM_NB = 1,
     M143_ELEM_TARGET = 0,
-    M143_MODEL_NB = 1,
-    M143_MODEL_TARGET = 0,
     // --- __m143_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m144 
@@ -35229,10 +33833,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M144_ELEM_E = 8,
     M144_ELEM_HA01 = 9,
     M144_ELEM_HA02 = 10,
-    M144_MODEL_NB = 3,
-    M144_MODEL_E = 0,
-    M144_MODEL_HA01 = 1,
-    M144_MODEL_HA02 = 2,
     // --- __m144_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m145 
@@ -35282,7 +33882,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M145_ELEM_R_FOOT3 = 41,
     M145_ELEM_R_FOOT4 = 42,
     M145_ELEM_EFF75 = 43,
-    M145_ELEM_MODEL = 44,
     M145_ELEM_CHN1 = 45,
     M145_ELEM_CHEST1 = 46,
     M145_ELEM_CHEST2 = 47,
@@ -35339,16 +33938,12 @@ public enum FhXMdlElemId : T_XMdlElemId
     M145_ELEM_EFF67 = 98,
     M145_ELEM_CHE2_NU = 99,
     M145_ELEM_CHE1_NU = 100,
-    M145_MODEL_NB = 1,
-    M145_MODEL_MODEL = 0,
     // --- __m145_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m146 
     // --- __m146_ath START (4 entries) ---
     M146_ELEM_NB = 1,
     M146_ELEM_TARGET = 0,
-    M146_MODEL_NB = 1,
-    M146_MODEL_TARGET = 0,
     // --- __m146_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m147 
@@ -35398,7 +33993,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M147_ELEM_R_FOOT3 = 41,
     M147_ELEM_R_FOOT4 = 42,
     M147_ELEM_EFF75 = 43,
-    M147_ELEM_MODEL = 44,
     M147_ELEM_CHN1 = 45,
     M147_ELEM_CHEST1 = 46,
     M147_ELEM_CHEST2 = 47,
@@ -35455,8 +34049,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M147_ELEM_EFF67 = 98,
     M147_ELEM_CHE2_NU = 99,
     M147_ELEM_CHE1_NU = 100,
-    M147_MODEL_NB = 1,
-    M147_MODEL_MODEL = 0,
     // --- __m147_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m148 
@@ -35506,7 +34098,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M148_ELEM_R_FOOT3 = 41,
     M148_ELEM_R_FOOT4 = 42,
     M148_ELEM_EFF75 = 43,
-    M148_ELEM_MODEL = 44,
     M148_ELEM_CHN1 = 45,
     M148_ELEM_CHEST1 = 46,
     M148_ELEM_CHEST2 = 47,
@@ -35563,16 +34154,12 @@ public enum FhXMdlElemId : T_XMdlElemId
     M148_ELEM_EFF67 = 98,
     M148_ELEM_CHE2_NU = 99,
     M148_ELEM_CHE1_NU = 100,
-    M148_MODEL_NB = 1,
-    M148_MODEL_MODEL = 0,
     // --- __m148_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m149 
     // --- __m149_ath START (4 entries) ---
     M149_ELEM_NB = 1,
     M149_ELEM_TARGET = 0,
-    M149_MODEL_NB = 1,
-    M149_MODEL_TARGET = 0,
     // --- __m149_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m150 
@@ -35583,8 +34170,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M150_ELEM_TRN_MOT = 2,
     M150_ELEM_M106_SK = 3,
     M150_ELEM_OBJ = 4,
-    M150_MODEL_NB = 1,
-    M150_MODEL_OBJ = 0,
     // --- __m150_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m151 
@@ -35694,8 +34279,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M151_ELEM_WING = 101,
     M151_ELEM_WNG_ARM = 102,
     M151_ELEM_WEB = 103,
-    M151_MODEL_NB = 1,
-    M151_MODEL_BOD = 0,
     // --- __m151_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m152 
@@ -35816,9 +34399,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M152_ELEM_R_FOOT = 112,
     M152_ELEM_R_TOES = 113,
     M152_ELEM_EFF111 = 114,
-    M152_MODEL_NB = 2,
-    M152_MODEL_M091 = 0,
-    M152_MODEL_M091_4 = 1,
     // --- __m152_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m153 
@@ -36021,8 +34601,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M153_ELEM_CHN136 = 194,
     M153_ELEM_NE5 = 195,
     M153_ELEM_EFF136_1 = 196,
-    M153_MODEL_NB = 1,
-    M153_MODEL_BODY01 = 0,
     // --- __m153_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m154 
@@ -36033,8 +34611,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M154_ELEM_TRN_MOT = 2,
     M154_ELEM_M106_SK = 3,
     M154_ELEM_OBJ = 4,
-    M154_MODEL_NB = 1,
-    M154_MODEL_OBJ = 0,
     // --- __m154_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m155 
@@ -36257,8 +34833,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M155_ELEM_NULL6 = 214,
     M155_ELEM_NULL5 = 215,
     M155_ELEM_NULL4 = 216,
-    M155_MODEL_NB = 1,
-    M155_MODEL_M006 = 0,
     // --- __m155_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m156 
@@ -36481,8 +35055,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M156_ELEM_NULL6 = 214,
     M156_ELEM_NULL5 = 215,
     M156_ELEM_NULL4 = 216,
-    M156_MODEL_NB = 1,
-    M156_MODEL_M006 = 0,
     // --- __m156_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m157 
@@ -36693,9 +35265,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M157_ELEM_H_F_1 = 202,
     M157_ELEM_H_F_2 = 203,
     M157_ELEM_EFF28 = 204,
-    M157_MODEL_NB = 2,
-    M157_MODEL_M044 = 0,
-    M157_MODEL_M044_ITA = 1,
     // --- __m157_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m158 
@@ -36817,11 +35386,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M158_ELEM_SQTSPLITRT = 113,
     M158_ELEM_R_HAND3 = 114,
     M158_ELEM_EFF230 = 115,
-    M158_MODEL_NB = 4,
-    M158_MODEL_ITAPORI_EMD = 0,
-    M158_MODEL_M084_EMD = 1,
-    M158_MODEL_HA_KAKUSI_EMD = 2,
-    M158_MODEL_HA_EMD = 3,
     // --- __m158_ath END ---
 
     // [h2cs 12/6/23 23:17] Header name: m159 
@@ -36960,48 +35524,18 @@ public enum FhXMdlElemId : T_XMdlElemId
     M159_ELEM_22 = 130,
     M159_ELEM_23 = 131,
     M159_ELEM_24 = 132,
-    M159_MODEL_NB = 25,
-    M159_MODEL_OBJ = 0,
-    M159_MODEL_01 = 1,
-    M159_MODEL_02 = 2,
-    M159_MODEL_03 = 3,
-    M159_MODEL_04 = 4,
-    M159_MODEL_05 = 5,
-    M159_MODEL_06 = 6,
-    M159_MODEL_07 = 7,
-    M159_MODEL_08 = 8,
-    M159_MODEL_09 = 9,
-    M159_MODEL_10 = 10,
-    M159_MODEL_11 = 11,
-    M159_MODEL_12 = 12,
-    M159_MODEL_13 = 13,
-    M159_MODEL_14 = 14,
-    M159_MODEL_15 = 15,
-    M159_MODEL_16 = 16,
-    M159_MODEL_17 = 17,
-    M159_MODEL_18 = 18,
-    M159_MODEL_19 = 19,
-    M159_MODEL_20 = 20,
-    M159_MODEL_21 = 21,
-    M159_MODEL_22 = 22,
-    M159_MODEL_23 = 23,
-    M159_MODEL_24 = 24,
     // --- __m159_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m160 
     // --- __m160_ath START (4 entries) ---
     M160_ELEM_NB = 1,
     M160_ELEM_TARGET = 0,
-    M160_MODEL_NB = 1,
-    M160_MODEL_TARGET = 0,
     // --- __m160_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m161 
     // --- __m161_ath START (4 entries) ---
     M161_ELEM_NB = 1,
     M161_ELEM_TARGET = 0,
-    M161_MODEL_NB = 1,
-    M161_MODEL_TARGET = 0,
     // --- __m161_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m162 
@@ -37009,8 +35543,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M162_ELEM_NB = 2,
     M162_ELEM_F150 = 0,
     M162_ELEM_F150_OBJ = 1,
-    M162_MODEL_NB = 1,
-    M162_MODEL_F150_OBJ = 0,
     // --- __m162_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m163 
@@ -37180,13 +35712,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M163_ELEM_WING_2 = 161,
     M163_ELEM_WING_1 = 162,
     M163_ELEM_KAMI = 163,
-    M163_MODEL_NB = 6,
-    M163_MODEL_BODY_1 = 0,
-    M163_MODEL_WING_2 = 1,
-    M163_MODEL_NECK_1 = 2,
-    M163_MODEL_WING_1 = 3,
-    M163_MODEL_KAMI = 4,
-    M163_MODEL_UROKO_1 = 5,
     // --- __m163_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m164 
@@ -37360,13 +35885,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M164_ELEM_JNT122_1 = 165,
     M164_ELEM_JNT122_2 = 166,
     M164_ELEM_EFF122 = 167,
-    M164_MODEL_NB = 6,
-    M164_MODEL_BODY1 = 0,
-    M164_MODEL_ACCE = 1,
-    M164_MODEL_TATEGAMI = 2,
-    M164_MODEL_JYUZU = 3,
-    M164_MODEL_ACCE_ITA = 4,
-    M164_MODEL_HIGE_HA = 5,
     // --- __m164_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m165 
@@ -37704,8 +36222,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M165_ELEM_SQTSPLITRT63 = 329,
     M165_ELEM_R_FK_C2 = 330,
     M165_ELEM_EFF111 = 331,
-    M165_MODEL_NB = 1,
-    M165_MODEL_BOD = 0,
     // --- __m165_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m166 
@@ -37959,8 +36475,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M166_ELEM_SQTSPLITRT_2 = 245,
     M166_ELEM_TAIL_5 = 246,
     M166_ELEM_SQTSPLITEF6 = 247,
-    M166_MODEL_NB = 1,
-    M166_MODEL_BODY_OBJ = 0,
     // --- __m166_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m167 
@@ -38254,9 +36768,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M167_ELEM_WA_NULL0 = 285,
     M167_ELEM_WA_NULL = 286,
     M167_ELEM_RING = 287,
-    M167_MODEL_NB = 2,
-    M167_MODEL_BAHAMUT_EMD = 0,
-    M167_MODEL_RING = 1,
     // --- __m167_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m168 
@@ -38498,9 +37009,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M168_ELEM_NULL4 = 233,
     M168_ELEM_KSA_N0 = 234,
     M168_ELEM_KUSA_N1 = 235,
-    M168_MODEL_NB = 2,
-    M168_MODEL_S007 = 0,
-    M168_MODEL_S007_3 = 1,
     // --- __m168_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m169 
@@ -38748,9 +37256,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M169_ELEM_L_HIMO2 = 239,
     M169_ELEM_L_HIMO3 = 240,
     M169_ELEM_EFF54_1 = 241,
-    M169_MODEL_NB = 2,
-    M169_MODEL_WAKISA1 = 0,
-    M169_MODEL_BODY = 1,
     // --- __m169_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m170 
@@ -38772,12 +37277,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M170_ELEM_OBJ_A = 13,
     M170_ELEM_B = 14,
     M170_ELEM_OBJ_B = 15,
-    M170_MODEL_NB = 5,
-    M170_MODEL_OBJ_C3 = 0,
-    M170_MODEL_OBJ_C1 = 1,
-    M170_MODEL_OBJ_B = 2,
-    M170_MODEL_OBJ_C2 = 3,
-    M170_MODEL_OBJ_A = 4,
     // --- __m170_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m171 
@@ -38785,8 +37284,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M171_ELEM_NB = 2,
     M171_ELEM_F150 = 0,
     M171_ELEM_F150_OBJ = 1,
-    M171_MODEL_NB = 1,
-    M171_MODEL_F150_OBJ = 0,
     // --- __m171_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m172 
@@ -38810,11 +37307,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M172_ELEM_CHE_2 = 15,
     M172_ELEM_CHE_1 = 16,
     M172_ELEM_OBJ = 17,
-    M172_MODEL_NB = 4,
-    M172_MODEL_CHE_3 = 0,
-    M172_MODEL_CHE_2 = 1,
-    M172_MODEL_CHE_1 = 2,
-    M172_MODEL_OBJ = 3,
     // --- __m172_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m173 
@@ -38843,13 +37335,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M173_ELEM_L_6A = 20,
     M173_ELEM_L_6B = 21,
     M173_ELEM_L_6C = 22,
-    M173_MODEL_NB = 6,
-    M173_MODEL_L_1C = 0,
-    M173_MODEL_L_2C = 1,
-    M173_MODEL_L_3C = 2,
-    M173_MODEL_L_4C = 3,
-    M173_MODEL_L_5C = 4,
-    M173_MODEL_L_6C = 5,
     // --- __m173_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m174 
@@ -38878,13 +37363,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M174_ELEM_R_1A = 20,
     M174_ELEM_R_1B = 21,
     M174_ELEM_R_1C = 22,
-    M174_MODEL_NB = 6,
-    M174_MODEL_R_6C = 0,
-    M174_MODEL_R_5C = 1,
-    M174_MODEL_R_4C = 2,
-    M174_MODEL_R_3C = 3,
-    M174_MODEL_R_2C = 4,
-    M174_MODEL_R_1C = 5,
     // --- __m174_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m175 
@@ -38912,9 +37390,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M175_ELEM_EFF841 = 19,
     M175_ELEM_DOKURO = 20,
     M175_ELEM_DO_HA = 21,
-    M175_MODEL_NB = 2,
-    M175_MODEL_DOKURO = 0,
-    M175_MODEL_DO_HA = 1,
     // --- __m175_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m176 
@@ -38956,9 +37431,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M176_ELEM_EFF19 = 33,
     M176_ELEM_M176_1 = 34,
     M176_ELEM_M176_2 = 35,
-    M176_MODEL_NB = 2,
-    M176_MODEL_M176_1 = 0,
-    M176_MODEL_M176_2 = 1,
     // --- __m176_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m177 
@@ -38969,8 +37441,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M177_ELEM_TRN_MOT = 2,
     M177_ELEM_M177_SK = 3,
     M177_ELEM_OBJ = 4,
-    M177_MODEL_NB = 1,
-    M177_MODEL_OBJ = 0,
     // --- __m177_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m178 
@@ -39076,8 +37546,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M178_ELEM_SQTSPLITRT10 = 97,
     M178_ELEM_R_FIN_B2 = 98,
     M178_ELEM_EFF10 = 99,
-    M178_MODEL_NB = 1,
-    M178_MODEL_BODY = 0,
     // --- __m178_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m179 
@@ -39225,12 +37693,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M179_ELEM_CHN12 = 139,
     M179_ELEM_R_ELB_2 = 140,
     M179_ELEM_EFF12 = 141,
-    M179_MODEL_NB = 5,
-    M179_MODEL_BODY = 0,
-    M179_MODEL_R_WING = 1,
-    M179_MODEL_L_WING = 2,
-    M179_MODEL_L_WING_I = 3,
-    M179_MODEL_R_WING_I = 4,
     // --- __m179_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m180 
@@ -39391,8 +37853,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M180_ELEM_SQTSPLITRT18 = 152,
     M180_ELEM_R_WIN_B2 = 153,
     M180_ELEM_EFF6 = 154,
-    M180_MODEL_NB = 1,
-    M180_MODEL_BODY = 0,
     // --- __m180_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m181 
@@ -39513,10 +37973,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M181_ELEM_L_WEP_5 = 112,
     M181_ELEM_L_KEN = 113,
     M181_ELEM_L_KON = 114,
-    M181_MODEL_NB = 3,
-    M181_MODEL_ATAMA_2 = 0,
-    M181_MODEL_BODY_OBJ = 1,
-    M181_MODEL_L_KEN = 2,
     // --- __m181_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m182 
@@ -39637,10 +38093,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M182_ELEM_L_WEP_5 = 112,
     M182_ELEM_L_KEN = 113,
     M182_ELEM_L_KON = 114,
-    M182_MODEL_NB = 3,
-    M182_MODEL_ATAMA_2 = 0,
-    M182_MODEL_BODY_OBJ = 1,
-    M182_MODEL_L_KEN = 2,
     // --- __m182_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m183 
@@ -39761,10 +38213,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M183_ELEM_L_WEP_5 = 112,
     M183_ELEM_L_KEN = 113,
     M183_ELEM_L_KON = 114,
-    M183_MODEL_NB = 3,
-    M183_MODEL_ATAMA_1 = 0,
-    M183_MODEL_BODY_OBJ = 1,
-    M183_MODEL_L_KON = 2,
     // --- __m183_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m184 
@@ -39885,10 +38333,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M184_ELEM_L_WEP_5 = 112,
     M184_ELEM_L_KEN = 113,
     M184_ELEM_L_KON = 114,
-    M184_MODEL_NB = 3,
-    M184_MODEL_ATAMA_1 = 0,
-    M184_MODEL_BODY_OBJ = 1,
-    M184_MODEL_L_KON = 2,
     // --- __m184_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m185 
@@ -40066,8 +38510,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M185_ELEM_R_FOOT1 = 169,
     M185_ELEM_R_FOOT2 = 170,
     M185_ELEM_EFF146 = 171,
-    M185_MODEL_NB = 1,
-    M185_MODEL_M185 = 0,
     // --- __m185_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m186 
@@ -40245,8 +38687,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M186_ELEM_R_FOOT1 = 169,
     M186_ELEM_R_FOOT2 = 170,
     M186_ELEM_EFF146 = 171,
-    M186_MODEL_NB = 1,
-    M186_MODEL_M185 = 0,
     // --- __m186_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m187 
@@ -40337,12 +38777,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M187_ELEM_CHN37 = 82,
     M187_ELEM_R_TOES = 83,
     M187_ELEM_EFF37 = 84,
-    M187_MODEL_NB = 5,
-    M187_MODEL_M187_1 = 0,
-    M187_MODEL_M187_3 = 1,
-    M187_MODEL_M187_4 = 2,
-    M187_MODEL_M187_5 = 3,
-    M187_MODEL_M187_2 = 4,
     // --- __m187_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m188 
@@ -40461,8 +38895,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M188_ELEM_CHN146 = 110,
     M188_ELEM_R_G = 111,
     M188_ELEM_EFF143 = 112,
-    M188_MODEL_NB = 1,
-    M188_MODEL_M188_5 = 0,
     // --- __m188_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m189 
@@ -40665,8 +39097,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M189_ELEM_CHN136 = 194,
     M189_ELEM_NE5 = 195,
     M189_ELEM_EFF136_1 = 196,
-    M189_MODEL_NB = 1,
-    M189_MODEL_BODY01 = 0,
     // --- __m189_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m190 
@@ -40869,8 +39299,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M190_ELEM_CHN136 = 194,
     M190_ELEM_NE5 = 195,
     M190_ELEM_EFF136_1 = 196,
-    M190_MODEL_NB = 1,
-    M190_MODEL_BODY01 = 0,
     // --- __m190_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m191 
@@ -40918,16 +39346,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M191_ELEM_R_CIRCLE = 39,
     M191_ELEM_OB_9 = 40,
     M191_ELEM_EFF4 = 41,
-    M191_MODEL_NB = 9,
-    M191_MODEL_OB_1 = 0,
-    M191_MODEL_OB_2 = 1,
-    M191_MODEL_OB_3 = 2,
-    M191_MODEL_OB_5 = 3,
-    M191_MODEL_OB_4 = 4,
-    M191_MODEL_OB_6 = 5,
-    M191_MODEL_OB_8 = 6,
-    M191_MODEL_OB_7 = 7,
-    M191_MODEL_OB_9 = 8,
     // --- __m191_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m192 
@@ -40975,16 +39393,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M192_ELEM_R_CIRCLE = 39,
     M192_ELEM_OB_9 = 40,
     M192_ELEM_EFF4 = 41,
-    M192_MODEL_NB = 9,
-    M192_MODEL_OB_1 = 0,
-    M192_MODEL_OB_2 = 1,
-    M192_MODEL_OB_3 = 2,
-    M192_MODEL_OB_5 = 3,
-    M192_MODEL_OB_4 = 4,
-    M192_MODEL_OB_6 = 5,
-    M192_MODEL_OB_8 = 6,
-    M192_MODEL_OB_7 = 7,
-    M192_MODEL_OB_9 = 8,
     // --- __m192_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m193 
@@ -41007,8 +39415,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M193_ELEM_CHIN = 14,
     M193_ELEM_EFF8 = 15,
     M193_ELEM_M193 = 16,
-    M193_MODEL_NB = 1,
-    M193_MODEL_M193 = 0,
     // --- __m193_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m194 
@@ -41031,8 +39437,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M194_ELEM_CHIN = 14,
     M194_ELEM_EFF8 = 15,
     M194_ELEM_M193 = 16,
-    M194_MODEL_NB = 1,
-    M194_MODEL_M193 = 0,
     // --- __m194_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m195 
@@ -41101,8 +39505,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M195_ELEM_SQTSPLITRT9 = 60,
     M195_ELEM_R_UPARM = 61,
     M195_ELEM_EFF9_1 = 62,
-    M195_MODEL_NB = 1,
-    M195_MODEL_M195 = 0,
     // --- __m195_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m196 
@@ -41171,8 +39573,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M196_ELEM_SQTSPLITRT9 = 60,
     M196_ELEM_R_UPARM = 61,
     M196_ELEM_EFF9_1 = 62,
-    M196_MODEL_NB = 1,
-    M196_MODEL_M195 = 0,
     // --- __m196_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m197 
@@ -41248,10 +39648,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M197_ELEM_CHN7 = 67,
     M197_ELEM_L_TOES = 68,
     M197_ELEM_EFF7 = 69,
-    M197_MODEL_NB = 3,
-    M197_MODEL_N122_OBJ = 0,
-    M197_MODEL_N122_OBJA = 1,
-    M197_MODEL_N122_OBJB = 2,
     // --- __m197_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m198 
@@ -41327,10 +39723,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M198_ELEM_CHN7 = 67,
     M198_ELEM_L_TOES = 68,
     M198_ELEM_EFF7 = 69,
-    M198_MODEL_NB = 3,
-    M198_MODEL_N122_OBJA = 0,
-    M198_MODEL_N122_OBJ = 1,
-    M198_MODEL_N122_OBJB = 2,
     // --- __m198_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m199 
@@ -41406,10 +39798,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M199_ELEM_L_FING = 67,
     M199_ELEM_EFF19 = 68,
     M199_ELEM_L_ITEM = 69,
-    M199_MODEL_NB = 3,
-    M199_MODEL_N124_OBJ = 0,
-    M199_MODEL_N124_OBJA = 1,
-    M199_MODEL_N124_OBJB = 2,
     // --- __m199_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m200 
@@ -41485,10 +39873,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M200_ELEM_L_FING = 67,
     M200_ELEM_EFF19 = 68,
     M200_ELEM_L_ITEM = 69,
-    M200_MODEL_NB = 3,
-    M200_MODEL_N124_OBJA = 0,
-    M200_MODEL_N124_OBJ = 1,
-    M200_MODEL_N124_OBJB = 2,
     // --- __m200_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m202 
@@ -41595,10 +39979,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M202_ELEM_SQTSPLITRT_1 = 98,
     M202_ELEM_L_FING1 = 99,
     M202_ELEM_EFF18 = 100,
-    M202_MODEL_NB = 3,
-    M202_MODEL_KAME_EMD = 0,
-    M202_MODEL_BOD_EMD = 1,
-    M202_MODEL_EYES_EMD = 2,
     // --- __m202_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m207 
@@ -41631,10 +40011,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M207_ELEM_L_FEMUR = 24,
     M207_ELEM_L_TIBIA = 25,
     M207_ELEM_EFF3 = 26,
-    M207_MODEL_NB = 3,
-    M207_MODEL_LARM = 0,
-    M207_MODEL_RARM = 1,
-    M207_MODEL_BODY = 2,
     // --- __m207_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m208 
@@ -41667,10 +40043,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M208_ELEM_L_FEMUR = 24,
     M208_ELEM_L_TIBIA = 25,
     M208_ELEM_EFF3 = 26,
-    M208_MODEL_NB = 3,
-    M208_MODEL_LARM = 0,
-    M208_MODEL_RARM = 1,
-    M208_MODEL_BODY = 2,
     // --- __m208_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m209 
@@ -41736,9 +40108,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M209_ELEM_NULL79 = 57,
     M209_ELEM_NULL80 = 58,
     M209_ELEM_NULL81 = 59,
-    M209_MODEL_NB = 2,
-    M209_MODEL_M209_2 = 0,
-    M209_MODEL_M209_1 = 1,
     // --- __m209_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m210 
@@ -41888,8 +40257,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M210_ELEM_L_SHELL4 = 141,
     M210_ELEM_L_SHELL5 = 142,
     M210_ELEM_EFF18 = 143,
-    M210_MODEL_NB = 1,
-    M210_MODEL_BODAY = 0,
     // --- __m210_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m211 
@@ -41905,9 +40272,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M211_ELEM_F002_OBJ = 7,
     M211_ELEM_F002_FUTASHAPE1 = 8,
     M211_ELEM_F002_HAKOSHAPE1 = 9,
-    M211_MODEL_NB = 2,
-    M211_MODEL_F002_FUTASHAPE1 = 0,
-    M211_MODEL_F002_HAKOSHAPE1 = 1,
     // --- __m211_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m212 
@@ -42097,8 +40461,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M212_ELEM_CHN162 = 181,
     M212_ELEM_L_PANTU = 182,
     M212_ELEM_EFF162 = 183,
-    M212_MODEL_NB = 1,
-    M212_MODEL_OK_BODY = 0,
     // --- __m212_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m213 
@@ -42173,9 +40535,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M213_ELEM_R_FING = 66,
     M213_ELEM_EFF12 = 67,
     M213_ELEM_R_ITEM = 68,
-    M213_MODEL_NB = 2,
-    M213_MODEL_N150_OBJ = 0,
-    M213_MODEL_N150_OBJA = 1,
     // --- __m213_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m214 
@@ -42316,8 +40675,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M214_ELEM_F_LEG = 132,
     M214_ELEM_F_FOOT = 133,
     M214_ELEM_EFF387 = 134,
-    M214_MODEL_NB = 1,
-    M214_MODEL_FNGO_SK = 0,
     // --- __m214_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m215 
@@ -42458,8 +40815,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M215_ELEM_F_LEG = 132,
     M215_ELEM_F_FOOT = 133,
     M215_ELEM_EFF387 = 134,
-    M215_MODEL_NB = 1,
-    M215_MODEL_FNGO_SK = 0,
     // --- __m215_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m216 
@@ -42600,8 +40955,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M216_ELEM_F_LEG = 132,
     M216_ELEM_F_FOOT = 133,
     M216_ELEM_EFF387 = 134,
-    M216_MODEL_NB = 1,
-    M216_MODEL_FNGO_SK = 0,
     // --- __m216_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m217 
@@ -42723,11 +41076,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M217_ELEM_SQTSPLITRT = 113,
     M217_ELEM_R_HAND3 = 114,
     M217_ELEM_EFF230 = 115,
-    M217_MODEL_NB = 4,
-    M217_MODEL_ITAPORI_EMD = 0,
-    M217_MODEL_M084_EMD = 1,
-    M217_MODEL_HA_KAKUSI_EMD = 2,
-    M217_MODEL_HA_EMD = 3,
     // --- __m217_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m218 
@@ -42750,8 +41098,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M218_ELEM_CHIN = 14,
     M218_ELEM_EFF8 = 15,
     M218_ELEM_M193 = 16,
-    M218_MODEL_NB = 1,
-    M218_MODEL_M193 = 0,
     // --- __m218_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m219 
@@ -42817,9 +41163,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M219_ELEM_VFX79 = 57,
     M219_ELEM_VFX80 = 58,
     M219_ELEM_VFX81 = 59,
-    M219_MODEL_NB = 2,
-    M219_MODEL_M209_2 = 0,
-    M219_MODEL_M209_1 = 1,
     // --- __m219_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m220 
@@ -42966,8 +41309,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M220_ELEM_NULL5 = 138,
     M220_ELEM_NULL7 = 139,
     M220_ELEM_NULL9 = 140,
-    M220_MODEL_NB = 1,
-    M220_MODEL_M050 = 0,
     // --- __m220_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m221 
@@ -43093,8 +41434,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M221_ELEM_HA_LL_2 = 117,
     M221_ELEM_HA_LL_1 = 118,
     M221_ELEM_EFF18_1 = 119,
-    M221_MODEL_NB = 1,
-    M221_MODEL_M039 = 0,
     // --- __m221_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m222 
@@ -43169,9 +41508,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M222_ELEM_R_FING = 66,
     M222_ELEM_EFF12 = 67,
     M222_ELEM_R_ITEM = 68,
-    M222_MODEL_NB = 2,
-    M222_MODEL_N150_OBJ = 0,
-    M222_MODEL_N150_OBJA = 1,
     // --- __m222_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m223 
@@ -43244,9 +41580,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M223_ELEM_CHN108 = 64,
     M223_ELEM_R_FOOT2 = 65,
     M223_ELEM_EFF108 = 66,
-    M223_MODEL_NB = 2,
-    M223_MODEL_M223_1 = 0,
-    M223_MODEL_BMERGE2 = 1,
     // --- __m223_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m224 
@@ -43319,9 +41652,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M224_ELEM_CHN108 = 64,
     M224_ELEM_R_FOOT2 = 65,
     M224_ELEM_EFF108 = 66,
-    M224_MODEL_NB = 2,
-    M224_MODEL_M223_1 = 0,
-    M224_MODEL_BMERGE2 = 1,
     // --- __m224_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m225 
@@ -43525,9 +41855,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M225_ELEM_HAIR3 = 195,
     M225_ELEM_HAIR4 = 196,
     M225_ELEM_EFF26 = 197,
-    M225_MODEL_NB = 2,
-    M225_MODEL_WING_EMD = 0,
-    M225_MODEL_M_035_EMD = 1,
     // --- __m225_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m226 
@@ -43550,8 +41877,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M226_ELEM_CHIN = 14,
     M226_ELEM_EFF8 = 15,
     M226_ELEM_M193 = 16,
-    M226_MODEL_NB = 1,
-    M226_MODEL_M193 = 0,
     // --- __m226_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m227 
@@ -43689,12 +42014,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M227_ELEM_TONG2 = 129,
     M227_ELEM_TONG3 = 130,
     M227_ELEM_EFF35 = 131,
-    M227_MODEL_NB = 5,
-    M227_MODEL_BODY = 0,
-    M227_MODEL_SISI_HA1 = 1,
-    M227_MODEL_SISI_HA = 2,
-    M227_MODEL_SISI_KE = 3,
-    M227_MODEL_HANE = 4,
     // --- __m227_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m228 
@@ -43816,8 +42135,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M228_ELEM_R_TOE1 = 113,
     M228_ELEM_R_TOE2 = 114,
     M228_ELEM_EFF152 = 115,
-    M228_MODEL_NB = 1,
-    M228_MODEL_M055 = 0,
     // --- __m228_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m229 
@@ -43960,8 +42277,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M229_ELEM_L_INDEX2 = 134,
     M229_ELEM_L_INDEX3 = 135,
     M229_ELEM_EFF16 = 136,
-    M229_MODEL_NB = 1,
-    M229_MODEL_M048 = 0,
     // --- __m229_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m230 
@@ -44172,9 +42487,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M230_ELEM_H_F_1 = 202,
     M230_ELEM_H_F_2 = 203,
     M230_ELEM_EFF28 = 204,
-    M230_MODEL_NB = 2,
-    M230_MODEL_M044 = 0,
-    M230_MODEL_M044_ITA = 1,
     // --- __m230_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m231 
@@ -44266,8 +42578,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M231_ELEM_TONG02 = 83,
     M231_ELEM_TONG03 = 84,
     M231_ELEM_EFF15 = 85,
-    M231_MODEL_NB = 1,
-    M231_MODEL_M009 = 0,
     // --- __m231_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m232 
@@ -44513,8 +42823,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M232_ELEM_R_B1_2_N = 237,
     M232_ELEM_M016 = 238,
     M232_ELEM_INSIDE = 239,
-    M232_MODEL_NB = 1,
-    M232_MODEL_INSIDE = 0,
     // --- __m232_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m233 
@@ -44635,8 +42943,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M233_ELEM_R_FOOT2 = 112,
     M233_ELEM_R_FOOT3 = 113,
     M233_ELEM_EFF2 = 114,
-    M233_MODEL_NB = 1,
-    M233_MODEL_M028 = 0,
     // --- __m233_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m234 
@@ -44762,8 +43068,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M234_ELEM_HA_LL_2 = 117,
     M234_ELEM_HA_LL_1 = 118,
     M234_ELEM_EFF18_1 = 119,
-    M234_MODEL_NB = 1,
-    M234_MODEL_M039 = 0,
     // --- __m234_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m235 
@@ -44861,8 +43165,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M235_ELEM_CHN313 = 89,
     M235_ELEM_R_FOOT2 = 90,
     M235_ELEM_EFF313 = 91,
-    M235_MODEL_NB = 1,
-    M235_MODEL_M002 = 0,
     // --- __m235_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m236 
@@ -44960,9 +43262,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M236_ELEM_CHN313 = 89,
     M236_ELEM_R_FOOT2 = 90,
     M236_ELEM_EFF313 = 91,
-    M236_MODEL_NB = 2,
-    M236_MODEL_M002 = 0,
-    M236_MODEL_M002_1 = 1,
     // --- __m236_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m237 
@@ -44978,9 +43277,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M237_ELEM_F002_OBJ = 7,
     M237_ELEM_F002_FUTASHAPE1 = 8,
     M237_ELEM_F002_HAKOSHAPE1 = 9,
-    M237_MODEL_NB = 2,
-    M237_MODEL_F002_FUTASHAPE1 = 0,
-    M237_MODEL_F002_HAKOSHAPE1 = 1,
     // --- __m237_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m238 
@@ -45191,9 +43487,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M238_ELEM_H_F_1 = 202,
     M238_ELEM_H_F_2 = 203,
     M238_ELEM_EFF28 = 204,
-    M238_MODEL_NB = 2,
-    M238_MODEL_M044 = 0,
-    M238_MODEL_M044_ITA = 1,
     // --- __m238_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m239 
@@ -45314,10 +43607,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M239_ELEM_CHN70 = 112,
     M239_ELEM_CHIN = 113,
     M239_ELEM_EFF70 = 114,
-    M239_MODEL_NB = 3,
-    M239_MODEL_M022 = 0,
-    M239_MODEL_02 = 1,
-    M239_MODEL_BMERGE1 = 2,
     // --- __m239_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m240 
@@ -45415,8 +43704,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M240_ELEM_CHN313 = 89,
     M240_ELEM_R_FOOT2 = 90,
     M240_ELEM_EFF313 = 91,
-    M240_MODEL_NB = 1,
-    M240_MODEL_M002 = 0,
     // --- __m240_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m241 
@@ -45662,8 +43949,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M241_ELEM_R_B1_2_N = 237,
     M241_ELEM_M016 = 238,
     M241_ELEM_INSIDE = 239,
-    M241_MODEL_NB = 1,
-    M241_MODEL_INSIDE = 0,
     // --- __m241_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m242 
@@ -45867,10 +44152,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M242_ELEM_HAIR3 = 195,
     M242_ELEM_HAIR4 = 196,
     M242_ELEM_EFF26 = 197,
-    M242_MODEL_NB = 3,
-    M242_MODEL_WING_EMD = 0,
-    M242_MODEL_M_035_EMD = 1,
-    M242_MODEL_HAIR_EMD = 2,
     // --- __m242_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m243 
@@ -45936,9 +44217,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M243_ELEM_VFX79 = 57,
     M243_ELEM_VFX80 = 58,
     M243_ELEM_VFX81 = 59,
-    M243_MODEL_NB = 2,
-    M243_MODEL_M209_2 = 0,
-    M243_MODEL_M209_1 = 1,
     // --- __m243_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m244 
@@ -46060,11 +44338,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M244_ELEM_SQTSPLITRT = 113,
     M244_ELEM_R_HAND3 = 114,
     M244_ELEM_EFF230 = 115,
-    M244_MODEL_NB = 4,
-    M244_MODEL_ITAPORI_EMD = 0,
-    M244_MODEL_M084_EMD = 1,
-    M244_MODEL_HA_KAKUSI_EMD = 2,
-    M244_MODEL_HA_EMD = 3,
     // --- __m244_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m245 
@@ -46185,9 +44458,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M245_ELEM_CHN70 = 112,
     M245_ELEM_CHIN = 113,
     M245_ELEM_EFF70 = 114,
-    M245_MODEL_NB = 2,
-    M245_MODEL_M022 = 0,
-    M245_MODEL_02 = 1,
     // --- __m245_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m246 
@@ -46285,8 +44555,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M246_ELEM_CHN313 = 89,
     M246_ELEM_R_FOOT2 = 90,
     M246_ELEM_EFF313 = 91,
-    M246_MODEL_NB = 1,
-    M246_MODEL_M002 = 0,
     // --- __m246_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m247 
@@ -46490,9 +44758,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M247_ELEM_HAIR3 = 195,
     M247_ELEM_HAIR4 = 196,
     M247_ELEM_EFF26 = 197,
-    M247_MODEL_NB = 2,
-    M247_MODEL_WING_EMD = 0,
-    M247_MODEL_M_035_EMD = 1,
     // --- __m247_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m248 
@@ -46577,8 +44842,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M248_ELEM_CHN7 = 76,
     M248_ELEM_L_TOES = 77,
     M248_ELEM_EFF7 = 78,
-    M248_MODEL_NB = 1,
-    M248_MODEL_N222_OBJ = 0,
     // --- __m248_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m249 
@@ -46678,10 +44941,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M249_ELEM_CHN202 = 91,
     M249_ELEM_R_TOES = 92,
     M249_ELEM_EFF202 = 93,
-    M249_MODEL_NB = 3,
-    M249_MODEL_N244_OBJ = 0,
-    M249_MODEL_BMERGE28 = 1,
-    M249_MODEL_GRID1 = 2,
     // --- __m249_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m250 
@@ -46781,10 +45040,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M250_ELEM_CHN202 = 91,
     M250_ELEM_R_TOES = 92,
     M250_ELEM_EFF202 = 93,
-    M250_MODEL_NB = 3,
-    M250_MODEL_N327_OBJ = 0,
-    M250_MODEL_BMERGE28 = 1,
-    M250_MODEL_GRID1 = 2,
     // --- __m250_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m251 
@@ -46931,31 +45186,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M251_ELEM_PARTS_22 = 138,
     M251_ELEM_PARTS_23 = 139,
     M251_ELEM_PARTS_24 = 140,
-    M251_MODEL_NB = 24,
-    M251_MODEL_PARTS_01 = 0,
-    M251_MODEL_PARTS_02 = 1,
-    M251_MODEL_PARTS_03 = 2,
-    M251_MODEL_PARTS_04 = 3,
-    M251_MODEL_PARTS_05 = 4,
-    M251_MODEL_PARTS_06 = 5,
-    M251_MODEL_PARTS_07 = 6,
-    M251_MODEL_PARTS_08 = 7,
-    M251_MODEL_PARTS_09 = 8,
-    M251_MODEL_PARTS_10 = 9,
-    M251_MODEL_PARTS_11 = 10,
-    M251_MODEL_PARTS_12 = 11,
-    M251_MODEL_PARTS_13 = 12,
-    M251_MODEL_PARTS_14 = 13,
-    M251_MODEL_PARTS_15 = 14,
-    M251_MODEL_PARTS_16 = 15,
-    M251_MODEL_PARTS_17 = 16,
-    M251_MODEL_PARTS_18 = 17,
-    M251_MODEL_PARTS_19 = 18,
-    M251_MODEL_PARTS_20 = 19,
-    M251_MODEL_PARTS_21 = 20,
-    M251_MODEL_PARTS_22 = 21,
-    M251_MODEL_PARTS_23 = 22,
-    M251_MODEL_PARTS_24 = 23,
     // --- __m251_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m252 
@@ -47101,31 +45331,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M252_ELEM_PARTS_22 = 137,
     M252_ELEM_PARTS_23 = 138,
     M252_ELEM_PARTS_24 = 139,
-    M252_MODEL_NB = 24,
-    M252_MODEL_PARTS_01 = 0,
-    M252_MODEL_PARTS_02 = 1,
-    M252_MODEL_PARTS_03 = 2,
-    M252_MODEL_PARTS_04 = 3,
-    M252_MODEL_PARTS_05 = 4,
-    M252_MODEL_PARTS_06 = 5,
-    M252_MODEL_PARTS_07 = 6,
-    M252_MODEL_PARTS_08 = 7,
-    M252_MODEL_PARTS_09 = 8,
-    M252_MODEL_PARTS_10 = 9,
-    M252_MODEL_PARTS_11 = 10,
-    M252_MODEL_PARTS_12 = 11,
-    M252_MODEL_PARTS_13 = 12,
-    M252_MODEL_PARTS_14 = 13,
-    M252_MODEL_PARTS_15 = 14,
-    M252_MODEL_PARTS_16 = 15,
-    M252_MODEL_PARTS_17 = 16,
-    M252_MODEL_PARTS_18 = 17,
-    M252_MODEL_PARTS_19 = 18,
-    M252_MODEL_PARTS_20 = 19,
-    M252_MODEL_PARTS_21 = 20,
-    M252_MODEL_PARTS_22 = 21,
-    M252_MODEL_PARTS_23 = 22,
-    M252_MODEL_PARTS_24 = 23,
     // --- __m252_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m253 
@@ -47360,31 +45565,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M253_ELEM_PARTS_22 = 226,
     M253_ELEM_PARTS_23 = 227,
     M253_ELEM_PARTS_24 = 228,
-    M253_MODEL_NB = 24,
-    M253_MODEL_PARTS_01 = 0,
-    M253_MODEL_PARTS_02 = 1,
-    M253_MODEL_PARTS_03 = 2,
-    M253_MODEL_PARTS_04 = 3,
-    M253_MODEL_PARTS_05 = 4,
-    M253_MODEL_PARTS_06 = 5,
-    M253_MODEL_PARTS_07 = 6,
-    M253_MODEL_PARTS_08 = 7,
-    M253_MODEL_PARTS_09 = 8,
-    M253_MODEL_PARTS_10 = 9,
-    M253_MODEL_PARTS_11 = 10,
-    M253_MODEL_PARTS_12 = 11,
-    M253_MODEL_PARTS_13 = 12,
-    M253_MODEL_PARTS_14 = 13,
-    M253_MODEL_PARTS_15 = 14,
-    M253_MODEL_PARTS_16 = 15,
-    M253_MODEL_PARTS_17 = 16,
-    M253_MODEL_PARTS_18 = 17,
-    M253_MODEL_PARTS_19 = 18,
-    M253_MODEL_PARTS_20 = 19,
-    M253_MODEL_PARTS_21 = 20,
-    M253_MODEL_PARTS_22 = 21,
-    M253_MODEL_PARTS_23 = 22,
-    M253_MODEL_PARTS_24 = 23,
     // --- __m253_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m254 
@@ -47554,21 +45734,12 @@ public enum FhXMdlElemId : T_XMdlElemId
     M254_ELEM_WING_2 = 161,
     M254_ELEM_WING_1 = 162,
     M254_ELEM_KAMI = 163,
-    M254_MODEL_NB = 6,
-    M254_MODEL_BODY_1 = 0,
-    M254_MODEL_WING_2 = 1,
-    M254_MODEL_NECK_1 = 2,
-    M254_MODEL_WING_1 = 3,
-    M254_MODEL_KAMI = 4,
-    M254_MODEL_UROKO_1 = 5,
     // --- __m254_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m255 
     // --- __m255_ath START (4 entries) ---
     M255_ELEM_NB = 1,
     M255_ELEM_TARGET = 0,
-    M255_MODEL_NB = 1,
-    M255_MODEL_TARGET = 0,
     // --- __m255_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m256 
@@ -47770,31 +45941,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M256_ELEM_PARTS_22 = 193,
     M256_ELEM_PARTS_23 = 194,
     M256_ELEM_PARTS_24 = 195,
-    M256_MODEL_NB = 24,
-    M256_MODEL_PARTS_01 = 0,
-    M256_MODEL_PARTS_02 = 1,
-    M256_MODEL_PARTS_03 = 2,
-    M256_MODEL_PARTS_04 = 3,
-    M256_MODEL_PARTS_05 = 4,
-    M256_MODEL_PARTS_06 = 5,
-    M256_MODEL_PARTS_07 = 6,
-    M256_MODEL_PARTS_08 = 7,
-    M256_MODEL_PARTS_09 = 8,
-    M256_MODEL_PARTS_10 = 9,
-    M256_MODEL_PARTS_11 = 10,
-    M256_MODEL_PARTS_12 = 11,
-    M256_MODEL_PARTS_13 = 12,
-    M256_MODEL_PARTS_14 = 13,
-    M256_MODEL_PARTS_15 = 14,
-    M256_MODEL_PARTS_16 = 15,
-    M256_MODEL_PARTS_17 = 16,
-    M256_MODEL_PARTS_18 = 17,
-    M256_MODEL_PARTS_19 = 18,
-    M256_MODEL_PARTS_20 = 19,
-    M256_MODEL_PARTS_21 = 20,
-    M256_MODEL_PARTS_22 = 21,
-    M256_MODEL_PARTS_23 = 22,
-    M256_MODEL_PARTS_24 = 23,
     // --- __m256_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m257 
@@ -47824,31 +45970,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M257_ELEM_PARTS_03 = 21,
     M257_ELEM_PARTS_02 = 22,
     M257_ELEM_PARTS_01 = 23,
-    M257_MODEL_NB = 24,
-    M257_MODEL_PARTS_24 = 0,
-    M257_MODEL_PARTS_23 = 1,
-    M257_MODEL_PARTS_22 = 2,
-    M257_MODEL_PARTS_21 = 3,
-    M257_MODEL_PARTS_20 = 4,
-    M257_MODEL_PARTS_19 = 5,
-    M257_MODEL_PARTS_18 = 6,
-    M257_MODEL_PARTS_17 = 7,
-    M257_MODEL_PARTS_16 = 8,
-    M257_MODEL_PARTS_15 = 9,
-    M257_MODEL_PARTS_14 = 10,
-    M257_MODEL_PARTS_13 = 11,
-    M257_MODEL_PARTS_12 = 12,
-    M257_MODEL_PARTS_11 = 13,
-    M257_MODEL_PARTS_10 = 14,
-    M257_MODEL_PARTS_09 = 15,
-    M257_MODEL_PARTS_08 = 16,
-    M257_MODEL_PARTS_07 = 17,
-    M257_MODEL_PARTS_06 = 18,
-    M257_MODEL_PARTS_05 = 19,
-    M257_MODEL_PARTS_04 = 20,
-    M257_MODEL_PARTS_03 = 21,
-    M257_MODEL_PARTS_02 = 22,
-    M257_MODEL_PARTS_01 = 23,
     // --- __m257_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m258 
@@ -48018,13 +46139,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M258_ELEM__WING_2 = 161,
     M258_ELEM__WING_1 = 162,
     M258_ELEM__HEAD_1 = 163,
-    M258_MODEL_NB = 6,
-    M258_MODEL__BODY_1 = 0,
-    M258_MODEL__WING_2 = 1,
-    M258_MODEL__NECK_1 = 2,
-    M258_MODEL__WING_1 = 3,
-    M258_MODEL__HEAD_1 = 4,
-    M258_MODEL__UROKO_1 = 5,
     // --- __m258_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m259 
@@ -48198,13 +46312,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M259_ELEM_JNT122_1 = 165,
     M259_ELEM_JNT122_2 = 166,
     M259_ELEM_EFF122 = 167,
-    M259_MODEL_NB = 6,
-    M259_MODEL_BODY1 = 0,
-    M259_MODEL_ACCE = 1,
-    M259_MODEL_TATEGAMI = 2,
-    M259_MODEL_JYUZU = 3,
-    M259_MODEL_ACCE_ITA = 4,
-    M259_MODEL_HIGE_HA = 5,
     // --- __m259_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m260 
@@ -48234,31 +46341,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M260_ELEM_PARTS_03 = 21,
     M260_ELEM_PARTS_02 = 22,
     M260_ELEM_PARTS_01 = 23,
-    M260_MODEL_NB = 24,
-    M260_MODEL_PARTS_24 = 0,
-    M260_MODEL_PARTS_23 = 1,
-    M260_MODEL_PARTS_22 = 2,
-    M260_MODEL_PARTS_21 = 3,
-    M260_MODEL_PARTS_20 = 4,
-    M260_MODEL_PARTS_19 = 5,
-    M260_MODEL_PARTS_18 = 6,
-    M260_MODEL_PARTS_17 = 7,
-    M260_MODEL_PARTS_16 = 8,
-    M260_MODEL_PARTS_15 = 9,
-    M260_MODEL_PARTS_14 = 10,
-    M260_MODEL_PARTS_13 = 11,
-    M260_MODEL_PARTS_12 = 12,
-    M260_MODEL_PARTS_11 = 13,
-    M260_MODEL_PARTS_10 = 14,
-    M260_MODEL_PARTS_09 = 15,
-    M260_MODEL_PARTS_08 = 16,
-    M260_MODEL_PARTS_07 = 17,
-    M260_MODEL_PARTS_06 = 18,
-    M260_MODEL_PARTS_05 = 19,
-    M260_MODEL_PARTS_04 = 20,
-    M260_MODEL_PARTS_03 = 21,
-    M260_MODEL_PARTS_02 = 22,
-    M260_MODEL_PARTS_01 = 23,
     // --- __m260_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m261 
@@ -48288,31 +46370,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M261_ELEM_PARTS_03 = 21,
     M261_ELEM_PARTS_02 = 22,
     M261_ELEM_PARTS_01 = 23,
-    M261_MODEL_NB = 24,
-    M261_MODEL_PARTS_24 = 0,
-    M261_MODEL_PARTS_23 = 1,
-    M261_MODEL_PARTS_22 = 2,
-    M261_MODEL_PARTS_21 = 3,
-    M261_MODEL_PARTS_20 = 4,
-    M261_MODEL_PARTS_19 = 5,
-    M261_MODEL_PARTS_18 = 6,
-    M261_MODEL_PARTS_17 = 7,
-    M261_MODEL_PARTS_16 = 8,
-    M261_MODEL_PARTS_15 = 9,
-    M261_MODEL_PARTS_14 = 10,
-    M261_MODEL_PARTS_13 = 11,
-    M261_MODEL_PARTS_12 = 12,
-    M261_MODEL_PARTS_11 = 13,
-    M261_MODEL_PARTS_10 = 14,
-    M261_MODEL_PARTS_09 = 15,
-    M261_MODEL_PARTS_08 = 16,
-    M261_MODEL_PARTS_07 = 17,
-    M261_MODEL_PARTS_06 = 18,
-    M261_MODEL_PARTS_05 = 19,
-    M261_MODEL_PARTS_04 = 20,
-    M261_MODEL_PARTS_03 = 21,
-    M261_MODEL_PARTS_02 = 22,
-    M261_MODEL_PARTS_01 = 23,
     // --- __m261_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m262 
@@ -48342,31 +46399,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M262_ELEM_PARTS_03 = 21,
     M262_ELEM_PARTS_02 = 22,
     M262_ELEM_PARTS_01 = 23,
-    M262_MODEL_NB = 24,
-    M262_MODEL_PARTS_24 = 0,
-    M262_MODEL_PARTS_23 = 1,
-    M262_MODEL_PARTS_22 = 2,
-    M262_MODEL_PARTS_21 = 3,
-    M262_MODEL_PARTS_20 = 4,
-    M262_MODEL_PARTS_19 = 5,
-    M262_MODEL_PARTS_18 = 6,
-    M262_MODEL_PARTS_17 = 7,
-    M262_MODEL_PARTS_16 = 8,
-    M262_MODEL_PARTS_15 = 9,
-    M262_MODEL_PARTS_14 = 10,
-    M262_MODEL_PARTS_13 = 11,
-    M262_MODEL_PARTS_12 = 12,
-    M262_MODEL_PARTS_11 = 13,
-    M262_MODEL_PARTS_10 = 14,
-    M262_MODEL_PARTS_09 = 15,
-    M262_MODEL_PARTS_08 = 16,
-    M262_MODEL_PARTS_07 = 17,
-    M262_MODEL_PARTS_06 = 18,
-    M262_MODEL_PARTS_05 = 19,
-    M262_MODEL_PARTS_04 = 20,
-    M262_MODEL_PARTS_03 = 21,
-    M262_MODEL_PARTS_02 = 22,
-    M262_MODEL_PARTS_01 = 23,
     // --- __m262_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m263 
@@ -48376,10 +46408,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M263_ELEM_BODY = 1,
     M263_ELEM_KEN = 2,
     M263_ELEM_OBJ = 3,
-    M263_MODEL_NB = 3,
-    M263_MODEL_BODY = 0,
-    M263_MODEL_KEN = 1,
-    M263_MODEL_OBJ = 2,
     // --- __m263_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m264 
@@ -48390,10 +46418,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M264_ELEM_BODY = 2,
     M264_ELEM_PARTS1 = 3,
     M264_ELEM_PARTS2 = 4,
-    M264_MODEL_NB = 3,
-    M264_MODEL_BODY = 0,
-    M264_MODEL_PARTS1 = 1,
-    M264_MODEL_PARTS2 = 2,
     // --- __m264_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m265 
@@ -48635,9 +46659,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M265_ELEM_NULL4 = 233,
     M265_ELEM_KSA_N0 = 234,
     M265_ELEM_KUSA_N1 = 235,
-    M265_MODEL_NB = 2,
-    M265_MODEL_S007 = 0,
-    M265_MODEL_S007_3 = 1,
     // --- __m265_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m266 
@@ -48718,9 +46739,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M266_ELEM_SQTSPLITRT11 = 72,
     M266_ELEM_L_TOES = 73,
     M266_ELEM_EFF8 = 74,
-    M266_MODEL_NB = 2,
-    M266_MODEL_BOD = 0,
-    M266_MODEL_ITA = 1,
     // --- __m266_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m267 
@@ -49026,9 +47044,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M267_ELEM_EFF147 = 297,
     M267_ELEM_NULL12 = 298,
     M267_ELEM_NULL10 = 299,
-    M267_MODEL_NB = 2,
-    M267_MODEL_B_BODO = 0,
-    M267_MODEL_KUSARI3 = 1,
     // --- __m267_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m268 
@@ -49243,9 +47258,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M268_ELEM_R_KAMI11 = 206,
     M268_ELEM_R_KAMI12 = 207,
     M268_ELEM_EFF136 = 208,
-    M268_MODEL_NB = 2,
-    M268_MODEL_BMERGE2 = 0,
-    M268_MODEL_B_BODO = 1,
     // --- __m268_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m269 
@@ -49281,10 +47293,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M269_ELEM_BOD_N = 27,
     M269_ELEM_BOD = 28,
     M269_ELEM_BOD2 = 29,
-    M269_MODEL_NB = 3,
-    M269_MODEL_SAYA = 0,
-    M269_MODEL_BOD = 1,
-    M269_MODEL_BOD2 = 2,
     // --- __m269_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m270 
@@ -49300,10 +47308,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M270_ELEM_TANKEN_B = 7,
     M270_ELEM_N_A = 8,
     M270_ELEM_TANKEN_A = 9,
-    M270_MODEL_NB = 3,
-    M270_MODEL_TANKEN_C = 0,
-    M270_MODEL_TANKEN_B = 1,
-    M270_MODEL_TANKEN_A = 2,
     // --- __m270_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m271 
@@ -49315,32 +47319,24 @@ public enum FhXMdlElemId : T_XMdlElemId
     M271_ELEM_S031_SK = 3,
     M271_ELEM_NULL = 4,
     M271_ELEM_TANKEN_1 = 5,
-    M271_MODEL_NB = 1,
-    M271_MODEL_TANKEN_1 = 0,
     // --- __m271_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m272 
     // --- __m272_ath START (4 entries) ---
     M272_ELEM_NB = 1,
     M272_ELEM_TARGET = 0,
-    M272_MODEL_NB = 1,
-    M272_MODEL_TARGET = 0,
     // --- __m272_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m273 
     // --- __m273_ath START (4 entries) ---
     M273_ELEM_NB = 1,
     M273_ELEM_TARGET = 0,
-    M273_MODEL_NB = 1,
-    M273_MODEL_TARGET = 0,
     // --- __m273_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m274 
     // --- __m274_ath START (4 entries) ---
     M274_ELEM_NB = 1,
     M274_ELEM_TARGET = 0,
-    M274_MODEL_NB = 1,
-    M274_MODEL_TARGET = 0,
     // --- __m274_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m276 
@@ -49575,10 +47571,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M276_ELEM_CHN64 = 226,
     M276_ELEM_R1_FIN1 = 227,
     M276_ELEM_SQTSPLITEF_4 = 228,
-    M276_MODEL_NB = 3,
-    M276_MODEL_BODY_OBJ = 0,
-    M276_MODEL_HONE_2 = 1,
-    M276_MODEL_OPT = 2,
     // --- __m276_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m277 
@@ -49797,14 +47789,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M277_ELEM_CHN96 = 210,
     M277_ELEM_R_WA = 211,
     M277_ELEM_EFF96 = 212,
-    M277_MODEL_NB = 7,
-    M277_MODEL_M102 = 0,
-    M277_MODEL_L_TE = 1,
-    M277_MODEL_R_TE = 2,
-    M277_MODEL_BMERGE5 = 3,
-    M277_MODEL_M_GG01 = 4,
-    M277_MODEL_R_GG_02 = 5,
-    M277_MODEL_L_GG_02 = 6,
     // --- __m277_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m278 
@@ -49875,8 +47859,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M278_ELEM_L_B5_4 = 62,
     M278_ELEM_EFF113_4 = 63,
     M278_ELEM_M102_1 = 64,
-    M278_MODEL_NB = 1,
-    M278_MODEL_M102_1 = 0,
     // --- __m278_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m279 
@@ -49997,8 +47979,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M279_ELEM_SQTSPLITRT23 = 112,
     M279_ELEM_R_HANE = 113,
     M279_ELEM_EFF21 = 114,
-    M279_MODEL_NB = 1,
-    M279_MODEL_EATER_EMD1 = 0,
     // --- __m279_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m280 
@@ -50262,12 +48242,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M280_ELEM_SQTSPLITRT46_1 = 255,
     M280_ELEM_L_FT4_3 = 256,
     M280_ELEM_EFF54_1_1 = 257,
-    M280_MODEL_NB = 5,
-    M280_MODEL_L_ARM_EMD_1 = 0,
-    M280_MODEL_R_ARM_EMD_1 = 1,
-    M280_MODEL_BODY_EMD_1 = 2,
-    M280_MODEL_OMOTE2 = 3,
-    M280_MODEL_URA2 = 4,
     // --- __m280_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m281 
@@ -50327,11 +48301,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M281_ELEM_BMERGE2 = 51,
     M281_ELEM_NULL1_5 = 52,
     M281_ELEM_BMERGE20 = 53,
-    M281_MODEL_NB = 4,
-    M281_MODEL_BMERGE2 = 0,
-    M281_MODEL_BMERGE6 = 1,
-    M281_MODEL_BMERGE5 = 2,
-    M281_MODEL_BMERGE20 = 3,
     // --- __m281_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m282 
@@ -50610,17 +48579,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M282_ELEM_TAIL7 = 270,
     M282_ELEM_TAIL8 = 271,
     M282_ELEM_EFF3 = 272,
-    M282_MODEL_NB = 10,
-    M282_MODEL_BODY_EMD = 0,
-    M282_MODEL_R_HANE_A_EMD = 1,
-    M282_MODEL_R_HANE_B_EMD = 2,
-    M282_MODEL_R_HANE_C_EMD = 3,
-    M282_MODEL_R_HANE_D_EMD = 4,
-    M282_MODEL_SHIPPO_ITA_EMD = 5,
-    M282_MODEL_L_HANE_A_EMD = 6,
-    M282_MODEL_L_HANE_B_EMD = 7,
-    M282_MODEL_L_HANE_D_EMD = 8,
-    M282_MODEL_L_HANE_C_EMD = 9,
     // --- __m282_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m283 
@@ -50876,8 +48834,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M283_ELEM_R_B_4B = 247,
     M283_ELEM_R_B_4A = 248,
     M283_ELEM_EFF143 = 249,
-    M283_MODEL_NB = 1,
-    M283_MODEL_BOD = 0,
     // --- __m283_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m284 
@@ -51051,13 +49007,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M284_ELEM_JNT122_1 = 165,
     M284_ELEM_JNT122_2 = 166,
     M284_ELEM_EFF122 = 167,
-    M284_MODEL_NB = 6,
-    M284_MODEL_BODY1 = 0,
-    M284_MODEL_ACCE = 1,
-    M284_MODEL_TATEGAMI = 2,
-    M284_MODEL_JYUZU = 3,
-    M284_MODEL_ACCE_ITA = 4,
-    M284_MODEL_HIGE_HA = 5,
     // --- __m284_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m285 
@@ -51395,8 +49344,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M285_ELEM_SQTSPLITRT63 = 329,
     M285_ELEM_R_FK_C2 = 330,
     M285_ELEM_EFF111 = 331,
-    M285_MODEL_NB = 1,
-    M285_MODEL_BOD = 0,
     // --- __m285_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m286 
@@ -51650,8 +49597,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M286_ELEM_SQTSPLITRT_2 = 245,
     M286_ELEM_TAIL_5 = 246,
     M286_ELEM_SQTSPLITEF6 = 247,
-    M286_MODEL_NB = 1,
-    M286_MODEL_BODY_OBJ = 0,
     // --- __m286_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m287 
@@ -51945,9 +49890,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M287_ELEM_WA_NULL0 = 285,
     M287_ELEM_WA_NULL = 286,
     M287_ELEM_RING = 287,
-    M287_MODEL_NB = 2,
-    M287_MODEL_BAHAMUT_EMD = 0,
-    M287_MODEL_RING = 1,
     // --- __m287_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m288 
@@ -52195,9 +50137,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M288_ELEM_L_HIMO2 = 239,
     M288_ELEM_L_HIMO3 = 240,
     M288_ELEM_EFF54_1 = 241,
-    M288_MODEL_NB = 2,
-    M288_MODEL_WAKISA1 = 0,
-    M288_MODEL_BODY = 1,
     // --- __m288_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m289 
@@ -52345,12 +50284,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M289_ELEM_CHN12 = 139,
     M289_ELEM_R_ELB_2 = 140,
     M289_ELEM_EFF12 = 141,
-    M289_MODEL_NB = 5,
-    M289_MODEL_BODY = 0,
-    M289_MODEL_R_WING = 1,
-    M289_MODEL_L_WING = 2,
-    M289_MODEL_L_WING_I = 3,
-    M289_MODEL_R_WING_I = 4,
     // --- __m289_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m290 
@@ -52456,8 +50389,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M290_ELEM_SQTSPLITRT10 = 97,
     M290_ELEM_R_FIN_B2 = 98,
     M290_ELEM_EFF10 = 99,
-    M290_MODEL_NB = 1,
-    M290_MODEL_BODY = 0,
     // --- __m290_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m291 
@@ -52618,8 +50549,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M291_ELEM_SQTSPLITRT18 = 152,
     M291_ELEM_R_WIN_B2 = 153,
     M291_ELEM_EFF6 = 154,
-    M291_MODEL_NB = 1,
-    M291_MODEL_BODY = 0,
     // --- __m291_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m292 
@@ -52717,9 +50646,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M292_ELEM_CHN313 = 89,
     M292_ELEM_R_FOOT2 = 90,
     M292_ELEM_EFF313 = 91,
-    M292_MODEL_NB = 2,
-    M292_MODEL_M002 = 0,
-    M292_MODEL_M002_1 = 1,
     // --- __m292_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m293 
@@ -52893,11 +50819,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M293_ELEM_L_FING3 = 165,
     M293_ELEM_EFF97 = 166,
     M293_ELEM_L_NULL = 167,
-    M293_MODEL_NB = 4,
-    M293_MODEL_TUNO = 0,
-    M293_MODEL_BODY = 1,
-    M293_MODEL_HAIR = 2,
-    M293_MODEL_ITA = 3,
     // --- __m293_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m294 
@@ -52989,9 +50910,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M294_ELEM_TONG02 = 83,
     M294_ELEM_TONG03 = 84,
     M294_ELEM_EFF15 = 85,
-    M294_MODEL_NB = 2,
-    M294_MODEL_M009_01 = 0,
-    M294_MODEL_M009 = 1,
     // --- __m294_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m295 
@@ -53237,8 +51155,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M295_ELEM_R_B1_2_N = 237,
     M295_ELEM_M016 = 238,
     M295_ELEM_INSIDE = 239,
-    M295_MODEL_NB = 1,
-    M295_MODEL_INSIDE = 0,
     // --- __m295_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m296 
@@ -53359,10 +51275,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M296_ELEM_CHN70 = 112,
     M296_ELEM_CHIN = 113,
     M296_ELEM_EFF70 = 114,
-    M296_MODEL_NB = 3,
-    M296_MODEL_M022 = 0,
-    M296_MODEL_02 = 1,
-    M296_MODEL_BMERGE1 = 2,
     // --- __m296_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m297 
@@ -53483,8 +51395,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M297_ELEM_R_FOOT2 = 112,
     M297_ELEM_R_FOOT3 = 113,
     M297_ELEM_EFF2 = 114,
-    M297_MODEL_NB = 1,
-    M297_MODEL_M028 = 0,
     // --- __m297_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m298 
@@ -53591,8 +51501,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M298_ELEM_HARI = 98,
     M298_ELEM_NULL124 = 99,
     M298_ELEM_NULL125 = 100,
-    M298_MODEL_NB = 1,
-    M298_MODEL_M009 = 0,
     // --- __m298_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m299 
@@ -53796,9 +51704,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M299_ELEM_HAIR3 = 195,
     M299_ELEM_HAIR4 = 196,
     M299_ELEM_EFF26 = 197,
-    M299_MODEL_NB = 2,
-    M299_MODEL_M_035_EMD = 0,
-    M299_MODEL_WING_EMD = 1,
     // --- __m299_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m300 
@@ -54009,9 +51914,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M300_ELEM_H_F_1 = 202,
     M300_ELEM_H_F_2 = 203,
     M300_ELEM_EFF28 = 204,
-    M300_MODEL_NB = 2,
-    M300_MODEL_M044 = 0,
-    M300_MODEL_M044_ITA = 1,
     // --- __m300_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m301 
@@ -54360,8 +52262,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M301_ELEM_HARA3 = 340,
     M301_ELEM_HARA2 = 341,
     M301_ELEM_HARA1 = 342,
-    M301_MODEL_NB = 1,
-    M301_MODEL_M046 = 0,
     // --- __m301_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m302 
@@ -54483,9 +52383,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M302_ELEM_R_TOE1 = 113,
     M302_ELEM_R_TOE2 = 114,
     M302_ELEM_EFF152 = 115,
-    M302_MODEL_NB = 2,
-    M302_MODEL_M055 = 0,
-    M302_MODEL_M055_02 = 1,
     // --- __m302_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m303 
@@ -54595,13 +52492,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M303_ELEM_WING = 101,
     M303_ELEM_WNG_ARM = 102,
     M303_ELEM_WEB = 103,
-    M303_MODEL_NB = 6,
-    M303_MODEL_BOD = 0,
-    M303_MODEL_PRICKLE1 = 1,
-    M303_MODEL_WNG_ARM = 2,
-    M303_MODEL_PRICKLE2 = 3,
-    M303_MODEL_WING = 4,
-    M303_MODEL_WEB = 5,
     // --- __m303_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m304 
@@ -55005,8 +52895,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M304_ELEM_LFOOT1_4 = 395,
     M304_ELEM_LFOOT1_5 = 396,
     M304_ELEM_EFF7_3 = 397,
-    M304_MODEL_NB = 1,
-    M304_MODEL_BODY = 0,
     // --- __m304_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m305 
@@ -55196,8 +53084,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M305_ELEM_CHN162 = 181,
     M305_ELEM_L_PANTU = 182,
     M305_ELEM_EFF162 = 183,
-    M305_MODEL_NB = 1,
-    M305_MODEL_OK_BODY = 0,
     // --- __m305_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m306 
@@ -55225,16 +53111,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M306_ELEM_EL_1_3 = 19,
     M306_ELEM_NULL3_1 = 20,
     M306_ELEM_EL_3_2 = 21,
-    M306_MODEL_NB = 9,
-    M306_MODEL_EL_3_1 = 0,
-    M306_MODEL_EL_3_3 = 1,
-    M306_MODEL_EL_3_4 = 2,
-    M306_MODEL_EL_1_1 = 3,
-    M306_MODEL_EL_2_1 = 4,
-    M306_MODEL_EL_1_2 = 5,
-    M306_MODEL_EL_1_4 = 6,
-    M306_MODEL_EL_1_3 = 7,
-    M306_MODEL_EL_3_2 = 8,
     // --- __m306_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m307 
@@ -55461,8 +53337,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M307_ELEM_CHN113 = 218,
     M307_ELEM_R_FIN4 = 219,
     M307_ELEM_EFF113 = 220,
-    M307_MODEL_NB = 1,
-    M307_MODEL_BODAY = 0,
     // --- __m307_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m308 
@@ -55600,12 +53474,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M308_ELEM_TONG2 = 129,
     M308_ELEM_TONG3 = 130,
     M308_ELEM_EFF35 = 131,
-    M308_MODEL_NB = 5,
-    M308_MODEL_BODY = 0,
-    M308_MODEL_SISI_HA1 = 1,
-    M308_MODEL_SISI_HA = 2,
-    M308_MODEL_SISI_KE = 3,
-    M308_MODEL_HANE = 4,
     // --- __m308_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m309 
@@ -55732,8 +53600,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M309_ELEM_CHN421 = 118,
     M309_ELEM_SENAKANOKE = 119,
     M309_ELEM_EFF421 = 120,
-    M309_MODEL_NB = 1,
-    M309_MODEL_Z_EMD1 = 0,
     // --- __m309_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m310 
@@ -55854,10 +53720,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M310_ELEM_L_WEP_5 = 112,
     M310_ELEM_L_KEN = 113,
     M310_ELEM_L_KON = 114,
-    M310_MODEL_NB = 3,
-    M310_MODEL_ATAMA_2 = 0,
-    M310_MODEL_BODY_OBJ = 1,
-    M310_MODEL_L_KEN = 2,
     // --- __m310_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m311 
@@ -56035,8 +53897,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M311_ELEM_R_FOOT1 = 169,
     M311_ELEM_R_FOOT2 = 170,
     M311_ELEM_EFF146 = 171,
-    M311_MODEL_NB = 1,
-    M311_MODEL_M185 = 0,
     // --- __m311_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m312 
@@ -56155,8 +54015,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M312_ELEM_CHN146 = 110,
     M312_ELEM_R_G = 111,
     M312_ELEM_EFF143 = 112,
-    M312_MODEL_NB = 1,
-    M312_MODEL_M188_5 = 0,
     // --- __m312_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m313 
@@ -56179,8 +54037,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M313_ELEM_CHIN = 14,
     M313_ELEM_EFF8 = 15,
     M313_ELEM_M193 = 16,
-    M313_MODEL_NB = 1,
-    M313_MODEL_M193 = 0,
     // --- __m313_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m314 
@@ -56213,10 +54069,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M314_ELEM_L_FEMUR = 24,
     M314_ELEM_L_TIBIA = 25,
     M314_ELEM_EFF3 = 26,
-    M314_MODEL_NB = 3,
-    M314_MODEL_LARM = 0,
-    M314_MODEL_RARM = 1,
-    M314_MODEL_BODY = 2,
     // --- __m314_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m315 
@@ -56366,8 +54218,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M315_ELEM_L_SHELL4 = 141,
     M315_ELEM_L_SHELL5 = 142,
     M315_ELEM_EFF18 = 143,
-    M315_MODEL_NB = 1,
-    M315_MODEL_BODAY = 0,
     // --- __m315_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m316 
@@ -56508,8 +54358,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M316_ELEM_F_LEG = 132,
     M316_ELEM_F_FOOT = 133,
     M316_ELEM_EFF387 = 134,
-    M316_MODEL_NB = 1,
-    M316_MODEL_FNGO_SK = 0,
     // --- __m316_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m317 
@@ -56582,9 +54430,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M317_ELEM_CHN108 = 64,
     M317_ELEM_R_FOOT2 = 65,
     M317_ELEM_EFF108 = 66,
-    M317_MODEL_NB = 2,
-    M317_MODEL_M223_1 = 0,
-    M317_MODEL_BMERGE2 = 1,
     // --- __m317_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m318 
@@ -56706,11 +54551,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M318_ELEM_SQTSPLITRT = 113,
     M318_ELEM_R_HAND3 = 114,
     M318_ELEM_EFF230 = 115,
-    M318_MODEL_NB = 4,
-    M318_MODEL_ITAPORI_EMD = 0,
-    M318_MODEL_M084_EMD = 1,
-    M318_MODEL_HA_KAKUSI_EMD = 2,
-    M318_MODEL_HA_EMD = 3,
     // --- __m318_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m319 
@@ -56733,8 +54573,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M319_ELEM_CHIN = 14,
     M319_ELEM_EFF8 = 15,
     M319_ELEM_M193 = 16,
-    M319_MODEL_NB = 1,
-    M319_MODEL_M193 = 0,
     // --- __m319_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m320 
@@ -56856,8 +54694,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M320_ELEM_R_TOE1 = 113,
     M320_ELEM_R_TOE2 = 114,
     M320_ELEM_EFF152 = 115,
-    M320_MODEL_NB = 1,
-    M320_MODEL_M055 = 0,
     // --- __m320_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m321 
@@ -57068,9 +54904,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M321_ELEM_H_F_1 = 202,
     M321_ELEM_H_F_2 = 203,
     M321_ELEM_EFF28 = 204,
-    M321_MODEL_NB = 2,
-    M321_MODEL_M044 = 0,
-    M321_MODEL_M044_ITA = 1,
     // --- __m321_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m322 
@@ -57248,8 +55081,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M322_ELEM_R_FOOT1 = 169,
     M322_ELEM_R_FOOT2 = 170,
     M322_ELEM_EFF146 = 171,
-    M322_MODEL_NB = 1,
-    M322_MODEL_M185 = 0,
     // --- __m322_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m323 
@@ -57452,8 +55283,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M323_ELEM_CHN136 = 194,
     M323_ELEM_NE5 = 195,
     M323_ELEM_EFF136_1 = 196,
-    M323_MODEL_NB = 1,
-    M323_MODEL_BODY01 = 0,
     // --- __m323_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m324 
@@ -57519,9 +55348,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M324_ELEM_NULL79 = 57,
     M324_ELEM_NULL80 = 58,
     M324_ELEM_NULL81 = 59,
-    M324_MODEL_NB = 2,
-    M324_MODEL_M209_2 = 0,
-    M324_MODEL_M209_1 = 1,
     // --- __m324_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m325 
@@ -57642,10 +55468,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M325_ELEM_L_WEP_5 = 112,
     M325_ELEM_L_KEN = 113,
     M325_ELEM_L_KON = 114,
-    M325_MODEL_NB = 3,
-    M325_MODEL_ATAMA_2 = 0,
-    M325_MODEL_BODY_OBJ = 1,
-    M325_MODEL_L_KEN = 2,
     // --- __m325_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m326 
@@ -57783,12 +55605,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M326_ELEM_TONG2 = 129,
     M326_ELEM_TONG3 = 130,
     M326_ELEM_EFF35 = 131,
-    M326_MODEL_NB = 5,
-    M326_MODEL_BODY = 0,
-    M326_MODEL_SISI_HA1 = 1,
-    M326_MODEL_SISI_HA = 2,
-    M326_MODEL_SISI_KE = 3,
-    M326_MODEL_HANE = 4,
     // --- __m326_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m327 
@@ -57910,11 +55726,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M327_ELEM_SQTSPLITRT = 113,
     M327_ELEM_R_HAND3 = 114,
     M327_ELEM_EFF230 = 115,
-    M327_MODEL_NB = 4,
-    M327_MODEL_ITAPORI_EMD = 0,
-    M327_MODEL_M084_EMD = 1,
-    M327_MODEL_HA_KAKUSI_EMD = 2,
-    M327_MODEL_HA_EMD = 3,
     // --- __m327_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m328 
@@ -57947,10 +55758,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M328_ELEM_L_FEMUR = 24,
     M328_ELEM_L_TIBIA = 25,
     M328_ELEM_EFF3 = 26,
-    M328_MODEL_NB = 3,
-    M328_MODEL_LARM = 0,
-    M328_MODEL_RARM = 1,
-    M328_MODEL_BODY = 2,
     // --- __m328_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m329 
@@ -58161,9 +55968,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M329_ELEM_H_F_1 = 202,
     M329_ELEM_H_F_2 = 203,
     M329_ELEM_EFF28 = 204,
-    M329_MODEL_NB = 2,
-    M329_MODEL_M044 = 0,
-    M329_MODEL_M044_ITA = 1,
     // --- __m329_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m330 
@@ -58512,8 +56316,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M330_ELEM_HARA3 = 340,
     M330_ELEM_HARA2 = 341,
     M330_ELEM_HARA1 = 342,
-    M330_MODEL_NB = 1,
-    M330_MODEL_M046 = 0,
     // --- __m330_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m331 
@@ -58660,8 +56462,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M331_ELEM_NULL5 = 138,
     M331_ELEM_NULL7 = 139,
     M331_ELEM_NULL9 = 140,
-    M331_MODEL_NB = 1,
-    M331_MODEL_M050 = 0,
     // --- __m331_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m332 
@@ -59065,8 +56865,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M332_ELEM_LFOOT1_4 = 395,
     M332_ELEM_LFOOT1_5 = 396,
     M332_ELEM_EFF7_3 = 397,
-    M332_MODEL_NB = 1,
-    M332_MODEL_BODY = 0,
     // --- __m332_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m333 
@@ -59256,8 +57054,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M333_ELEM_CHN162 = 181,
     M333_ELEM_L_PANTU = 182,
     M333_ELEM_EFF162 = 183,
-    M333_MODEL_NB = 1,
-    M333_MODEL_OK_BODY = 0,
     // --- __m333_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m334 
@@ -59427,13 +57223,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M334_ELEM__WING_2 = 161,
     M334_ELEM__WING_1 = 162,
     M334_ELEM__HEAD_1 = 163,
-    M334_MODEL_NB = 6,
-    M334_MODEL__BODY_1 = 0,
-    M334_MODEL__WING_2 = 1,
-    M334_MODEL__NECK_1 = 2,
-    M334_MODEL__WING_1 = 3,
-    M334_MODEL__HEAD_1 = 4,
-    M334_MODEL__UROKO_1 = 5,
     // --- __m334_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m335 
@@ -59607,13 +57396,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M335_ELEM_JNT122_1 = 165,
     M335_ELEM_JNT122_2 = 166,
     M335_ELEM_EFF122 = 167,
-    M335_MODEL_NB = 6,
-    M335_MODEL_BODY1 = 0,
-    M335_MODEL_ACCE = 1,
-    M335_MODEL_TATEGAMI = 2,
-    M335_MODEL_JYUZU = 3,
-    M335_MODEL_ACCE_ITA = 4,
-    M335_MODEL_HIGE_HA = 5,
     // --- __m335_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m336 
@@ -59951,8 +57733,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M336_ELEM_SQTSPLITRT63 = 329,
     M336_ELEM_R_FK_C2 = 330,
     M336_ELEM_EFF111 = 331,
-    M336_MODEL_NB = 1,
-    M336_MODEL_BOD = 0,
     // --- __m336_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m337 
@@ -60206,8 +57986,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M337_ELEM_SQTSPLITRT_2 = 245,
     M337_ELEM_TAIL_5 = 246,
     M337_ELEM_SQTSPLITEF6 = 247,
-    M337_MODEL_NB = 1,
-    M337_MODEL_BODY_OBJ = 0,
     // --- __m337_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m338 
@@ -60501,9 +58279,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M338_ELEM_WA_NULL0 = 285,
     M338_ELEM_WA_NULL = 286,
     M338_ELEM_RING = 287,
-    M338_MODEL_NB = 2,
-    M338_MODEL_BAHAMUT_EMD = 0,
-    M338_MODEL_RING = 1,
     // --- __m338_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m339 
@@ -60745,9 +58520,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M339_ELEM_NULL4 = 233,
     M339_ELEM_KSA_N0 = 234,
     M339_ELEM_KUSA_N1 = 235,
-    M339_MODEL_NB = 2,
-    M339_MODEL_S007 = 0,
-    M339_MODEL_S007_3 = 1,
     // --- __m339_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m340 
@@ -60995,9 +58767,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M340_ELEM_L_HIMO2 = 239,
     M340_ELEM_L_HIMO3 = 240,
     M340_ELEM_EFF54_1 = 241,
-    M340_MODEL_NB = 2,
-    M340_MODEL_WAKISA1 = 0,
-    M340_MODEL_BODY = 1,
     // --- __m340_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m341 
@@ -61103,8 +58872,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M341_ELEM_SQTSPLITRT10 = 97,
     M341_ELEM_R_FIN_B2 = 98,
     M341_ELEM_EFF10 = 99,
-    M341_MODEL_NB = 1,
-    M341_MODEL_BODY = 0,
     // --- __m341_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m342 
@@ -61252,12 +59019,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M342_ELEM_CHN12 = 139,
     M342_ELEM_R_ELB_2 = 140,
     M342_ELEM_EFF12 = 141,
-    M342_MODEL_NB = 5,
-    M342_MODEL_BODY = 0,
-    M342_MODEL_R_WING = 1,
-    M342_MODEL_L_WING = 2,
-    M342_MODEL_L_WING_I = 3,
-    M342_MODEL_R_WING_I = 4,
     // --- __m342_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m343 
@@ -61418,8 +59179,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M343_ELEM_SQTSPLITRT18 = 152,
     M343_ELEM_R_WIN_B2 = 153,
     M343_ELEM_EFF6 = 154,
-    M343_MODEL_NB = 1,
-    M343_MODEL_BODY = 0,
     // --- __m343_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m344 
@@ -61464,11 +59223,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M344_ELEM_HIP2 = 36,
     M344_ELEM_HIP3 = 37,
     M344_ELEM_EFF76 = 38,
-    M344_MODEL_NB = 4,
-    M344_MODEL_ARMER = 0,
-    M344_MODEL_ENBAN = 1,
-    M344_MODEL_BOD = 2,
-    M344_MODEL_OPO = 3,
     // --- __m344_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m345 
@@ -61516,8 +59270,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     M345_ELEM_FING_03 = 39,
     M345_ELEM_EFF88 = 40,
     M345_ELEM_UDE_OBJ = 41,
-    M345_MODEL_NB = 1,
-    M345_MODEL_UDE_OBJ = 0,
     // --- __m345_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m346 
@@ -61565,16 +59317,12 @@ public enum FhXMdlElemId : T_XMdlElemId
     M346_ELEM_FING_03 = 39,
     M346_ELEM_EFF88 = 40,
     M346_ELEM_UDE_OBJ = 41,
-    M346_MODEL_NB = 1,
-    M346_MODEL_UDE_OBJ = 0,
     // --- __m346_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: m999 
     // --- __m999_ath START (4 entries) ---
     M999_ELEM_NB = 1,
     M999_ELEM_ZERO = 0,
-    M999_MODEL_NB = 1,
-    M999_MODEL_ZERO = 0,
     // --- __m999_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n002 
@@ -61649,9 +59397,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N002_ELEM_CHN15 = 66,
     N002_ELEM_CHIN = 67,
     N002_ELEM_EFF15 = 68,
-    N002_MODEL_NB = 2,
-    N002_MODEL_N002_OBJ = 0,
-    N002_MODEL_N002_PARTS = 1,
     // --- __n002_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n003 
@@ -61727,10 +59472,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N003_ELEM_CHN7 = 67,
     N003_ELEM_L_TOES = 68,
     N003_ELEM_EFF7 = 69,
-    N003_MODEL_NB = 3,
-    N003_MODEL_N003_OBJ = 0,
-    N003_MODEL_N003_OPA = 1,
-    N003_MODEL_N003_OPB = 2,
     // --- __n003_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n008 
@@ -61830,10 +59571,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N008_ELEM_R_HAIR_2 = 91,
     N008_ELEM_R_HAIR_3 = 92,
     N008_ELEM_EFF711 = 93,
-    N008_MODEL_NB = 3,
-    N008_MODEL_GRID1 = 0,
-    N008_MODEL_N008_OBJ = 1,
-    N008_MODEL_OBJ_2 = 2,
     // --- __n008_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n009 
@@ -61935,12 +59672,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N009_ELEM_CHN202 = 93,
     N009_ELEM_R_TOES = 94,
     N009_ELEM_EFF202 = 95,
-    N009_MODEL_NB = 5,
-    N009_MODEL_N009_OBJ = 0,
-    N009_MODEL_BMERGE52 = 1,
-    N009_MODEL_BMERGE53 = 2,
-    N009_MODEL_BMERGE39 = 3,
-    N009_MODEL_BMERGE54 = 4,
     // --- __n009_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n010 
@@ -62042,12 +59773,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N010_ELEM_CHN202 = 93,
     N010_ELEM_R_TOES = 94,
     N010_ELEM_EFF202 = 95,
-    N010_MODEL_NB = 5,
-    N010_MODEL_N010_OBJ = 0,
-    N010_MODEL_BMERGE48 = 1,
-    N010_MODEL_N91_OBJ = 2,
-    N010_MODEL_BMERGE50 = 3,
-    N010_MODEL_BMERGE51 = 4,
     // --- __n010_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n016 
@@ -62122,9 +59847,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N016_ELEM_CHN7 = 66,
     N016_ELEM_L_TOES = 67,
     N016_ELEM_EFF7 = 68,
-    N016_MODEL_NB = 2,
-    N016_MODEL_N016_OBJ = 0,
-    N016_MODEL_N016_OBJA = 1,
     // --- __n016_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n026 
@@ -62226,11 +59948,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N026_ELEM_EFF503 = 93,
     N026_ELEM_L_ITEM = 94,
     N026_ELEM_L_HAND_N = 95,
-    N026_MODEL_NB = 4,
-    N026_MODEL_OBJ3 = 0,
-    N026_MODEL_OBJ1 = 1,
-    N026_MODEL_OBJ2 = 2,
-    N026_MODEL_OBJ4 = 3,
     // --- __n026_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n027 
@@ -62304,8 +60021,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N027_ELEM_CHN15 = 65,
     N027_ELEM_CHIN = 66,
     N027_ELEM_EFF15 = 67,
-    N027_MODEL_NB = 1,
-    N027_MODEL_N027_OBJ = 0,
     // --- __n027_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n028 
@@ -62380,9 +60095,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N028_ELEM_CHN7 = 66,
     N028_ELEM_L_TOES = 67,
     N028_ELEM_EFF7 = 68,
-    N028_MODEL_NB = 2,
-    N028_MODEL_N028_OBJ = 0,
-    N028_MODEL_ITA_POLY = 1,
     // --- __n028_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n029 
@@ -62456,8 +60168,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N029_ELEM_CHN7 = 65,
     N029_ELEM_L_TOES = 66,
     N029_ELEM_EFF7 = 67,
-    N029_MODEL_NB = 1,
-    N029_MODEL_N029_OBJ = 0,
     // --- __n029_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n030 
@@ -62531,8 +60241,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N030_ELEM_CHN7 = 65,
     N030_ELEM_L_TOES = 66,
     N030_ELEM_EFF7 = 67,
-    N030_MODEL_NB = 1,
-    N030_MODEL_N030_OBJ = 0,
     // --- __n030_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n031 
@@ -62606,8 +60314,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N031_ELEM_L_FING = 65,
     N031_ELEM_EFF19 = 66,
     N031_ELEM_L_ITEM = 67,
-    N031_MODEL_NB = 1,
-    N031_MODEL_N031 = 0,
     // --- __n031_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n032 
@@ -62681,8 +60387,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N032_ELEM_R_FING = 65,
     N032_ELEM_EFF12 = 66,
     N032_ELEM_R_ITEM = 67,
-    N032_MODEL_NB = 1,
-    N032_MODEL_N032 = 0,
     // --- __n032_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n033 
@@ -62784,8 +60488,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N033_ELEM_EFF503 = 93,
     N033_ELEM_L_ITEM = 94,
     N033_ELEM_L_HAND_N = 95,
-    N033_MODEL_NB = 1,
-    N033_MODEL_N033_OBJ = 0,
     // --- __n033_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n034 
@@ -62885,10 +60587,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N034_ELEM_C_HAIR_2 = 91,
     N034_ELEM_C_HAIR_3 = 92,
     N034_ELEM_EFF701 = 93,
-    N034_MODEL_NB = 3,
-    N034_MODEL_N034_OBJ = 0,
-    N034_MODEL_PARTS2 = 1,
-    N034_MODEL_PARTS1 = 2,
     // --- __n034_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n035 
@@ -62987,9 +60685,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N035_ELEM_L_HAIR_2 = 90,
     N035_ELEM_L_HAIR_3 = 91,
     N035_ELEM_EFF721 = 92,
-    N035_MODEL_NB = 2,
-    N035_MODEL_N035_1 = 0,
-    N035_MODEL_N035_2 = 1,
     // --- __n035_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n036 
@@ -63089,10 +60784,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N036_ELEM_CHN202 = 91,
     N036_ELEM_R_TOES = 92,
     N036_ELEM_EFF202 = 93,
-    N036_MODEL_NB = 3,
-    N036_MODEL_N036_OBJ = 0,
-    N036_MODEL_ITA_POLY = 1,
-    N036_MODEL__MIMIKAZARI_1 = 2,
     // --- __n036_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n037 
@@ -63196,13 +60887,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N037_ELEM_CHN202 = 95,
     N037_ELEM_R_TOES = 96,
     N037_ELEM_EFF202 = 97,
-    N037_MODEL_NB = 6,
-    N037_MODEL_OBJ2 = 0,
-    N037_MODEL_OBJ3 = 1,
-    N037_MODEL_OBJ4 = 2,
-    N037_MODEL_OBJ5 = 3,
-    N037_MODEL_OBJ6 = 4,
-    N037_MODEL_OBJ1 = 5,
     // --- __n037_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n038 
@@ -63300,8 +60984,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N038_ELEM_EFF723 = 89,
     N038_ELEM_L_ITEM = 90,
     N038_ELEM_L_HAND_N = 91,
-    N038_MODEL_NB = 1,
-    N038_MODEL_N038_OBJ = 0,
     // --- __n038_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n039 
@@ -63402,11 +61084,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N039_ELEM_C_HAIR_2 = 92,
     N039_ELEM_C_HAIR_3 = 93,
     N039_ELEM_EFF21 = 94,
-    N039_MODEL_NB = 4,
-    N039_MODEL_N039_OBJ = 0,
-    N039_MODEL_BMERGE17 = 1,
-    N039_MODEL_BMERGE20 = 2,
-    N039_MODEL_BMERGE8 = 3,
     // --- __n039_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n040 
@@ -63483,10 +61160,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N040_ELEM_CHN5 = 68,
     N040_ELEM_CHIN = 69,
     N040_ELEM_EFF5 = 70,
-    N040_MODEL_NB = 3,
-    N040_MODEL_BODY = 0,
-    N040_MODEL_KIRE = 1,
-    N040_MODEL_PORI = 2,
     // --- __n040_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n041 
@@ -63596,20 +61269,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N041_ELEM_R_HAIR_2 = 101,
     N041_ELEM_R_HAIR_3 = 102,
     N041_ELEM_EFF711 = 103,
-    N041_MODEL_NB = 13,
-    N041_MODEL_N041_OBJ = 0,
-    N041_MODEL_FUKU_HEAD = 1,
-    N041_MODEL_HEIR = 2,
-    N041_MODEL_FUKU_FRONT = 3,
-    N041_MODEL_FUKU_BACK = 4,
-    N041_MODEL_HIMO_L = 5,
-    N041_MODEL_FUKURO_L = 6,
-    N041_MODEL_HIMO_L1 = 7,
-    N041_MODEL_FUKURO_L1 = 8,
-    N041_MODEL_NECK_HIMO = 9,
-    N041_MODEL_CUBE1 = 10,
-    N041_MODEL_CUBE2 = 11,
-    N041_MODEL_CUBE3 = 12,
     // --- __n041_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n042 
@@ -63709,9 +61368,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N042_ELEM_EFF503 = 91,
     N042_ELEM_L_ITEM = 92,
     N042_ELEM_L_HAND_N = 93,
-    N042_MODEL_NB = 2,
-    N042_MODEL_OBJ1 = 0,
-    N042_MODEL_OBJ2 = 1,
     // --- __n042_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n043 
@@ -63786,9 +61442,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N043_ELEM_CHN15 = 66,
     N043_ELEM_CHIN = 67,
     N043_ELEM_EFF15 = 68,
-    N043_MODEL_NB = 2,
-    N043_MODEL_N043_OBJ = 0,
-    N043_MODEL_N043_OP = 1,
     // --- __n043_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n044 
@@ -63868,13 +61521,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N044_ELEM_CHN15 = 71,
     N044_ELEM_CHIN = 72,
     N044_ELEM_EFF15 = 73,
-    N044_MODEL_NB = 6,
-    N044_MODEL_OBJ1 = 0,
-    N044_MODEL_OBJ3 = 1,
-    N044_MODEL_OBJ2 = 2,
-    N044_MODEL_OBJ4 = 3,
-    N044_MODEL_OBJ5 = 4,
-    N044_MODEL_SPHERE2 = 5,
     // --- __n044_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n045 
@@ -63951,11 +61597,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N045_ELEM_CHN7 = 68,
     N045_ELEM_L_TOES = 69,
     N045_ELEM_EFF7 = 70,
-    N045_MODEL_NB = 4,
-    N045_MODEL_N045_OBJ = 0,
-    N045_MODEL_ITA01 = 1,
-    N045_MODEL_ITA03 = 2,
-    N045_MODEL_ITA02 = 3,
     // --- __n045_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n046 
@@ -64034,12 +61675,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N046_ELEM_CHN7 = 70,
     N046_ELEM_L_TOES = 71,
     N046_ELEM_EFF7 = 72,
-    N046_MODEL_NB = 5,
-    N046_MODEL_OBJ2 = 0,
-    N046_MODEL_OBJ1 = 1,
-    N046_MODEL_OBJ1_1 = 2,
-    N046_MODEL_OBJ5 = 3,
-    N046_MODEL_OBJ7 = 4,
     // --- __n046_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n047 
@@ -64115,10 +61750,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N047_ELEM_L_FING = 67,
     N047_ELEM_EFF19 = 68,
     N047_ELEM_L_ITEM = 69,
-    N047_MODEL_NB = 3,
-    N047_MODEL_N047_OBJ = 0,
-    N047_MODEL_N047_OPA = 1,
-    N047_MODEL_N047_OPB = 2,
     // --- __n047_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n048 
@@ -64195,8 +61826,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N048_ELEM_R_FING = 68,
     N048_ELEM_EFF12 = 69,
     N048_ELEM_R_ITEM = 70,
-    N048_MODEL_NB = 1,
-    N048_MODEL_N048_OBJ = 0,
     // --- __n048_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n049 
@@ -64272,10 +61901,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N049_ELEM_R_FING = 67,
     N049_ELEM_EFF12 = 68,
     N049_ELEM_R_ITEM = 69,
-    N049_MODEL_NB = 3,
-    N049_MODEL_N049_OBJ = 0,
-    N049_MODEL_N049_OBJA = 1,
-    N049_MODEL_N049_OBJB = 2,
     // --- __n049_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n050 
@@ -64375,10 +62000,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N050_ELEM_EFF503 = 91,
     N050_ELEM_L_ITEM = 92,
     N050_ELEM_L_HAND_N = 93,
-    N050_MODEL_NB = 3,
-    N050_MODEL_N050_OBJ = 0,
-    N050_MODEL_KODOMO_1 = 1,
-    N050_MODEL_BMERGE47 = 2,
     // --- __n050_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n051 
@@ -64482,13 +62103,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N051_ELEM_R_HAIR_2 = 95,
     N051_ELEM_R_HAIR_3 = 96,
     N051_ELEM_EFF711 = 97,
-    N051_MODEL_NB = 6,
-    N051_MODEL_OBJ5 = 0,
-    N051_MODEL_GRID1 = 1,
-    N051_MODEL_OBJ6 = 2,
-    N051_MODEL_OBJ12 = 3,
-    N051_MODEL_OBJ13 = 4,
-    N051_MODEL_OBJ10 = 5,
     // --- __n051_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n052 
@@ -64589,11 +62203,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N052_ELEM_CHN202 = 92,
     N052_ELEM_R_TOES = 93,
     N052_ELEM_EFF202 = 94,
-    N052_MODEL_NB = 4,
-    N052_MODEL_N52_OBJ = 0,
-    N052_MODEL_BMERGE47 = 1,
-    N052_MODEL_OBJ1 = 2,
-    N052_MODEL_BMERGE49 = 3,
     // --- __n052_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n053 
@@ -64693,8 +62302,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N053_ELEM_CHN202 = 91,
     N053_ELEM_R_TOES = 92,
     N053_ELEM_EFF202 = 93,
-    N053_MODEL_NB = 1,
-    N053_MODEL_N053_OBJ = 0,
     // --- __n053_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n054 
@@ -64800,15 +62407,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N054_ELEM_CHN302 = 97,
     N054_ELEM_L_TOES = 98,
     N054_ELEM_EFF302 = 99,
-    N054_MODEL_NB = 8,
-    N054_MODEL_N054_HAND = 0,
-    N054_MODEL_N054_BODY = 1,
-    N054_MODEL_N054_PANTS = 2,
-    N054_MODEL_N054_FOOT = 3,
-    N054_MODEL_N054_HIZA = 4,
-    N054_MODEL_N054_OP = 5,
-    N054_MODEL_N054_HAIR = 6,
-    N054_MODEL_N054_RING1 = 7,
     // --- __n054_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n055 
@@ -64908,10 +62506,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N055_ELEM_EFF723 = 91,
     N055_ELEM_L_ITEM = 92,
     N055_ELEM_L_HAND_N = 93,
-    N055_MODEL_NB = 3,
-    N055_MODEL_N055_OBJ = 0,
-    N055_MODEL_PARTS2 = 1,
-    N055_MODEL_BMERGE1 = 2,
     // --- __n055_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n056 
@@ -65011,10 +62605,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N056_ELEM_C_HAIR_2 = 91,
     N056_ELEM_C_HAIR_3 = 92,
     N056_ELEM_EFF21 = 93,
-    N056_MODEL_NB = 3,
-    N056_MODEL_N056_OBJ = 0,
-    N056_MODEL_PARTS2 = 1,
-    N056_MODEL_PARTS1 = 2,
     // --- __n056_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n057 
@@ -65091,10 +62681,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N057_ELEM_CHN7 = 68,
     N057_ELEM_L_TOES = 69,
     N057_ELEM_EFF7 = 70,
-    N057_MODEL_NB = 3,
-    N057_MODEL_BODY = 0,
-    N057_MODEL_MAE = 1,
-    N057_MODEL_PORI = 2,
     // --- __n057_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n058 
@@ -65195,10 +62781,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N058_ELEM_CHN202 = 92,
     N058_ELEM_R_TOES = 93,
     N058_ELEM_EFF202 = 94,
-    N058_MODEL_NB = 3,
-    N058_MODEL_BMERGE22 = 0,
-    N058_MODEL_BMERGE32 = 1,
-    N058_MODEL_BMERGE30 = 2,
     // --- __n058_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n059 
@@ -65300,11 +62882,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N059_ELEM_CHN202 = 93,
     N059_ELEM_R_TOES = 94,
     N059_ELEM_EFF202 = 95,
-    N059_MODEL_NB = 4,
-    N059_MODEL_N059_BOUSHI = 0,
-    N059_MODEL_N059_BODY = 1,
-    N059_MODEL_N059_HAIR = 2,
-    N059_MODEL_N059_OP = 3,
     // --- __n059_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n060 
@@ -65381,10 +62958,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N060_ELEM_EFF12 = 68,
     N060_ELEM_L_ITEM = 69,
     N060_ELEM_L_HAND_N = 70,
-    N060_MODEL_NB = 3,
-    N060_MODEL_N060_OP = 0,
-    N060_MODEL_N060_LIP = 1,
-    N060_MODEL_N060_BODY = 2,
     // --- __n060_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n061 
@@ -65460,10 +63033,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N061_ELEM_CHN7 = 67,
     N061_ELEM_L_TOES = 68,
     N061_ELEM_EFF7 = 69,
-    N061_MODEL_NB = 3,
-    N061_MODEL_N061_OBJ = 0,
-    N061_MODEL_N061_OBJA = 1,
-    N061_MODEL_N061_OBJB = 2,
     // --- __n061_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n063 
@@ -65540,10 +63109,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N063_ELEM_CHN15 = 68,
     N063_ELEM_CHIN = 69,
     N063_ELEM_EFF15 = 70,
-    N063_MODEL_NB = 3,
-    N063_MODEL_OBJ3 = 0,
-    N063_MODEL_OBJ2 = 1,
-    N063_MODEL_OBJ1 = 2,
     // --- __n063_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n064 
@@ -65619,9 +63184,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N064_ELEM_CHN7 = 67,
     N064_ELEM_L_TOES = 68,
     N064_ELEM_EFF7 = 69,
-    N064_MODEL_NB = 2,
-    N064_MODEL_N064_BODY = 0,
-    N064_MODEL_N064_OP = 1,
     // --- __n064_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n065 
@@ -65696,9 +63258,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N065_ELEM_CHN7 = 66,
     N065_ELEM_L_TOES = 67,
     N065_ELEM_EFF7 = 68,
-    N065_MODEL_NB = 2,
-    N065_MODEL_N065_OBJ = 0,
-    N065_MODEL_BMERGE9 = 1,
     // --- __n065_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n066 
@@ -65775,10 +63334,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N066_ELEM_R_FING = 68,
     N066_ELEM_EFF12 = 69,
     N066_ELEM_R_ITEM = 70,
-    N066_MODEL_NB = 3,
-    N066_MODEL_N066_PORI = 0,
-    N066_MODEL_N066_BODY = 1,
-    N066_MODEL_N066_MAE = 2,
     // --- __n066_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n067 
@@ -65878,10 +63433,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N067_ELEM_R_HAIR_2 = 91,
     N067_ELEM_R_HAIR_3 = 92,
     N067_ELEM_EFF711 = 93,
-    N067_MODEL_NB = 3,
-    N067_MODEL_N067_OBJ = 0,
-    N067_MODEL_CONE2 = 1,
-    N067_MODEL_BMERGE42 = 2,
     // --- __n067_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n068 
@@ -65981,9 +63532,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N068_ELEM_CHN202 = 91,
     N068_ELEM_R_TOES = 92,
     N068_ELEM_EFF202 = 93,
-    N068_MODEL_NB = 2,
-    N068_MODEL_OBJ1 = 0,
-    N068_MODEL_OBJ2 = 1,
     // --- __n068_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n069 
@@ -66082,9 +63630,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N069_ELEM_CHN202 = 90,
     N069_ELEM_R_TOES = 91,
     N069_ELEM_EFF202 = 92,
-    N069_MODEL_NB = 2,
-    N069_MODEL_N069_OBJ = 0,
-    N069_MODEL_BMERGE1 = 1,
     // --- __n069_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n070 
@@ -66183,9 +63728,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N070_ELEM_L_HAIR_2 = 90,
     N070_ELEM_L_HAIR_3 = 91,
     N070_ELEM_EFF25 = 92,
-    N070_MODEL_NB = 2,
-    N070_MODEL_N070_OBJ = 0,
-    N070_MODEL_BMERGE18 = 1,
     // --- __n070_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n071 
@@ -66285,10 +63827,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N071_ELEM_L_HAIR_2 = 91,
     N071_ELEM_L_HAIR_3 = 92,
     N071_ELEM_EFF721 = 93,
-    N071_MODEL_NB = 3,
-    N071_MODEL_N071_OBJ = 0,
-    N071_MODEL_N071_OBJA = 1,
-    N071_MODEL_N071_OBJB = 2,
     // --- __n071_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n072 
@@ -66363,9 +63901,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N072_ELEM_R_FING = 66,
     N072_ELEM_EFF12 = 67,
     N072_ELEM_R_ITEM = 68,
-    N072_MODEL_NB = 2,
-    N072_MODEL_N072_OBJ = 0,
-    N072_MODEL_N072_OBJA = 1,
     // --- __n072_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n074 
@@ -66440,9 +63975,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N074_ELEM_R_FING = 66,
     N074_ELEM_EFF12 = 67,
     N074_ELEM_R_ITEM = 68,
-    N074_MODEL_NB = 2,
-    N074_MODEL_N074_OBJ = 0,
-    N074_MODEL_N074_OBJA = 1,
     // --- __n074_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n075 
@@ -66541,9 +64073,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N075_ELEM_L_HAIR_2 = 90,
     N075_ELEM_L_HAIR_3 = 91,
     N075_ELEM_EFF721 = 92,
-    N075_MODEL_NB = 2,
-    N075_MODEL_N075_OBJ = 0,
-    N075_MODEL_BMERGE27 = 1,
     // --- __n075_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n076 
@@ -66643,10 +64172,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N076_ELEM_C_HAIR_2 = 91,
     N076_ELEM_C_HAIR_3 = 92,
     N076_ELEM_EFF701 = 93,
-    N076_MODEL_NB = 3,
-    N076_MODEL_N076_OBJ = 0,
-    N076_MODEL_BMERGE23 = 1,
-    N076_MODEL_BMERGE24 = 2,
     // --- __n076_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n078 
@@ -66746,10 +64271,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N078_ELEM_R_FING = 91,
     N078_ELEM_EFF403 = 92,
     N078_ELEM_R_ITEM = 93,
-    N078_MODEL_NB = 3,
-    N078_MODEL_N078_OBJ = 0,
-    N078_MODEL_BMERGE34 = 1,
-    N078_MODEL_BMERGE35 = 2,
     // --- __n078_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n079 
@@ -66824,9 +64345,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N079_ELEM_R_FING = 66,
     N079_ELEM_EFF12 = 67,
     N079_ELEM_R_ITEM = 68,
-    N079_MODEL_NB = 2,
-    N079_MODEL_N079_OBJ = 0,
-    N079_MODEL_N079_OBJA = 1,
     // --- __n079_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n080 
@@ -66926,9 +64444,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N080_ELEM_EFF503 = 91,
     N080_ELEM_L_ITEM = 92,
     N080_ELEM_L_HAND_N = 93,
-    N080_MODEL_NB = 2,
-    N080_MODEL_OBJ1 = 0,
-    N080_MODEL_OBJ2 = 1,
     // --- __n080_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n081 
@@ -67005,11 +64520,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N081_ELEM_CHN7 = 68,
     N081_ELEM_L_TOES = 69,
     N081_ELEM_EFF7 = 70,
-    N081_MODEL_NB = 4,
-    N081_MODEL_N081_OBJ = 0,
-    N081_MODEL_N081_BAG = 1,
-    N081_MODEL_N081_CLOTH = 2,
-    N081_MODEL_N081_HEIR = 3,
     // --- __n081_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n082 
@@ -67087,12 +64597,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N082_ELEM_CHN7 = 69,
     N082_ELEM_L_TOES = 70,
     N082_ELEM_EFF7 = 71,
-    N082_MODEL_NB = 5,
-    N082_MODEL_N082_OBJ = 0,
-    N082_MODEL_N082_BAG = 1,
-    N082_MODEL_N082_BACK = 2,
-    N082_MODEL_N082_CLOTH = 3,
-    N082_MODEL_N082_HEIR = 4,
     // --- __n082_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n084 
@@ -67167,9 +64671,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N084_ELEM_CHN7 = 66,
     N084_ELEM_L_TOES = 67,
     N084_ELEM_EFF7 = 68,
-    N084_MODEL_NB = 2,
-    N084_MODEL_N084_OBJ = 0,
-    N084_MODEL_N084_OP = 1,
     // --- __n084_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n085 
@@ -67244,9 +64745,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N085_ELEM_CHN7 = 66,
     N085_ELEM_L_TOES = 67,
     N085_ELEM_EFF7 = 68,
-    N085_MODEL_NB = 2,
-    N085_MODEL_N085_OBJ = 0,
-    N085_MODEL_N085_OP = 1,
     // --- __n085_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n086 
@@ -67346,9 +64844,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N086_ELEM_EFF503 = 91,
     N086_ELEM_L_ITEM = 92,
     N086_ELEM_L_HAND_N = 93,
-    N086_MODEL_NB = 2,
-    N086_MODEL_OBJ1 = 0,
-    N086_MODEL_OBJ2 = 1,
     // --- __n086_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n087 
@@ -67447,9 +64942,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N087_ELEM_C_HAIR_2 = 90,
     N087_ELEM_C_HAIR_3 = 91,
     N087_ELEM_EFF701 = 92,
-    N087_MODEL_NB = 2,
-    N087_MODEL_N087_OBJ = 0,
-    N087_MODEL_BMERGE41 = 1,
     // --- __n087_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n088 
@@ -67550,11 +65042,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N088_ELEM_CHN202 = 92,
     N088_ELEM_R_TOES = 93,
     N088_ELEM_EFF202 = 94,
-    N088_MODEL_NB = 4,
-    N088_MODEL_N088_OBJ = 0,
-    N088_MODEL_N088_GLASSES = 1,
-    N088_MODEL_N088_FOOT = 2,
-    N088_MODEL_N088_CLOTH = 3,
     // --- __n088_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n090 
@@ -67654,10 +65141,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N090_ELEM_EFF723 = 91,
     N090_ELEM_L_ITEM = 92,
     N090_ELEM_L_HAND_N = 93,
-    N090_MODEL_NB = 3,
-    N090_MODEL_N090_OBJ = 0,
-    N090_MODEL_BMERGE10 = 1,
-    N090_MODEL_BMERGE13 = 2,
     // --- __n090_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n091 
@@ -67757,10 +65240,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N091_ELEM_CHN202 = 91,
     N091_ELEM_R_TOES = 92,
     N091_ELEM_EFF202 = 93,
-    N091_MODEL_NB = 3,
-    N091_MODEL_N91_OBJ = 0,
-    N091_MODEL_BMERGE39 = 1,
-    N091_MODEL_BMERGE40 = 2,
     // --- __n091_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n099 
@@ -67842,10 +65321,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N099_ELEM_R_FING = 73,
     N099_ELEM_EFF20 = 74,
     N099_ELEM_R_ITEM = 75,
-    N099_MODEL_NB = 3,
-    N099_MODEL_N099_OBJ = 0,
-    N099_MODEL_N099_OPB = 1,
-    N099_MODEL_N099_OPA = 2,
     // --- __n099_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n100 
@@ -67937,9 +65412,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N100_ELEM_R_HAIR1 = 83,
     N100_ELEM_R_HAIR2 = 84,
     N100_ELEM_EFF10 = 85,
-    N100_MODEL_NB = 2,
-    N100_MODEL_BODY = 0,
-    N100_MODEL_KAZARI = 1,
     // --- __n100_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n101 
@@ -68031,9 +65503,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N101_ELEM_R_HAIR1 = 83,
     N101_ELEM_R_HAIR2 = 84,
     N101_ELEM_EFF10 = 85,
-    N101_MODEL_NB = 2,
-    N101_MODEL_BODY = 0,
-    N101_MODEL_KAZARI = 1,
     // --- __n101_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n102 
@@ -68129,8 +65598,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N102_ELEM_CHN27 = 87,
     N102_ELEM_R_FING = 88,
     N102_ELEM_EFF27 = 89,
-    N102_MODEL_NB = 1,
-    N102_MODEL_N102_OBJ = 0,
     // --- __n102_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n103 
@@ -68213,11 +65680,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N103_ELEM_CHN20 = 74,
     N103_ELEM_R_FING = 75,
     N103_ELEM_EFF20 = 76,
-    N103_MODEL_NB = 4,
-    N103_MODEL_N103_OBJ = 0,
-    N103_MODEL_N099_OPA_3 = 1,
-    N103_MODEL_N099_OPB_3 = 2,
-    N103_MODEL_N099_OPA_4 = 3,
     // --- __n103_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n104 
@@ -68301,9 +65763,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N104_ELEM_SQTSPLITRT3 = 75,
     N104_ELEM_CHIN = 76,
     N104_ELEM_EFF10 = 77,
-    N104_MODEL_NB = 2,
-    N104_MODEL_BODY = 0,
-    N104_MODEL_KAZARI = 1,
     // --- __n104_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n105 
@@ -68387,9 +65846,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N105_ELEM_SQTSPLITRT3 = 75,
     N105_ELEM_CHIN = 76,
     N105_ELEM_EFF10 = 77,
-    N105_MODEL_NB = 2,
-    N105_MODEL_BODY = 0,
-    N105_MODEL_KAZARI = 1,
     // --- __n105_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n106 
@@ -68484,9 +65940,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N106_ELEM_SQTSPLITRT3 = 86,
     N106_ELEM_CHIN = 87,
     N106_ELEM_EFF10 = 88,
-    N106_MODEL_NB = 2,
-    N106_MODEL_BODY1 = 0,
-    N106_MODEL_OBJ2 = 1,
     // --- __n106_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n108 
@@ -68586,9 +66039,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N108_ELEM_EFF503 = 91,
     N108_ELEM_L_ITEM = 92,
     N108_ELEM_L_HAND_N = 93,
-    N108_MODEL_NB = 2,
-    N108_MODEL_OBJ1 = 0,
-    N108_MODEL_OBJ2 = 1,
     // --- __n108_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n110 
@@ -68663,9 +66113,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N110_ELEM_CHN7 = 66,
     N110_ELEM_L_TOES = 67,
     N110_ELEM_EFF7 = 68,
-    N110_MODEL_NB = 2,
-    N110_MODEL_N110_FUTA = 0,
-    N110_MODEL_N110_OBJ = 1,
     // --- __n110_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n112 
@@ -68739,8 +66186,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N112_ELEM_R_FING = 65,
     N112_ELEM_EFF12 = 66,
     N112_ELEM_R_ITEM = 67,
-    N112_MODEL_NB = 1,
-    N112_MODEL_N112_OBJ = 0,
     // --- __n112_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n115 
@@ -68840,9 +66285,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N115_ELEM_CHN202 = 91,
     N115_ELEM_R_TOES = 92,
     N115_ELEM_EFF202 = 93,
-    N115_MODEL_NB = 2,
-    N115_MODEL_OBJ1 = 0,
-    N115_MODEL_OBJ2 = 1,
     // --- __n115_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n122 
@@ -68918,10 +66360,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N122_ELEM_CHN7 = 67,
     N122_ELEM_L_TOES = 68,
     N122_ELEM_EFF7 = 69,
-    N122_MODEL_NB = 3,
-    N122_MODEL_N122_OBJ = 0,
-    N122_MODEL_N122_OBJA = 1,
-    N122_MODEL_N122_OBJB = 2,
     // --- __n122_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n124 
@@ -68997,10 +66435,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N124_ELEM_L_FING = 67,
     N124_ELEM_EFF19 = 68,
     N124_ELEM_L_ITEM = 69,
-    N124_MODEL_NB = 3,
-    N124_MODEL_N124_OBJ = 0,
-    N124_MODEL_N124_OBJA = 1,
-    N124_MODEL_N124_OBJB = 2,
     // --- __n124_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n125 
@@ -69101,11 +66535,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N125_ELEM_CHN202 = 92,
     N125_ELEM_R_TOES = 93,
     N125_ELEM_EFF202 = 94,
-    N125_MODEL_NB = 4,
-    N125_MODEL_N125_OBJ = 0,
-    N125_MODEL_BMERGE40 = 1,
-    N125_MODEL_BMERGE29 = 2,
-    N125_MODEL_GRID1 = 3,
     // --- __n125_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n126 
@@ -69183,10 +66612,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N126_ELEM_R_FING = 69,
     N126_ELEM_EFF12 = 70,
     N126_ELEM_R_ITEM = 71,
-    N126_MODEL_NB = 3,
-    N126_MODEL_N126_HEAD = 0,
-    N126_MODEL_N126_BODY = 1,
-    N126_MODEL_N126_JK = 2,
     // --- __n126_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n127 
@@ -69268,15 +66693,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N127_ELEM_R_FING = 73,
     N127_ELEM_EFF12 = 74,
     N127_ELEM_R_ITEM = 75,
-    N127_MODEL_NB = 8,
-    N127_MODEL_N127_HEAD = 0,
-    N127_MODEL_N127_SOKO = 1,
-    N127_MODEL_N127_JK = 2,
-    N127_MODEL_N127_TE = 3,
-    N127_MODEL_N127_SODE = 4,
-    N127_MODEL_N127_BOUSHI = 5,
-    N127_MODEL_N127_PARTS = 6,
-    N127_MODEL_N127_HIMO = 7,
     // --- __n127_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n128 
@@ -69378,12 +66794,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N128_ELEM_L_HAIR_2 = 93,
     N128_ELEM_L_HAIR_3 = 94,
     N128_ELEM_EFF25 = 95,
-    N128_MODEL_NB = 5,
-    N128_MODEL_N128_OBJ = 0,
-    N128_MODEL_N128_MAE = 1,
-    N128_MODEL_N128_MANTO = 2,
-    N128_MODEL_N128_ITA = 3,
-    N128_MODEL_N128_SOKO = 4,
     // --- __n128_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n129 
@@ -69483,9 +66893,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N129_ELEM_EFF503 = 91,
     N129_ELEM_L_ITEM = 92,
     N129_ELEM_L_HAND_N = 93,
-    N129_MODEL_NB = 2,
-    N129_MODEL_OBJ1 = 0,
-    N129_MODEL_OBJ2 = 1,
     // --- __n129_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n130 
@@ -69561,10 +66968,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N130_ELEM_CHN15 = 67,
     N130_ELEM_CHIN = 68,
     N130_ELEM_EFF15 = 69,
-    N130_MODEL_NB = 3,
-    N130_MODEL_N130_OBJ = 0,
-    N130_MODEL_N130_OBJA = 1,
-    N130_MODEL_N130_OBIB = 2,
     // --- __n130_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n131 
@@ -69639,9 +67042,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N131_ELEM_CHN7 = 66,
     N131_ELEM_L_TOES = 67,
     N131_ELEM_EFF7 = 68,
-    N131_MODEL_NB = 2,
-    N131_MODEL_N131_OBJ = 0,
-    N131_MODEL_N131_OBJA = 1,
     // --- __n131_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n132 
@@ -69716,9 +67116,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N132_ELEM_CHN7 = 66,
     N132_ELEM_L_TOES = 67,
     N132_ELEM_EFF7 = 68,
-    N132_MODEL_NB = 2,
-    N132_MODEL_N132_OBJ = 0,
-    N132_MODEL_N132_OBJA = 1,
     // --- __n132_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n133 
@@ -69793,9 +67190,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N133_ELEM_L_FING = 66,
     N133_ELEM_EFF19 = 67,
     N133_ELEM_L_ITEM = 68,
-    N133_MODEL_NB = 2,
-    N133_MODEL_N133_OBJ = 0,
-    N133_MODEL_N133_OBJA = 1,
     // --- __n133_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n134 
@@ -69896,10 +67290,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N134_ELEM_EFF503 = 92,
     N134_ELEM_L_ITEM = 93,
     N134_ELEM_L_HAND_N = 94,
-    N134_MODEL_NB = 3,
-    N134_MODEL_OBJ1 = 0,
-    N134_MODEL_OBJ2 = 1,
-    N134_MODEL_OBJ3 = 2,
     // --- __n134_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n135 
@@ -70000,11 +67390,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N135_ELEM_R_HAIR_2 = 92,
     N135_ELEM_R_HAIR_3 = 93,
     N135_ELEM_EFF711 = 94,
-    N135_MODEL_NB = 4,
-    N135_MODEL_N135_OBJ = 0,
-    N135_MODEL_N135_OPA = 1,
-    N135_MODEL_N135_OPB = 2,
-    N135_MODEL_N135_OPC = 3,
     // --- __n135_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n136 
@@ -70102,8 +67487,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N136_ELEM_CHN202 = 89,
     N136_ELEM_R_TOES = 90,
     N136_ELEM_EFF202 = 91,
-    N136_MODEL_NB = 1,
-    N136_MODEL_N136_OBJ = 0,
     // --- __n136_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n137 
@@ -70202,9 +67585,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N137_ELEM_CHN202 = 90,
     N137_ELEM_R_TOES = 91,
     N137_ELEM_EFF202 = 92,
-    N137_MODEL_NB = 2,
-    N137_MODEL_N137_OBJ = 0,
-    N137_MODEL_N137_OBJA = 1,
     // --- __n137_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n139 
@@ -70283,8 +67663,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N139_ELEM_CHN7 = 70,
     N139_ELEM_L_TOES = 71,
     N139_ELEM_EFF7 = 72,
-    N139_MODEL_NB = 1,
-    N139_MODEL_N139_OBJ_2 = 0,
     // --- __n139_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n140 
@@ -70363,13 +67741,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N140_ELEM_CHN7 = 70,
     N140_ELEM_L_TOES = 71,
     N140_ELEM_EFF7 = 72,
-    N140_MODEL_NB = 6,
-    N140_MODEL_N140_OBJ = 0,
-    N140_MODEL_N140_GLASS = 1,
-    N140_MODEL_N140_KAMI4 = 2,
-    N140_MODEL_N140_KAMI3 = 3,
-    N140_MODEL_N140_KAMI2 = 4,
-    N140_MODEL_N140_KAMI1 = 5,
     // --- __n140_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n141 
@@ -70446,11 +67817,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N141_ELEM_CHN5 = 68,
     N141_ELEM_CHIN = 69,
     N141_ELEM_EFF5 = 70,
-    N141_MODEL_NB = 4,
-    N141_MODEL_N141_OBJ = 0,
-    N141_MODEL_N141_GLASS = 1,
-    N141_MODEL_N141_TE = 2,
-    N141_MODEL_N141_ITA = 3,
     // --- __n141_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n142 
@@ -70527,8 +67893,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N142_ELEM_R_FING = 68,
     N142_ELEM_EFF12 = 69,
     N142_ELEM_R_ITEM = 70,
-    N142_MODEL_NB = 1,
-    N142_MODEL_N142_OBJ = 0,
     // --- __n142_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n143 
@@ -70628,10 +67992,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N143_ELEM_CHN202 = 91,
     N143_ELEM_R_TOES = 92,
     N143_ELEM_EFF202 = 93,
-    N143_MODEL_NB = 3,
-    N143_MODEL_N143_OBJ = 0,
-    N143_MODEL_BMERGE39_1 = 1,
-    N143_MODEL_BMERGE40_2_1 = 2,
     // --- __n143_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n144 
@@ -70709,11 +68069,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N144_ELEM_CHN20 = 69,
     N144_ELEM_R_TOES = 70,
     N144_ELEM_EFF20 = 71,
-    N144_MODEL_NB = 4,
-    N144_MODEL_N144_BODY = 0,
-    N144_MODEL_N144_HOLNSIDE = 1,
-    N144_MODEL_N144_OP = 2,
-    N144_MODEL_N144_MANT = 3,
     // --- __n144_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n145 
@@ -70797,8 +68152,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N145_ELEM_CHN16 = 75,
     N145_ELEM_R_TOES = 76,
     N145_ELEM_EFF16 = 77,
-    N145_MODEL_NB = 1,
-    N145_MODEL_N145_OBJ = 0,
     // --- __n145_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n146 
@@ -70882,11 +68235,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N146_ELEM_CHN15 = 75,
     N146_ELEM_R_TOES = 76,
     N146_ELEM_EFF15 = 77,
-    N146_MODEL_NB = 4,
-    N146_MODEL_N146_BODY = 0,
-    N146_MODEL_N146_OP = 1,
-    N146_MODEL_N146_DRAMS = 2,
-    N146_MODEL_N146_TASUKI = 3,
     // --- __n146_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n150 
@@ -70961,9 +68309,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N150_ELEM_R_FING = 66,
     N150_ELEM_EFF12 = 67,
     N150_ELEM_R_ITEM = 68,
-    N150_MODEL_NB = 2,
-    N150_MODEL_N150_OBJ = 0,
-    N150_MODEL_N150_OBJA = 1,
     // --- __n150_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n151 
@@ -71038,9 +68383,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N151_ELEM_R_FING = 66,
     N151_ELEM_EFF12 = 67,
     N151_ELEM_R_ITEM = 68,
-    N151_MODEL_NB = 2,
-    N151_MODEL_N151_OBJ = 0,
-    N151_MODEL_N151_OP = 1,
     // --- __n151_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n168 
@@ -71118,11 +68460,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N168_ELEM_CHN7 = 69,
     N168_ELEM_L_TOES = 70,
     N168_ELEM_EFF7 = 71,
-    N168_MODEL_NB = 4,
-    N168_MODEL_N168_NECK = 0,
-    N168_MODEL_N168_BODY = 1,
-    N168_MODEL_N168_NUNO = 2,
-    N168_MODEL_N168_PORI = 3,
     // --- __n168_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n170 
@@ -71221,9 +68558,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N170_ELEM_CHN202 = 90,
     N170_ELEM_R_TOES = 91,
     N170_ELEM_EFF202 = 92,
-    N170_MODEL_NB = 2,
-    N170_MODEL_N170_OBJ = 0,
-    N170_MODEL_BMERGE47 = 1,
     // --- __n170_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n171 
@@ -71300,10 +68634,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N171_ELEM_L_FING = 68,
     N171_ELEM_EFF19 = 69,
     N171_ELEM_L_ITEM = 70,
-    N171_MODEL_NB = 3,
-    N171_MODEL_N171_BODY = 0,
-    N171_MODEL_N171_PORI = 1,
-    N171_MODEL_N171_ATE = 2,
     // --- __n171_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n172 
@@ -71378,9 +68708,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N172_ELEM_CHN7 = 66,
     N172_ELEM_L_TOES = 67,
     N172_ELEM_EFF7 = 68,
-    N172_MODEL_NB = 2,
-    N172_MODEL_N172_OBJ = 0,
-    N172_MODEL_N172_OBJA = 1,
     // --- __n172_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n173 
@@ -71455,9 +68782,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N173_ELEM_CHN7 = 66,
     N173_ELEM_L_TOES = 67,
     N173_ELEM_EFF7 = 68,
-    N173_MODEL_NB = 2,
-    N173_MODEL_N173_OBJ = 0,
-    N173_MODEL_N173_OBJA = 1,
     // --- __n173_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n174 
@@ -71533,10 +68857,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N174_ELEM_CHN7 = 67,
     N174_ELEM_L_TOES = 68,
     N174_ELEM_EFF7 = 69,
-    N174_MODEL_NB = 3,
-    N174_MODEL_N176_OBJ = 0,
-    N174_MODEL_N174_OBJA = 1,
-    N174_MODEL_HAIR = 2,
     // --- __n174_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n175 
@@ -71612,9 +68932,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N175_ELEM_CHN7 = 67,
     N175_ELEM_L_TOES = 68,
     N175_ELEM_EFF7 = 69,
-    N175_MODEL_NB = 2,
-    N175_MODEL_N175_OBJ = 0,
-    N175_MODEL_N175_OBJA = 1,
     // --- __n175_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n176 
@@ -71690,10 +69007,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N176_ELEM_CHN7 = 67,
     N176_ELEM_L_TOES = 68,
     N176_ELEM_EFF7 = 69,
-    N176_MODEL_NB = 3,
-    N176_MODEL_N176_OBJ = 0,
-    N176_MODEL_N176_OBJA = 1,
-    N176_MODEL_HAIR = 2,
     // --- __n176_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n177 
@@ -71770,11 +69083,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N177_ELEM_CHN7 = 68,
     N177_ELEM_L_TOES = 69,
     N177_ELEM_EFF7 = 70,
-    N177_MODEL_NB = 4,
-    N177_MODEL_N177_OBI = 0,
-    N177_MODEL_N177_KAO = 1,
-    N177_MODEL_N177_OBJ = 2,
-    N177_MODEL_N177_ME = 3,
     // --- __n177_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n178 
@@ -71851,8 +69159,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N178_ELEM_CHN7 = 68,
     N178_ELEM_L_TOES = 69,
     N178_ELEM_EFF7 = 70,
-    N178_MODEL_NB = 1,
-    N178_MODEL_N178_OBJ = 0,
     // --- __n178_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n179 
@@ -71929,11 +69235,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N179_ELEM_CHN7 = 68,
     N179_ELEM_L_TOES = 69,
     N179_ELEM_EFF7 = 70,
-    N179_MODEL_NB = 4,
-    N179_MODEL_N179_OBJ = 0,
-    N179_MODEL_OBI = 1,
-    N179_MODEL_KAO = 2,
-    N179_MODEL_KAMI = 3,
     // --- __n179_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n180 
@@ -72033,8 +69334,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N180_ELEM_CHN202 = 91,
     N180_ELEM_R_TOES = 92,
     N180_ELEM_EFF202 = 93,
-    N180_MODEL_NB = 1,
-    N180_MODEL_N178_OBJ = 0,
     // --- __n180_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n181 
@@ -72134,10 +69433,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N181_ELEM_CHN202 = 91,
     N181_ELEM_R_TOES = 92,
     N181_ELEM_EFF202 = 93,
-    N181_MODEL_NB = 3,
-    N181_MODEL_N181_OBJ = 0,
-    N181_MODEL_N181_OPA = 1,
-    N181_MODEL_N181_OPB = 2,
     // --- __n181_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n182 
@@ -72215,12 +69510,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N182_ELEM_CHN7 = 69,
     N182_ELEM_L_TOES = 70,
     N182_ELEM_EFF7 = 71,
-    N182_MODEL_NB = 5,
-    N182_MODEL_N182_OBJ = 0,
-    N182_MODEL_KAO = 1,
-    N182_MODEL_NUNO = 2,
-    N182_MODEL_KAMI = 3,
-    N182_MODEL_TUNAGI = 4,
     // --- __n182_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n183 
@@ -72298,11 +69587,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N183_ELEM_CHN7 = 69,
     N183_ELEM_L_TOES = 70,
     N183_ELEM_EFF7 = 71,
-    N183_MODEL_NB = 4,
-    N183_MODEL_N183_OBJ = 0,
-    N183_MODEL_KAO = 1,
-    N183_MODEL_TUNAGI = 2,
-    N183_MODEL_NUNO = 3,
     // --- __n183_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n184 
@@ -72380,12 +69664,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N184_ELEM_CHN7 = 69,
     N184_ELEM_L_TOES = 70,
     N184_ELEM_EFF7 = 71,
-    N184_MODEL_NB = 5,
-    N184_MODEL_N184_OBJ = 0,
-    N184_MODEL_TUNAGI = 1,
-    N184_MODEL_NUNO = 2,
-    N184_MODEL_KAO = 3,
-    N184_MODEL_KAMI = 4,
     // --- __n184_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n185 
@@ -72485,10 +69763,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N185_ELEM_CHN202 = 91,
     N185_ELEM_R_TOES = 92,
     N185_ELEM_EFF202 = 93,
-    N185_MODEL_NB = 3,
-    N185_MODEL_N185_OBJ = 0,
-    N185_MODEL_N185_HEIR = 1,
-    N185_MODEL_N185_OP = 2,
     // --- __n185_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n186 
@@ -72589,11 +69863,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N186_ELEM_CHN202 = 92,
     N186_ELEM_R_TOES = 93,
     N186_ELEM_EFF202 = 94,
-    N186_MODEL_NB = 4,
-    N186_MODEL_N186_OBJ = 0,
-    N186_MODEL_N186_OP = 1,
-    N186_MODEL_N186_HEIR = 2,
-    N186_MODEL_N186_HEIR_2 = 3,
     // --- __n186_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n197 
@@ -72672,12 +69941,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N197_ELEM_R_FING = 70,
     N197_ELEM_EFF19_1 = 71,
     N197_ELEM_R_ITEM = 72,
-    N197_MODEL_NB = 5,
-    N197_MODEL_BODY = 0,
-    N197_MODEL_FACE = 1,
-    N197_MODEL_NECK_OBJ = 2,
-    N197_MODEL_BOTOM = 3,
-    N197_MODEL_CLOTH = 4,
     // --- __n197_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n198 
@@ -72756,12 +70019,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N198_ELEM_R_FING = 70,
     N198_ELEM_EFF19_1 = 71,
     N198_ELEM_R_ITEM = 72,
-    N198_MODEL_NB = 5,
-    N198_MODEL_N198_BODY = 0,
-    N198_MODEL_N198_FACE = 1,
-    N198_MODEL_N198_NECK = 2,
-    N198_MODEL_N198_BOTOM = 3,
-    N198_MODEL_N198_CLOTH = 4,
     // --- __n198_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n199 
@@ -72838,11 +70095,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N199_ELEM_R_FING = 68,
     N199_ELEM_EFF27 = 69,
     N199_ELEM_R_ITEM = 70,
-    N199_MODEL_NB = 4,
-    N199_MODEL_N199_OBJ = 0,
-    N199_MODEL_N199_FACE = 1,
-    N199_MODEL_N199_NECK = 2,
-    N199_MODEL_N199_CLOTH = 3,
     // --- __n199_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n200 
@@ -72919,11 +70171,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N200_ELEM_R_FING = 68,
     N200_ELEM_EFF27 = 69,
     N200_ELEM_R_ITEM = 70,
-    N200_MODEL_NB = 4,
-    N200_MODEL_N200_OBJ = 0,
-    N200_MODEL_N200_HEAD = 1,
-    N200_MODEL_N200_NECK = 2,
-    N200_MODEL_N200_CLOTH = 3,
     // --- __n200_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n201 
@@ -73002,12 +70249,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N201_ELEM_CHN7 = 70,
     N201_ELEM_L_TOES = 71,
     N201_ELEM_EFF7 = 72,
-    N201_MODEL_NB = 5,
-    N201_MODEL_N201_OPC = 0,
-    N201_MODEL_N201_OPB = 1,
-    N201_MODEL_N201_BODY = 2,
-    N201_MODEL_N201_OPD = 3,
-    N201_MODEL_N201_OPA = 4,
     // --- __n201_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n202 
@@ -73085,11 +70326,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N202_ELEM_CHN7 = 69,
     N202_ELEM_L_TOES = 70,
     N202_ELEM_EFF7 = 71,
-    N202_MODEL_NB = 4,
-    N202_MODEL_N202_BODY = 0,
-    N202_MODEL_N202_OPC = 1,
-    N202_MODEL_N202_OPB = 2,
-    N202_MODEL_N202_OPA = 3,
     // --- __n202_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n203 
@@ -73167,11 +70403,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N203_ELEM_CHN7 = 69,
     N203_ELEM_L_TOES = 70,
     N203_ELEM_EFF7 = 71,
-    N203_MODEL_NB = 4,
-    N203_MODEL_N203_BODY = 0,
-    N203_MODEL_N203_OPB = 1,
-    N203_MODEL_N203_OPC = 2,
-    N203_MODEL_N203_OPA = 3,
     // --- __n203_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n204 
@@ -73270,9 +70501,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N204_ELEM_CHN202 = 90,
     N204_ELEM_R_TOES = 91,
     N204_ELEM_EFF202 = 92,
-    N204_MODEL_NB = 2,
-    N204_MODEL_N204_OBJ = 0,
-    N204_MODEL_BMERGE40_1_1 = 1,
     // --- __n204_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n205 
@@ -73371,9 +70599,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N205_ELEM_CHN202 = 90,
     N205_ELEM_R_TOES = 91,
     N205_ELEM_EFF202 = 92,
-    N205_MODEL_NB = 2,
-    N205_MODEL_N205_OBJ = 0,
-    N205_MODEL_BMERGE39_1_1 = 1,
     // --- __n205_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n206 
@@ -73465,9 +70690,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N206_ELEM_R_HAIR1 = 83,
     N206_ELEM_R_HAIR2 = 84,
     N206_ELEM_EFF10 = 85,
-    N206_MODEL_NB = 2,
-    N206_MODEL_BODY = 0,
-    N206_MODEL_KAZARI = 1,
     // --- __n206_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n207 
@@ -73559,9 +70781,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N207_ELEM_R_HAIR1 = 83,
     N207_ELEM_R_HAIR2 = 84,
     N207_ELEM_EFF10 = 85,
-    N207_MODEL_NB = 2,
-    N207_MODEL_N207_OBJ = 0,
-    N207_MODEL_N207_OP = 1,
     // --- __n207_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n208 
@@ -73645,9 +70864,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N208_ELEM_SQTSPLITRT3 = 75,
     N208_ELEM_CHIN = 76,
     N208_ELEM_EFF10_2 = 77,
-    N208_MODEL_NB = 2,
-    N208_MODEL_N028_OBJ = 0,
-    N208_MODEL_N028_OP = 1,
     // --- __n208_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n209 
@@ -73731,9 +70947,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N209_ELEM_SQTSPLITRT3 = 75,
     N209_ELEM_CHIN = 76,
     N209_ELEM_EFF10_2 = 77,
-    N209_MODEL_NB = 2,
-    N209_MODEL_N209_OBJ = 0,
-    N209_MODEL_N209_OP = 1,
     // --- __n209_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n210 
@@ -73825,10 +71038,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N210_ELEM_L_ANT2 = 83,
     N210_ELEM_L_ANT3 = 84,
     N210_ELEM_EFF722 = 85,
-    N210_MODEL_NB = 3,
-    N210_MODEL_N210_SKARF = 0,
-    N210_MODEL_N210_T = 1,
-    N210_MODEL_N210_OP = 2,
     // --- __n210_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n211 
@@ -73906,11 +71115,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N211_ELEM_L_FING = 69,
     N211_ELEM_EFF20_1 = 70,
     N211_ELEM_L_ITEM = 71,
-    N211_MODEL_NB = 4,
-    N211_MODEL_N211_BODY = 0,
-    N211_MODEL_N211_FACE = 1,
-    N211_MODEL_N211_MASK = 2,
-    N211_MODEL_N211_OP = 3,
     // --- __n211_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n216 
@@ -73985,9 +71189,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N216_ELEM_CHN15 = 66,
     N216_ELEM_CHIN = 67,
     N216_ELEM_EFF15 = 68,
-    N216_MODEL_NB = 2,
-    N216_MODEL_N216_OBJ = 0,
-    N216_MODEL_ITA_POLY = 1,
     // --- __n216_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n217 
@@ -74063,10 +71264,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N217_ELEM_CHN7 = 67,
     N217_ELEM_L_TOES = 68,
     N217_ELEM_EFF7 = 69,
-    N217_MODEL_NB = 3,
-    N217_MODEL_N217_OBJ = 0,
-    N217_MODEL_OBJ3 = 1,
-    N217_MODEL_OBJ2 = 2,
     // --- __n217_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n218 
@@ -74142,8 +71339,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N218_ELEM_R_FING = 67,
     N218_ELEM_EFF12 = 68,
     N218_ELEM_R_ITEM = 69,
-    N218_MODEL_NB = 1,
-    N218_MODEL_N218_OBJ = 0,
     // --- __n218_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n219 
@@ -74243,8 +71438,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N219_ELEM_CHN202 = 91,
     N219_ELEM_R_TOES = 92,
     N219_ELEM_EFF202 = 93,
-    N219_MODEL_NB = 1,
-    N219_MODEL_N219_OBJ = 0,
     // --- __n219_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n220 
@@ -74320,10 +71513,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N220_ELEM_CHN7 = 67,
     N220_ELEM_L_TOES = 68,
     N220_ELEM_EFF7 = 69,
-    N220_MODEL_NB = 3,
-    N220_MODEL_N220_OBJ = 0,
-    N220_MODEL_N220_KAMI = 1,
-    N220_MODEL_N220_ITA = 2,
     // --- __n220_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n221 
@@ -74399,9 +71588,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N221_ELEM_CHN15 = 67,
     N221_ELEM_CHIN = 68,
     N221_ELEM_EFF15 = 69,
-    N221_MODEL_NB = 2,
-    N221_MODEL_OBJ1 = 0,
-    N221_MODEL_OBJ2 = 1,
     // --- __n221_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n222 
@@ -74486,8 +71672,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N222_ELEM_CHN7 = 76,
     N222_ELEM_L_TOES = 77,
     N222_ELEM_EFF7 = 78,
-    N222_MODEL_NB = 1,
-    N222_MODEL_N222_OBJ = 0,
     // --- __n222_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n223 
@@ -74564,11 +71748,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N223_ELEM_CHN7 = 68,
     N223_ELEM_L_TOES = 69,
     N223_ELEM_EFF7 = 70,
-    N223_MODEL_NB = 4,
-    N223_MODEL_N223_OBJ = 0,
-    N223_MODEL_N223_OBJA = 1,
-    N223_MODEL_N223_OBJC = 2,
-    N223_MODEL_N223_OBJB = 3,
     // --- __n223_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n224 
@@ -74668,8 +71847,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N224_ELEM_EFF503 = 91,
     N224_ELEM_L_ITEM = 92,
     N224_ELEM_L_HAND_N = 93,
-    N224_MODEL_NB = 1,
-    N224_MODEL_N224_OBJ = 0,
     // --- __n224_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n225 
@@ -74771,12 +71948,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N225_ELEM_R_HAIR_2 = 93,
     N225_ELEM_R_HAIR_3 = 94,
     N225_ELEM_EFF711 = 95,
-    N225_MODEL_NB = 5,
-    N225_MODEL_N255_FOOT = 0,
-    N225_MODEL_N255_CLOTH = 1,
-    N225_MODEL_N225_ARM = 2,
-    N225_MODEL_N255_OBJ = 3,
-    N225_MODEL_N225_OP = 4,
     // --- __n225_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n226 
@@ -74851,9 +72022,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N226_ELEM_R_FING = 66,
     N226_ELEM_EFF12 = 67,
     N226_ELEM_R_ITEM = 68,
-    N226_MODEL_NB = 2,
-    N226_MODEL_N226_OBJ = 0,
-    N226_MODEL_N226_OP = 1,
     // --- __n226_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n227 
@@ -74961,17 +72129,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N227_ELEM_CHN202 = 99,
     N227_ELEM_R_TOES = 100,
     N227_ELEM_EFF202 = 101,
-    N227_MODEL_NB = 10,
-    N227_MODEL_OBJ45 = 0,
-    N227_MODEL_OBJ39 = 1,
-    N227_MODEL_OBJ43 = 2,
-    N227_MODEL_OBJ41 = 3,
-    N227_MODEL_OBJ46 = 4,
-    N227_MODEL_OBJ16 = 5,
-    N227_MODEL_OBJ37 = 6,
-    N227_MODEL_OBJ19 = 7,
-    N227_MODEL_OBJ20 = 8,
-    N227_MODEL_OBJ18 = 9,
     // --- __n227_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n228 
@@ -75072,9 +72229,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N228_ELEM_R_HAIR_2 = 92,
     N228_ELEM_R_HAIR_3 = 93,
     N228_ELEM_EFF711 = 94,
-    N228_MODEL_NB = 2,
-    N228_MODEL_N228_OBJ = 0,
-    N228_MODEL_N228_OPC = 1,
     // --- __n228_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n229 
@@ -75150,10 +72304,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N229_ELEM_CHN15 = 67,
     N229_ELEM_CHIN = 68,
     N229_ELEM_EFF15 = 69,
-    N229_MODEL_NB = 3,
-    N229_MODEL_N229_OBJA = 0,
-    N229_MODEL_N229_OBJ = 1,
-    N229_MODEL_N229_OBJB = 2,
     // --- __n229_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n231 
@@ -75231,11 +72381,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N231_ELEM_R_FING = 69,
     N231_ELEM_EFF12 = 70,
     N231_ELEM_R_ITEM = 71,
-    N231_MODEL_NB = 4,
-    N231_MODEL_N231_FOOT = 0,
-    N231_MODEL_N231_HANDS = 1,
-    N231_MODEL_N231_BODY = 2,
-    N231_MODEL_N231_OP = 3,
     // --- __n231_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n232 
@@ -75328,9 +72473,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N232_ELEM_R_HAIR1 = 84,
     N232_ELEM_R_HAIR2 = 85,
     N232_ELEM_EFF10 = 86,
-    N232_MODEL_NB = 2,
-    N232_MODEL_BODY = 0,
-    N232_MODEL_KAZARI = 1,
     // --- __n232_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n233 
@@ -75423,9 +72565,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N233_ELEM_R_HAIR1 = 84,
     N233_ELEM_R_HAIR2 = 85,
     N233_ELEM_EFF10 = 86,
-    N233_MODEL_NB = 2,
-    N233_MODEL_BODY = 0,
-    N233_MODEL_BMERGE2 = 1,
     // --- __n233_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n234 
@@ -75502,11 +72641,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N234_ELEM_CHN7 = 68,
     N234_ELEM_L_TOES = 69,
     N234_ELEM_EFF7 = 70,
-    N234_MODEL_NB = 4,
-    N234_MODEL_N234_OBJ = 0,
-    N234_MODEL_N234_OBJA = 1,
-    N234_MODEL_N234_OBJB = 2,
-    N234_MODEL_N234_OBJC = 3,
     // --- __n234_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n236 
@@ -75610,9 +72744,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N236_ELEM_EFF503 = 95,
     N236_ELEM_L_ITEM = 96,
     N236_ELEM_L_HAND_N = 97,
-    N236_MODEL_NB = 2,
-    N236_MODEL_N236_OBJ = 0,
-    N236_MODEL_N236_OBJA = 1,
     // --- __n236_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n238 
@@ -75696,11 +72827,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N238_ELEM_L_FING = 75,
     N238_ELEM_EFF22 = 76,
     N238_ELEM_L_ITEM = 77,
-    N238_MODEL_NB = 4,
-    N238_MODEL_N238_OBJC = 0,
-    N238_MODEL_N238_OBJB = 1,
-    N238_MODEL_N238_OBJ = 2,
-    N238_MODEL_N238_OBJA = 3,
     // --- __n238_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n239 
@@ -75800,8 +72926,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N239_ELEM_CHN202 = 91,
     N239_ELEM_R_TOES = 92,
     N239_ELEM_EFF202 = 93,
-    N239_MODEL_NB = 1,
-    N239_MODEL_N239_OBJ = 0,
     // --- __n239_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n240 
@@ -75875,8 +72999,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N240_ELEM_CHN7 = 65,
     N240_ELEM_L_TOES = 66,
     N240_ELEM_EFF7 = 67,
-    N240_MODEL_NB = 1,
-    N240_MODEL_N240_OBJ = 0,
     // --- __n240_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n241 
@@ -75954,8 +73076,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N241_ELEM_R_FING = 69,
     N241_ELEM_EFF12 = 70,
     N241_ELEM_R_ITEM = 71,
-    N241_MODEL_NB = 1,
-    N241_MODEL_N241_OBJ = 0,
     // --- __n241_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n242 
@@ -76059,13 +73179,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N242_ELEM_CHN202 = 95,
     N242_ELEM_R_TOES = 96,
     N242_ELEM_EFF202 = 97,
-    N242_MODEL_NB = 6,
-    N242_MODEL_N242_BODY = 0,
-    N242_MODEL_N242_CLOTH = 1,
-    N242_MODEL_N242_OP = 2,
-    N242_MODEL_N242_OP2 = 3,
-    N242_MODEL_N242_OP3 = 4,
-    N242_MODEL_N242_OP4 = 5,
     // --- __n242_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n243 
@@ -76156,9 +73269,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N243_ELEM_EFF725 = 82,
     N243_ELEM_HOPPE_X_N = 83,
     N243_ELEM_HOPPE_YZ_N = 84,
-    N243_MODEL_NB = 2,
-    N243_MODEL_N243_BODY = 0,
-    N243_MODEL_N243_OP = 1,
     // --- __n243_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n244 
@@ -76258,10 +73368,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N244_ELEM_CHN202 = 91,
     N244_ELEM_R_TOES = 92,
     N244_ELEM_EFF202 = 93,
-    N244_MODEL_NB = 3,
-    N244_MODEL_N244_OBJ = 0,
-    N244_MODEL_BMERGE28 = 1,
-    N244_MODEL_GRID1 = 2,
     // --- __n244_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n246 
@@ -76336,9 +73442,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N246_ELEM_CHN7 = 66,
     N246_ELEM_L_TOES = 67,
     N246_ELEM_EFF7 = 68,
-    N246_MODEL_NB = 2,
-    N246_MODEL_N256_OBJ = 0,
-    N246_MODEL_BMERGE9 = 1,
     // --- __n246_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n247 
@@ -76414,10 +73517,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N247_ELEM_CHN7 = 67,
     N247_ELEM_L_TOES = 68,
     N247_ELEM_EFF7 = 69,
-    N247_MODEL_NB = 3,
-    N247_MODEL_N247_OBJ = 0,
-    N247_MODEL_N247_OP = 1,
-    N247_MODEL_N247_MAEKAKE = 2,
     // --- __n247_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n248 
@@ -76628,14 +73727,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N248_ELEM_AKS_R3 = 202,
     N248_ELEM_AKS_R4 = 203,
     N248_ELEM_EFF111 = 204,
-    N248_MODEL_NB = 7,
-    N248_MODEL_N248_OBJ = 0,
-    N248_MODEL_PARTS4 = 1,
-    N248_MODEL_PARTS0 = 2,
-    N248_MODEL_PARTS2 = 3,
-    N248_MODEL_KAMI = 4,
-    N248_MODEL_PARTS3 = 5,
-    N248_MODEL_PARTS1 = 6,
     // --- __n248_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n249 
@@ -76736,11 +73827,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N249_ELEM_CHN25 = 92,
     N249_ELEM_R_TOES = 93,
     N249_ELEM_EFF25 = 94,
-    N249_MODEL_NB = 4,
-    N249_MODEL_N249_OBJ = 0,
-    N249_MODEL_N249_ARMER = 1,
-    N249_MODEL_N249_HELM = 2,
-    N249_MODEL_N249_MANT1 = 3,
     // --- __n249_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n250 
@@ -76830,8 +73916,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N250_ELEM_CHN7 = 81,
     N250_ELEM_L_TOES = 82,
     N250_ELEM_EFF7 = 83,
-    N250_MODEL_NB = 1,
-    N250_MODEL_N250_OBJ = 0,
     // --- __n250_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n255 
@@ -76922,11 +74006,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N255_ELEM_CHN27_1 = 82,
     N255_ELEM_R_CLOTH_1 = 83,
     N255_ELEM_EFF27 = 84,
-    N255_MODEL_NB = 4,
-    N255_MODEL_N255_OBJ = 0,
-    N255_MODEL_N255_CLOTH = 1,
-    N255_MODEL_N255_OP = 2,
-    N255_MODEL_N255_ARM = 3,
     // --- __n255_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n257 
@@ -77025,9 +74104,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N257_ELEM_CHN25 = 90,
     N257_ELEM_R_TOES = 91,
     N257_ELEM_EFF25 = 92,
-    N257_MODEL_NB = 2,
-    N257_MODEL_N257_OBJ = 0,
-    N257_MODEL_N257_OP = 1,
     // --- __n257_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n265 
@@ -77104,11 +74180,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N265_ELEM_CHN7 = 68,
     N265_ELEM_L_TOES = 69,
     N265_ELEM_EFF7 = 70,
-    N265_MODEL_NB = 4,
-    N265_MODEL_OBJ1 = 0,
-    N265_MODEL_OBJ2 = 1,
-    N265_MODEL_OBJ4 = 2,
-    N265_MODEL_OBJ3 = 3,
     // --- __n265_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n272 
@@ -77212,14 +74283,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N272_ELEM_EFF503 = 95,
     N272_ELEM_L_ITEM = 96,
     N272_ELEM_L_HAND_N = 97,
-    N272_MODEL_NB = 7,
-    N272_MODEL_N272_OBJ = 0,
-    N272_MODEL_N272_OP1 = 1,
-    N272_MODEL_N272_OP2 = 2,
-    N272_MODEL_N272_OP3 = 3,
-    N272_MODEL_N272_HANDS = 4,
-    N272_MODEL_N272_ARM = 5,
-    N272_MODEL_N272_HAIR = 6,
     // --- __n272_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n278 
@@ -77298,12 +74361,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N278_ELEM_R_FING = 70,
     N278_ELEM_EFF19_1 = 71,
     N278_ELEM_R_ITEM = 72,
-    N278_MODEL_NB = 5,
-    N278_MODEL_N278_BODY = 0,
-    N278_MODEL_N278_FACE = 1,
-    N278_MODEL_N278_NECK = 2,
-    N278_MODEL_N278_BOTOM = 3,
-    N278_MODEL_N278_CLOTH = 4,
     // --- __n278_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n281 
@@ -77395,9 +74452,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N281_ELEM_R_HAIR1 = 83,
     N281_ELEM_R_HAIR2 = 84,
     N281_ELEM_EFF10 = 85,
-    N281_MODEL_NB = 2,
-    N281_MODEL_BODY = 0,
-    N281_MODEL_KAZARI = 1,
     // --- __n281_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n283 
@@ -77473,10 +74527,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N283_ELEM_CHN5 = 67,
     N283_ELEM_CHIN = 68,
     N283_ELEM_EFF5 = 69,
-    N283_MODEL_NB = 3,
-    N283_MODEL_N283_OBJ = 0,
-    N283_MODEL_N283_OBJA = 1,
-    N283_MODEL_N283_OBJB = 2,
     // --- __n283_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n284 
@@ -77576,12 +74626,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N284_ELEM_CHN27 = 91,
     N284_ELEM_R_FING = 92,
     N284_ELEM_EFF27 = 93,
-    N284_MODEL_NB = 5,
-    N284_MODEL_N248_FACE = 0,
-    N284_MODEL_N284_BODY = 1,
-    N284_MODEL_N284_CLOTH = 2,
-    N284_MODEL_N248_OP = 3,
-    N284_MODEL_N284_OP2 = 4,
     // --- __n284_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n287 
@@ -77683,10 +74727,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N287_ELEM_EFF503 = 93,
     N287_ELEM_L_ITEM = 94,
     N287_ELEM_L_HAND_N = 95,
-    N287_MODEL_NB = 3,
-    N287_MODEL_OBJ1 = 0,
-    N287_MODEL_OBJ3 = 1,
-    N287_MODEL_OBJ4 = 2,
     // --- __n287_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n288 
@@ -77761,9 +74801,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N288_ELEM_CHN15 = 66,
     N288_ELEM_CHIN = 67,
     N288_ELEM_EFF15 = 68,
-    N288_MODEL_NB = 2,
-    N288_MODEL_N288_OBJ = 0,
-    N288_MODEL_N288_OBJA = 1,
     // --- __n288_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n289 
@@ -77838,9 +74875,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N289_ELEM_CHN7 = 66,
     N289_ELEM_L_TOES = 67,
     N289_ELEM_EFF7 = 68,
-    N289_MODEL_NB = 2,
-    N289_MODEL_N289_OBJ = 0,
-    N289_MODEL_N289_BOUSHI = 1,
     // --- __n289_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n290 
@@ -77915,9 +74949,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N290_ELEM_R_HAND_N = 66,
     N290_ELEM_N290_OBJ = 67,
     N290_ELEM_N290_OBJA = 68,
-    N290_MODEL_NB = 2,
-    N290_MODEL_N290_OBJ = 0,
-    N290_MODEL_N290_OBJA = 1,
     // --- __n290_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n291 
@@ -77991,8 +75022,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N291_ELEM_CHN7 = 65,
     N291_ELEM_L_TOES = 66,
     N291_ELEM_EFF7 = 67,
-    N291_MODEL_NB = 1,
-    N291_MODEL_N291_OBJ = 0,
     // --- __n291_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n292 
@@ -78068,10 +75097,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N292_ELEM_L_FING = 67,
     N292_ELEM_EFF19 = 68,
     N292_ELEM_L_ITEM = 69,
-    N292_MODEL_NB = 3,
-    N292_MODEL_N292_OBJ = 0,
-    N292_MODEL_N292_ASHI = 1,
-    N292_MODEL_N292_TE = 2,
     // --- __n292_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n293 
@@ -78147,10 +75172,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N293_ELEM_N293_OBJ = 67,
     N293_ELEM_N293_HEIR = 68,
     N293_ELEM_N293_OP = 69,
-    N293_MODEL_NB = 3,
-    N293_MODEL_N293_OBJ = 0,
-    N293_MODEL_N293_HEIR = 1,
-    N293_MODEL_N293_OP = 2,
     // --- __n293_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n294 
@@ -78252,11 +75273,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N294_ELEM_EFF503 = 93,
     N294_ELEM_L_ITEM = 94,
     N294_ELEM_L_HAND_N = 95,
-    N294_MODEL_NB = 4,
-    N294_MODEL_OBJ4 = 0,
-    N294_MODEL_OBJ1 = 1,
-    N294_MODEL_OBJ2 = 2,
-    N294_MODEL_OBJ3 = 3,
     // --- __n294_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n295 
@@ -78355,9 +75371,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N295_ELEM_R_HAIR_2 = 90,
     N295_ELEM_R_HAIR_3 = 91,
     N295_ELEM_EFF711 = 92,
-    N295_MODEL_NB = 2,
-    N295_MODEL_N295_OBJ = 0,
-    N295_MODEL_N295_OP = 1,
     // --- __n295_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n296 
@@ -78456,9 +75469,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N296_ELEM_R_HAIR_2 = 90,
     N296_ELEM_R_HAIR_3 = 91,
     N296_ELEM_EFF711 = 92,
-    N296_MODEL_NB = 2,
-    N296_MODEL_N296_OBJ = 0,
-    N296_MODEL_N296_OBJA = 1,
     // --- __n296_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n297 
@@ -78557,9 +75567,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N297_ELEM_CHN202 = 90,
     N297_ELEM_R_TOES = 91,
     N297_ELEM_EFF202 = 92,
-    N297_MODEL_NB = 2,
-    N297_MODEL_N297_OBJ = 0,
-    N297_MODEL_N297_OBJA = 1,
     // --- __n297_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n298 
@@ -78663,13 +75670,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N298_ELEM_CHN202 = 95,
     N298_ELEM_R_TOES = 96,
     N298_ELEM_EFF202 = 97,
-    N298_MODEL_NB = 6,
-    N298_MODEL_OBJ2 = 0,
-    N298_MODEL_OBJ3 = 1,
-    N298_MODEL_OBJ4 = 2,
-    N298_MODEL_OBJ5 = 3,
-    N298_MODEL_OBJ6 = 4,
-    N298_MODEL_OBJ1 = 5,
     // --- __n298_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n299 
@@ -78769,10 +75769,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N299_ELEM_EFF723 = 91,
     N299_ELEM_L_ITEM = 92,
     N299_ELEM_L_HAND_N = 93,
-    N299_MODEL_NB = 3,
-    N299_MODEL_N299_OBJ = 0,
-    N299_MODEL_N299_SHOES = 1,
-    N299_MODEL_N299_OP = 2,
     // --- __n299_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n300 
@@ -78871,9 +75867,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N300_ELEM_C_HAIR_2 = 90,
     N300_ELEM_C_HAIR_3 = 91,
     N300_ELEM_EFF21 = 92,
-    N300_MODEL_NB = 2,
-    N300_MODEL_N300_OBJ = 0,
-    N300_MODEL_N300_OP = 1,
     // --- __n300_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n314 
@@ -78972,9 +75965,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N314_ELEM_CHN202 = 90,
     N314_ELEM_R_TOES = 91,
     N314_ELEM_EFF202 = 92,
-    N314_MODEL_NB = 2,
-    N314_MODEL_N314_OBJ = 0,
-    N314_MODEL_N314_OBJA = 1,
     // --- __n314_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n315 
@@ -79075,11 +76065,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N315_ELEM_L_HAIR_2 = 92,
     N315_ELEM_L_HAIR_3 = 93,
     N315_ELEM_EFF721 = 94,
-    N315_MODEL_NB = 4,
-    N315_MODEL_N315_OBJ = 0,
-    N315_MODEL_PARTS1 = 1,
-    N315_MODEL_PARTS2 = 2,
-    N315_MODEL_PARTS3 = 3,
     // --- __n315_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n316 
@@ -79153,8 +76138,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N316_ELEM_CHN15 = 65,
     N316_ELEM_CHIN = 66,
     N316_ELEM_EFF15 = 67,
-    N316_MODEL_NB = 1,
-    N316_MODEL_N316_OBJ = 0,
     // --- __n316_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n323 
@@ -79230,10 +76213,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N323_ELEM_CHN15 = 67,
     N323_ELEM_CHIN = 68,
     N323_ELEM_EFF15 = 69,
-    N323_MODEL_NB = 3,
-    N323_MODEL_N130_OBJ = 0,
-    N323_MODEL_N130_OBJA = 1,
-    N323_MODEL_N130_OBIB = 2,
     // --- __n323_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n324 
@@ -79308,9 +76287,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N324_ELEM_CHN7 = 66,
     N324_ELEM_L_TOES = 67,
     N324_ELEM_EFF7 = 68,
-    N324_MODEL_NB = 2,
-    N324_MODEL_N131_OBJ = 0,
-    N324_MODEL_N131_OBJA = 1,
     // --- __n324_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n325 
@@ -79411,11 +76387,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N325_ELEM_R_HAIR_2 = 92,
     N325_ELEM_R_HAIR_3 = 93,
     N325_ELEM_EFF711 = 94,
-    N325_MODEL_NB = 4,
-    N325_MODEL_N135_OBJ = 0,
-    N325_MODEL_N135_OPA = 1,
-    N325_MODEL_N135_OPB = 2,
-    N325_MODEL_N135_OPC = 3,
     // --- __n325_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n326 
@@ -79514,9 +76485,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N326_ELEM_CHN202 = 90,
     N326_ELEM_R_TOES = 91,
     N326_ELEM_EFF202 = 92,
-    N326_MODEL_NB = 2,
-    N326_MODEL_N137_OBJ = 0,
-    N326_MODEL_N137_OBJA = 1,
     // --- __n326_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n327 
@@ -79616,10 +76584,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N327_ELEM_CHN202 = 91,
     N327_ELEM_R_TOES = 92,
     N327_ELEM_EFF202 = 93,
-    N327_MODEL_NB = 3,
-    N327_MODEL_N327_OBJ = 0,
-    N327_MODEL_BMERGE28 = 1,
-    N327_MODEL_GRID1 = 2,
     // --- __n327_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n330 
@@ -79723,8 +76687,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N330_ELEM_CHN202 = 95,
     N330_ELEM_R_TOES = 96,
     N330_ELEM_EFF202 = 97,
-    N330_MODEL_NB = 1,
-    N330_MODEL_N330_OBJ = 0,
     // --- __n330_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n332 
@@ -79802,12 +76764,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N332_ELEM_CHN7 = 69,
     N332_ELEM_L_TOES = 70,
     N332_ELEM_EFF7 = 71,
-    N332_MODEL_NB = 5,
-    N332_MODEL_N332_OBJ = 0,
-    N332_MODEL_N332_BAG = 1,
-    N332_MODEL_N332_CLOTH = 2,
-    N332_MODEL_N332_FACE = 3,
-    N332_MODEL_N332_HEIR = 4,
     // --- __n332_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n333 
@@ -79886,13 +76842,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N333_ELEM_CHN7 = 70,
     N333_ELEM_L_TOES = 71,
     N333_ELEM_EFF7 = 72,
-    N333_MODEL_NB = 6,
-    N333_MODEL_N333_OBJ = 0,
-    N333_MODEL_N333_BAG = 1,
-    N333_MODEL_N333_BACK = 2,
-    N333_MODEL_N333_CLOTH = 3,
-    N333_MODEL_N333_FACE = 4,
-    N333_MODEL_N333_HEIR = 5,
     // --- __n333_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n334 
@@ -79968,10 +76917,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N334_ELEM_CHN7 = 67,
     N334_ELEM_L_TOES = 68,
     N334_ELEM_EFF7 = 69,
-    N334_MODEL_NB = 3,
-    N334_MODEL_OBJ1 = 0,
-    N334_MODEL_OBJ3 = 1,
-    N334_MODEL_OBJ4 = 2,
     // --- __n334_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n335 
@@ -80046,9 +76991,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N335_ELEM_CHN15 = 66,
     N335_ELEM_CHIN = 67,
     N335_ELEM_EFF15 = 68,
-    N335_MODEL_NB = 2,
-    N335_MODEL_N043_OBJ = 0,
-    N335_MODEL_N043_OP = 1,
     // --- __n335_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n336 
@@ -80128,13 +77070,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N336_ELEM_CHN15 = 71,
     N336_ELEM_CHIN = 72,
     N336_ELEM_EFF15 = 73,
-    N336_MODEL_NB = 6,
-    N336_MODEL_OBJ5 = 0,
-    N336_MODEL_OBJ1 = 1,
-    N336_MODEL_OBJ3 = 2,
-    N336_MODEL_OBJ2 = 3,
-    N336_MODEL_OBJ4 = 4,
-    N336_MODEL_SPHERE2 = 5,
     // --- __n336_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n337 
@@ -80235,11 +77170,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N337_ELEM_CHN202 = 92,
     N337_ELEM_R_TOES = 93,
     N337_ELEM_EFF202 = 94,
-    N337_MODEL_NB = 4,
-    N337_MODEL_N52_OBJ = 0,
-    N337_MODEL_BMERGE47 = 1,
-    N337_MODEL_BMERGE49 = 2,
-    N337_MODEL_OBJ1 = 3,
     // --- __n337_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n338 
@@ -80339,10 +77269,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N338_ELEM_CHN202 = 91,
     N338_ELEM_R_TOES = 92,
     N338_ELEM_EFF202 = 93,
-    N338_MODEL_NB = 3,
-    N338_MODEL_BMERGE47 = 0,
-    N338_MODEL_N053_OBJ = 1,
-    N338_MODEL_BMERGE40_1_2 = 2,
     // --- __n338_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n339 
@@ -80446,13 +77372,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N339_ELEM_CHN302 = 95,
     N339_ELEM_L_TOES = 96,
     N339_ELEM_EFF302 = 97,
-    N339_MODEL_NB = 6,
-    N339_MODEL_HAND = 0,
-    N339_MODEL_BODY = 1,
-    N339_MODEL_HAIR = 2,
-    N339_MODEL_PANTS = 3,
-    N339_MODEL_FOOT = 4,
-    N339_MODEL_RING1 = 5,
     // --- __n339_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n340 
@@ -80527,9 +77446,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N340_ELEM_CHN7 = 66,
     N340_ELEM_L_TOES = 67,
     N340_ELEM_EFF7 = 68,
-    N340_MODEL_NB = 2,
-    N340_MODEL_N340_OBJ = 0,
-    N340_MODEL_N340_OPA = 1,
     // --- __n340_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n341 
@@ -80629,10 +77545,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N341_ELEM_CHN202 = 91,
     N341_ELEM_R_TOES = 92,
     N341_ELEM_EFF202 = 93,
-    N341_MODEL_NB = 3,
-    N341_MODEL_N341_OBJ = 0,
-    N341_MODEL_BMERGE34 = 1,
-    N341_MODEL_N296_OBJ = 2,
     // --- __n341_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n342 
@@ -80708,10 +77620,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N342_ELEM_CHN7 = 67,
     N342_ELEM_L_TOES = 68,
     N342_ELEM_EFF7 = 69,
-    N342_MODEL_NB = 3,
-    N342_MODEL_N342_OBJ = 0,
-    N342_MODEL_N342_OBJA = 1,
-    N342_MODEL_N342_OBJB = 2,
     // --- __n342_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n343 
@@ -80788,11 +77696,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N343_ELEM_CHN7 = 68,
     N343_ELEM_L_TOES = 69,
     N343_ELEM_EFF7 = 70,
-    N343_MODEL_NB = 4,
-    N343_MODEL_N343_OBJ = 0,
-    N343_MODEL_N343_OBJ3 = 1,
-    N343_MODEL_N343_OBJ2 = 2,
-    N343_MODEL_N343_OBJ1 = 3,
     // --- __n343_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n344 
@@ -80891,9 +77794,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N344_ELEM_CHN202 = 90,
     N344_ELEM_R_TOES = 91,
     N344_ELEM_EFF202 = 92,
-    N344_MODEL_NB = 2,
-    N344_MODEL_N344_OBJ = 0,
-    N344_MODEL_N344_PARTS = 1,
     // --- __n344_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n345 
@@ -80968,9 +77868,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N345_ELEM_CHN15 = 66,
     N345_ELEM_CHIN = 67,
     N345_ELEM_EFF15 = 68,
-    N345_MODEL_NB = 2,
-    N345_MODEL_N345_OBJ = 0,
-    N345_MODEL_N345_OBJA = 1,
     // --- __n345_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n346 
@@ -81046,9 +77943,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N346_ELEM_CHN7 = 67,
     N346_ELEM_L_TOES = 68,
     N346_ELEM_EFF7 = 69,
-    N346_MODEL_NB = 2,
-    N346_MODEL_OBJ2 = 0,
-    N346_MODEL_OBJ1 = 1,
     // --- __n346_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n347 
@@ -81124,9 +78018,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N347_ELEM_CHN5 = 67,
     N347_ELEM_CHIN = 68,
     N347_ELEM_EFF5 = 69,
-    N347_MODEL_NB = 2,
-    N347_MODEL_OBJ1 = 0,
-    N347_MODEL_OBJ2 = 1,
     // --- __n347_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n348 
@@ -81203,11 +78094,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N348_ELEM_CHN7 = 68,
     N348_ELEM_L_TOES = 69,
     N348_ELEM_EFF7 = 70,
-    N348_MODEL_NB = 4,
-    N348_MODEL_N348_OBJ = 0,
-    N348_MODEL_N348_OBJ2 = 1,
-    N348_MODEL_N348_OBJ3 = 2,
-    N348_MODEL_N348_OBJ1 = 3,
     // --- __n348_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n349 
@@ -81312,10 +78198,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N349_ELEM_CHN202 = 96,
     N349_ELEM_R_TOES = 97,
     N349_ELEM_EFF202 = 98,
-    N349_MODEL_NB = 3,
-    N349_MODEL_N349_OBJ = 0,
-    N349_MODEL_N349_OPA = 1,
-    N349_MODEL_N349_OPB = 2,
     // --- __n349_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n350 
@@ -81417,9 +78299,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N350_ELEM_R_HAIR_2 = 93,
     N350_ELEM_R_HAIR_3 = 94,
     N350_ELEM_EFF711 = 95,
-    N350_MODEL_NB = 2,
-    N350_MODEL_N350_OBJ = 0,
-    N350_MODEL_N350_OBJ1 = 1,
     // --- __n350_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n352 
@@ -81521,8 +78400,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N352_ELEM_EFF503 = 93,
     N352_ELEM_L_ITEM = 94,
     N352_ELEM_L_HAND_N = 95,
-    N352_MODEL_NB = 1,
-    N352_MODEL_N352_OBJ = 0,
     // --- __n352_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n353 
@@ -81624,9 +78501,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N353_ELEM_EFF503 = 93,
     N353_ELEM_L_ITEM = 94,
     N353_ELEM_L_HAND_N = 95,
-    N353_MODEL_NB = 2,
-    N353_MODEL_N353_OBJ = 0,
-    N353_MODEL_OBJ1 = 1,
     // --- __n353_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n354 
@@ -81728,8 +78602,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N354_ELEM_EFF503 = 93,
     N354_ELEM_L_ITEM = 94,
     N354_ELEM_L_HAND_N = 95,
-    N354_MODEL_NB = 1,
-    N354_MODEL_N354_OBJ = 0,
     // --- __n354_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n355 
@@ -81830,11 +78702,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N355_ELEM_EFF503 = 92,
     N355_ELEM_L_ITEM = 93,
     N355_ELEM_L_HAND_N = 94,
-    N355_MODEL_NB = 4,
-    N355_MODEL_N355_OBJ = 0,
-    N355_MODEL_N355_OBJ1 = 1,
-    N355_MODEL_N355_OBJ2 = 2,
-    N355_MODEL_N355_OBJ3 = 3,
     // --- __n355_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n356 
@@ -81918,11 +78785,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N356_ELEM_L_FING = 75,
     N356_ELEM_EFF22 = 76,
     N356_ELEM_L_ITEM = 77,
-    N356_MODEL_NB = 4,
-    N356_MODEL_N238_OBJC = 0,
-    N356_MODEL_N238_OBJB = 1,
-    N356_MODEL_N238_OBJ = 2,
-    N356_MODEL_N238_OBJA = 3,
     // --- __n356_ath END ---
 
     // [h2cs 12/6/23 23:18] Header name: n999 
@@ -82024,8 +78886,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     N999_ELEM_EFF503 = 93,
     N999_ELEM_L_ITEM = 94,
     N999_ELEM_L_HAND_N = 95,
-    N999_MODEL_NB = 1,
-    N999_MODEL_N352_OBJ = 0,
     // --- __n999_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s001 
@@ -82195,13 +79055,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S001_ELEM__WING_2 = 161,
     S001_ELEM__WING_1 = 162,
     S001_ELEM__HEAD_1 = 163,
-    S001_MODEL_NB = 6,
-    S001_MODEL__BODY_1 = 0,
-    S001_MODEL__WING_2 = 1,
-    S001_MODEL__NECK_1 = 2,
-    S001_MODEL__WING_1 = 3,
-    S001_MODEL__HEAD_1 = 4,
-    S001_MODEL__UROKO_1 = 5,
     // --- __s001_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s002 
@@ -82375,13 +79228,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S002_ELEM_JNT122_1 = 165,
     S002_ELEM_JNT122_2 = 166,
     S002_ELEM_EFF122 = 167,
-    S002_MODEL_NB = 6,
-    S002_MODEL_BODY1 = 0,
-    S002_MODEL_ACCE = 1,
-    S002_MODEL_TATEGAMI = 2,
-    S002_MODEL_JYUZU = 3,
-    S002_MODEL_ACCE_ITA = 4,
-    S002_MODEL_HIGE_HA = 5,
     // --- __s002_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s003 
@@ -82719,8 +79565,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S003_ELEM_SQTSPLITRT63 = 329,
     S003_ELEM_R_FK_C2 = 330,
     S003_ELEM_EFF111 = 331,
-    S003_MODEL_NB = 1,
-    S003_MODEL_BOD = 0,
     // --- __s003_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s004 
@@ -82974,8 +79818,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S004_ELEM_SQTSPLITRT_2 = 245,
     S004_ELEM_TAIL_5 = 246,
     S004_ELEM_SQTSPLITEF6 = 247,
-    S004_MODEL_NB = 1,
-    S004_MODEL_BODY_OBJ = 0,
     // --- __s004_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s006 
@@ -83269,9 +80111,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S006_ELEM_WA_NULL0 = 285,
     S006_ELEM_WA_NULL = 286,
     S006_ELEM_RING = 287,
-    S006_MODEL_NB = 2,
-    S006_MODEL_BAHAMUT_EMD = 0,
-    S006_MODEL_RING = 1,
     // --- __s006_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s007 
@@ -83513,9 +80352,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S007_ELEM_NULL4 = 233,
     S007_ELEM_KSA_N0 = 234,
     S007_ELEM_KUSA_N1 = 235,
-    S007_MODEL_NB = 2,
-    S007_MODEL_S007 = 0,
-    S007_MODEL_S007_3 = 1,
     // --- __s007_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s008 
@@ -83763,9 +80599,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S008_ELEM_L_HIMO2 = 239,
     S008_ELEM_L_HIMO3 = 240,
     S008_ELEM_EFF54_1 = 241,
-    S008_MODEL_NB = 2,
-    S008_MODEL_WAKISA1 = 0,
-    S008_MODEL_BODY = 1,
     // --- __s008_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s009 
@@ -83871,8 +80704,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S009_ELEM_SQTSPLITRT10 = 97,
     S009_ELEM_R_FIN_B2 = 98,
     S009_ELEM_EFF10 = 99,
-    S009_MODEL_NB = 1,
-    S009_MODEL_BODY = 0,
     // --- __s009_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s010 
@@ -84020,12 +80851,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S010_ELEM_CHN12 = 139,
     S010_ELEM_R_ELB_2 = 140,
     S010_ELEM_EFF12 = 141,
-    S010_MODEL_NB = 5,
-    S010_MODEL_BODY = 0,
-    S010_MODEL_R_WING = 1,
-    S010_MODEL_L_WING = 2,
-    S010_MODEL_L_WING_I = 3,
-    S010_MODEL_R_WING_I = 4,
     // --- __s010_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s011 
@@ -84186,8 +81011,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S011_ELEM_SQTSPLITRT18 = 152,
     S011_ELEM_R_WIN_B2 = 153,
     S011_ELEM_EFF6 = 154,
-    S011_MODEL_NB = 1,
-    S011_MODEL_BODY = 0,
     // --- __s011_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s013 
@@ -84493,9 +81316,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S013_ELEM_EFF147 = 297,
     S013_ELEM_NULL12 = 298,
     S013_ELEM_NULL10 = 299,
-    S013_MODEL_NB = 2,
-    S013_MODEL_B_BODO = 0,
-    S013_MODEL_KUSARI3 = 1,
     // --- __s013_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s014 
@@ -84710,9 +81530,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S014_ELEM_R_KAMI11 = 206,
     S014_ELEM_R_KAMI12 = 207,
     S014_ELEM_EFF136 = 208,
-    S014_MODEL_NB = 2,
-    S014_MODEL_BMERGE2 = 0,
-    S014_MODEL_B_BODO = 1,
     // --- __s014_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s015 
@@ -84755,8 +81572,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S015_ELEM_IKARI = 34,
     S015_ELEM_EFF115 = 35,
     S015_ELEM_S015 = 36,
-    S015_MODEL_NB = 1,
-    S015_MODEL_S015 = 0,
     // --- __s015_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s016 
@@ -84801,8 +81616,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S016_ELEM_27 = 36,
     S016_ELEM_EFF116 = 37,
     S016_ELEM_S016 = 38,
-    S016_MODEL_NB = 1,
-    S016_MODEL_S016 = 0,
     // --- __s016_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s017 
@@ -84874,9 +81687,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S017_ELEM_S017 = 63,
     S017_ELEM_S017_2 = 64,
     S017_ELEM_S017_1 = 65,
-    S017_MODEL_NB = 2,
-    S017_MODEL_S017_2 = 0,
-    S017_MODEL_S017_1 = 1,
     // --- __s017_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s018 
@@ -84908,8 +81718,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S018_ELEM_R_JNT1_3 = 23,
     S018_ELEM_EFF8 = 24,
     S018_ELEM_MANT_OBJ = 25,
-    S018_MODEL_NB = 1,
-    S018_MODEL_MANT_OBJ = 0,
     // --- __s018_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s019 
@@ -85019,8 +81827,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S019_ELEM_NULL1_7 = 101,
     S019_ELEM_NULL1_8 = 102,
     S019_ELEM_NULL1_9 = 103,
-    S019_MODEL_NB = 1,
-    S019_MODEL_S019 = 0,
     // --- __s019_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s020 
@@ -85091,9 +81897,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S020_ELEM_TAIL1 = 62,
     S020_ELEM_TAIL2 = 63,
     S020_ELEM_EFF5 = 64,
-    S020_MODEL_NB = 2,
-    S020_MODEL_S020 = 0,
-    S020_MODEL_S020_1 = 1,
     // --- __s020_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s021 
@@ -85173,9 +81976,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S021_ELEM_ACC1 = 71,
     S021_ELEM_ACC2 = 72,
     S021_ELEM_EFF10 = 73,
-    S021_MODEL_NB = 2,
-    S021_MODEL_BODY = 0,
-    S021_MODEL_CROW = 1,
     // --- __s021_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s022 
@@ -85204,8 +82004,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S022_ELEM_BRANCH1 = 20,
     S022_ELEM_EFF23 = 21,
     S022_ELEM_BMERGE13 = 22,
-    S022_MODEL_NB = 1,
-    S022_MODEL_BMERGE13 = 0,
     // --- __s022_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s023 
@@ -85286,9 +82084,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S023_ELEM_SQTSPLITRT11 = 72,
     S023_ELEM_L_TOES = 73,
     S023_ELEM_EFF8 = 74,
-    S023_MODEL_NB = 2,
-    S023_MODEL_BOD = 0,
-    S023_MODEL_ITA = 1,
     // --- __s023_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s024 
@@ -85324,10 +82119,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S024_ELEM_BOD_N = 27,
     S024_ELEM_BOD = 28,
     S024_ELEM_BOD2 = 29,
-    S024_MODEL_NB = 3,
-    S024_MODEL_SAYA = 0,
-    S024_MODEL_BOD = 1,
-    S024_MODEL_BOD2 = 2,
     // --- __s024_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s025 
@@ -85343,10 +82134,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S025_ELEM_TANKEN_B = 7,
     S025_ELEM_N_A = 8,
     S025_ELEM_TANKEN_A = 9,
-    S025_MODEL_NB = 3,
-    S025_MODEL_TANKEN_C = 0,
-    S025_MODEL_TANKEN_B = 1,
-    S025_MODEL_TANKEN_A = 2,
     // --- __s025_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s026 
@@ -85533,13 +82320,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S026_ELEM_FLOW_S3 = 178,
     S026_ELEM_FN2 = 179,
     S026_ELEM_FLOW_S2 = 180,
-    S026_MODEL_NB = 6,
-    S026_MODEL_FLOW = 0,
-    S026_MODEL_FLOW_S1 = 1,
-    S026_MODEL_FLOW_S5 = 2,
-    S026_MODEL_FLOW_S4 = 3,
-    S026_MODEL_FLOW_S3 = 4,
-    S026_MODEL_FLOW_S2 = 5,
     // --- __s026_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s027 
@@ -85723,13 +82503,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S027_ELEM_FLOW_S3 = 175,
     S027_ELEM_FN2 = 176,
     S027_ELEM_FLOW_S2 = 177,
-    S027_MODEL_NB = 6,
-    S027_MODEL_BODY_1 = 0,
-    S027_MODEL_FLOW_S1 = 1,
-    S027_MODEL_FLOW_S5 = 2,
-    S027_MODEL_FLOW_S4 = 3,
-    S027_MODEL_FLOW_S3 = 4,
-    S027_MODEL_FLOW_S2 = 5,
     // --- __s027_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s028 
@@ -85907,13 +82680,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S028_ELEM_FLOW_S3 = 169,
     S028_ELEM_FN2 = 170,
     S028_ELEM_FLOW_S2 = 171,
-    S028_MODEL_NB = 6,
-    S028_MODEL_BODY = 0,
-    S028_MODEL_FLOW_S1 = 1,
-    S028_MODEL_FLOW_S5 = 2,
-    S028_MODEL_FLOW_S4 = 3,
-    S028_MODEL_FLOW_S3 = 4,
-    S028_MODEL_FLOW_S2 = 5,
     // --- __s028_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s029 
@@ -85924,8 +82690,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S029_ELEM_TRN_MOT = 2,
     S029_ELEM_S029_SK = 3,
     S029_ELEM_OBJ = 4,
-    S029_MODEL_NB = 1,
-    S029_MODEL_OBJ = 0,
     // --- __s029_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s030 
@@ -85995,27 +82759,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S030_ELEM_05_A = 61,
     S030_ELEM_05_B = 62,
     S030_ELEM_05_C = 63,
-    S030_MODEL_NB = 20,
-    S030_MODEL_20_C = 0,
-    S030_MODEL_19_C = 1,
-    S030_MODEL_18_C = 2,
-    S030_MODEL_17_C = 3,
-    S030_MODEL_16_C = 4,
-    S030_MODEL_15_C = 5,
-    S030_MODEL_14_C = 6,
-    S030_MODEL_13_C = 7,
-    S030_MODEL_12_C = 8,
-    S030_MODEL_11_C = 9,
-    S030_MODEL_10_C = 10,
-    S030_MODEL_09_C = 11,
-    S030_MODEL_08_C = 12,
-    S030_MODEL_07_C = 13,
-    S030_MODEL_06_C = 14,
-    S030_MODEL_04_C = 15,
-    S030_MODEL_02_C = 16,
-    S030_MODEL_01_C = 17,
-    S030_MODEL_03_C = 18,
-    S030_MODEL_05_C = 19,
     // --- __s030_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s031 
@@ -86027,8 +82770,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S031_ELEM_S031_SK = 3,
     S031_ELEM_NULL = 4,
     S031_ELEM_TANKEN_1 = 5,
-    S031_MODEL_NB = 1,
-    S031_MODEL_TANKEN_1 = 0,
     // --- __s031_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: s125 
@@ -86269,11 +83010,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     S125_ELEM_KD4 = 232,
     S125_ELEM_KD5 = 233,
     S125_ELEM_EFF111 = 234,
-    S125_MODEL_NB = 4,
-    S125_MODEL_S007 = 0,
-    S125_MODEL_S007_5 = 1,
-    S125_MODEL_S007_2 = 2,
-    S125_MODEL_S007_3 = 3,
     // --- __s125_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w001 
@@ -86284,10 +83020,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W001_ELEM_W001_MDL = 2,
     W001_ELEM_OBJ2 = 3,
     W001_ELEM_OBJ3 = 4,
-    W001_MODEL_NB = 3,
-    W001_MODEL_OBJ3 = 0,
-    W001_MODEL_W001_MDL = 1,
-    W001_MODEL_OBJ2 = 2,
     // --- __w001_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w002 
@@ -86297,9 +83029,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W002_ELEM_W002 = 1,
     W002_ELEM_OBJ1 = 2,
     W002_ELEM_OBJ2 = 3,
-    W002_MODEL_NB = 2,
-    W002_MODEL_OBJ1 = 0,
-    W002_MODEL_OBJ2 = 1,
     // --- __w002_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w003 
@@ -86310,10 +83039,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W003_ELEM_OBJ1 = 2,
     W003_ELEM_OBJ2 = 3,
     W003_ELEM_OBJ3 = 4,
-    W003_MODEL_NB = 3,
-    W003_MODEL_OBJ1 = 0,
-    W003_MODEL_OBJ2 = 1,
-    W003_MODEL_OBJ3 = 2,
     // --- __w003_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w004 
@@ -86323,9 +83048,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W004_ELEM_W004 = 1,
     W004_ELEM_OBJ2 = 2,
     W004_ELEM_OBJ1 = 3,
-    W004_MODEL_NB = 2,
-    W004_MODEL_OBJ2 = 0,
-    W004_MODEL_OBJ1 = 1,
     // --- __w004_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w005 
@@ -86334,8 +83056,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W005_ELEM_ROOT = 0,
     W005_ELEM_W005 = 1,
     W005_ELEM_OBJ1 = 2,
-    W005_MODEL_NB = 1,
-    W005_MODEL_OBJ1 = 0,
     // --- __w005_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w006 
@@ -86345,9 +83065,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W006_ELEM_W006 = 1,
     W006_ELEM_OBJ2 = 2,
     W006_ELEM_OBJ1 = 3,
-    W006_MODEL_NB = 2,
-    W006_MODEL_OBJ2 = 0,
-    W006_MODEL_OBJ1 = 1,
     // --- __w006_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w007 
@@ -86357,9 +83074,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W007_ELEM_W007 = 1,
     W007_ELEM_OBJ2 = 2,
     W007_ELEM_OBJ1 = 3,
-    W007_MODEL_NB = 2,
-    W007_MODEL_OBJ2 = 0,
-    W007_MODEL_OBJ1 = 1,
     // --- __w007_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w008 
@@ -86369,9 +83083,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W008_ELEM_W008 = 1,
     W008_ELEM_BODY = 2,
     W008_ELEM_TSUKA = 3,
-    W008_MODEL_NB = 2,
-    W008_MODEL_BODY = 0,
-    W008_MODEL_TSUKA = 1,
     // --- __w008_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w011 
@@ -86398,10 +83109,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W011_ELEM_JNT4_2 = 18,
     W011_ELEM_JNT4_3 = 19,
     W011_ELEM_EFF4 = 20,
-    W011_MODEL_NB = 3,
-    W011_MODEL_ITEM_2 = 0,
-    W011_MODEL_ITEM_1 = 1,
-    W011_MODEL_BODY = 2,
     // --- __w011_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w012 
@@ -86410,9 +83117,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W012_ELEM_WEP = 0,
     W012_ELEM_BODY = 1,
     W012_ELEM_ITEM_1 = 2,
-    W012_MODEL_NB = 2,
-    W012_MODEL_BODY = 0,
-    W012_MODEL_ITEM_1 = 1,
     // --- __w012_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w013 
@@ -86421,9 +83125,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W013_ELEM_WEP = 0,
     W013_ELEM_BODY = 1,
     W013_ELEM_ITEM_1 = 2,
-    W013_MODEL_NB = 2,
-    W013_MODEL_BODY = 0,
-    W013_MODEL_ITEM_1 = 1,
     // --- __w013_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w014 
@@ -86431,8 +83132,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W014_ELEM_NB = 2,
     W014_ELEM_WEP = 0,
     W014_ELEM_BODY = 1,
-    W014_MODEL_NB = 1,
-    W014_MODEL_BODY = 0,
     // --- __w014_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w015 
@@ -86441,9 +83140,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W015_ELEM_WEP = 0,
     W015_ELEM_BODY = 1,
     W015_ELEM_ITEM_1 = 2,
-    W015_MODEL_NB = 2,
-    W015_MODEL_BODY = 0,
-    W015_MODEL_ITEM_1 = 1,
     // --- __w015_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w016 
@@ -86451,8 +83147,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W016_ELEM_NB = 2,
     W016_ELEM_WEP = 0,
     W016_ELEM_BODY = 1,
-    W016_MODEL_NB = 1,
-    W016_MODEL_BODY = 0,
     // --- __w016_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w021 
@@ -86461,9 +83155,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W021_ELEM_W021 = 0,
     W021_ELEM_TUKA = 1,
     W021_ELEM_BLADE = 2,
-    W021_MODEL_NB = 2,
-    W021_MODEL_TUKA = 0,
-    W021_MODEL_BLADE = 1,
     // --- __w021_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w022 
@@ -86472,9 +83163,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W022_ELEM_W022 = 0,
     W022_ELEM_BLADE = 1,
     W022_ELEM_TUKA = 2,
-    W022_MODEL_NB = 2,
-    W022_MODEL_BLADE = 0,
-    W022_MODEL_TUKA = 1,
     // --- __w022_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w023 
@@ -86484,10 +83172,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W023_ELEM_BLADE = 1,
     W023_ELEM_TUKA = 2,
     W023_ELEM_FUSA = 3,
-    W023_MODEL_NB = 3,
-    W023_MODEL_BLADE = 0,
-    W023_MODEL_TUKA = 1,
-    W023_MODEL_FUSA = 2,
     // --- __w023_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w024 
@@ -86497,10 +83181,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W024_ELEM_BLADE = 1,
     W024_ELEM_TUKA = 2,
     W024_ELEM_PARTS = 3,
-    W024_MODEL_NB = 3,
-    W024_MODEL_BLADE = 0,
-    W024_MODEL_PARTS = 1,
-    W024_MODEL_TUKA = 2,
     // --- __w024_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w025 
@@ -86508,8 +83188,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W025_ELEM_NB = 2,
     W025_ELEM_W025 = 0,
     W025_ELEM_BODY = 1,
-    W025_MODEL_NB = 1,
-    W025_MODEL_BODY = 0,
     // --- __w025_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w031 
@@ -86526,10 +83204,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W031_ELEM_E = 8,
     W031_ELEM_HA01 = 9,
     W031_ELEM_HA02 = 10,
-    W031_MODEL_NB = 3,
-    W031_MODEL_E = 0,
-    W031_MODEL_HA01 = 1,
-    W031_MODEL_HA02 = 2,
     // --- __w031_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w032 
@@ -86546,10 +83220,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W032_ELEM_E = 8,
     W032_ELEM_HA = 9,
     W032_ELEM_HA2 = 10,
-    W032_MODEL_NB = 3,
-    W032_MODEL_E = 0,
-    W032_MODEL_HA = 1,
-    W032_MODEL_HA2 = 2,
     // --- __w032_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w033 
@@ -86566,10 +83236,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W033_ELEM_E = 8,
     W033_ELEM_HA = 9,
     W033_ELEM_PARTS = 10,
-    W033_MODEL_NB = 3,
-    W033_MODEL_E = 0,
-    W033_MODEL_PARTS = 1,
-    W033_MODEL_HA = 2,
     // --- __w033_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w034 
@@ -86592,8 +83258,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W034_ELEM_JNT302_2 = 14,
     W034_ELEM_EFF302 = 15,
     W034_ELEM_BODY = 16,
-    W034_MODEL_NB = 1,
-    W034_MODEL_BODY = 0,
     // --- __w034_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w035 
@@ -86618,10 +83282,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W035_ELEM_E = 16,
     W035_ELEM_PARTS = 17,
     W035_ELEM_HA = 18,
-    W035_MODEL_NB = 3,
-    W035_MODEL_E = 0,
-    W035_MODEL_PARTS = 1,
-    W035_MODEL_HA = 2,
     // --- __w035_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w036 
@@ -86644,8 +83304,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W036_ELEM_JNT302_2 = 14,
     W036_ELEM_EFF302 = 15,
     W036_ELEM_BODY = 16,
-    W036_MODEL_NB = 1,
-    W036_MODEL_BODY = 0,
     // --- __w036_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w041 
@@ -86655,8 +83313,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W041_ELEM_NULL1 = 1,
     W041_ELEM_NULL_1 = 2,
     W041_ELEM_BALL = 3,
-    W041_MODEL_NB = 1,
-    W041_MODEL_BALL = 0,
     // --- __w041_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w042 
@@ -86666,8 +83322,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W042_ELEM_NULL1 = 1,
     W042_ELEM_NULL_1 = 2,
     W042_ELEM_BALL = 3,
-    W042_MODEL_NB = 1,
-    W042_MODEL_BALL = 0,
     // --- __w042_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w043 
@@ -86677,8 +83331,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W043_ELEM_NULL1 = 1,
     W043_ELEM_NULL_1 = 2,
     W043_ELEM_BALL = 3,
-    W043_MODEL_NB = 1,
-    W043_MODEL_BALL = 0,
     // --- __w043_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w044 
@@ -86689,9 +83341,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W044_ELEM_NULL_1 = 2,
     W044_ELEM_BALL = 3,
     W044_ELEM_WAKU = 4,
-    W044_MODEL_NB = 2,
-    W044_MODEL_BALL = 0,
-    W044_MODEL_WAKU = 1,
     // --- __w044_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w045 
@@ -86702,9 +83351,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W045_ELEM_NULL_1 = 2,
     W045_ELEM_BALL = 3,
     W045_ELEM_TOGE = 4,
-    W045_MODEL_NB = 2,
-    W045_MODEL_BALL = 0,
-    W045_MODEL_TOGE = 1,
     // --- __w045_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w046 
@@ -86716,9 +83362,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W046_ELEM_BALL = 3,
     W046_ELEM_NULL2 = 4,
     W046_ELEM_BLAD = 5,
-    W046_MODEL_NB = 2,
-    W046_MODEL_BALL = 0,
-    W046_MODEL_BLAD = 1,
     // --- __w046_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w051 
@@ -86753,9 +83396,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W051_ELEM_CHN7 = 26,
     W051_ELEM_SIPPO = 27,
     W051_ELEM_EFF7 = 28,
-    W051_MODEL_NB = 2,
-    W051_MODEL_OBJ1 = 0,
-    W051_MODEL_OBJ2 = 1,
     // --- __w051_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w052 
@@ -86790,9 +83430,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W052_ELEM_CHN7 = 26,
     W052_ELEM_SIPPO = 27,
     W052_ELEM_EFF7 = 28,
-    W052_MODEL_NB = 2,
-    W052_MODEL_OBJ1 = 0,
-    W052_MODEL_OBJ2 = 1,
     // --- __w052_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w053 
@@ -86827,9 +83464,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W053_ELEM_CHN7 = 26,
     W053_ELEM_SIPPO = 27,
     W053_ELEM_EFF7 = 28,
-    W053_MODEL_NB = 2,
-    W053_MODEL_OBJ1 = 0,
-    W053_MODEL_OBJ2 = 1,
     // --- __w053_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w054 
@@ -86838,9 +83472,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W054_ELEM_W054 = 0,
     W054_ELEM_BODY = 1,
     W054_ELEM_UDE = 2,
-    W054_MODEL_NB = 2,
-    W054_MODEL_BODY = 0,
-    W054_MODEL_UDE = 1,
     // --- __w054_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w055 
@@ -86858,8 +83489,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W055_ELEM_R_ARM = 9,
     W055_ELEM_EFF2 = 10,
     W055_ELEM_BODY = 11,
-    W055_MODEL_NB = 1,
-    W055_MODEL_BODY = 0,
     // --- __w055_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w056 
@@ -86897,8 +83526,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W056_ELEM_CHN15 = 29,
     W056_ELEM_MANT_R = 30,
     W056_ELEM_EFF15 = 31,
-    W056_MODEL_NB = 1,
-    W056_MODEL_W056_OBJ = 0,
     // --- __w056_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w061 
@@ -86910,8 +83537,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W061_ELEM_R_FOARM = 3,
     W061_ELEM_EFF100 = 4,
     W061_ELEM_W061_OBJ = 5,
-    W061_MODEL_NB = 1,
-    W061_MODEL_W061_OBJ = 0,
     // --- __w061_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w062 
@@ -86923,8 +83548,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W062_ELEM_R_FOARM = 3,
     W062_ELEM_EFF100 = 4,
     W062_ELEM_W062_OBJ = 5,
-    W062_MODEL_NB = 1,
-    W062_MODEL_W062_OBJ = 0,
     // --- __w062_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w063 
@@ -86936,8 +83559,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W063_ELEM_R_FOARM = 3,
     W063_ELEM_EFF100 = 4,
     W063_ELEM_W063_OBJ = 5,
-    W063_MODEL_NB = 1,
-    W063_MODEL_W063_OBJ = 0,
     // --- __w063_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w064 
@@ -86949,8 +83570,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W064_ELEM_R_FOARM = 3,
     W064_ELEM_EFF100 = 4,
     W064_ELEM_W064_OBJ = 5,
-    W064_MODEL_NB = 1,
-    W064_MODEL_W064_OBJ = 0,
     // --- __w064_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w065 
@@ -86962,8 +83581,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W065_ELEM_R_FOARM = 3,
     W065_ELEM_EFF100 = 4,
     W065_ELEM_W065_OBJ = 5,
-    W065_MODEL_NB = 1,
-    W065_MODEL_W065_OBJ = 0,
     // --- __w065_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w066 
@@ -86971,8 +83588,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W066_ELEM_NB = 2,
     W066_ELEM_W066 = 0,
     W066_ELEM_OBJ1 = 1,
-    W066_MODEL_NB = 1,
-    W066_MODEL_OBJ1 = 0,
     // --- __w066_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w067 
@@ -86980,8 +83595,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W067_ELEM_NB = 2,
     W067_ELEM_W067 = 0,
     W067_ELEM_OBJ1 = 1,
-    W067_MODEL_NB = 1,
-    W067_MODEL_OBJ1 = 0,
     // --- __w067_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w068 
@@ -86989,8 +83602,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W068_ELEM_NB = 2,
     W068_ELEM_W068 = 0,
     W068_ELEM_OBJ1 = 1,
-    W068_MODEL_NB = 1,
-    W068_MODEL_OBJ1 = 0,
     // --- __w068_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w069 
@@ -86999,9 +83610,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W069_ELEM_W069 = 0,
     W069_ELEM_OBJ1 = 1,
     W069_ELEM_OBJ2 = 2,
-    W069_MODEL_NB = 2,
-    W069_MODEL_OBJ1 = 0,
-    W069_MODEL_OBJ2 = 1,
     // --- __w069_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w070 
@@ -87009,8 +83617,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W070_ELEM_NB = 2,
     W070_ELEM_W070 = 0,
     W070_ELEM_OBJ1 = 1,
-    W070_MODEL_NB = 1,
-    W070_MODEL_OBJ1 = 0,
     // --- __w070_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w071 
@@ -87018,8 +83624,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W071_ELEM_NB = 2,
     W071_ELEM_W071 = 0,
     W071_ELEM_OBJ = 1,
-    W071_MODEL_NB = 1,
-    W071_MODEL_OBJ = 0,
     // --- __w071_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w072 
@@ -87027,8 +83631,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W072_ELEM_NB = 2,
     W072_ELEM_W072 = 0,
     W072_ELEM_OBJ = 1,
-    W072_MODEL_NB = 1,
-    W072_MODEL_OBJ = 0,
     // --- __w072_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w073 
@@ -87036,8 +83638,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W073_ELEM_NB = 2,
     W073_ELEM_W073 = 0,
     W073_ELEM_OBJ = 1,
-    W073_MODEL_NB = 1,
-    W073_MODEL_OBJ = 0,
     // --- __w073_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w074 
@@ -87045,8 +83645,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W074_ELEM_NB = 2,
     W074_ELEM_W074 = 0,
     W074_ELEM_OBJ = 1,
-    W074_MODEL_NB = 1,
-    W074_MODEL_OBJ = 0,
     // --- __w074_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w075 
@@ -87054,8 +83652,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W075_ELEM_NB = 2,
     W075_ELEM_W075 = 0,
     W075_ELEM_OBJ = 1,
-    W075_MODEL_NB = 1,
-    W075_MODEL_OBJ = 0,
     // --- __w075_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w076 
@@ -87064,9 +83660,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W076_ELEM_W076 = 0,
     W076_ELEM_BODY = 1,
     W076_ELEM_URA = 2,
-    W076_MODEL_NB = 2,
-    W076_MODEL_URA = 0,
-    W076_MODEL_BODY = 1,
     // --- __w076_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w077 
@@ -87075,9 +83668,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W077_ELEM_W077 = 0,
     W077_ELEM_BODY = 1,
     W077_ELEM_URA = 2,
-    W077_MODEL_NB = 2,
-    W077_MODEL_URA = 0,
-    W077_MODEL_BODY = 1,
     // --- __w077_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w078 
@@ -87086,9 +83676,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W078_ELEM_W078 = 0,
     W078_ELEM_BODY = 1,
     W078_ELEM_URA = 2,
-    W078_MODEL_NB = 2,
-    W078_MODEL_URA = 0,
-    W078_MODEL_BODY = 1,
     // --- __w078_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w079 
@@ -87097,9 +83684,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W079_ELEM_W079 = 0,
     W079_ELEM_BODY = 1,
     W079_ELEM_URA = 2,
-    W079_MODEL_NB = 2,
-    W079_MODEL_URA = 0,
-    W079_MODEL_BODY = 1,
     // --- __w079_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w080 
@@ -87123,10 +83707,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W080_ELEM_BODY = 15,
     W080_ELEM_FUSA = 16,
     W080_ELEM_URA = 17,
-    W080_MODEL_NB = 3,
-    W080_MODEL_URA = 0,
-    W080_MODEL_FUSA = 1,
-    W080_MODEL_BODY = 2,
     // --- __w080_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w081 
@@ -87136,9 +83716,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W081_ELEM_W081 = 1,
     W081_ELEM_BODY = 2,
     W081_ELEM_URA = 3,
-    W081_MODEL_NB = 2,
-    W081_MODEL_BODY = 0,
-    W081_MODEL_URA = 1,
     // --- __w081_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w082 
@@ -87153,10 +83730,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W082_ELEM_BODY = 6,
     W082_ELEM_PARTS = 7,
     W082_ELEM_URA = 8,
-    W082_MODEL_NB = 3,
-    W082_MODEL_BODY = 0,
-    W082_MODEL_PARTS = 1,
-    W082_MODEL_URA = 2,
     // --- __w082_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w083 
@@ -87180,10 +83753,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W083_ELEM_BODY = 15,
     W083_ELEM_URA = 16,
     W083_ELEM_OBJ = 17,
-    W083_MODEL_NB = 3,
-    W083_MODEL_URA = 0,
-    W083_MODEL_OBJ = 1,
-    W083_MODEL_BODY = 2,
     // --- __w083_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w084 
@@ -87194,10 +83763,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W084_ELEM_BODY = 2,
     W084_ELEM_HANE = 3,
     W084_ELEM_URA = 4,
-    W084_MODEL_NB = 3,
-    W084_MODEL_URA = 0,
-    W084_MODEL_HANE = 1,
-    W084_MODEL_BODY = 2,
     // --- __w084_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w085 
@@ -87205,8 +83770,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W085_ELEM_NB = 2,
     W085_ELEM_W085 = 0,
     W085_ELEM_BODY = 1,
-    W085_MODEL_NB = 1,
-    W085_MODEL_BODY = 0,
     // --- __w085_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w086 
@@ -87216,10 +83779,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W086_ELEM_BODY = 1,
     W086_ELEM_OBJ = 2,
     W086_ELEM_URA = 3,
-    W086_MODEL_NB = 3,
-    W086_MODEL_OBJ = 0,
-    W086_MODEL_URA = 1,
-    W086_MODEL_BODY = 2,
     // --- __w086_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w087 
@@ -87229,10 +83788,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W087_ELEM_BODY = 1,
     W087_ELEM_OBJ = 2,
     W087_ELEM_URA = 3,
-    W087_MODEL_NB = 3,
-    W087_MODEL_BODY = 0,
-    W087_MODEL_OBJ = 1,
-    W087_MODEL_URA = 2,
     // --- __w087_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w088 
@@ -87242,10 +83797,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W088_ELEM_OBJ = 1,
     W088_ELEM_BODY = 2,
     W088_ELEM_URA = 3,
-    W088_MODEL_NB = 3,
-    W088_MODEL_BODY = 0,
-    W088_MODEL_OBJ = 1,
-    W088_MODEL_URA = 2,
     // --- __w088_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w089 
@@ -87255,10 +83806,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W089_ELEM_BODY = 1,
     W089_ELEM_OBJ = 2,
     W089_ELEM_URA = 3,
-    W089_MODEL_NB = 3,
-    W089_MODEL_BODY = 0,
-    W089_MODEL_OBJ = 1,
-    W089_MODEL_URA = 2,
     // --- __w089_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w090 
@@ -87266,8 +83813,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W090_ELEM_NB = 2,
     W090_ELEM_W090 = 0,
     W090_ELEM_OBJ = 1,
-    W090_MODEL_NB = 1,
-    W090_MODEL_OBJ = 0,
     // --- __w090_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w091 
@@ -87275,8 +83820,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W091_ELEM_NB = 2,
     W091_ELEM_W091 = 0,
     W091_ELEM_OBJ = 1,
-    W091_MODEL_NB = 1,
-    W091_MODEL_OBJ = 0,
     // --- __w091_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w092 
@@ -87284,8 +83827,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W092_ELEM_NB = 2,
     W092_ELEM_W092 = 0,
     W092_ELEM_OBJ = 1,
-    W092_MODEL_NB = 1,
-    W092_MODEL_OBJ = 0,
     // --- __w092_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w093 
@@ -87293,8 +83834,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W093_ELEM_NB = 2,
     W093_ELEM_W093 = 0,
     W093_ELEM_OBJ = 1,
-    W093_MODEL_NB = 1,
-    W093_MODEL_OBJ = 0,
     // --- __w093_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w094 
@@ -87302,8 +83841,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W094_ELEM_NB = 2,
     W094_ELEM_W094 = 0,
     W094_ELEM_OBJ = 1,
-    W094_MODEL_NB = 1,
-    W094_MODEL_OBJ = 0,
     // --- __w094_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w095 
@@ -87327,13 +83864,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W095_ELEM_CHN5 = 15,
     W095_ELEM_JNT5 = 16,
     W095_ELEM_OBJ5 = 17,
-    W095_MODEL_NB = 6,
-    W095_MODEL_OBJ5 = 0,
-    W095_MODEL_OBJ1 = 1,
-    W095_MODEL_OBJ2 = 2,
-    W095_MODEL_OBJ3 = 3,
-    W095_MODEL_OBJ4 = 4,
-    W095_MODEL_BODY = 5,
     // --- __w095_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w096 
@@ -87357,13 +83887,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W096_ELEM_CHN5 = 15,
     W096_ELEM_JNT5 = 16,
     W096_ELEM_OBJ5 = 17,
-    W096_MODEL_NB = 6,
-    W096_MODEL_BODY = 0,
-    W096_MODEL_OBJ1 = 1,
-    W096_MODEL_OBJ2 = 2,
-    W096_MODEL_OBJ3 = 3,
-    W096_MODEL_OBJ4 = 4,
-    W096_MODEL_OBJ5 = 5,
     // --- __w096_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w097 
@@ -87387,13 +83910,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W097_ELEM_CHN5 = 15,
     W097_ELEM_JNT5 = 16,
     W097_ELEM_OBJ5 = 17,
-    W097_MODEL_NB = 6,
-    W097_MODEL_OBJ1 = 0,
-    W097_MODEL_OBJ2 = 1,
-    W097_MODEL_OBJ3 = 2,
-    W097_MODEL_OBJ4 = 3,
-    W097_MODEL_OBJ5 = 4,
-    W097_MODEL_BODY = 5,
     // --- __w097_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w098 
@@ -87417,13 +83933,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W098_ELEM_JNT5 = 15,
     W098_ELEM_OBJ5 = 16,
     W098_ELEM_BODY = 17,
-    W098_MODEL_NB = 6,
-    W098_MODEL_OBJ1 = 0,
-    W098_MODEL_OBJ2 = 1,
-    W098_MODEL_OBJ3 = 2,
-    W098_MODEL_OBJ4 = 3,
-    W098_MODEL_OBJ5 = 4,
-    W098_MODEL_BODY = 5,
     // --- __w098_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w100 
@@ -87434,10 +83943,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W100_ELEM_BODY = 2,
     W100_ELEM_PARTS1 = 3,
     W100_ELEM_PARTS2 = 4,
-    W100_MODEL_NB = 3,
-    W100_MODEL_BODY = 0,
-    W100_MODEL_PARTS1 = 1,
-    W100_MODEL_PARTS2 = 2,
     // --- __w100_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w101 
@@ -87447,10 +83952,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W101_ELEM_BODY = 1,
     W101_ELEM_KEN = 2,
     W101_ELEM_OBJ = 3,
-    W101_MODEL_NB = 3,
-    W101_MODEL_BODY = 0,
-    W101_MODEL_KEN = 1,
-    W101_MODEL_OBJ = 2,
     // --- __w101_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w102 
@@ -87460,10 +83961,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W102_ELEM_BODY = 1,
     W102_ELEM_KAZARI = 2,
     W102_ELEM_HIMO = 3,
-    W102_MODEL_NB = 3,
-    W102_MODEL_BODY = 0,
-    W102_MODEL_KAZARI = 1,
-    W102_MODEL_HIMO = 2,
     // --- __w102_ath END ---
 
     // [h2cs 12/6/23 23:19] Header name: w103 
@@ -87471,7 +83968,6 @@ public enum FhXMdlElemId : T_XMdlElemId
     W103_ELEM_NB = 2,
     W103_ELEM_W103 = 0,
     W103_ELEM_OBJ = 1,
-    W103_MODEL_NB = 1,
-    W103_MODEL_OBJ = 0,
     // --- __w103_ath END ---
 }
+#pragma warning restore CA1069
