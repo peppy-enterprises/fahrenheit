@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 using Fahrenheit.CoreLib;
@@ -33,18 +32,15 @@ public static class FhHookDelegates
 
 public static class FhHooks
 {
-    private static readonly StreamWriter _logFile;
-
-    static FhHooks()
-    {
-        _logFile = new StreamWriter(File.Open("dbgPrintf.log", FileMode.Append, FileAccess.Write, FileShare.Read));
-    }
-
     [FhHook(HookTarget.X, 0x22F6B0, typeof(FhHookDelegates.PrintfVarargDelegate))]
+    [FhHook(HookTarget.X, 0x22FDA0, typeof(FhHookDelegates.PrintfVarargDelegate))]
+    [FhHook(HookTarget.X, 0x473C10, typeof(FhHookDelegates.PrintfVarargDelegate))]
+    [FhHook(HookTarget.X, 0x473C20, typeof(FhHookDelegates.PrintfVarargDelegate))]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
     public static void CLRPrintfHookAnsi(string fmt, nint va0, nint va1, nint va2, nint va3, nint va4, nint va5, nint va6, nint va7, nint va8, nint va9, nint va10, nint va11, nint va12, nint va13, nint va14, nint va15)
     {
         int argc = 0;
+        fmt = fmt.Trim();
 
         for (int i = 0; i < fmt.Length; i++) if (fmt[i] == '%') argc++;
 
@@ -96,7 +92,7 @@ public static class FhHooks
                 _  => throw new Exception("FH_E_PFHOOK_RAH_OVERREACH")
             };
 
-            _logFile.Write(Marshal.PtrToStringAnsi(buf));
+            FhLog.Log(LogLevel.Info, Marshal.PtrToStringAnsi(buf) ?? "FH_E_HOOK_PTR_TO_STRING_NUL");
         }
         finally
         {

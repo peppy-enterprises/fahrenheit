@@ -8,7 +8,7 @@ public enum HookTarget
     X2 = 2
 }
 
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class FhHookAttribute : Attribute
 {
     public HookTarget Target       { get; init; }

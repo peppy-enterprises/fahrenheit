@@ -4,15 +4,22 @@
 
 int wmain(int argc, wchar_t* argv[ ])
 {
+    LPCSTR szDllPath = "fhclrldr.dll";
+
     PROCESS_INFORMATION processInfo;
     STARTUPINFO         startupInfo = { 0 };
 
-    LPCWSTR szExePath = L"..\\..\\ffx.exe";
-    LPCSTR  szDllPath = "fhclrldr.dll";
+    startupInfo.cb = sizeof(startupInfo);
+
+    std::wstring commandLine = argv[1];
+    for (int i = 2; i < argc; i++)
+    {
+        commandLine += TEXT(" ") + std::wstring(argv[i]);
+    }
 
     if (!DetourCreateProcessWithDlls(
-        szExePath,
         NULL,
+        const_cast<wchar_t*>(commandLine.c_str()),
         NULL,
         NULL,
         FALSE,

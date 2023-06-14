@@ -36,12 +36,11 @@ public static partial class FhCLRHost
         {
             foreach (MethodInfo method in type.GetMethods(BindingFlags.Static | BindingFlags.Public))
             {
-                FhHookAttribute? attr;
-
-                if ((attr = method.GetCustomAttribute<FhHookAttribute>()) == null) continue;
-                
-                FhLog.Log(LogLevel.Info, $"Detected valid hook {method.Name}.");
-                callerList.Add(new FhHookRecord(method, attr));
+                foreach (FhHookAttribute attr in method.GetCustomAttributes<FhHookAttribute>())
+                {
+                    FhLog.Log(LogLevel.Info, $"Detected valid hook {method.Name}.");
+                    callerList.Add(new FhHookRecord(method, attr));
+                }
             }
         }
     }
