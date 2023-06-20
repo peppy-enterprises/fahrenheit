@@ -24,13 +24,7 @@ internal static class FhPInvoke
 #pragma warning restore SYSLIB1054
 }
 
-public static class FhHookDelegates
-{
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void PrintfVarargDelegate(string fmt, nint va0, nint va1, nint va2, nint va3, nint va4, nint va5, nint va6, nint va7, nint va8, nint va9, nint va10, nint va11, nint va12, nint va13, nint va14, nint va15);
-}
-
-public static class FhHooks
+public static partial class FhHooks
 {
     [FhHook(HookTarget.X, 0x22F6B0, typeof(FhHookDelegates.PrintfVarargDelegate))]
     [FhHook(HookTarget.X, 0x22FDA0, typeof(FhHookDelegates.PrintfVarargDelegate))]

@@ -6,6 +6,41 @@ to my attention by posting an issue in the repository.
 
 The attached notices are provided for information only.
 
+Regarding the lawfulness of the decompilation and reverse engineering performed for this project
+---
+END USER SOFTWARE LICENSE AGREEMENT AND LIMITED WARRANTY
+FINAL FANTASY X/X-2 HD Remaster (the “Software Product”)
+
+Section 3. Restrictions
+
+> You are not permitted to:
+> (e) to reverse engineer, derive source code, modify, decompile, disassemble, 
+> or create derivative works based on the whole or any part of the Software Product, 
+> in whole or in part, except as the applicable law expressly permits. Where applicable
+> law expressly permits any such acts, any lawful modifications, adaptations and improvements
+> and all copyrights therein shall be deemed assigned to and shall belong to, vest in and be
+> the exclusive property of Square Enix and/or its licensors on creation to the maximum extent
+> permitted by law and you hereby waive all or any moral rights in such creations;
+
+To the best of our knowledge, the reverse-engineering and decompilation work carried out for the Fahrenheit project
+by EU residents is lawful based on the judgement rendered by the European Court of Justice in case C-13/20 
+(https://curia.europa.eu/juris/document/document.jsf?text=&docid=247056&pageIndex=0&doclang=DE&mode=req&dir=&occ=first&part=1&cid=18380521),
+which explicitly permits decompilation for the purpose of fixing defects in software applications,
+and based on the extant work of other groups whose similar projects have not been ordered to desist.
+
+Additionally, Article 6 of Directive 91/250 (https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0024) states:
+
+> 1. The authorisation of the rightholder shall not be required where reproduction of the code and translation
+> of its form within the meaning of points (a) and (b) of Article 4(1) are indispensable to obtain the information
+> necessary to achieve the interoperability of an independently created computer program with other programs, provided
+> that the following conditions are met:
+>
+> (a) those acts are performed by the licensee or by another person having a right to use a copy of a program, or on their behalf by a person authorised to do so;
+> (b) the information necessary to achieve interoperability has not previously been readily available to the persons referred to in point (a); and
+> (c) those acts are confined to the parts of the original program which are necessary in order to achieve interoperability.
+
+To the best of our knowledge, all three conditions stated herein are fulfilled.
+
 License notice for Detours.NET
 ----
 https://github.com/citronneur/detours.net/blob/master/LICENSE

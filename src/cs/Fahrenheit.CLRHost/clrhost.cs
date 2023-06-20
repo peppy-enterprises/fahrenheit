@@ -13,15 +13,10 @@ using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.CLRHost;
 
-public class FhCLRHostDelegateStore
+public static class FhCLRHostDelegateStore
 {
     public static readonly Dictionary<MethodBase, Delegate> Real = new Dictionary<MethodBase, Delegate>();
     public static readonly Dictionary<MethodBase, Delegate> Mine = new Dictionary<MethodBase, Delegate>();
-
-    public static Delegate GetReal(MethodBase method)
-    {
-        return Real[method];
-    }
 }
 
 public sealed record FhHookRecord(MethodInfo Method, FhHookAttribute Attribute);
@@ -38,7 +33,7 @@ public static partial class FhCLRHost
             {
                 foreach (FhHookAttribute attr in method.GetCustomAttributes<FhHookAttribute>())
                 {
-                    FhLog.Log(LogLevel.Info, $"Detected valid hook {method.Name}.");
+                    FhLog.Log(LogLevel.Info, $"{method.Name} -> 0x{attr.Offset.ToString("X")}.");
                     callerList.Add(new FhHookRecord(method, attr));
                 }
             }
@@ -61,27 +56,26 @@ public static partial class FhCLRHost
 
             assem.GetEligibleMethods(records);
 
-            foreach (FhHookRecord record in records)
+            foreach (FhHookRecord hookRecord in records)
             {
-                MethodInfo method = record.Method;
-                Type       dtype  = record.Attribute.DelegateType;
-                string     mname  = record.Attribute.Target switch 
+                MethodInfo method = hookRecord.Method;
+                Type       dtype  = hookRecord.Attribute.DelegateType;
+                nint       offset = hookRecord.Attribute.Offset;
+                string     mname  = hookRecord.Attribute.Target switch 
                 {
                     HookTarget.X  => "FFX.exe",
                     HookTarget.X2 => "FFX-2.exe",
                     _             => throw new Exception("E_UNDEFINED_HOOK_TARGET")
                 };
 
-                FhLog.Log(LogLevel.Info, $"Hook record: module {mname} at 0x{record.Attribute.Offset.ToString("X8")}, apply hook {record.Method.Name}.");
-
                 FhCLRHostDelegateStore.Mine[method] = Delegate.CreateDelegate(dtype, method);
 
                 nint mbase = GetModuleHandle(mname);
                 if (mbase == nint.Zero) continue;
 
-                nint addr = mbase + record.Attribute.Offset;
+                nint addr = mbase + offset;
 
-                FhLog.Log(LogLevel.Info, $"Module addr: 0x{mbase.ToString("X8")}, final address: 0x{addr.ToString("X8")}.");
+                FhLog.Log(LogLevel.Info, $"Now applying hook {hookRecord.Method.Name}; targeted module addr: 0x{mbase.ToString("X8")}, final address: 0x{addr.ToString("X8")}.");
 
                 DetourTransactionBegin();
                 DetourUpdateThread(GetCurrentThread());

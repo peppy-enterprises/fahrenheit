@@ -32,6 +32,7 @@ public static class FhRuntimeConst
     internal const string _confDirName     = "config";
     internal const string _diagLogDirName  = "diaglog";
     internal const string _rsrcDirName     = "rsrc";
+    internal const string _miscDirName     = "misc";
 
     static FhRuntimeConst()
     {
@@ -45,6 +46,8 @@ public static class FhRuntimeConst
         string confDirPath     = Path.Join(cwdParent, _confDirName);
         string diagLogDirPath  = Path.Join(cwdParent, _diagLogDirName);
         string rsrcDirPath     = Path.Join(cwdParent, _rsrcDirName);
+        string miscDirPath     = Path.Join(cwdParent, _miscDirName);
+        string byRunDirPath    = Path.Join(miscDirPath, $"run_{FhUtil.GetTimestampString()}");
 
         BinDir      = new FhDirLink("$bindir", binDirPath);
         CLRHooksDir = new FhDirLink("$clrhookdir", clrHooksDirPath);
@@ -53,6 +56,8 @@ public static class FhRuntimeConst
         ConfigDir   = new FhDirLink("$confdir", confDirPath);
         DiagLogDir  = new FhDirLink("$diaglogdir", diagLogDirPath);
         RsrcDir     = new FhDirLink("$rsrcdir", rsrcDirPath);
+        MiscDir     = new FhDirLink("$miscdir", miscDirPath);
+        ByRunDir    = new FhDirLink("$rundir", byRunDirPath);
     }
 
     public static readonly FhDirLink BinDir;
@@ -62,4 +67,6 @@ public static class FhRuntimeConst
     public static readonly FhDirLink ConfigDir;
     public static readonly FhDirLink DiagLogDir;
     public static readonly FhDirLink RsrcDir;
+    public static readonly FhDirLink MiscDir;
+    public static readonly FhDirLink ByRunDir;
 }

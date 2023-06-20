@@ -59,14 +59,13 @@ internal class Program
         StringBuilder sb = new StringBuilder();
         string        fn = Path.Join(H2CSConfig.DestPath, $"{Path.GetFileName(config.SrcPath)}-{Guid.NewGuid()}.g.cs");
 
-        FhHeaderFile? hf     = default;
         string[]      lines  = File.ReadAllLines(H2CSConfig.SrcPath);
         string        hgline = lines[0];
 
         if (!hgline.StartsWith("#ifndef") || !hgline.ConstructHeaderGuard(out FhHeaderGuardNode? hg)) 
             throw new Exception("FH_E_H2CS_HG_ILLEGIBLE");
         
-        hf = new FhHeaderFile(hg, new List<FhDefineNode>());
+        FhHeaderFile hf = new FhHeaderFile(hg, new List<FhDefineNode>());
         
         foreach (string line in lines[2..])
         {

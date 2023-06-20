@@ -13,7 +13,7 @@ public static class FhLoader
     static FhLoader()
     {
         LoadModules(FhRuntimeConst.CLRHooksDir.Path, out _);
-        LoadModules(FhRuntimeConst.ModulesDir.Path, out _);
+        LoadModules(FhRuntimeConst.ModulesDir.Path,  out _);
     }
 
     public static List<Assembly> LoadedPluginAssembliesCache { get; } = new List<Assembly>();
@@ -158,7 +158,7 @@ public static class FhLoader
      *
      * These methods take the "Type" variable of a given JSON configuration and try to resolve it
      * to an actual Type instance while making sure that it not only exists, but is what we expect-
-     * usually a derived type of FiModuleConfig.
+     * usually a derived type of FhModuleConfig.
      */
     public static bool StrictResolveDescendantOf<T>(this ref Utf8JsonReader reader,
                                                     Type                    typeToConvert,

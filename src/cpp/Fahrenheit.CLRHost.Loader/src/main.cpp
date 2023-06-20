@@ -15,6 +15,7 @@
 #include <string.h>
 #include <assert.h>
 #include <iostream>
+#include <fstream>
 #include <direct.h>
 
 // .NET hosting headers

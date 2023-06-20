@@ -13,6 +13,7 @@ namespace Fahrenheit.CT2CS;
 [DebuggerDisplay("{Description}, {CheatEntries.Count} descendants")]
 public sealed class FhCtEntry
 {
+    // hack
     private string _description;
 
     public string Description

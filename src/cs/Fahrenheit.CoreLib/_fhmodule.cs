@@ -3,49 +3,49 @@
 namespace Fahrenheit.CoreLib;
 
 // TODO: Not yet fully defined/fleshed out
-public enum ModuleState
+public enum FhModuleState
 {
     InitWaiting,
     InitSuccess,
     Started,
     Stopped,
-    Fault,
-    Abort
+    Fault
 }
 
-public class FiModuleStateChangeEventArgs : EventArgs
+public class FhModuleStateChangeEventArgs : EventArgs
 {
-    public FiModuleStateChangeEventArgs(ModuleState oldstate, ModuleState newstate, FhModule fm)
+    public FhModuleStateChangeEventArgs(FhModuleState oldstate, FhModuleState newstate)
     {
         OldState = oldstate;
         NewState = newstate;
-        Caller   = fm;
     }
 
-    public ModuleState OldState { get; }
-    public ModuleState NewState { get; }
-    public FhModule    Caller   { get; }
+    public FhModuleState OldState { get; }
+    public FhModuleState NewState { get; }
 }
 
 public abstract class FhModule : IEquatable<FhModule>
 {
-    private ModuleState _moduleState;
+    protected string        _moduleName;
+    protected FhModuleState _moduleState;
 
-    protected FhModule(IFhModuleController parent, FhModuleConfig moduleConfig)
+    protected FhModule(FhModuleConfig moduleConfig)
     {
-        Controller          = parent;
-        ModuleConfiguration = moduleConfig;
-        Name                = moduleConfig.ConfigName;
-
-        OnModuleStateChange += parent.ModuleStateChangeHandler;
+        _moduleName = moduleConfig.ConfigName;
     }
 
-    protected      IFhModuleController Controller          { get; }
-    public         string              Name                { get; }
-    public virtual FhModuleConfig      ModuleConfiguration { get; }
+    internal string ModuleType
+    {
+        get { return GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE"); }
+    }
+
+    public string ModuleName
+    {
+        get { return _moduleName; }
+    }
 
     /* [fkelava 27/3/23 01:59]
-     * ModuleState is the _only_ legal way for modules to declare that they've suffered a hard fault.
+     * ModuleState is the _only_ way for modules to declare that they've suffered a hard fault.
      * Modules may UNDER NO CIRCUMSTANCE WHATSOEVER throw exceptions, because they're loaded into the same 
      * AppDomain/address space/process as everything else.
      * 
@@ -54,61 +54,46 @@ public abstract class FhModule : IEquatable<FhModule>
      *   2) The IPC methods at our disposal would require strong interprocess locking, which I find difficult for end-users;
      *   3) I'm not sure whether either of mmap'ing or named pipes can be as efficient as this...? (I'm probably wrong.)
      *   
-     * Hence ModuleState. Just `ModuleState = ModuleState.Fault;` and your DI'd IFiModuleController will 
+     * Hence ModuleState. Just `ModuleState = ModuleState.Fault;` and your DI'd IFhModuleController will 
      * transparently handle the fault and propagate it to all dependent modules as well.
-     * 
-     * TODO: It would be nice if FiModules were also forced to specify restart callbacks in case they fault.
      */
-    public ModuleState ModuleState
+
+    public FhModuleState ModuleState
     {
         get { return _moduleState; }
-        protected set {
-#pragma warning disable CS8602
-            // intentionally fail with a null reference if an IFiModuleController has not hooked this method.
-            OnModuleStateChange(this, new FiModuleStateChangeEventArgs(ModuleState, value, this));
+        protected set
+        {
+            FhModuleController.ModuleStateChangeHandler(this, new(_moduleState, value));
             _moduleState = value;
-#pragma warning restore CS8602
         }
     }
 
-    /// <summary>
-    ///     Transparently hooked by the module's injected parent <see cref="IFiModuleController"/> to handle any changes to ModuleState.
-    /// </summary>
-    public event EventHandler<FiModuleStateChangeEventArgs>? OnModuleStateChange;
+    public abstract FhModuleConfig ModuleConfiguration { get; }
+
+    public abstract bool FhModuleInit();
+    public abstract bool FhModuleStart();
+    public abstract bool FhModuleStop();
+    public abstract bool FhModuleFaultHandler();
 
     public bool Equals(FhModule? other)
     {
-        if (ReferenceEquals(null, other))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        return Name.Equals(other.Name);
+        if (other is null)                return false;
+        if (ReferenceEquals(this, other)) return true;
+        
+        return _moduleName.Equals(other.ModuleName);
     }
 
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(null, obj))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, obj))
-        {
-            return true;
-        }
-
+        if (obj is null)                return false;
+        if (ReferenceEquals(this, obj)) return true;
+        
         return obj.GetType() == GetType() && Equals((FhModule)obj);
     }
 
     public override int GetHashCode()
     {
-        return Name.GetHashCode();
+        return _moduleName.GetHashCode();
     }
 
     public static bool operator ==(FhModule? left, FhModule? right)

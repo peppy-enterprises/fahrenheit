@@ -2,21 +2,21 @@
 ---
 
 ## What is Fahrenheit?
-As a project, Fahrenheit **aims to reverse-engineer Final Fantasy X and X-2**, encompassing a
-**decompilation effort** combined with **analysis of the binary files that make up the core game logic**.
+To borrow and slightly reword the definition and aim of the excellent [OpenKH](https://github.com/OpenKH/OpenKh) project,
 
-As this repository, Fahrenheit is a **collection of tools and libraries relating to Final Fantasy X and X-2**,
-and the **canonical implementation of information gathered through the analysis process**.
+**Fahrenheit aims to centralize all the technical knowledge of the 'Final Fantasy X' and 'Final Fantasy X-2' games in one place, 
+providing documentation, tools, code libraries, and the foundation for modding the commercial games.**
 
 The knowledge gathered by the project underpins many tools for the game, such as the 
-[AI/VI TAS](https://github.com/coderwilson/FFX_TAS_Python) and 
-[Cutscene Remover](https://github.com/erickt420/FFXCutsceneRemover) mod. Consumers usually
-do not reference Fahrenheit libraries directly; instead, they reimplement the bits they need
-and tune them for their specific purposes.
+[AI/VI TAS](https://github.com/coderwilson/FFX_TAS_Python), [Cutscene Remover](https://github.com/erickt420/FFXCutsceneRemover) mod,
+[Karifean](https://github.com/Karifean)'s [FFXDataParser](https://github.com/Karifean/FFXDataParser), and more.
 
-Fahrenheit, generally, is the place where mod/tool developers find the specific information they need. 
-If you want neatly packaged tools, you are probably looking for something that _implements_ Fahrenheit, not 
-this project itself.
+Typically, consumers do not reference Fahrenheit libraries directly; instead, they reimplement 
+the bits they need and tune them for their specific purposes.
+
+For mod/tool developers, Fahrenheit is where they find the specific information they need.
+
+For end-users, Fahrenheit is a mod loader and base framework that other tools rely upon.
 
 ## Why?
 Many people have made tremendous efforts to tackle this game over the years, and some have even

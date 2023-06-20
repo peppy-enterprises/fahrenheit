@@ -35,11 +35,11 @@ public sealed record FhModuleConfigCollection(List<FhModuleConfig> ModuleConfigs
 /// <para></para>
 ///     1) ConfigName, which uniquely identifies both configuration _and_ module!<br></br>
 ///     2) ConfigVersion, which is available to you for versioning scenarios.<br></br>
-///     3) ConfigEnabled, which instructs the <see cref="IFiModuleController"/> not to spawn the module.
+///     3) ConfigEnabled, which instructs the <see cref="IFhModuleController"/> not to spawn the module.
 /// </summary>
 public abstract record FhModuleConfig(string ConfigName, uint ConfigVersion, bool ConfigEnabled) : FhConfigStruct(ConfigName, ConfigVersion)
 {
-    public abstract bool TrySpawnModule(IFhModuleController parent, [NotNullWhen(true)] out FhModule? fm);
+    public abstract bool TrySpawnModule([NotNullWhen(true)] out FhModule? fm);
 }
 
 public abstract record FhSerializerConfig;
