@@ -206,4 +206,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  
+  <!-- LOCAL DEPLOYMENT TARGET -->
+  <PropertyGroup>
+  	<CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
+  </PropertyGroup>
 </Project>

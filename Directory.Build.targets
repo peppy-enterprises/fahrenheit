@@ -1,10 +1,6 @@
 <Project>
     <!-- LOCAL TESTING COPY TASK -->
 	<Target Name="CopyAfterBuild" AfterTargets="Build">
-		<PropertyGroup>
-			<CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
-		</PropertyGroup>
-
 		<ItemGroup>
 			<ProjectFiles Include="$(TargetDir)\*.*" />
 		</ItemGroup>
