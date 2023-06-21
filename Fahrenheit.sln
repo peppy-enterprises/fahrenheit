@@ -12,11 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CoreLib", "src\cs\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CT2CS", "src\cs\Fahrenheit.CT2CS\Fahrenheit.CT2CS.csproj", "{732FDF80-DAC5-4E93-804D-9ECF346E90E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.CT2CS", "src\cs\Fahrenheit.Tools.CT2CS\Fahrenheit.Tools.CT2CS.csproj", "{732FDF80-DAC5-4E93-804D-9ECF346E90E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.H2CS", "src\cs\Fahrenheit.H2CS\Fahrenheit.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.H2CS", "src\cs\Fahrenheit.Tools.H2CS\Fahrenheit.Tools.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.DEdit", "src\cs\Fahrenheit.DEdit\Fahrenheit.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.DEdit", "src\cs\Fahrenheit.Tools.DEdit\Fahrenheit.Tools.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Loader", "src\cpp\Fahrenheit.CLRHost.Loader\Fahrenheit.CLRHost.Loader.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
 EndProject
@@ -26,7 +26,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Launcher
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CLRHost", "src\cs\Fahrenheit.CLRHost\Fahrenheit.CLRHost.csproj", "{F3F4FFE6-A34C-4E95-866B-E37C26B632F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.HookLib", "src\cs\Fahrenheit.HookLib\Fahrenheit.HookLib.csproj", "{4398D298-2C96-4B53-970F-2B4F16BC606D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Hooks.Generic", "src\cs\Fahrenheit.Hooks.Generic\Fahrenheit.Hooks.Generic.csproj", "{4398D298-2C96-4B53-970F-2B4F16BC606D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Modules.CSR", "src\cs\Fahrenheit.Modules.CSR\Fahrenheit.Modules.CSR.csproj", "{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -184,6 +186,22 @@ Global
 		{4398D298-2C96-4B53-970F-2B4F16BC606D}.Release|x64.Build.0 = Release|Any CPU
 		{4398D298-2C96-4B53-970F-2B4F16BC606D}.Release|x86.ActiveCfg = Release|Any CPU
 		{4398D298-2C96-4B53-970F-2B4F16BC606D}.Release|x86.Build.0 = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|x64.Build.0 = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Debug|x86.Build.0 = Debug|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|ARM64.Build.0 = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|x64.ActiveCfg = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|x64.Build.0 = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
