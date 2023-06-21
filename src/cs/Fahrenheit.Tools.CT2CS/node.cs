@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace Fahrenheit.CT2CS;
+namespace Fahrenheit.Tools.CT2CS;
 
 [XmlType("CheatEntry")]
 [DebuggerDisplay("{Description}, {CheatEntries.Count} descendants")]

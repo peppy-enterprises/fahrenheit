@@ -3,7 +3,7 @@ using System.CommandLine;
 using System.CommandLine.Binding;
 using System.IO;
 
-namespace Fahrenheit.H2CS;
+namespace Fahrenheit.Tools.H2CS;
 
 internal static class H2CSConfig
 {

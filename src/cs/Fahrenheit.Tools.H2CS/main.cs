@@ -10,7 +10,7 @@ using System.CommandLine;
 using System.IO;
 using System.Text;
 
-namespace Fahrenheit.H2CS;
+namespace Fahrenheit.Tools.H2CS;
 
 internal class Program
 {

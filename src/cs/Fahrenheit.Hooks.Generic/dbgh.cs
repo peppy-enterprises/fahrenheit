@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 using Fahrenheit.CoreLib;
 
-namespace Fahrenheit.HookLib;
+namespace Fahrenheit.Hooks.Generic;
 
 public static partial class FhHooks
 {

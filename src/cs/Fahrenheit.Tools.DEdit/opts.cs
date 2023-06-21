@@ -5,7 +5,7 @@ using System.IO;
 
 using Fahrenheit.CoreLib;
 
-namespace Fahrenheit.DEdit;
+namespace Fahrenheit.Tools.DEdit;
 
 internal enum FhDEditMode
 {

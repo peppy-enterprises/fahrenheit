@@ -6,7 +6,7 @@ using System.Text;
 
 using Fahrenheit.CoreLib;
 
-namespace Fahrenheit.H2CS;
+namespace Fahrenheit.Tools.H2CS;
 
 public record FhSyntaxNode(string Name);
 public record FhHeaderGuardNode(string Name);

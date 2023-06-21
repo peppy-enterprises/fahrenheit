@@ -10,7 +10,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Fahrenheit.CT2CS;
+namespace Fahrenheit.Tools.CT2CS;
 
 internal class Program
 {

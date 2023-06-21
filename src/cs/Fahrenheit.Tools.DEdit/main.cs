@@ -12,7 +12,7 @@ using System.Text;
 
 using Fahrenheit.CoreLib;
 
-namespace Fahrenheit.DEdit;
+namespace Fahrenheit.Tools.DEdit;
 
 internal class Program
 {

@@ -3,7 +3,7 @@ using System.CommandLine;
 using System.CommandLine.Binding;
 using System.IO;
 
-namespace Fahrenheit.CT2CS;
+namespace Fahrenheit.Tools.CT2CS;
 
 internal static class CT2CSConfig
 {

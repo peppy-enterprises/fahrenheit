@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 using Fahrenheit.CoreLib;
 
-namespace Fahrenheit.HookLib;
+namespace Fahrenheit.Hooks.Generic;
 
 /* [fkelava 6/6/23 21:29]
  * P/Invokes must be declared here because of https://github.com/dotnet/runtime/issues/87188.
