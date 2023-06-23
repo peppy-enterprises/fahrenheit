@@ -7,19 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.CLRHost;
 
-public static class FhCLRHostDelegateStore
+public static class FhDelegateStore
 {
     public static readonly Dictionary<MethodBase, Delegate> Real = new Dictionary<MethodBase, Delegate>();
     public static readonly Dictionary<MethodBase, Delegate> Mine = new Dictionary<MethodBase, Delegate>();
 }
 
-public sealed record FhHookRecord(MethodInfo Method, FhHookAttribute Attribute);
+public sealed record FhHookRecord(MethodInfo Method, Type DelegateType, nint Offset, FhHookTarget Target);
 
 public static partial class FhCLRHost
 {
@@ -34,7 +33,7 @@ public static partial class FhCLRHost
                 foreach (FhHookAttribute attr in method.GetCustomAttributes<FhHookAttribute>())
                 {
                     FhLog.Log(LogLevel.Info, $"{method.Name} -> 0x{attr.Offset.ToString("X")}.");
-                    callerList.Add(new FhHookRecord(method, attr));
+                    callerList.Add(new FhHookRecord(method, attr.DelegateType, attr.Offset, attr.Target));
                 }
             }
         }
@@ -48,69 +47,44 @@ public static partial class FhCLRHost
      */
     public static int CLRHostInit(IntPtr args, int size)
     {
-        List<FhHookRecord> records = new List<FhHookRecord>();
+        List<FhHookRecord> fhrlist = new List<FhHookRecord>();
 
         foreach (Assembly assem in FhLoader.LoadedPluginAssembliesCache)
         {
             FhLog.Log(LogLevel.Info, $"Entering host init for assembly {assem.GetName().Name?.ToUpperInvariant()}.");
 
-            assem.GetEligibleMethods(records);
+            assem.GetEligibleMethods(fhrlist);
 
-            foreach (FhHookRecord hookRecord in records)
+            foreach (FhHookRecord fhr in fhrlist)
             {
-                MethodInfo method = hookRecord.Method;
-                Type       dtype  = hookRecord.Attribute.DelegateType;
-                nint       offset = hookRecord.Attribute.Offset;
-                string     mname  = hookRecord.Attribute.Target switch 
+                MethodInfo method = fhr.Method;
+                Type       dtype  = fhr.DelegateType;
+                nint       offset = fhr.Offset;
+                string     mname  = fhr.Target switch 
                 {
-                    HookTarget.X  => "FFX.exe",
-                    HookTarget.X2 => "FFX-2.exe",
-                    _             => throw new Exception("E_UNDEFINED_HOOK_TARGET")
+                    FhHookTarget.FFX  => "FFX.exe",
+                    FhHookTarget.FFX2 => "FFX-2.exe",
+                    _                 => throw new Exception("FH_E_CLRHOST_UNDEFINED_HOOK_TARGET")
                 };
 
-                FhCLRHostDelegateStore.Mine[method] = Delegate.CreateDelegate(dtype, method);
+                FhDelegateStore.Mine[method] = Delegate.CreateDelegate(dtype, method);
 
-                nint mbase = GetModuleHandle(mname);
+                nint mbase = FhPInvoke.GetModuleHandle(mname);
                 if (mbase == nint.Zero) continue;
+                nint addr  = mbase + offset;
 
-                nint addr = mbase + offset;
+                FhLog.Log(LogLevel.Info, $"Now applying hook {fhr.Method.Name}; targeted module addr: 0x{mbase.ToString("X8")}, final address: 0x{addr.ToString("X8")}.");
 
-                FhLog.Log(LogLevel.Info, $"Now applying hook {hookRecord.Method.Name}; targeted module addr: 0x{mbase.ToString("X8")}, final address: 0x{addr.ToString("X8")}.");
+                FhPInvoke.DetourTransactionBegin();
+                FhPInvoke.DetourUpdateThread(FhPInvoke.GetCurrentThread());
+                FhPInvoke.DetourAttach(ref addr, Marshal.GetFunctionPointerForDelegate(FhDelegateStore.Mine[method]));
+                FhPInvoke.DetourTransactionCommit();
+                FhPInvoke.DetoursPatchIAT(FhPInvoke.GetModuleHandle("coreclr.dll"), mbase, addr);
 
-                DetourTransactionBegin();
-                DetourUpdateThread(GetCurrentThread());
-                DetourAttach(ref addr, Marshal.GetFunctionPointerForDelegate(FhCLRHostDelegateStore.Mine[method]));
-                DetourTransactionCommit();
-
-                // and so on patch IAT of clr module
-                DetoursPatchIAT(GetModuleHandle("coreclr.dll"), mbase, addr);
-
-                FhCLRHostDelegateStore.Real[method] = Marshal.GetDelegateForFunctionPointer(addr, dtype);
+                FhDelegateStore.Real[method] = Marshal.GetDelegateForFunctionPointer(addr, dtype);
             }
         }
 
         return 0;
     }
-
-    [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16)]                                                             
-    private static partial nint GetProcAddress(nint hModule, string lpProcName);
-    [LibraryImport("kernel32.dll")]                                                             
-    private static partial nint GetCurrentThread();
-    [LibraryImport("kernel32.dll", EntryPoint = "LoadLibraryW", StringMarshalling = StringMarshalling.Utf16)]     
-    private static partial nint LoadLibrary(string lpModuleName);
-    [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)] 
-    private static partial nint GetModuleHandle(string lpModuleName);
-    [LibraryImport("fhdetour.dll")]                                                             
-    private static partial long DetourAttach(ref nint a, nint b);
-    [LibraryImport("fhdetour.dll")]                                                             
-    private static partial long DetourUpdateThread(nint a);
-    [LibraryImport("fhdetour.dll")]                                                             
-    private static partial long DetourTransactionBegin();
-    [LibraryImport("fhdetour.dll")]                                                             
-    private static partial long DetourTransactionCommit();
-    [LibraryImport("fhdetour.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static partial bool DetoursPatchIAT(nint hModule, nint import, nint real);
-    [LibraryImport("fhclrldr.dll", StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(AnsiStringMarshaller))]                                     
-    private static partial void DetoursCLRSetGetProcAddressCache(nint hModule, string procName, nint real);
 }
