@@ -41,5 +41,13 @@ int wmain(int argc, wchar_t* argv[ ])
     int i = _getch();
 
     ResumeThread(processInfo.hThread);
+    WaitForSingleObject(processInfo.hProcess, INFINITE);
+
+    DWORD exitCode;
+    BOOL  result = GetExitCodeProcess(processInfo.hProcess, &exitCode);
+
+    CloseHandle(processInfo.hProcess);
+    CloseHandle(processInfo.hThread);
+
 	return 0;
 }

@@ -19,12 +19,10 @@ public record struct FhPointerDeref(nint Offset, bool AsPtr);
  */
 public unsafe readonly ref struct FhPointer
 {
-    private readonly nint                         _base;
     private readonly ReadOnlySpan<FhPointerDeref> _derefs;
 
-    public FhPointer(nint baseAddr, ReadOnlySpan<FhPointerDeref> derefs)
+    public FhPointer(ReadOnlySpan<FhPointerDeref> derefs)
     {
-        _base   = baseAddr;
         _derefs = derefs;
     }
 
@@ -37,12 +35,12 @@ public unsafe readonly ref struct FhPointer
      * The SizeOf<T> in question is `Unsafe.SizeOf<T>`, which returns the size of the `managed` view of T.
      * > If T is a reference type, the return value is the size of the reference itself (sizeof(void*)) {...}
      * 
-     * Hence `where T : struct`, as reference types are not usable here. But not _any_ struct. The struct
-     * in question _must_ _exactly_ represent its unmanaged equivalent (or at least be blittable).
-     * In short, `Marshal.SizeOf<T>` and `Unsafe.SizeOf<T>` must be equal. For instance:
+     * Hence `where T : struct`. HOWEVER, additionally, the struct in question _must_ _exactly_
+     * represent its unmanaged equivalent (or at least be blittable). In short, 
+     * `Marshal.SizeOf<T>` and `Unsafe.SizeOf<T>` must be equal. For instance:
      * 
-     * public readonly struct TestStructA { public readonly uint A; }
-     * public readonly struct TestStructB { [MarshalAs(UnmanagedType.Bool)] public readonly bool A; }
+     * public struct TestStructA { public uint A; }
+     * public struct TestStructB { [MarshalAs(UnmanagedType.Bool)] public bool A; }
      * 
      * TestStructA is valid. An `uint` is blittable, 4 bytes in managed and unmanaged view.
      * TestStructB is invalid. A `bool` marshaled as Win32 BOOL is 1 byte managed, 4 bytes unmanaged. The request is invalid and DerefPrimitive will crash.
@@ -54,7 +52,7 @@ public unsafe readonly ref struct FhPointer
 
         if (us != ms)
         {
-            FhLog.Log(LogLevel.Error, $"Invalid use of DerefPrimitive for type {typeof(T).FullName} - US {us} != MS {ms}. Crashing the game before the inevitable happens.");
+            FhLog.Log(LogLevel.Error, $"Invalid use of DerefPrimitive for type {typeof(T).FullName} - type unmanaged size {us} != type managed size {ms}. Crashing the game before the inevitable happens.");
             throw new Exception("FH_E_DPTR_UNSAFE_PRIMITIVE_DEREF");
         }
 
@@ -76,8 +74,7 @@ public unsafe readonly ref struct FhPointer
 
     private nint DerefOffsetsInternal()
     {
-        nint ptr = Marshal.ReadIntPtr(_base);
-        if (ptr == nint.Zero) return nint.MaxValue;
+        nint ptr = nint.Zero;
 
         foreach (FhPointerDeref deref in _derefs)
         {
