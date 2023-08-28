@@ -28,7 +28,7 @@ public static class FhLog
     {
         Trace.AutoFlush = true;
         Trace.Listeners.Add(new ConsoleTraceListener());
-        Trace.Listeners.Add(new TextWriterTraceListener(File.OpenWrite(Path.Join(FhRuntimeConst.DiagLogDir.Path, $"{FhUtil.GetTimestampString()}.log"))));
+        Trace.Listeners.Add(new TextWriterTraceListener(File.Open(Path.Join(FhRuntimeConst.DiagLogDir.Path, $"{FhUtil.GetTimestampString()}.log"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)));
     }
 
     public static void Log(LogLevel                  level,

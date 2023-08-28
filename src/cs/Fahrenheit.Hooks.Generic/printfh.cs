@@ -7,10 +7,6 @@ namespace Fahrenheit.Hooks.Generic;
 
 public static partial class FhHooks
 {
-    [FhHook(FhHookTarget.FFX, 0x22F6B0, typeof(FhHookDelegates.PrintfVarargDelegate))]
-    [FhHook(FhHookTarget.FFX, 0x22FDA0, typeof(FhHookDelegates.PrintfVarargDelegate))]
-    [FhHook(FhHookTarget.FFX, 0x473C10, typeof(FhHookDelegates.PrintfVarargDelegate))]
-    [FhHook(FhHookTarget.FFX, 0x473C20, typeof(FhHookDelegates.PrintfVarargDelegate))]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
     public static void CLRPrintfHookAnsi(string fmt, nint va0, nint va1, nint va2, nint va3, nint va4, nint va5, nint va6, nint va7, nint va8, nint va9, nint va10, nint va11, nint va12, nint va13, nint va14, nint va15)
     {

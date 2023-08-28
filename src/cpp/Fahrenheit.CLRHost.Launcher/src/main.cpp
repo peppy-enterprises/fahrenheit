@@ -4,30 +4,24 @@
 
 int wmain(int argc, wchar_t* argv[ ])
 {
-    LPCSTR szDllPath = "fhclrldr.dll";
+    LPCSTR              szDllPath  = "fhclrldr.dll";
+    LPWSTR              cmdLineStr = GetCommandLineW();
+    PROCESS_INFORMATION pi;
+    STARTUPINFO         si = { 0 };
 
-    PROCESS_INFORMATION processInfo;
-    STARTUPINFO         startupInfo = { 0 };
-
-    startupInfo.cb = sizeof(startupInfo);
-
-    std::wstring commandLine = argv[1];
-    for (int i = 2; i < argc; i++)
-    {
-        commandLine += TEXT(" ") + std::wstring(argv[i]);
-    }
+    si.cb = sizeof(si);
 
     if (!DetourCreateProcessWithDlls(
-        NULL,
-        const_cast<wchar_t*>(commandLine.c_str()),
+        argv[1],
+        cmdLineStr,
         NULL,
         NULL,
         FALSE,
         CREATE_SUSPENDED,
         NULL,
         NULL,
-        &startupInfo,
-        &processInfo,
+        &si,
+        &pi,
         1,
         &szDllPath,
         NULL
@@ -40,14 +34,14 @@ int wmain(int argc, wchar_t* argv[ ])
     std::cout << "Ready. You can now attach a debugger; press any key to launch.";
     int i = _getch();
 
-    ResumeThread(processInfo.hThread);
-    WaitForSingleObject(processInfo.hProcess, INFINITE);
+    ResumeThread(pi.hThread);
+    WaitForSingleObject(pi.hProcess, INFINITE);
 
     DWORD exitCode;
-    BOOL  result = GetExitCodeProcess(processInfo.hProcess, &exitCode);
+    BOOL  result = GetExitCodeProcess(pi.hProcess, &exitCode);
 
-    CloseHandle(processInfo.hProcess);
-    CloseHandle(processInfo.hThread);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
 
 	return 0;
 }

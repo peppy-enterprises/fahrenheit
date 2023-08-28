@@ -10,12 +10,6 @@ namespace Fahrenheit.CoreLib;
 
 public static class FhLoader
 {
-    static FhLoader()
-    {
-        LoadModules(FhRuntimeConst.CLRHooksDir.Path, out _);
-        LoadModules(FhRuntimeConst.ModulesDir.Path,  out _);
-    }
-
     public static List<Assembly> LoadedPluginAssembliesCache { get; } = new List<Assembly>();
 
     /// <summary>
@@ -58,7 +52,7 @@ public static class FhLoader
     {
         moduleConfigCollections = new List<FhModuleConfigCollection>();
 
-        string dirName        = Path.GetDirectoryName(fullPath) ?? throw new Exception("E_DIR_UNIDENTIFIABLE");
+        string dirName        = Path.GetDirectoryName(fullPath) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
         string moduleName     = Path.GetFileNameWithoutExtension(fullPath).ToUpperInvariant();
         string configJsonName = Path.Join(FhRuntimeConst.ConfigDir.Path, Path.GetFileName(fullPath).Replace(".dll", ".conf.json"));
 
@@ -80,12 +74,12 @@ public static class FhLoader
         // --> LOAD ORDERING; LOAD REFERENCED ASSEMBLIES FIRST <--
         foreach (AssemblyName refAssem in currentlyLoadingAssem.GetReferencedAssemblies())
         {
-            if (ResolveModuleRef(dirName, refAssem.Name ?? throw new Exception("E_REF_ASSEM_NAME_NULL"), out string refAssemFullPath))
+            if (ResolveModuleRef(dirName, refAssem.Name ?? throw new Exception("FH_E_REF_ASSEM_NAME_NULL"), out string refAssemFullPath))
             {
                 FhLog.Log(LogLevel.Info, $"{moduleName} depends on {refAssem.Name.ToUpperInvariant()}; trying to load it first.");
 
                 if (!LoadSingleModule(refAssemFullPath, out List<FhModuleConfigCollection>? refAssemConfigCollection))
-                    throw new Exception("E_REF_ASSEM_LOAD_FAULT");
+                    throw new Exception("FH_E_REF_ASSEM_LOAD_FAULT");
 
                 moduleConfigCollections.AddRange(refAssemConfigCollection);
             }
@@ -99,7 +93,7 @@ public static class FhLoader
 
             FhModuleConfigCollection configCollection =
                 JsonSerializer.Deserialize<FhModuleConfigCollection>(patchedJson, FhUtil.JsonOpts) ??
-                throw new Exception($"E_CONF_DESERIALIZE_FAULT: {moduleName}.");
+                throw new Exception($"FH_E_CONF_DESERIALIZE_FAULT: {moduleName}.");
 
             FhLog.Log(LogLevel.Info, $"{moduleName} loaded successfully, parsing {configCollection.ModuleConfigs.Count.ToString()} configurations.");
 
@@ -144,7 +138,7 @@ public static class FhLoader
         {
             if (field.FieldType == typeof(FhDirLink))
             {
-                FhDirLink? dirLink = field.GetValue(null) as FhDirLink ?? throw new Exception("E_RUNTIME_DIR_REDIRECT_FAULT");
+                FhDirLink? dirLink = field.GetValue(null) as FhDirLink ?? throw new Exception("FH_E_DIR_LINK_FAULT");
                 configJson = configJson.Replace(dirLink.LinkSymbol, dirLink.Path);
             }
         }

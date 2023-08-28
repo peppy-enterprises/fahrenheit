@@ -9,7 +9,7 @@ public unsafe struct FhXActor
 {
     [FieldOffset(0x0)]   public ushort chr_id;
     [FieldOffset(0x2)]   public ushort chr_enabled;
-    [FieldOffset(0x4)]   public string chr_name; // actually a pointer; marshalling automatically corrects this
+    [FieldOffset(0x4)]   public char*  chr_name;
     [FieldOffset(0xC)]   public Vec4f  chr_pos_vec;
     [FieldOffset(0x1C)]  public Vec4f  chr_pos_vec_bkup;
     [FieldOffset(0x5C)]  public Vec4f  chr_scale_vec;

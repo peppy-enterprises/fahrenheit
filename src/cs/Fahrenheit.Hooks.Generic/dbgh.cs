@@ -3,14 +3,22 @@ using System.Runtime.InteropServices;
 
 using Fahrenheit.CoreLib;
 
+using static Fahrenheit.CoreLib.FhHookDelegates;
+
 namespace Fahrenheit.Hooks.Generic;
 
-public static partial class FhHooks
+public partial class FhHooksExampleModule
 {
-    [FhHook(FhHookTarget.FFX, 0x487C80, typeof(FhHookDelegates.TkIsDebugDelegate))]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvStdcall) })]
-    public static unsafe int TkIsDebugHook()
+    public unsafe int TkIsDebugHook()
     {
+        if (_tkIsDbg.GetOriginalFptrSafe(out TkIsDebugDelegate? fptr))
+        {
+            FhLog.Log(LogLevel.Info, $"Calling original.");
+            return fptr.Invoke();
+        }
+
+        FhLog.Log(LogLevel.Info, $"Original was not called.");
         return 0;
     }
 }

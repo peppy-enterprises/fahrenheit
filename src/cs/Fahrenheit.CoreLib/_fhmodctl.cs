@@ -31,12 +31,14 @@ public static class FhModuleController
 
     public static bool Initialize(IEnumerable<FhModuleConfigCollection> moduleConfigCollections)
     {
+        bool rv = true;
+
         foreach (FhModuleConfigCollection moduleConfigCollection in moduleConfigCollections)
         {
-            InitializeModules(moduleConfigCollection.ModuleConfigs);
+            if (!InitializeModules(moduleConfigCollection.ModuleConfigs)) rv = false;
         }
 
-        return true;
+        return rv;
     }
 
     private static FhModuleContext? GetContextForModule(in FhModule module)
@@ -175,6 +177,7 @@ public static class FhModuleController
     {
         lock (_moduleManipLock)
         {
+            FhLog.Log(LogLevel.Info, $"Starting module {fm.ModuleName}.");
             return StartIncludingDependents(GetContextForModule(fm) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE"));
         }
     }
@@ -201,6 +204,7 @@ public static class FhModuleController
     {
         lock (_moduleManipLock)
         {
+            FhLog.Log(LogLevel.Info, $"Stopping module {fm.ModuleName}.");
             return StopIncludingDependents(GetContextForModule(fm) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE"));
         }
     }
@@ -209,7 +213,7 @@ public static class FhModuleController
     {
         lock (_moduleManipLock)
         {
-            foreach (FhModule fm in fms)
+            foreach (FhModule fm in fms) 
                 yield return Stop(fm);
         }
     }
@@ -301,6 +305,7 @@ public static class FhModuleController
                     continue;
                 }
 
+                FhLog.Log(LogLevel.Warning, $"Initialized module {fmcfg.ConfigName} [{fmcfg.GetType().Name}].");
                 _moduleContexts.Add(new FhModuleContext(fm, fmcfg));
             }
         }

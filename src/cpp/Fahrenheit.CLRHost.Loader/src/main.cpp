@@ -216,7 +216,7 @@ static int DetourMain(void)
     load_assembly_and_get_function_pointer = get_dotnet_load_assembly(config_path.c_str());
     assert(load_assembly_and_get_function_pointer != nullptr && "Failure: get_dotnet_load_assembly()");
 
-    DetoursPatchIAT(GetModuleHandle(TEXT("coreclr.dll")), GetProcAddress, GetProcAddressCLR);
+    FhDetourPatchIAT(GetModuleHandle(TEXT("coreclr.dll")), GetProcAddress, GetProcAddressCLR);
 
     //
     // STEP 3: Load managed assembly and get function pointer to a managed method

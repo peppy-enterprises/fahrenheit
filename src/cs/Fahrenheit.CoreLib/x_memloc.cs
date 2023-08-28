@@ -1,3 +1,0 @@
-﻿namespace Fahrenheit.CoreLib;
-
-// Placeholder.
