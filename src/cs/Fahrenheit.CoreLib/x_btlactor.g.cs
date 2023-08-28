@@ -9,6 +9,7 @@ namespace Fahrenheit.CoreLib;
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0xF90)]
 public struct FhXChr 
 {
+	[FieldOffset(0x00C)] public byte chr_id;
     [FieldOffset(0x5D0)] public uint stat_hp;
     [FieldOffset(0x5D4)] public uint stat_mp;
     [FieldOffset(0x594)] public uint stat_maxhp;
@@ -82,29 +83,30 @@ public struct FhXChr
     [FieldOffset(0x508)] public byte stat_adjust_pos;
     [FieldOffset(0x50D)] public byte stat_height_on;
     [FieldOffset(0x50E)] public byte stat_sleep_recover_flag;
-    [FieldOffset(0x5DA)] public byte __0x5DA;
-    public int stat_abs_fire { get { return (__0x5DA) & 1; } }
-    public int stat_abs_cold { get { return (__0x5DA >> 1) & 1; } }
-    public int stat_abs_thunder { get { return (__0x5DA >> 2) & 1; } }
-    public int stat_abs_water { get { return (__0x5DA >> 3) & 1; } }
-    public int stat_abs_holy { get { return (__0x5DA >> 4) & 1; } }
-    [FieldOffset(0x5DB)] public byte __0x5DB;
-    public int stat_inv_fire { get { return (__0x5DB) & 1; } }
-    public int stat_inv_cold { get { return (__0x5DB >> 1) & 1; } }
-    public int stat_inv_thunder { get { return (__0x5DB >> 2) & 1; } }
-    public int stat_inv_water { get { return (__0x5DB >> 3) & 1; } }
-    public int stat_inv_holy { get { return (__0x5DB >> 4) & 1; } }
-    [FieldOffset(0x5DC)] public byte __0x5DC;
-    public int stat_half_fire { get { return (__0x5DC) & 1; } }
-    public int stat_half_cold { get { return (__0x5DC >> 1) & 1; } }
-    public int stat_half_thunder { get { return (__0x5DC >> 2) & 1; } }
-    public int stat_half_water { get { return (__0x5DC >> 3) & 1; } }
-    public int stat_half_holy { get { return (__0x5DC >> 4) & 1; } }
-    public int stat_weak_fire { get { return (__0x5DC) & 1; } }
-    public int stat_weak_cold { get { return (__0x5DC >> 1) & 1; } }
-    public int stat_weak_thunder { get { return (__0x5DC >> 2) & 1; } }
-    public int stat_weak_water { get { return (__0x5DC >> 3) & 1; } }
-    public int stat_weak_holy { get { return (__0x5DC >> 4) & 1; } }
+    [FieldOffset(0x5DA)] public byte stat_abs_e;
+    public bool stat_abs_fire { get { return (stat_abs_e & 1) != 0; } }
+    public bool stat_abs_cold { get { return (stat_abs_e >> 1 & 1) != 0; } }
+    public bool stat_abs_thunder { get { return (stat_abs_e >> 2 & 1) != 0; } }
+    public bool stat_abs_water { get { return (stat_abs_e >> 3 & 1) != 0; } }
+    public bool stat_abs_holy { get { return (stat_abs_e >> 4 & 1) != 0; } }
+    [FieldOffset(0x5DB)] public byte stat_inv_e;
+    public bool stat_inv_fire { get { return (stat_inv_e & 1) != 0; } }
+    public bool stat_inv_cold { get { return (stat_inv_e >> 1 & 1) != 0; } }
+    public bool stat_inv_thunder { get { return (stat_inv_e >> 2 & 1) != 0; } }
+    public bool stat_inv_water { get { return (stat_inv_e >> 3 & 1) != 0; } }
+    public bool stat_inv_holy { get { return (stat_inv_e >> 4 & 1) != 0; } }
+    [FieldOffset(0x5DC)] public byte stat_half_e;
+    public bool stat_half_fire { get { return (stat_half_e & 1) != 0; } }
+    public bool stat_half_cold { get { return (stat_half_e >> 1 & 1) != 0; } }
+    public bool stat_half_thunder { get { return (stat_half_e >> 2 & 1) != 0; } }
+    public bool stat_half_water { get { return (stat_half_e >> 3 & 1) != 0; } }
+    public bool stat_half_holy { get { return (stat_half_e >> 4 & 1) != 0; } }
+	[FieldOffset(0x5DD)] public byte stat_weak_e;
+    public bool stat_weak_fire { get { return (stat_weak_e & 1) != 0; } }
+    public bool stat_weak_cold { get { return (stat_weak_e >> 1 & 1) != 0; } }
+    public bool stat_weak_thunder { get { return (stat_weak_e >> 2 & 1) != 0; } }
+    public bool stat_weak_water { get { return (stat_weak_e >> 3 & 1) != 0; } }
+    public bool stat_weak_holy { get { return (stat_weak_e >> 4 & 1) != 0; } }
     [FieldOffset(0x426)] public byte stat_adjust_pos_flag;
     [FieldOffset(0x447)] public byte __0x447;
     public int stat_inv_physic_motion { get { return (__0x447) & 1; } }
@@ -156,7 +158,7 @@ public struct FhXChr
     [FieldOffset(0x425)] public byte stat_avoid_flag;
     [FieldOffset(0xDDE)] public sbyte stat_blow_exist_flag;
     [FieldOffset(0xDCD)] public sbyte stat_escape_flag;
-    [FieldOffset(0x17)] public byte stat_hide;
+    [FieldOffset(0x017)] public byte stat_hide;
     [FieldOffset(0x641)] public byte stat_def_death;
     [FieldOffset(0x642)] public byte stat_def_zombie;
     [FieldOffset(0x643)] public byte stat_def_stone;
@@ -199,7 +201,10 @@ public struct FhXChr
     public int stat_def_protect { get { return (__0x65B >> 4) & 1; } }
     public int stat_def_iron { get { return (__0x65B >> 5) & 1; } }
     public int stat_def_death_sentence { get { return (__0x65B >> 6) & 1; } }
-    [FieldOffset(0xDD8)] public byte stat_hp_list;
+	[FieldOffset(0x65D)] public uint stat_max_ctb;
+	[FieldOffset(0x65E)] public byte cheer_count;
+	[FieldOffset(0x660)] public byte focus_count;
+	[FieldOffset(0xDD8)] public byte stat_hp_list;
     [FieldOffset(0x19)] public byte stat_visible_cam;
     [FieldOffset(0x1B)] public byte stat_visible_out;
     [FieldOffset(0x43B)] public byte stat_win_pose;
@@ -245,6 +250,9 @@ public struct FhXChr
     [FieldOffset(0x409)] public byte stat_return_motion_type;
     [FieldOffset(0x6DF)] public byte stat_command_exe_count;
     [FieldOffset(0x6E0)] public byte stat_consent;
+	[FieldOffset(0x6E4)] public int current_hp;
+	[FieldOffset(0x6E8)] public int current_mp;
+	[FieldOffset(0x6EC)] public int current_ctb;
     [FieldOffset(0x40D)] public byte stat_attack_near_frame;
     [FieldOffset(0x6E1)] public byte stat_energy;
     [FieldOffset(0x44F)] public byte stat_weak_motion;
