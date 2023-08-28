@@ -22,6 +22,9 @@ internal static partial class FhPInvoke
     
     [LibraryImport("fhdetour.dll")] 
     public static partial long DetourAttach(ref nint a, nint b);
+
+    [LibraryImport("fhdetour.dll")]
+    public static partial long DetourDetach(ref nint a, nint b);
     
     [LibraryImport("fhdetour.dll")] 
     public static partial long DetourUpdateThread(nint a);
@@ -34,7 +37,11 @@ internal static partial class FhPInvoke
 
     [LibraryImport("fhdetour.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static partial bool DetoursPatchIAT(nint hModule, nint import, nint real);
+    public static partial bool FhDetourPatchIAT(nint hModule, nint import, nint real);
+
+    [LibraryImport("fhdetour.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool FhDetourUnpatchIAT(nint hModule, nint import, nint real);
 
     [LibraryImport("fhclrldr.dll", StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(AnsiStringMarshaller))]
     public static partial void DetoursCLRSetGetProcAddressCache(nint hModule, string procName, nint real);

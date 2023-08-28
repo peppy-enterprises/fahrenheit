@@ -34,6 +34,6 @@ global using T_XBtlVoiceId    = System.UInt32; // x_idbtlvo
 global using T_XMotId         = System.UInt32; // x_idmot-*
 
 // X-2
-global using T_X2PComId       = System.UInt16; // x2_idpcom
-global using T_X2BtlId        = System.UInt32; // x2_idbtl
-global using T_X2ChrStatId     = System.Int32;  // x2_idchrstat
+global using T_X2PComId    = System.UInt16; // x2_idpcom
+global using T_X2BtlId     = System.UInt32; // x2_idbtl
+global using T_X2ChrStatId = System.Int32;  // x2_idchrstat

@@ -26,8 +26,8 @@ public class FhModuleStateChangeEventArgs : EventArgs
 
 public abstract class FhModule : IEquatable<FhModule>
 {
-    protected string        _moduleName;
-    protected FhModuleState _moduleState;
+    protected string         _moduleName;
+    protected FhModuleState  _moduleState;
 
     protected FhModule(FhModuleConfig moduleConfig)
     {
@@ -73,7 +73,7 @@ public abstract class FhModule : IEquatable<FhModule>
     public abstract bool FhModuleInit();
     public abstract bool FhModuleStart();
     public abstract bool FhModuleStop();
-    public abstract bool FhModuleFaultHandler();
+    public abstract bool FhModuleOnError();
 
     public bool Equals(FhModule? other)
     {

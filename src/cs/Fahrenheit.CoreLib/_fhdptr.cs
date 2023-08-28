@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace Fahrenheit.CoreLib;
 
-public enum FhStringDerefType
+public enum FhStringType
 {
-    Unicode = 1,
-    UTF8    = 2,
-    Ansi    = 3
+    Uni  = 1,
+    UTF8 = 2,
+    Ansi = 3
 }
 
 public record struct FhPointerDeref(nint Offset, bool AsPtr);
@@ -29,7 +30,7 @@ public unsafe readonly ref struct FhPointer
     /* [fkelava 23/6/23 14:03]
      * Some one-liners require a hefty explanation. This one does. READ IT CAREFULLY.
      * 
-     * Unsafe.Read<T> does not require a constraint. The constraint is there to make evident that
+     * Unsafe.Read/Write<T> does not require a constraint. The constraint is there to make evident that
      * > there must be SizeOf<T>() bytes of readable memory available starting at the location pointed to {...}
      * 
      * The SizeOf<T> in question is `Unsafe.SizeOf<T>`, which returns the size of the `managed` view of T.
@@ -43,33 +44,11 @@ public unsafe readonly ref struct FhPointer
      * public struct TestStructB { [MarshalAs(UnmanagedType.Bool)] public bool A; }
      * 
      * TestStructA is valid. An `uint` is blittable, 4 bytes in managed and unmanaged view.
-     * TestStructB is invalid. A `bool` marshaled as Win32 BOOL is 1 byte managed, 4 bytes unmanaged. The request is invalid and DerefPrimitive will crash.
+     * TestStructB is invalid. A `bool` marshaled as Win32 BOOL is 1 byte managed, 4 bytes unmanaged. The request is invalid and Fahrenheit will crash the game before you do.
      */
-    public T DerefPrimitive<T>() where T : struct
+    private static void ThrowIfTInvalid<T>() where T : unmanaged
     {
-        int us = Marshal.SizeOf<T>();
-        int ms = Unsafe.SizeOf<T>();
-
-        if (us != ms)
-        {
-            FhLog.Log(LogLevel.Error, $"Invalid use of DerefPrimitive for type {typeof(T).FullName} - type unmanaged size {us} != type managed size {ms}. Crashing the game before the inevitable happens.");
-            throw new Exception("FH_E_DPTR_UNSAFE_PRIMITIVE_DEREF");
-        }
-
-        return DerefOffsets(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
-    }
-
-    public string DerefString(FhStringDerefType strtype)
-    {
-        if (!DerefOffsets(out nint vptr)) return string.Empty;
-
-        return strtype switch
-        {
-            FhStringDerefType.Unicode => Marshal.PtrToStringUni(vptr)!,
-            FhStringDerefType.UTF8    => Marshal.PtrToStringUTF8(vptr)!,
-            FhStringDerefType.Ansi    => Marshal.PtrToStringAnsi(vptr)!,
-            _                         => throw new Exception("FH_E_DPTR_UNDEFINED_STRING_DEREF_TYPE")
-        };
+        if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_UNSAFE_OPERATION: {typeof(T).FullName}");
     }
 
     private nint DerefOffsetsInternal()
@@ -88,5 +67,103 @@ public unsafe readonly ref struct FhPointer
     public bool DerefOffsets(out nint vptr)
     {
         return (vptr = DerefOffsetsInternal()) != nint.MaxValue;
+    }
+
+    public T DerefPrimitive<T>() where T : unmanaged
+    {
+        ThrowIfTInvalid<T>();
+        return DerefOffsets(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
+    }
+
+    public void WritePrimitive<T>(T value) where T : unmanaged
+    {
+        ThrowIfTInvalid<T>();
+        if (!DerefOffsets(out nint vptr)) return;
+        Unsafe.Write(vptr.ToPointer(), value);
+    }
+
+    public string DerefString(FhStringType strtype)
+    {
+        if (!DerefOffsets(out nint vptr)) return string.Empty;
+
+        return strtype switch
+        {
+            FhStringType.Uni  => Marshal.PtrToStringUni(vptr)!,
+            FhStringType.UTF8 => Marshal.PtrToStringUTF8(vptr)!,
+            FhStringType.Ansi => Marshal.PtrToStringAnsi(vptr)!,
+            _                 => throw new Exception("FH_E_DPTR_UNDEFINED_STRTYPE")
+        };
+    }
+
+    /* [fkelava 26/6/23 11:03]
+     * Mandatory reading: https://devblogs.microsoft.com/oldnewthing/20180118-00/?p=97825,
+     * https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitonaddress.
+     */
+
+    public bool AwaitValue<T>(T target) where T : unmanaged
+    {
+        if (!DerefOffsets(out nint vptr))
+        {
+            FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
+            return false;
+        }
+
+        void* maptr = vptr.ToPointer(); // Void pointer to monitored addr.
+        T     maval = *(T*)maptr;       // Value at monitored addr at call start.
+
+        if (maval.Equals(target))
+            return true;
+
+        T  cur    = maval;
+        T* curptr = &cur;
+
+        while (!cur.Equals(target))
+        {
+            FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1); 
+            cur = *(T*)maptr;
+        }
+        
+        return true;
+    }
+
+    public bool AwaitValues<T>(in ReadOnlySpan<T> targets, out T match) where T : unmanaged
+    {
+        match = default;
+
+        if (!DerefOffsets(out nint vptr))
+        {
+            FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
+            return false;
+        }
+
+        void* maptr = vptr.ToPointer(); // `m`onitored `a`ddress pointer.
+        T     maval = *(T*)maptr;       // `m`onitored `a`ddress value.
+
+        foreach (T target in targets)
+        {
+            if (maval.Equals(target))
+                return true;
+        }
+
+        T    cur    = maval;
+        T*   curptr = &cur;
+        bool hasMatched  = false;
+
+        while (!hasMatched)
+        {
+            FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1); 
+            cur = *(T*)maptr;
+
+            foreach (T target in targets)
+            {
+                if (hasMatched = cur.Equals(target))
+                {
+                    match = target;
+                    break;
+                }
+            }
+        }
+        
+        return true;
     }
 }

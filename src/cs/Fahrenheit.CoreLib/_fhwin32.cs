@@ -6,12 +6,17 @@
  * Until this is fixed, vararg P/Invokes must be declared in the hook assembly itself.
  */
 
-internal static partial class FhPInvoke
+internal static unsafe partial class FhPInvoke
 {
     internal const uint INFINITE = 4294967295;
 
-    [LibraryImport("KERNELBASE.dll", SetLastError = true)]
+    [LibraryImport("kernelbase.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static unsafe partial bool WaitOnAddress(void* Address, void* CompareAddress, nint AddressSize, uint dwMilliseconds);
-    // Actually void* Address, void* CompareAddress, but nint is more practical.
+    public static partial bool WaitOnAddress(void* Address, void* CompareAddress, nint AddressSize, uint dwMilliseconds);
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    public static partial int SuspendThread(nint hThread);
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    public static partial int ResumeThread(nint hThread);
 }

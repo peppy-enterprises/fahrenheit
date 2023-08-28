@@ -38,7 +38,7 @@ public class RNGFixModule : FhModule
         get { return _moduleConfig; }
     }
 
-    public override bool FhModuleFaultHandler()
+    public override bool FhModuleOnError()
     {
         return true;
     }
