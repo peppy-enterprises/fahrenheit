@@ -28,7 +28,7 @@ public static class FhLog
     {
         Trace.AutoFlush = true;
         Trace.Listeners.Add(new ConsoleTraceListener());
-        Trace.Listeners.Add(new TextWriterTraceListener(File.OpenWrite(Path.Join(FhRuntimeConst.DiagLogDir.Path, $"{FhUtil.GetTimestampString()}.log"))));
+        Trace.Listeners.Add(new TextWriterTraceListener(File.Open(Path.Join(FhRuntimeConst.DiagLogDir.Path, "latest.log"), FileMode.Create, FileAccess.Write, FileShare.Read)));
     }
 
     public static void Log(LogLevel                  level,
@@ -39,7 +39,16 @@ public static class FhLog
     {
         if (level < MinLevel) return;
         
-        long millis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        Trace.WriteLine($"{millis.ToString()} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}");
+		string timeFormat = @"hh:mm:ss.ff t\M";
+        string time = DateTimeOffset.UtcNow.ToString(timeFormat);
+		string prefix = $"{time} | [{level}] {Path.GetFileName(fpath)}:{lnb}";
+
+		if (msg.Contains('\n')) {
+			string newline_prefix = "".PadLeft(prefix.Length, ' ');
+			msg = msg.Replace("\r", "");
+			msg = msg.Replace("\n", $"\n{newline_prefix}\t| ");
+		}
+
+        Trace.WriteLine($"{prefix}\t| {msg}");
     }
 }
