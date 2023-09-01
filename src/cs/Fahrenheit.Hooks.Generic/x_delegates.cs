@@ -45,7 +45,7 @@ public static unsafe class FhXDelegates {
 	public delegate bool MsCalcEscape(uint chr_id);
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	public delegate nint MsApUp(uint chr_id, FhXChr* chr, int base_ap_add, nint param_4);
+	public delegate nint MsApUp(uint chr_id, FhXChr* chr, uint base_ap_add, nint param_4);
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate int MsCalcDamage(FhXChr* user, FhXChr* target, FhXMemCom* command,
