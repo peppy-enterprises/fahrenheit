@@ -41,7 +41,7 @@ public struct FhXChr
     [FieldOffset(0x4FE)] public byte stat_pos;
     [FieldOffset(0x4FF)] public byte stat_far;
     [FieldOffset(0x504)] public byte stat_group;
-    [FieldOffset(0x606)] public byte __0x606;
+    [FieldOffset(0x606)] public ushort __0x606;
     public bool stat_zombie { get { return (__0x606 >> 1 & 1) != 0; } }
     public bool stat_poison { get { return (__0x606 >> 3 & 1) != 0; } }
     public bool stat_power_break { get { return (__0x606 >> 4 & 1) != 0; } }
