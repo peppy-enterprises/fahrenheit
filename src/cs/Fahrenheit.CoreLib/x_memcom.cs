@@ -29,9 +29,7 @@ public struct FhXMemCom {
 	public bool usable_outside_combat { get { return (misc_props & 1) != 0; } }
 	public bool usable_in_combat { get { return (misc_props >> 1 & 1) != 0; } }
 	public bool display_move_name { get { return (misc_props >> 2 & 1) != 0; } }
-	public bool flag4 { get { return (misc_props >> 3 & 1) != 0; } }
-	public bool can_miss { get { return (misc_props >> 4 & 1) != 0; } }
-	public bool flag6 { get { return (misc_props >> 5 & 1) != 0; } }
+	public uint accuracy_formula { get { return misc_props >> 3 & 7; } }
 	public bool affected_by_darkness { get { return (misc_props >> 6 & 1) != 0; } }
 	public bool affected_by_reflect { get { return (misc_props >> 7 & 1) != 0; } }
 	public bool absorbs_dmg { get { return (misc_props >> 8 & 1) != 0; } }
