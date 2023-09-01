@@ -11,6 +11,7 @@ public unsafe struct FhXBtlStruct {
 	[FieldOffset(0x3E)] public bool always_1_dmg;
 	[FieldOffset(0x3F)] public bool always_9999_dmg;
 	[FieldOffset(0x40)] public bool always_99999_dmg;
+	[FieldOffset(0x4F)] public bool always_hit;
 	[FieldOffset(0x5C)] public IntPtr command_bin_ptr;
 	[FieldOffset(0x60)] public IntPtr monmagic1_bin_ptr;
 	[FieldOffset(0x64)] public IntPtr monmagic2_bin_ptr;
