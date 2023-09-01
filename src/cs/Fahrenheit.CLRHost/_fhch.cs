@@ -32,7 +32,7 @@ public static class FhCLRHost
         nint iatAddr  = origAddr;
         nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
 
-        FhLog.Log(LogLevel.Info, $"Applying hook {hook.Method.Name}; M -> 0x{mbase.ToString("X8")}, T -> 0x{origAddr.ToString("X8")}.");
+        FhLog.Log(LogLevel.Info, $"Applying hook {hook.Method.Name}; M -> 0x{mbase:X8}, T -> 0x{origAddr:X8}.");
 
         FhPInvoke.DetourTransactionBegin();
         FhPInvoke.DetourUpdateThread(FhPInvoke.GetCurrentThread());
@@ -41,7 +41,7 @@ public static class FhCLRHost
         FhPInvoke.FhDetourPatchIAT(FhPInvoke.GetModuleHandle("coreclr.dll"), iatAddr, origAddr);
 
         orig = Marshal.GetDelegateForFunctionPointer<T>(origAddr);
-        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr.ToString("X8")}, H -> 0x{hookAddr.ToString("X8")}.");
+        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr:X8}, H -> 0x{hookAddr:X8}.");
 
         return rv;
     }
@@ -53,7 +53,7 @@ public static class FhCLRHost
         nint iatAddr  = origAddr;
         nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
 
-        FhLog.Log(LogLevel.Info, $"Removing hook {hook.Method.Name}; targeted module addr: 0x{mbase.ToString("X8")}, final address: 0x{origAddr.ToString("X8")}.");
+        FhLog.Log(LogLevel.Info, $"Removing hook {hook.Method.Name}; targeted module addr: 0x{mbase:X8}, final address: 0x{origAddr:X8}.");
 
         FhPInvoke.DetourTransactionBegin();
         FhPInvoke.DetourUpdateThread(FhPInvoke.GetCurrentThread());
@@ -62,7 +62,7 @@ public static class FhCLRHost
         FhPInvoke.FhDetourUnpatchIAT(FhPInvoke.GetModuleHandle("coreclr.dll"), iatAddr, origAddr);
 
         orig = Marshal.GetDelegateForFunctionPointer<T>(origAddr);
-        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr.ToString("X8")}, H -> 0x{hookAddr.ToString("X8")}.");
+        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr:X8}, H -> 0x{hookAddr:X8}.");
 
         return rv;
     }
