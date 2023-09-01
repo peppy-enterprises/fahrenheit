@@ -50,7 +50,7 @@ public static unsafe class FhXDelegates {
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate int MsCalcDamage(FhXChr* user, FhXChr* target, FhXMemCom* command,
 		byte dmg_formula, int power, byte target_status__0x606, byte targetted_stat,
-		uint should_vary, ref byte used_def, ref byte used_mdef, int base_dmg);
+		uint should_vary, byte* ref_used_def, byte* ref_used_mdef, int base_dmg);
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate bool MsSetRikkuLimit(uint chr_id, FhXChr* chr, nint param_3);
