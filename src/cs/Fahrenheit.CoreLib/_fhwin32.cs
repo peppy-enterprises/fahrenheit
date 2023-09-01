@@ -19,4 +19,7 @@ internal static unsafe partial class FhPInvoke
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
     public static partial int ResumeThread(nint hThread);
+    
+    [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)] 
+    public static partial nint GetModuleHandle(string lpModuleName);
 }

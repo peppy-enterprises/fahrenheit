@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
-
+using Fahrenheit.CLRHost;
 using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.Modules.RNGFix;
@@ -24,12 +25,18 @@ public sealed record RNGFixModuleConfig : FhModuleConfig
 
 public class RNGFixModule : FhModule
 {
-    private readonly byte[]             _patchBytes = new byte[] { 0x31, 0xD2, 0x90 };
     private readonly RNGFixModuleConfig _moduleConfig;
+	private FhMethodHandle<brndDelegate> _brnd;
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	public delegate nint brndDelegate(nint rng_seed_idx);
 
     public RNGFixModule(RNGFixModuleConfig moduleConfig) : base(moduleConfig)
     {
         _moduleConfig = moduleConfig;
+
+		_brnd = new FhMethodHandle<brndDelegate>(this, 0x398900, brndRngFix);
+
         _moduleState  = FhModuleState.InitSuccess;
     }
 
@@ -45,16 +52,25 @@ public class RNGFixModule : FhModule
 
     public override bool FhModuleInit()
     {
-        throw new NotImplementedException();
+        return true;
     }
 
     public override bool FhModuleStart()
     {
-        throw new NotImplementedException();
+        return _brnd.ApplyHook();
     }
 
     public override bool FhModuleStop()
     {
-        throw new NotImplementedException();
+        return _brnd.RemoveHook();
     }
+
+	public nint brndRngFix(nint rng_seed_idx) {
+		if (_brnd.GetOriginalFptrSafe(out brndDelegate? fptr)) {
+			return fptr.Invoke(0);
+		}
+
+		//FhLog.Log(LogLevel.Error, "Failed to call original of brnd, supplying own rng instead.");
+		return new Random().Next();
+	}
 }
