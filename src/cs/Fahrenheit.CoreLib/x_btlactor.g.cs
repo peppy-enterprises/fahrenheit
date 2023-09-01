@@ -43,6 +43,7 @@ public struct FhXChr
     [FieldOffset(0x504)] public byte stat_group;
     [FieldOffset(0x606)] public ushort __0x606;
     public bool stat_zombie { get { return (__0x606 >> 1 & 1) != 0; } }
+	public bool stat_ko { get { return (__0x606 >> 2 & 1) != 0; } }
     public bool stat_poison { get { return (__0x606 >> 3 & 1) != 0; } }
     public bool stat_power_break { get { return (__0x606 >> 4 & 1) != 0; } }
     public bool stat_magic_break { get { return (__0x606 >> 5 & 1) != 0; } }
