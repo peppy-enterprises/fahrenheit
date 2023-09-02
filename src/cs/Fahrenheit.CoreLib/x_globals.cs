@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Fahrenheit.CoreLib;
 
@@ -11,5 +12,6 @@ public static unsafe class FhXGlobals {
 	public static FhXAtelBasicWorker* cur_atel_worker = (FhXAtelBasicWorker*)(game_base + 0xF270A4);
 	public static float* tidus_limit_times = (float*)(game_base + 0x886BF0);
 	public static float* auron_limit_times = (float*)(game_base + 0x886B60);
+	public static byte* hit_chance_table = (byte*)(game_base + 0x8421E0);
 }
 

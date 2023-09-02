@@ -150,6 +150,10 @@ public struct FhXChr
     public bool stat_iron { get { return (__0x616 >> 13 & 1) != 0; } }
     public bool stat_death_sentence { get { return (__0x616 >> 14 & 1) != 0; } }
 
+	[FieldOffset(0x5C1)] public byte wpn_dmg_formula;
+	[FieldOffset(0x5C7)] public byte wpn_power;
+	[FieldOffset(0x5D9)] public byte chr_elem_atk;
+	[FieldOffset(0x604)] public byte extra_status_inflict;
     [FieldOffset(0x5C9)] public byte stat_death_sentence_start;
     [FieldOffset(0x5C8)] public byte stat_death_sentence_count;
     [FieldOffset(0x44E)] public byte stat_dmg_dir;
@@ -210,7 +214,11 @@ public struct FhXChr
 
 	[FieldOffset(0x65D)] public uint stat_max_ctb;
 	[FieldOffset(0x65E)] public byte cheer_count;
+	[FieldOffset(0x65F)] public byte aim_count;
 	[FieldOffset(0x660)] public byte focus_count;
+	[FieldOffset(0x661)] public byte reflex_count;
+	[FieldOffset(0x662)] public byte luck_count;
+	[FieldOffset(0x663)] public byte jinx_count;
 	[FieldOffset(0x6BC)] public ushort auto_abilities1;
 	public bool has_sensor { get { return (auto_abilities1 & 1) != 0; } }
 	public bool has_first_strike { get { return (auto_abilities1 >> 1 & 1) != 0; } }

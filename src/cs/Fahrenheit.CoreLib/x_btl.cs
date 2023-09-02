@@ -7,6 +7,7 @@ public unsafe struct FhXBtlStruct {
 	[FieldOffset(0x10)] public byte battle_state;
 	[FieldOffset(0x12)] public byte battle_trigger;
 	[FieldOffset(0x39)] public bool never_crit;
+	[FieldOffset(0x3A)] public bool never_hit;
 	[FieldOffset(0x3D)] public bool always_crit;
 	[FieldOffset(0x3E)] public bool always_1_dmg;
 	[FieldOffset(0x3F)] public bool always_9999_dmg;
