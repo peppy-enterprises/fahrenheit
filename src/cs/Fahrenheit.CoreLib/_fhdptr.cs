@@ -18,11 +18,11 @@ public record struct FhPointerDeref(nint Offset, bool AsPtr);
  * Since we have no control over execution, a pointer can become invalid in the instant _after_ internal validation
  * and _before_ a e.g. string deref. Hence, you MUST appropriately guard FhPointer operations lest you crash the game.
  */
-public unsafe readonly ref struct FhPointer
+public unsafe readonly struct FhPointer
 {
-    private readonly ReadOnlySpan<FhPointerDeref> _derefs;
+    private readonly FhPointerDeref[] _derefs;
 
-    public FhPointer(ReadOnlySpan<FhPointerDeref> derefs)
+    public FhPointer(FhPointerDeref[] derefs)
     {
         _derefs = derefs;
     }
