@@ -123,7 +123,7 @@ public struct {{stn.Name}}
 
     public static string EmitBitfieldVarNode(this FhBitfieldVarNode bfvn)
     {
-        return $"    public int {bfvn.Name} {{ get {{ return (__0x{bfvn.Offset}{(bfvn.BitStart == 0 ? "" : $" >> {bfvn.BitStart}")}) & 1; }} }}";
+        return $"    public bool {bfvn.Name} {{ get {{ return (__0x{bfvn.Offset}{(bfvn.BitStart == 0 ? "" : $" >> {bfvn.BitStart}")}) & 1 != 0; }} }}";
     }
 
     public static string EmitBitfieldVarBackingField(this FhBitfieldVarNode bfvn)
