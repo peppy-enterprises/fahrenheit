@@ -11,20 +11,35 @@ public struct FhXChr
 {
 	[FieldOffset(0x00C)] public byte chr_id;
     [FieldOffset(0x5D0)] public uint stat_hp;
+	[FieldOffset(0x5D0)] public uint hp;
     [FieldOffset(0x5D4)] public uint stat_mp;
+	[FieldOffset(0x5D4)] public uint mp;
     [FieldOffset(0x594)] public uint stat_maxhp;
+	[FieldOffset(0x594)] public uint max_hp;
     [FieldOffset(0x598)] public uint stat_maxmp;
+	[FieldOffset(0x598)] public uint max_mp;
     [FieldOffset(0xDCC)] public byte stat_death;
     [FieldOffset(0xDCE)] public byte stat_stone;
     [FieldOffset(0x63D)] public byte stat_weak;
     [FieldOffset(0x5A8)] public byte stat_str;
+	[FieldOffset(0x5A8)] public byte strength;
     [FieldOffset(0x5A9)] public byte stat_vit;
+	[FieldOffset(0x5A9)] public byte defense;
+	[FieldOffset(0x5A9)] public byte vitality; // Alt (from stat_vit)
     [FieldOffset(0x5AA)] public byte stat_mag;
+	[FieldOffset(0x5AA)] public byte magic;
     [FieldOffset(0x5AB)] public byte stat_spirit;
+	[FieldOffset(0x5AB)] public byte magic_defense;
+	[FieldOffset(0x5AB)] public byte spirit; // Alt (from stat_spirit)
     [FieldOffset(0x5AC)] public byte stat_dex;
+	[FieldOffset(0x5AC)] public byte agility;
+	[FieldOffset(0x5AC)] public byte dexterity; // Alt (from stat_dex)
     [FieldOffset(0x5AD)] public byte stat_luck;
+	[FieldOffset(0x5AD)] public byte luck;
     [FieldOffset(0x5AE)] public byte stat_avoid;
+	[FieldOffset(0x5AE)] public byte evasion;
     [FieldOffset(0x5AF)] public byte stat_hit;
+	[FieldOffset(0x5AF)] public byte accuracy;
     [FieldOffset(0x5BA)] public byte stat_poison_per;
     [FieldOffset(0x5BB)] public byte stat_limit_type;
     [FieldOffset(0x5BC)] public byte stat_limit_gauge;
@@ -152,7 +167,8 @@ public struct FhXChr
 
 	[FieldOffset(0x5C1)] public byte wpn_dmg_formula;
 	[FieldOffset(0x5C7)] public byte wpn_power;
-	[FieldOffset(0x5D9)] public byte chr_elem_atk;
+	[FieldOffset(0x5D8)] public byte wpn_crit_bonus;
+	[FieldOffset(0x5D9)] public byte wpn_elem;
 	[FieldOffset(0x604)] public byte extra_status_inflict;
     [FieldOffset(0x5C9)] public byte stat_death_sentence_start;
     [FieldOffset(0x5C8)] public byte stat_death_sentence_count;
@@ -213,12 +229,12 @@ public struct FhXChr
     public bool stat_def_death_sentence { get { return (__0x65A >> 14 & 1) != 0; } }
 
 	[FieldOffset(0x65D)] public uint stat_max_ctb;
-	[FieldOffset(0x65E)] public byte cheer_count;
-	[FieldOffset(0x65F)] public byte aim_count;
-	[FieldOffset(0x660)] public byte focus_count;
-	[FieldOffset(0x661)] public byte reflex_count;
-	[FieldOffset(0x662)] public byte luck_count;
-	[FieldOffset(0x663)] public byte jinx_count;
+	[FieldOffset(0x65E)] public byte cheer_stacks;
+	[FieldOffset(0x65F)] public byte aim_stacks;
+	[FieldOffset(0x660)] public byte focus_stacks;
+	[FieldOffset(0x661)] public byte reflex_stacks;
+	[FieldOffset(0x662)] public byte luck_stacks;
+	[FieldOffset(0x663)] public byte jinx_stacks;
 	[FieldOffset(0x6BC)] public ushort auto_abilities1;
 	public bool has_sensor { get { return (auto_abilities1 & 1) != 0; } }
 	public bool has_first_strike { get { return (auto_abilities1 >> 1 & 1) != 0; } }
@@ -276,6 +292,7 @@ public struct FhXChr
     [FieldOffset(0x21)] public bool stat_motion_dispose_flag;
     [FieldOffset(0x22)] public bool stat_model_dispose_flag;
     [FieldOffset(0x5B8)] public ushort __0x5B8;
+	public bool is_armored { get { return (__0x5B8 >> 1 & 1) != 0; } }
 	public bool immune_to_gravity { get { return (__0x5B8 >> 1 & 1) != 0; } }
     public bool stat_sp_inv_physic { get { return (__0x5B8 >> 5 & 1) != 0; } }
     public bool stat_sp_inv_magic { get { return (__0x5B8 >> 6 & 1) != 0; } }

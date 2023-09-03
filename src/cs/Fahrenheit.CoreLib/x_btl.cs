@@ -6,13 +6,14 @@ namespace Fahrenheit.CoreLib;
 public unsafe struct FhXBtlStruct {
 	[FieldOffset(0x10)] public byte battle_state;
 	[FieldOffset(0x12)] public byte battle_trigger;
+	[FieldOffset(0x38)] public bool no_variance;
 	[FieldOffset(0x39)] public bool never_crit;
-	[FieldOffset(0x3A)] public bool never_hit;
+	[FieldOffset(0x3A)] public bool always_hit;
 	[FieldOffset(0x3D)] public bool always_crit;
 	[FieldOffset(0x3E)] public bool always_1_dmg;
 	[FieldOffset(0x3F)] public bool always_9999_dmg;
 	[FieldOffset(0x40)] public bool always_99999_dmg;
-	[FieldOffset(0x4F)] public bool always_hit;
+	[FieldOffset(0x4F)] public bool never_hit;
 	[FieldOffset(0x5C)] public IntPtr command_bin_ptr;
 	[FieldOffset(0x60)] public IntPtr monmagic1_bin_ptr;
 	[FieldOffset(0x64)] public IntPtr monmagic2_bin_ptr;
