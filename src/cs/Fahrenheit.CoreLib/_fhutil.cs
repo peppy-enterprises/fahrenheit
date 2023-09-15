@@ -532,3 +532,63 @@ public ref struct FhTokenizer
         ReadOnlySpan<char> _ = GetNextToken();
     }
 }
+
+public static class Extensions {
+	/// <summary>
+	/// Bitwise NOT operator but it is automatically cast back to T
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static T bnot_with_cast<T>(this T x)
+            where T: System.Numerics.IBinaryInteger<T> {
+        unchecked { return (T)~x; }
+    }
+
+	/// <param name="bit_offset">A 0-based offset of the bit into the <paramref name="bitfield"/>.</param>
+	/// <returns>Whether bit at <paramref name="bit_offset"/> into <paramref name="bitfield"/> is set.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static unsafe bool get_bit<T>(this T bitfield, int bit_offset)
+			where T : unmanaged, System.Numerics.IBinaryInteger<T> {
+		if (bit_offset < 0 || bit_offset >= sizeof(T) * 8) throw new System.ArgumentOutOfRangeException();
+		return (bitfield >> bit_offset & T.One) != T.Zero;
+	}
+
+	/// <param name="start_offset">A 0-based offset into the <paramref name="bitfield"/>.</param>
+	/// <param name="len">The amount of bits to read.</param>
+	/// <returns>The value of type <typeparamref name="T"/> made from <paramref name="len"/> bits <paramref name="start_offset"/> into <paramref name="bitfield"/>.</returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static unsafe T get_bits<T>(this T bitfield, int start_offset, int len)
+			where T : unmanaged, System.Numerics.IBinaryInteger<T> {
+		if (start_offset < 0 || start_offset >= sizeof(T) * 8) throw new System.ArgumentOutOfRangeException();
+		if (len <= 0 || len > (sizeof(T) * 8) - start_offset) throw new System.ArgumentOutOfRangeException();
+		return (bitfield >> start_offset) & ((T.One << len) - T.One);
+	}
+
+	/// <summary>
+	/// Sets bit at <paramref name="bit_offset"/> into <paramref name="bitfield"/> based on <paramref name="value"/>.
+	/// </summary>
+	/// <param name="bit_offset">A 0-based offset into the <paramref name="bitfield"/>.</param>
+	/// <param name="value">Whether the bit should be set to <c>1</c> if <c>true</c> or <c>0</c> if <c>false</c>.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static unsafe void set_bit<T>(this ref T bitfield, int bit_offset, bool value)
+            where T: unmanaged, System.Numerics.IBinaryInteger<T> {
+		if (bit_offset < 0 || bit_offset >= sizeof(T) * 8) throw new System.ArgumentOutOfRangeException();
+        if (value) bitfield |= T.One << bit_offset;
+        else bitfield &= (T.One << bit_offset).bnot_with_cast();
+    }
+	
+	/// <summary>
+	/// Sets bit at <paramref name="start_offset"/> into <paramref name="bitfield"/> to <paramref name="value"/>.
+	/// </summary>
+	/// <param name="start_offset">A 0-based offset into the <paramref name="bitfield"/>.</param>
+	/// <param name="len">The amount of bits to write.</param>
+	/// <param name="value">The value to set the bits to. Only the first <paramref name="len"/> bits matter.</param>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static unsafe void set_bits<T>(this ref T bitfield, int start_offset, int len, T value)
+            where T: unmanaged, System.Numerics.IBinaryInteger<T> {
+		if (start_offset < 0 || start_offset >= sizeof(T) * 8) throw new System.ArgumentOutOfRangeException();
+		if (len <= 0 || len > (sizeof(T) * 8) - start_offset) throw new System.ArgumentOutOfRangeException();
+		for (;len > 0; len--, start_offset++) {
+			bitfield.set_bit(start_offset, value.get_bit(start_offset));
+		}
+    }
+}
