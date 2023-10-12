@@ -51,4 +51,39 @@ public static class FhLog
 
         Trace.WriteLine($"{prefix}\t| {msg}");
     }
+
+	public static void Debug(string msg,
+							 [CallerMemberName] string mname = "",
+							 [CallerFilePath] string fpath = "",
+							 [CallerLineNumber] int lnb = 0) {
+		Log(LogLevel.Debug, msg, mname, fpath, lnb);
+	}
+
+	public static void Info(string msg,
+						    [CallerMemberName] string mname = "",
+							[CallerFilePath] string fpath = "",
+							[CallerLineNumber] int lnb = 0) {
+		Log(LogLevel.Info, msg, mname, fpath, lnb);
+	}
+
+	public static void Warning(string msg,
+							   [CallerMemberName] string mname = "",
+							   [CallerFilePath] string fpath = "",
+							   [CallerLineNumber] int lnb = 0) {
+		Log(LogLevel.Warning, msg, mname, fpath, lnb);
+	}
+
+	public static void Error(string msg,
+							 [CallerMemberName] string mname = "",
+							 [CallerFilePath] string fpath = "",
+							 [CallerLineNumber] int lnb = 0) {
+		Log(LogLevel.Error, msg, mname, fpath, lnb);
+	}
+
+	public static void Fatal(string msg,
+							 [CallerMemberName] string mname = "",
+							 [CallerFilePath] string fpath = "",
+							 [CallerLineNumber] int lnb = 0) {
+		Log(LogLevel.Fatal, msg, mname, fpath, lnb);
+	}
 }
