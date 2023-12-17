@@ -179,6 +179,8 @@ EntryPoint_T ffxMain = NULL;
 
 static int DetourMain(void) 
 {
+    AttachConsole(ATTACH_PARENT_PROCESS);
+
     // Get the current executable's directory
     // This sample assumes the managed assembly to load and its runtime configuration file are next to the host
     char_t host_path[MAX_PATH];
