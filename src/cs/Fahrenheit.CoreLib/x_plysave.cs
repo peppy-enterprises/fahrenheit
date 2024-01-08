@@ -40,33 +40,68 @@ public unsafe struct FhXPlySave
     [FieldOffset(0x3C)] public byte slv_spent;
     [FieldOffset(0x3D)] public byte __0x3D;
 	[FieldOffset(0x3E)] public FhXAbiMap abilities;
-    [FieldOffset(0x4A)] public ushort __0x4A;
-    [FieldOffset(0x4C)] public uint __0x4C;
+    [FieldOffset(0x4A)] public ushort auto_abilities1;
+    [FieldOffset(0x4C)] public ushort auto_abilities2;
+	[FieldOffset(0x4E)] public ushort auto_abilities3;
+	public bool has_sensor				{ get => auto_abilities1.get_bit(0); set => auto_abilities1.set_bit(0, value); }
+	public bool has_first_strike		{ get => auto_abilities1.get_bit(1); set => auto_abilities1.set_bit(1, value); }
+	public bool has_initiative			{ get => auto_abilities1.get_bit(2); set => auto_abilities1.set_bit(2, value); }
+	public bool has_counter_attack		{ get => auto_abilities1.get_bit(3); set => auto_abilities1.set_bit(3, value); }
+	public bool has_evade_and_counter	{ get => auto_abilities1.get_bit(4); set => auto_abilities1.set_bit(4, value); }
+	public bool has_magic_counter		{ get => auto_abilities1.get_bit(5); set => auto_abilities1.set_bit(5, value); }
+	public bool has_magic_booster		{ get => auto_abilities1.get_bit(6); set => auto_abilities1.set_bit(6, value); }
+	public bool has_alchemy				{ get => auto_abilities1.get_bit(9); set => auto_abilities1.set_bit(9, value); }
+	public bool has_auto_potion			{ get => auto_abilities1.get_bit(10); set => auto_abilities1.set_bit(10, value); }
+	public bool has_auto_med			{ get => auto_abilities1.get_bit(11); set => auto_abilities1.set_bit(11, value); }
+	public bool has_auto_phoenix		{ get => auto_abilities1.get_bit(12); set => auto_abilities1.set_bit(12, value); }
+	public bool has_piercing			{ get => auto_abilities1.get_bit(13); set => auto_abilities1.set_bit(13, value); }
+	public bool has_half_mp_cost		{ get => auto_abilities1.get_bit(14); set => auto_abilities1.set_bit(14, value); }
+	public bool has_one_mp_cost			{ get => auto_abilities1.get_bit(15); set => auto_abilities1.set_bit(15, value); }
+
+	public bool has_double_overdrive	{ get => auto_abilities2.get_bit(0); set => auto_abilities2.set_bit(0, value); }
+	public bool has_triple_overdrive	{ get => auto_abilities2.get_bit(1); set => auto_abilities2.set_bit(1, value); }
+	public bool has_sos_overdrive		{ get => auto_abilities2.get_bit(2); set => auto_abilities2.set_bit(2, value); }
+	public bool has_overdrive_to_ap		{ get => auto_abilities2.get_bit(3); set => auto_abilities2.set_bit(3, value); }
+	public bool has_double_ap			{ get => auto_abilities2.get_bit(4); set => auto_abilities2.set_bit(4, value); }
+	public bool has_triple_ap			{ get => auto_abilities2.get_bit(5); set => auto_abilities2.set_bit(5, value); }
+	public bool has_no_ap				{ get => auto_abilities2.get_bit(6); set => auto_abilities2.set_bit(6, value); }
+	public bool has_pickpocket			{ get => auto_abilities2.get_bit(7); set => auto_abilities2.set_bit(7, value); }
+	public bool has_master_thief		{ get => auto_abilities2.get_bit(8); set => auto_abilities2.set_bit(8, value); }
+	public bool has_break_hp_limit		{ get => auto_abilities2.get_bit(9); set => auto_abilities2.set_bit(9, value); }
+	public bool has_break_mp_limit		{ get => auto_abilities2.get_bit(10); set => auto_abilities2.set_bit(10, value); }
+	public bool has_break_damage_limit	{ get => auto_abilities2.get_bit(11); set => auto_abilities2.set_bit(11, value); }
+	public bool has_gillionaire			{ get => auto_abilities2.get_bit(14); set => auto_abilities2.set_bit(14, value); }
+	public bool has_hp_stroll			{ get => auto_abilities2.get_bit(15); set => auto_abilities2.set_bit(15, value); }
+
+	public bool has_mp_stroll			{ get => auto_abilities3.get_bit(0); set => auto_abilities3.set_bit(0, value); }
+	public bool has_no_encounters		{ get => auto_abilities3.get_bit(1); set => auto_abilities3.set_bit(1, value); }
+	public bool has_capture				{ get => auto_abilities3.get_bit(2); set => auto_abilities3.set_bit(2, value); }
+
     [FieldOffset(0x50)] public uint battle_count;
     [FieldOffset(0x54)] public uint enemies_defeated;
     [FieldOffset(0x58)] public uint __0x58;
     [FieldOffset(0x5C)] public uint __0x5C;
 	[FieldOffset(0x60)] public fixed ushort ovr_mode_counters[20];
 	public ushort ovr_counter_warrior	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_comrade	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_stoic		{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_healer	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_tactician	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_victim	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_dancer	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_avenger	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_slayer	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_hero		{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_rook		{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_victor	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_coward	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_ally		{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_sufferer	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_daredevil	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_liner		{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_unused1	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_unused2	{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
-	public ushort ovr_counter_aeons		{ get => ovr_mode_counters[0]; set => ovr_mode_counters[0] = value; }
+	public ushort ovr_counter_comrade	{ get => ovr_mode_counters[1]; set => ovr_mode_counters[1] = value; }
+	public ushort ovr_counter_stoic		{ get => ovr_mode_counters[2]; set => ovr_mode_counters[2] = value; }
+	public ushort ovr_counter_healer	{ get => ovr_mode_counters[3]; set => ovr_mode_counters[3] = value; }
+	public ushort ovr_counter_tactician	{ get => ovr_mode_counters[4]; set => ovr_mode_counters[4] = value; }
+	public ushort ovr_counter_victim	{ get => ovr_mode_counters[5]; set => ovr_mode_counters[5] = value; }
+	public ushort ovr_counter_dancer	{ get => ovr_mode_counters[6]; set => ovr_mode_counters[6] = value; }
+	public ushort ovr_counter_avenger	{ get => ovr_mode_counters[7]; set => ovr_mode_counters[7] = value; }
+	public ushort ovr_counter_slayer	{ get => ovr_mode_counters[8]; set => ovr_mode_counters[8] = value; }
+	public ushort ovr_counter_hero		{ get => ovr_mode_counters[9]; set => ovr_mode_counters[9] = value; }
+	public ushort ovr_counter_rook		{ get => ovr_mode_counters[10]; set => ovr_mode_counters[10] = value; }
+	public ushort ovr_counter_victor	{ get => ovr_mode_counters[11]; set => ovr_mode_counters[11] = value; }
+	public ushort ovr_counter_coward	{ get => ovr_mode_counters[12]; set => ovr_mode_counters[12] = value; }
+	public ushort ovr_counter_ally		{ get => ovr_mode_counters[13]; set => ovr_mode_counters[13] = value; }
+	public ushort ovr_counter_sufferer	{ get => ovr_mode_counters[14]; set => ovr_mode_counters[14] = value; }
+	public ushort ovr_counter_daredevil	{ get => ovr_mode_counters[15]; set => ovr_mode_counters[15] = value; }
+	public ushort ovr_counter_liner		{ get => ovr_mode_counters[16]; set => ovr_mode_counters[16] = value; }
+	public ushort ovr_counter_unused1	{ get => ovr_mode_counters[17]; set => ovr_mode_counters[17] = value; }
+	public ushort ovr_counter_unused2	{ get => ovr_mode_counters[18]; set => ovr_mode_counters[18] = value; }
+	public ushort ovr_counter_aeons		{ get => ovr_mode_counters[19]; set => ovr_mode_counters[19] = value; }
 
     [FieldOffset(0x88)] public uint ovr_modes_unlocked;
     public bool ovr_has_warrior		{ get => ovr_modes_unlocked.get_bit(0); set => ovr_modes_unlocked.set_bit(0, value); }

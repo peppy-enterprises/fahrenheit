@@ -414,6 +414,12 @@ public static class FhUtil
 
         return tval;
     }
+	
+	public static TDelegate GetFPtr<TDelegate>(nint funcAddress) {
+		if (FhXGlobals.game_base != 0) return Marshal.GetDelegateForFunctionPointer<TDelegate>(FhXGlobals.game_base + funcAddress);
+		if (FhX2Globals.game_base != 0) return Marshal.GetDelegateForFunctionPointer<TDelegate>(FhX2Globals.game_base + funcAddress);
+		throw new Exception("FH_E_HOOK_TARGET_INDETERMINATE");
+	}
 }
 
 // TODO: unfuck this garbage

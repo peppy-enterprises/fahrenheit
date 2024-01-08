@@ -2,19 +2,19 @@
 
 public static class FhXFontColor {
 	public enum Foreground {
-		White = 0x00, // Also 0x04, 0x0A
-		LightGray = 0x01,
-		Yellow = 0x02,
-		Red = 0x03,
-		Gray = 0x05, // Really dark
-		Pink = 0x06,
-		Cyan = 0x07,
-		Black = 0x08, // Also 0x09
-		ShadowTheHedgehog = 0x0B,
-		Blue = 0x0C,
-		Crimson = 0x0D,
-		DarkBlue = 0x0E,
-		LightBlue = 0x0F,
+		White = 0x0, // Also 0x04, 0x0A
+		LightGray = 0x1,
+		Yellow = 0x2,
+		Red = 0x3,
+		Gray = 0x5, // Really dark
+		Pink = 0x6,
+		Cyan = 0x7,
+		Black = 0x8, // Also 0x09
+		ShadowTheHedgehog = 0xB,
+		Blue = 0xC,
+		Crimson = 0xD,
+		DarkBlue = 0xE,
+		LightBlue = 0xF,
 	}
 
 	public enum Background {

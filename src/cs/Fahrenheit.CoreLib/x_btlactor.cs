@@ -184,7 +184,7 @@ public unsafe struct FhXChr {
 	public bool inflicts_guard				{ get => extra_status_inflict.get_bit(12); set => extra_status_inflict.set_bit(12, value); }
 	public bool inflicts_sentinel			{ get => extra_status_inflict.get_bit(13); set => extra_status_inflict.set_bit(13, value); }
 	public bool inflicts_doom				{ get => extra_status_inflict.get_bit(14); set => extra_status_inflict.set_bit(14, value); }
-	
+
     [FieldOffset(0x606)] public ushort status_suffer;
 	public bool suffers_ko				{ get => status_suffer.get_bit(0); set => status_suffer.set_bit(0, value); }
     public bool suffers_zombie			{ get => status_suffer.get_bit(1); set => status_suffer.set_bit(1, value); }
@@ -306,11 +306,11 @@ public unsafe struct FhXChr {
 	public bool has_sos_auto_regen			{ get => sos_auto_status2.get_bit(6); set => sos_auto_status2.set_bit(6, value); }
 	public bool has_sos_auto_haste			{ get => sos_auto_status2.get_bit(7); set => sos_auto_status2.set_bit(7, value); }
 	public bool has_sos_auto_slow			{ get => sos_auto_status2.get_bit(8); set => sos_auto_status2.set_bit(8, value); }
-	
+
     [FieldOffset(0x63D)] public byte weak_level_full;
 	[FieldOffset(0x63E)] public byte weak_level_hp;
     [FieldOffset(0x641)] public FhXStatus status_resist;
-	
+
 	[FieldOffset(0x65A)] public ushort extra_status_resist;
 	public bool resists_scan				{ get => extra_status_resist.get_bit(0); set => extra_status_resist.set_bit(0, value); }
 	public bool resists_distill_power		{ get => extra_status_resist.get_bit(1); set => extra_status_resist.set_bit(1, value); }
@@ -327,6 +327,7 @@ public unsafe struct FhXChr {
 	public bool resists_guard				{ get => extra_status_resist.get_bit(12); set => extra_status_resist.set_bit(12, value); }
 	public bool resists_sentinel			{ get => extra_status_resist.get_bit(13); set => extra_status_resist.set_bit(13, value); }
 	public bool resists_doom				{ get => extra_status_resist.get_bit(14); set => extra_status_resist.set_bit(14, value); }
+
     [FieldOffset(0x65C)] public byte ctb;
 	[FieldOffset(0x65D)] public uint max_ctb;
 	[FieldOffset(0x65E)] public byte cheer_stacks;
@@ -339,7 +340,6 @@ public unsafe struct FhXChr {
 	[FieldOffset(0x6BC)] public ushort auto_abilities1;
 	[FieldOffset(0x6BE)] public ushort auto_abilities2;
 	[FieldOffset(0x6C0)] public ushort auto_abilities3;
-
 	public bool has_sensor				{ get => auto_abilities1.get_bit(0); set => auto_abilities1.set_bit(0, value); }
 	public bool has_first_strike		{ get => auto_abilities1.get_bit(1); set => auto_abilities1.set_bit(1, value); }
 	public bool has_initiative			{ get => auto_abilities1.get_bit(2); set => auto_abilities1.set_bit(2, value); }
@@ -373,7 +373,7 @@ public unsafe struct FhXChr {
 	public bool has_mp_stroll			{ get => auto_abilities3.get_bit(0); set => auto_abilities3.set_bit(0, value); }
 	public bool has_no_encounters		{ get => auto_abilities3.get_bit(1); set => auto_abilities3.set_bit(1, value); }
 	public bool has_capture				{ get => auto_abilities3.get_bit(2); set => auto_abilities3.set_bit(2, value); }
-	
+
     [FieldOffset(0x6CE)] public byte stat_use_mp0;
     [FieldOffset(0x6D1)] public byte summoned_by_id;
     [FieldOffset(0x6D2)] public byte regen_strength;

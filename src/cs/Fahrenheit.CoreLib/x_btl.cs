@@ -6,6 +6,10 @@ namespace Fahrenheit.CoreLib;
 public unsafe struct FhXBtlStruct {
 	[FieldOffset(0x10)] public byte battle_state;
 	[FieldOffset(0x12)] public byte battle_trigger;
+	[FieldOffset(0x28)] public bool invincible_mon;
+	[FieldOffset(0x29)] public bool invincible_ply;
+	[FieldOffset(0x2A)] public bool ply_controls_mon;
+	[FieldOffset(0x2C)] public bool free_camera;
 	[FieldOffset(0x38)] public bool no_variance;
 	[FieldOffset(0x39)] public bool never_crit;
 	[FieldOffset(0x3A)] public bool always_hit;
