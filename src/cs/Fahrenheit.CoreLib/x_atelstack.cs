@@ -41,45 +41,49 @@ public unsafe struct FhXAtelStack {
 
 	public int pop_int() {
 		if (size <= 0) throw new AtelStackOverflowException("Attempted to pop from an empty stack");
+		int i = size - 1;
 
-		size -= 1;
-		FhXAtelStackVar value = this[size].var;
+		FhXAtelStackVar value = this[i].var;
 		int x = 0;
 
-		if (types[size] == FhXAtelStackType.Float) x = (int)value.as_float;
-		else if (types[size] == FhXAtelStackType.Int) x = value.as_int;
+		if (types[i] == FhXAtelStackType.Float) x = (int)value.as_float;
+		else if (types[i] == FhXAtelStackType.Int) x = value.as_int;
 
-		types[size] = FhXAtelStackType.None;
+		types[i] = FhXAtelStackType.None;
+		size -= 1;
 		return x;
 	}
 
 	public float pop_float() {
 		if (size <= 0) throw new AtelStackOverflowException("Attempted to pop from an empty stack");
+		int i = size - 1;
 
-		size -= 1;
-		FhXAtelStackVar value = this[size].var;
+		FhXAtelStackVar value = this[i].var;
 		float x = 0;
 
-		if (types[size] == FhXAtelStackType.Int) x = value.as_int;
-		else if (types[size] == FhXAtelStackType.Float) x = value.as_float;
+		if (types[i] == FhXAtelStackType.Int) x = value.as_int;
+		else if (types[i] == FhXAtelStackType.Float) x = value.as_float;
 
-		types[size] = FhXAtelStackType.None;
+		types[i] = FhXAtelStackType.None;
+		size -= 1;
 		return x;
 	}
 
 	public void push_int(int value) {
 		if (size >= MAX_SIZE) throw new AtelStackOverflowException("Attempted to push onto a full stack");
+		int i = size - 1;
 
-		types[size] = FhXAtelStackType.Int;
-		values_as_int[size] = value;
+		types[i] = FhXAtelStackType.Int;
+		values_as_int[i] = value;
 		size += 1;
 	}
 
 	public void push_float(float value) {
 		if (size >= MAX_SIZE) throw new AtelStackOverflowException("Attempted to push onto a full stack");
+		int i = size - 1;
 
-		types[size] = FhXAtelStackType.Float;
-		values_as_float[size] = value;
+		types[i] = FhXAtelStackType.Float;
+		values_as_float[i] = value;
 		size += 1;
 	}
 
@@ -90,10 +94,10 @@ public unsafe struct FhXAtelStack {
 
 			switch (types[i]) {
 				case FhXAtelStackType.Int:
-					return_value.as_int = values_as_int[20];
+					return_value.as_int = values_as_int[i];
 					return (return_value, FhXAtelStackType.Int);
 				case FhXAtelStackType.Float:
-					return_value.as_float = values_as_float[20];
+					return_value.as_float = values_as_float[i];
 					return (return_value, FhXAtelStackType.Float);
 				default:
 					return_value.as_int = 0;
