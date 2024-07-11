@@ -2,7 +2,7 @@
     <!-- LOCAL TESTING COPY TASK -->
 	<Target Name="CopyAfterBuild" AfterTargets="Build">
 		<ItemGroup>
-			<ProjectFiles Include="$(TargetDir)\*.*" />
+			<ProjectFiles Include="$(TargetDir)\**\*.*" />
 		</ItemGroup>
 
 		<Message Text="$(MSBuildProjectName): Copying to $(CopyToDir)." Importance="High" />
