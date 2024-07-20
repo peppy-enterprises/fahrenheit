@@ -90,6 +90,9 @@
     <IntDir>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)\</IntDir>
     <TargetName>fhlaunch</TargetName>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

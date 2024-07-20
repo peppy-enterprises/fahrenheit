@@ -42,7 +42,7 @@ public static class FhLoader
     {
         refAssemFullPath = Path.Join(dirPath, $"{refAssemName}.dll");
 
-        return !(!IsModule(refAssemFullPath) || IsAssemLoaded(refAssemName));
+        return File.Exists(refAssemFullPath) && !IsAssemLoaded(refAssemName);
     }
 
     /// <summary>

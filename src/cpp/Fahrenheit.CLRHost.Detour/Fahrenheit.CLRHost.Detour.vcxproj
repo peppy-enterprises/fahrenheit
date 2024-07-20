@@ -111,6 +111,9 @@
     <IntDir>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)\</IntDir>
     <TargetName>fhdetour</TargetName>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
   </PropertyGroup>
