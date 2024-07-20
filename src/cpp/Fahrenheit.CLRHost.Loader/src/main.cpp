@@ -121,7 +121,7 @@ namespace
         // Load .NET Core
         void*          load_assembly_and_get_function_pointer = nullptr;
         hostfxr_handle cxt                                    = nullptr;
-        
+
         int rc = init_fptr(config_path, nullptr, &cxt);
         if (rc != 0 || cxt == nullptr)
         {
@@ -152,7 +152,7 @@ static FARPROC WINAPI GetProcAddressCLR(HMODULE module, LPCSTR funcName)
     }
 
     auto real = FhCLRHost::PInvokeCache::GetInstance().find(module, funcName);
-    
+
     // already hooked
     if (real != nullptr) {
         return reinterpret_cast<FARPROC>(real);
@@ -177,8 +177,10 @@ using EntryPoint_T = int(*)(void);
 
 EntryPoint_T ffxMain = NULL;
 
-static int DetourMain(void) 
+static int DetourMain(void)
 {
+    AttachConsole(ATTACH_PARENT_PROCESS);
+
     // Get the current executable's directory
     // This sample assumes the managed assembly to load and its runtime configuration file are next to the host
     char_t host_path[MAX_PATH];
@@ -250,7 +252,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
                        LPVOID lpReserved
                      )
 {
-    if (DetourIsHelperProcess()) 
+    if (DetourIsHelperProcess())
     {
         return TRUE;
     }

@@ -7,7 +7,7 @@ using static Fahrenheit.CoreLib.FhHookDelegates;
 
 namespace Fahrenheit.Hooks.Generic;
 
-public partial class FhHooksExampleModule
+public partial class FhHooksBaseModule
 {
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvStdcall) })]
     public unsafe int TkIsDebugHook()

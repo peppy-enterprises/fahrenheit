@@ -33,6 +33,9 @@ public class FhMethodHandle<T> where T : Delegate
         return (handle = _hookFptr) != null;
     }
 
+    public T GetOrigFPtrUnchecked => _origFptr;
+    public T GetHookFPtr => _hookFptr;
+
     public bool ApplyHook()
     {
         return FhCLRHost.CLRHostHook(_addr, _hookFptr, out _origFptr);

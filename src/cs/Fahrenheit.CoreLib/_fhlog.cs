@@ -38,52 +38,52 @@ public static class FhLog
                            [CallerLineNumber] int    lnb   = 0)
     {
         if (level < MinLevel) return;
-        
-		string timeFormat = @"hh:mm:ss.ff t\M";
-        string time = DateTimeOffset.UtcNow.ToString(timeFormat);
-		string prefix = $"{time} | [{level}] {Path.GetFileName(fpath)}:{lnb}";
 
-		if (msg.Contains('\n')) {
-			string newline_prefix = "".PadLeft(prefix.Length, ' ');
-			msg = msg.Replace("\r", "");
-			msg = msg.Replace("\n", $"\n{newline_prefix}\t| ");
-		}
+        string timeFormat = @"hh:mm:ss.ff t\M";
+        string time = DateTimeOffset.UtcNow.ToString(timeFormat);
+        string prefix = $"{time} | [{level}] {Path.GetFileName(fpath)}:{lnb}";
+
+        if (msg.Contains('\n')) {
+            string newline_prefix = "".PadLeft(prefix.Length, ' ');
+            msg = msg.Replace("\r", "");
+            msg = msg.Replace("\n", $"\n{newline_prefix}\t| ");
+        }
 
         Trace.WriteLine($"{prefix}\t| {msg}");
     }
 
-	public static void Debug(string msg,
-							 [CallerMemberName] string mname = "",
-							 [CallerFilePath] string fpath = "",
-							 [CallerLineNumber] int lnb = 0) {
-		Log(LogLevel.Debug, msg, mname, fpath, lnb);
-	}
+    public static void Debug(string msg,
+                             [CallerMemberName] string mname = "",
+                             [CallerFilePath] string fpath = "",
+                             [CallerLineNumber] int lnb = 0) {
+        Log(LogLevel.Debug, msg, mname, fpath, lnb);
+    }
 
-	public static void Info(string msg,
-						    [CallerMemberName] string mname = "",
-							[CallerFilePath] string fpath = "",
-							[CallerLineNumber] int lnb = 0) {
-		Log(LogLevel.Info, msg, mname, fpath, lnb);
-	}
+    public static void Info(string msg,
+                            [CallerMemberName] string mname = "",
+                            [CallerFilePath] string fpath = "",
+                            [CallerLineNumber] int lnb = 0) {
+        Log(LogLevel.Info, msg, mname, fpath, lnb);
+    }
 
-	public static void Warning(string msg,
-							   [CallerMemberName] string mname = "",
-							   [CallerFilePath] string fpath = "",
-							   [CallerLineNumber] int lnb = 0) {
-		Log(LogLevel.Warning, msg, mname, fpath, lnb);
-	}
+    public static void Warning(string msg,
+                               [CallerMemberName] string mname = "",
+                               [CallerFilePath] string fpath = "",
+                               [CallerLineNumber] int lnb = 0) {
+        Log(LogLevel.Warning, msg, mname, fpath, lnb);
+    }
 
-	public static void Error(string msg,
-							 [CallerMemberName] string mname = "",
-							 [CallerFilePath] string fpath = "",
-							 [CallerLineNumber] int lnb = 0) {
-		Log(LogLevel.Error, msg, mname, fpath, lnb);
-	}
+    public static void Error(string msg,
+                             [CallerMemberName] string mname = "",
+                             [CallerFilePath] string fpath = "",
+                             [CallerLineNumber] int lnb = 0) {
+        Log(LogLevel.Error, msg, mname, fpath, lnb);
+    }
 
-	public static void Fatal(string msg,
-							 [CallerMemberName] string mname = "",
-							 [CallerFilePath] string fpath = "",
-							 [CallerLineNumber] int lnb = 0) {
-		Log(LogLevel.Fatal, msg, mname, fpath, lnb);
-	}
+    public static void Fatal(string msg,
+                             [CallerMemberName] string mname = "",
+                             [CallerFilePath] string fpath = "",
+                             [CallerLineNumber] int lnb = 0) {
+        Log(LogLevel.Fatal, msg, mname, fpath, lnb);
+    }
 }

@@ -19,8 +19,8 @@ public static class FhLoader
     /// </summary>
     private static bool IsModule(string dirEntry)
     {
-        return dirEntry.EndsWith(".dll") 
-               && File.Exists(dirEntry.Replace(".dll", ".runtimeconfig.json")) 
+        return dirEntry.EndsWith(".dll")
+               && File.Exists(dirEntry.Replace(".dll", ".runtimeconfig.json"))
                && File.Exists(dirEntry.Replace(".dll", ".deps.json"));
     }
 
@@ -165,7 +165,7 @@ public static class FhLoader
             foreach (Type type in assembly.GetExportedTypes())
             {
                 if (type.FullName != typename || !typeof(T).IsAssignableFrom(type) || type == typeof(T)) continue;
-                
+
                 if (!typeToConvert.IsAssignableFrom(type))
                 {
                     throw new JsonException($"E_TYPE_MISMATCH: {typeToConvert.FullName} is not assignable from {type.FullName}.");
@@ -190,7 +190,7 @@ public static class FhLoader
             foreach (Type type in assembly.GetTypes())
             {
                 if (type.FullName != typename || type != typeof(T)) continue;
-              
+
                 if (type != typeToConvert)
                 {
                     throw new JsonException($"E_TYPE_MISMATCH: expected {typeToConvert.FullName} but got {type.FullName}");

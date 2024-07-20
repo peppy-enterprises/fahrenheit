@@ -60,7 +60,7 @@ public static class FhModuleController
         }
 
         if (!fmctx.Module.FhModuleStop()) retval = false;
-     
+
         return retval;
     }
 
@@ -74,7 +74,7 @@ public static class FhModuleController
         }
 
         if (!fmctx.Module.FhModuleStart()) retval = false;
-        
+
         return retval;
     }
 
@@ -83,7 +83,7 @@ public static class FhModuleController
         lock (_moduleManipLock)
         {
             FhLog.Log(LogLevel.Info, $"Module {sender.ModuleName} changes state from {e.OldState} to {e.NewState}.");
-            
+
             FhModuleContext fmctx = GetContextForModule(sender) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE");
 
             if (!(e.NewState switch {

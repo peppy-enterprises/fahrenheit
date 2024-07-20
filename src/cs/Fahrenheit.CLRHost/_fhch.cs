@@ -14,7 +14,7 @@ namespace Fahrenheit.CLRHost;
 
 public static class FhCLRHost
 {
-    internal static nint RetrieveMbaseOrThrow()
+    public static nint RetrieveMbaseOrThrow()
     {
         nint mbase;
         if ((mbase = FhPInvoke.GetModuleHandle("FFX.exe")) == nint.Zero)
@@ -69,7 +69,7 @@ public static class FhCLRHost
 
     /* [fkelava 3/6/23 15:13]
      * The signature is intentional. You can edit it, but that requires a change in the CLR hosting code as well.
-     * 
+     *
      * https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting#step-3---load-managed-assembly-and-get-function-pointer-to-a-managed-method
      * `public delegate int ComponentEntryPoint(IntPtr args, int sizeBytes);`
      */
