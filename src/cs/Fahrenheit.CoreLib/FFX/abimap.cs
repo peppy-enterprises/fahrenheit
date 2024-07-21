@@ -2,9 +2,9 @@
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0xC)]
 public struct AbiMap {
-    [FieldOffset(0x0)] public ushort part1;
-    [FieldOffset(0x4)] public ushort part2;
-    [FieldOffset(0x8)] public ushort part3;
+    [FieldOffset(0x0)] public uint part1;
+    [FieldOffset(0x4)] public uint part2;
+    [FieldOffset(0x8)] public uint part3;
 
     public bool has_attack			{ get => part1.get_bit(0); set => part1.set_bit(0, value); }
     public bool has_item			{ get => part1.get_bit(1); set => part1.set_bit(1, value); }
