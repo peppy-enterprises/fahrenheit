@@ -12,10 +12,8 @@ using System.Xml.Serialization;
 
 namespace Fahrenheit.Tools.CT2CS;
 
-internal class Program
-{
-    static void Main(string[] args)
-    {
+internal class Program {
+    static void Main(string[] args) {
         Option<string> optDefNs    = new Option<string>("--ns", "Set the namespace of the resulting C# file.");
         Option<string> optFilePath = new Option<string>("--src", "Set the path to the source file.");
         Option<string> optDestPath = new Option<string>("--dest", "Set the folder where the C# file should be written.");
@@ -24,8 +22,7 @@ internal class Program
         optFilePath.IsRequired = true;
         optDestPath.IsRequired = true;
 
-        RootCommand rootCmd = new RootCommand("Process a cheat table and create a C# code file.")
-        {
+        RootCommand rootCmd = new RootCommand("Process a cheat table and create a C# code file.") {
             optDefNs, 
             optFilePath,
             optDestPath
@@ -40,30 +37,25 @@ internal class Program
         return;
     }
 
-    static void CT2CSMain(FhCT2CSArgs config)
-    {
+    static void CT2CSMain(FhCT2CSArgs config) {
         CT2CSConfig.CLIRead(config);
 
-        using (XmlReader xmlr = XmlReader.Create(config.SrcPath))
-        {
+        using (XmlReader xmlr = XmlReader.Create(config.SrcPath)) {
             xmlr.ReadToDescendant("CheatEntry");
 
             XmlSerializer xmls = new XmlSerializer(typeof(FhCtEntry), new XmlRootAttribute("CheatEntry"));
             FhCtEntry     ct   = xmls.Deserialize(xmlr) as FhCtEntry ?? throw new Exception("E_CAST_FAILED");
 
-            List<FhSyntaxNode> ast = new List<FhSyntaxNode>
-            {
+            List<FhSyntaxNode> ast = new List<FhSyntaxNode> {
                 ct.TryConstructSyntaxNode(out FhSyntaxNode? rsn) ? rsn : throw new Exception("E_MALFORMED_CHEAT_TABLE")
             };
 
-            foreach (FhCtEntry entry in ct.CheatEntries)
-            {
+            foreach (FhCtEntry entry in ct.CheatEntries) {
                 if (entry.TryConstructSyntaxNode(out FhSyntaxNode? sn))
                     ast.Add(sn);
             }
 
-            foreach (FhSyntaxNode node in ast)
-            {
+            foreach (FhSyntaxNode node in ast) {
                 if (node is not FhStructNode stn)
                     continue;
 
@@ -73,10 +65,8 @@ internal class Program
                 if (!stn.TryEmitStruct(sb))
                     throw new Exception("E_EMIT_FAULT");
 
-                using (FileStream fs = File.Open(fn, FileMode.CreateNew))
-                {
-                    using (StreamWriter sw = new StreamWriter(fs))
-                    {
+                using (FileStream fs = File.Open(fn, FileMode.CreateNew)) {
+                    using (StreamWriter sw = new StreamWriter(fs)) {
                         sw.Write(sb.ToString());
                     }
                 }

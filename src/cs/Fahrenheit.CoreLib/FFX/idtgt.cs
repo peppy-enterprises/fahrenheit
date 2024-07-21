@@ -9,8 +9,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum TargetId : T_XTargetId
-{
+public enum TargetId : T_XTargetId {
     CHR_NOP         = -1,
     CHR_ACTIVE      = -2,
     CHR_TARGET      = -3,

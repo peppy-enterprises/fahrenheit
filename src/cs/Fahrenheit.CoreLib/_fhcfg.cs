@@ -11,11 +11,9 @@ namespace Fahrenheit.CoreLib;
 ///     _All_ configuration structs, without exception, have the <see cref="Type"/> field set to typeof(T).FullName
 ///     to permit their polymorphic deserialization. See <see cref="FhConfigParser{T}"/>.
 /// </summary>
-public abstract record FhConfigStruct
-{
+public abstract record FhConfigStruct {
     protected FhConfigStruct(string configName,
-                             uint   configVersion)
-    {
+                             uint   configVersion) {
         Type          = GetType().FullName ?? throw new Exception("E_CONFSTRUCT_TYPE_UNIDENTIFIABLE");
         ConfigName    = configName;
         ConfigVersion = configVersion;
@@ -37,8 +35,7 @@ public sealed record FhModuleConfigCollection(List<FhModuleConfig> ModuleConfigs
 ///     2) ConfigVersion, which is available to you for versioning scenarios.<br></br>
 ///     3) ConfigEnabled, which instructs the <see cref="IFhModuleController"/> not to spawn the module.
 /// </summary>
-public abstract record FhModuleConfig(string ConfigName, uint ConfigVersion, bool ConfigEnabled) : FhConfigStruct(ConfigName, ConfigVersion)
-{
+public abstract record FhModuleConfig(string ConfigName, uint ConfigVersion, bool ConfigEnabled) : FhConfigStruct(ConfigName, ConfigVersion) {
     public abstract bool TrySpawnModule([NotNullWhen(true)] out FhModule? fm);
 }
 

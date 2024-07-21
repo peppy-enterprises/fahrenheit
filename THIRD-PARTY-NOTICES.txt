@@ -24,7 +24,7 @@ Section 3. Restrictions
 
 To the best of our knowledge, the reverse-engineering and decompilation work carried out for the Fahrenheit project
 by EU residents is lawful based on the judgement rendered by the European Court of Justice in case C-13/20 
-(https://curia.europa.eu/juris/document/document.jsf?text=&docid=247056&pageIndex=0&doclang=DE&mode=req&dir=&occ=first&part=1&cid=18380521),
+(https://curia.europa.eu/juris/document/document.jsf?text=&docid=247056&pageIndex=0&doclang=EN&mode=req&dir=&occ=first&part=1&cid=18380521),
 which explicitly permits decompilation for the purpose of fixing defects in software applications,
 and based on the extant work of other groups whose similar projects have not been ordered to desist.
 

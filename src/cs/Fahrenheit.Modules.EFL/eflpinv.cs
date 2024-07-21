@@ -3,7 +3,7 @@
 namespace Fahrenheit.Modules.EFL;
 
 internal unsafe class EFLPInvoke {
-    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)] 
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
     public static extern nint CreateFile(
             string fileName,
             uint desiredAccess,

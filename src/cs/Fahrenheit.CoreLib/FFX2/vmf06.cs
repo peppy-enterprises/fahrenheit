@@ -35,8 +35,7 @@
 
 namespace Fahrenheit.CoreLib.FFX2;
 
-public static unsafe partial class VMCall
-{
+public static unsafe partial class VMCall {
     public delegate int   camSleep(int arg1);
     public delegate int   camWakeUp(int arg1);
     public delegate int   camSetPos(float arg1, float arg2, float arg3);

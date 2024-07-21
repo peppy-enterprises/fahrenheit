@@ -7,10 +7,8 @@
 #include <map>
 #include <mutex>
 
-namespace FhCLRHost
-{
-	class PInvokeCache
-	{
+namespace FhCLRHost {
+	class PInvokeCache {
 	public:
 		/*!
 		*	@brief	return thread safe instance of cache

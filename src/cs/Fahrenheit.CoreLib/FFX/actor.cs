@@ -5,8 +5,7 @@
 namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Auto, Pack = 4, Size = 0x880)]
-public unsafe struct Actor
-{
+public unsafe struct Actor {
     [FieldOffset(0x0)]   public ushort chr_id;
     [FieldOffset(0x2)]   public ushort chr_enabled;
     [FieldOffset(0x4)]   public char*  chr_name;

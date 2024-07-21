@@ -9,8 +9,7 @@
 
 namespace Fahrenheit.CoreLib.FFX2;
 
-public enum ChrStatId : T_X2ChrStatId
-{
+public enum ChrStatId : T_X2ChrStatId {
     STAT_NOP                       = 0,  // なし
     STAT_HP                        = 1,  // ＨＰ
     STAT_MP                        = 2,  // ＭＰ

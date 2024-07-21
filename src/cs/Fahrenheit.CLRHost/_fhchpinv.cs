@@ -3,8 +3,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace Fahrenheit.CLRHost;
 
-internal static partial class FhPInvoke
-{
+internal static partial class FhPInvoke {
     [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16)]
     public static partial nint GetProcAddress(nint hModule, string lpProcName);
 

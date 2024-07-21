@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum SklId : T_XSklId
-{
+public enum SklId : T_XSklId {
     K001 = 0x6001, // 子供
     K002 = 0x6002, // 男青年（細身）
     K003 = 0x6003, // 男青年（太身）

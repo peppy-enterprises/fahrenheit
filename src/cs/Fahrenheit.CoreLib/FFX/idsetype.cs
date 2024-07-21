@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum SeTypeId : T_XSeTypeId
-{
+public enum SeTypeId : T_XSeTypeId {
     SE_WOOD_PIER     = 0,
     SE_CARPET        = 1,
     SE_CEMENT        = 2,

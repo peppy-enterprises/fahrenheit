@@ -12,10 +12,8 @@ using System.Text;
 
 namespace Fahrenheit.Tools.H2CS;
 
-internal class Program
-{
-    static void Main(string[] args)
-    {
+internal class Program {
+    static void Main(string[] args) {
         Option<string> optDefNs      = new Option<string>("--ns", "Set the namespace of the resulting C# file.");
         Option<bool>   optEmitProlog = new Option<bool>("--emit-prologue", "Whether to emit a prologue. Used when compiling multiple headers into a single C# file.");
         Option<bool>   optEmitDedup  = new Option<bool>("--emit-dedup", "Whether to deduplicate entries. Used when compiling multiple headers into a single C# file.");
@@ -30,8 +28,7 @@ internal class Program
         optFilePath.IsRequired   = true;
         optDestPath.IsRequired   = true;
 
-        RootCommand rootCmd = new RootCommand("Process a C header and create a C# code file.")
-        {
+        RootCommand rootCmd = new RootCommand("Process a C header and create a C# code file.") {
             optDefNs,
             optEmitProlog,
             optEmitDedup,
@@ -52,8 +49,7 @@ internal class Program
         return;
     }
 
-    static void H2CSMain(FhH2CSArgs config)
-    {
+    static void H2CSMain(FhH2CSArgs config) {
         H2CSConfig.CLIRead(config);
 
         StringBuilder sb = new StringBuilder();
@@ -64,11 +60,10 @@ internal class Program
 
         if (!hgline.StartsWith("#ifndef") || !hgline.ConstructHeaderGuard(out FhHeaderGuardNode? hg)) 
             throw new Exception("FH_E_H2CS_HG_ILLEGIBLE");
-        
+
         FhHeaderFile hf = new FhHeaderFile(hg, new List<FhDefineNode>());
-        
-        foreach (string line in lines[2..])
-        {
+
+        foreach (string line in lines[2..]) {
             if (line.StartsWith("#define") && line.ConstructDefineNode(out FhDefineNode? define)) 
                 hf.Defines.Add(define);
         }
@@ -76,10 +71,8 @@ internal class Program
         if (!hf.TryEmitHeader(sb))
             throw new Exception("FH_E_H2CS_INTERNAL_FAULT");
 
-        using (FileStream fs = File.Open(fn, FileMode.CreateNew))
-        {
-            using (StreamWriter sw = new StreamWriter(fs))
-            {
+        using (FileStream fs = File.Open(fn, FileMode.CreateNew)) {
+            using (StreamWriter sw = new StreamWriter(fs)) {
                 sw.Write(sb.ToString());
             }
         }

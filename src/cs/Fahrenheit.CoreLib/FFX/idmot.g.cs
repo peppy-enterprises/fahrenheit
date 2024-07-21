@@ -14,8 +14,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum MotId : T_XMotId
-{
+public enum MotId : T_XMotId {
     // [h2cs 12/6/23 22:48] Header name: mot_c001 
     // --- __mot_c001_h START (1440 entries) ---
     TIDU_BZ_DMG1 = 0x0001137A,

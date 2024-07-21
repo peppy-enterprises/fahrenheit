@@ -3,13 +3,11 @@ using System.IO;
 
 namespace Fahrenheit.CoreLib;
 
-public sealed record FhDirLink
-{
+public sealed record FhDirLink {
     public string LinkSymbol { get; }
     public string Path       { get; }
 
-    public FhDirLink(string linkSymbol, string path)
-    {
+    public FhDirLink(string linkSymbol, string path) {
         LinkSymbol = linkSymbol;
 
         /* [fkelava 31/3/23 13:10]
@@ -23,8 +21,7 @@ public sealed record FhDirLink
     }
 }
 
-public static class FhRuntimeConst
-{
+public static class FhRuntimeConst {
     internal const string _binDirName      = "bin";
     internal const string _clrHooksDirName = "clrhooks";
     internal const string _cppHooksDirName = "cpphooks";
@@ -34,8 +31,7 @@ public static class FhRuntimeConst
     internal const string _rsrcDirName     = "rsrc";
     internal const string _miscDirName     = "misc";
 
-    static FhRuntimeConst()
-    {
+    static FhRuntimeConst() {
         string cwdParent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
                            throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
 

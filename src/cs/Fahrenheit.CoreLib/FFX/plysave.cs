@@ -21,6 +21,9 @@ public unsafe struct PlySave {
     [FieldOffset(0x24)] public uint max_hp;
     [FieldOffset(0x28)] public uint max_mp;
     [FieldOffset(0x2C)] public byte ply_flags;
+    public bool join { get => ply_flags.get_bit(0); set => ply_flags.set_bit(0, value); }
+    public bool joined { get => ply_flags.get_bit(4); set => ply_flags.set_bit(4, value); }
+
     [FieldOffset(0x2D)] public byte wpn_inv_idx;
     [FieldOffset(0x2E)] public byte arm_inv_idx;
     [FieldOffset(0x2F)] public byte strength;

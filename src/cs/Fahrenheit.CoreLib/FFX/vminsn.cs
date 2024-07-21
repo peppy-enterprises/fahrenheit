@@ -10,10 +10,8 @@
 
 public sealed record VMInstruction(string Name, uint OperandType, uint OperandCount, ushort InsnSize, ushort __UNKNOWN1);
 
-public static partial class VM
-{
-    public static readonly VMInstruction[] Instructions =
-    {
+public static partial class VM {
+    public static readonly VMInstruction[] Instructions = {
         new VMInstruction("NOP", 0, 0, 0, 0),
         new VMInstruction("OPLOR", 1, 1, 1, 0),
         new VMInstruction("OPLAND", 1, 1, 1, 0),

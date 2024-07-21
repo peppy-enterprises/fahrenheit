@@ -5,8 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Fahrenheit.CoreLib;
 
-public enum LogLevel
-{
+public enum LogLevel {
     Trace   = 0,
     Debug   = 1,
     Info    = 2,
@@ -16,16 +15,14 @@ public enum LogLevel
     None    = 6
 }
 
-public static class FhLog
-{
+public static class FhLog {
 #if DEBUG
     private const LogLevel MinLevel = LogLevel.Debug;
 #else
     private const LogLevel MinLevel = LogLevel.Info;
 #endif
 
-    static FhLog()
-    {
+    static FhLog() {
         Trace.AutoFlush = true;
         Trace.Listeners.Add(new ConsoleTraceListener());
         Trace.Listeners.Add(new TextWriterTraceListener(File.Open(Path.Join(FhRuntimeConst.DiagLogDir.Path, "latest.log"), FileMode.Create, FileAccess.Write, FileShare.Read)));
@@ -35,8 +32,7 @@ public static class FhLog
                            string                    msg,
                            [CallerMemberName] string mname = "",
                            [CallerFilePath]   string fpath = "",
-                           [CallerLineNumber] int    lnb   = 0)
-    {
+                           [CallerLineNumber] int    lnb   = 0) {
         if (level < MinLevel) return;
 
         string timeFormat = @"hh:mm:ss.ff t\M";

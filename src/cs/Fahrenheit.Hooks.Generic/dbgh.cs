@@ -7,18 +7,15 @@ using static Fahrenheit.CoreLib.FhHookDelegates;
 
 namespace Fahrenheit.Hooks.Generic;
 
-public partial class FhHooksBaseModule
-{
+public partial class FhHooksBaseModule {
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvStdcall) })]
-    public unsafe int TkIsDebugHook()
-    {
-        if (_tkIsDbg.GetOriginalFptrSafe(out TkIsDebugDelegate? fptr))
-        {
-            FhLog.Log(LogLevel.Info, $"Calling original.");
+    public unsafe int TkIsDebugHook() {
+        if (_tkIsDbg.GetOriginalFptrSafe(out TkIsDebugDelegate? fptr)) {
+            //FhLog.Info($"Calling original.");
             return fptr.Invoke();
         }
 
-        FhLog.Log(LogLevel.Info, $"Original was not called.");
+        //FhLog.Info($"Original was not called.");
         return 0;
     }
 }

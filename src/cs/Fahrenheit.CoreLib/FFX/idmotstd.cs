@@ -9,8 +9,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public static class StdMotionId
-{
+public static class StdMotionId {
     public const T_XStdMotId MOT_ALL        = 0xFFFF;
     public const T_XStdMotId MOT_IDLE       = 0x01; // システムアイドリング
     public const T_XStdMotId MOT_ATTACK_00  = 0x02;
@@ -26,7 +25,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_IDLE3      = 0x12;
     public const T_XStdMotId MOT_WEAK1_00   = 0x18;
     public const T_XStdMotId MOT_WEAK1_01   = 0x19;
-    public const T_XStdMotId MOT_WEAK1_02   = 0x1A;                   
+    public const T_XStdMotId MOT_WEAK1_02   = 0x1A;
     public const T_XStdMotId MOT_WEAK2_00_1 = 0x20;
     public const T_XStdMotId MOT_WEAK2_00_2 = 0x21;
     public const T_XStdMotId MOT_WEAK2_01   = 0x22;
@@ -34,7 +33,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_WEAK2_02_2 = 0x24;
     public const T_XStdMotId MOT_GUARD_00   = 0x28;
     public const T_XStdMotId MOT_GUARD_01   = 0x29;
-    public const T_XStdMotId MOT_GUARD_02   = 0x2A;                 
+    public const T_XStdMotId MOT_GUARD_02   = 0x2A;
     public const T_XStdMotId MOT_PROV_00    = 0x30;
     public const T_XStdMotId MOT_PROV_01    = 0x31;
     public const T_XStdMotId MOT_PROV_02    = 0x32;
@@ -60,36 +59,36 @@ public static class StdMotionId
     public const T_XStdMotId MOT_ATTACK1_04 = 0x5D;
     public const T_XStdMotId MOT_MAGIC1_00  = 0x60;
     public const T_XStdMotId MOT_MAGIC1_01  = 0x61;
-    public const T_XStdMotId MOT_MAGIC1_02  = 0x62;                    
+    public const T_XStdMotId MOT_MAGIC1_02  = 0x62;
     public const T_XStdMotId MOT_MAGIC2_00  = 0x68;
     public const T_XStdMotId MOT_MAGIC2_01  = 0x69;
-    public const T_XStdMotId MOT_MAGIC2_02  = 0x6A;                    
+    public const T_XStdMotId MOT_MAGIC2_02  = 0x6A;
     public const T_XStdMotId MOT_MAGIC3_00  = 0x70;
     public const T_XStdMotId MOT_MAGIC3_01  = 0x71;
-    public const T_XStdMotId MOT_MAGIC3_02  = 0x72;                     
+    public const T_XStdMotId MOT_MAGIC3_02  = 0x72;
     public const T_XStdMotId MOT_SKILL_00   = 0x78;
     public const T_XStdMotId MOT_SKILL_01   = 0x79;
-    public const T_XStdMotId MOT_SKILL_02   = 0x7A;                     
+    public const T_XStdMotId MOT_SKILL_02   = 0x7A;
     public const T_XStdMotId MOT_AVOID_00   = 0x80;
     public const T_XStdMotId MOT_AVOID_01   = 0x81;
-    public const T_XStdMotId MOT_AVOID_02   = 0x82;                      
+    public const T_XStdMotId MOT_AVOID_02   = 0x82;
     public const T_XStdMotId MOT_ITEM_00    = 0x88;
     public const T_XStdMotId MOT_ITEM_01    = 0x89;
     public const T_XStdMotId MOT_ITEM_02_1  = 0x8A;
-    public const T_XStdMotId MOT_ITEM_02_2  = 0x8B;                    
+    public const T_XStdMotId MOT_ITEM_02_2  = 0x8B;
     public const T_XStdMotId MOT_WIN_00     = 0x90;
-    public const T_XStdMotId MOT_WIN_01     = 0x91;                    
+    public const T_XStdMotId MOT_WIN_01     = 0x91;
     public const T_XStdMotId MOT_ESC        = 0x98;
     public const T_XStdMotId MOT_RUN_LEFT   = 0x99;
     public const T_XStdMotId MOT_RUN_RIGHT  = 0x9A;
     public const T_XStdMotId MOT_TURN_LEFT  = 0x9B;
-    public const T_XStdMotId MOT_TURN_RIGHT = 0x9C;  
+    public const T_XStdMotId MOT_TURN_RIGHT = 0x9C;
     public const T_XStdMotId MOT_SLEEP_00   = 0xA0;
     public const T_XStdMotId MOT_SLEEP_01   = 0xA1;
     public const T_XStdMotId MOT_SLEEP_02   = 0xA2;
     public const T_XStdMotId MOT_SLEEP_03   = 0xA3; 
     public const T_XStdMotId MOT_MGINV_00   = 0xA8;
-    public const T_XStdMotId MOT_PHINV_00   = 0xAB;  
+    public const T_XStdMotId MOT_PHINV_00   = 0xAB;
     public const T_XStdMotId MOT_SP0_00     = 0xB0;
     public const T_XStdMotId MOT_SP0_01     = 0xB1;
     public const T_XStdMotId MOT_SP0_02     = 0xB2;
@@ -97,7 +96,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_SP0_04     = 0xB4;
     public const T_XStdMotId MOT_SP0_05     = 0xB5;
     public const T_XStdMotId MOT_SP0_06     = 0xB6;
-    public const T_XStdMotId MOT_SP0_07     = 0xB7;                  
+    public const T_XStdMotId MOT_SP0_07     = 0xB7;
     public const T_XStdMotId MOT_SP1_00     = 0xB8;
     public const T_XStdMotId MOT_SP1_01     = 0xB9;
     public const T_XStdMotId MOT_SP1_02     = 0xBA;
@@ -105,7 +104,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_SP1_04     = 0xBC;
     public const T_XStdMotId MOT_SP1_05     = 0xBD;
     public const T_XStdMotId MOT_SP1_06     = 0xBE;
-    public const T_XStdMotId MOT_SP1_07     = 0xBF;              
+    public const T_XStdMotId MOT_SP1_07     = 0xBF;
     public const T_XStdMotId MOT_SP2_00     = 0xC0;
     public const T_XStdMotId MOT_SP2_01     = 0xC1;
     public const T_XStdMotId MOT_SP2_02     = 0xC2;
@@ -113,7 +112,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_SP2_04     = 0xC4;
     public const T_XStdMotId MOT_SP2_05     = 0xC5;
     public const T_XStdMotId MOT_SP2_06     = 0xC6;
-    public const T_XStdMotId MOT_SP2_07     = 0xC7;             
+    public const T_XStdMotId MOT_SP2_07     = 0xC7;
     public const T_XStdMotId MOT_SP3_00     = 0xC8;
     public const T_XStdMotId MOT_SP3_01     = 0xC9;
     public const T_XStdMotId MOT_SP3_02     = 0xCA;
@@ -121,7 +120,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_SP3_04     = 0xCC;
     public const T_XStdMotId MOT_SP3_05     = 0xCD;
     public const T_XStdMotId MOT_SP3_06     = 0xCE;
-    public const T_XStdMotId MOT_SP3_07     = 0xCF;            
+    public const T_XStdMotId MOT_SP3_07     = 0xCF;
     public const T_XStdMotId MOT_SP4_00     = 0xD0;
     public const T_XStdMotId MOT_SP4_01     = 0xD1;
     public const T_XStdMotId MOT_SP4_02     = 0xD2;
@@ -129,7 +128,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_SP4_04     = 0xD4;
     public const T_XStdMotId MOT_SP4_05     = 0xD5;
     public const T_XStdMotId MOT_SP4_06     = 0xD6;
-    public const T_XStdMotId MOT_SP4_07     = 0xD7;             
+    public const T_XStdMotId MOT_SP4_07     = 0xD7;
     public const T_XStdMotId MOT_SP5_00     = 0xD8;
     public const T_XStdMotId MOT_SP5_01     = 0xD9;
     public const T_XStdMotId MOT_SP5_02     = 0xDA;
@@ -137,7 +136,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_SP5_04     = 0xDC;
     public const T_XStdMotId MOT_SP5_05     = 0xDD;
     public const T_XStdMotId MOT_SP5_06     = 0xDE;
-    public const T_XStdMotId MOT_SP5_07     = 0xDF;          
+    public const T_XStdMotId MOT_SP5_07     = 0xDF;
     public const T_XStdMotId MOT_SP6_00     = 0xE0;
     public const T_XStdMotId MOT_SP6_01     = 0xE1;
     public const T_XStdMotId MOT_SP6_02     = 0xE2;
@@ -145,7 +144,7 @@ public static class StdMotionId
     public const T_XStdMotId MOT_SP6_04     = 0xE4;
     public const T_XStdMotId MOT_SP6_05     = 0xE5;
     public const T_XStdMotId MOT_SP6_06     = 0xE6;
-    public const T_XStdMotId MOT_SP6_07     = 0xE7;             
+    public const T_XStdMotId MOT_SP6_07     = 0xE7;
     public const T_XStdMotId MOT_SP7_00     = 0xE8;
     public const T_XStdMotId MOT_SP7_01     = 0xE9;
     public const T_XStdMotId MOT_SP7_02     = 0xEA;

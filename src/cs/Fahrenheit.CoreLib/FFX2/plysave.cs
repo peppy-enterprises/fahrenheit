@@ -8,8 +8,7 @@
 namespace Fahrenheit.CoreLib.FFX2;
 
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct PlySave
-{
+public unsafe struct PlySave {
     public       uint   name;
     public       uint   hp_bonus;
     public       uint   mp_bonus;

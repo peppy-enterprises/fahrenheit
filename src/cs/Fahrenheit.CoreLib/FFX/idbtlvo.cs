@@ -15,8 +15,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum BtlVoiceId : T_XBtlVoiceId
-{
+public enum BtlVoiceId : T_XBtlVoiceId {
     // BEGIN voice_battle_ab.ath
 
     // その他・敵を挑発

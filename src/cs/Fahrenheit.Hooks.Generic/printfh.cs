@@ -5,18 +5,15 @@ using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.Hooks.Generic;
 
-public static partial class FhHooks
-{
+public static partial class FhHooks {
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
-    public static void CLRPrintfHookAnsi(string fmt, nint va0, nint va1, nint va2, nint va3, nint va4, nint va5, nint va6, nint va7, nint va8, nint va9, nint va10, nint va11, nint va12, nint va13, nint va14, nint va15)
-    {
+    public static void CLRPrintfHookAnsi(string fmt, nint va0, nint va1, nint va2, nint va3, nint va4, nint va5, nint va6, nint va7, nint va8, nint va9, nint va10, nint va11, nint va12, nint va13, nint va14, nint va15) {
         int argc = 0;
         fmt = fmt.Trim();
 
         for (int i = 0; i < fmt.Length; i++) if (fmt[i] == '%') argc++;
 
-        int bl = argc switch
-        {
+        int bl = argc switch {
             0  => FhPInvoke._scprintf(fmt, __arglist()),
             1  => FhPInvoke._scprintf(fmt, __arglist(va0)),
             2  => FhPInvoke._scprintf(fmt, __arglist(va0, va1)),
@@ -39,10 +36,8 @@ public static partial class FhHooks
 
         nint buf = Marshal.AllocHGlobal(bl + 1);
 
-        try
-        {
-            int rv = argc switch
-            {
+        try {
+            int rv = argc switch {
                 0  => FhPInvoke.sprintf(buf, fmt, __arglist()),
                 1  => FhPInvoke.sprintf(buf, fmt, __arglist(va0)),
                 2  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1)),
@@ -63,10 +58,9 @@ public static partial class FhHooks
                 _  => throw new Exception("FH_E_PFHOOK_RAH_OVERREACH")
             };
 
-            FhLog.Log(LogLevel.Info, Marshal.PtrToStringAnsi(buf) ?? "FH_E_PFHOOK_STRING_NUL");
+            FhLog.Info(Marshal.PtrToStringAnsi(buf) ?? "FH_E_PFHOOK_STRING_NUL");
         }
-        finally
-        {
+        finally {
             Marshal.FreeHGlobal(buf);
         }
     }

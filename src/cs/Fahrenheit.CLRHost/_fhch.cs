@@ -1,5 +1,5 @@
 ﻿/* [fkelava 29/5/23 15:21]
- * Taken mostly wholesale from https://github.com/citronneur/detours.net/, 
+ * Taken mostly wholesale from https://github.com/citronneur/detours.net/,
  * with adjustments made to the .NET runtime hosting bit to make it compatible with .NET Core/.NET 5+.
  */
 
@@ -12,27 +12,23 @@ using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.CLRHost;
 
-public static class FhCLRHost
-{
-    public static nint RetrieveMbaseOrThrow()
-    {
+public static class FhCLRHost {
+    public static nint RetrieveMbaseOrThrow() {
         nint mbase;
-        if ((mbase = FhPInvoke.GetModuleHandle("FFX.exe")) == nint.Zero)
-        {
+        if ((mbase = FhPInvoke.GetModuleHandle("FFX.exe")) == nint.Zero) {
             if ((mbase = FhPInvoke.GetModuleHandle("FFX-2.exe")) == nint.Zero)
                 throw new Exception("FH_E_HOOK_TARGET_INDETERMINATE");
         }
         return mbase;
     }
 
-    public static bool CLRHostHook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
-    {
+    public static bool CLRHostHook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate {
         nint mbase    = RetrieveMbaseOrThrow();
         nint origAddr = mbase + offset;
         nint iatAddr  = origAddr;
         nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
 
-        FhLog.Log(LogLevel.Info, $"Applying hook {hook.Method.Name}; M -> 0x{mbase:X8}, T -> 0x{origAddr:X8}.");
+        FhLog.Info($"Applying hook {hook.Method.Name}; M -> 0x{mbase:X8}, T -> 0x{origAddr:X8}.");
 
         FhPInvoke.DetourTransactionBegin();
         FhPInvoke.DetourUpdateThread(FhPInvoke.GetCurrentThread());
@@ -41,19 +37,18 @@ public static class FhCLRHost
         FhPInvoke.FhDetourPatchIAT(FhPInvoke.GetModuleHandle("coreclr.dll"), iatAddr, origAddr);
 
         orig = Marshal.GetDelegateForFunctionPointer<T>(origAddr);
-        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr:X8}, H -> 0x{hookAddr:X8}.");
+        FhLog.Info($"H {hook.Method.Name}; O -> 0x{origAddr:X8}, H -> 0x{hookAddr:X8}.");
 
         return rv;
     }
 
-    public static bool CLRHostUnhook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
-    {
+    public static bool CLRHostUnhook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate {
         nint mbase    = RetrieveMbaseOrThrow();
         nint origAddr = mbase + offset;
         nint iatAddr  = origAddr;
         nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
 
-        FhLog.Log(LogLevel.Info, $"Removing hook {hook.Method.Name}; targeted module addr: 0x{mbase:X8}, final address: 0x{origAddr:X8}.");
+        FhLog.Info($"Removing hook {hook.Method.Name}; targeted module addr: 0x{mbase:X8}, final address: 0x{origAddr:X8}.");
 
         FhPInvoke.DetourTransactionBegin();
         FhPInvoke.DetourUpdateThread(FhPInvoke.GetCurrentThread());
@@ -62,7 +57,7 @@ public static class FhCLRHost
         FhPInvoke.FhDetourUnpatchIAT(FhPInvoke.GetModuleHandle("coreclr.dll"), iatAddr, origAddr);
 
         orig = Marshal.GetDelegateForFunctionPointer<T>(origAddr);
-        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr:X8}, H -> 0x{hookAddr:X8}.");
+        FhLog.Info($"H {hook.Method.Name}; O -> 0x{origAddr:X8}, H -> 0x{hookAddr:X8}.");
 
         return rv;
     }
@@ -73,8 +68,7 @@ public static class FhCLRHost
      * https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting#step-3---load-managed-assembly-and-get-function-pointer-to-a-managed-method
      * `public delegate int ComponentEntryPoint(IntPtr args, int sizeBytes);`
      */
-    public static int CLRHostInit(IntPtr args, int size)
-    {
+    public static int CLRHostInit(IntPtr args, int size) {
         if (!FhLoader.LoadModules(FhRuntimeConst.CLRHooksDir.Path, out List<FhModuleConfigCollection>? moduleConfigs))
             throw new Exception("FH_E_CLRHOST_MODULE_LOAD_FAILED");
 

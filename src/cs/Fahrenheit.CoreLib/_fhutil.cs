@@ -6,18 +6,15 @@ using System.Text.Json.Serialization;
 
 namespace Fahrenheit.CoreLib;
 
-public static class FhUtil
-{
+public static class FhUtil {
     /// <summary>
     ///     Reads bytes as primitives- unsigned, little-endian, variant length (multiple of 8, power of 2, &lt;= 64).
     ///     <para></para>
     ///     Returns an <see cref="ulong"/>. Downcast it to your desired return type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong BPrimReadULE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
-        return len switch
-        {
+    public static ulong BPrimReadULE(this ReadOnlySpan<byte> bytes, int start, int len) {
+        return len switch {
             8  => bytes[start / 8],
             16 => BinaryPrimitives.ReadUInt16LittleEndian(bytes[(start / 8)..]),
             32 => BinaryPrimitives.ReadUInt32LittleEndian(bytes[(start / 8)..]),
@@ -32,10 +29,8 @@ public static class FhUtil
     ///     Returns an <see cref="ulong"/>. Downcast it to your desired return type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long BPrimReadSLE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
-        return len switch
-        {
+    public static long BPrimReadSLE(this ReadOnlySpan<byte> bytes, int start, int len) {
+        return len switch {
             8  => bytes[start / 8],
             16 => BinaryPrimitives.ReadInt16LittleEndian(bytes[(start / 8)..]),
             32 => BinaryPrimitives.ReadInt32LittleEndian(bytes[(start / 8)..]),
@@ -50,10 +45,8 @@ public static class FhUtil
     ///     Returns a <see cref="long"/>. Downcast it to your desired return type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong BPrimReadUBE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
-        return len switch
-        {
+    public static ulong BPrimReadUBE(this ReadOnlySpan<byte> bytes, int start, int len) {
+        return len switch {
             8  => bytes[start / 8],
             16 => BinaryPrimitives.ReadUInt16BigEndian(bytes[(start / 8)..]),
             32 => BinaryPrimitives.ReadUInt32BigEndian(bytes[(start / 8)..]),
@@ -68,10 +61,8 @@ public static class FhUtil
     ///     Returns a <see cref="long"/>. Downcast it to your desired return type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long BPrimReadSBE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
-        return len switch
-        {
+    public static long BPrimReadSBE(this ReadOnlySpan<byte> bytes, int start, int len) {
+        return len switch {
             8  => bytes[start / 8],
             16 => BinaryPrimitives.ReadInt16BigEndian(bytes[(start / 8)..]),
             32 => BinaryPrimitives.ReadInt32BigEndian(bytes[(start / 8)..]),
@@ -80,8 +71,7 @@ public static class FhUtil
         };
     }
 
-    public static ulong U64SwapEndian(ulong x)
-    {
+    public static ulong U64SwapEndian(ulong x) {
         // swap adjacent 32-bit blocks
         x = (x >> 32) | (x << 32);
         // swap adjacent 16-bit blocks
@@ -95,8 +85,7 @@ public static class FhUtil
     ///     Undefined on inputs over 8 bytes in length.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong PackBytesLE(this ReadOnlySpan<byte> bytes)
-    {
+    public static ulong PackBytesLE(this ReadOnlySpan<byte> bytes) {
         ulong le = 0;
 
         for (int i = bytes.Length - 1; i >= 0; i--)
@@ -110,8 +99,7 @@ public static class FhUtil
     ///     Undefined on inputs over 8 bytes in length.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong PackBytesBE(this ReadOnlySpan<byte> bytes)
-    {
+    public static ulong PackBytesBE(this ReadOnlySpan<byte> bytes) {
         ulong be = 0;
 
         for (int i = bytes.Length - 1, j = 0; i >= 0; i--, j++)
@@ -141,8 +129,7 @@ public static class FhUtil
      */
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static byte BExtr_U8LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static byte BExtr_U8LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -151,8 +138,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static byte BExtr_U8BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static byte BExtr_U8BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -161,14 +147,12 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static byte UBExtr_U8(this ulong bytesPacked, int start, int len)
-    {
+    public static byte UBExtr_U8(this ulong bytesPacked, int start, int len) {
         return (byte)((bytesPacked >> start) & ((1UL << len) - 1));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static sbyte BExtr_I8LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static sbyte BExtr_I8LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -177,8 +161,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static sbyte BExtr_I8BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static sbyte BExtr_I8BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -187,14 +170,12 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static sbyte UBExtr_I8(this ulong bytesPacked, int start, int len)
-    {
+    public static sbyte UBExtr_I8(this ulong bytesPacked, int start, int len) {
         return (sbyte)((bytesPacked >> start) & ((1UL << len) - 1));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort BExtr_U16LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static ushort BExtr_U16LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -203,8 +184,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort BExtr_U16BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static ushort BExtr_U16BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -213,14 +193,12 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ushort UBExtr_U16(this ulong bytesPacked, int start, int len)
-    {
+    public static ushort UBExtr_U16(this ulong bytesPacked, int start, int len) {
         return (ushort)((bytesPacked >> start) & ((1UL << len) - 1));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static short BExtr_I16LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static short BExtr_I16LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -229,8 +207,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static short BExtr_I16BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static short BExtr_I16BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -239,14 +216,12 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static short UBExtr_I16(this ulong bytesPacked, int start, int len)
-    {
+    public static short UBExtr_I16(this ulong bytesPacked, int start, int len) {
         return (short)((bytesPacked >> start) & ((1UL << len) - 1));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static uint BExtr_U32LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static uint BExtr_U32LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -255,8 +230,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static uint BExtr_U32BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static uint BExtr_U32BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -265,14 +239,12 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static uint UBExtr_U32(this ulong bytesPacked, int start, int len)
-    {
+    public static uint UBExtr_U32(this ulong bytesPacked, int start, int len) {
         return (uint)((bytesPacked >> start) & ((1UL << len) - 1));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int BExtr_I32LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static int BExtr_I32LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -281,8 +253,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int BExtr_I32BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static int BExtr_I32BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -291,14 +262,12 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int UBExtr_I32(this ulong bytesPacked, int start, int len)
-    {
+    public static int UBExtr_I32(this ulong bytesPacked, int start, int len) {
         return (int)((bytesPacked >> start) & ((1UL << len) - 1));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong BExtr_U64LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static ulong BExtr_U64LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -307,8 +276,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong BExtr_U64BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static ulong BExtr_U64BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -317,14 +285,12 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong UBExtr_U64(this ulong bytesPacked, int start, int len)
-    {
+    public static ulong UBExtr_U64(this ulong bytesPacked, int start, int len) {
         return (bytesPacked >> start) & ((1UL << len) - 1);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long BExtr_I64LE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static long BExtr_I64LE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -333,8 +299,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long BExtr_I64BE(this ReadOnlySpan<byte> bytes, int start, int len)
-    {
+    public static long BExtr_I64BE(this ReadOnlySpan<byte> bytes, int start, int len) {
         int sb = start % 8;
 
         return sb == 0 && (len % 8) == 0
@@ -343,8 +308,7 @@ public static class FhUtil
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long UBExtr_I64(this ulong bytesPacked, int start, int len)
-    {
+    public static long UBExtr_I64(this ulong bytesPacked, int start, int len) {
         return (long)((bytesPacked >> start) & ((1UL << len) - 1));
     }
 
@@ -359,52 +323,43 @@ public static class FhUtil
      */
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string GetTimestampString()
-    {
+    public static string GetTimestampString() {
         DateTime dt = DateTime.UtcNow;
         return $"{dt.Day.ToString("D2")}{dt.Month.ToString("D2")}{dt.Year.ToString("D2")}_{dt.Hour.ToString("D2")}{dt.Minute.ToString("D2")}{dt.Second.ToString("D2")}";
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string GetExtendedTimestampString()
-    {
+    public static string GetExtendedTimestampString() {
         DateTime dt = DateTime.UtcNow;
         return $"{dt.Day.ToString("D2")}{dt.Month.ToString("D2")}{dt.Year.ToString("D2")}_{dt.Hour.ToString("D2")}{dt.Minute.ToString("D2")}{dt.Second.ToString("D2")}.{dt.Millisecond.ToString("D3")}";
     }
 
-    internal static JsonSerializerOptions InternalJsonOpts { get; } = new JsonSerializerOptions
-    {
-        Converters =
-        {
+    internal static JsonSerializerOptions InternalJsonOpts { get; } = new JsonSerializerOptions {
+        Converters = {
             new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
         },
         NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
     };
 
-    public static JsonSerializerOptions JsonOpts { get; } = new JsonSerializerOptions
-    {
-        Converters =
-        {
+    public static JsonSerializerOptions JsonOpts { get; } = new JsonSerializerOptions {
+        Converters = {
             new FhConfigParser<FhModuleConfig>(),
             new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
         },
         NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
     };
 
-    internal static void EnterObject(this ref Utf8JsonReader reader)
-    {
+    internal static void EnterObject(this ref Utf8JsonReader reader) {
         while (reader.TokenType != JsonTokenType.StartObject) reader.Read();
         reader.Read();
     }
 
-    internal static void EnterArray(this ref Utf8JsonReader reader)
-    {
+    internal static void EnterArray(this ref Utf8JsonReader reader) {
         while (reader.TokenType != JsonTokenType.StartArray) reader.Read();
         reader.Read();
     }
 
-    internal static T DeserializeAndAdvance<T>(this ref Utf8JsonReader reader, string key)
-    {
+    internal static T DeserializeAndAdvance<T>(this ref Utf8JsonReader reader, string key) {
         if (reader.GetString() != key)
             throw new JsonException($"Expected {key}, got {reader.GetString()}.");
 
@@ -423,8 +378,7 @@ public static class FhUtil
 }
 
 // TODO: unfuck this garbage
-public ref struct FhTokenizer
-{
+public ref struct FhTokenizer {
     private readonly ReadOnlySpan<char> _span;
     private readonly int                _spanLength;
     private readonly ReadOnlySpan<char> _delimiters;
@@ -432,8 +386,7 @@ public ref struct FhTokenizer
 
     public FhTokenizer(ReadOnlySpan<char> span,
                        ReadOnlySpan<char> delimiters,
-                       int                startPos = 0)
-    {
+                       int                startPos = 0) {
         _span            = span;
         _spanLength      = span.Length;
         _delimiters      = delimiters;
@@ -446,24 +399,22 @@ public ref struct FhTokenizer
     ///    already use as a delimiter is in the middle of a span you wish to retrieve in its entirety.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ReadOnlySpan<char> GetNextTokenBetween(char startToken, char endToken)
-    {
+    public ReadOnlySpan<char> GetNextTokenBetween(char startToken, char endToken) {
         if (_currentPosition == _span.Length) // We are at the end of the span. Nothing to read.
             return ReadOnlySpan<char>.Empty;
-       
+
         int methodStartPos = _currentPosition;
         int startTokenPos  = _span[_currentPosition.._spanLength].IndexOf(startToken) + _currentPosition;
         int endTokenPos    = _span[startTokenPos.._spanLength].IndexOf(endToken) + startTokenPos;
 
-        while (startTokenPos == methodStartPos)
-        {
+        while (startTokenPos == methodStartPos) {
             _currentPosition++;
             methodStartPos++;
             startTokenPos = _span[_currentPosition.._spanLength].IndexOf(startToken) + _currentPosition;
         }
 
-        if (endTokenPos == methodStartPos - 1) // IndexOf(endToken) returned -1; there is no endToken in the span.
-        {
+        // IndexOf(endToken) returned -1; there is no endToken in the span.
+        if (endTokenPos == methodStartPos - 1) {
             _currentPosition = _spanLength;
             return _span[methodStartPos.._spanLength];
         }
@@ -479,23 +430,20 @@ public ref struct FhTokenizer
     ///    Retrieves the next slice up to an explicit <paramref name="endToken"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ReadOnlySpan<char> GetNextTokenUpTo(char endToken)
-    {
+    public ReadOnlySpan<char> GetNextTokenUpTo(char endToken) {
         if (_currentPosition == _spanLength) // We are at the end of the span. Nothing to read.
             return ReadOnlySpan<char>.Empty;
-      
+
         int startPos = _currentPosition;
         int endPos = _span[_currentPosition.._spanLength].IndexOf(endToken) + _currentPosition;
 
-        while (endPos == startPos)
-        {
+        while (endPos == startPos) {
             _currentPosition++;
             startPos++;
             endPos = _span[_currentPosition.._spanLength].IndexOf(endToken) + _currentPosition;
         }
 
-        if (endPos == startPos - 1)
-        {
+        if (endPos == startPos - 1) {
             _currentPosition = _spanLength;
             return ReadOnlySpan<char>.Empty;
         }
@@ -508,23 +456,20 @@ public ref struct FhTokenizer
     ///    Retrieves the next slice between any two delimiters passed to <see cref="FiTokenizer{T}"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ReadOnlySpan<char> GetNextToken()
-    {
+    public ReadOnlySpan<char> GetNextToken() {
         if (_currentPosition == _span.Length) // We are at the end of the span. Nothing to read.
             return ReadOnlySpan<char>.Empty;
-        
+
         int sliceStart = _currentPosition;
         int sliceEnd   = _span[_currentPosition.._spanLength].IndexOfAny(_delimiters) + _currentPosition;
 
-        while (sliceEnd == sliceStart)
-        {
+        while (sliceEnd == sliceStart) {
             _currentPosition++;
             sliceStart++;
             sliceEnd = _span[_currentPosition.._spanLength].IndexOfAny(_delimiters) + _currentPosition;
         }
 
-        if (sliceEnd == sliceStart - 1)
-        {
+        if (sliceEnd == sliceStart - 1) {
             _currentPosition = _spanLength;
             return _span[sliceStart.._spanLength];
         }
@@ -533,8 +478,7 @@ public ref struct FhTokenizer
         return _span[sliceStart..sliceEnd];
     }
 
-    public void SkipToken()
-    {
+    public void SkipToken() {
         ReadOnlySpan<char> _ = GetNextToken();
     }
 }
