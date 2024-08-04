@@ -1,6 +1,6 @@
 ﻿/* [fkelava 17/5/23 02:48]
- * A shitty, quick tool to emit (mostly?!) valid C# from swidx C header. 
- * 
+ * A shitty, quick tool to emit (mostly?!) valid C# from swidx C header.
+ *
  * Only and specifically used to convert #defines to C# enums for constant imports.
  */
 
@@ -11,6 +11,7 @@ using System.IO;
 using System.Text;
 
 using Fahrenheit.CoreLib;
+using Fahrenheit.CoreLib.FFX;
 
 namespace Fahrenheit.Tools.DEdit;
 
@@ -34,7 +35,7 @@ internal class Program
         RootCommand rootCmd = new RootCommand("Perform various operations on FFX dialogue files and character sets.")
         {
             optMode,
-            optDefNs, 
+            optDefNs,
             optFilePath,
             optDestPath,
             optCharSet
@@ -87,8 +88,8 @@ internal class Program
 
         ReadOnlySpan<byte> dialogue = File.ReadAllBytes(DEditConfig.SrcPath);
 
-        string diastr = isMDict 
-            ? DEditDecompileMacroDict(dialogue, cs) 
+        string diastr = isMDict
+            ? DEditDecompileMacroDict(dialogue, cs)
             : DEditDecompileDialogue(dialogue, cs);
 
         using (FileStream fs = File.Open(dfn, FileMode.CreateNew))

@@ -60,11 +60,11 @@ public partial class FhHooksExampleModule : FhModule
 
     public override bool FhModuleStart()
     {
-        return _tkIsDbg.ApplyHook() && 
-               _printf_22F6B0.ApplyHook() && 
-               _printf_22FDA0.ApplyHook() && 
-               _printf_473C10.ApplyHook() && 
-               _printf_473C20.ApplyHook();
+        return _tkIsDbg.hook() && 
+               _printf_22F6B0.hook() && 
+               _printf_22FDA0.hook() && 
+               _printf_473C10.hook() && 
+               _printf_473C20.hook();
     }
 
     public override bool FhModuleStop()

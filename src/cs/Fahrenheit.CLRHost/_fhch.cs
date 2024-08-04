@@ -1,5 +1,5 @@
 ﻿/* [fkelava 29/5/23 15:21]
- * Taken mostly wholesale from https://github.com/citronneur/detours.net/, 
+ * Taken mostly wholesale from https://github.com/citronneur/detours.net/,
  * with adjustments made to the .NET runtime hosting bit to make it compatible with .NET Core/.NET 5+.
  */
 
@@ -14,20 +14,9 @@ namespace Fahrenheit.CLRHost;
 
 public static class FhCLRHost
 {
-    internal static nint RetrieveMbaseOrThrow()
+    public static bool hook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
     {
-        nint mbase;
-        if ((mbase = FhPInvoke.GetModuleHandle("FFX.exe")) == nint.Zero)
-        {
-            if ((mbase = FhPInvoke.GetModuleHandle("FFX-2.exe")) == nint.Zero)
-                throw new Exception("FH_E_HOOK_TARGET_INDETERMINATE");
-        }
-        return mbase;
-    }
-
-    public static bool CLRHostHook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
-    {
-        nint mbase    = RetrieveMbaseOrThrow();
+        nint mbase    = FhGlobal.base_addr;
         nint origAddr = mbase + offset;
         nint iatAddr  = origAddr;
         nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
@@ -46,9 +35,9 @@ public static class FhCLRHost
         return rv;
     }
 
-    public static bool CLRHostUnhook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
+    public static bool unhook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
     {
-        nint mbase    = RetrieveMbaseOrThrow();
+        nint mbase    = FhGlobal.base_addr;
         nint origAddr = mbase + offset;
         nint iatAddr  = origAddr;
         nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
@@ -69,13 +58,13 @@ public static class FhCLRHost
 
     /* [fkelava 3/6/23 15:13]
      * The signature is intentional. You can edit it, but that requires a change in the CLR hosting code as well.
-     * 
+     *
      * https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting#step-3---load-managed-assembly-and-get-function-pointer-to-a-managed-method
      * `public delegate int ComponentEntryPoint(IntPtr args, int sizeBytes);`
      */
-    public static int CLRHostInit(IntPtr args, int size)
+    public static int clrhost_init(IntPtr args, int size)
     {
-        if (!FhLoader.LoadModules(FhRuntimeConst.CLRHooksDir.Path, out List<FhModuleConfigCollection>? moduleConfigs))
+        if (!FhLoader.LoadModules(FhRuntimeConst.ModulesDir.Path, out List<FhModuleConfigCollection>? moduleConfigs))
             throw new Exception("FH_E_CLRHOST_MODULE_LOAD_FAILED");
 
         FhModuleController.Initialize(moduleConfigs);

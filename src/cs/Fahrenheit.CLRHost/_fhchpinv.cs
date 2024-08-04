@@ -5,34 +5,34 @@ namespace Fahrenheit.CLRHost;
 
 internal static partial class FhPInvoke
 {
-    [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16)] 
+    [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16)]
     public static partial nint GetProcAddress(nint hModule, string lpProcName);
-    
-    [LibraryImport("kernel32.dll")] 
+
+    [LibraryImport("kernel32.dll")]
     public static partial nint GetCurrentThread();
-    
-    [LibraryImport("kernel32.dll", EntryPoint = "LoadLibraryW", StringMarshalling = StringMarshalling.Utf16)] 
+
+    [LibraryImport("kernel32.dll", EntryPoint = "LoadLibraryW", StringMarshalling = StringMarshalling.Utf16)]
     public static partial nint LoadLibrary(string lpModuleName);
-    
-    [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)] 
+
+    [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)]
     public static partial nint GetModuleHandle(string lpModuleName);
-    
-    //[LibraryImport("winmm.dll")] 
+
+    //[LibraryImport("winmm.dll")]
     //public static partial nint timeBeginPeriod(uint uPeriod);
-    
-    [LibraryImport("fhdetour.dll")] 
+
+    [LibraryImport("fhdetour.dll")]
     public static partial long DetourAttach(ref nint a, nint b);
 
     [LibraryImport("fhdetour.dll")]
     public static partial long DetourDetach(ref nint a, nint b);
-    
-    [LibraryImport("fhdetour.dll")] 
+
+    [LibraryImport("fhdetour.dll")]
     public static partial long DetourUpdateThread(nint a);
-    
-    [LibraryImport("fhdetour.dll")] 
+
+    [LibraryImport("fhdetour.dll")]
     public static partial long DetourTransactionBegin();
-    
-    [LibraryImport("fhdetour.dll")] 
+
+    [LibraryImport("fhdetour.dll")]
     public static partial long DetourTransactionCommit();
 
     [LibraryImport("fhdetour.dll")]

@@ -6,6 +6,19 @@ dotnet_diagnostic.CS8981.severity = suggestion
 # IDE0071: Interpolation can be simplified.
 dotnet_diagnostic.IDE0071.severity = silent
 
+# Snake case - Fahrenheit naming group
+dotnet_naming_symbols.public_symbols.applicable_kinds           = property,method,field,event
+dotnet_naming_symbols.public_symbols.applicable_accessibilities = public
+
+# Snake case - Fahrenheit naming style
+dotnet_naming_style.snake_case.capitalization = all_lower
+dotnet_naming_style.snake_case.word_separator = _
+
+# Snake case - Fahrenheit naming rule
+dotnet_naming_rule.fh_naming.symbols  = public_symbols
+dotnet_naming_rule.fh_naming.style    = snake_case
+dotnet_naming_rule.fh_naming.severity = warning
+
 # Exempt any global using file from Code Cleanup
 # v. https://github.com/dotnet/roslyn/issues/3705#issuecomment-570687450
 
