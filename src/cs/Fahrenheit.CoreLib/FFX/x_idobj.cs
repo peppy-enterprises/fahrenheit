@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum ObjId : T_XObjId
-{
+public enum ObjId : T_XObjId {
     F001                = 0x5001, // ＳＡＶＥスフィア
     CHR_SAVESPHERE001   = F001,
     F002                = 0x5002, // 宝箱ノーマルＡ（近景）

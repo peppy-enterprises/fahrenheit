@@ -2,8 +2,7 @@
 
 using System.Runtime.InteropServices;
 
-public static unsafe class Call
-{
+public static unsafe class Call {
     /*===== Util =====*/
     [UnmanagedFunctionPointer(CallingConvention.FastCall)]
     public delegate void SecCookieCheck(

@@ -2,12 +2,9 @@
 
 namespace Fahrenheit.CoreLib;
 
-public static class FhSymbolTableGenerator
-{
-    public static string translate_callconv(string callConv)
-    {
-        return callConv switch
-        {
+public static class FhSymbolTableGenerator {
+    public static string translate_callconv(string callConv) {
+        return callConv switch {
             "__thiscall" => "[UnmanagedFunctionPointer(CallingConvention.ThisCall)]",
             "__cdecl"    => "[UnmanagedFunctionPointer(CallingConvention.Cdecl)]",
             "__stdcall"  => "[UnmanagedFunctionPointer(CallingConvention.StdCall)]",
@@ -16,12 +13,10 @@ public static class FhSymbolTableGenerator
         };
     }
 
-    public static string translate_arg_type(string argType)
-    {
+    public static string translate_arg_type(string argType) {
         if (argType.Contains('*')) return "nint";
 
-        return argType switch
-        {
+        return argType switch {
             "undefined"  => "nint",
             "undefined1" => "byte",
             "undefined2" => "ushort",

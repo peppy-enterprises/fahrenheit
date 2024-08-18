@@ -8,8 +8,7 @@
 
 namespace Fahrenheit.CoreLib.FFX2;
 
-public enum BtlId : T_X2BtlId
-{
+public enum BtlId : T_X2BtlId {
     BTL_SYSTEM_00  = 0x00000000,
     BTL_SYSTEM_01  = 0x00000001,
     BTL_ZZZZ00_00  = 0x02590000,

@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum PcId : T_XPcId
-{
+public enum PcId : T_XPcId {
     C001        = 0x1,   // ティーダ／３０００／標準服
     CHR_TIDU    = C001,
     C002        = 0x2,   // ユウナ／３０００／標準服

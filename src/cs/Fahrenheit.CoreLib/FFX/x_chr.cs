@@ -1,8 +1,7 @@
 namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0xF90)]
-public unsafe struct Chr
-{
+public unsafe struct Chr {
     [FieldOffset(0x0)]   public       Actor*            actor;
     [FieldOffset(0x4)]   public       uint              model_id;
     [FieldOffset(0xC)]   public       ushort            id;

@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x16)]
-public unsafe struct Equipment
-{
+public unsafe struct Equipment {
     [FieldOffset(0x0)] public        ushort name_id;
     [FieldOffset(0x2)] public        bool   exists;
     [FieldOffset(0x3)] public        byte   flags;

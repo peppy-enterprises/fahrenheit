@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum NpcId : T_XNpcId
-{
+public enum NpcId : T_XNpcId {
     N001               = 0x2001, // ザナルカンド／汎用ヒト男子供１
     CHR_ZANA_HAN001    = N001,
     N002               = 0x2002, // ザナルカンド／汎用ヒト男青年１

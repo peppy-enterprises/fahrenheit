@@ -6,8 +6,7 @@ typedef struct _DetoursUnsandboxContext {
 	PVOID pReal;
 } DetoursUnsandboxContext;
 
-static BOOL CALLBACK Unsandbox(_In_opt_ PVOID pContext, _In_ ULONG nOrdinal, _In_opt_ PCSTR pszName, _In_opt_ PVOID* pvFunc)
-{
+static BOOL CALLBACK Unsandbox(_In_opt_ PVOID pContext, _In_ ULONG nOrdinal, _In_opt_ PCSTR pszName, _In_opt_ PVOID* pvFunc) {
 	DetoursUnsandboxContext* context = reinterpret_cast<DetoursUnsandboxContext*>(pContext);
 	
 	if (pvFunc != nullptr && *pvFunc == context->pImport)
@@ -24,8 +23,7 @@ static BOOL CALLBACK Unsandbox(_In_opt_ PVOID pContext, _In_ ULONG nOrdinal, _In
 	return TRUE;
 }
 
-static BOOL CALLBACK Sandbox(_In_opt_ PVOID pContext, _In_ ULONG nOrdinal, _In_opt_ PCSTR pszName, _In_opt_ PVOID* pvFunc)
-{
+static BOOL CALLBACK Sandbox(_In_opt_ PVOID pContext, _In_ ULONG nOrdinal, _In_opt_ PCSTR pszName, _In_opt_ PVOID* pvFunc) {
 	DetoursUnsandboxContext* context = reinterpret_cast<DetoursUnsandboxContext*>(pContext);
 
 	if (pvFunc != nullptr && *pvFunc == context->pReal)
@@ -42,15 +40,13 @@ static BOOL CALLBACK Sandbox(_In_opt_ PVOID pContext, _In_ ULONG nOrdinal, _In_o
 	return TRUE;
 }
 
-BOOL FhDetourPatchIAT(HMODULE hModule, PVOID pFunction, PVOID pReal)
-{
+BOOL FhDetourPatchIAT(HMODULE hModule, PVOID pFunction, PVOID pReal) {
 	DetoursUnsandboxContext context = { pFunction, pReal };
 
 	return DetourEnumerateImportsEx(hModule, &context, nullptr, Unsandbox);
 }
 
-BOOL FhDetourUnpatchIAT(HMODULE hModule, PVOID pFunction, PVOID pReal)
-{
+BOOL FhDetourUnpatchIAT(HMODULE hModule, PVOID pFunction, PVOID pReal) {
 	DetoursUnsandboxContext context = { pFunction, pReal };
 
 	return DetourEnumerateImportsEx(hModule, &context, nullptr, Sandbox);

@@ -8,17 +8,13 @@
 
 namespace Fahrenheit.CoreLib;
 
-public abstract partial class FhCharset
-{
+public abstract partial class FhCharset {
     public static FhCharsetUs Us = new FhCharsetUs();
 }
 
-public sealed class FhCharsetUs : FhCharset
-{
-    public override byte ToByte(char c)
-    {
-        return c switch
-        {
+public sealed class FhCharsetUs : FhCharset {
+    public override byte ToByte(char c) {
+        return c switch {
             '0' => 0x30, // 30
             '1' => 0x31, // 31
             '2' => 0x32, // 32
@@ -216,10 +212,8 @@ public sealed class FhCharsetUs : FhCharset
         };
     }
 
-    public override char ToChar(byte b)
-    {
-        return b switch
-        {
+    public override char ToChar(byte b) {
+        return b switch {
             0x30 => '0', // 30
             0x31 => '1', // 31
             0x32 => '2', // 32

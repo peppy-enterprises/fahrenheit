@@ -9,8 +9,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum ChrStatId : T_XChrStatId
-{
+public enum ChrStatId : T_XChrStatId {
     STAT_HP                        = 0,   // ＨＰ
     STAT_MP                        = 1,   // ＭＰ
     STAT_MAXHP                     = 2,   // 最大ＨＰ

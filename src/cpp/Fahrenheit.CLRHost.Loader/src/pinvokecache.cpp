@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "pinvokecache.h"
 
-namespace FhCLRHost
-{
+namespace FhCLRHost {
 	PInvokeCache& PInvokeCache::GetInstance()
 	{
 		static PInvokeCache cache;

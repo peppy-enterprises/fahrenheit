@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum PlySaveId : T_XPlySaveId
-{
+public enum PlySaveId : T_XPlySaveId {
     PC_TIDUS   = 0x00,
     PC_YUNA    = 0x01,
     PC_AURON   = 0x02,

@@ -16,8 +16,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum MonId : T_XMonId
-{
+public enum MonId : T_XMonId {
     M000            = 0x1000, // ダミー
     CHR_DUMMY       = M000,
     M001            = 0x1001, // 甲羅モンスター１

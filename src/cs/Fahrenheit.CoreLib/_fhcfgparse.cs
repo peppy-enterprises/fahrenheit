@@ -13,30 +13,25 @@ namespace Fahrenheit.CoreLib;
  *
  * See StrictResolveDescendantOf<T> for the actual type-matching mechanism.
  */
-public class FhConfigParser<T> : JsonConverter<T> where T : FhModuleConfig
-{
-    public override bool CanConvert(Type objtype)
-    {
+public class FhConfigParser<T> : JsonConverter<T> where T : FhModuleConfig {
+    public override bool CanConvert(Type objtype) {
         return typeof(FhModuleConfig).IsAssignableFrom(objtype);
     }
 
-    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
+    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         Utf8JsonReader readerClone = reader;
 
         readerClone.EnterObject();
         readerClone.StrictResolveDescendantOf<T>(typeToConvert, out Type actualType);
 
-        if (JsonSerializer.Deserialize(ref reader, actualType, FhUtil.InternalJsonOpts) is not T t)
-        {
+        if (JsonSerializer.Deserialize(ref reader, actualType, FhUtil.InternalJsonOpts) is not T t) {
             throw new JsonException("E_CONFIG_DESERIALIZE_TO_DERIVED_TYPE_FAILED");
         }
 
         return t;
     }
 
-    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options) {
         JsonSerializer.Serialize<object>(writer, value, options);
     }
 }

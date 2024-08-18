@@ -15,10 +15,8 @@ using Fahrenheit.CoreLib.FFX;
 
 namespace Fahrenheit.Tools.DEdit;
 
-internal class Program
-{
-    static void Main(string[] args)
-    {
+internal class Program {
+    static void Main(string[] args) {
         Console.WriteLine($"{nameof(Fahrenheit)}.{nameof(DEdit)}\n");
         Console.WriteLine($"Started with args: {string.Join(' ', args)}\n");
 
@@ -32,8 +30,7 @@ internal class Program
         optFilePath.IsRequired = true;
         optDestPath.IsRequired = true;
 
-        RootCommand rootCmd = new RootCommand("Perform various operations on FFX dialogue files and character sets.")
-        {
+        RootCommand rootCmd = new RootCommand("Perform various operations on FFX dialogue files and character sets.") {
             optMode,
             optDefNs,
             optFilePath,
@@ -52,17 +49,14 @@ internal class Program
         return;
     }
 
-    static void DEditReadCharset()
-    {
+    static void DEditReadCharset() {
         string sfn = Path.GetFileName(DEditConfig.SrcPath);
         string dfn = Path.Join(DEditConfig.DestPath, $"{sfn}-{Guid.NewGuid()}.g.cs");
         string ns  = DEditConfig.CharsetReader?.DefaultNamespace ?? throw new Exception("FH_E_MISSING_NAMESPACE: Specify --ns at the command line.");
         string cs  = FhCharsetGenerator.EmitCharset(DEditConfig.SrcPath, ns);
 
-        using (FileStream fs = File.Open(dfn, FileMode.CreateNew))
-        {
-            using (StreamWriter sw = new StreamWriter(fs))
-            {
+        using (FileStream fs = File.Open(dfn, FileMode.CreateNew)) {
+            using (StreamWriter sw = new StreamWriter(fs)) {
                 sw.Write(cs);
             }
         }
@@ -71,12 +65,10 @@ internal class Program
         Console.WriteLine($"Charset {sfn}: Output is at {dfn}.");
     }
 
-    static void DEditDecompile()
-    {
+    static void DEditDecompile() {
         FhCharsetId cs = DEditConfig.Decompile!.CharSet;
 
-        if (cs == FhCharsetId.INVALID)
-        {
+        if (cs == FhCharsetId.INVALID) {
             Console.WriteLine("E_MISSING_CHARSET: Specify --cs at the command line.");
             return;
         }
@@ -92,10 +84,8 @@ internal class Program
             ? DEditDecompileMacroDict(dialogue, cs)
             : DEditDecompileDialogue(dialogue, cs);
 
-        using (FileStream fs = File.Open(dfn, FileMode.CreateNew))
-        {
-            using (StreamWriter sw = new StreamWriter(fs))
-            {
+        using (FileStream fs = File.Open(dfn, FileMode.CreateNew)) {
+            using (StreamWriter sw = new StreamWriter(fs)) {
                 sw.Write(diastr);
             }
         }
@@ -104,8 +94,7 @@ internal class Program
         Console.WriteLine($"{(isMDict ? "Macro dictionary" : "Dialogue")} {sfn}: Output is at {dfn}.");
     }
 
-    static string DEditDecompileDialogue(in ReadOnlySpan<byte> dialogue, FhCharsetId cs)
-    {
+    static string DEditDecompileDialogue(in ReadOnlySpan<byte> dialogue, FhCharsetId cs) {
         int               idxCount = dialogue.GetDialogueIndexCount();
         FhDialogueIndex[] idxArray = new FhDialogueIndex[idxCount];
 
@@ -116,15 +105,12 @@ internal class Program
         return dialogue.ReadDialogue(cs, idxArray);
     }
 
-    static string DEditDecompileMacroDict(in ReadOnlySpan<byte> dialogue, FhCharsetId cs)
-    {
+    static string DEditDecompileMacroDict(in ReadOnlySpan<byte> dialogue, FhCharsetId cs) {
         FhMacroDictHeader header = dialogue.GetMacroDictHeader();
         StringBuilder     sb     = new StringBuilder();
 
-        unsafe
-        {
-            for (int i = 0; i < FhMacroDictHeader.MD_SECTION_NR; i++)
-            {
+        unsafe {
+            for (int i = 0; i < FhMacroDictHeader.MD_SECTION_NR; i++) {
                 sb.AppendLine($"\n--- SECTION {i} ---");
 
                 int                offset = header.SectionOffsets[i];
@@ -145,16 +131,14 @@ internal class Program
         return sb.ToString();
     }
 
-    static void DEditMain(FhDEditArgs config)
-    {
+    static void DEditMain(FhDEditArgs config) {
         DEditConfig.CLIRead(config);
         Stopwatch perfSwatch = Stopwatch.StartNew();
 
         if (!File.Exists(DEditConfig.SrcPath))
             throw new Exception("E_INVALID_PATH");
 
-        switch (DEditConfig.Mode)
-        {
+        switch (DEditConfig.Mode) {
             case FhDEditMode.ReadCharsets:
                 DEditReadCharset(); break;
             case FhDEditMode.Decompile:

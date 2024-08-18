@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x38)]
-public unsafe struct AtelScriptChunk
-{
+public unsafe struct AtelScriptChunk {
     [FieldOffset(0x00)] public  uint   code_length;
     [FieldOffset(0x04)] public  uint   map_start;
     [FieldOffset(0x08)] public  uint   offset_author;

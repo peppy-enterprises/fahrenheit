@@ -10,10 +10,8 @@
 
 public sealed record FhXVMInstruction(string Name, uint OperandType, uint OperandCount, ushort InsnSize, ushort __UNKNOWN1);
 
-public static partial class FhXVM
-{
-    public static readonly FhXVMInstruction[] Instructions =
-    {
+public static partial class FhXVM {
+    public static readonly FhXVMInstruction[] Instructions = {
         new FhXVMInstruction("NOP", 0, 0, 0, 0),
         new FhXVMInstruction("OPLOR", 1, 1, 1, 0),
         new FhXVMInstruction("OPLAND", 1, 1, 1, 0),

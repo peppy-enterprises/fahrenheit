@@ -5,20 +5,16 @@ using System.Text;
 
 namespace Fahrenheit.CoreLib;
 
-public static class FhCharsetGenerator
-{
-    private static string Escape(char c)
-    {
-        return c switch
-        {
+public static class FhCharsetGenerator {
+    private static string Escape(char c) {
+        return c switch {
             '\'' => @"'\''",
             '\\' => @"'\\'",
             _    => $"'{c}'"
         };
     }
 
-    public static string EmitCharset(string fpath, string ns)
-    {
+    public static string EmitCharset(string fpath, string ns) {
         StringBuilder tbsb  = new StringBuilder(); // ToByte switch
         StringBuilder tcsb  = new StringBuilder(); // ToChar switch
         string        csstr = File.ReadAllText(fpath);
@@ -26,8 +22,7 @@ public static class FhCharsetGenerator
         List<char> duplist = new List<char>(csstr.Length);
 
         int swidx = 0x30;
-        for (int i = 0; i < csstr.Length; i++)
-        {
+        for (int i = 0; i < csstr.Length; i++) {
             int  dupidx = duplist.IndexOf(csstr[i]);
             bool isdup  = dupidx != -1;
 
@@ -64,26 +59,18 @@ public static class FhCharsetGenerator
 
 namespace {{ns}};
 
-public abstract partial class FhCharset
-{
+public abstract partial class FhCharset {
     public static FhCharset{{charsetid}} {{charsetid}} = new FhCharset{{charsetid}}();
 }
 
-public sealed class FhCharset{{charsetid}} : FhCharset 
-{
-    public override byte ToByte(char c)
-    {
-        return c switch 
-        {
-{{tbsb.ToString()}}
+public sealed class FhCharset{{charsetid}} : FhCharset  {
+    public override byte ToByte(char c) {
+        return c switch  { {{tbsb.ToString()}}
         };
     }
 
-    public override char ToChar(byte b)
-    {
-        return b switch 
-        {
-{{tcsb.ToString()}}
+    public override char ToChar(byte b) {
+        return b switch  { {{tcsb.ToString()}}
         };
     }
 }

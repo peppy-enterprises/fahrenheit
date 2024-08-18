@@ -12,10 +12,8 @@ using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.CLRHost;
 
-public static class FhCLRHost
-{
-    public static bool hook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
-    {
+public static class FhCLRHost {
+    public static bool hook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate {
         nint mbase    = FhGlobal.base_addr;
         nint origAddr = mbase + offset;
         nint iatAddr  = origAddr;
@@ -35,8 +33,7 @@ public static class FhCLRHost
         return rv;
     }
 
-    public static bool unhook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate
-    {
+    public static bool unhook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate {
         nint mbase    = FhGlobal.base_addr;
         nint origAddr = mbase + offset;
         nint iatAddr  = origAddr;
@@ -62,8 +59,7 @@ public static class FhCLRHost
      * https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting#step-3---load-managed-assembly-and-get-function-pointer-to-a-managed-method
      * `public delegate int ComponentEntryPoint(IntPtr args, int sizeBytes);`
      */
-    public static int clrhost_init(IntPtr args, int size)
-    {
+    public static int clrhost_init(IntPtr args, int size) {
         if (!FhLoader.LoadModules(FhRuntimeConst.ModulesDir.Path, out List<FhModuleConfigCollection>? moduleConfigs))
             throw new Exception("FH_E_CLRHOST_MODULE_LOAD_FAILED");
 

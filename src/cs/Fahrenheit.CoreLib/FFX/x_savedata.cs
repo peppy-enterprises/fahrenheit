@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x68C0)]
-public unsafe struct SaveData
-{
+public unsafe struct SaveData {
     [FieldOffset(0x0)]    public       ushort  now_eventjump_id;
     [FieldOffset(0x2)]    public       ushort  last_eventjump_id;
     [FieldOffset(0x4)]    public       ushort  now_eventjump_map_no;

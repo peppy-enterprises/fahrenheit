@@ -15,8 +15,7 @@
 namespace Fahrenheit.CoreLib.FFX;
 
 #pragma warning disable CA1069
-public enum MdlElemId : T_XMdlElemId
-{
+public enum MdlElemId : T_XMdlElemId {
     // [h2cs 12/6/23 23:16] Header name: c001
     // --- __c001_ath START (140 entries) ---
     C001_ELEM_NB = 136,

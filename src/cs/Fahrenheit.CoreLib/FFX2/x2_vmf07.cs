@@ -35,8 +35,7 @@
 
 namespace Fahrenheit.CoreLib.FFX2;
 
-public static unsafe partial class VMCall
-{
+public static unsafe partial class VMCall {
     public delegate int   btlTerminateAction();
     public delegate int   btlSetRandPosFlag(int arg1);
     public delegate int   btlExe(int arg1, int arg2);

@@ -11,8 +11,7 @@ namespace Fahrenheit.Hooks.Generic;
  * Always declare your P/Invokes internal if bundling them in the hook library as such!
  */
 
-internal static partial class FhPInvoke
-{
+internal static partial class FhPInvoke {
     internal const uint INFINITE = 4294967295;
 
 #pragma warning disable SYSLIB1054 // Specifically disabled because LibraryImportAttribute cannot handle __arglist, presumably.

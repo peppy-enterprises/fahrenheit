@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX2;
 
-public enum BtlPCommandId : T_X2PComId
-{
+public enum BtlPCommandId : T_X2PComId {
     PCOM_ITEM                 = 0x03000,
     PCOM_ESCAPE               = 0x03001,
     PCOM_CHANGE               = 0x03002,

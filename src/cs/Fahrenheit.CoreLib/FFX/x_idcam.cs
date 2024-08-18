@@ -8,8 +8,7 @@
  */
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum CamTargetId : T_XCamTargetId
-{
+public enum CamTargetId : T_XCamTargetId {
     CAM_CHR_NOP         = -1,
     CAM_CHR_ACTIVE      = -2,
     CAM_CHR_TARGET      = -3,
@@ -31,8 +30,7 @@ public enum CamTargetId : T_XCamTargetId
     CAM_CHR_OWN_TARGET0 = -26,
 }
 
-public enum CamMoveType : T_XCamMoveType
-{
+public enum CamMoveType : T_XCamMoveType {
     CAM_MOVE_X      = 1,
     CAM_MOVE_Y      = 2,
     CAM_MOVE_Z      = 4,
@@ -44,8 +42,7 @@ public enum CamMoveType : T_XCamMoveType
     CAM_MOVE_SCRDPT = 16,
 }
 
-public enum FhXCamSplineType : T_XCamSplineType
-{
+public enum FhXCamSplineType : T_XCamSplineType {
     CAM_SPLINE_2       = 2,
     CAM_SPLINE_3       = 3,
     CAM_SPLINE_TANGENT = 4,

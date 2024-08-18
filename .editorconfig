@@ -1,5 +1,21 @@
 ﻿[*.cs]
 
+# Fahrenheit prefers block-bodied everything
+csharp_style_expression_bodied_constructors = false
+csharp_style_expression_bodied_methods = false
+csharp_style_expression_bodied_operators = false
+csharp_style_expression_bodied_properties = false
+csharp_style_expression_bodied_indexers = false
+csharp_style_expression_bodied_accessors = false
+csharp_style_expression_bodied_lambdas = false
+csharp_style_expression_bodied_local_functions = false
+
+# K&R style braces, for Evelyn
+csharp_new_line_before_open_brace = none
+
+# Do not fuck up vertical alignment during Code Cleanup.
+csharp_space_around_declaration_statements = ignore
+
 # CS8981: The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
 dotnet_diagnostic.CS8981.severity = suggestion
 

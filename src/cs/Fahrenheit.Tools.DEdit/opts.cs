@@ -7,15 +7,13 @@ using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.Tools.DEdit;
 
-internal enum FhDEditMode
-{
+internal enum FhDEditMode {
     ReadCharsets = 1,
     Compile      = 2,
     Decompile    = 3
 }
 
-internal static class DEditConfig
-{
+internal static class DEditConfig {
     public static FhDEditMode Mode;
     public static string      SrcPath  = string.Empty;
     public static string      DestPath = string.Empty;
@@ -23,8 +21,7 @@ internal static class DEditConfig
     public static DEditCharsetReaderConfig? CharsetReader;
     public static DEditDecompileConfig?     Decompile;
 
-    public static void CLIRead(FhDEditArgs args)
-    {
+    public static void CLIRead(FhDEditArgs args) {
         Mode             = args.Mode;
         SrcPath          = args.SrcPath;
         DestPath         = Directory.Exists(args.DestPath) ? args.DestPath : throw new Exception("E_INVALID_DEST_DIR");
@@ -37,8 +34,7 @@ internal static class DEditConfig
 internal sealed record DEditCharsetReaderConfig(string? DefaultNamespace);
 internal sealed record DEditDecompileConfig(FhCharsetId CharSet);
 
-internal class DEditArgsBinder : BinderBase<FhDEditArgs>
-{
+internal class DEditArgsBinder : BinderBase<FhDEditArgs> {
     private readonly Option<FhDEditMode> _optMode;
     private readonly Option<string>      _optDefNs;
     private readonly Option<string>      _optSrcPath;
@@ -49,8 +45,7 @@ internal class DEditArgsBinder : BinderBase<FhDEditArgs>
                            Option<string>      optDefNs, 
                            Option<string>      optFilePath,
                            Option<string>      optDestPath,
-                           Option<FhCharsetId> optCharSet)
-    {
+                           Option<FhCharsetId> optCharSet) {
         _optMode     = optMode;
         _optDefNs    = optDefNs;
         _optSrcPath  = optFilePath;
@@ -58,8 +53,7 @@ internal class DEditArgsBinder : BinderBase<FhDEditArgs>
         _optCharSet  = optCharSet;
     }
 
-    protected override FhDEditArgs GetBoundValue(BindingContext bindingContext)
-    {
+    protected override FhDEditArgs GetBoundValue(BindingContext bindingContext) {
         // Mandatory
         FhDEditMode mode     = bindingContext.ParseResult.GetValueForOption(_optMode);
         string      srcPath  = bindingContext.ParseResult.GetValueForOption(_optSrcPath) ?? throw new Exception("E_CLI_ARG_NULL");

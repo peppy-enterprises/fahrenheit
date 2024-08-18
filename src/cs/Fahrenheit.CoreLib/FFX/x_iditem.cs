@@ -9,8 +9,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum ItemId : T_XItemId
-{
+public enum ItemId : T_XItemId {
     ITEM_POTION             = 0x02000,
     ITEM_HI_POTION          = 0x02001,
     ITEM_X_POTION           = 0x02002,

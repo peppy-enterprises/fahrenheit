@@ -3,8 +3,7 @@
 namespace Fahrenheit.CoreLib;
 
 // TODO: Not yet fully defined/fleshed out
-public enum FhModuleState
-{
+public enum FhModuleState {
     InitWaiting,
     InitSuccess,
     Started,
@@ -12,10 +11,8 @@ public enum FhModuleState
     Fault
 }
 
-public class FhModuleStateChangeEventArgs : EventArgs
-{
-    public FhModuleStateChangeEventArgs(FhModuleState oldstate, FhModuleState newstate)
-    {
+public class FhModuleStateChangeEventArgs : EventArgs {
+    public FhModuleStateChangeEventArgs(FhModuleState oldstate, FhModuleState newstate) {
         OldState = oldstate;
         NewState = newstate;
     }
@@ -24,23 +21,19 @@ public class FhModuleStateChangeEventArgs : EventArgs
     public FhModuleState NewState { get; }
 }
 
-public abstract class FhModule : IEquatable<FhModule>
-{
+public abstract class FhModule : IEquatable<FhModule> {
     protected string         _moduleName;
     protected FhModuleState  _moduleState;
 
-    protected FhModule(FhModuleConfig moduleConfig)
-    {
+    protected FhModule(FhModuleConfig moduleConfig) {
         _moduleName = moduleConfig.ConfigName;
     }
 
-    internal string ModuleType
-    {
+    internal string ModuleType {
         get { return GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE"); }
     }
 
-    public string ModuleName
-    {
+    public string ModuleName {
         get { return _moduleName; }
     }
 
@@ -58,11 +51,9 @@ public abstract class FhModule : IEquatable<FhModule>
      * transparently handle the fault and propagate it to all dependent modules as well.
      */
 
-    public FhModuleState ModuleState
-    {
+    public FhModuleState ModuleState {
         get { return _moduleState; }
-        protected set
-        {
+        protected set {
             FhModuleController.ModuleStateChangeHandler(this, new(_moduleState, value));
             _moduleState = value;
         }
@@ -75,34 +66,29 @@ public abstract class FhModule : IEquatable<FhModule>
     public abstract bool FhModuleStop();
     public abstract bool FhModuleOnError();
 
-    public bool Equals(FhModule? other)
-    {
+    public bool Equals(FhModule? other) {
         if (other is null)                return false;
         if (ReferenceEquals(this, other)) return true;
         
         return _moduleName.Equals(other.ModuleName);
     }
 
-    public override bool Equals(object? obj)
-    {
+    public override bool Equals(object? obj) {
         if (obj is null)                return false;
         if (ReferenceEquals(this, obj)) return true;
         
         return obj.GetType() == GetType() && Equals((FhModule)obj);
     }
 
-    public override int GetHashCode()
-    {
+    public override int GetHashCode() {
         return _moduleName.GetHashCode();
     }
 
-    public static bool operator ==(FhModule? left, FhModule? right)
-    {
+    public static bool operator ==(FhModule? left, FhModule? right) {
         return Equals(left, right);
     }
 
-    public static bool operator !=(FhModule? left, FhModule? right)
-    {
+    public static bool operator !=(FhModule? left, FhModule? right) {
         return !Equals(left, right);
     }
 }

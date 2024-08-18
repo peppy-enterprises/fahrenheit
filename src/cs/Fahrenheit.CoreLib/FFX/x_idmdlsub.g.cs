@@ -17,8 +17,7 @@
 namespace Fahrenheit.CoreLib.FFX;
 
 #pragma warning disable CA1069
-public enum MdlSubId
-{
+public enum MdlSubId {
     C001_MODEL_NB              = 2,
     C001_MODEL_C001_00         = 0,
     C001_MODEL_C001_01         = 1,

@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum BtlId : T_XBtlId
-{
+public enum BtlId : T_XBtlId {
     BTL_SYSTEM_00 = 0x00000000,
     BTL_SYSTEM_01 = 0x00000001,
     BTL_BJYT02_00 = 0x00200000,

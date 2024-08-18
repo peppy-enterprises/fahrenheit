@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum SumId : T_XSumId
-{
+public enum SumId : T_XSumId {
     S001         = 0x3001, // ヴァルファーレ
     CHR_VALFOR   = S001,
     S002         = 0x3002, // イフリート

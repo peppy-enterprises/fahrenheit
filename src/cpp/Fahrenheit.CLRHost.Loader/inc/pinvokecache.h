@@ -7,8 +7,7 @@
 #include <map>
 #include <mutex>
 
-namespace FhCLRHost
-{
+namespace FhCLRHost {
 	class PInvokeCache
 	{
 	public:

@@ -5,8 +5,7 @@ using System.IO;
 
 namespace Fahrenheit.Tools.H2CS;
 
-internal static class H2CSConfig
-{
+internal static class H2CSConfig {
     public static string DefaultNamespace = string.Empty;
     public static bool   EmitPrologue     = false;
     public static bool   EmitDeduplicated = true;
@@ -14,8 +13,7 @@ internal static class H2CSConfig
     public static string SrcPath          = string.Empty;
     public static string DestPath         = string.Empty;
 
-    public static void CLIRead(FhH2CSArgs args)
-    {
+    public static void CLIRead(FhH2CSArgs args) {
         DefaultNamespace = args.DefaultNamespace;
         EmitPrologue     = args.EmitPrologue;
         EmitDeduplicated = args.EmitDeduplicated;
@@ -32,8 +30,7 @@ internal sealed record FhH2CSArgs(string DefaultNamespace,
                                   string SrcPath,
                                   string DestPath);
 
-internal class H2CSArgsBinder : BinderBase<FhH2CSArgs>
-{
+internal class H2CSArgsBinder : BinderBase<FhH2CSArgs> {
     private readonly Option<string> _optDefNs;
     private readonly Option<bool>   _optEmitProlog;
     private readonly Option<bool>   _optEmitDedup;
@@ -46,8 +43,7 @@ internal class H2CSArgsBinder : BinderBase<FhH2CSArgs>
                           Option<bool>   optEmitDedup,
                           Option<string> optTypeName,
                           Option<string> optFilePath,
-                          Option<string> optDestPath)
-    {
+                          Option<string> optDestPath) {
         _optDefNs      = optDefNs;
         _optEmitProlog = optEmitProlog;
         _optEmitDedup  = optEmitDedup;
@@ -56,8 +52,7 @@ internal class H2CSArgsBinder : BinderBase<FhH2CSArgs>
         _optDestPath   = optDestPath;
     }
 
-    protected override FhH2CSArgs GetBoundValue(BindingContext bindingContext)
-    {
+    protected override FhH2CSArgs GetBoundValue(BindingContext bindingContext) {
         string defNs      = bindingContext.ParseResult.GetValueForOption(_optDefNs) ?? throw new Exception("E_CLI_ARG_NULL");
         bool   emitProlog = bindingContext.ParseResult.GetValueForOption(_optEmitProlog);
         bool   emitDedup  = bindingContext.ParseResult.GetValueForOption(_optEmitDedup);

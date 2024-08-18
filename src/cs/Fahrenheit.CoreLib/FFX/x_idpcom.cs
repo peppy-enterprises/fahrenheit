@@ -9,8 +9,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum PCommandId : T_XPComId
-{
+public enum PCommandId : T_XPComId {
     PCOM_ATTACK                     = 0x03000,
     PCOM_ITEM                       = 0x03001,
     PCOM_CHANGE                     = 0x03002,

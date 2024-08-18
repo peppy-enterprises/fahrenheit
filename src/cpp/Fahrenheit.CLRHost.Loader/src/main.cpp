@@ -43,8 +43,7 @@
 
 using string_t = std::basic_string<char_t>;
 
-namespace
-{
+namespace {
     // Globals to hold hostfxr exports
     hostfxr_initialize_for_runtime_config_fn init_fptr;
     hostfxr_get_runtime_delegate_fn          get_delegate_fptr;
@@ -59,34 +58,29 @@ namespace
  * Function used to load and activate .NET Core
  ********************************************************************************************/
 
-namespace
-{
+namespace {
     // Forward declarations
     void* load_library(const char_t*);
     void* get_export(void*, const char*);
 
 #ifdef _WIN32
-    void* load_library(const char_t* path)
-    {
+    void* load_library(const char_t* path) {
         HMODULE h = ::LoadLibraryW(path);
         assert(h != nullptr);
         return (void*)h;
     }
-    void* get_export(void* h, const char* name)
-    {
+    void* get_export(void* h, const char* name) {
         void* f = ::GetProcAddress((HMODULE)h, name);
         assert(f != nullptr);
         return f;
     }
 #else
-    void* load_library(const char_t* path)
-    {
+    void* load_library(const char_t* path) {
         void* h = dlopen(path, RTLD_LAZY | RTLD_LOCAL);
         assert(h != nullptr);
         return h;
     }
-    void* get_export(void* h, const char* name)
-    {
+    void* get_export(void* h, const char* name) {
         void* f = dlsym(h, name);
         assert(f != nullptr);
         return f;
@@ -95,8 +89,7 @@ namespace
 
     // <SnippetLoadHostFxr>
     // Using the nethost library, discover the location of hostfxr and get exports
-    bool load_hostfxr()
-    {
+    bool load_hostfxr() {
         // Pre-allocate a large buffer for the path to hostfxr
         char_t buffer[MAX_PATH];
         size_t buffer_size = sizeof(buffer) / sizeof(char_t);
@@ -116,15 +109,13 @@ namespace
 
     // <SnippetInitialize>
     // Load and initialize .NET Core and get desired function pointer for scenario
-    load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t* config_path)
-    {
+    load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t* config_path) {
         // Load .NET Core
         void*          load_assembly_and_get_function_pointer = nullptr;
         hostfxr_handle cxt                                    = nullptr;
 
         int rc = init_fptr(config_path, nullptr, &cxt);
-        if (rc != 0 || cxt == nullptr)
-        {
+        if (rc != 0 || cxt == nullptr) {
             std::cerr << "Init failed: " << std::hex << std::showbase << rc << std::endl;
             close_fptr(cxt);
             return nullptr;
@@ -144,8 +135,7 @@ namespace
     // </SnippetInitialize>
 }
 
-static FARPROC WINAPI GetProcAddressCLR(HMODULE module, LPCSTR funcName)
-{
+static FARPROC WINAPI GetProcAddressCLR(HMODULE module, LPCSTR funcName) {
     // if ordinal
     if ((reinterpret_cast<ULONGLONG>(funcName) & 0xffffffffffff0000) == 0) {
         return GetProcAddress(module, funcName);
@@ -168,8 +158,7 @@ static FARPROC WINAPI GetProcAddressCLR(HMODULE module, LPCSTR funcName)
  *	@param	pReal		real address
  */
 extern "C"
-__declspec(dllexport) void DetoursCLRSetGetProcAddressCache(HMODULE module, LPCSTR funcName, PVOID real)
-{
+__declspec(dllexport) void DetoursCLRSetGetProcAddressCache(HMODULE module, LPCSTR funcName, PVOID real) {
     FhCLRHost::PInvokeCache::GetInstance().update(module, funcName, real);
 }
 
@@ -177,8 +166,7 @@ using EntryPoint_T = int(*)(void);
 
 EntryPoint_T ffxMain = NULL;
 
-static int DetourMain(void)
-{
+static int DetourMain(void) {
     AttachConsole(ATTACH_PARENT_PROCESS);
 
     // Get the current executable's directory
@@ -203,8 +191,7 @@ static int DetourMain(void)
     //
     // STEP 1: Load HostFxr and get exported hosting functions
     //
-    if (!load_hostfxr())
-    {
+    if (!load_hostfxr()) {
         assert(false && "Failure: load_hostfxr()");
         return EXIT_FAILURE;
     }
@@ -250,17 +237,13 @@ static int DetourMain(void)
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
-                     )
-{
-    if (DetourIsHelperProcess())
-    {
+                     ) {
+    if (DetourIsHelperProcess()) {
         return TRUE;
     }
 
-    switch (ul_reason_for_call)
-    {
-        case DLL_PROCESS_ATTACH:
-        {
+    switch (ul_reason_for_call) {
+        case DLL_PROCESS_ATTACH: {
             DetourRestoreAfterWith();
 
             auto hMainModule = reinterpret_cast<HMODULE>(NtCurrentTeb()->ProcessEnvironmentBlock->Reserved3[1]);

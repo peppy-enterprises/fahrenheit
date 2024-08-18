@@ -2,8 +2,7 @@
 #include <conio.h>
 #include "fhdetour.h"
 
-int wmain(int argc, wchar_t* argv[ ])
-{
+int wmain(int argc, wchar_t* argv[ ]) {
     LPCSTR              szDllPath  = "fhclrldr.dll";
     LPWSTR              cmdLineStr = GetCommandLineW();
     PROCESS_INFORMATION pi;
@@ -25,8 +24,7 @@ int wmain(int argc, wchar_t* argv[ ])
         1,
         &szDllPath,
         NULL
-    ))
-    {
+    )) {
         std::cerr << "[!]" << std::endl;
         return 1;
     }

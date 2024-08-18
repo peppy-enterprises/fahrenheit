@@ -3,8 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Fahrenheit.CoreLib;
 
-public enum FhStringType
-{
+public enum FhStringType {
     Uni  = 1,
     UTF8 = 2,
     Ansi = 3
@@ -17,12 +16,10 @@ public record struct FhPointerDeref(nint Offset, bool AsPtr);
  * Since we have no control over execution, a pointer can become invalid in the instant _after_ internal validation
  * and _before_ a e.g. string deref. Hence, you MUST appropriately guard FhPointer operations lest you crash the game.
  */
-public unsafe readonly struct FhPointer
-{
+public unsafe readonly struct FhPointer {
     private readonly FhPointerDeref[] _derefs;
 
-    public FhPointer(FhPointerDeref[] derefs)
-    {
+    public FhPointer(FhPointerDeref[] derefs) {
         _derefs = derefs;
     }
 
@@ -45,17 +42,14 @@ public unsafe readonly struct FhPointer
      * TestStructA is valid. An `uint` is blittable, 4 bytes in managed and unmanaged view.
      * TestStructB is invalid. A `bool` marshaled as Win32 BOOL is 1 byte managed, 4 bytes unmanaged. The request is invalid and Fahrenheit will crash the game before you do.
      */
-    private static void ThrowIfTInvalid<T>() where T : unmanaged
-    {
+    private static void ThrowIfTInvalid<T>() where T : unmanaged {
         if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_UNSAFE_OPERATION: {typeof(T).FullName}");
     }
 
-    private nint DerefOffsetsInternal()
-    {
+    private nint DerefOffsetsInternal() {
         nint ptr = nint.Zero;
 
-        foreach (FhPointerDeref deref in _derefs)
-        {
+        foreach (FhPointerDeref deref in _derefs) {
             ptr = deref.AsPtr ? Marshal.ReadIntPtr(ptr + deref.Offset) : ptr + deref.Offset;
             if (ptr == nint.Zero) return nint.MaxValue;
         }
@@ -63,30 +57,25 @@ public unsafe readonly struct FhPointer
         return ptr;
     }
 
-    public bool DerefOffsets(out nint vptr)
-    {
+    public bool DerefOffsets(out nint vptr) {
         return (vptr = DerefOffsetsInternal()) != nint.MaxValue;
     }
 
-    public T DerefPrimitive<T>() where T : unmanaged
-    {
+    public T DerefPrimitive<T>() where T : unmanaged {
         ThrowIfTInvalid<T>();
         return DerefOffsets(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
     }
 
-    public void WritePrimitive<T>(T value) where T : unmanaged
-    {
+    public void WritePrimitive<T>(T value) where T : unmanaged {
         ThrowIfTInvalid<T>();
         if (!DerefOffsets(out nint vptr)) return;
         Unsafe.Write(vptr.ToPointer(), value);
     }
 
-    public string DerefString(FhStringType strtype)
-    {
+    public string DerefString(FhStringType strtype) {
         if (!DerefOffsets(out nint vptr)) return string.Empty;
 
-        return strtype switch
-        {
+        return strtype switch {
             FhStringType.Uni  => Marshal.PtrToStringUni(vptr)!,
             FhStringType.UTF8 => Marshal.PtrToStringUTF8(vptr)!,
             FhStringType.Ansi => Marshal.PtrToStringAnsi(vptr)!,
@@ -99,10 +88,8 @@ public unsafe readonly struct FhPointer
      * https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitonaddress.
      */
 
-    public bool AwaitValue<T>(T target) where T : unmanaged
-    {
-        if (!DerefOffsets(out nint vptr))
-        {
+    public bool AwaitValue<T>(T target) where T : unmanaged {
+        if (!DerefOffsets(out nint vptr)) {
             FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }
@@ -116,8 +103,7 @@ public unsafe readonly struct FhPointer
         T  cur    = maval;
         T* curptr = &cur;
 
-        while (!cur.Equals(target))
-        {
+        while (!cur.Equals(target)) {
             FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1);
             cur = *(T*)maptr;
         }
@@ -125,12 +111,10 @@ public unsafe readonly struct FhPointer
         return true;
     }
 
-    public bool AwaitValues<T>(in ReadOnlySpan<T> targets, out T match) where T : unmanaged
-    {
+    public bool AwaitValues<T>(in ReadOnlySpan<T> targets, out T match) where T : unmanaged {
         match = default;
 
-        if (!DerefOffsets(out nint vptr))
-        {
+        if (!DerefOffsets(out nint vptr)) {
             FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }
@@ -138,8 +122,7 @@ public unsafe readonly struct FhPointer
         void* maptr = vptr.ToPointer(); // `m`onitored `a`ddress pointer.
         T     maval = *(T*)maptr;       // `m`onitored `a`ddress value.
 
-        foreach (T target in targets)
-        {
+        foreach (T target in targets) {
             if (maval.Equals(target))
                 return true;
         }
@@ -148,15 +131,12 @@ public unsafe readonly struct FhPointer
         T*   curptr = &cur;
         bool hasMatched  = false;
 
-        while (!hasMatched)
-        {
+        while (!hasMatched) {
             FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1);
             cur = *(T*)maptr;
 
-            foreach (T target in targets)
-            {
-                if (hasMatched = cur.Equals(target))
-                {
+            foreach (T target in targets) {
+                if (hasMatched = cur.Equals(target)) {
                     match = target;
                     break;
                 }

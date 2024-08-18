@@ -1,7 +1,6 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
-public enum BtlWindowType : ushort
-{
+public enum BtlWindowType : ushort {
     Main        = 0x00,
     BlackMagic  = 0x01,
     WhiteMagic  = 0x02,
@@ -22,8 +21,7 @@ public enum BtlWindowType : ushort
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 0x4, Size = 0xF0)]
-public unsafe struct BtlWindow
-{
+public unsafe struct BtlWindow {
     [FieldOffset(0x01)] public byte          state;
     [FieldOffset(0x06)] public BtlWindowType type;
     [FieldOffset(0x08)] public byte          cur_chr_id;
@@ -49,8 +47,7 @@ public unsafe struct BtlWindow
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 0x4, Size = 0x90)]
-public struct BtlStatusWindow
-{
+public struct BtlStatusWindow {
     [FieldOffset(0x0C)] public uint hp;
     [FieldOffset(0x10)] public uint hp2;
     [FieldOffset(0x19)] public byte font_color;

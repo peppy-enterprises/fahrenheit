@@ -7,23 +7,19 @@ using static Fahrenheit.CoreLib.FhHookDelegates;
 
 namespace Fahrenheit.Hooks.Generic;
 
-public sealed record FhHooksExampleModuleConfig : FhModuleConfig
-{
+public sealed record FhHooksExampleModuleConfig : FhModuleConfig {
     public FhHooksExampleModuleConfig(string configName,
                                       uint   configVersion,
-                                      bool   configEnabled) : base(configName, configVersion, configEnabled)
-    {
+                                      bool   configEnabled) : base(configName, configVersion, configEnabled) {
     }
 
-    public override bool TrySpawnModule([NotNullWhen(true)] out FhModule? fm)
-    {
+    public override bool TrySpawnModule([NotNullWhen(true)] out FhModule? fm) {
         fm = new FhHooksExampleModule(this);
         return fm.ModuleState == FhModuleState.InitSuccess;
     }
 }
 
-public partial class FhHooksExampleModule : FhModule
-{
+public partial class FhHooksExampleModule : FhModule {
     private readonly FhHooksExampleModuleConfig           _moduleConfig;
     private readonly FhMethodHandle<TkIsDebugDelegate>    _tkIsDbg;
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_22F6B0;
@@ -31,8 +27,7 @@ public partial class FhHooksExampleModule : FhModule
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C10;
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C20;
 
-    public FhHooksExampleModule(FhHooksExampleModuleConfig cfg) : base(cfg)
-    {
+    public FhHooksExampleModule(FhHooksExampleModuleConfig cfg) : base(cfg) {
         _moduleConfig = cfg;
         _moduleState  = FhModuleState.InitSuccess;
 
@@ -43,32 +38,27 @@ public partial class FhHooksExampleModule : FhModule
         _printf_473C20 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x473C20, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
     }
 
-    public override FhHooksExampleModuleConfig ModuleConfiguration
-    {
+    public override FhHooksExampleModuleConfig ModuleConfiguration {
         get { return _moduleConfig; }
     }
 
-    public override bool FhModuleInit()
-    {
+    public override bool FhModuleInit() {
         return true;
     }
 
-    public override bool FhModuleOnError()
-    {
+    public override bool FhModuleOnError() {
         return true;
     }
 
-    public override bool FhModuleStart()
-    {
-        return _tkIsDbg.hook() && 
-               _printf_22F6B0.hook() && 
-               _printf_22FDA0.hook() && 
-               _printf_473C10.hook() && 
+    public override bool FhModuleStart() {
+        return _tkIsDbg.hook() &&
+               _printf_22F6B0.hook() &&
+               _printf_22FDA0.hook() &&
+               _printf_473C10.hook() &&
                _printf_473C20.hook();
     }
 
-    public override bool FhModuleStop()
-    {
+    public override bool FhModuleStop() {
         return true;
     }
 }

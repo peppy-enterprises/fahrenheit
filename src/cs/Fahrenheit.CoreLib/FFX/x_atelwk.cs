@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x700)]
-public unsafe struct AtelBasicWorker
-{
+public unsafe struct AtelBasicWorker {
     [FieldOffset(0x0)] public AtelScriptHeader* script_header;
     [FieldOffset(0x4)] public AtelScriptChunk*  script_chunk;
     [FieldOffset(0xC)] public ushort            event_actor_total;

@@ -9,8 +9,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public static class StdMotionId
-{
+public static class StdMotionId {
     public const T_XStdMotId MOT_ALL        = 0xFFFF;
     public const T_XStdMotId MOT_IDLE       = 0x01; // システムアイドリング
     public const T_XStdMotId MOT_ATTACK_00  = 0x02;

@@ -8,8 +8,7 @@
 namespace Fahrenheit.CoreLib.FFX2;
 
 [StructLayout(LayoutKind.Sequential)]
-internal unsafe struct ECommand
-{
+internal unsafe struct ECommand {
     public       uint   name;
     public       uint   help;
     public fixed short  effect[2];

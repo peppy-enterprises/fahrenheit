@@ -7,8 +7,7 @@
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public enum BtlMapId : T_XBtlMapId
-{
+public enum BtlMapId : T_XBtlMapId {
     MAP_GRID00_A = 0x401, // グリッド
     MAP_CDSP00_A = 0x402, // シド船外観１
     MAP_BSIL03_A = 0x403, // ビサイド水中

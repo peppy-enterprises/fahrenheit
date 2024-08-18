@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x0C)]
-public struct ChrItemLoot
-{
+public struct ChrItemLoot {
     [FieldOffset(0x00)] public ushort item_primary_common;
     [FieldOffset(0x02)] public ushort item_primary_rare;
     [FieldOffset(0x04)] public ushort item_secondary_common;
@@ -14,8 +13,7 @@ public struct ChrItemLoot
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x09)]
-public struct ChrStealLoot
-{
+public struct ChrStealLoot {
     [FieldOffset(0x00)] public ushort item_common;
     [FieldOffset(0x02)] public ushort item_rare;
     [FieldOffset(0x04)] public byte   amount_common;
@@ -25,15 +23,13 @@ public struct ChrStealLoot
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x20)]
-public unsafe struct ChrEquipmentLootAbilities
-{
+public unsafe struct ChrEquipmentLootAbilities {
     [FieldOffset(0x00)] public fixed ushort weapon_abilities[8];
     [FieldOffset(0x10)] public fixed ushort armor_abilities [8];
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0xE5)]
-public struct ChrEquipmentLoot
-{
+public struct ChrEquipmentLoot {
     [FieldOffset(0x00)] public byte slot_count;
     [FieldOffset(0x01)] public byte dmg_formula;
     [FieldOffset(0x02)] public byte crit_bonus;
@@ -50,8 +46,7 @@ public struct ChrEquipmentLoot
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x118)]
-public unsafe struct ChrLoot
-{
+public unsafe struct ChrLoot {
     [FieldOffset(0x00)] public ushort gil;
     [FieldOffset(0x02)] public ushort ap;
     [FieldOffset(0x04)] public ushort ap_overkill;
