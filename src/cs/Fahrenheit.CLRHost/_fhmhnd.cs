@@ -6,37 +6,40 @@ using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.CLRHost;
 
-public class FhMethodHandle<T> where T : Delegate {
+public class FhMethodHandle<T> where T : Delegate
+{
     private readonly FhModule _handleOwner;
-    private readonly nint     _addr;
+    private readonly nint     _offset;
     private          T?       _origFptr;
     private readonly T        _hookFptr;
 
     public FhMethodHandle(FhModule owner,
-                          nint     addr,
-                          T        fptr) {
+                          nint     offset,
+                          T        fptr)
+    {
         _handleOwner = owner;
-        _addr        = addr;
-        _origFptr    = Marshal.GetDelegateForFunctionPointer<T>(FhCLRHost.RetrieveMbaseOrThrow() + _addr);
+        _offset      = offset;
+        _origFptr    = Marshal.GetDelegateForFunctionPointer<T>(FhGlobal.base_addr + _offset);
         _hookFptr    = fptr;
     }
 
-    public bool GetOriginalFptrSafe([NotNullWhen(true)] out T? handle) {
+    public bool try_get_original_fptr([NotNullWhen(true)] out T? handle)
+    {
         return (handle = _origFptr) != null;
     }
 
-    public bool GetHookFptrSafe([NotNullWhen(true)] out T? handle) {
+    public bool try_get_hook_fptr([NotNullWhen(true)] out T? handle)
+    {
         return (handle = _hookFptr) != null;
     }
 
-    public T GetOrigFPtrUnchecked => _origFptr;
-    public T GetHookFPtr => _hookFptr;
-
-    public bool ApplyHook() {
-        return FhCLRHost.CLRHostHook(_addr, _hookFptr, out _origFptr);
+    public bool hook()
+    {
+        return FhCLRHost.hook(_offset, _hookFptr, out _origFptr);
     }
 
-    public bool RemoveHook() {
-        return FhCLRHost.CLRHostUnhook(_addr, _hookFptr, out _origFptr);
+    public bool unhook()
+    {
+        return FhCLRHost.unhook(_offset, _hookFptr, out _origFptr);
     }
 }

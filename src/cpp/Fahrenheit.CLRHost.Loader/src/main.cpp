@@ -166,7 +166,8 @@ using EntryPoint_T = int(*)(void);
 
 EntryPoint_T ffxMain = NULL;
 
-static int DetourMain(void) {
+static int DetourMain(void)
+{
     AttachConsole(ATTACH_PARENT_PROCESS);
 
     // Get the current executable's directory
@@ -212,7 +213,7 @@ static int DetourMain(void) {
     //
     const string_t dotnetlib_path     = fh_bin_path + STR("fhclrhost.dll");
     const char_t*  dotnet_type        = STR("Fahrenheit.CLRHost.FhCLRHost, fhclrhost");
-    const char_t*  dotnet_type_method = STR("CLRHostInit");
+    const char_t*  dotnet_type_method = STR("clrhost_init");
 
     // <SnippetLoadAndGet>
     // Function pointer to managed delegate
@@ -237,8 +238,10 @@ static int DetourMain(void) {
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
-                     ) {
-    if (DetourIsHelperProcess()) {
+                     )
+{
+    if (DetourIsHelperProcess())
+    {
         return TRUE;
     }
 

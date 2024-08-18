@@ -42,7 +42,7 @@ public partial class FhHooksBaseModule : FhModule {
         _printf_22FDA0 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x22FDA0, FhHooks.CLRPrintfHookAnsi);
         _printf_473C10 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x473C10, FhHooks.CLRPrintfHookAnsi);
         _printf_473C20 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x473C20, FhHooks.CLRPrintfHookAnsi);
-        _mainLoop = new FhMethodHandle<Sg_MainLoop>(this, 0x420C00, HMainLoop);
+        _mainLoop = new FhMethodHandle<Sg_MainLoop>(this, 0x420C00, main_loop);
 
         _moduleState  = FhModuleState.InitSuccess;
     }
@@ -56,36 +56,36 @@ public partial class FhHooksBaseModule : FhModule {
     }
 
     public override bool FhModuleStart() {
-        return _tkIsDbg.ApplyHook()
-            //&& _printf_22F6B0.ApplyHook()
-            //&& _printf_22FDA0.ApplyHook()
-            //&& _printf_473C10.ApplyHook()
-            //&& _printf_473C20.ApplyHook()
-            && _mainLoop.ApplyHook();
+        return _tkIsDbg.hook()
+            //&& _printf_22F6B0.hook()
+            //&& _printf_22FDA0.hook()
+            //&& _printf_473C10.hook()
+            //&& _printf_473C20.hook()
+            && _mainLoop.hook();
     }
 
     public override bool FhModuleStop() {
-        return _tkIsDbg.RemoveHook()
-            //&& _printf_22F6B0.RemoveHook()
-            //&& _printf_22FDA0.RemoveHook()
-            //&& _printf_473C10.RemoveHook()
-            //&& _printf_473C20.RemoveHook()
-            && _mainLoop.RemoveHook();
+        return _tkIsDbg.unhook()
+            //&& _printf_22F6B0.unhook()
+            //&& _printf_22FDA0.unhook()
+            //&& _printf_473C10.unhook()
+            //&& _printf_473C20.unhook()
+            && _mainLoop.unhook();
     }
 
-    public void HMainLoop(float delta) {
+    public void main_loop(float delta) {
         foreach (FhModule module in FhModuleController.FindAll()) {
-            module.EarlyUpdate();
+            module.pre_update();
         }
 
         CoreLib.FFX.Globals.Input.update();
 
-        if (_mainLoop.GetOriginalFptrSafe(out Sg_MainLoop? handle)) {
+        if (_mainLoop.try_get_original_fptr(out Sg_MainLoop? handle)) {
             handle.Invoke(delta);
         }
 
         foreach (FhModule module in FhModuleController.FindAll()) {
-            module.LateUpdate();
+            module.post_update();
         }
     }
 }

@@ -48,15 +48,15 @@ public class RNGFixModule : FhModule {
     }
 
     public override bool FhModuleStart() {
-        return _brnd.ApplyHook();
+        return _brnd.hook();
     }
 
     public override bool FhModuleStop() {
-        return _brnd.RemoveHook();
+        return _brnd.unhook();
     }
 
     public nint brndRngFix(nint rng_seed_idx) {
-        if (_brnd.GetOriginalFptrSafe(out brndDelegate? fptr)) {
+        if (_brnd.try_get_original_fptr(out brndDelegate? fptr)) {
             return fptr.Invoke(0);
         }
 

@@ -6,6 +6,41 @@ dotnet_diagnostic.CS8981.severity = suggestion
 # IDE0071: Interpolation can be simplified.
 dotnet_diagnostic.IDE0071.severity = silent
 
+# no new lines before open brace - Fahrenheit style rule because Evelyn begged
+csharp_new_line_before_open_brance = none
+
+# IDE0027: Evelyn likes =>, Fahrenheit does not
+csharp_style_expression_bodied_constructors = false
+csharp_style_expression_bodied_methods = false
+csharp_style_expression_bodied_operators = false
+csharp_style_expression_bodied_properties = false
+csharp_style_expression_bodied_indexers = false
+csharp_style_expression_bodied_accessors = false
+csharp_style_expression_bodied_lambdas = false
+csharp_style_expression_bodied_local_functions = false
+
+# Snake case - Fahrenheit naming group
+dotnet_naming_symbols.public_symbols.applicable_kinds           = property,method,field,event
+dotnet_naming_symbols.public_symbols.applicable_accessibilities = public
+
+# Snake case - Fahrenheit naming style
+dotnet_naming_style.snake_case.capitalization = all_lower
+dotnet_naming_style.snake_case.word_separator = _
+
+# Snake case - Fahrenheit naming rule
+dotnet_naming_rule.fh_naming.symbols  = public_symbols
+dotnet_naming_rule.fh_naming.style = snake_case
+dotnet_naming_rule.fh_naming.severity = warning
+
+csharp_indent_labels = flush_left
+csharp_using_directive_placement = outside_namespace:warning
+csharp_prefer_simple_using_statement = false:warning
+csharp_prefer_braces = true:silent
+csharp_style_namespace_declarations = file_scoped:silent
+csharp_style_prefer_method_group_conversion = false:warning
+csharp_style_prefer_top_level_statements = true:silent
+csharp_style_prefer_primary_constructors = true:suggestion
+
 # Exempt any global using file from Code Cleanup
 # v. https://github.com/dotnet/roslyn/issues/3705#issuecomment-570687450
 

@@ -62,8 +62,8 @@ public abstract class FhModule : IEquatable<FhModule> {
     public abstract bool FhModuleStop();
     public abstract bool FhModuleOnError();
 
-    public virtual void EarlyUpdate() { }
-    public virtual void LateUpdate() { }
+    public virtual void pre_update() { }
+    public virtual void post_update() { }
 
     public bool Equals(FhModule? other) {
         if (other is null)                return false;

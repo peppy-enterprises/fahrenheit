@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 
-using static Fahrenheit.Hooks.Generic.FhXDelegates;
+using static Fahrenheit.CoreLib.FFX.Call;
 
 namespace Fahrenheit.Modules.Solo;
 
@@ -78,20 +78,20 @@ public unsafe class SoloModule : FhModule {
 
     public override bool FhModuleStart() {
         return
-            _MsGetSavePlyJoined.ApplyHook()
-         && _CT_RetInt_00CA_addPartyMember.ApplyHook()
-         && _CT_RetInt_00CB_removePartyMember.ApplyHook()
-         && _CT_RetInt_00E7_putPartyMemberInSlot.ApplyHook()
-         && _CT_Init_7002_launchBattle.ApplyHook();
+            _MsGetSavePlyJoined.hook()
+         && _CT_RetInt_00CA_addPartyMember.hook()
+         && _CT_RetInt_00CB_removePartyMember.hook()
+         && _CT_RetInt_00E7_putPartyMemberInSlot.hook()
+         && _CT_Init_7002_launchBattle.hook();
     }
 
     public override bool FhModuleStop() {
         return
-            _MsGetSavePlyJoined.RemoveHook()
-         && _CT_RetInt_00CA_addPartyMember.RemoveHook()
-         && _CT_RetInt_00CB_removePartyMember.RemoveHook()
-         && _CT_RetInt_00E7_putPartyMemberInSlot.RemoveHook()
-         && _CT_Init_7002_launchBattle.RemoveHook();
+            _MsGetSavePlyJoined.unhook()
+         && _CT_RetInt_00CA_addPartyMember.unhook()
+         && _CT_RetInt_00CB_removePartyMember.unhook()
+         && _CT_RetInt_00E7_putPartyMemberInSlot.unhook()
+         && _CT_Init_7002_launchBattle.unhook();
     }
 
     public byte soloMsGetSavePlyJoined(byte idx) {
@@ -103,14 +103,14 @@ public unsafe class SoloModule : FhModule {
     public int soloCT_RetInt_00CA_addPartyMember(AtelBasicWorker* work, nint* storage, AtelStack* stack) {
         int chr_id = stack->pop_int(); // we don't really care
         FhLog.Info($"Call: addPartyMember({chr_id})");
-        FhUtil.GetFPtr<FUN_00786a10>(0x386a10)(desired_chr_id, 0xff, 0xff); // just making sure...
+        FhUtil.get_fptr<FUN_00786a10>(0x386a10)(desired_chr_id, 0xff, 0xff); // just making sure...
         return (int)desired_chr_id;
     }
 
     public int soloCT_RetInt_00CB_removePartyMember(AtelBasicWorker* work, nint* storage, AtelStack* stack) {
         int chr_id = stack->pop_int(); // we don't really care
         FhLog.Info($"Call: removePartyMember({chr_id})");
-        FhUtil.GetFPtr<FUN_00786a10>(0x386a10)(desired_chr_id, 0xff, 0xff); // just making sure...
+        FhUtil.get_fptr<FUN_00786a10>(0x386a10)(desired_chr_id, 0xff, 0xff); // just making sure...
         return 0;
     }
 
@@ -118,7 +118,7 @@ public unsafe class SoloModule : FhModule {
         int chr_id = stack->pop_int(); // we don't really care
         int slot = stack->pop_int(); // we don't really care
         FhLog.Info($"Call: putPartyMemberInSlot({slot}, {chr_id})");
-        FhUtil.GetFPtr<FUN_00786a10>(0x386a10)(desired_chr_id, 0xff, 0xff); // just making sure...
+        FhUtil.get_fptr<FUN_00786a10>(0x386a10)(desired_chr_id, 0xff, 0xff); // just making sure...
         return (int)desired_chr_id;
     }
 
@@ -126,7 +126,7 @@ public unsafe class SoloModule : FhModule {
         int b = stack->pop_int();
         int a = stack->pop_int();
         FhLog.Info($"Call: launchBattle({a}, {b})");
-        FhUtil.GetFPtr<MsBattleLabelExe>(0x381d60)((uint)a, 1, (byte)b);
+        FhUtil.get_fptr<MsBattleLabelExe>(0x381d60)((uint)a, 1, (byte)b);
     }
 }
 

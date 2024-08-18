@@ -43,7 +43,7 @@ public static class FhRuntimeConst {
         string diagLogDirPath  = Path.Join(cwdParent, _diagLogDirName);
         string rsrcDirPath     = Path.Join(cwdParent, _rsrcDirName);
         string miscDirPath     = Path.Join(cwdParent, _miscDirName);
-        string byRunDirPath    = Path.Join(miscDirPath, $"run_{FhUtil.GetTimestampString()}");
+        string byRunDirPath    = Path.Join(miscDirPath, $"run_{FhUtil.get_timestamp_string()}");
 
         BinDir      = new FhDirLink("$bindir", binDirPath);
         CLRHooksDir = new FhDirLink("$clrhookdir", clrHooksDirPath);

@@ -19,15 +19,9 @@ public sealed record DebugModuleConfig : FhModuleConfig {
 
 public class DebugModule : FhModule {
     private readonly DebugModuleConfig _moduleConfig;
-    private FhMethodHandle<Sg_MainLoopDelegate> _postMainLoop;
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void Sg_MainLoopDelegate(float delta);
 
     public DebugModule(DebugModuleConfig moduleConfig) : base(moduleConfig) {
         _moduleConfig = moduleConfig;
-
-        _postMainLoop = new FhMethodHandle<Sg_MainLoopDelegate>(this, 0x420c00, render);
 
         _moduleState  = FhModuleState.InitSuccess;
     }
@@ -43,21 +37,16 @@ public class DebugModule : FhModule {
     }
 
     public override bool FhModuleStart() {
-        return _postMainLoop.ApplyHook();
+        return true;
     }
 
     public override bool FhModuleStop() {
-        return _postMainLoop.RemoveHook();
+        return true;
     }
 
-    public void render(float delta) {
-        if (_postMainLoop.GetOriginalFptrSafe(out Sg_MainLoopDelegate? fptr)) {
-            fptr.Invoke(0);
-        }
+    public override void post_update() {
+        SphereGridEditor.update();
 
-        ImGuiNET.ImColor accent_color = new ImGuiNET.ImColor() {
-            Value = new System.Numerics.Vector4(0.7f, 0.9f, 0.1f, 0.8f)
-        };
         //DebugMenu.render(delta);
     }
 }

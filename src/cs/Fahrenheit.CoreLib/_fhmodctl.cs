@@ -64,14 +64,16 @@ public static class FhModuleController {
             retval &= dependency.FhModuleStart();
         }
 
-        retval &= fmctx.Module.FhModuleStart();
+        if (!fmctx.Module.FhModuleStart()) retval = false;
 
         return retval;
     }
 
-    public static void ModuleStateChangeHandler(FhModule sender, FhModuleStateChangeEventArgs e) {
-        lock (_moduleManipLock) {
-            FhLog.Info($"Module {sender.ModuleName} changes state from {e.OldState} to {e.NewState}.");
+    public static void ModuleStateChangeHandler(FhModule sender, FhModuleStateChangeEventArgs e)
+    {
+        lock (_moduleManipLock)
+        {
+            FhLog.Log(LogLevel.Info, $"Module {sender.ModuleName} changes state from {e.OldState} to {e.NewState}.");
 
             FhModuleContext fmctx = GetContextForModule(sender) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE");
 
@@ -170,8 +172,10 @@ public static class FhModuleController {
         }
     }
 
-    public static IEnumerable<bool> Stop(IEnumerable<FhModule> fms) {
-        lock (_moduleManipLock) {
+    public static IEnumerable<bool> Stop(IEnumerable<FhModule> fms)
+    {
+        lock (_moduleManipLock)
+        {
             foreach (FhModule fm in fms)
                 yield return Stop(fm);
         }
