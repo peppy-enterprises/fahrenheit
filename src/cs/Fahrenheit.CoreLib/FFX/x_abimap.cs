@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0xC)]
-public struct AbilityMap
-{
+public struct AbilityMap {
     [FieldOffset(0x0)] private uint _0x00;
     [FieldOffset(0x4)] private uint _0x04;
     [FieldOffset(0x8)] private uint _0x08;

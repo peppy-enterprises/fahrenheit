@@ -1,7 +1,6 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
-public enum FontForegroundColor
-{
+public enum FontForegroundColor {
     White             = 0x0, // Also 0x04, 0x0A
     LightGray         = 0x1,
     Yellow            = 0x2,
@@ -17,8 +16,7 @@ public enum FontForegroundColor
     LightBlue         = 0xF,
 }
 
-public enum FontBackgroundColor
-{
+public enum FontBackgroundColor {
     Black             = 0x00, // Also 0x10, 0x80, 0x90
     White             = 0x20, // Also 0xA0
     ShadowTheHedgehog = 0x30, // Also 0xB0
@@ -28,10 +26,8 @@ public enum FontBackgroundColor
     LightBlue         = 0x70, // Also 0xF0
 }
 
-public static class FontColor
-{
-    public static byte create(FontForegroundColor fg, FontBackgroundColor bg)
-    {
+public static class FontColor {
+    public static byte create(FontForegroundColor fg, FontBackgroundColor bg) {
         return (byte)((byte)bg + (byte)fg);
     }
 }

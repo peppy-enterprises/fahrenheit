@@ -1,7 +1,6 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
-public enum VpaTriCollisionGroup
-{
+public enum VpaTriCollisionGroup {
     Pass        = 0,
     BlockAll    = 1,
     BlockNPC    = 2,
@@ -9,8 +8,7 @@ public enum VpaTriCollisionGroup
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x10)]
-public unsafe struct VpaTri
-{
+public unsafe struct VpaTri {
     [FieldOffset(0x0)] public  fixed short vertex_indices   [3];
     [FieldOffset(0x6)] public  fixed short neighbour_indices[3];
     [FieldOffset(0xC)] private       int   data;
@@ -36,8 +34,7 @@ public unsafe struct VpaTri
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x8)]
-public unsafe struct VpaVertex
-{
+public unsafe struct VpaVertex {
     [FieldOffset(0x0)] public  short x;
     [FieldOffset(0x2)] public  short y;
     [FieldOffset(0x4)] public  short z;
@@ -45,8 +42,7 @@ public unsafe struct VpaVertex
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x20)]
-public unsafe struct VpaNavMesh
-{
+public unsafe struct VpaNavMesh {
     [FieldOffset(0x0A)] public ushort vertex_count;
     [FieldOffset(0x0C)] public float  scale;
     [FieldOffset(0x18)] public uint   vertices_offset;

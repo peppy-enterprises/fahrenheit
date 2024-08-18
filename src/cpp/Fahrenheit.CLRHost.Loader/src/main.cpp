@@ -166,8 +166,7 @@ using EntryPoint_T = int(*)(void);
 
 EntryPoint_T ffxMain = NULL;
 
-static int DetourMain(void)
-{
+static int DetourMain(void) {
     AttachConsole(ATTACH_PARENT_PROCESS);
 
     // Get the current executable's directory
@@ -238,10 +237,8 @@ static int DetourMain(void)
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
-                     )
-{
-    if (DetourIsHelperProcess())
-    {
+                     ) {
+    if (DetourIsHelperProcess()) {
         return TRUE;
     }
 

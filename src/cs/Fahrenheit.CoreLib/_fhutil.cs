@@ -6,17 +6,14 @@ using System.Text.Json.Serialization;
 
 namespace Fahrenheit.CoreLib;
 
-public static unsafe class FhUtil
-{
+public static unsafe class FhUtil {
     public static T* ptr_at<T>(nint address)          where T : unmanaged { return (T*)(FhGlobal.base_addr + address); }
     public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                }
     public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;        }
 
-    public static nint get_mbase_or_throw()
-    {
+    public static nint get_mbase_or_throw() {
         nint mbase;
-        if ((mbase = FhPInvoke.GetModuleHandle("FFX.exe")) == nint.Zero)
-        {
+        if ((mbase = FhPInvoke.GetModuleHandle("FFX.exe")) == nint.Zero) {
             if ((mbase = FhPInvoke.GetModuleHandle("FFX-2.exe")) == nint.Zero)
                 throw new Exception("FH_E_HOOK_TARGET_INDETERMINATE");
         }
@@ -27,8 +24,7 @@ public static unsafe class FhUtil
     ///     Generic bitwise NOT.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T not_with_cast<T>(this T x) where T : IBinaryInteger<T>
-    {
+    public static T not_with_cast<T>(this T x) where T : IBinaryInteger<T> {
         unchecked { return ~x; }
     }
 
@@ -37,8 +33,7 @@ public static unsafe class FhUtil
     ///     Whether bit at <paramref name="offset"/> into <paramref name="bitField"/> is set.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe bool get_bit<T>(this T bitField, int offset) where T : unmanaged, IBinaryInteger<T>
-    {
+    public static unsafe bool get_bit<T>(this T bitField, int offset) where T : unmanaged, IBinaryInteger<T> {
         if (offset < 0 || offset >= sizeof(T) * 8) throw new ArgumentOutOfRangeException(nameof(offset));
 
         return ((bitField >> offset) & T.One) != T.Zero;
@@ -50,8 +45,7 @@ public static unsafe class FhUtil
     ///     The value of type <typeparamref name="T"/> made from <paramref name="len"/> bits <paramref name="offset"/> into <paramref name="bitField"/>.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe T get_bits<T>(this T bitField, int offset, int len) where T : unmanaged, IBinaryInteger<T>
-    {
+    public static unsafe T get_bits<T>(this T bitField, int offset, int len) where T : unmanaged, IBinaryInteger<T> {
         if (offset <  0 || offset >=  sizeof(T) * 8)           throw new ArgumentOutOfRangeException(nameof(offset));
         if (len    <= 0 || len    >  (sizeof(T) * 8) - offset) throw new ArgumentOutOfRangeException(nameof(len));
 
@@ -64,8 +58,7 @@ public static unsafe class FhUtil
     /// <param name="offset">A 0-based offset into the <paramref name="bitField"/>.</param>
     /// <param name="value">Whether the bit should be set to <c>1</c> if <c>true</c> or <c>0</c> if <c>false</c>.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe void set_bit<T>(this ref T bitField, int offset, bool value) where T : unmanaged, IBinaryInteger<T>
-    {
+    public static unsafe void set_bit<T>(this ref T bitField, int offset, bool value) where T : unmanaged, IBinaryInteger<T> {
         if (offset < 0 || offset >= sizeof(T) * 8) throw new ArgumentOutOfRangeException(nameof(offset));
 
         if (value) bitField |=  T.One << offset;
@@ -79,16 +72,18 @@ public static unsafe class FhUtil
     /// <param name="len">The amount of bits to write.</param>
     /// <param name="value">The value to set the bits to. Only the first <paramref name="len"/> bits matter.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static unsafe void set_bits<T>(this ref T bitField, int offset, int len, T value) where T : unmanaged, IBinaryInteger<T>
-    {
+    public static unsafe void set_bits<T>(this ref T bitField, int offset, int len, T value) where T : unmanaged, IBinaryInteger<T> {
         if (offset < 0  || offset >=  sizeof(T) * 8)           throw new ArgumentOutOfRangeException(nameof(offset));
         if (len    <= 0 || len    >  (sizeof(T) * 8) - offset) throw new ArgumentOutOfRangeException(nameof(len));
 
         for (; len > 0; len--, offset++) { bitField.set_bit(offset, value.get_bit(offset)); }
     }
 
-    public static ulong u64_swap_endian(ulong x)
-    {
+    public static unsafe Span<T> array<T>(ref this T start, int length) where T: struct {
+        return MemoryMarshal.CreateSpan<T>(ref start, length);
+    }
+
+    public static ulong u64_swap_endian(ulong x) {
         // swap adjacent 32-bit blocks
         x = (x >> 32) | (x << 32);
         // swap adjacent 16-bit blocks
@@ -102,8 +97,7 @@ public static unsafe class FhUtil
     ///     Undefined on inputs over 8 bytes in length.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong pack_bytes_le(this ReadOnlySpan<byte> bytes)
-    {
+    public static ulong pack_bytes_le(this ReadOnlySpan<byte> bytes) {
         ulong le = 0;
 
         for (int i = bytes.Length - 1; i >= 0; i--)
@@ -117,8 +111,7 @@ public static unsafe class FhUtil
     ///     Undefined on inputs over 8 bytes in length.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ulong pack_bytes_be(this ReadOnlySpan<byte> bytes)
-    {
+    public static ulong pack_bytes_be(this ReadOnlySpan<byte> bytes) {
         ulong be = 0;
 
         for (int i = bytes.Length - 1, j = 0; i >= 0; i--, j++)
@@ -138,15 +131,13 @@ public static unsafe class FhUtil
      */
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string get_timestamp_string()
-    {
+    public static string get_timestamp_string() {
         DateTime dt = DateTime.UtcNow;
         return $"{dt.Day.ToString("D2")}{dt.Month.ToString("D2")}{dt.Year.ToString("D2")}_{dt.Hour.ToString("D2")}{dt.Minute.ToString("D2")}{dt.Second.ToString("D2")}";
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string get_extended_timestamp_string()
-    {
+    public static string get_extended_timestamp_string() {
         DateTime dt = DateTime.UtcNow;
         return $"{dt.Day.ToString("D2")}{dt.Month.ToString("D2")}{dt.Year.ToString("D2")}_{dt.Hour.ToString("D2")}{dt.Minute.ToString("D2")}{dt.Second.ToString("D2")}.{dt.Millisecond.ToString("D3")}";
     }

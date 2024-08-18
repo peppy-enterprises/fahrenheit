@@ -1,9 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
-public static unsafe class Globals
-{
-    public static class Map
-    {
+public static unsafe class Globals {
+    public static class Map {
         public static int*        tri_count { get { return FhUtil.ptr_at<int>       (0xF01A48); } }
         public static VpaTri*     tris      { get { return FhUtil.ptr_at<VpaTri>    (0xF01A44); } }
         public static VpaVertex*  vertices  { get { return FhUtil.ptr_at<VpaVertex> (0xF01A4C); } }
@@ -11,16 +9,17 @@ public static unsafe class Globals
         public static VpaNavMesh* navmesh   { get { return FhUtil.ptr_at<VpaNavMesh>(0xF01A54); } }
     }
 
-    public static class Battle
-    {
+    public static class SphereGrid {
+        public static LpAbilityMapEngine* lpamng { get { return FhUtil.ptr_at<LpAbilityMapEngine>(0x1F05834); } }
+    }
+
+    public static class Battle {
         public static Chr* player_characters  { get { return (Chr*)FhUtil.get_at<nint>(0xD334CC); } }
         public static Chr* monster_characters { get { return (Chr*)FhUtil.get_at<nint>(0xD34460); } }
     }
 
-    public static class OverdriveInfo
-    {
-        public static class Times
-        {
+    public static class OverdriveInfo {
+        public static class Times {
             public static float* spiral_cut      { get { return FhUtil.ptr_at<float>(0x886BF0); } }
             public static float* slice_and_dice  { get { return FhUtil.ptr_at<float>(0x886BF4); } }
             public static float* energy_rain     { get { return FhUtil.ptr_at<float>(0x886BF8); } }
@@ -33,30 +32,37 @@ public static unsafe class Globals
         }
     }
 
-    public static class Input
-    {
-        public static readonly InputAction confirm = new(0x20);
-        public static readonly InputAction cancel  = new(0x40);
-        public static readonly InputAction up      = new(0x1000);
-        public static readonly InputAction right   = new(0x2000);
-        public static readonly InputAction down    = new(0x4000);
-        public static readonly InputAction left    = new(0x8000);
+    public static class Input {
+        public static readonly InputAction l2 = new(0x1);
+        public static readonly InputAction r2 = new(0x2);
+        public static readonly InputAction l1 = new(0x4);
+        public static readonly InputAction r1 = new(0x8);
+
+        public static readonly InputAction square   = new(0x10);
+        public static readonly InputAction confirm  = new(0x20);
+        public static readonly InputAction cancel   = new(0x40);
+        public static readonly InputAction triangle = new(0x80);
+
+        public static readonly InputAction select = new(0x100);
+        public static readonly InputAction start  = new(0x800);
+
+        public static readonly InputAction up    = new(0x1000);
+        public static readonly InputAction right = new(0x2000);
+        public static readonly InputAction down  = new(0x4000);
+        public static readonly InputAction left  = new(0x8000);
 
         public static ushort* raw { get { return FhUtil.ptr_at<ushort>(0xF27080); } }
 
         private static ushort previous;
 
-        public static void update()
-        {
+        public static void update() {
             previous = *raw;
         }
 
-        public class InputAction
-        {
+        public class InputAction {
             private ushort mask;
 
-            public InputAction(ushort mask)
-            {
+            public InputAction(ushort mask) {
                 this.mask = mask;
             }
 

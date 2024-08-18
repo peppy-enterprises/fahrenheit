@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x2150)]
-public unsafe struct Btl
-{
+public unsafe struct Btl {
     [FieldOffset(0x10)]   public       byte   battle_state;
     [FieldOffset(0x12)]   public       byte   battle_trigger;
     [FieldOffset(0x28)]   public       bool   flag_invincible_mon;

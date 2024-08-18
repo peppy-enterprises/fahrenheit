@@ -103,8 +103,7 @@ public unsafe readonly struct FhPointer {
         T  cur    = maval;
         T* curptr = &cur;
 
-        while (!cur.Equals(target))
-        {
+        while (!cur.Equals(target)) {
             FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1);
             cur = *(T*)maptr;
         }
@@ -132,8 +131,7 @@ public unsafe readonly struct FhPointer {
         T*   curptr = &cur;
         bool hasMatched  = false;
 
-        while (!hasMatched)
-        {
+        while (!hasMatched) {
             FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1);
             cur = *(T*)maptr;
 

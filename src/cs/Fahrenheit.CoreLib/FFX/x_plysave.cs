@@ -1,8 +1,7 @@
 namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x94)]
-public unsafe struct PlySave
-{
+public unsafe struct PlySave {
     [FieldOffset(0x00)] private      uint       __0x0;
     [FieldOffset(0x04)] public       uint       base_hp;
     [FieldOffset(0x08)] public       uint       base_mp;

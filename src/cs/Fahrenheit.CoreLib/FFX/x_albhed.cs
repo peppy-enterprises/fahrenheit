@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x4)]
-public struct AlBhed
-{
+public struct AlBhed {
     [FieldOffset(0x00)] public  byte chr_original;
     [FieldOffset(0x01)] public  byte chr_albhed;
     [FieldOffset(0x02)] public  byte primer_index;

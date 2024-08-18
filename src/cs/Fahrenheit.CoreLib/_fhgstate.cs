@@ -1,9 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib;
 
-public static unsafe class FhGlobal
-{
-    static FhGlobal()
-    {
+public static unsafe class FhGlobal {
+    static FhGlobal() {
         base_addr = FhUtil.get_mbase_or_throw();
     }
 

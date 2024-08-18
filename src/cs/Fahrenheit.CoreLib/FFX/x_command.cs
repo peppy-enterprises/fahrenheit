@@ -1,22 +1,19 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x4)]
-public struct PCommandData
-{
+public struct PCommandData {
     [FieldOffset(0x00)] public byte ordering_idx;
     [FieldOffset(0x01)] public byte sphere_grid_role;
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x60)]
-public struct PCommand
-{
+public struct PCommand {
     [FieldOffset(0x00)] public Command      command;
     [FieldOffset(0x5C)] public PCommandData command_pdata;
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x5C)]
-public struct Command
-{
+public struct Command {
     [FieldOffset(0x00)] public  ushort name_offset;
     [FieldOffset(0x04)] public  ushort dash_offset;
     [FieldOffset(0x08)] public  ushort desc_offset;

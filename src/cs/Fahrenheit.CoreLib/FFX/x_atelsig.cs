@@ -1,7 +1,6 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
-public enum AtelSignalState : byte
-{
+public enum AtelSignalState : byte {
     Ignore       = 0x0,
     Run          = 0x1,
     Complete     = 0x2,
@@ -9,8 +8,7 @@ public enum AtelSignalState : byte
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 2, Size = 0x16)]
-public unsafe struct AtelSignal
-{
+public unsafe struct AtelSignal {
     [FieldOffset(0x00)] public  AtelSignal*     next;
     [FieldOffset(0x04)] public  AtelSignal*     prev;
     [FieldOffset(0x08)] public  ushort          entry_point;

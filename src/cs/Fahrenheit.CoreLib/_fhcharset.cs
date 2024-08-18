@@ -44,6 +44,30 @@ public abstract partial class FhCharset {
         return true;
     }
 
+    public byte[] ToBytes(in ReadOnlySpan<char> src) {
+        byte[] bytes = new byte[src.Length];
+
+        for (int i = 0; i < src.Length; i++) {
+            byte b;
+            if ((b = ToByte(src[i])) != InvalidByte)
+                bytes[i] = b;
+        }
+
+        return bytes;
+    }
+
+    public string ToString(in ReadOnlySpan<byte> src) {
+        string result = "";
+
+        for (int i = 0; i < src.Length; i++) {
+            char c;
+            if ((c = ToChar(src[i])) != InvalidChar)
+                result += c;
+        }
+
+        return result;
+    }
+
     public abstract char ToChar(byte b);
     public abstract byte ToByte(char c);
 }

@@ -29,9 +29,13 @@ public abstract class FhModule : IEquatable<FhModule> {
         _moduleName = moduleConfig.ConfigName;
     }
 
-    internal string ModuleType => GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE");
+    internal string ModuleType {
+        get { return GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE"); }
+    }
 
-    public string ModuleName => _moduleName;
+    public string ModuleName {
+        get { return _moduleName; }
+    }
 
     /* [fkelava 27/3/23 01:59]
      * ModuleState is the _only_ way for modules to declare that they've suffered a hard fault.
@@ -48,7 +52,7 @@ public abstract class FhModule : IEquatable<FhModule> {
      */
 
     public FhModuleState ModuleState {
-        get => _moduleState;
+        get { return _moduleState; }
         protected set {
             FhModuleController.ModuleStateChangeHandler(this, new(_moduleState, value));
             _moduleState = value;
@@ -83,6 +87,11 @@ public abstract class FhModule : IEquatable<FhModule> {
         return _moduleName.GetHashCode();
     }
 
-    public static bool operator ==(FhModule? left, FhModule? right) => Equals(left, right);
-    public static bool operator !=(FhModule? left, FhModule? right) => !Equals(left, right);
+    public static bool operator ==(FhModule? left, FhModule? right) {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(FhModule? left, FhModule? right) {
+        return !Equals(left, right);
+    }
 }

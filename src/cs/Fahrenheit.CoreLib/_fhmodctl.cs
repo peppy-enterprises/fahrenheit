@@ -48,7 +48,7 @@ public static class FhModuleController {
         bool retval = true;
 
         foreach (FhModule dependent in fmctx.DependentModules) {
-            FhLog.Info($"Halting threads of module {dependent.ModuleName} because module {fmctx.Module.ModuleName} it depends on faulted.");
+            FhLog.Log(LogLevel.Info, $"Halting threads of module {dependent.ModuleName} because module {fmctx.Module.ModuleName} it depends on faulted.");
             if (!dependent.FhModuleStop()) retval = false;
         }
 
@@ -57,11 +57,11 @@ public static class FhModuleController {
         return retval;
     }
 
-    private static bool StartIncludingDependencies(in FhModuleContext fmctx) {
+    private static bool StartIncludingDependents(in FhModuleContext fmctx) {
         bool retval = true;
 
-        foreach (FhModule dependency in fmctx.Dependencies) {
-            retval &= dependency.FhModuleStart();
+        foreach (FhModule dependent in fmctx.DependentModules) {
+            if (!dependent.FhModuleStart()) retval = false;
         }
 
         if (!fmctx.Module.FhModuleStart()) retval = false;
@@ -69,20 +69,18 @@ public static class FhModuleController {
         return retval;
     }
 
-    public static void ModuleStateChangeHandler(FhModule sender, FhModuleStateChangeEventArgs e)
-    {
-        lock (_moduleManipLock)
-        {
+    public static void ModuleStateChangeHandler(FhModule sender, FhModuleStateChangeEventArgs e) {
+        lock (_moduleManipLock) {
             FhLog.Log(LogLevel.Info, $"Module {sender.ModuleName} changes state from {e.OldState} to {e.NewState}.");
 
             FhModuleContext fmctx = GetContextForModule(sender) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE");
 
             if (!(e.NewState switch {
                 FhModuleState.Fault   => StopIncludingDependents(fmctx),
-                FhModuleState.Started => StartIncludingDependencies(fmctx),
+                FhModuleState.Started => StartIncludingDependents(fmctx),
                 _ => false
             })) {
-                FhLog.Error($"Internal error in {ModuleStateChangeHandler} invoked by module {sender.ModuleName}.");
+                FhLog.Log(LogLevel.Error, $"Internal error in {ModuleStateChangeHandler} invoked by module {sender.ModuleName}.");
             }
         }
     }
@@ -146,8 +144,8 @@ public static class FhModuleController {
 
     public static bool Start(FhModule fm) {
         lock (_moduleManipLock) {
-            FhLog.Info($"Starting module {fm.ModuleName}.");
-            return StartIncludingDependencies(GetContextForModule(fm) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE"));
+            FhLog.Log(LogLevel.Info, $"Starting module {fm.ModuleName}.");
+            return StartIncludingDependents(GetContextForModule(fm) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE"));
         }
     }
 
@@ -167,15 +165,13 @@ public static class FhModuleController {
 
     public static bool Stop(FhModule fm) {
         lock (_moduleManipLock) {
-            FhLog.Info($"Stopping module {fm.ModuleName}.");
+            FhLog.Log(LogLevel.Info, $"Stopping module {fm.ModuleName}.");
             return StopIncludingDependents(GetContextForModule(fm) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE"));
         }
     }
 
-    public static IEnumerable<bool> Stop(IEnumerable<FhModule> fms)
-    {
-        lock (_moduleManipLock)
-        {
+    public static IEnumerable<bool> Stop(IEnumerable<FhModule> fms) {
+        lock (_moduleManipLock) {
             foreach (FhModule fm in fms)
                 yield return Stop(fm);
         }
@@ -195,14 +191,14 @@ public static class FhModuleController {
             FhModuleContext? targetfmctx = GetContextForModule(target);
 
             if (targetfmctx == default) {
-                FhLog.Error($"Target FhModule not found in RegisterModuleDependency, caller {caller}.");
+                FhLog.Log(LogLevel.Error, $"Target FhModule not found in RegisterModuleDependency, caller {caller}.");
                 return false;
             }
 
             StopIncludingDependents(callerfmctx);
             callerfmctx.Dependencies.Add(target);
             targetfmctx.DependentModules.Add(caller);
-            return StartIncludingDependencies(callerfmctx);
+            return StartIncludingDependents(callerfmctx);
         }
     }
 
@@ -220,12 +216,12 @@ public static class FhModuleController {
             FhModuleContext? targetfmctx = GetContextForModule(target);
 
             if (targetfmctx == default) {
-                FhLog.Error($"Caller FhModule not found or not in dependency list of target, caller {caller}.");
+                FhLog.Log(LogLevel.Error, $"Caller FhModule not found or not in dependency list of target, caller {caller}.");
                 return false;
             }
 
             StopIncludingDependents(callerfmctx);
-            return targetfmctx.DependentModules.Remove(caller) && StartIncludingDependencies(callerfmctx);
+            return targetfmctx.DependentModules.Remove(caller) && StartIncludingDependents(callerfmctx);
         }
     }
 
@@ -239,19 +235,19 @@ public static class FhModuleController {
         lock (_moduleManipLock) {
             foreach (FhModuleConfig fmcfg in moduleConfigs) {
                 if (!fmcfg.ConfigEnabled) {
-                    FhLog.Warning($"Module {fmcfg.ConfigName} [{fmcfg.GetType().Name}] is disabled in configuration. Suppressing.");
+                    FhLog.Log(LogLevel.Warning, $"Module {fmcfg.ConfigName} [{fmcfg.GetType().Name}] is disabled in configuration. Suppressing.");
                     continue;
                 }
 
                 if (!fmcfg.TrySpawnModule(out FhModule? fm)) {
-                    FhLog.Error($"Module {fmcfg.ConfigName} [{fmcfg.GetType().Name}] constructor failed. Suppressing.");
+                    FhLog.Log(LogLevel.Error, $"Module {fmcfg.ConfigName} [{fmcfg.GetType().Name}] constructor failed. Suppressing.");
 
                     retval = false;
                     continue;
                 }
 
                 if (!fm.FhModuleInit()) {
-                    FhLog.Warning($"Module {fmcfg.ConfigName} [{fmcfg.GetType().Name}] initializer callback failed. Suppressing.");
+                    FhLog.Log(LogLevel.Warning, $"Module {fmcfg.ConfigName} [{fmcfg.GetType().Name}] initializer callback failed. Suppressing.");
 
                     retval = false;
                     continue;

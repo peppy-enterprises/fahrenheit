@@ -3,8 +3,7 @@
 namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x34)]
-public unsafe struct AtelScriptHeader
-{
+public unsafe struct AtelScriptHeader {
     [FieldOffset(0x00)] public ushort script_type;
     [FieldOffset(0x02)] public ushort var_count;
     [FieldOffset(0x04)] public ushort ref_int_count;
@@ -22,8 +21,7 @@ public unsafe struct AtelScriptHeader
     [FieldOffset(0x30)] public uint   offset_shared_data;
 }
 
-public enum AtelScriptVarLocation
-{
+public enum AtelScriptVarLocation {
     SaveData,
     CommonVars,
     Data,
@@ -33,8 +31,7 @@ public enum AtelScriptVarLocation
     EventData
 }
 
-public enum AtelScriptVarType
-{
+public enum AtelScriptVarType {
     U8  = 0x00,
     I8  = 0x01,
     U16 = 0x02,
@@ -45,8 +42,7 @@ public enum AtelScriptVarType
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x4)]
-public unsafe struct AtelScriptVarValue
-{
+public unsafe struct AtelScriptVarValue {
     [FieldOffset(0x0)] public byte   as_byte;
     [FieldOffset(0x0)] public sbyte  as_sbyte;
     [FieldOffset(0x0)] public ushort as_ushort;
@@ -57,8 +53,7 @@ public unsafe struct AtelScriptVarValue
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x8)]
-public unsafe struct AtelScriptVar
-{
+public unsafe struct AtelScriptVar {
     [FieldOffset(0x0)] public long raw;
     [FieldOffset(0x0)] public uint lo;
     [FieldOffset(0x4)] public uint hi;
@@ -70,12 +65,9 @@ public unsafe struct AtelScriptVar
     public AtelScriptVarType     type     { get { return (AtelScriptVarType)   ((properties & 0xF0) >> 4); } }
     public AtelScriptVarLocation location { get { return (AtelScriptVarLocation)(properties & 0x0F);       } }
 
-    public double value
-    {
-        get
-        {
-            return type switch
-            {
+    public double value {
+        get {
+            return type switch {
                 AtelScriptVarType.U8  =>        val[0],
                 AtelScriptVarType.I8  => (sbyte)val[0],
                 AtelScriptVarType.U16 => (ushort)((val[1] << 0x8) | val[0]),

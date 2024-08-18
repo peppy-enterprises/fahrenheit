@@ -1,8 +1,7 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x19)]
-public struct StatusMap
-{
+public struct StatusMap {
     [FieldOffset(0x00)] public byte death;
     [FieldOffset(0x01)] public byte zombie;
     [FieldOffset(0x02)] public byte petrification;
@@ -31,8 +30,7 @@ public struct StatusMap
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0xD)]
-public struct StatusDurationMap
-{
+public struct StatusDurationMap {
     [FieldOffset(0x00)] public byte sleep;
     [FieldOffset(0x01)] public byte silence;
     [FieldOffset(0x02)] public byte darkness;
