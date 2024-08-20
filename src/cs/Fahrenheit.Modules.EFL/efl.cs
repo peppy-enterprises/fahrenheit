@@ -85,7 +85,7 @@ public unsafe class EFLModule : FhModule {
 
         // Poor gal's "which game is loaded",
         //TODO: please update with an actual enum
-        if (FFX.Globals.game_base != 0) { // FFX
+        if (FhGlobal.base_addr != 0) { // FFX; broken
             hCheckExists = new FhMethodHandle<CheckExists>(this, 0x21c000, HCheckExists);
             hOpenFile = new FhMethodHandle<OpenFile>(this, 0x208100, HOpenFile);
             hCheckVBF_Parent = new FhMethodHandle<CheckVBF_Parent>(this, 0x279760, HCheckVBF_Parent);
@@ -124,11 +124,11 @@ public unsafe class EFLModule : FhModule {
     }
 
     public override bool FhModuleStart() {
-        return hCheckExists.ApplyHook() && hCheckVBF_Parent.ApplyHook() && hOpenFile.ApplyHook();
+        return hCheckExists.hook() && hCheckVBF_Parent.hook() && hOpenFile.hook();
     }
 
     public override bool FhModuleStop() {
-        return hCheckExists.RemoveHook() && hCheckVBF_Parent.RemoveHook() && hOpenFile.RemoveHook();
+        return hCheckExists.unhook() && hCheckVBF_Parent.unhook() && hOpenFile.unhook();
     }
 
     /*===== Utility Functions =====*/
@@ -167,13 +167,13 @@ public unsafe class EFLModule : FhModule {
             ? bytesPerSector
             : 2048;
         fixed (byte *code = GetSecSkipWithRet(0)) {
-            if (!VirtualProtectEx(FhCLRHost.RetrieveMbaseOrThrow(), (nint)code, 0x8, 0x40, out uint _)) {
+            if (!VirtualProtectEx(FhGlobal.base_addr, (nint)code, 0x8, 0x40, out uint _)) {
                 throw new System.Exception($"{GetLastError()}");
             }
 
             Marshal.GetDelegateForFunctionPointer<SkipSecCheck>((nint)code)();
         }
-        //FhUtil.GetFPtr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
+        //FhUtil.get_fptr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
         return 0;
     }
 
@@ -216,7 +216,7 @@ public unsafe class EFLModule : FhModule {
 
         if (filepath is not null) {
             fixed (byte *code = GetSecSkipWithRet(1)) {
-                if (!VirtualProtectEx(FhCLRHost.RetrieveMbaseOrThrow(), (nint)code, 0x8, 0x40, out uint _)) {
+                if (!VirtualProtectEx(FhGlobal.base_addr, (nint)code, 0x8, 0x40, out uint _)) {
                     throw new System.Exception($"{GetLastError()}");
                 }
 
@@ -225,35 +225,35 @@ public unsafe class EFLModule : FhModule {
             return 1;
         }
 
-        if (hCheckExists.GetOriginalFptrSafe(out CheckExists? fptr)) {
+        if (hCheckExists.try_get_original_fptr(out CheckExists? fptr)) {
             FhLog.Debug($"Passing non-modded path to vanilla game: \"{Marshal.PtrToStringAnsi((nint)path)}\"");
             return fptr.Invoke(thisPtr, path);
         }
 
         fixed (byte *code = GetSecSkipWithRet(0)) {
-            if (!VirtualProtectEx(FhCLRHost.RetrieveMbaseOrThrow(), (nint)code, 0x8, 0x40, out uint _)) {
+            if (!VirtualProtectEx(FhGlobal.base_addr, (nint)code, 0x8, 0x40, out uint _)) {
                 throw new System.Exception($"{GetLastError()}");
             }
 
             Marshal.GetDelegateForFunctionPointer<SkipSecCheck>((nint)code)();
         }
-        //FhUtil.GetFPtr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
+        //FhUtil.get_fptr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
         return 0;
     }
 
     public void HCheckVBF_Parent() {
-        FhUtil.GetFPtr<StdVoidS>(0x207F00)("../../..");
-        FhUtil.GetFPtr<StdVoidV>(0x21B750)();
-        nint ptr = FhUtil.GetFPtr<StdPtrV>(0x21BF70)();
-        FhUtil.GetFPtr<ThisVoidS>(0x21C560)(ptr, "../../../");
-        int ignored = FhUtil.GetFPtr<ThisIntS>(0x21C310)(ptr, "data\\FFX_Data.vbf");
+        FhUtil.get_fptr<StdVoidS>(0x207F00)("../../..");
+        FhUtil.get_fptr<StdVoidV>(0x21B750)();
+        nint ptr = FhUtil.get_fptr<StdPtrV>(0x21BF70)();
+        FhUtil.get_fptr<ThisVoidS>(0x21C560)(ptr, "../../../");
+        int ignored = FhUtil.get_fptr<ThisIntS>(0x21C310)(ptr, "data\\FFX_Data.vbf");
         // Skipping `if` block
-        FhUtil.GetFPtr<StdVoidV>(0x2DB0F0)();
-        ptr = FhUtil.GetFPtr<StdPtrV>(0x2DB1A0)();
-        FhUtil.GetFPtr<ThisIntV>(0x2DB1C0)(ptr);
+        FhUtil.get_fptr<StdVoidV>(0x2DB0F0)();
+        ptr = FhUtil.get_fptr<StdPtrV>(0x2DB1A0)();
+        FhUtil.get_fptr<ThisIntV>(0x2DB1C0)(ptr);
         // non-op switch statement ???
-        FhUtil.GetFPtr<StdIntV>(0x207EF0)();
-        FhUtil.GetFPtr<StdIntV>(0x2F9C40)();
+        FhUtil.get_fptr<StdIntV>(0x207EF0)();
+        FhUtil.get_fptr<StdIntV>(0x2F9C40)();
     }
 
     public int HOpenFile(int *handle, char *path, bool readOnly) {
@@ -267,7 +267,7 @@ public unsafe class EFLModule : FhModule {
         filepath = GetModdedFilepath(filepath);
 
         if (filepath is null) {
-            if (hOpenFile.GetOriginalFptrSafe(out OpenFile? fptr)) {
+            if (hOpenFile.try_get_original_fptr(out OpenFile? fptr)) {
                 return fptr.Invoke(handle, path, readOnly);
             }
         }
@@ -286,25 +286,25 @@ public unsafe class EFLModule : FhModule {
                 *handle = INVALID_HANDLE_VALUE;
 
                 fixed (byte *code = GetSecSkipWithRet(12)) {
-                    if (!VirtualProtectEx(FhCLRHost.RetrieveMbaseOrThrow(), (nint)code, 0x8, 0x40, out uint _)) {
+                    if (!VirtualProtectEx(FhGlobal.base_addr, (nint)code, 0x8, 0x40, out uint _)) {
                         throw new System.Exception($"{GetLastError()}");
                     }
 
                     Marshal.GetDelegateForFunctionPointer<SkipSecCheck>((nint)code)();
                 }
-                //FhUtil.GetFPtr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
+                //FhUtil.get_fptr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
                 return 12;
             }
         }
 
         fixed (byte *code = GetSecSkipWithRet(10)) {
-            if (!VirtualProtectEx(FhCLRHost.RetrieveMbaseOrThrow(), (nint)code, 0x8, 0x40, out uint _)) {
+            if (!VirtualProtectEx(FhGlobal.base_addr, (nint)code, 0x8, 0x40, out uint _)) {
                 throw new System.Exception($"{GetLastError()}");
             }
 
             Marshal.GetDelegateForFunctionPointer<SkipSecCheck>((nint)code)();
         }
-        //FhUtil.GetFPtr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
+        //FhUtil.get_fptr<FhXDelegates.SecCookieCheck>(0x549240)(FFX.Globals.security_cookie);
         return 10;
     }
 }
