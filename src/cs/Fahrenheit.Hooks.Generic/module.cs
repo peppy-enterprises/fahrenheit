@@ -31,11 +31,11 @@ public partial class FhHooksExampleModule : FhModule {
         _moduleConfig = cfg;
         _moduleState  = FhModuleState.InitSuccess;
 
-        _tkIsDbg       = new FhMethodHandle<TkIsDebugDelegate>(this, 0x487C80, new TkIsDebugDelegate(TkIsDebugHook));
-        _printf_22F6B0 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x22F6B0, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
-        _printf_22FDA0 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x22FDA0, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
-        _printf_473C10 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x473C10, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
-        _printf_473C20 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x473C20, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
+        _tkIsDbg       = new FhMethodHandle<TkIsDebugDelegate>   (this, "FFX.exe", 0x487C80, new TkIsDebugDelegate   (TkIsDebugHook));
+        _printf_22F6B0 = new FhMethodHandle<PrintfVarargDelegate>(this, "FFX.exe", 0x22F6B0, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
+        _printf_22FDA0 = new FhMethodHandle<PrintfVarargDelegate>(this, "FFX.exe", 0x22FDA0, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
+        _printf_473C10 = new FhMethodHandle<PrintfVarargDelegate>(this, "FFX.exe", 0x473C10, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
+        _printf_473C20 = new FhMethodHandle<PrintfVarargDelegate>(this, "FFX.exe", 0x473C20, new PrintfVarargDelegate(FhHooks.CLRPrintfHookAnsi));
     }
 
     public override FhHooksExampleModuleConfig ModuleConfiguration {
@@ -51,11 +51,11 @@ public partial class FhHooksExampleModule : FhModule {
     }
 
     public override bool FhModuleStart() {
-        return _tkIsDbg.hook() &&
-               _printf_22F6B0.hook() &&
-               _printf_22FDA0.hook() &&
-               _printf_473C10.hook() &&
-               _printf_473C20.hook();
+        return _tkIsDbg.try_hook() &&
+               _printf_22F6B0.try_hook() &&
+               _printf_22FDA0.try_hook() &&
+               _printf_473C10.try_hook() &&
+               _printf_473C20.try_hook();
     }
 
     public override bool FhModuleStop() {

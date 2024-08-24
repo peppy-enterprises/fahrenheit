@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace Fahrenheit.CLRHost;
 
@@ -33,15 +32,4 @@ internal static partial class FhPInvoke {
 
     [LibraryImport("fhdetour.dll")]
     public static partial long DetourTransactionCommit();
-
-    [LibraryImport("fhdetour.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static partial bool FhDetourPatchIAT(nint hModule, nint import, nint real);
-
-    [LibraryImport("fhdetour.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static partial bool FhDetourUnpatchIAT(nint hModule, nint import, nint real);
-
-    [LibraryImport("fhclrldr.dll", StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(AnsiStringMarshaller))]
-    public static partial void DetoursCLRSetGetProcAddressCache(nint hModule, string procName, nint real);
 }

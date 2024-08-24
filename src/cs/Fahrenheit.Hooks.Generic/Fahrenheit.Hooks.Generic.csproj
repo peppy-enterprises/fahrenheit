@@ -19,7 +19,7 @@
 
 	<!-- LOCAL DEPLOYMENT TARGET -->
 	<PropertyGroup>
-		<CopyToDir>$(SolutionDir)\artifacts\localdeploy\clrhooks</CopyToDir>
+		<CopyToDir>$(SolutionDir)\artifacts\localdeploy\modules</CopyToDir>
 	</PropertyGroup>
 
 	<!-- SDK REFERENCES -->

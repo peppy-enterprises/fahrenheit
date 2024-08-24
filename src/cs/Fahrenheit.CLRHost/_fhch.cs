@@ -13,42 +13,32 @@ using Fahrenheit.CoreLib;
 namespace Fahrenheit.CLRHost;
 
 public static class FhCLRHost {
-    public static bool hook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate {
-        nint mbase    = FhGlobal.base_addr;
-        nint origAddr = mbase + offset;
-        nint iatAddr  = origAddr;
-        nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
-
-        FhLog.Log(LogLevel.Info, $"Applying hook {hook.Method.Name}; M -> 0x{mbase.ToString("X8")}, T -> 0x{origAddr.ToString("X8")}.");
+    public static bool hook<T>(nint addr, T hook_fn, [NotNullWhen(true)] out T? orig) where T : Delegate {
+        nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook_fn);
+        FhLog.Log(LogLevel.Info, $"Applying hook {hook_fn.Method.Name}; T -> 0x{addr.ToString("X8")}.");
 
         FhPInvoke.DetourTransactionBegin();
         FhPInvoke.DetourUpdateThread(FhPInvoke.GetCurrentThread());
-        FhPInvoke.DetourAttach(ref origAddr, hookAddr);
+        FhPInvoke.DetourAttach(ref addr, hookAddr);
         bool rv = FhPInvoke.DetourTransactionCommit() == 0;
-        FhPInvoke.FhDetourPatchIAT(FhPInvoke.GetModuleHandle("coreclr.dll"), iatAddr, origAddr);
 
-        orig = Marshal.GetDelegateForFunctionPointer<T>(origAddr);
-        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr.ToString("X8")}, H -> 0x{hookAddr.ToString("X8")}.");
+        orig = Marshal.GetDelegateForFunctionPointer<T>(addr);
+        FhLog.Log(LogLevel.Info, $"H {hook_fn.Method.Name}; O -> 0x{addr.ToString("X8")}, H -> 0x{hookAddr.ToString("X8")}.");
 
         return rv;
     }
 
-    public static bool unhook<T>(nint offset, T hook, [NotNullWhen(true)] out T? orig) where T : Delegate {
-        nint mbase    = FhGlobal.base_addr;
-        nint origAddr = mbase + offset;
-        nint iatAddr  = origAddr;
-        nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook);
-
-        FhLog.Log(LogLevel.Info, $"Removing hook {hook.Method.Name}; targeted module addr: 0x{mbase.ToString("X8")}, final address: 0x{origAddr.ToString("X8")}.");
+    public static bool unhook<T>(nint addr, T hook_fn, [NotNullWhen(true)] out T? orig) where T : Delegate {
+        nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook_fn);
+        FhLog.Log(LogLevel.Info, $"Removing hook {hook_fn.Method.Name}; targeted module addr: 0x{addr.ToString("X8")}, final address: 0x{addr.ToString("X8")}.");
 
         FhPInvoke.DetourTransactionBegin();
         FhPInvoke.DetourUpdateThread(FhPInvoke.GetCurrentThread());
-        FhPInvoke.DetourDetach(ref origAddr, hookAddr);
+        FhPInvoke.DetourDetach(ref addr, hookAddr);
         bool rv = FhPInvoke.DetourTransactionCommit() == 0;
-        FhPInvoke.FhDetourUnpatchIAT(FhPInvoke.GetModuleHandle("coreclr.dll"), iatAddr, origAddr);
 
-        orig = Marshal.GetDelegateForFunctionPointer<T>(origAddr);
-        FhLog.Log(LogLevel.Info, $"H {hook.Method.Name}; O -> 0x{origAddr.ToString("X8")}, H -> 0x{hookAddr.ToString("X8")}.");
+        orig = Marshal.GetDelegateForFunctionPointer<T>(addr);
+        FhLog.Log(LogLevel.Info, $"H {hook_fn.Method.Name}; O -> 0x{addr.ToString("X8")}, H -> 0x{hookAddr.ToString("X8")}.");
 
         return rv;
     }

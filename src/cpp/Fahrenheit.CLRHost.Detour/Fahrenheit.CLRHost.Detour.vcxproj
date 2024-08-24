@@ -19,13 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\fhdetour.h" />
-    <ClInclude Include="inc\framework.h" />
     <ClInclude Include="inc\pch.h" />
     <ClInclude Include="inc\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\fhdetour.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -209,9 +206,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  
   <!-- LOCAL DEPLOYMENT TARGET -->
   <PropertyGroup>
-  	<CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
+    <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
   </PropertyGroup>
 </Project>

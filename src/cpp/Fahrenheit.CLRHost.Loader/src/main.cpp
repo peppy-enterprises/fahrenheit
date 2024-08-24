@@ -3,10 +3,7 @@
  * Both are licensed MIT, as is this repository. See THIRD-PARTY-NOTICES.
  */
 
-// Fahrenheit headers
-#include "pch.h"
-#include "fhdetour.h"
-#include "pinvokecache.h"
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
 // Standard headers
 #include <stdio.h>
@@ -24,7 +21,9 @@
 #include <hostfxr.h>
 
 #ifdef _WIN32
-#include <Windows.h>
+#include <windows.h>
+#include <winternl.h>
+#include <TlHelp32.h>
 
 #define STR(s) L ## s
 #define CH(c) L ## c
@@ -40,6 +39,8 @@
 #define MAX_PATH PATH_MAX
 
 #endif
+
+#include <detours/detours.h>
 
 using string_t = std::basic_string<char_t>;
 
@@ -135,33 +136,6 @@ namespace {
     // </SnippetInitialize>
 }
 
-static FARPROC WINAPI GetProcAddressCLR(HMODULE module, LPCSTR funcName) {
-    // if ordinal
-    if ((reinterpret_cast<ULONGLONG>(funcName) & 0xffffffffffff0000) == 0) {
-        return GetProcAddress(module, funcName);
-    }
-
-    auto real = FhCLRHost::PInvokeCache::GetInstance().find(module, funcName);
-
-    // already hooked
-    if (real != nullptr) {
-        return reinterpret_cast<FARPROC>(real);
-    }
-
-    return GetProcAddress(module, funcName);
-}
-
-/*!
- *	@brief	Function from Detours.dll (managed) to indicate new hook
- *	@param	hModule		source module
- *	@param	lpProcName	name of function
- *	@param	pReal		real address
- */
-extern "C"
-__declspec(dllexport) void DetoursCLRSetGetProcAddressCache(HMODULE module, LPCSTR funcName, PVOID real) {
-    FhCLRHost::PInvokeCache::GetInstance().update(module, funcName, real);
-}
-
 using EntryPoint_T = int(*)(void);
 
 EntryPoint_T ffxMain = NULL;
@@ -204,8 +178,6 @@ static int DetourMain(void) {
     load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
     load_assembly_and_get_function_pointer = get_dotnet_load_assembly(config_path.c_str());
     assert(load_assembly_and_get_function_pointer != nullptr && "Failure: get_dotnet_load_assembly()");
-
-    FhDetourPatchIAT(GetModuleHandle(TEXT("coreclr.dll")), GetProcAddress, GetProcAddressCLR);
 
     //
     // STEP 3: Load managed assembly and get function pointer to a managed method

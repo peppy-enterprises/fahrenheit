@@ -99,7 +99,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>inc;..\Fahrenheit.CLRHost.Detour\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>inc</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +134,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>inc;..\Fahrenheit.CLRHost.Detour\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>inc</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,7 +152,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>inc;..\Fahrenheit.CLRHost.Detour\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>inc</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,9 +181,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  
   <!-- LOCAL DEPLOYMENT TARGET -->
   <PropertyGroup>
-  	<CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
+    <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
   </PropertyGroup>
 </Project>

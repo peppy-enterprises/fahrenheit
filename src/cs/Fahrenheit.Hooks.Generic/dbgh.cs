@@ -10,7 +10,7 @@ namespace Fahrenheit.Hooks.Generic;
 public partial class FhHooksExampleModule {
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvStdcall) })]
     public unsafe int TkIsDebugHook() {
-        if (_tkIsDbg.try_get_original_fptr(out TkIsDebugDelegate? fptr)) {
+        if (_tkIsDbg.try_get_original_fn(out TkIsDebugDelegate? fptr)) {
             FhLog.Log(LogLevel.Info, $"Calling original.");
             return fptr.Invoke();
         }

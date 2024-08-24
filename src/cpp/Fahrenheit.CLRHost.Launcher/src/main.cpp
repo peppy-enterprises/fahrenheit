@@ -1,6 +1,9 @@
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+// Windows Header Files
+#include <windows.h>
+#include <detours/detours.h>
 #include <iostream>
 #include <conio.h>
-#include "fhdetour.h"
 
 int wmain(int argc, wchar_t* argv[ ]) {
     LPCSTR              szDllPath  = "fhclrldr.dll";
@@ -41,5 +44,5 @@ int wmain(int argc, wchar_t* argv[ ]) {
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
 
-	return 0;
+    return 0;
 }
