@@ -24,4 +24,14 @@ internal static partial class FhPInvoke {
     [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)]
     public static partial nint GetModuleHandle(string lpModuleName);
 #pragma warning restore SYSLIB1054
+
+    [DllImport("kernel32.dll")]
+    public static extern nint GetProcAddress(nint hModule, string lpProcName);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern nint FindWindow(string lpClassName, string lpWindowName);
+
+    public static nint FindWindow(string caption) {
+        return FindWindow(null, caption);
+    }
 }

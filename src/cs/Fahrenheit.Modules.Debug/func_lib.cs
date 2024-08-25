@@ -27,4 +27,12 @@ internal static unsafe class FuncLib {
             f32 _) {
         TOMkpCrossExtMesFontLClutTypeRGBA(p1, text, x, y, color, p6, 0x80, 0x80, 0x80, 0x80, scale, _);
     }
+
+    public static void SndSepPlaySimple(u32 snd_id) {
+        FhUtil.get_fptr<SndSepPlaySimple>(0x486de0)(snd_id);
+    }
+
+    public static void FUN_00a48740(i32 p1, i32 node_idx) {
+        FhUtil.get_fptr<FUN_00a48740>(0x648740)(p1, node_idx);
+    }
 }

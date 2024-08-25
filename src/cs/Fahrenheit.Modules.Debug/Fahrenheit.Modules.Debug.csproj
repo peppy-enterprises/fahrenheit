@@ -43,5 +43,10 @@
             <ExcludeAssets>runtime</ExcludeAssets>
         </ProjectReference>
     </ItemGroup>
+    <ItemGroup>
+      <Reference Include="ImGui.NET">
+        <HintPath>..\..\..\..\..\..\..\Downloads\__IMGUI_EXTERN\ImGui.NET.dll</HintPath>
+      </Reference>
+    </ItemGroup>
 
 </Project>

@@ -56,7 +56,7 @@ public static class FhDialogueUtil {
     internal static char ResolveChar(FhCharsetId cs, byte b) {
         // We check that CharSet is not invalid in DEditDecompile().
         return cs switch {
-            FhCharsetId.US => FhCharset.Us.ToChar(b),
+            FhCharsetId.US => FhCharset.Us.to_char(b),
             _              => throw new Exception("E_INVALID_CHARSET_ID")
         };
     }

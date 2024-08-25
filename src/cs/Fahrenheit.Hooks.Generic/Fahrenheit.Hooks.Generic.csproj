@@ -19,7 +19,7 @@
 
 	<!-- LOCAL DEPLOYMENT TARGET -->
 	<PropertyGroup>
-		<CopyToDir>$(SolutionDir)\artifacts\localdeploy\clrhooks</CopyToDir>
+		<CopyToDir>$(SolutionDir)\artifacts\localdeploy\modules</CopyToDir>
 	</PropertyGroup>
 
 	<!-- SDK REFERENCES -->
@@ -41,6 +41,11 @@
 			<Private>false</Private>
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="ImGui.NET">
+	    <HintPath>..\..\..\..\..\..\..\Downloads\__IMGUI_EXTERN\ImGui.NET.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 </Project>

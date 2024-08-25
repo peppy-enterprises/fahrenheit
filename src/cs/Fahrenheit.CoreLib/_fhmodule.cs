@@ -68,6 +68,8 @@ public abstract class FhModule : IEquatable<FhModule> {
 
     public virtual void pre_update() { }
     public virtual void post_update() { }
+    public virtual void handle_input() { }
+    public virtual void render() { }
 
     public bool Equals(FhModule? other) {
         if (other is null)                return false;

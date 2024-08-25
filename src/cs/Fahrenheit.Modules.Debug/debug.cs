@@ -17,7 +17,7 @@ public sealed record DebugModuleConfig : FhModuleConfig {
     }
 }
 
-public class DebugModule : FhModule {
+public unsafe partial class DebugModule : FhModule {
     private readonly DebugModuleConfig _moduleConfig;
 
     public DebugModule(DebugModuleConfig moduleConfig) : base(moduleConfig) {
@@ -33,20 +33,23 @@ public class DebugModule : FhModule {
     }
 
     public override bool FhModuleInit() {
+        init_hooks();
         return true;
     }
 
     public override bool FhModuleStart() {
-        return true;
+        return hook();
     }
 
     public override bool FhModuleStop() {
-        return true;
+        return unhook();
     }
 
-    public override void post_update() {
-        SphereGridEditor.update();
+    public override void render() {
+        SphereGridEditor.render();
+    }
 
-        //DebugMenu.render(delta);
+    public override void handle_input() {
+        SphereGridEditor.handle_input();
     }
 }

@@ -10,7 +10,7 @@ public static unsafe class Globals {
     }
 
     public static class SphereGrid {
-        public static LpAbilityMapEngine* lpamng { get { return FhUtil.ptr_at<LpAbilityMapEngine>(0x1F05834); } }
+        public static LpAbilityMapEngine* lpamng { get { return (LpAbilityMapEngine*)FhUtil.get_at<nint>(0x1F05834); } }
     }
 
     public static class Battle {
@@ -59,11 +59,21 @@ public static unsafe class Globals {
             previous = *raw;
         }
 
+        public static void consume_all() {
+            previous = *raw = 0;
+        }
+
         public class InputAction {
             private ushort mask;
 
             public InputAction(ushort mask) {
                 this.mask = mask;
+            }
+
+            public (bool held, bool just_pressed, bool just_released) consume() {
+                (bool, bool, bool) ret = (held, just_pressed, just_released);
+                *raw &= (ushort)~mask;
+                return ret;
             }
 
             public bool held          { get { return (*raw & mask) != 0;                           } }
