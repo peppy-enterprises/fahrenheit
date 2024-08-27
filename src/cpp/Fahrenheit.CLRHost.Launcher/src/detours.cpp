@@ -387,13 +387,6 @@ static BOOL UpdateImports32(
 
 #if 0
     for (i = 0; i < nDlls + nOldDlls; i++) {
-        DETOUR_TRACE(("%8d. Look=%08x Time=%08x Fore=%08x Name=%08x Addr=%08x\n",
-            i,
-            piid[i].OriginalFirstThunk,
-            piid[i].TimeDateStamp,
-            piid[i].ForwarderChain,
-            piid[i].Name,
-            piid[i].FirstThunk));
         if (piid[i].OriginalFirstThunk == 0 && piid[i].FirstThunk == 0) {
             break;
         }

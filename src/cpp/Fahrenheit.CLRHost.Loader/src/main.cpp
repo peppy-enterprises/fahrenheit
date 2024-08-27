@@ -94,6 +94,7 @@ namespace {
         // Pre-allocate a large buffer for the path to hostfxr
         char_t buffer[MAX_PATH];
         size_t buffer_size = sizeof(buffer) / sizeof(char_t);
+
         int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
         if (rc != 0)
             return false;
@@ -101,8 +102,8 @@ namespace {
         // Load hostfxr and get desired exports
         void* lib         = load_library(buffer);
         init_fptr         = (hostfxr_initialize_for_runtime_config_fn)get_export(lib, "hostfxr_initialize_for_runtime_config");
-        get_delegate_fptr = (hostfxr_get_runtime_delegate_fn)get_export(lib, "hostfxr_get_runtime_delegate");
-        close_fptr        = (hostfxr_close_fn)get_export(lib, "hostfxr_close");
+        get_delegate_fptr = (hostfxr_get_runtime_delegate_fn)         get_export(lib, "hostfxr_get_runtime_delegate");
+        close_fptr        = (hostfxr_close_fn)                        get_export(lib, "hostfxr_close");
 
         return (init_fptr && get_delegate_fptr && close_fptr);
     }
@@ -143,6 +144,12 @@ EntryPoint_T ffxMain = NULL;
 static int DetourMain(void) {
     AttachConsole(ATTACH_PARENT_PROCESS);
 
+    FILE* parent_stdout;
+    FILE* parent_stderr;
+
+    if (freopen_s(&parent_stdout, "CONOUT$", "w", stdout) != 0 || freopen_s(&parent_stderr, "CONOUT$", "w", stderr) != 0)
+        exit(EXIT_FAILURE);
+
     // Get the current executable's directory
     // This sample assumes the managed assembly to load and its runtime configuration file are next to the host
     char_t host_path[MAX_PATH];
@@ -157,17 +164,20 @@ static int DetourMain(void) {
     string_t root_path = host_path;
     auto     pos       = root_path.find_last_of(DIR_SEPARATOR);
 
-    assert(pos != string_t::npos);
-    root_path = root_path.substr(0, pos + 1);
+    if (pos == string_t::npos) {
+        std::cout << "cannot normalize own path [?]" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
+    root_path = root_path.substr(0, pos + 1);
     string_t fh_bin_path = root_path + L"\\fahrenheit\\bin\\";
 
     //
     // STEP 1: Load HostFxr and get exported hosting functions
     //
     if (!load_hostfxr()) {
-        assert(false && "Failure: load_hostfxr()");
-        return EXIT_FAILURE;
+        std::cout << "load_hostfxr() failed" << std::endl;
+        exit(EXIT_FAILURE);
     }
 
     //
@@ -177,7 +187,11 @@ static int DetourMain(void) {
 
     load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
     load_assembly_and_get_function_pointer = get_dotnet_load_assembly(config_path.c_str());
-    assert(load_assembly_and_get_function_pointer != nullptr && "Failure: get_dotnet_load_assembly()");
+
+    if (load_assembly_and_get_function_pointer == nullptr) {
+        std::cout << "get_dotnet_load_assembly() failed" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
     //
     // STEP 3: Load managed assembly and get function pointer to a managed method
@@ -197,11 +211,20 @@ static int DetourMain(void) {
         nullptr,
         (void**)&clrhostinit);
     // </SnippetLoadAndGet>
-    assert(rc == 0 && clrhostinit != nullptr && "Failure: load_assembly_and_get_function_pointer()");
+
+    if (rc != 0 || clrhostinit == nullptr) {
+        std::cout << "load_assembly_and_get_function_pointer() failed" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
     clrhostinit(nullptr, 0);
+
     // return the working directory to the executable, now that bootstrapping is complete
-    assert(_wchdir(root_path.c_str()) == 0);
+    int chrc = _wchdir(root_path.c_str());
+    if (chrc != 0) {
+        std::cout << "_wchdir failed, rc:" << chrc << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
     return ffxMain();
 }

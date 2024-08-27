@@ -1,10 +1,7 @@
-
-
 #include "fhlaunch.h"
 
 int wmain(int argc, wchar_t* argv[ ]) {
     LPCSTR              szDllPath     = "fhclrldr.dll";
-    SIZE_T              szDllPathSize = strlen(szDllPath) + 1;
     LPWSTR              cmdLineStr    = GetCommandLineW();
     PROCESS_INFORMATION pi;
     STARTUPINFO         si = { 0 };
