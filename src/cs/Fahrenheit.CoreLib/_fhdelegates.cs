@@ -6,4 +6,10 @@ public static partial class FhHookDelegates {
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate int TkIsDebugDelegate();
+
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate nint WndProcDelegate(nint hWnd, uint msg, nint wParam, nint lParam);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void Sg_MainLoop(float delta);
 }
