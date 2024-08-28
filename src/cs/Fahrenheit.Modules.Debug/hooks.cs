@@ -8,9 +8,11 @@ public unsafe partial class DebugModule {
     public static FhMethodHandle<FUN_00a5a640> _FUN_00a5a640;
 
     public void init_hooks() {
+        const string game = "FFX.exe";
+
         // Sphere Grid Editor
-        _FUN_00a594c0 = new FhMethodHandle<FUN_00a594c0>(this, 0x6594c0, render_sphere_grid);
-        _FUN_00a5a640 = new FhMethodHandle<FUN_00a5a640>(this, 0x65a640, update_node_type_early);
+        _FUN_00a594c0 = new FhMethodHandle<FUN_00a594c0>(this, game, 0x6594c0, render_sphere_grid);
+        _FUN_00a5a640 = new FhMethodHandle<FUN_00a5a640>(this, game, 0x65a640, update_node_type_early);
     }
 
     public bool hook() {

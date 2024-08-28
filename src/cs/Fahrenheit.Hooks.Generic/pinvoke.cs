@@ -28,10 +28,45 @@ internal static partial class FhPInvoke {
     [DllImport("kernel32.dll")]
     public static extern nint GetProcAddress(nint hModule, string lpProcName);
 
-    [DllImport("user32.dll", SetLastError = true)]
-    static extern nint FindWindow(string lpClassName, string lpWindowName);
+    [LibraryImport("user32.dll", EntryPoint = "FindWindowA", SetLastError = true, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+    public static partial IntPtr FindWindow(string? lpClassName, string lpWindowName);
 
     public static nint FindWindow(string caption) {
         return FindWindow(null, caption);
     }
+
+    internal const int  GWLP_WNDPROC = -4;
+
+    [LibraryImport("user32.dll", EntryPoint = "CallWindowProcW")]
+    public static partial nint CallWindowProc(nint lpPrevWndFunc, nint hWnd, uint msg, nint wParam, nint lParam);
+
+    public static nint GetWindowLong(nint hWnd, int nIndex) {
+        return nint.Size == 8
+            ? GetWindowLongPtr64(hWnd, nIndex)
+            : GetWindowLong32   (hWnd, nIndex);
+    }
+
+    [LibraryImport("user32.dll", EntryPoint = "GetWindowLongA")]
+    private static partial nint GetWindowLong32(nint hWnd, int nIndex);
+
+    [LibraryImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
+    private static partial nint GetWindowLongPtr64(nint hWnd, int nIndex);
+
+    // This static method is required because legacy OSes do not support
+    // SetWindowLongPtr
+    public static nint SetWindowLongPtr(nint hWnd, int nIndex, nint dwNewLong) {
+        return nint.Size == 8
+            ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong)
+            : SetWindowLong32   (hWnd, nIndex, dwNewLong);
+    }
+
+    [LibraryImport("user32.dll", EntryPoint = "SetWindowLongA")]
+    private static partial int SetWindowLong32(nint hWnd, int nIndex, nint dwNewLong);
+
+    [LibraryImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
+    private static partial nint SetWindowLongPtr64(nint hWnd, int nIndex, nint dwNewLong);
+
+    // what the *fuck* is this
+    [DllImport("cimgui.dll")]
+    public static extern nint ImGui_ImplWin32_WndProcHandler(nint hWnd, uint msg, nint wParam, nint lParam);
 }

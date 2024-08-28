@@ -7,6 +7,7 @@ using Fahrenheit.CLRHost;
 using Fahrenheit.CoreLib;
 
 using static Fahrenheit.CoreLib.FhHookDelegates;
+using System;
 
 namespace Fahrenheit.Hooks.Generic;
 
@@ -29,6 +30,9 @@ public unsafe partial class FhHooksBaseModule : FhModule {
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate void AtelExecInternal_00871d10();
 
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate nint WndProcDelegate(nint hWnd, uint msg, nint wParam, nint lParam);
+
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate void D3D11CreateDeviceAndSwapChain(
             nint pAdapter,
@@ -44,9 +48,6 @@ public unsafe partial class FhHooksBaseModule : FhModule {
             nint pFeatureLevel,
             nint ppImmediateContext);
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate nint D3DKMTPresent(nint param1);
-
     private readonly FhHooksBaseModuleConfig           _moduleConfig;
 
     private readonly FhMethodHandle<TkIsDebugDelegate>    _tkIsDbg;
@@ -56,11 +57,17 @@ public unsafe partial class FhHooksBaseModule : FhModule {
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C20;
     private readonly FhMethodHandle<Sg_MainLoop> _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
-    private readonly FhMethodHandle<D3DKMTPresent> _render;
-    private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _init_imgui;
+    //private readonly FhMethodHandle<WIP> _render;
+    private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _prep_init_imgui;
+
+    private          nint                                 _o_WndProcPtr;
+    private          WndProcDelegate?                     _h_WndProc;
+    private          nint                                 _h_WndProcPtr;
+    private          bool                                 _wndProc_init;
 
     public override FhHooksBaseModuleConfig ModuleConfiguration => _moduleConfig;
 
+    private static bool hooked_wndproc = false;
     private static bool ready_to_init_imgui = false;
     private static bool initialized_imgui = false;
     private static void* pDevice;
@@ -69,23 +76,19 @@ public unsafe partial class FhHooksBaseModule : FhModule {
     public FhHooksBaseModule(FhHooksBaseModuleConfig cfg) : base(cfg) {
         _moduleConfig = cfg;
 
-        _tkIsDbg       = new FhMethodHandle<TkIsDebugDelegate>(this, 0x487C80, TkIsDebugHook);
-        _printf_22F6B0 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x22F6B0, FhHooks.CLRPrintfHookAnsi);
-        _printf_22FDA0 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x22FDA0, FhHooks.CLRPrintfHookAnsi);
-        _printf_473C10 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x473C10, FhHooks.CLRPrintfHookAnsi);
-        _printf_473C20 = new FhMethodHandle<PrintfVarargDelegate>(this, 0x473C20, FhHooks.CLRPrintfHookAnsi);
+        const string game = "FFX.exe";
+
+        // Debug things that really should be in Modules.Debug instead
+        _tkIsDbg       = new FhMethodHandle<TkIsDebugDelegate>(this, game, 0x487C80, TkIsDebugHook);
+        _printf_22F6B0 = new FhMethodHandle<PrintfVarargDelegate>(this, game, 0x22F6B0, FhHooks.CLRPrintfHookAnsi);
+        _printf_22FDA0 = new FhMethodHandle<PrintfVarargDelegate>(this, game, 0x22FDA0, FhHooks.CLRPrintfHookAnsi);
+        _printf_473C10 = new FhMethodHandle<PrintfVarargDelegate>(this, game, 0x473C10, FhHooks.CLRPrintfHookAnsi);
+        _printf_473C20 = new FhMethodHandle<PrintfVarargDelegate>(this, game, 0x473C20, FhHooks.CLRPrintfHookAnsi);
 
         // Providing basic functionality to other modules
-        _main_loop = new FhMethodHandle<Sg_MainLoop>(this, 0x420C00, main_loop);
-        _update_input = new FhMethodHandle<AtelExecInternal_00871d10>(this, 0x471D10, update_input);
-        _init_imgui = new FhMethodHandle<D3D11CreateDeviceAndSwapChain>(
-                this,
-                FhPInvoke.GetProcAddress(FhPInvoke.GetModuleHandle("D3D11.dll"), "D3D11CreateDeviceAndSwapChain") - FhGlobal.base_addr,
-                init_imgui);
-        _render = new FhMethodHandle<D3DKMTPresent>(
-                this,
-                FhPInvoke.GetProcAddress(FhPInvoke.GetModuleHandle("D3D11.dll"), "D3DKMTPresent") - FhGlobal.base_addr,
-                render_imgui);
+        _main_loop = new FhMethodHandle<Sg_MainLoop>(this, game, 0x420C00, main_loop);
+        _update_input = new FhMethodHandle<AtelExecInternal_00871d10>(this, game, 0x471D10, update_input);
+        _prep_init_imgui = new FhMethodHandle<D3D11CreateDeviceAndSwapChain>(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", prep_init_imgui);
 
         _moduleState  = FhModuleState.InitSuccess;
     }
@@ -106,8 +109,8 @@ public unsafe partial class FhHooksBaseModule : FhModule {
             //&& _printf_473C20.hook()
             && _main_loop.hook()
             && _update_input.hook()
-            && _init_imgui.hook()
-            && _render.hook();
+            && _prep_init_imgui.hook()
+            ;//&& _render.hook();
     }
 
     public override bool FhModuleStop() {
@@ -118,11 +121,44 @@ public unsafe partial class FhHooksBaseModule : FhModule {
             //&& _printf_473C20.unhook()
             && _main_loop.unhook()
             && _update_input.unhook()
-            && _init_imgui.unhook()
-            && _render.unhook();
+            && _prep_init_imgui.unhook()
+            ;//&& _render.unhook();
     }
 
-    public unsafe void init_imgui(
+    public nint h_wndproc(nint hWnd, uint msg, nint wParam, nint lParam) {
+        if (_o_WndProcPtr == 0) throw new Exception("Original WndProcPtr is null");
+
+        if (FhPInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1) {
+            return 1;
+        }
+
+        FhLog.Debug($"WndProc({hWnd:X8}, {msg}, {wParam:X8}, {lParam:X8})");
+
+        return FhPInvoke.CallWindowProc(_o_WndProcPtr, hWnd, msg, wParam, lParam);
+    }
+
+    private bool hook_wndproc() {
+        _h_WndProcPtr = Marshal.GetFunctionPointerForDelegate(new WndProcDelegate(h_wndproc));
+        nint hWnd = FhPInvoke.FindWindow(null, "FINAL FANTASY X"); // shitfuck hack
+
+        if (hWnd == 0) {
+            FhLog.Error("Failed in FindWindow.");
+            return false;
+        }
+
+        _o_WndProcPtr = FhPInvoke.GetWindowLong(hWnd, FhPInvoke.GWLP_WNDPROC);
+        FhPInvoke.SetWindowLongPtr(hWnd, FhPInvoke.GWLP_WNDPROC, _h_WndProcPtr);
+
+        if (_o_WndProcPtr == 0) {
+            FhLog.Error("Failed in GetWindowLongPtr.");
+            return false;
+        }
+
+        hooked_wndproc = true;
+        return true;
+    }
+
+    public unsafe void prep_init_imgui(
             nint pAdapter,
             nint DriverType,
             nint Software,
@@ -135,7 +171,7 @@ public unsafe partial class FhHooksBaseModule : FhModule {
             nint ppDevice,
             nint pFeatureLevel,
             nint ppImmediateContext) {
-        if (_init_imgui.try_get_original_fptr(out D3D11CreateDeviceAndSwapChain? fptr)) {
+        if (_prep_init_imgui.try_get_original_fptr(out D3D11CreateDeviceAndSwapChain? fptr)) {
             fptr.Invoke(
                     pAdapter,
                     DriverType,
@@ -159,21 +195,7 @@ public unsafe partial class FhHooksBaseModule : FhModule {
         ready_to_init_imgui = true;
     }
 
-    public void main_loop(float delta) {
-        foreach (FhModule module in FhModuleController.FindAll()) {
-            module.pre_update();
-        }
-
-        if (_main_loop.try_get_original_fptr(out Sg_MainLoop? fptr)) {
-            fptr.Invoke(delta);
-        }
-
-        foreach (FhModule module in FhModuleController.FindAll()) {
-            module.post_update();
-        }
-
-        if (initialized_imgui || !ready_to_init_imgui) return;
-
+    private void init_imgui() {
         ImGui.CreateContext();
         ImGuiIOPtr io = ImGui.GetIO();
 
@@ -194,6 +216,23 @@ public unsafe partial class FhHooksBaseModule : FhModule {
         initialized_imgui = true;
     }
 
+    public void main_loop(float delta) {
+        if (!hooked_wndproc)
+            hook_wndproc();
+
+        if (!initialized_imgui && ready_to_init_imgui)
+            init_imgui();
+
+        foreach (FhModule module in FhModuleController.FindAll())
+            module.pre_update();
+
+        if (_main_loop.try_get_original_fptr(out Sg_MainLoop? fptr))
+            fptr.Invoke(delta);
+
+        foreach (FhModule module in FhModuleController.FindAll())
+            module.post_update();
+    }
+
     public void update_input() {
         CoreLib.FFX.Globals.Input.update();
 
@@ -206,14 +245,14 @@ public unsafe partial class FhHooksBaseModule : FhModule {
         }
     }
 
-    public nint render_imgui(nint data) {
+    public nint render_imgui() {
         foreach (FhModule module in FhModuleController.FindAll()) {
             module.render();
         }
 
-        if (_render.try_get_original_fptr(out D3DKMTPresent? fptr)) {
-            return fptr.Invoke(data);
-        }
+        /*if (_render.try_get_original_fptr(out WIP? fptr)) {
+            return fptr.Invoke();
+        }*/
 
         return 0;
     }

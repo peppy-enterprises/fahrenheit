@@ -1,16 +1,17 @@
-#include <iostream>
-#include <conio.h>
-#include "fhdetour.h"
+
+
+#include "fhlaunch.h"
 
 int wmain(int argc, wchar_t* argv[ ]) {
-    LPCSTR              szDllPath  = "fhclrldr.dll";
-    LPWSTR              cmdLineStr = GetCommandLineW();
+    LPCSTR              szDllPath     = "fhclrldr.dll";
+    SIZE_T              szDllPathSize = strlen(szDllPath) + 1;
+    LPWSTR              cmdLineStr    = GetCommandLineW();
     PROCESS_INFORMATION pi;
     STARTUPINFO         si = { 0 };
 
     si.cb = sizeof(si);
 
-    if (!DetourCreateProcessWithDlls(
+    if (!CreateProcess(
         argv[1],
         cmdLineStr,
         NULL,
@@ -20,19 +21,28 @@ int wmain(int argc, wchar_t* argv[ ]) {
         NULL,
         NULL,
         &si,
-        &pi,
-        1,
-        &szDllPath,
-        NULL
+        &pi
     )) {
-        std::cerr << "[!]" << std::endl;
+        std::cerr << "Failed to create target process." << std::endl;
         return 1;
     }
 
-    std::cout << "Ready. You can now attach a debugger; press any key to launch.";
+    std::cout << "Ready. You can now attach a debugger; press any key to attempt launch.";
     int i = _getch();
 
-    ResumeThread(pi.hThread);
+    // copied verbatim for safety's sake, stupid as it is
+    LPCSTR rlpDlls[2] {};
+    DWORD  nDlls = 0;
+    if (szDllPath != NULL) {
+        rlpDlls[nDlls++] = szDllPath;
+    }
+
+    if (!DetourUpdateProcessWithDll(pi.hProcess, rlpDlls, nDlls)) {
+        TerminateProcess(pi.hProcess, ~0u);
+        return FALSE;
+    }
+
+    ResumeThread       (pi.hThread);
     WaitForSingleObject(pi.hProcess, INFINITE);
 
     DWORD exitCode;
@@ -41,5 +51,5 @@ int wmain(int argc, wchar_t* argv[ ]) {
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
 
-    return 0;
+    return exitCode;
 }
