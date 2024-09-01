@@ -10,27 +10,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CoreLib", "src\cs\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CoreLib", "src\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.CT2CS", "src\cs\Fahrenheit.Tools.CT2CS\Fahrenheit.Tools.CT2CS.csproj", "{732FDF80-DAC5-4E93-804D-9ECF346E90E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.CT2CS", "src\Fahrenheit.Tools.CT2CS\Fahrenheit.Tools.CT2CS.csproj", "{732FDF80-DAC5-4E93-804D-9ECF346E90E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.H2CS", "src\cs\Fahrenheit.Tools.H2CS\Fahrenheit.Tools.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.H2CS", "src\Fahrenheit.Tools.H2CS\Fahrenheit.Tools.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.DEdit", "src\cs\Fahrenheit.Tools.DEdit\Fahrenheit.Tools.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.DEdit", "src\Fahrenheit.Tools.DEdit\Fahrenheit.Tools.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Loader", "src\cpp\Fahrenheit.CLRHost.Loader\Fahrenheit.CLRHost.Loader.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Loader", "src\Fahrenheit.CLRHost.Loader\Fahrenheit.CLRHost.Loader.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Detour", "src\cpp\Fahrenheit.CLRHost.Detour\Fahrenheit.CLRHost.Detour.vcxproj", "{DE90A6C1-504F-45BD-A4F9-8129755F3E7C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Detour", "src\Fahrenheit.CLRHost.Detour\Fahrenheit.CLRHost.Detour.vcxproj", "{DE90A6C1-504F-45BD-A4F9-8129755F3E7C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Launcher", "src\cpp\Fahrenheit.CLRHost.Launcher\Fahrenheit.CLRHost.Launcher.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.CLRHost.Launcher", "src\Fahrenheit.CLRHost.Launcher\Fahrenheit.CLRHost.Launcher.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CLRHost", "src\cs\Fahrenheit.CLRHost\Fahrenheit.CLRHost.csproj", "{F3F4FFE6-A34C-4E95-866B-E37C26B632F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.CLRHost", "src\Fahrenheit.CLRHost\Fahrenheit.CLRHost.csproj", "{F3F4FFE6-A34C-4E95-866B-E37C26B632F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Hooks.Generic", "src\cs\Fahrenheit.Hooks.Generic\Fahrenheit.Hooks.Generic.csproj", "{4398D298-2C96-4B53-970F-2B4F16BC606D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Hooks.Generic", "src\Fahrenheit.Hooks.Generic\Fahrenheit.Hooks.Generic.csproj", "{4398D298-2C96-4B53-970F-2B4F16BC606D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.CSR", "src\cs\Fahrenheit.Modules.CSR\Fahrenheit.Modules.CSR.csproj", "{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.CSR", "src\Fahrenheit.Modules.CSR\Fahrenheit.Modules.CSR.csproj", "{5E8E2FB0-3D42-4AE6-ADA0-F2E4BCB3A167}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.RNGFix", "src\cs\Fahrenheit.Modules.RNGFix\Fahrenheit.Modules.RNGFix.csproj", "{6DBF2D2F-C4A7-489C-AB0B-575993DDAB69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.RNGFix", "src\Fahrenheit.Modules.RNGFix\Fahrenheit.Modules.RNGFix.csproj", "{6DBF2D2F-C4A7-489C-AB0B-575993DDAB69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

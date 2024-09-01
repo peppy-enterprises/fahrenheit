@@ -34,7 +34,7 @@ public static class FhLog {
                            [CallerFilePath]   string fpath = "",
                            [CallerLineNumber] int    lnb   = 0) {
         if (level < MinLevel) return;
-        
+
         long millis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         Trace.WriteLine($"{millis.ToString()} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}");
     }

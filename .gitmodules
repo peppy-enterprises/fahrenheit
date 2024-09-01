@@ -1,0 +1,6 @@
+[submodule "extern/luajit"]
+	path = extern/luajit
+	url = https://luajit.org/git/luajit.git
+[submodule "extern/cimgui"]
+	path = extern/cimgui
+	url = https://github.com/cimgui/cimgui
