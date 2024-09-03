@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- LOCAL DEPLOYMENT TARGET -->
+  <PropertyGroup>
+    <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
+  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -108,8 +112,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -132,8 +136,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -152,8 +156,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -176,33 +180,26 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)\artifacts\build\Fahrenheit.CLRHost.Detour\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);fhdetour.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <ModuleDefinitionFile>$(MSBuildProjectDirectory)\src\fhclrldr.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fahrenheit.CLRHost.Detour\Fahrenheit.CLRHost.Detour.vcxproj">
-      <Project>{de90a6c1-504f-45bd-a4f9-8129755f3e7c}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="inc\fhclrldr.h" />
     <ClInclude Include="inc\resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\detours.cpp" />
     <ClCompile Include="src\main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\fhclrldr.def" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="inc\fhclrldr.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="src\fhclrldr.def" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <!-- LOCAL DEPLOYMENT TARGET -->
-  <PropertyGroup>
-    <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
-  </PropertyGroup>
 </Project>
