@@ -1,3 +1,0 @@
-LIBRARY fhclrldr
-EXPORTS
-	DetourFinishHelperProcess = fhdetour.DetourFinishHelperProcess

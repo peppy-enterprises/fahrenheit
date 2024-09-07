@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Fahrenheit.CoreLib;
 
@@ -81,17 +80,6 @@ public static class FhModuleController {
                 FhLog.Log(LogLevel.Error, $"Internal error in {ModuleStateChangeHandler} invoked by module {sender.ModuleName}.");
             }
         }
-    }
-
-    public static bool SaveFileToRunDir(string filePath) {
-        try {
-            File.Copy(filePath, Path.Join(FhRuntimeConst.ByRunDir.Path, Path.GetFileName(filePath)));
-        }
-        catch {
-            return false;
-        }
-
-        return true;
     }
 
     public static IEnumerable<FhModule> FindAll() {

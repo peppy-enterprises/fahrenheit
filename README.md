@@ -14,19 +14,19 @@ It is also, in source-code form, a mod framework for the games. It allows you to
 in the form of loadable DLLs. Fahrenheit bootstraps and hosts the [.NET runtime](https://dotnet.microsoft.com/en-us/download)
 within the games, allowing you to write mods in any compatible language.
 
-The knowledge gathered by the project underpins many tools and mods for the game, such as the 
+The knowledge gathered by the project underpins many tools and mods for the game, such as the
 [AI/VI TAS](https://github.com/coderwilson/FFX_TAS_Python), [Cutscene Remover](https://github.com/erickt420/FFXCutsceneRemover) mod,
 [Karifean](https://github.com/Karifean)'s [FFXDataParser](https://github.com/Karifean/FFXDataParser), and more.
 
 ## Why?
 Many people have made tremendous efforts to tackle this game over the years, and some have even
 succeeded in creating amazing mods for these timeless games. Unfortunately, almost all such efforts were
-made by lone individuals who chose not to publicize their methods and share their knowledge. 
+made by lone individuals who chose not to publicize their methods and share their knowledge.
 Even when they did, their knowledge may have been lost to time and is exceptionally hard to find today.
 
-Fahrenheit attempts to put an end to this. 
+Fahrenheit attempts to put an end to this.
 
-It aims not only to exceed all these efforts in scope, but also to stay free for others to analyze, 
+It aims not only to exceed all these efforts in scope, but also to stay free for others to analyze,
 improve, learn from and use- now and forever.
 
 ## Building from source and testing
@@ -47,7 +47,7 @@ Time permitting, the goals (in no specific order) of the project are:
 - In general, _polish_ every aspect of the solution.
 
 ## Can I contribute?
-Yes. Feel free to join us in the #modding channel of the 
+Yes. Feel free to join us in the #modding channel of the
 [Final Fantasy X speedrunning Discord](https://discord.gg/tSvM6PUggU).
 
 ## License
@@ -55,7 +55,7 @@ Fahrenheit source code is licensed under the [MIT](https://github.com/fkelava/fa
 
 Assets (the contents of the ``assets`` folder) may be used in forks of Fahrenheit, but _not_ for any other purpose!
 
-For third-party code license notices, please see 
+For third-party code license notices, please see
 [THIRD-PARTY-NOTICES](https://github.com/fkelava/fahrenheit/blob/main/THIRD-PARTY-NOTICES.txt).
 
 ## Associated and/or derived projects

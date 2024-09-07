@@ -22,47 +22,36 @@ public sealed record FhDirLink {
 }
 
 public static class FhRuntimeConst {
-    internal const string _binDirName      = "bin";
-    internal const string _clrHooksDirName = "clrhooks";
-    internal const string _cppHooksDirName = "cpphooks";
-    internal const string _modulesDirName  = "modules";
-    internal const string _confDirName     = "config";
-    internal const string _diagLogDirName  = "diaglog";
-    internal const string _rsrcDirName     = "rsrc";
-    internal const string _miscDirName     = "misc";
+    internal const string _binDirName     = "bin";
+    internal const string _modulesDirName = "modules";
+    internal const string _confDirName    = "config";
+    internal const string _diagLogDirName = "diaglog";
+    internal const string _rsrcDirName    = "rsrc";
+    internal const string _miscDirName    = "misc";
 
     static FhRuntimeConst() {
         string cwdParent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
                            throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
 
-        string binDirPath      = Path.Join(cwdParent, _binDirName);
-        string clrHooksDirPath = Path.Join(cwdParent, _clrHooksDirName);
-        string cppHooksDirPath = Path.Join(cwdParent, _cppHooksDirName);
-        string modulesDirPath  = Path.Join(cwdParent, _modulesDirName);
-        string confDirPath     = Path.Join(cwdParent, _confDirName);
-        string diagLogDirPath  = Path.Join(cwdParent, _diagLogDirName);
-        string rsrcDirPath     = Path.Join(cwdParent, _rsrcDirName);
-        string miscDirPath     = Path.Join(cwdParent, _miscDirName);
-        string byRunDirPath    = Path.Join(miscDirPath, $"run_{FhUtil.get_timestamp_string()}");
+        string binDirPath      = Path.Join(cwdParent,   _binDirName);
+        string modulesDirPath  = Path.Join(cwdParent,   _modulesDirName);
+        string confDirPath     = Path.Join(cwdParent,   _confDirName);
+        string diagLogDirPath  = Path.Join(cwdParent,   _diagLogDirName);
+        string rsrcDirPath     = Path.Join(cwdParent,   _rsrcDirName);
+        string miscDirPath     = Path.Join(cwdParent,   _miscDirName);
 
-        BinDir      = new FhDirLink("$bindir", binDirPath);
-        CLRHooksDir = new FhDirLink("$clrhookdir", clrHooksDirPath);
-        CPPHooksDir = new FhDirLink("$cpphookdir", cppHooksDirPath);
+        BinDir      = new FhDirLink("$bindir",     binDirPath);
         ModulesDir  = new FhDirLink("$modulesdir", modulesDirPath);
-        ConfigDir   = new FhDirLink("$confdir", confDirPath);
+        ConfigDir   = new FhDirLink("$confdir",    confDirPath);
         DiagLogDir  = new FhDirLink("$diaglogdir", diagLogDirPath);
-        RsrcDir     = new FhDirLink("$rsrcdir", rsrcDirPath);
-        MiscDir     = new FhDirLink("$miscdir", miscDirPath);
-        ByRunDir    = new FhDirLink("$rundir", byRunDirPath);
+        RsrcDir     = new FhDirLink("$rsrcdir",    rsrcDirPath);
+        MiscDir     = new FhDirLink("$miscdir",    miscDirPath);
     }
 
     public static readonly FhDirLink BinDir;
-    public static readonly FhDirLink CLRHooksDir;
-    public static readonly FhDirLink CPPHooksDir;
     public static readonly FhDirLink ModulesDir;
     public static readonly FhDirLink ConfigDir;
     public static readonly FhDirLink DiagLogDir;
     public static readonly FhDirLink RsrcDir;
     public static readonly FhDirLink MiscDir;
-    public static readonly FhDirLink ByRunDir;
 }

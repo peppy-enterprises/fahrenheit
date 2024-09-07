@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-using Fahrenheit.CLRHost;
 using Fahrenheit.CoreLib;
 
 using static Fahrenheit.CoreLib.FhHookDelegates;

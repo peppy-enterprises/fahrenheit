@@ -1,0 +1,3 @@
+LIBRARY fhstage1
+EXPORTS
+	DetourFinishHelperProcess

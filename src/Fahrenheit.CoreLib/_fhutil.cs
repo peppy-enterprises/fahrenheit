@@ -153,17 +153,21 @@ public static unsafe class FhUtil {
         NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
     };
 
-    internal static void EnterObject(this ref Utf8JsonReader reader) {
-        while (reader.TokenType != JsonTokenType.StartObject) reader.Read();
+    internal static void enter_json_object(this ref Utf8JsonReader reader) {
+        while (reader.TokenType != JsonTokenType.StartObject) {
+            reader.Read();
+        }
         reader.Read();
     }
 
-    internal static void EnterArray(this ref Utf8JsonReader reader) {
-        while (reader.TokenType != JsonTokenType.StartArray) reader.Read();
+    internal static void enter_json_array(this ref Utf8JsonReader reader) {
+        while (reader.TokenType != JsonTokenType.StartArray) {
+            reader.Read();
+        }
         reader.Read();
     }
 
-    internal static T DeserializeAndAdvance<T>(this ref Utf8JsonReader reader, string key) {
+    internal static T deserialize_and_advance<T>(this ref Utf8JsonReader reader, string key) {
         if (reader.GetString() != key)
             throw new JsonException($"Expected {key}, got {reader.GetString()}.");
 
