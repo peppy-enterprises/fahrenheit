@@ -1,64 +1,65 @@
-# Fahrenheit
----
+<h1 align="center">Fahrenheit</h1>
+<h3 align="center">A Final Fantasy X reverse-engineering project and mod framework</h3>
+
+<p align="center">
+<img alt="Logo Banner" src="https://github.com/fkelava/fahrenheit/blob/main/assets/fh_banner.png"/>
+<br/>
+<h4 align="center">See the world as you never have before.</h3>
+<p align="center">Art by <a href="https://mnemorie.etsy.com">Mnemorie</a></p>
 
 ## What is Fahrenheit?
-To borrow and slightly reword the definition and aim of the excellent [OpenKH](https://github.com/OpenKH/OpenKh) project,
+Fahrenheit is a reverse-engineering project for the [Final Fantasy X and X-2 HD Remasters](https://store.steampowered.com/app/359870/).
 
-**Fahrenheit aims to centralize all the technical knowledge of the 'Final Fantasy X' and 'Final Fantasy X-2' games in one place, 
-providing documentation, tools, code libraries, and the foundation for modding the commercial games.**
+It is also, in source-code form, a mod framework for the games. It allows you to freely hook game functions and distribute mods
+in the form of loadable DLLs. Fahrenheit bootstraps and hosts the [.NET runtime](https://dotnet.microsoft.com/en-us/download)
+within the games, allowing you to write mods in any compatible language.
 
-The knowledge gathered by the project underpins many tools for the game, such as the 
+The knowledge gathered by the project underpins many tools and mods for the game, such as the
 [AI/VI TAS](https://github.com/coderwilson/FFX_TAS_Python), [Cutscene Remover](https://github.com/erickt420/FFXCutsceneRemover) mod,
 [Karifean](https://github.com/Karifean)'s [FFXDataParser](https://github.com/Karifean/FFXDataParser), and more.
-
-Typically, consumers do not reference Fahrenheit libraries directly; instead, they reimplement 
-the bits they need and tune them for their specific purposes.
-
-For mod/tool developers, Fahrenheit is where they find the specific information they need.
-
-For end-users, Fahrenheit is a mod loader and base framework that other tools rely upon.
 
 ## Why?
 Many people have made tremendous efforts to tackle this game over the years, and some have even
 succeeded in creating amazing mods for these timeless games. Unfortunately, almost all such efforts were
-made by lone individuals who chose not to publicize their methods and share their knowledge. 
+made by lone individuals who chose not to publicize their methods and share their knowledge.
 Even when they did, their knowledge may have been lost to time and is exceptionally hard to find today.
 
-Fahrenheit is an attempt to put an end to this. It aims not only to exceed all these efforts in scope,
-but also to finally place them in the open where they will be free for others to analyze, improve, learn from,
-and use.
+Fahrenheit attempts to put an end to this.
 
-## What is currently included?
-Please consult each individual project's `README` for specific information.
+It aims not only to exceed all these efforts in scope, but also to stay free for others to analyze,
+improve, learn from and use- now and forever.
 
-Abridged summaries of each included project are:
+## Building from source and testing
+You will require the following:
+- Visual Studio 2022 v17.6 or higher, with the [built-in `vcpkg` manager enabled](https://devblogs.microsoft.com/cppblog/vcpkg-is-now-included-with-visual-studio/).
+    - The .NET desktop development workload installed (at least the .NET 7 SDK)
+    - The C++ desktop development workload installed (latest version)
+- Build output, by default, is under ``artifacts\localdeploy`` in the top-level directory.
+    - Copy the contents of this directory (the folders ``bin``, ``modules``, etc.) to a subfolder named ``fahrenheit`` in your game directory (where ``FFX.exe`` is).
+    - Open a terminal in ``fahrenheit/bin``, then ``.\fhlaunch.exe ..\..\FFX.exe``.
+    - Debugging can be performed from Visual Studio. Attach to either ``fhlaunch.exe`` or ``FFX.exe``, and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
 
-- `Fahrenheit.CoreLib`: Provides game constants, structures, and methods to manipulate them. 
-The canonical implementation of all game knowledge available to us at present.
-- `Fahrenheit.CT2CS`: Converts specially formatted cheat tables to C#. 
-Intended only for `CoreLib` development.
-- `Fahrenheit.H2CS`: Converts specific C headers to C#.
-Intended only for `CoreLib` development.
-- `Fahrenheit.DEdit`: A dialogue and character set viewer/editor.
-- `Fahrenheit.CLRHost.*`: A reimplementation of [citronneur/detours.net](https://github.com/citronneur/detours.net)
-for .NET (Core). Allows detouring with C# code.
+## What's next?
+Time permitting, the goals (in no specific order) of the project are:
+- Provide actual code-behind, helper functions, and tooling to make various modding tasks approachable.
+- Provide a mod manager for end users who simply want to enjoy the game.
+- Provide quality documentation for various implementation-specific details and game systems.
+- In general, _polish_ every aspect of the solution.
 
 ## Can I contribute?
-Yes. Feel free to join us in the #modding channel of the 
+Yes. Feel free to join us in the #modding channel of the
 [Final Fantasy X speedrunning Discord](https://discord.gg/tSvM6PUggU).
 
 ## License
-Fahrenheit is licensed under the [MIT](https://github.com/fkelava/fahrenheit/blob/main/LICENSE.txt) license.
+Fahrenheit source code is licensed under the [MIT](https://github.com/fkelava/fahrenheit/blob/main/LICENSE.txt) license.
 
-For third-party code license notices, please see 
+Assets (the contents of the ``assets`` folder) may be used in forks of Fahrenheit, but _not_ for any other purpose!
+
+For third-party code license notices, please see
 [THIRD-PARTY-NOTICES](https://github.com/fkelava/fahrenheit/blob/main/THIRD-PARTY-NOTICES.txt).
 
 ## Associated and/or derived projects
 You should check out the following projects if you want finished mods or approachable tools.
 - [Karifean](https://github.com/Karifean)'s [FFXDataParser](https://github.com/Karifean/FFXDataParser).
 - The [Cutscene Remover mod](https://github.com/erickt420/FFXCutsceneRemover) for FFX by B3dIntruder,
-Cereth, CrimsonInferno, Flobber, Roosta, shenef, and myself.
-
-## Some older, still useful projects
-- [Farplane](https://github.com/topher-au/Farplane) by [topher-au](https://github.com/topher-au).
-
+Cereth, CrimsonInferno, Flobber, Roosta, shenef, and peppy.
