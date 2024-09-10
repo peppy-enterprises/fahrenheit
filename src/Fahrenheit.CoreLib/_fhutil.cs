@@ -20,6 +20,18 @@ public static unsafe class FhUtil {
         return mbase;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void cast_to_bytes<T>(in ReadOnlySpan<T> src, in Span<byte> dest, out int bytesWritten) where T : struct {
+        bytesWritten = Unsafe.SizeOf<T>() * src.Length;
+        MemoryMarshal.AsBytes(src).CopyTo(dest);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void cast_from_bytes<T>(in ReadOnlySpan<byte> src, in Span<T> dest, int srcLen, out int count) where T : struct {
+        count = srcLen / Unsafe.SizeOf<T>();
+        MemoryMarshal.Cast<byte, T>(src).CopyTo(dest);
+    }
+
     /// <summary>
     ///     Generic bitwise NOT.
     /// </summary>

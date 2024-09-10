@@ -11,19 +11,9 @@ public enum FhModuleState {
     Fault
 }
 
-public class FhModuleStateChangeEventArgs : EventArgs {
-    public FhModuleStateChangeEventArgs(FhModuleState oldstate, FhModuleState newstate) {
-        OldState = oldstate;
-        NewState = newstate;
-    }
-
-    public FhModuleState OldState { get; }
-    public FhModuleState NewState { get; }
-}
-
 public abstract class FhModule : IEquatable<FhModule> {
-    protected string         _moduleName;
-    protected FhModuleState  _moduleState;
+    protected string        _moduleName;
+    protected FhModuleState _moduleState;
 
     protected FhModule(FhModuleConfig moduleConfig) {
         _moduleName = moduleConfig.ConfigName;
@@ -52,18 +42,11 @@ public abstract class FhModule : IEquatable<FhModule> {
      */
 
     public FhModuleState ModuleState {
-        get { return _moduleState; }
-        protected set {
-            FhModuleController.ModuleStateChangeHandler(this, new(_moduleState, value));
-            _moduleState = value;
-        }
+        get           { return _moduleState;  }
+        protected set { _moduleState = value; }
     }
 
-    public abstract FhModuleConfig ModuleConfiguration { get; }
-
     public abstract bool FhModuleInit();
-    public abstract bool FhModuleStart();
-    public abstract bool FhModuleStop();
     public abstract bool FhModuleOnError();
 
     public bool Equals(FhModule? other) {

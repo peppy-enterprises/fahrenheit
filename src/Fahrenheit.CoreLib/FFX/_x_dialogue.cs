@@ -13,7 +13,7 @@ public static class FhDialogueUtil {
     public static FhMacroDictHeader GetMacroDictHeader(this in ReadOnlySpan<byte> dialogue) {
         FhMacroDictHeader header = new FhMacroDictHeader();
 
-        FhMarshal.from_bytes(dialogue[0..FhMacroDictHeader.MD_HEADER_SIZE], header.SectionOffsets.AsSpan(), FhMacroDictHeader.MD_HEADER_SIZE, out _);
+        FhUtil.cast_from_bytes(dialogue[0..FhMacroDictHeader.MD_HEADER_SIZE], header.SectionOffsets.AsSpan(), FhMacroDictHeader.MD_HEADER_SIZE, out _);
 
         return header;
     }
@@ -28,12 +28,12 @@ public static class FhDialogueUtil {
 
     public static void ReadDialogueIndices(this in ReadOnlySpan<byte> dialogue, in FhDialogueIndex[] callerArray, out int count) {
         int endpos = callerArray.Length * Unsafe.SizeOf<FhDialogueIndex>();
-        FhMarshal.from_bytes<FhDialogueIndex>(dialogue[0..endpos], callerArray, endpos, out count);
+        FhUtil.cast_from_bytes<FhDialogueIndex>(dialogue[0..endpos], callerArray, endpos, out count);
     }
 
     public static void ReadMacroDictIndices(this in ReadOnlySpan<byte> dialogue, in FhMacroDictIndex[] callerArray, out int count) {
         int endpos = callerArray.Length * Unsafe.SizeOf<FhMacroDictIndex>();
-        FhMarshal.from_bytes<FhMacroDictIndex>(dialogue[0..endpos], callerArray, endpos, out count);
+        FhUtil.cast_from_bytes<FhMacroDictIndex>(dialogue[0..endpos], callerArray, endpos, out count);
     }
 
     internal static void ReadLineInternal(this in ReadOnlySpan<byte> dialogue, in FhCharsetId cs, in StringBuilder sb, T_FhDialoguePos start, T_FhDialoguePos end) {

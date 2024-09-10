@@ -23,13 +23,13 @@ internal class Program {
         optDestPath.IsRequired = true;
 
         RootCommand rootCmd = new RootCommand("Process a cheat table and create a C# code file.") {
-            optDefNs, 
+            optDefNs,
             optFilePath,
             optDestPath
         };
 
         rootCmd.SetHandler(CT2CSMain, new CT2CSArgsBinder(
-            optDefNs, 
+            optDefNs,
             optFilePath,
             optDestPath));
 

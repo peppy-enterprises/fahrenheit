@@ -17,7 +17,7 @@ internal static class DEditConfig {
     public static FhDEditMode Mode;
     public static string      SrcPath  = string.Empty;
     public static string      DestPath = string.Empty;
-    
+
     public static DEditCharsetReaderConfig? CharsetReader;
     public static DEditDecompileConfig?     Decompile;
 
@@ -42,7 +42,7 @@ internal class DEditArgsBinder : BinderBase<FhDEditArgs> {
     private readonly Option<FhCharsetId> _optCharSet;
 
     public DEditArgsBinder(Option<FhDEditMode> optMode,
-                           Option<string>      optDefNs, 
+                           Option<string>      optDefNs,
                            Option<string>      optFilePath,
                            Option<string>      optDestPath,
                            Option<FhCharsetId> optCharSet) {

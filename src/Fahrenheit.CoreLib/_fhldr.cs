@@ -12,11 +12,12 @@ public static class FhLoader {
     public delegate void FhInitDelegate();
 
     public static void ldr_bootstrap() {
-        if (!load_modules(FhRuntimeConst.ModulesDir.Path, out List<FhModuleConfigCollection>? moduleConfigs))
-            throw new Exception("FH_E_LDR_MODULE_LOAD_FAILED");
+        foreach (string directory in Directory.EnumerateDirectories(FhRuntimeConst.ModulesDir.Path)) {
+            if (!load_modules(directory, out List<FhModuleConfig>? moduleConfigs))
+                throw new Exception("FH_E_LDR_MODULE_LOAD_FAILED");
 
-        FhModuleController.Initialize(moduleConfigs);
-        foreach (bool rv in FhModuleController.StartAll()) { }
+            FhModuleController.initialize_modules(moduleConfigs);
+        }
     }
 
     private static List<Assembly> loaded_plugin_assemblies_cache { get; } = new List<Assembly>();
@@ -53,53 +54,53 @@ public static class FhLoader {
     /// <summary>
     ///     Loads a module while ensuring its references, if detected, are loaded before it.
     /// </summary>
-    private static bool load_single_module(string fullPath, [NotNullWhen(true)] out List<FhModuleConfigCollection>? moduleConfigCollections) {
-        moduleConfigCollections = new List<FhModuleConfigCollection>();
+    private static bool load_single_module(string fullPath, [NotNullWhen(true)] out List<FhModuleConfig>? module_configs) {
+        module_configs = new List<FhModuleConfig>();
 
-        string dirName        = Path.GetDirectoryName(fullPath) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
-        string moduleName     = Path.GetFileNameWithoutExtension(fullPath).ToUpperInvariant();
-        string configJsonName = Path.Join(FhRuntimeConst.ConfigDir.Path, Path.GetFileName(fullPath).Replace(".dll", ".conf.json"));
+        string module_dir_name  = Path.GetDirectoryName(fullPath) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
+        string module_dll_name  = Path.GetFileNameWithoutExtension(fullPath).ToUpperInvariant();
+        string module_conf_name = Path.Join(module_dir_name, Path.GetFileName(fullPath).Replace(".dll", ".conf.json"));
 
-        bool shouldLoadConfig = File.Exists(configJsonName);
+        bool should_load_config = File.Exists(module_conf_name);
 
-        if (is_assem_loaded(moduleName)) {
-            FhLog.Log(LogLevel.Info, $"{moduleName} already loaded; skipping.");
+        if (is_assem_loaded(module_dll_name)) {
+            FhLog.Log(LogLevel.Info, $"{module_dll_name} already loaded; skipping.");
             return true;
         }
 
-        FhLog.Log(LogLevel.Info, $"Loading module {moduleName}.");
+        FhLog.Log(LogLevel.Info, $"Loading module {module_dll_name}.");
 
-        AssemblyLoadContext asmLoadCtx            = AssemblyLoadContext.GetLoadContext(typeof(FhLoader).Assembly) ?? throw new Exception("E_CANNOT_GET_OWN_ALC");
+        AssemblyLoadContext asmLoadCtx            = AssemblyLoadContext.GetLoadContext(typeof(FhLoader).Assembly) ?? throw new Exception("FH_E_CANNOT_GET_OWN_ALC");
         Assembly            currentlyLoadingAssem = asmLoadCtx.LoadFromAssemblyPath(fullPath);
 
         loaded_plugin_assemblies_cache.Add(currentlyLoadingAssem);
 
         // --> LOAD ORDERING; LOAD REFERENCED ASSEMBLIES FIRST <--
         foreach (AssemblyName refAssem in currentlyLoadingAssem.GetReferencedAssemblies()) {
-            if (try_resolve_module_ref(dirName, refAssem.Name ?? throw new Exception("FH_E_REF_ASSEM_NAME_NULL"), out string refAssemFullPath)) {
-                FhLog.Log(LogLevel.Info, $"{moduleName} depends on {refAssem.Name.ToUpperInvariant()}; trying to load it first.");
+            if (try_resolve_module_ref(module_dir_name, refAssem.Name ?? throw new Exception("FH_E_REF_ASSEM_NAME_NULL"), out string refAssemFullPath)) {
+                FhLog.Log(LogLevel.Info, $"{module_dll_name} depends on {refAssem.Name.ToUpperInvariant()}; trying to load it first.");
 
-                if (!load_single_module(refAssemFullPath, out List<FhModuleConfigCollection>? refAssemConfigCollection))
+                if (!load_single_module(refAssemFullPath, out List<FhModuleConfig>? ref_assem_module_configs))
                     throw new Exception("FH_E_REF_ASSEM_LOAD_FAULT");
 
-                moduleConfigCollections.AddRange(refAssemConfigCollection);
+                module_configs.AddRange(ref_assem_module_configs);
             }
         }
         // --> END LOAD ORDERING <--
 
         // --> LOAD CONFIGURATIONS <--
-        if (shouldLoadConfig) {
-            string patchedJson = File.ReadAllText(configJsonName).apply_rtconst_dir_redirects();
+        if (should_load_config) {
+            string patched_json = File.ReadAllText(module_conf_name).apply_rtconst_dir_redirects();
 
-            FhModuleConfigCollection configCollection =
-                JsonSerializer.Deserialize<FhModuleConfigCollection>(patchedJson, FhUtil.JsonOpts) ??
-                throw new Exception($"FH_E_CONF_DESERIALIZE_FAULT: {moduleName}.");
+            List<FhModuleConfig> configs =
+                JsonSerializer.Deserialize<List<FhModuleConfig>>(patched_json, FhUtil.JsonOpts) ??
+                throw new Exception($"FH_E_CONF_DESERIALIZE_FAULT: {module_dll_name}.");
 
-            FhLog.Log(LogLevel.Info, $"{moduleName} loaded successfully, parsing {configCollection.ModuleConfigs.Count.ToString()} configurations.");
+            FhLog.Log(LogLevel.Info, $"{module_dll_name} loaded successfully, parsing {configs.Count.ToString()} configurations.");
 
-            moduleConfigCollections.Add(configCollection);
+            module_configs.AddRange(configs);
         }
-        else FhLog.Log(LogLevel.Info, $"{moduleName} loaded successfully.");
+        else FhLog.Log(LogLevel.Info, $"{module_dll_name} loaded successfully.");
         // --> END LOAD CONFIGURATIONS <--
 
         return true;
@@ -110,12 +111,12 @@ public static class FhLoader {
     ///     An eligible module has a defined configuration named *.conf.json.
     ///     Referenced modules are also resolved and loaded at the same time if required.
     /// </summary>
-    public static bool load_modules(string dirPath, [NotNullWhen(true)] out List<FhModuleConfigCollection>? moduleConfigCollections) {
-        moduleConfigCollections = new List<FhModuleConfigCollection>();
+    public static bool load_modules(string dirPath, [NotNullWhen(true)] out List<FhModuleConfig>? all_module_configs) {
+        all_module_configs = new List<FhModuleConfig>();
 
         foreach (string dirEntry in Directory.EnumerateFiles(dirPath)) {
-            if (!is_module(dirEntry) || !load_single_module(dirEntry, out List<FhModuleConfigCollection>? singleModuleConfigCollection)) continue;
-            moduleConfigCollections.AddRange(singleModuleConfigCollection);
+            if (!is_module(dirEntry) || !load_single_module(dirEntry, out List<FhModuleConfig>? single_module_configs)) continue;
+            all_module_configs.AddRange(single_module_configs);
         }
 
         return true;
