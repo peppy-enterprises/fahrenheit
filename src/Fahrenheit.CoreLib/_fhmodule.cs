@@ -27,20 +27,6 @@ public abstract class FhModule : IEquatable<FhModule> {
         get { return _moduleName; }
     }
 
-    /* [fkelava 27/3/23 01:59]
-     * ModuleState is the _only_ way for modules to declare that they've suffered a hard fault.
-     * Modules may UNDER NO CIRCUMSTANCE WHATSOEVER throw exceptions, because they're loaded into the same
-     * AppDomain/address space/process as everything else.
-     *
-     * Why is that? Why not interprocess communication?
-     *   1) The IPC methods at our disposal are, effectively, memory-mapped files and named pipes; neither are easy to get right.
-     *   2) The IPC methods at our disposal would require strong interprocess locking, which I find difficult for end-users;
-     *   3) I'm not sure whether either of mmap'ing or named pipes can be as efficient as this...? (I'm probably wrong.)
-     *
-     * Hence ModuleState. Just `ModuleState = ModuleState.Fault;` and your DI'd IFhModuleController will
-     * transparently handle the fault and propagate it to all dependent modules as well.
-     */
-
     public FhModuleState ModuleState {
         get           { return _moduleState;  }
         protected set { _moduleState = value; }

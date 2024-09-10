@@ -2,6 +2,8 @@
 
 namespace Fahrenheit.CoreLib;
 
+// DON'T FORGET, IDIOT
+// READ CONVO FROM https://discord.com/channels/612363389003366405/612363618591440904/1282875425357434904 ONWARD AND FIX IT
 public class FhMethodHandle<T> where T : Delegate {
     public FhModule handle_owner { get; init;        }
     public nint     fn_addr      { get; private set; }
