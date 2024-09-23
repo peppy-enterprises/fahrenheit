@@ -44,9 +44,13 @@ internal static partial class FhPInvoke {
     [LibraryImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
     private static partial nint SetWindowLongPtr64(nint hWnd, int nIndex, nint dwNewLong);
 
-    // shitfuck hack
+    // hacky
     [LibraryImport("user32.dll", EntryPoint = "FindWindowA", SetLastError = true, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
     public static partial IntPtr FindWindow(string? lpClassName, string lpWindowName);
+
+    public static nint FindWindow(string lpWindowName) {
+        return FindWindow(null, lpWindowName);
+    }
 
 #pragma warning disable SYSLIB1054 // Specifically disabled because LibraryImportAttribute cannot handle __arglist, presumably.
     [DllImport("msvcrt.dll", CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true, CallingConvention = CallingConvention.Cdecl)]
@@ -57,5 +61,9 @@ internal static partial class FhPInvoke {
 
     [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)]
     public static partial nint GetModuleHandle(string lpModuleName);
+
+    // what the *fuck* is this
+    [DllImport("cimgui.dll")]
+    public static extern nint ImGui_ImplWin32_WndProcHandler(nint hWnd, uint msg, nint wParam, nint lParam);
 #pragma warning restore SYSLIB1054
 }

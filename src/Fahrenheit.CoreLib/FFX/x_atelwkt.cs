@@ -4,7 +4,7 @@
 public unsafe struct AtelWorkThread {
     [FieldOffset(0x00)] public  fixed int                   script_offset_stack[4];
     [FieldOffset(0x10)] public  fixed short                 script_idx_stack[4];
-    [FieldOffset(0x18)] public        byte*                 instruction_ptr;
+    [FieldOffset(0x18)] public        byte*                 pc;
     [FieldOffset(0x1C)] private       byte                  __0x1C;
     [FieldOffset(0x1D)] public        byte                  stack_depth;
     [FieldOffset(0x1E)] private       byte                  __0x1E;

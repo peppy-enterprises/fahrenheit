@@ -1,4 +1,5 @@
 ﻿using System;
+using static Fahrenheit.CoreLib.FFX.Call;
 
 namespace Fahrenheit.CoreLib;
 
@@ -59,17 +60,17 @@ public abstract class FhModule : IEquatable<FhModule> {
         }
     }
 
-    public abstract FhModuleConfig ModuleConfiguration { get; }
+    public abstract FhModuleConfig ModuleConfig { get; }
 
-    public abstract bool FhModuleInit();
-    public abstract bool FhModuleStart();
-    public abstract bool FhModuleStop();
-    public abstract bool FhModuleOnError();
+    public virtual bool FhModuleInit() => true;
+    public virtual bool FhModuleStart() => true;
+    public virtual bool FhModuleOnError() => true;
 
     public virtual void pre_update() { }
     public virtual void post_update() { }
     public virtual void handle_input() { }
-    public virtual void render() { }
+    public virtual void render_imgui() { }
+    public virtual void render_game() { }
 
     public bool Equals(FhModule? other) {
         if (other is null)                return false;
@@ -85,15 +86,9 @@ public abstract class FhModule : IEquatable<FhModule> {
         return obj.GetType() == GetType() && Equals((FhModule)obj);
     }
 
-    public override int GetHashCode() {
-        return _moduleName.GetHashCode();
-    }
+    public override int GetHashCode() => _moduleName.GetHashCode();
 
-    public static bool operator ==(FhModule? left, FhModule? right) {
-        return Equals(left, right);
-    }
+    public static bool operator ==(FhModule? left, FhModule? right) => Equals(left, right);
 
-    public static bool operator !=(FhModule? left, FhModule? right) {
-        return !Equals(left, right);
-    }
+    public static bool operator !=(FhModule? left, FhModule? right) => !Equals(left, right);
 }

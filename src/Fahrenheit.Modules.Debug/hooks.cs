@@ -1,4 +1,4 @@
-﻿using Fahrenheit.CLRHost;
+﻿using Fahrenheit.CoreLib;
 using static Fahrenheit.Modules.Debug.Delegates;
 
 namespace Fahrenheit.Modules.Debug;

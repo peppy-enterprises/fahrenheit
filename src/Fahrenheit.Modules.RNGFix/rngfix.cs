@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
-using Fahrenheit.CLRHost;
 using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.Modules.RNGFix;
@@ -30,7 +29,7 @@ public class RNGFixModule : FhModule {
     public RNGFixModule(RNGFixModuleConfig moduleConfig) : base(moduleConfig) {
         _moduleConfig = moduleConfig;
 
-        _brnd = new FhMethodHandle<brndDelegate>(this, 0x398900, brndRngFix);
+        _brnd = new FhMethodHandle<brndDelegate>(this, "FFX.exe", 0x398900, brndRngFix);
 
         _moduleState  = FhModuleState.InitSuccess;
     }

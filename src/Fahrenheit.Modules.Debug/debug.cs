@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
-using Fahrenheit.CLRHost;
 using Fahrenheit.CoreLib;
 
 namespace Fahrenheit.Modules.Debug;

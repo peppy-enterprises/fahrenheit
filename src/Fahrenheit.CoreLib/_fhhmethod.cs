@@ -43,6 +43,11 @@ public class FhMethodHandle<T> where T : Delegate {
         return fn_addr != 0;
     }
 
+    public T original { get {
+        if (_orig_fn is null) throw new NullReferenceException($"Failed to call original function");
+        return _orig_fn;
+    }}
+
     public bool try_get_original_fptr([NotNullWhen(true)] out T? handle) { return (handle = _orig_fn) != null; }
 
     public bool hook()   { return _handle_valid && FhHookEngine.hook  (_fn_addr, _hook_fn, out _orig_fn); }

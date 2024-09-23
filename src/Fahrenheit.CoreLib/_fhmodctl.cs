@@ -43,19 +43,6 @@ public static class FhModuleController {
         return default;
     }
 
-    private static bool StopIncludingDependents(in FhModuleContext fmctx) {
-        bool retval = true;
-
-        foreach (FhModule dependent in fmctx.DependentModules) {
-            FhLog.Log(LogLevel.Info, $"Halting threads of module {dependent.ModuleName} because module {fmctx.Module.ModuleName} it depends on faulted.");
-            if (!dependent.FhModuleStop()) retval = false;
-        }
-
-        if (!fmctx.Module.FhModuleStop()) retval = false;
-
-        return retval;
-    }
-
     private static bool StartIncludingDependents(in FhModuleContext fmctx) {
         bool retval = true;
 
@@ -75,7 +62,6 @@ public static class FhModuleController {
             FhModuleContext fmctx = GetContextForModule(sender) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE");
 
             if (!(e.NewState switch {
-                FhModuleState.Fault   => StopIncludingDependents(fmctx),
                 FhModuleState.Started => StartIncludingDependents(fmctx),
                 _ => false
             })) {
@@ -144,27 +130,6 @@ public static class FhModuleController {
         }
     }
 
-    public static IEnumerable<bool> StopAll() {
-        lock (_moduleManipLock) {
-            foreach (FhModuleContext fmctx in _moduleContexts)
-                yield return Stop(fmctx.Module);
-        }
-    }
-
-    public static bool Stop(FhModule fm) {
-        lock (_moduleManipLock) {
-            FhLog.Log(LogLevel.Info, $"Stopping module {fm.ModuleName}.");
-            return StopIncludingDependents(GetContextForModule(fm) ?? throw new Exception("FH_E_NO_FMCTX_FOR_MODULE"));
-        }
-    }
-
-    public static IEnumerable<bool> Stop(IEnumerable<FhModule> fms) {
-        lock (_moduleManipLock) {
-            foreach (FhModule fm in fms)
-                yield return Stop(fm);
-        }
-    }
-
     /// <summary>
     ///     Specifies that <paramref name="caller"/> is dependent on <paramref name="target"/>, and so should
     ///     be shut down if <paramref name="target"/> faults. To allow for this, <paramref name="caller"/>'s
@@ -183,7 +148,6 @@ public static class FhModuleController {
                 return false;
             }
 
-            StopIncludingDependents(callerfmctx);
             callerfmctx.Dependencies.Add(target);
             targetfmctx.DependentModules.Add(caller);
             return StartIncludingDependents(callerfmctx);
@@ -208,7 +172,6 @@ public static class FhModuleController {
                 return false;
             }
 
-            StopIncludingDependents(callerfmctx);
             return targetfmctx.DependentModules.Remove(caller) && StartIncludingDependents(callerfmctx);
         }
     }

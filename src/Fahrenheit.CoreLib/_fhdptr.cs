@@ -9,71 +9,46 @@ public enum FhStringType {
     Ansi = 3
 }
 
-public record struct FhPointerDeref(nint Offset, bool AsPtr);
+public record struct FhPtrDeref(nint offset, bool as_ptr);
 
-/* [fkelava 23/6/23 13:12]
- * Any use of FhPointer is _inherently_ unsafe in the sense that you will always be subject to possible AVs.
- * Since we have no control over execution, a pointer can become invalid in the instant _after_ internal validation
- * and _before_ a e.g. string deref. Hence, you MUST appropriately guard FhPointer operations lest you crash the game.
- */
-public unsafe readonly struct FhPointer {
-    private readonly FhPointerDeref[] _derefs;
+public unsafe readonly struct FhPtr {
+    private readonly FhPtrDeref[] _derefs;
 
-    public FhPointer(FhPointerDeref[] derefs) {
+    public FhPtr(FhPtrDeref[] derefs) {
         _derefs = derefs;
     }
 
-    /* [fkelava 23/6/23 14:03]
-     * Some one-liners require a hefty explanation. This one does. READ IT CAREFULLY.
-     *
-     * Unsafe.Read/Write<T> does not require a constraint. The constraint is there to make evident that
-     * > there must be SizeOf<T>() bytes of readable memory available starting at the location pointed to {...}
-     *
-     * The SizeOf<T> in question is `Unsafe.SizeOf<T>`, which returns the size of the `managed` view of T.
-     * > If T is a reference type, the return value is the size of the reference itself (sizeof(void*)) {...}
-     *
-     * Hence `where T : struct`. HOWEVER, additionally, the struct in question _must_ _exactly_
-     * represent its unmanaged equivalent (or at least be blittable). In short,
-     * `Marshal.SizeOf<T>` and `Unsafe.SizeOf<T>` must be equal. For instance:
-     *
-     * public struct TestStructA { public uint A; }
-     * public struct TestStructB { [MarshalAs(UnmanagedType.Bool)] public bool A; }
-     *
-     * TestStructA is valid. An `uint` is blittable, 4 bytes in managed and unmanaged view.
-     * TestStructB is invalid. A `bool` marshaled as Win32 BOOL is 1 byte managed, 4 bytes unmanaged. The request is invalid and Fahrenheit will crash the game before you do.
-     */
-    private static void ThrowIfTInvalid<T>() where T : unmanaged {
+    /* Make sure managed and managed size is the same for safety */
+    private static void check_safety<T>() where T : unmanaged {
         if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_UNSAFE_OPERATION: {typeof(T).FullName}");
     }
 
-    private nint DerefOffsetsInternal() {
-        nint ptr = nint.Zero;
+    public bool try_calc(out nint vptr) {
+        nint ptr = 0;
 
-        foreach (FhPointerDeref deref in _derefs) {
-            ptr = deref.AsPtr ? Marshal.ReadIntPtr(ptr + deref.Offset) : ptr + deref.Offset;
-            if (ptr == nint.Zero) return nint.MaxValue;
+        foreach (FhPtrDeref deref in _derefs) {
+            ptr = deref.as_ptr
+                    ? Marshal.ReadIntPtr(ptr + deref.offset)
+                    : ptr + deref.offset;
+            if (ptr == 0) break;
         }
 
-        return ptr;
+        return (vptr = ptr) != 0;
     }
 
-    public bool DerefOffsets(out nint vptr) {
-        return (vptr = DerefOffsetsInternal()) != nint.MaxValue;
+    public T read<T>() where T : unmanaged {
+        check_safety<T>();
+        return try_calc(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
     }
 
-    public T DerefPrimitive<T>() where T : unmanaged {
-        ThrowIfTInvalid<T>();
-        return DerefOffsets(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
-    }
-
-    public void WritePrimitive<T>(T value) where T : unmanaged {
-        ThrowIfTInvalid<T>();
-        if (!DerefOffsets(out nint vptr)) return;
+    public void write<T>(T value) where T : unmanaged {
+        check_safety<T>();
+        if (!try_calc(out nint vptr)) return;
         Unsafe.Write(vptr.ToPointer(), value);
     }
 
-    public string DerefString(FhStringType strtype) {
-        if (!DerefOffsets(out nint vptr)) return string.Empty;
+    public string read_string(FhStringType strtype) {
+        if (!try_calc(out nint vptr)) return String.Empty;
 
         return strtype switch {
             FhStringType.Uni  => Marshal.PtrToStringUni(vptr)!,
@@ -89,7 +64,7 @@ public unsafe readonly struct FhPointer {
      */
 
     public bool AwaitValue<T>(T target) where T : unmanaged {
-        if (!DerefOffsets(out nint vptr)) {
+        if (!try_calc(out nint vptr)) {
             FhLog.Warning($"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }
@@ -114,7 +89,7 @@ public unsafe readonly struct FhPointer {
     public bool AwaitValues<T>(in ReadOnlySpan<T> targets, out T match) where T : unmanaged {
         match = default;
 
-        if (!DerefOffsets(out nint vptr)) {
+        if (!try_calc(out nint vptr)) {
             FhLog.Warning($"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }

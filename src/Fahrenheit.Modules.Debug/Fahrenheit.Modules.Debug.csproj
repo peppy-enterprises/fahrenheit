@@ -34,10 +34,6 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\Fahrenheit.CLRHost\Fahrenheit.CLRHost.csproj">
-            <Private>false</Private>
-            <ExcludeAssets>runtime</ExcludeAssets>
-        </ProjectReference>
         <ProjectReference Include="..\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>

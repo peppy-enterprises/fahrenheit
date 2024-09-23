@@ -4,11 +4,9 @@ using System.Runtime.InteropServices;
 
 using ImGuiNET;
 
-using Fahrenheit.CLRHost;
 using Fahrenheit.CoreLib;
 
 using static Fahrenheit.CoreLib.FhHookDelegates;
-using System;
 
 namespace Fahrenheit.Hooks.Generic;
 
@@ -27,6 +25,9 @@ public sealed record FhHooksBaseModuleConfig : FhModuleConfig {
 public unsafe partial class FhHooksBaseModule : FhModule {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void Sg_MainLoop(float delta);
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate void TODrawMessageWindow();
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate void AtelExecInternal_00871d10();
@@ -58,15 +59,15 @@ public unsafe partial class FhHooksBaseModule : FhModule {
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C20;
     private readonly FhMethodHandle<Sg_MainLoop> _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
-    //private readonly FhMethodHandle<WIP> _render;
+    private readonly FhMethodHandle<TODrawMessageWindow> _render_game; // best I can do atm - Evelyn
     private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _prep_init_imgui;
 
-    private          nint                                 _o_WndProcPtr;
-    private          WndProcDelegate?                     _h_WndProc;
-    private          nint                                 _h_WndProcPtr;
-    private          bool                                 _wndProc_init;
+    private nint                                 _o_WndProcPtr;
+    private WndProcDelegate?                     _h_WndProc;
+    private nint                                 _h_WndProcPtr;
+    private bool                                 _wndProc_init;
 
-    public override FhHooksBaseModuleConfig ModuleConfiguration => _moduleConfig;
+    public override FhHooksBaseModuleConfig ModuleConfig => _moduleConfig;
 
     private static bool hooked_wndproc = false;
     private static bool ready_to_init_imgui = false;
@@ -88,18 +89,13 @@ public unsafe partial class FhHooksBaseModule : FhModule {
 
         // Providing basic functionality to other modules
         _main_loop = new FhMethodHandle<Sg_MainLoop>(this, game, 0x420C00, main_loop);
+
         _update_input = new FhMethodHandle<AtelExecInternal_00871d10>(this, game, 0x471D10, update_input);
         _prep_init_imgui = new FhMethodHandle<D3D11CreateDeviceAndSwapChain>(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", prep_init_imgui);
 
+        _render_game = new(this, game, 0x4abce0, render_game);
+
         _moduleState  = FhModuleState.InitSuccess;
-    }
-
-    public override bool FhModuleInit() {
-        return true;
-    }
-
-    public override bool FhModuleOnError() {
-        return true;
     }
 
     public override bool FhModuleStart() {
@@ -110,20 +106,9 @@ public unsafe partial class FhHooksBaseModule : FhModule {
             //&& _printf_473C20.hook()
             && _main_loop.hook()
             && _update_input.hook()
-            && _prep_init_imgui.hook()
+            && _render_game.hook()
+            //&& _prep_init_imgui.hook()
             ;//&& _render.hook();
-    }
-
-    public override bool FhModuleStop() {
-        return _tkIsDbg.unhook()
-            //&& _printf_22F6B0.unhook()
-            //&& _printf_22FDA0.unhook()
-            //&& _printf_473C10.unhook()
-            //&& _printf_473C20.unhook()
-            && _main_loop.unhook()
-            && _update_input.unhook()
-            && _prep_init_imgui.unhook()
-            ;//&& _render.unhook();
     }
 
     public nint h_wndproc(nint hWnd, uint msg, nint wParam, nint lParam) {
@@ -133,13 +118,13 @@ public unsafe partial class FhHooksBaseModule : FhModule {
             return 1;
         }
 
-        FhLog.Debug($"WndProc({hWnd:X8}, {msg}, {wParam:X8}, {lParam:X8})");
+        //FhLog.Debug($"WndProc({hWnd:X8}, {msg}, {wParam:X8}, {lParam:X8})");
 
         return FhPInvoke.CallWindowProc(_o_WndProcPtr, hWnd, msg, wParam, lParam);
     }
 
     private bool hook_wndproc() {
-        _h_WndProcPtr = Marshal.GetFunctionPointerForDelegate(new WndProcDelegate(h_wndproc));
+        _h_WndProcPtr = Marshal.GetFunctionPointerForDelegate(h_wndproc);
         nint hWnd = FhPInvoke.FindWindow(null, "FINAL FANTASY X"); // shitfuck hack
 
         if (hWnd == 0) {
@@ -218,8 +203,8 @@ public unsafe partial class FhHooksBaseModule : FhModule {
     }
 
     public void main_loop(float delta) {
-        if (!hooked_wndproc)
-            hook_wndproc();
+        //if (!hooked_wndproc)
+        //    hook_wndproc();
 
         if (!initialized_imgui && ready_to_init_imgui)
             init_imgui();
@@ -227,8 +212,7 @@ public unsafe partial class FhHooksBaseModule : FhModule {
         foreach (FhModule module in FhModuleController.FindAll())
             module.pre_update();
 
-        if (_main_loop.try_get_original_fptr(out Sg_MainLoop? fptr))
-            fptr.Invoke(delta);
+        _main_loop.original(delta);
 
         foreach (FhModule module in FhModuleController.FindAll())
             module.post_update();
@@ -237,18 +221,16 @@ public unsafe partial class FhHooksBaseModule : FhModule {
     public void update_input() {
         CoreLib.FFX.Globals.Input.update();
 
-        if (_update_input.try_get_original_fptr(out AtelExecInternal_00871d10? fptr)) {
-            fptr.Invoke();
-        }
+        _update_input.original();
 
         foreach (FhModule module in FhModuleController.FindAll()) {
             module.handle_input();
         }
     }
 
-    public nint render_imgui() {
+    public new nint render_imgui() {
         foreach (FhModule module in FhModuleController.FindAll()) {
-            module.render();
+            module.render_imgui();
         }
 
         /*if (_render.try_get_original_fptr(out WIP? fptr)) {
@@ -256,5 +238,13 @@ public unsafe partial class FhHooksBaseModule : FhModule {
         }*/
 
         return 0;
+    }
+
+    public new void render_game() {
+        _render_game.original();
+
+        foreach (FhModule module in FhModuleController.FindAll()) {
+            module.render_game();
+        }
     }
 }

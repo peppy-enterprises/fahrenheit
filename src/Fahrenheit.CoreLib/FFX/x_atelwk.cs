@@ -39,5 +39,5 @@ public unsafe struct AtelBasicWorker {
     public readonly uint*           table_shared_data { get { return (uint*)         ((nint)script_chunk + script_header->offset_shared_data);        } }
     public readonly AtelWorkThread* current_thread    { get { return threads + current_thread_priority;                                               } }
 
-    public int pc_of(AtelWorkThread* thread) => (int)(thread->instruction_ptr - code_ptr);
+    public int pc_of(AtelWorkThread* thread) => (int)(thread->pc - code_ptr);
 }
