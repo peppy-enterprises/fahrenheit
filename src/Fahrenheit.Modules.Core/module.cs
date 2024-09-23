@@ -14,9 +14,7 @@ using static Fahrenheit.CoreLib.FhHookDelegates;
 namespace Fahrenheit.CoreLib;
 
 public sealed record FhCoreModuleConfig : FhModuleConfig {
-    public FhCoreModuleConfig(string configName,
-                              bool   configEnabled) : base(configName, configEnabled) {
-    }
+    public FhCoreModuleConfig(string configName, bool configEnabled) : base(configName, configEnabled) { }
 
     public override bool TrySpawnModule([NotNullWhen(true)] out FhModule? fm) {
         fm = new FhCoreModule(this);

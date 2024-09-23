@@ -43,11 +43,6 @@ public class FhMethodHandle<T> where T : Delegate {
         if (fn_addr == 0) throw new Exception("FH_E_METHOD_HANDLE_GETPROCADDR_FAILED");
     }
 
-    public T original { get {
-        if (_orig_fn is null) throw new NullReferenceException($"Failed to call original function");
-        return _orig_fn;
-    }}
-
     public bool hook() {
         nint origAddr = fn_addr;
         nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook_fptr);

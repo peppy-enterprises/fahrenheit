@@ -11,11 +11,7 @@ namespace Fahrenheit.Modules.CSR;
 
 public sealed record CSRModuleConfig : FhModuleConfig {
     [JsonConstructor]
-    public CSRModuleConfig(string configName,
-                           uint   configVersion,
-                           bool   configEnabled)
-            : base(configName, configVersion, configEnabled) {
-    }
+    public CSRModuleConfig(string configName, bool configEnabled) : base(configName, configEnabled) { }
 
     public override bool TrySpawnModule([NotNullWhen(true)] out FhModule? fm) {
         fm = new CSRModule(this);
@@ -80,7 +76,7 @@ public unsafe class CSRModule : FhModule {
     public CSRModule(CSRModuleConfig moduleConfig) : base(moduleConfig) {
         _moduleConfig = moduleConfig;
 
-        _csr_event = new(this, "FFX.exe", 0x472e90, csr_event);
+        _csr_event = new(this, "FFX.exe", csr_event, offset: 0x472e90);
 
         _moduleState  = FhModuleState.InitSuccess;
     }
@@ -89,8 +85,6 @@ public unsafe class CSRModule : FhModule {
         Removers.init();
         return _csr_event.hook();
     }
-
-    public override FhModuleConfig ModuleConfig { get => _moduleConfig; }
 
     public override void render_game() {
         // Try rendering something I guess?
@@ -104,7 +98,7 @@ public unsafe class CSRModule : FhModule {
     }
 
     public void csr_event(u32 event_id) {
-        _csr_event.original(event_id);
+        _csr_event.orig_fptr(event_id);
 
         string event_name = Marshal.PtrToStringAnsi((isize)get_event_name(event_id))!;
         if (removers.TryGetValue(event_name, out CsrEvent? remover)) {
