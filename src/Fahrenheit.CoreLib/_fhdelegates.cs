@@ -7,9 +7,30 @@ public static partial class FhHookDelegates {
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate int TkIsDebugDelegate();
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void Sg_MainLoop(float delta);
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate void TODrawMessageWindow();
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate void AtelExecInternal_00871d10();
+
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate nint WndProcDelegate(nint hWnd, uint msg, nint wParam, nint lParam);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void Sg_MainLoop(float delta);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate void D3D11CreateDeviceAndSwapChain(
+            nint pAdapter,
+            nint DriverType,
+            nint software,
+            uint flags,
+            nint pFeatureLevels,
+            uint FeatureLevels,
+            uint SDKVersion,
+            nint pSwapChainDesc,
+            nint ppSwapChain,
+            nint ppDevice,
+            nint pFeatureLevel,
+            nint ppImmediateContext);
 }
