@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# extern build files
+extern/luajit-bin/
+extern/cimgui-bin/
+
 # vcpkg
 **/vcpkg_installed/
 
