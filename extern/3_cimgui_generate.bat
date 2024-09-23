@@ -1,15 +1,13 @@
-:: set your PATH if necessary for LuaJIT or Lua5.1 or luajit with: (for example)
+:: Fahrenheit `extern` build, Stage 3 : cimgui "generator"
+:: 24/9/24 00:28 fkelava
+
+:: Slightly modified from https://github.com/cimgui/cimgui/blob/docking_inter/generator/generator.bat
+:: according to https://github.com/cimgui/cimgui/issues/267
+:: and https://github.com/cimgui/cimgui/issues/232#issuecomment-1497059497
+
+:: LuaJIT must be on the path set up in 2_luajit_copy.bat
 set PATH=%PATH%;%~dp0\luajit-bin;
 
-:: https://github.com/cimgui/cimgui/issues/232#issuecomment-1497059497
 cd cimgui/generator
-
-::process  files
-:: arg[1] compiler name gcc, clang or cl
-:: arg[2] options as words in one string: internal for imgui_internal generation, freetype for freetype generation, comments for comments generation, nochar to skip char* function version, noimstrv to skip imstrv
-:: examples: "" "internal" "internal freetype comments"
-:: arg[3..n] name of implementations to generate and/or CFLAGS (e.g. -DIMGUI_USER_CONFIG or -DIMGUI_USE_WCHAR32)
 luajit ./generator.lua cl "internal noimstrv" dx11 win32 %*
-
-::leave console open
 cmd /k
