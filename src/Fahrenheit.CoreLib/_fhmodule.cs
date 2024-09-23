@@ -11,7 +11,7 @@ public enum FhModuleState {
     Fault
 }
 
-public abstract class FhModule : IEquatable<FhModule> {
+public abstract class FhModule {
     protected string        _moduleName;
     protected FhModuleState _moduleState;
 
@@ -32,8 +32,6 @@ public abstract class FhModule : IEquatable<FhModule> {
         protected set { _moduleState = value; }
     }
 
-    public abstract FhModuleConfig ModuleConfig { get; }
-
     public virtual bool FhModuleInit() => true;
     public virtual bool FhModuleOnError() => true;
 
@@ -42,22 +40,4 @@ public abstract class FhModule : IEquatable<FhModule> {
     public virtual void handle_input() { }
     public virtual void render_imgui() { }
     public virtual void render_game() { }
-
-    public bool Equals(FhModule? other) {
-        if (other is null)                return false;
-        if (ReferenceEquals(this, other)) return true;
-
-        return _moduleName.Equals(other.ModuleName);
-    }
-
-    public override bool Equals(object? obj) {
-        if (obj is null)                return false;
-        if (ReferenceEquals(this, obj)) return true;
-
-        return obj.GetType() == GetType() && Equals((FhModule)obj);
-    }
-
-    public override int GetHashCode() {
-        return _moduleName.GetHashCode();
-    }
 }
