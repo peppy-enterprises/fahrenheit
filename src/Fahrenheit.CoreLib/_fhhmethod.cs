@@ -4,32 +4,22 @@ using System.Diagnostics.CodeAnalysis;
 namespace Fahrenheit.CoreLib;
 
 public class FhMethodHandle<T> where T : Delegate {
-    private readonly FhModule _handle_owner;
-    private readonly bool     _handle_valid;
-    private readonly nint     _fn_addr;
-    private          T?       _orig_fn;
-    private readonly T        _hook_fn;
+    public FhModule handle_owner { get; init;        }
+    public nint     fn_addr      { get; private set; }
+    public T        orig_fptr    { get; private set; } // Do not store the value of this field; it can and will change between hook() calls.
+    public T        hook_fptr    { get; init;        }
 
     public FhMethodHandle(FhModule owner,
                           string   module_name,
-                          nint     offset,
-                          T        hook_fn)
+                          T        hook,
+                          nint     offset  = int.MaxValue,
+                          string?  fn_name = default)
     {
-        _handle_owner = owner;
-        _handle_valid = calc_fnaddr(module_name, offset, out _fn_addr);
-        _orig_fn      = _handle_valid ? Marshal.GetDelegateForFunctionPointer<T>(_fn_addr) : null;
-        _hook_fn      = hook_fn;
-    }
+        calc_fnaddr_or_throw(module_name, offset, fn_name);
 
-    public FhMethodHandle(FhModule owner,
-                          string   module_name,
-                          string   fn_name,
-                          T        hook_fn)
-    {
-        _handle_owner = owner;
-        _handle_valid = calc_fnaddr(module_name, fn_name, out _fn_addr);
-        _orig_fn      = _handle_valid ? Marshal.GetDelegateForFunctionPointer<T>(_fn_addr) : null;
-        _hook_fn      = hook_fn;
+        handle_owner = owner;
+        orig_fptr    = Marshal.GetDelegateForFunctionPointer<T>(fn_addr);
+        hook_fptr    = hook;
     }
 
     private bool calc_fnaddr(string module_name, nint offset, out nint fn_addr) {
@@ -43,13 +33,32 @@ public class FhMethodHandle<T> where T : Delegate {
         return fn_addr != 0;
     }
 
+    private void calc_fnaddr_or_throw(string module_name, nint offset, string? fn_name) {
+        nint mod_addr = FhPInvoke.GetModuleHandle(module_name);
+        if (mod_addr == 0) throw new Exception("FH_E_METHOD_HANDLE_MODULE_UNKNOWN");
+
+        fn_addr = fn_name == null
+            ? mod_addr + offset
+            : FhPInvoke.GetProcAddress(mod_addr, fn_name);
+        if (fn_addr == 0) throw new Exception("FH_E_METHOD_HANDLE_GETPROCADDR_FAILED");
+    }
+
     public T original { get {
         if (_orig_fn is null) throw new NullReferenceException($"Failed to call original function");
         return _orig_fn;
     }}
 
-    public bool try_get_original_fptr([NotNullWhen(true)] out T? handle) { return (handle = _orig_fn) != null; }
+    public bool hook() {
+        nint origAddr = fn_addr;
+        nint hookAddr = Marshal.GetFunctionPointerForDelegate(hook_fptr);
+        FhLog.Log(LogLevel.Info, $"Applying hook {hook_fptr.Method.Name} to address 0x{fn_addr.ToString("X8")}.");
 
-    public bool hook()   { return _handle_valid && FhHookEngine.hook  (_fn_addr, _hook_fn, out _orig_fn); }
-    public bool unhook() { return _handle_valid && FhHookEngine.unhook(_fn_addr, _hook_fn, out _orig_fn); }
+        if (FhPInvoke.MH_CreateHook(fn_addr, hookAddr, ref origAddr) != 0) throw new Exception("FH_E_NATIVE_HOOK_CREATE_FAILED");
+        if (FhPInvoke.MH_EnableHook(fn_addr)                         != 0) throw new Exception("FH_E_NATIVE_HOOK_ENABLE_FAILED");
+
+        orig_fptr = Marshal.GetDelegateForFunctionPointer<T>(origAddr);
+        FhLog.Log(LogLevel.Info, $"Hook {hook_fptr.Method.Name}; original -> 0x{fn_addr.ToString("X8")}, hook -> 0x{hookAddr.ToString("X8")}.");
+
+        return true;
+    }
 }

@@ -24,34 +24,26 @@ public sealed record FhDirLink {
 public static class FhRuntimeConst {
     internal const string _binDirName     = "bin";
     internal const string _modulesDirName = "modules";
-    internal const string _confDirName    = "config";
-    internal const string _diagLogDirName = "diaglog";
+    internal const string _logsDirName    = "logs";
     internal const string _rsrcDirName    = "rsrc";
-    internal const string _miscDirName    = "misc";
 
     static FhRuntimeConst() {
         string cwdParent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
                            throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
 
-        string binDirPath      = Path.Join(cwdParent,   _binDirName);
-        string modulesDirPath  = Path.Join(cwdParent,   _modulesDirName);
-        string confDirPath     = Path.Join(cwdParent,   _confDirName);
-        string diagLogDirPath  = Path.Join(cwdParent,   _diagLogDirName);
-        string rsrcDirPath     = Path.Join(cwdParent,   _rsrcDirName);
-        string miscDirPath     = Path.Join(cwdParent,   _miscDirName);
+        string binDirPath     = Path.Join(cwdParent, _binDirName);
+        string modulesDirPath = Path.Join(cwdParent, _modulesDirName);
+        string logsDirPath    = Path.Join(cwdParent, _logsDirName);
+        string rsrcDirPath    = Path.Join(cwdParent, _rsrcDirName);
 
-        BinDir      = new FhDirLink("$bindir",     binDirPath);
-        ModulesDir  = new FhDirLink("$modulesdir", modulesDirPath);
-        ConfigDir   = new FhDirLink("$confdir",    confDirPath);
-        DiagLogDir  = new FhDirLink("$diaglogdir", diagLogDirPath);
-        RsrcDir     = new FhDirLink("$rsrcdir",    rsrcDirPath);
-        MiscDir     = new FhDirLink("$miscdir",    miscDirPath);
+        BinDir     = new FhDirLink("$bindir",     binDirPath);
+        ModulesDir = new FhDirLink("$modulesdir", modulesDirPath);
+        DiagLogDir = new FhDirLink("$diaglogdir", logsDirPath);
+        RsrcDir    = new FhDirLink("$rsrcdir",    rsrcDirPath);
     }
 
     public static readonly FhDirLink BinDir;
     public static readonly FhDirLink ModulesDir;
-    public static readonly FhDirLink ConfigDir;
     public static readonly FhDirLink DiagLogDir;
     public static readonly FhDirLink RsrcDir;
-    public static readonly FhDirLink MiscDir;
 }

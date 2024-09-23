@@ -42,7 +42,7 @@ internal class DEditArgsBinder : BinderBase<FhDEditArgs> {
     private readonly Option<FhCharsetId> _optCharSet;
 
     public DEditArgsBinder(Option<FhDEditMode> optMode,
-                           Option<string>      optDefNs, 
+                           Option<string>      optDefNs,
                            Option<string>      optFilePath,
                            Option<string>      optDestPath,
                            Option<FhCharsetId> optCharSet) {

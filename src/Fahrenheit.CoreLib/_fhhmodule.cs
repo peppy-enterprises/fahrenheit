@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace Fahrenheit.CoreLib;
 
 public class FhModuleHandle<T> where T : FhModule {
-    private readonly FhModule     _handleOwner;
-    private          T?           _rawHandle;
-    private readonly Predicate<T> _matchFunc;
+    private readonly FhModule         _handleOwner;
+    private          FhModuleContext? _matchCtx;
+    private readonly Predicate<T>     _matchFunc;
 
     public FhModuleHandle(FhModule     owner,
                           Predicate<T> match) {
@@ -14,21 +14,11 @@ public class FhModuleHandle<T> where T : FhModule {
         _matchFunc   = match;
     }
 
-    public bool GetHandleSafe([NotNullWhen(true)] out T? handle) {
-        return (handle = _rawHandle) != null;
+    public bool try_get_handle([NotNullWhen(true)] out FhModuleContext? handle) {
+        return (handle = _matchCtx) != null;
     }
 
-    public bool TryAcquire() {
-        return (_rawHandle = FhModuleController.Find(_matchFunc)) != default;
-    }
-
-    public bool MarkDependency() {
-        if (!GetHandleSafe(out T? handle)) return false;
-        return FhModuleController.RegisterModuleDependency(_handleOwner, handle);
-    }
-
-    public bool UnmarkDependency() {
-        if (!GetHandleSafe(out T? handle)) return false;
-        return FhModuleController.UnregisterModuleDependency(_handleOwner, handle);
+    public bool try_acquire() {
+        return (_matchCtx = FhModuleController.find(_matchFunc)) != null;
     }
 }
