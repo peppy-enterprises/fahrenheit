@@ -36,8 +36,8 @@ You will require the following:
     - The C++ desktop development workload installed (latest version)
 - Build output, by default, is under ``artifacts\localdeploy`` in the top-level directory.
     - Copy the contents of this directory (the folders ``bin``, ``modules``, etc.) to a subfolder named ``fahrenheit`` in your game directory (where ``FFX.exe`` is).
-    - Open a terminal in ``fahrenheit/bin``, then ``.\fhlaunch.exe ..\..\FFX.exe``.
-    - Debugging can be performed from Visual Studio. Attach to either ``fhlaunch.exe`` or ``FFX.exe``, and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
+    - Open a terminal in ``fahrenheit/bin``, then ``.\fhstage0.exe ..\..\FFX.exe``.
+    - Debugging can be performed from Visual Studio. Attach to either ``fhstage0.exe`` or ``FFX.exe``, and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
 
 ## What's next?
 Time permitting, the goals (in no specific order) of the project are:
