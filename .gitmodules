@@ -6,4 +6,4 @@
 	url = https://github.com/cimgui/cimgui
 [submodule "extern/ImGui.NET"]
 	path = extern/ImGui.NET
-	url = https://github.com/ImGuiNET/ImGui.NET
+	url = https://github.com/fkelava/ImGui.NET
