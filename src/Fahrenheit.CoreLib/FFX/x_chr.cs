@@ -201,10 +201,12 @@ public unsafe struct Chr {
     public bool stat_inv_physic_motion { readonly get { return stat_inv_motion.get_bit(0); } set { stat_inv_motion.set_bit(0, value); } }
     public bool stat_inv_magic_motion  { readonly get { return stat_inv_motion.get_bit(1); } set { stat_inv_motion.set_bit(1, value); } }
 
+    // Gender
     public bool is_male   { readonly get { return gender.get_bit(0); } set { gender.set_bit(0, value); } }
     public bool is_female { readonly get { return gender.get_bit(1); } set { gender.set_bit(1, value); } }
     public bool is_aeon   { readonly get { return gender.get_bit(2); } set { gender.set_bit(2, value); } }
 
+    // Extra Resistances (Properties)
     public bool is_armored           { readonly get { return extra_resist.get_bit(0); } set { extra_resist.set_bit(0, value); } }
     public bool ignores_gravity_dmg  { readonly get { return extra_resist.get_bit(1); } set { extra_resist.set_bit(1, value); } }
     public bool ignores_physical_dmg { readonly get { return extra_resist.get_bit(2); } set { extra_resist.set_bit(2, value); } }
@@ -214,6 +216,7 @@ public unsafe struct Chr {
     public bool ignores_zanmato      { readonly get { return extra_resist.get_bit(6); } set { extra_resist.set_bit(6, value); } }
     public bool ignores_bribe        { readonly get { return extra_resist.get_bit(7); } set { extra_resist.set_bit(7, value); } }
 
+    // Elemental affinities, resistances, et al.
     public bool has_firestrike    { readonly get { return elem_wpn.get_bit(0); } set { elem_wpn.set_bit(0, value); } }
     public bool has_icestrike     { readonly get { return elem_wpn.get_bit(1); } set { elem_wpn.set_bit(1, value); } }
     public bool has_thunderstrike { readonly get { return elem_wpn.get_bit(2); } set { elem_wpn.set_bit(2, value); } }
@@ -244,6 +247,7 @@ public unsafe struct Chr {
     public bool weak_water      { readonly get { return elem_weak.get_bit(3); } set { elem_weak.set_bit(3, value); } }
     public bool weak_holy       { readonly get { return elem_weak.get_bit(4); } set { elem_weak.set_bit(4, value); } }
 
+    // Inflicts Extra Statuses
     public bool inflicts_scan            { readonly get { return status_inflict_extra.get_bit( 0); } set { status_inflict_extra.set_bit( 0, value); } }
     public bool inflicts_distill_power   { readonly get { return status_inflict_extra.get_bit( 1); } set { status_inflict_extra.set_bit( 1, value); } }
     public bool inflicts_distill_mana    { readonly get { return status_inflict_extra.get_bit( 2); } set { status_inflict_extra.set_bit( 2, value); } }
@@ -260,6 +264,7 @@ public unsafe struct Chr {
     public bool inflicts_sentinel        { readonly get { return status_inflict_extra.get_bit(13); } set { status_inflict_extra.set_bit(13, value); } }
     public bool inflicts_doom            { readonly get { return status_inflict_extra.get_bit(14); } set { status_inflict_extra.set_bit(14, value); } }
 
+    // Statuses
     public bool suffers_ko            { readonly get { return status_suffer.get_bit(0); } set { status_suffer.set_bit(0, value); } }
     public bool suffers_zombie        { readonly get { return status_suffer.get_bit(1); } set { status_suffer.set_bit(1, value); } }
     public bool suffers_petrification { readonly get { return status_suffer.get_bit(2); } set { status_suffer.set_bit(2, value); } }
@@ -289,6 +294,7 @@ public unsafe struct Chr {
     public bool suffers_sentinel        { readonly get { return status_suffer_extra.get_bit(13); } set { status_suffer_extra.set_bit(13, value); } }
     public bool suffers_doom            { readonly get { return status_suffer_extra.get_bit(14); } set { status_suffer_extra.set_bit(14, value); } }
 
+    // Currently Applicable Auto-Statuses
     public bool has_auto_death         { readonly get { return status_full_auto_1.get_bit( 0); } set { status_full_auto_1.set_bit( 0, value); } }
     public bool has_auto_zombie        { readonly get { return status_full_auto_1.get_bit( 1); } set { status_full_auto_1.set_bit( 1, value); } }
     public bool has_auto_petrification { readonly get { return status_full_auto_1.get_bit( 2); } set { status_full_auto_1.set_bit( 2, value); } }
@@ -316,6 +322,7 @@ public unsafe struct Chr {
     public bool has_auto_haste       { readonly get { return status_full_auto_2.get_bit(7); } set { status_full_auto_2.set_bit(7, value); } }
     public bool has_auto_slow        { readonly get { return status_full_auto_2.get_bit(8); } set { status_full_auto_2.set_bit(8, value); } }
 
+    // Innate Auto-Statuses
     public bool has_innate_auto_death         { readonly get { return status_innate_auto_1.get_bit( 0); } set { status_innate_auto_1.set_bit( 0, value); } }
     public bool has_innate_auto_zombie        { readonly get { return status_innate_auto_1.get_bit( 1); } set { status_innate_auto_1.set_bit( 1, value); } }
     public bool has_innate_auto_petrification { readonly get { return status_innate_auto_1.get_bit( 2); } set { status_innate_auto_1.set_bit( 2, value); } }
@@ -343,6 +350,7 @@ public unsafe struct Chr {
     public bool has_innate_auto_haste       { readonly get { return status_innate_auto_2.get_bit(7); } set { status_innate_auto_2.set_bit(7, value); } }
     public bool has_innate_auto_slow        { readonly get { return status_innate_auto_2.get_bit(8); } set { status_innate_auto_2.set_bit(8, value); } }
 
+    // SOS Auto-Statuses
     public bool has_sos_auto_death         { readonly get { return status_sos_auto_1.get_bit( 0); } set { status_sos_auto_1.set_bit( 0, value); } }
     public bool has_sos_auto_zombie        { readonly get { return status_sos_auto_1.get_bit( 1); } set { status_sos_auto_1.set_bit( 1, value); } }
     public bool has_sos_auto_petrification { readonly get { return status_sos_auto_1.get_bit( 2); } set { status_sos_auto_1.set_bit( 2, value); } }
@@ -370,6 +378,7 @@ public unsafe struct Chr {
     public bool has_sos_auto_haste       { readonly get { return status_sos_auto_2.get_bit(7); } set { status_sos_auto_2.set_bit(7, value); } }
     public bool has_sos_auto_slow        { readonly get { return status_sos_auto_2.get_bit(8); } set { status_sos_auto_2.set_bit(8, value); } }
 
+    // Extra Status Resistances
     public bool resists_scan            { readonly get { return status_resist_extra.get_bit( 0); } set { status_resist_extra.set_bit( 0, value); } }
     public bool resists_distill_power   { readonly get { return status_resist_extra.get_bit( 1); } set { status_resist_extra.set_bit( 1, value); } }
     public bool resists_distill_mana    { readonly get { return status_resist_extra.get_bit( 2); } set { status_resist_extra.set_bit( 2, value); } }
@@ -386,6 +395,7 @@ public unsafe struct Chr {
     public bool resists_sentinel        { readonly get { return status_resist_extra.get_bit(13); } set { status_resist_extra.set_bit(13, value); } }
     public bool resists_doom            { readonly get { return status_resist_extra.get_bit(14); } set { status_resist_extra.set_bit(14, value); } }
 
+    // Auto-Abilities
     public bool has_sensor            { readonly get { return auto_abilities_1.get_bit( 0); } set { auto_abilities_1.set_bit( 0, value); } }
     public bool has_first_strike      { readonly get { return auto_abilities_1.get_bit( 1); } set { auto_abilities_1.set_bit( 1, value); } }
     public bool has_initiative        { readonly get { return auto_abilities_1.get_bit( 2); } set { auto_abilities_1.set_bit( 2, value); } }

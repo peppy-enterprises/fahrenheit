@@ -13,7 +13,7 @@ public abstract partial class FhCharset {
 }
 
 public sealed class FhCharsetUs : FhCharset {
-    public override byte ToByte(char c) {
+    public override byte to_byte(char c) {
         return c switch {
             '0' => 0x30, // 30
             '1' => 0x31, // 31
@@ -212,7 +212,7 @@ public sealed class FhCharsetUs : FhCharset {
         };
     }
 
-    public override char ToChar(byte b) {
+    public override char to_char(byte b) {
         return b switch {
             0x30 => '0', // 30
             0x31 => '1', // 31

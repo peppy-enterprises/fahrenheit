@@ -11,6 +11,7 @@ public unsafe struct Actor {
     [FieldOffset(0x6C)]  public Vec4f  chr_offset_vec;
     [FieldOffset(0x154)] public float  chr_speed;
     [FieldOffset(0x158)] public float  chr_rotation_rad;
+    [FieldOffset(0x168)] public float  chr_direction;
     [FieldOffset(0x170)] public float  chr_run_anim_spd_threshold;
     [FieldOffset(0x330)] public LVec3f chr_shade_r_vec;
     [FieldOffset(0x33C)] public LVec3f chr_shade_g_vec;
@@ -51,4 +52,5 @@ public unsafe struct Actor {
     [FieldOffset(0x6A4)] public Vec4f  chr_optpos_vec_23;
     [FieldOffset(0x6B4)] public Vec4f  chr_optpos_vec_24;
     [FieldOffset(0x6C4)] public Vec4f  chr_optpos_vec_25;
+    [FieldOffset(0x824)] public uint   chr_var1; // TODO: Figure out a better name. Comes from CSR.
 }

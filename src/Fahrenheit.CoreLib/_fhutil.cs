@@ -189,6 +189,10 @@ public static unsafe class FhUtil {
 
         return tval;
     }
+
+    public static TDelegate get_fptr<TDelegate>(nint funcAddress) {
+        return Marshal.GetDelegateForFunctionPointer<TDelegate>(FhGlobal.base_addr + funcAddress);
+    }
 }
 
 // TODO: unfuck this garbage
@@ -227,7 +231,8 @@ public ref struct FhTokenizer {
             startTokenPos = _span[_currentPosition.._spanLength].IndexOf(startToken) + _currentPosition;
         }
 
-        if (endTokenPos == methodStartPos - 1) { // IndexOf(endToken) returned -1; there is no endToken in the span.
+        // IndexOf(endToken) returned -1; there is no endToken in the span.
+        if (endTokenPos == methodStartPos - 1) {
             _currentPosition = _spanLength;
             return _span[methodStartPos.._spanLength];
         }
