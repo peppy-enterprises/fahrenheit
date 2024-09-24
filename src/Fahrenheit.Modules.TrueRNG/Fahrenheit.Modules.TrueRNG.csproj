@@ -1,0 +1,87 @@
+﻿<Project>
+	<!--
+	Welcome to an example .csproj file for a Fahrenheit module!
+
+	When in doubt, you can consult this to see what options need to be set and why.
+
+	Assume that the order in which these groups appear is intentional. When preparing your own project, use the same order.
+	-->
+
+	<!-- ASSEMBLY BASIC PROPERTIES -->
+	<!--
+	All projects should declare these properties.
+
+	TargetFramework MUST match that of every other project and the Fahrenheit version you are linking against.
+	PlatformTarget MUST be x86.
+	EnableDynamicLoading MUST be true.
+
+	The rest of the options are highly recommended, but strictly speaking not mandatory.
+	-->
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<PlatformTarget>x86</PlatformTarget>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+	</PropertyGroup>
+
+	<!-- ASSEMBLY ADDITIONAL PROPERTIES -->
+	<!--
+	These properties are unique to your own mod!
+
+	Set what you want here, just keep it brief so it appears nice on the finished artifact.
+
+	AssemblyName is the name of the finished module DLL, ex. `fhtruerng.dll`.
+	AssemblyTitle and Product appear when hovering over the DLL in Windows Explorer.
+	-->
+	<PropertyGroup>
+		<AssemblyName>fhtruerng</AssemblyName>
+		<AssemblyTitle>True RNG mod for Final Fantasy X</AssemblyTitle>
+		<Product>True RNG mod for Final Fantasy X</Product>
+	</PropertyGroup>
+
+	<!-- LOCAL DEPLOYMENT TARGET -->
+	<!--
+	This should be included exactly as-is.
+
+	For modules, this must always be equal to $(SolutionDir)\artifacts\localdeploy\modules\$(AssemblyName).
+	-->
+	<PropertyGroup>
+		<CopyToDir>$(SolutionDir)artifacts\localdeploy\modules\$(AssemblyName)</CopyToDir>
+	</PropertyGroup>
+
+	<!-- SDK REFERENCES -->
+	<!--
+	This should be included exactly as-is.
+	-->
+	<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+	<!-- SHARED FILE LINKS -->
+	<!--
+	This should be included exactly as-is.
+
+	This imports Fahrenheit's code style rules to allow you to write in a uniform way.
+	-->
+	<ItemGroup>
+		<None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<!-- PROJECT REFERENCES -->
+	<!--
+	This should be included exactly as-is.
+
+	This imports Fahrenheit's core library, which you must link against.
+	You're free to import other libraries as well using NuGet packages, which will automatically add to this group.
+
+	Project references MUST have Private set to "false" and ExcludeAssets set to "runtime".
+	-->
+	<ItemGroup>
+		<ProjectReference Include="..\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj">
+			<Private>false</Private>
+			<ExcludeAssets>runtime</ExcludeAssets>
+		</ProjectReference>
+	</ItemGroup>
+
+</Project>
