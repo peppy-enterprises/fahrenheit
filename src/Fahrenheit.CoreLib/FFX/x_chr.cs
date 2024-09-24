@@ -216,7 +216,7 @@ public unsafe struct Chr {
     public bool ignores_zanmato      { readonly get { return extra_resist.get_bit(6); } set { extra_resist.set_bit(6, value); } }
     public bool ignores_bribe        { readonly get { return extra_resist.get_bit(7); } set { extra_resist.set_bit(7, value); } }
 
-    // Elemental affinities, resistances, et al.
+    // Elemental properties
     public bool has_firestrike    { readonly get { return elem_wpn.get_bit(0); } set { elem_wpn.set_bit(0, value); } }
     public bool has_icestrike     { readonly get { return elem_wpn.get_bit(1); } set { elem_wpn.set_bit(1, value); } }
     public bool has_thunderstrike { readonly get { return elem_wpn.get_bit(2); } set { elem_wpn.set_bit(2, value); } }

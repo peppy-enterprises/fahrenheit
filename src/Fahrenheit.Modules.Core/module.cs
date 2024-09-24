@@ -68,7 +68,7 @@ public unsafe class FhCoreModule : FhModule {
         _update_input = new(this, game, update_input, offset: 0x471d10);
         _render_game  = new(this, game, render_game,  offset: 0x4abce0);
 
-        _moduleState  = FhModuleState.InitSuccess;
+        _moduleState = FhModuleState.InitSuccess;
     }
 
     public override bool FhModuleInit() {

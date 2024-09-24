@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Fahrenheit.CoreLib;
 
@@ -19,6 +20,17 @@ public class FhMethodHandle<T> where T : Delegate {
         handle_owner = owner;
         orig_fptr    = Marshal.GetDelegateForFunctionPointer<T>(fn_addr);
         hook_fptr    = hook;
+    }
+
+    private bool calc_fnaddr(string module_name, nint offset, out nint fn_addr) {
+        nint mod_addr  = FhPInvoke.GetModuleHandle(module_name);
+        fn_addr        = mod_addr + offset;
+        return mod_addr != 0;
+    }
+
+    private bool calc_fnaddr(string moduleName, string fn_name, out nint fn_addr) {
+        fn_addr = FhPInvoke.GetProcAddress(FhPInvoke.GetModuleHandle(moduleName), fn_name);
+        return fn_addr != 0;
     }
 
     private void calc_fnaddr_or_throw(string module_name, nint offset, string? fn_name) {

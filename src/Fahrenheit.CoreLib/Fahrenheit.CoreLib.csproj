@@ -18,7 +18,7 @@
 
     <!-- LOCAL DEPLOYMENT TARGET -->
     <PropertyGroup>
-        <CopyToDir>$(SolutionDir)artifacts\localdeploy\bin</CopyToDir>
+        <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -27,7 +27,7 @@
 
     <!-- SHARED FILE LINKS -->
     <ItemGroup>
-        <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
+        <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
 </Project>
