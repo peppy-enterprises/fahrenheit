@@ -1,5 +1,4 @@
 ﻿<Project>
-
 	<!-- ASSEMBLY BASIC PROPERTIES -->
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,14 +11,14 @@
 
 	<!-- ASSEMBLY ADDITIONAL PROPERTIES -->
 	<PropertyGroup>
-		<AssemblyName>fhcshook</AssemblyName>
-		<AssemblyTitle>Fahrenheit C# Hook Library</AssemblyTitle>
-		<Product>Fahrenheit C# Hook Library</Product>
+		<AssemblyName>fhcore</AssemblyName>
+		<AssemblyTitle>Core mod for Final Fantasy X</AssemblyTitle>
+		<Product>Core mod for Final Fantasy X</Product>
 	</PropertyGroup>
 
 	<!-- LOCAL DEPLOYMENT TARGET -->
 	<PropertyGroup>
-		<CopyToDir>$(SolutionDir)\artifacts\localdeploy\modules</CopyToDir>
+		<CopyToDir>$(SolutionDir)artifacts\localdeploy\modules\$(AssemblyName)</CopyToDir>
 	</PropertyGroup>
 
 	<!-- SDK REFERENCES -->
@@ -28,7 +27,7 @@
 
 	<!-- SHARED FILE LINKS -->
 	<ItemGroup>
-		<None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+		<None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
 	</ItemGroup>
 
 	<!-- PROJECT REFERENCES -->
@@ -37,11 +36,6 @@
 			<Private>false</Private>
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</ProjectReference>
-	</ItemGroup>
-	<ItemGroup>
-	  <Reference Include="ImGui.NET">
-	    <HintPath>..\..\..\..\..\..\..\Downloads\__IMGUI_EXTERN\ImGui.NET.dll</HintPath>
-	  </Reference>
 	</ItemGroup>
 
 </Project>

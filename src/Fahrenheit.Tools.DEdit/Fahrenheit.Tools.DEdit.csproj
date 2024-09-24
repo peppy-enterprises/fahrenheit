@@ -18,18 +18,18 @@
 
 	<!-- LOCAL DEPLOYMENT TARGET -->
 	<PropertyGroup>
-		<CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
+		<CopyToDir>$(SolutionDir)artifacts\localdeploy\bin</CopyToDir>
 	</PropertyGroup>
-	
+
 	<!-- SDK REFERENCES -->
 	<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
 	<!-- SHARED FILE LINKS -->
 	<ItemGroup>
-		<None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+		<None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
 	</ItemGroup>
-	
+
 	<!-- PROJECT REFERENCES -->
 	<ItemGroup>
 		<ProjectReference Include="..\Fahrenheit.CoreLib\Fahrenheit.CoreLib.csproj" />

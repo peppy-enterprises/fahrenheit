@@ -1,12 +1,35 @@
 ﻿namespace Fahrenheit.CoreLib.FFX;
 
 public static unsafe class Globals {
+    public static LocalizationManager* localization_manager => (LocalizationManager*)FhUtil.get_at<nint>(0x8DED48);
+
     public static class Map {
         public static int*        tri_count { get { return FhUtil.ptr_at<int>       (0xF01A48); } }
         public static VpaTri*     tris      { get { return FhUtil.ptr_at<VpaTri>    (0xF01A44); } }
         public static VpaVertex*  vertices  { get { return FhUtil.ptr_at<VpaVertex> (0xF01A4C); } }
         public static float*      scale     { get { return FhUtil.ptr_at<float>     (0xF01A50); } }
         public static VpaNavMesh* navmesh   { get { return FhUtil.ptr_at<VpaNavMesh>(0xF01A54); } }
+    }
+
+    public static class Magic {
+        public static i32* current_id => FhUtil.ptr_at<i32>(0x864CA0);
+        public static i32* current_handle => FhUtil.ptr_at<i32>(0x864CA8);
+
+        public static i32* to_be_deleted_id => FhUtil.ptr_at<i32>(0x864CA4);
+        public static i32* to_be_deleted_handle => FhUtil.ptr_at<i32>(0x864CAC);
+
+        public static i32* effect_ptr => FhUtil.ptr_at<i32>(0xD33360);
+        public static  u8* effect_status_flag => FhUtil.ptr_at<u8>(0xD33364);
+    }
+
+    public static class Atel {
+        public static int*         request_count { get { return FhUtil.ptr_at<int>(0xD34564);         } }
+        public static AtelRequest* request_list  { get { return FhUtil.ptr_at<AtelRequest>(0xD35D68); } }
+
+        public static AtelWorkerController* controllers { get { return FhUtil.ptr_at<AtelWorkerController>(0xF25B60); } }
+
+        public static AtelBasicWorker*      current_worker     { get { return FhUtil.ptr_at<AtelBasicWorker>     (0xF270A4); } }
+        public static AtelWorkerController* current_controller { get { return FhUtil.ptr_at<AtelWorkerController>(0xF26AE8); } }
     }
 
     public static class SphereGrid {
@@ -82,18 +105,12 @@ public static unsafe class Globals {
         }
     }
 
+    public static Actor* actors => FhUtil.ptr_at<Actor>(0x1FC44E4);
+
     public static Btl*             btl             { get { return FhUtil.ptr_at<Btl>            (0xD2A8D0);  } }
     public static BtlRewardData*   btl_reward_data { get { return FhUtil.ptr_at<BtlRewardData>  (0x1F10EA0); } }
     public static SaveData*        save_data       { get { return FhUtil.ptr_at<SaveData>       (0xD2CA90);  } }
     //public static ParamDataStruct* param_data      { get { return FhUtil.ptr_at<ParamDataStruct>(0x1F11240); } }
-
-    public static int*         atel_request_count { get { return FhUtil.ptr_at<int>(0xD34564);         } }
-    public static AtelRequest* atel_request_list  { get { return FhUtil.ptr_at<AtelRequest>(0xD35D68); } }
-
-    public static AtelWorkerController* atel_ctrl_workers { get { return FhUtil.ptr_at<AtelWorkerController>(0xF25B60); } }
-
-    public static AtelBasicWorker*      cur_atel_worker      { get { return FhUtil.ptr_at<AtelBasicWorker>     (0xF270A4); } }
-    public static AtelWorkerController* cur_ctrl_atel_worker { get { return FhUtil.ptr_at<AtelWorkerController>(0xF26AE8); } }
 
     public static BtlWindow* btl_windows    { get { return FhUtil.ptr_at<BtlWindow>         (0xF3C910);  } }
     public static BtlWindow* cur_btl_window { get { return btl_windows + FhUtil.get_at<byte>(0x1FCC092); } }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Fahrenheit.CoreLib;
@@ -17,7 +18,15 @@ public record struct FhPointerDeref(nint Offset, bool AsPtr);
  * and _before_ a e.g. string deref. Hence, you MUST appropriately guard FhPointer operations lest you crash the game.
  */
 public unsafe readonly struct FhPointer {
-    private readonly FhPointerDeref[] _derefs;
+
+    private readonly static List<nint>       _pending_waits;
+    private readonly static object           _pending_waits_lock;
+    private readonly        FhPointerDeref[] _derefs;
+
+    static FhPointer() {
+        _pending_waits      = new List<nint>(31);
+        _pending_waits_lock = new object();
+    }
 
     public FhPointer(FhPointerDeref[] derefs) {
         _derefs = derefs;
@@ -42,11 +51,17 @@ public unsafe readonly struct FhPointer {
      * TestStructA is valid. An `uint` is blittable, 4 bytes in managed and unmanaged view.
      * TestStructB is invalid. A `bool` marshaled as Win32 BOOL is 1 byte managed, 4 bytes unmanaged. The request is invalid and Fahrenheit will crash the game before you do.
      */
-    private static void ThrowIfTInvalid<T>() where T : unmanaged {
+    private static void throw_if_type_parameter_invalid<T>() where T : unmanaged {
         if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_UNSAFE_OPERATION: {typeof(T).FullName}");
     }
 
-    private nint DerefOffsetsInternal() {
+    public static IEnumerable<nint> get_pending_wait_addresses() {
+        lock (_pending_waits_lock) { // I'm not entirely sure the lock is necessary, but better safe than sorry...
+            foreach (nint addr in _pending_waits) yield return addr;
+        }
+    }
+
+    private nint deref_offsets_internal() {
         nint ptr = nint.Zero;
 
         foreach (FhPointerDeref deref in _derefs) {
@@ -57,23 +72,23 @@ public unsafe readonly struct FhPointer {
         return ptr;
     }
 
-    public bool DerefOffsets(out nint vptr) {
-        return (vptr = DerefOffsetsInternal()) != nint.MaxValue;
+    public bool deref_offsets(out nint vptr) {
+        return (vptr = deref_offsets_internal()) != nint.MaxValue;
     }
 
-    public T DerefPrimitive<T>() where T : unmanaged {
-        ThrowIfTInvalid<T>();
-        return DerefOffsets(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
+    public T deref_primitive<T>() where T : unmanaged {
+        throw_if_type_parameter_invalid<T>();
+        return deref_offsets(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
     }
 
-    public void WritePrimitive<T>(T value) where T : unmanaged {
-        ThrowIfTInvalid<T>();
-        if (!DerefOffsets(out nint vptr)) return;
+    public void write_primitive<T>(T value) where T : unmanaged {
+        throw_if_type_parameter_invalid<T>();
+        if (!deref_offsets(out nint vptr)) return;
         Unsafe.Write(vptr.ToPointer(), value);
     }
 
-    public string DerefString(FhStringType strtype) {
-        if (!DerefOffsets(out nint vptr)) return string.Empty;
+    public string deref_string(FhStringType strtype) {
+        if (!deref_offsets(out nint vptr)) return string.Empty;
 
         return strtype switch {
             FhStringType.Uni  => Marshal.PtrToStringUni(vptr)!,
@@ -88,11 +103,13 @@ public unsafe readonly struct FhPointer {
      * https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitonaddress.
      */
 
-    public bool AwaitValue<T>(T target) where T : unmanaged {
-        if (!DerefOffsets(out nint vptr)) {
-            FhLog.Warning($"AwaitValue was called but the supplied pointer resolved to nothing.");
+    public bool try_await_value<T>(T target) where T : unmanaged {
+        if (!deref_offsets(out nint vptr)) {
+            FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }
+
+        lock (_pending_waits_lock) { _pending_waits.Add(vptr); }
 
         void* maptr = vptr.ToPointer(); // Void pointer to monitored addr.
         T     maval = *(T*)maptr;       // Value at monitored addr at call start.
@@ -104,20 +121,22 @@ public unsafe readonly struct FhPointer {
         T* curptr = &cur;
 
         while (!cur.Equals(target)) {
-            FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1);
+            FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), FhPInvoke.INFINITE);
             cur = *(T*)maptr;
         }
 
-        return true;
+        lock (_pending_waits_lock) { return _pending_waits.Remove(vptr); }
     }
 
-    public bool AwaitValues<T>(in ReadOnlySpan<T> targets, out T match) where T : unmanaged {
+    public bool try_await_values<T>(in ReadOnlySpan<T> targets, out T match) where T : unmanaged {
         match = default;
 
-        if (!DerefOffsets(out nint vptr)) {
-            FhLog.Warning($"AwaitValue was called but the supplied pointer resolved to nothing.");
+        if (!deref_offsets(out nint vptr)) {
+            FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }
+
+        lock (_pending_waits_lock) { _pending_waits.Add(vptr); }
 
         void* maptr = vptr.ToPointer(); // `m`onitored `a`ddress pointer.
         T     maval = *(T*)maptr;       // `m`onitored `a`ddress value.
@@ -127,12 +146,12 @@ public unsafe readonly struct FhPointer {
                 return true;
         }
 
-        T    cur    = maval;
-        T*   curptr = &cur;
-        bool hasMatched  = false;
+        T    cur        = maval;
+        T*   curptr     = &cur;
+        bool hasMatched = false;
 
         while (!hasMatched) {
-            FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), 1);
+            FhPInvoke.WaitOnAddress(curptr, maptr, sizeof(T), FhPInvoke.INFINITE);
             cur = *(T*)maptr;
 
             foreach (T target in targets) {
@@ -143,6 +162,6 @@ public unsafe readonly struct FhPointer {
             }
         }
 
-        return true;
+        lock (_pending_waits_lock) { return _pending_waits.Remove(vptr); }
     }
 }
