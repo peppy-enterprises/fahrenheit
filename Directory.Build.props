@@ -1,8 +1,8 @@
 <Project>	
 	<PropertyGroup>
-		<BaseIntermediateOutputPath>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-		<BaseOutputPath>$(SolutionDir)\artifacts\build\$(MSBuildProjectName)\</BaseOutputPath>
-		<Copyright>(C) 2023 Fran 'peppy' Kelava</Copyright>
+		<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+		<BaseOutputPath>$(MSBuildThisFileDirectory)artifacts\build\$(MSBuildProjectName)\</BaseOutputPath>
+		<Copyright>(C) 2024 Fran 'peppy' Kelava</Copyright>
 		<Company>https://github.com/fkelava/fahrenheit</Company>
 	</PropertyGroup>
 </Project>
