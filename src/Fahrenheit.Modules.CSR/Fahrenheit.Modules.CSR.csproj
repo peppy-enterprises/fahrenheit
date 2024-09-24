@@ -19,7 +19,7 @@
 
     <!-- LOCAL DEPLOYMENT TARGET -->
     <PropertyGroup>
-        <CopyToDir>$(SolutionDir)\artifacts\localdeploy\modules</CopyToDir>
+        <CopyToDir>$(SolutionDir)\artifacts\localdeploy\modules\$(AssemblyName)</CopyToDir>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
