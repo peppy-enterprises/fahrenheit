@@ -39,7 +39,7 @@ public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C20;
 
     private          nint                                 _o_WndProcPtr;
-    private readonly WndProcDelegate                      _h_WndProc;
+    private readonly PInvoke.WndProcDelegate              _h_WndProc;
     private          nint                                 _h_WndProcPtr;
     private bool hooked_wndproc = false;
 
@@ -197,7 +197,7 @@ public unsafe class FhCoreModule : FhModule {
         //}
 
         // TODO: Fix WndProc hook causing StackOverflow
-        return Marshal.GetDelegateForFunctionPointer<WndProcDelegate>(_o_WndProcPtr)(hWnd, msg, wParam, lParam);
+        return Marshal.GetDelegateForFunctionPointer<PInvoke.WndProcDelegate>(_o_WndProcPtr)(hWnd, msg, wParam, lParam);
     }
 
     private bool try_hook_wndproc() {
