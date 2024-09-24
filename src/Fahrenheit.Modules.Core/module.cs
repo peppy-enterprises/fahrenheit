@@ -42,8 +42,8 @@ public unsafe class FhCoreModule : FhModule {
     private          nint                                 _o_WndProcPtr;
     private readonly WndProcDelegate                      _h_WndProc;
     private          nint                                 _h_WndProcPtr;
-
     private bool hooked_wndproc = false;
+
     //TODO: Add ImGui dependency
     //private bool ready_to_init_imgui = false;
     //private bool initialized_imgui = false;
@@ -66,7 +66,7 @@ public unsafe class FhCoreModule : FhModule {
         //_prep_init_imgui = new (this, "D3D11.dll", prep_init_imgui, fn_name: "D3D11CreateDeviceAndSwapChain");
 
         _main_loop =     new (this, game, main_loop, offset: 0x420C00);
-        _update_input = new (this, game, update_input, offset: 0x420C00);
+        _update_input = new (this, game, update_input, offset: 0x471d10);
         _render_game =  new(this, game, render_game, offset: 0x4abce0);
 
         _moduleState   = FhModuleState.InitSuccess;
@@ -81,8 +81,9 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public void main_loop(float delta) {
-        if (!hooked_wndproc)
-            try_hook_wndproc();
+        //TODO: Fix WndProc hook causing StackOverflow
+        //if (!hooked_wndproc)
+        //    try_hook_wndproc();
 
         //TODO: Add ImGui dependency
         //if (!initialized_imgui && ready_to_init_imgui)
@@ -192,11 +193,13 @@ public unsafe class FhCoreModule : FhModule {
     public nint h_wndproc(nint hWnd, uint msg, nint wParam, nint lParam) {
         if (_o_WndProcPtr == 0) throw new Exception("FH_E_OWNDPROC_NUL");
 
-        if (PInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1) {
-            return 1;
-        }
+        //TODO: Add ImGui dependency
+        //if (PInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1) {
+        //    return 1;
+        //}
 
-        return PInvoke.CallWindowProcW(_o_WndProcPtr, hWnd, msg, wParam, lParam);
+        // TODO: Fix WndProc hook causing StackOverflow
+        return Marshal.GetDelegateForFunctionPointer<WndProcDelegate>(_o_WndProcPtr)(hWnd, msg, wParam, lParam);
     }
 
     private bool try_hook_wndproc() {
