@@ -4,14 +4,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-using Fahrenheit.Modules.Core;
+using Fahrenheit.CoreLib;
 
 //TODO: Add ImGui dependency
 //using ImGuiNET;
 
 using static Fahrenheit.CoreLib.FhHookDelegates;
 
-namespace Fahrenheit.CoreLib;
+namespace Fahrenheit.Modules.Core;
 
 public sealed record FhCoreModuleConfig : FhModuleConfig {
     public FhCoreModuleConfig(string configName, bool configEnabled) : base(configName, configEnabled) { }
@@ -104,7 +104,7 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public void update_input() {
-        FFX.Globals.Input.update();
+        CoreLib.FFX.Globals.Input.update();
 
         _update_input.orig_fptr();
 
