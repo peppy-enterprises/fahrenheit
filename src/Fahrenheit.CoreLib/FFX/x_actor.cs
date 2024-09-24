@@ -1,8 +1,4 @@
-﻿/* [fkelava 13/9/22 08:11]
- * Based entirely on my own observations of game memory and decompilation.
- */
-
-namespace Fahrenheit.CoreLib.FFX;
+﻿namespace Fahrenheit.CoreLib.FFX;
 
 [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Auto, Pack = 4, Size = 0x880)]
 public unsafe struct Actor {
@@ -56,5 +52,5 @@ public unsafe struct Actor {
     [FieldOffset(0x6A4)] public Vec4f  chr_optpos_vec_23;
     [FieldOffset(0x6B4)] public Vec4f  chr_optpos_vec_24;
     [FieldOffset(0x6C4)] public Vec4f  chr_optpos_vec_25;
-    [FieldOffset(0x824)] public uint   chr_var1; //TODO: Figure out a better name. Comes from CSR.
+    [FieldOffset(0x824)] public uint   chr_var1; // TODO: Figure out a better name. Comes from CSR.
 }

@@ -32,20 +32,20 @@ internal static class DEditConfig {
 }
 
 internal sealed record DEditCharsetReaderConfig(string? DefaultNamespace);
-internal sealed record DEditDecompileConfig(FhCharsetId CharSet);
+internal sealed record DEditDecompileConfig(FhLangId CharSet);
 
 internal class DEditArgsBinder : BinderBase<FhDEditArgs> {
     private readonly Option<FhDEditMode> _optMode;
     private readonly Option<string>      _optDefNs;
     private readonly Option<string>      _optSrcPath;
     private readonly Option<string>      _optDestPath;
-    private readonly Option<FhCharsetId> _optCharSet;
+    private readonly Option<FhLangId>    _optCharSet;
 
     public DEditArgsBinder(Option<FhDEditMode> optMode,
                            Option<string>      optDefNs,
                            Option<string>      optFilePath,
                            Option<string>      optDestPath,
-                           Option<FhCharsetId> optCharSet) {
+                           Option<FhLangId>    optCharSet) {
         _optMode     = optMode;
         _optDefNs    = optDefNs;
         _optSrcPath  = optFilePath;
@@ -63,7 +63,7 @@ internal class DEditArgsBinder : BinderBase<FhDEditArgs> {
         string? defNs = bindingContext.ParseResult.GetValueForOption(_optDefNs);
 
         // Decompile mandatory
-        FhCharsetId charSet = bindingContext.ParseResult.GetValueForOption(_optCharSet);
+        FhLangId charSet = bindingContext.ParseResult.GetValueForOption(_optCharSet);
 
         return new FhDEditArgs(mode, srcPath, destPath, defNs, charSet);
     }
@@ -73,4 +73,4 @@ internal sealed record FhDEditArgs(FhDEditMode Mode,
                                    string      SrcPath,
                                    string      DestPath,
                                    string?     DefaultNamespace,
-                                   FhCharsetId CharSet);
+                                   FhLangId    CharSet);

@@ -32,12 +32,12 @@ public abstract class FhModule {
         protected set { _moduleState = value; }
     }
 
-    public virtual bool FhModuleInit() => true;
+    public virtual bool FhModuleInit()    => true;
     public virtual bool FhModuleOnError() => true;
 
-    public virtual void pre_update() { }
-    public virtual void post_update() { }
+    public virtual void pre_update()   { }
+    public virtual void post_update()  { }
     public virtual void handle_input() { }
     public virtual void render_imgui() { }
-    public virtual void render_game() { }
+    public virtual void render_game()  { }
 }

@@ -46,9 +46,9 @@ public unsafe struct Btl {
     [FieldOffset(0x100)]  public       ushort btl_bin_field_count;
     [FieldOffset(0x102)]  public       ushort size_btl_bin;
 
-    [FieldOffset(0x106)] public byte grace;
-    [FieldOffset(0x108)] public float walked_dist;
-    [FieldOffset(0x10C)] public float walked_dist_total;
+    [FieldOffset(0x106)] public        byte   grace;
+    [FieldOffset(0x108)] public        float  walked_dist;
+    [FieldOffset(0x10C)] public        float  walked_dist_total;
 
     [FieldOffset(0x120)]  public       uint   ptr_btl_bin_cur_field;
     [FieldOffset(0x124)]  public       uint   ptr_btl_bin_cur_encounter;

@@ -1,6 +1,6 @@
 ﻿/* [fkelava 17/5/23 02:48]
- * A shitty, quick tool to emit (mostly?!) valid C# from a C header.
- *
+ * A shitty, quick tool to emit (mostly?!) valid C# from a C header. 
+ * 
  * Only and specifically used to convert #defines to C# enums for constant imports.
  */
 
@@ -60,19 +60,18 @@ internal class Program {
 
         if (!hgline.StartsWith("#ifndef") || !hgline.ConstructHeaderGuard(out FhHeaderGuardNode? hg)) 
             throw new Exception("FH_E_H2CS_HG_ILLEGIBLE");
-
+        
         FhHeaderFile hf = new FhHeaderFile(hg, new List<FhDefineNode>());
-
+        
         foreach (string line in lines[2..]) {
-        {
             if (line.StartsWith("#define") && line.ConstructDefineNode(out FhDefineNode? define)) 
                 hf.Defines.Add(define);
         }
 
         if (!hf.TryEmitHeader(sb))
             throw new Exception("FH_E_H2CS_INTERNAL_FAULT");
+
         using (FileStream fs = File.Open(fn, FileMode.CreateNew)) {
-            using (StreamWriter sw = new StreamWriter(fs)) {
             using (StreamWriter sw = new StreamWriter(fs)) {
                 sw.Write(sb.ToString());
             }

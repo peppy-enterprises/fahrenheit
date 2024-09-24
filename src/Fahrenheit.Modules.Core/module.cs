@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -25,19 +24,19 @@ public sealed record FhCoreModuleConfig : FhModuleConfig {
 public unsafe class FhCoreModule : FhModule {
     private readonly FhCoreModuleConfig                   _moduleConfig;
 
-    private readonly FhMethodHandle<Sg_MainLoop>          _main_loop;
+    private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
-    private readonly FhMethodHandle<TODrawMessageWindow> _render_game;
+    private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
     //TODO: Add ImGui rendering
     //private readonly FhMethodHandle<???> _render_imgui;
     //TODO: Add ImGui dependency
     //private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _prep_init_imgui;
 
     //TODO: Move these to debug
-    //private readonly FhMethodHandle<PrintfVarargDelegate> _printf_22F6B0;
-    //private readonly FhMethodHandle<PrintfVarargDelegate> _printf_22FDA0;
-    //private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C10;
-    //private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C20;
+    private readonly FhMethodHandle<PrintfVarargDelegate> _printf_22F6B0;
+    private readonly FhMethodHandle<PrintfVarargDelegate> _printf_22FDA0;
+    private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C10;
+    private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C20;
 
     private          nint                                 _o_WndProcPtr;
     private readonly WndProcDelegate                      _h_WndProc;
@@ -56,20 +55,20 @@ public unsafe class FhCoreModule : FhModule {
         const string game = "FFX.exe";
 
         //TODO: Move these to Modules.Debug
-        //_printf_22F6B0 = new (this, "FFX.exe", h_printf_ansi, offset: 0x22F6B0);
-        //_printf_22FDA0 = new (this, "FFX.exe", h_printf_ansi, offset: 0x22FDA0);
-        //_printf_473C10 = new (this, "FFX.exe", h_printf_ansi, offset: 0x473C10);
-        //_printf_473C20 = new (this, "FFX.exe", h_printf_ansi, offset: 0x473C20);
+        _printf_22F6B0 = new(this, "FFX.exe", h_printf_ansi, offset: 0x22F6B0);
+        _printf_22FDA0 = new(this, "FFX.exe", h_printf_ansi, offset: 0x22FDA0);
+        _printf_473C10 = new(this, "FFX.exe", h_printf_ansi, offset: 0x473C10);
+        _printf_473C20 = new(this, "FFX.exe", h_printf_ansi, offset: 0x473C20);
 
-        _h_WndProc = new (h_wndproc);
+        _h_WndProc = new(h_wndproc);
         //TODO: Add ImGui dependency
         //_prep_init_imgui = new (this, "D3D11.dll", prep_init_imgui, fn_name: "D3D11CreateDeviceAndSwapChain");
 
-        _main_loop =     new (this, game, main_loop, offset: 0x420C00);
-        _update_input = new (this, game, update_input, offset: 0x471d10);
-        _render_game =  new(this, game, render_game, offset: 0x4abce0);
+        _main_loop    = new(this, game, main_loop,    offset: 0x420C00);
+        _update_input = new(this, game, update_input, offset: 0x471d10);
+        _render_game  = new(this, game, render_game,  offset: 0x4abce0);
 
-        _moduleState   = FhModuleState.InitSuccess;
+        _moduleState = FhModuleState.InitSuccess;
     }
 
     public override bool FhModuleInit() {
@@ -89,14 +88,14 @@ public unsafe class FhCoreModule : FhModule {
         //if (!initialized_imgui && ready_to_init_imgui)
         //    init_imgui();
 
-        foreach (FhModule module in FhModuleController.find_all().Select(context => context.Module)) {
-            module.pre_update();
+        foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
+            fmctx.Module.pre_update();
         }
 
         _main_loop.orig_fptr(delta);
 
-        foreach (FhModule module in FhModuleController.find_all().Select(context => context.Module)) {
-            module.post_update();
+        foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
+            fmctx.Module.post_update();
         }
 
         foreach (nint addr in FhPointer.get_pending_wait_addresses()) {
@@ -109,26 +108,25 @@ public unsafe class FhCoreModule : FhModule {
 
         _update_input.orig_fptr();
 
-        foreach (FhModule module in FhModuleController.find_all().Select(context => context.Module)) {
-            module.handle_input();
+        foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
+            fmctx.Module.handle_input();
         }
     }
 
     public new nint render_imgui() {
-        foreach (FhModule module in FhModuleController.find_all().Select(context => context.Module)) {
-            module.render_imgui();
+        foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
+            fmctx.Module.render_imgui();
         }
 
         //_render_imgui.orig_fptr();
-
         return 0;
     }
 
     public new void render_game() {
         _render_game.orig_fptr();
 
-        foreach (FhModule module in FhModuleController.find_all().Select(context => context.Module)) {
-            module.render_game();
+        foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
+            fmctx.Module.render_game();
         }
     }
 
@@ -223,62 +221,62 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     //TODO: Move this to Modules.Debug
-    //[UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-    //public static void h_printf_ansi(string fmt, nint va0, nint va1, nint va2, nint va3, nint va4, nint va5, nint va6, nint va7, nint va8, nint va9, nint va10, nint va11, nint va12, nint va13, nint va14, nint va15) {
-    //    int argc = 0;
-    //    fmt = fmt.Trim();
+    [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+    public static void h_printf_ansi(string fmt, nint va0, nint va1, nint va2, nint va3, nint va4, nint va5, nint va6, nint va7, nint va8, nint va9, nint va10, nint va11, nint va12, nint va13, nint va14, nint va15) {
+        int argc = 0;
+        fmt = fmt.Trim();
 
-    //    for (int i = 0; i < fmt.Length; i++) if (fmt[i] == '%') argc++;
+        for (int i = 0; i < fmt.Length; i++) if (fmt[i] == '%') argc++;
 
-    //    int bl = argc switch {
-    //        0  => FhPInvoke._scprintf(fmt, __arglist()),
-    //        1  => FhPInvoke._scprintf(fmt, __arglist(va0)),
-    //        2  => FhPInvoke._scprintf(fmt, __arglist(va0, va1)),
-    //        3  => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2)),
-    //        4  => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3)),
-    //        5  => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4)),
-    //        6  => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5)),
-    //        7  => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6)),
-    //        8  => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7)),
-    //        9  => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8)),
-    //        10 => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9)),
-    //        11 => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10)),
-    //        12 => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11)),
-    //        13 => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12)),
-    //        14 => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13)),
-    //        15 => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14)),
-    //        16 => FhPInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14, va15)),
-    //        _  => throw new Exception("FH_E_PFHOOK_RAH_OVERREACH")
-    //    };
+        int bl = argc switch {
+            0  => PInvoke._scprintf(fmt, __arglist()),
+            1  => PInvoke._scprintf(fmt, __arglist(va0)),
+            2  => PInvoke._scprintf(fmt, __arglist(va0, va1)),
+            3  => PInvoke._scprintf(fmt, __arglist(va0, va1, va2)),
+            4  => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3)),
+            5  => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4)),
+            6  => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5)),
+            7  => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6)),
+            8  => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7)),
+            9  => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8)),
+            10 => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9)),
+            11 => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10)),
+            12 => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11)),
+            13 => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12)),
+            14 => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13)),
+            15 => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14)),
+            16 => PInvoke._scprintf(fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14, va15)),
+            _  => throw new Exception("FH_E_PFHOOK_RAH_OVERREACH")
+        };
 
-    //    nint buf = Marshal.AllocHGlobal(bl + 1);
+        nint buf = Marshal.AllocHGlobal(bl + 1);
 
-    //    try {
-    //        int rv = argc switch {
-    //            0  => FhPInvoke.sprintf(buf, fmt, __arglist()),
-    //            1  => FhPInvoke.sprintf(buf, fmt, __arglist(va0)),
-    //            2  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1)),
-    //            3  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2)),
-    //            4  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3)),
-    //            5  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4)),
-    //            6  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5)),
-    //            7  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6)),
-    //            8  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7)),
-    //            9  => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8)),
-    //            10 => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9)),
-    //            11 => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10)),
-    //            12 => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11)),
-    //            13 => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12)),
-    //            14 => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13)),
-    //            15 => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14)),
-    //            16 => FhPInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14, va15)),
-    //            _  => throw new Exception("FH_E_PFHOOK_RAH_OVERREACH")
-    //        };
+        try {
+            int rv = argc switch {
+                0  => PInvoke.sprintf(buf, fmt, __arglist()),
+                1  => PInvoke.sprintf(buf, fmt, __arglist(va0)),
+                2  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1)),
+                3  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2)),
+                4  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3)),
+                5  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4)),
+                6  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5)),
+                7  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6)),
+                8  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7)),
+                9  => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8)),
+                10 => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9)),
+                11 => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10)),
+                12 => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11)),
+                13 => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12)),
+                14 => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13)),
+                15 => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14)),
+                16 => PInvoke.sprintf(buf, fmt, __arglist(va0, va1, va2, va3, va4, va5, va6, va7, va8, va9, va10, va11, va12, va13, va14, va15)),
+                _  => throw new Exception("FH_E_PFHOOK_RAH_OVERREACH")
+            };
 
-    //        FhLog.Info(Marshal.PtrToStringAnsi(buf) ?? "FH_E_PFHOOK_STRING_NUL");
-    //    }
-    //    finally {
-    //        Marshal.FreeHGlobal(buf);
-    //    }
-    //}
+            FhLog.Info(Marshal.PtrToStringAnsi(buf) ?? "FH_E_PFHOOK_STRING_NUL");
+        }
+        finally {
+            Marshal.FreeHGlobal(buf);
+        }
+    }
 }

@@ -12,14 +12,14 @@
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <AssemblyName>fhdebug</AssemblyName>
-        <AssemblyTitle>Debugging tools for Final Fantasy X</AssemblyTitle>
-        <Product>Debugging tools for Final Fantasy X</Product>
+        <AssemblyName>fhcsr</AssemblyName>
+        <AssemblyTitle>Fahrenheit port of the Cutscene Remover for Final Fantasy X</AssemblyTitle>
+        <Product>Fahrenheit port of the Cutscene Remover for Final Fantasy X</Product>
     </PropertyGroup>
 
     <!-- LOCAL DEPLOYMENT TARGET -->
     <PropertyGroup>
-        <CopyToDir>$(SolutionDir)\artifacts\localdeploy\modules</CopyToDir>
+        <CopyToDir>$(SolutionDir)artifacts\localdeploy\modules\$(AssemblyName)</CopyToDir>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -28,7 +28,7 @@
 
     <!-- SHARED FILE LINKS -->
     <ItemGroup>
-        <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+        <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
         <Compile Include="..\Fahrenheit.CoreLib\_fhtypedefs.cs" Link="_fhtypedefs.cs" />
     </ItemGroup>
 
@@ -38,11 +38,6 @@
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>
         </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Reference Include="ImGui.NET">
-        <HintPath>..\..\..\..\..\..\..\Downloads\__IMGUI_EXTERN\ImGui.NET.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>

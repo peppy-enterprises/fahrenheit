@@ -91,10 +91,6 @@ public static unsafe class FhUtil {
         for (; len > 0; len--, offset++) { bitField.set_bit(offset, value.get_bit(offset)); }
     }
 
-    public static unsafe Span<T> array<T>(ref this T start, int length) where T: struct {
-        return MemoryMarshal.CreateSpan<T>(ref start, length);
-    }
-
     public static ulong u64_swap_endian(ulong x) {
         // swap adjacent 32-bit blocks
         x = (x >> 32) | (x << 32);

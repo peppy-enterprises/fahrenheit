@@ -1,6 +1,8 @@
 <Project>
     <!-- LOCAL TESTING COPY TASK -->
 	<Target Name="CopyAfterBuild" AfterTargets="Build">
+	    
+	
 		<ItemGroup>
 			<ProjectFiles Include="$(TargetDir)\**\*.*" />
 		</ItemGroup>

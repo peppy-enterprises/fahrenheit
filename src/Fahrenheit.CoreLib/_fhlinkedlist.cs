@@ -4,40 +4,38 @@ using System.Collections.Generic;
 
 namespace Fahrenheit.CoreLib;
 
-public unsafe class FhLinkedList<T> : IEnumerable<T>
-        where T: unmanaged {
-    private readonly T* start;
-    private Func<T, nint> get_next;
-    private Func<T, nint>? get_prev;
+public unsafe class FhLinkedList<T> : IEnumerable<T> where T : unmanaged {
+    private readonly T*             _start;
+    private readonly Func<T, nint>  _get_next;
+    private readonly Func<T, nint>? _get_prev;
+
+    public FhLinkedList(T* start, Func<T, nint> get_next) {
+        _start    = start;
+        _get_next = get_next;
+        _get_prev = null;
+    }
+
+    public FhLinkedList(T* start, Func<T, nint> get_next, Func<T, nint>? get_prev) {
+        _start    = start;
+        _get_next = get_next;
+        _get_prev = get_prev;
+    }
 
     public int length {
         get {
             int len = 0;
-            for (T* current = start; get_next(*current) != 0; current = (T*)get_next(*current), len++);
+            for (T* current = _start; _get_next(*current) != 0; current = (T*)_get_next(*current), len++);
             return len;
         }
     }
 
-    public FhLinkedList(T* start, Func<T, nint> get_next) {
-        this.start = start;
-        this.get_next = get_next;
-        this.get_prev = null;
-    }
-
-    public FhLinkedList(T* start, Func<T, nint> get_next, Func<T, nint>? get_prev) {
-        this.start = start;
-        this.get_next = get_next;
-        this.get_prev = get_prev;
-    }
-
     public T this[int i] {
         get {
-            T* current = start;
+            T* current = _start;
+
             for (; i > 0; i--) {
-                if (get_next(*current) == 0) {
-                    throw new IndexOutOfRangeException();
-                }
-                current = (T*)get_next(*current);
+                if (_get_next(*current) == 0) throw new IndexOutOfRangeException();
+                current = (T*)_get_next(*current);
             }
 
             return *current;
@@ -45,36 +43,35 @@ public unsafe class FhLinkedList<T> : IEnumerable<T>
     }
 
     public IEnumerator<T> GetEnumerator() {
-        return new Enumerator<T>(start, get_next);
+        return new Enumerator(_start, _get_next);
     }
 
     IEnumerator IEnumerable.GetEnumerator() {
         throw new NotImplementedException();
     }
 
-    public class Enumerator<T> : IEnumerator<T>
-            where T: unmanaged {
-        private readonly T* start;
-        private T* current;
-        private Func<T, nint> get_next;
+    public class Enumerator : IEnumerator<T> {
+        private readonly T*            _start;
+        private          T*            _current;
+        private readonly Func<T, nint> _get_next;
 
         public Enumerator(T* start, Func<T, nint> get_next) {
-            this.start = current = start;
-            this.get_next = get_next;
+            _start = _current = start;
+            _get_next = get_next;
         }
 
-        public T Current => *current;
+        public T           Current => *_current;
         object IEnumerator.Current => Current!;
 
         public void Dispose() { }
 
         public bool MoveNext() {
-            current = (T*)get_next(*current);
-            return current != null;
+            _current = (T*)_get_next(*_current);
+            return _current != null;
         }
 
         public void Reset() {
-            current = start;
+            _current = _start;
         }
     }
 }
