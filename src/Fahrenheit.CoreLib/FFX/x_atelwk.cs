@@ -27,17 +27,17 @@ public unsafe struct AtelBasicWorker {
     [FieldOffset(0xC4)]  public AtelStack       stack;
     [FieldOffset(0x12C)] public AtelWorkThread* threads; // [9]
 
-    public readonly byte*           code_ptr          { get { return (byte*)         ((nint)script_chunk + script_chunk ->offset_code);               } }
-    public readonly uint*           table_event_data  { get { return (uint*)         ((nint)script_chunk + script_chunk ->offset_event_data);         } }
-    public readonly AtelScriptVar*  table_var         { get { return (AtelScriptVar*)((nint)script_chunk + script_header->offset_var_table);          } }
-    public readonly int*            table_int         { get { return (int*)          ((nint)script_chunk + script_header->offset_int_table);          } }
-    public readonly float*          table_float       { get { return (float*)        ((nint)script_chunk + script_header->offset_float_table);        } }
-    public readonly uint*           table_script      { get { return (uint*)         ((nint)script_chunk + script_header->offset_script_begin_table); } }
-    public readonly uint*           table_jump        { get { return (uint*)         ((nint)script_chunk + script_header->offset_jumps_begin_table);  } }
-    public readonly uint*           table_data        { get { return (uint*)         ((nint)script_chunk + script_header->offset_data);               } }
-    public readonly uint*           table_priv_data   { get { return (uint*)         ((nint)script_chunk + script_header->offset_priv_data);          } }
-    public readonly uint*           table_shared_data { get { return (uint*)         ((nint)script_chunk + script_header->offset_shared_data);        } }
-    public readonly AtelWorkThread* current_thread    { get { return threads + current_thread_priority;                                               } }
+    public readonly byte*           code_ptr          => (byte*)         ((nint)script_chunk + script_chunk ->offset_code);
+    public readonly uint*           table_event_data  => (uint*)         ((nint)script_chunk + script_chunk ->offset_event_data);
+    public readonly AtelScriptVar*  table_var         => (AtelScriptVar*)((nint)script_chunk + script_header->offset_var_table);
+    public readonly int*            table_int         => (int*)          ((nint)script_chunk + script_header->offset_int_table);
+    public readonly float*          table_float       => (float*)        ((nint)script_chunk + script_header->offset_float_table);
+    public readonly uint*           table_script      => (uint*)         ((nint)script_chunk + script_header->offset_script_begin_table);
+    public readonly uint*           table_jump        => (uint*)         ((nint)script_chunk + script_header->offset_jumps_begin_table);
+    public readonly uint*           table_data        => (uint*)         ((nint)script_chunk + script_header->offset_data);
+    public readonly uint*           table_priv_data   => (uint*)         ((nint)script_chunk + script_header->offset_priv_data);
+    public readonly uint*           table_shared_data => (uint*)         ((nint)script_chunk + script_header->offset_shared_data);
+    public readonly AtelWorkThread* current_thread    => threads + current_thread_priority;
 
-    public int pc_of(AtelWorkThread* thread) => (int)(thread->instruction_ptr - code_ptr);
+    public int pc_of(AtelWorkThread* thread) => (int)(thread->pc - code_ptr);
 }

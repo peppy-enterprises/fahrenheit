@@ -24,7 +24,7 @@ internal class Program {
         Option<string>      optDefNs    = new Option<string>("--ns", "Set the namespace of the resulting C# file, if reading a charset.");
         Option<string>      optFilePath = new Option<string>("--src", "Set the path to the source file.");
         Option<string>      optDestPath = new Option<string>("--dest", "Set the folder where the C#/text file should be written.");
-        Option<FhCharsetId> optCharSet  = new Option<FhCharsetId>("--cs", "Set the charset that should be used for the input file.");
+        Option<FhLangId>    optCharSet  = new Option<FhLangId>("--cs", "Set the charset that should be used for the input file.");
 
         optMode.IsRequired     = true;
         optFilePath.IsRequired = true;
@@ -66,12 +66,7 @@ internal class Program {
     }
 
     static void DEditDecompile() {
-        FhCharsetId cs = DEditConfig.Decompile!.CharSet;
-
-        if (cs == FhCharsetId.INVALID) {
-            Console.WriteLine("E_MISSING_CHARSET: Specify --cs at the command line.");
-            return;
-        }
+        FhLangId cs = DEditConfig.Decompile!.CharSet;
 
         string sfn       = Path.GetFileName(DEditConfig.SrcPath);
         bool   isMDict   = sfn == "macrodic.dcp";
@@ -94,7 +89,7 @@ internal class Program {
         Console.WriteLine($"{(isMDict ? "Macro dictionary" : "Dialogue")} {sfn}: Output is at {dfn}.");
     }
 
-    static string DEditDecompileDialogue(in ReadOnlySpan<byte> dialogue, FhCharsetId cs) {
+    static string DEditDecompileDialogue(in ReadOnlySpan<byte> dialogue, FhLangId cs) {
         int               idxCount = dialogue.GetDialogueIndexCount();
         FhDialogueIndex[] idxArray = new FhDialogueIndex[idxCount];
 
@@ -105,7 +100,7 @@ internal class Program {
         return dialogue.ReadDialogue(cs, idxArray);
     }
 
-    static string DEditDecompileMacroDict(in ReadOnlySpan<byte> dialogue, FhCharsetId cs) {
+    static string DEditDecompileMacroDict(in ReadOnlySpan<byte> dialogue, FhLangId cs) {
         FhMacroDictHeader header = dialogue.GetMacroDictHeader();
         StringBuilder     sb     = new StringBuilder();
 

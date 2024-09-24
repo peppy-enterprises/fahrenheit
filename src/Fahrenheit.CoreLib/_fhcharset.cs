@@ -1,49 +1,68 @@
 ﻿using System;
+using System.Text;
 
 namespace Fahrenheit.CoreLib;
 
-public enum FhCharsetId {
-    INVALID = 0,
-    JP      = 1,
-    CH      = 2,
-    CN      = 3,
-    KR      = 4,
-    US      = 5,
-    NEW_JP  = 6,
-    NEW_CH  = 7,
-    NEW_CN  = 8,
-    NEW_KR  = 9,
-    NEW_US  = 10,
-    NEW_DE  = 11,
-    NEW_FR  = 12,
-    NEW_IT  = 13,
-    NEW_SP  = 14
+public enum FhLangId {
+    Japanese = 0,
+    English  = 1,
+    French   = 2,
+    Spanish  = 3,
+    German   = 4,
+    Italian  = 5,
+    Korean   = 9,
+    Chinese  = 10,
+    Debug    = 11
 }
 
-public abstract partial class FhCharset {
+public abstract unsafe partial class FhCharset {
     public const char InvalidChar = char.MaxValue;
     public const byte InvalidByte = byte.MaxValue;
 
-    public bool ToBytes(in ReadOnlySpan<char> src, in Span<byte> dest) {
+    public void to_bytes(in ReadOnlySpan<char> src, in Span<byte> dest) {
         for (int i = 0; i < src.Length; i++) {
-            byte b;
-            if ((b = ToByte(src[i])) != InvalidByte)
-                dest[i] = b;
+            dest[i] = to_byte(src[i]);
         }
-
-        return true;
     }
 
-    public bool ToChars(in ReadOnlySpan<byte> src, in Span<char> dest) {
+    public void to_chars(in ReadOnlySpan<byte> src, in Span<char> dest) {
         for (int i = 0; i < src.Length; i++) {
-            char c;
-            if ((c = ToChar(src[i])) != InvalidChar)
-                dest[i] = c;
+            dest[i] = to_char(src[i]);
         }
-
-        return true;
     }
 
-    public abstract char ToChar(byte b);
-    public abstract byte ToByte(char c);
+    public byte[] to_bytes(in ReadOnlySpan<char> src) {
+        byte[] dest = new byte[src.Length];
+        to_bytes(src, dest);
+        return dest;
+    }
+
+    public char[] to_chars(in ReadOnlySpan<byte> src) {
+        char[] dest = new char[src.Length];
+        to_chars(src, dest);
+        return dest;
+    }
+
+    public string to_string(in ReadOnlySpan<byte> src) {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < src.Length; i++) {
+            result.Append(to_char(src[i]));
+        }
+
+        return result.ToString();
+    }
+
+    public string to_string(byte* src) {
+        StringBuilder result = new StringBuilder();
+
+        for (byte b = *src; b != 0x00; b = *++src) {
+            result.Append(to_char(b));
+        }
+
+        return result.ToString();
+    }
+
+    public abstract char to_char(byte b);
+    public abstract byte to_byte(char c);
 }

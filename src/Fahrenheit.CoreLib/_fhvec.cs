@@ -11,6 +11,16 @@ public struct LVec3f {
     public float latch;
 }
 
+public struct Vec2s16 {
+    public short x;
+    public short y;
+}
+
+public struct Vec2f {
+    public float x;
+    public float y;
+}
+
 public struct Vec3f {
     public float x;
     public float y;

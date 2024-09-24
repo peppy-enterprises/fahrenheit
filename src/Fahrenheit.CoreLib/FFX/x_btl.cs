@@ -45,6 +45,11 @@ public unsafe struct Btl {
     [FieldOffset(0xFC)]   public       uint   ptr_btl_bin_encounters;
     [FieldOffset(0x100)]  public       ushort btl_bin_field_count;
     [FieldOffset(0x102)]  public       ushort size_btl_bin;
+
+    [FieldOffset(0x106)] public        byte   grace;
+    [FieldOffset(0x108)] public        float  walked_dist;
+    [FieldOffset(0x10C)] public        float  walked_dist_total;
+
     [FieldOffset(0x120)]  public       uint   ptr_btl_bin_cur_field;
     [FieldOffset(0x124)]  public       uint   ptr_btl_bin_cur_encounter;
     [FieldOffset(0x128)]  public       uint   ptr_btl_bin_cur_group;
@@ -52,6 +57,8 @@ public unsafe struct Btl {
     [FieldOffset(0x15C0)] public       uint   chosen_gil;
     [FieldOffset(0x1984)] public       ushort battlefield_id;
     [FieldOffset(0x1986)] public       ushort field_idx;
+    [FieldOffset(0x1988)] public       byte   group_idx;
+    [FieldOffset(0x1989)] public       byte   formation_idx;
     [FieldOffset(0x198A)] public fixed byte   field_name[8];
     [FieldOffset(0x2008)] public       uint   last_com;
     [FieldOffset(0x210C)] public       byte   ambush_state;

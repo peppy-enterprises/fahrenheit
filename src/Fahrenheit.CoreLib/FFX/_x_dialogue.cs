@@ -36,7 +36,7 @@ public static class FhDialogueUtil {
         FhUtil.cast_from_bytes<FhMacroDictIndex>(dialogue[0..endpos], callerArray, endpos, out count);
     }
 
-    internal static void ReadLineInternal(this in ReadOnlySpan<byte> dialogue, in FhCharsetId cs, in StringBuilder sb, T_FhDialoguePos start, T_FhDialoguePos end) {
+    internal static void ReadLineInternal(this in ReadOnlySpan<byte> dialogue, in FhLangId cs, in StringBuilder sb, T_FhDialoguePos start, T_FhDialoguePos end) {
         ReadOnlySpan<byte> slice = dialogue[start..end];
 
         if (slice.Length == 0) return;
@@ -53,15 +53,15 @@ public static class FhDialogueUtil {
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static char ResolveChar(FhCharsetId cs, byte b) {
+    internal static char ResolveChar(FhLangId cs, byte b) {
         // We check that CharSet is not invalid in DEditDecompile().
         return cs switch {
-            FhCharsetId.US => FhCharset.Us.ToChar(b),
-            _              => throw new Exception("E_INVALID_CHARSET_ID")
+            FhLangId.English => FhCharset.Us.to_char(b),
+            _                => throw new Exception("E_INVALID_CHARSET_ID")
         };
     }
 
-    public static string ReadDialogue(this ReadOnlySpan<byte> dialogue, FhCharsetId cs, in FhDialogueIndex[] indices) {
+    public static string ReadDialogue(this ReadOnlySpan<byte> dialogue, FhLangId cs, in FhDialogueIndex[] indices) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < indices.Length - 1; i++)
@@ -70,7 +70,7 @@ public static class FhDialogueUtil {
         return sb.ToString();
     }
 
-    public static string ReadMacroDict(this ReadOnlySpan<byte> dialogue, FhCharsetId cs, in FhMacroDictIndex[] indices) {
+    public static string ReadMacroDict(this ReadOnlySpan<byte> dialogue, FhLangId cs, in FhMacroDictIndex[] indices) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < indices.Length - 1; i++)
