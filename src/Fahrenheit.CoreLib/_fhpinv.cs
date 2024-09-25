@@ -48,7 +48,7 @@ internal static unsafe partial class FhPInvoke {
     [LibraryImport("kernel32.dll", SetLastError = true)]
     internal static partial int ResumeThread(nint hThread);
 
-    [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16)]
+    [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
     internal static partial nint GetProcAddress(nint hModule, string lpProcName);
 
     [LibraryImport("kernel32.dll")]

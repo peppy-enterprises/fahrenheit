@@ -5,8 +5,7 @@ using System.Runtime.InteropServices;
 
 using Fahrenheit.CoreLib;
 
-//TODO: Add ImGui dependency
-//using ImGuiNET;
+using ImGuiNET;
 
 using static Fahrenheit.CoreLib.FhHookDelegates;
 
@@ -29,8 +28,7 @@ public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
     //TODO: Add ImGui rendering
     //private readonly FhMethodHandle<???> _render_imgui;
-    //TODO: Add ImGui dependency
-    //private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _prep_init_imgui;
+    private readonly FhMethodHandle<PInvoke.D3D11CreateDeviceAndSwapChain> _prep_init_imgui;
 
     //TODO: Move these to debug
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_22F6B0;
@@ -39,15 +37,13 @@ public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<PrintfVarargDelegate> _printf_473C20;
 
     private          nint                                 _o_WndProcPtr;
-    private readonly WndProcDelegate                      _h_WndProc;
+    private readonly PInvoke.WndProcDelegate              _h_WndProc;
     private          nint                                 _h_WndProcPtr;
-    private bool hooked_wndproc = false;
 
-    //TODO: Add ImGui dependency
-    //private bool ready_to_init_imgui = false;
-    //private bool initialized_imgui = false;
-    //private void* pDevice;
-    //private void* pContext;
+    private bool ready_to_init_imgui = false;
+    private bool initialized_imgui = false;
+    private nint* pDevice;
+    private nint* pContext;
 
     public FhCoreModule(FhCoreModuleConfig cfg) : base(cfg) {
         _moduleConfig  = cfg;
@@ -61,8 +57,7 @@ public unsafe class FhCoreModule : FhModule {
         _printf_473C20 = new(this, "FFX.exe", h_printf_ansi, offset: 0x473C20);
 
         _h_WndProc = new(h_wndproc);
-        //TODO: Add ImGui dependency
-        //_prep_init_imgui = new (this, "D3D11.dll", prep_init_imgui, fn_name: "D3D11CreateDeviceAndSwapChain");
+        _prep_init_imgui = new (this, "D3D11.dll", prep_init_imgui, fn_name: "D3D11CreateDeviceAndSwapChain");
 
         _main_loop    = new(this, game, main_loop,    offset: 0x420C00);
         _update_input = new(this, game, update_input, offset: 0x471d10);
@@ -72,21 +67,17 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public override bool FhModuleInit() {
-        //TODO: Add ImGui dependency
-        return //_prep_init_imgui.hook()
-               _main_loop.hook()
+        return _prep_init_imgui.hook()
+            && _main_loop.hook()
             && _update_input.hook()
             && _render_game.hook();
     }
 
     public void main_loop(float delta) {
-        //TODO: Fix WndProc hook causing StackOverflow
-        //if (!hooked_wndproc)
-        //    try_hook_wndproc();
-
-        //TODO: Add ImGui dependency
-        //if (!initialized_imgui && ready_to_init_imgui)
-        //    init_imgui();
+        if (!initialized_imgui && ready_to_init_imgui) {
+            init_imgui();
+            try_hook_wndproc();
+        }
 
         foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
             fmctx.Module.pre_update();
@@ -130,79 +121,79 @@ public unsafe class FhCoreModule : FhModule {
         }
     }
 
-    //TODO: Add ImGui dependency
-    //public void prep_init_imgui(
-    //        nint pAdapter,
-    //        nint DriverType,
-    //        nint Software,
-    //        uint Flags,
-    //        nint pFeatureLevels,
-    //        uint FeatureLevels,
-    //        uint SDKVersion,
-    //        nint pSwapChainDesc,
-    //        nint ppSwapChain,
-    //        nint ppDevice,
-    //        nint pFeatureLevel,
-    //        nint ppImmediateContext) {
-    //    _prep_init_imgui.orig_fptr(
-    //            pAdapter,
-    //            DriverType,
-    //            Software,
-    //            Flags,
-    //            pFeatureLevels,
-    //            FeatureLevels,
-    //            SDKVersion,
-    //            pSwapChainDesc,
-    //            ppSwapChain,
-    //            ppDevice,
-    //            pFeatureLevel,
-    //            ppImmediateContext);
+    public nint prep_init_imgui(
+            nint pAdapter,
+            nint DriverType,
+            nint Software,
+            uint Flags,
+            nint pFeatureLevels,
+            uint FeatureLevels,
+            uint SDKVersion,
+            nint pSwapChainDesc,
+            nint ppSwapChain,
+            nint ppDevice,
+            nint pFeatureLevel,
+            nint ppImmediateContext) {
+        nint result = _prep_init_imgui.orig_fptr(
+                pAdapter,
+                DriverType,
+                Software,
+                Flags,
+                pFeatureLevels,
+                FeatureLevels,
+                SDKVersion,
+                pSwapChainDesc,
+                ppSwapChain,
+                ppDevice,
+                pFeatureLevel,
+                ppImmediateContext);
 
-    //    if (initialized_imgui) return;
+        if (initialized_imgui || result != 0)
+            return result;
 
-    //    pDevice = (void*)*(nint*)ppDevice;
-    //    pContext = (void*)*(nint*)ppImmediateContext;
+        pDevice = *(nint**)ppDevice;
+        pContext = *(nint**)ppImmediateContext;
 
-    //    ready_to_init_imgui = true;
-    //}
+        ready_to_init_imgui = true;
+        return result;
+    }
 
-    //TODO: Add ImGui dependency
-    //private void init_imgui() {
-    //    ImGui.CreateContext();
-    //    ImGuiIOPtr io = ImGui.GetIO();
+    private void init_imgui() {
+        ImGui.CreateContext();
+        ImGuiIOPtr io = ImGui.GetIO();
 
-    //    // Enable controls
-    //    //io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-    //    //io.ConfigFlags |= ImGuiConfigFlags.NavEnableGamepad;
+        // Enable controls
+        //io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+        //io.ConfigFlags |= ImGuiConfigFlags.NavEnableGamepad;
 
-    //    ImGui.StyleColorsDark();
+        ImGui.StyleColorsDark();
 
-    //    FhLog.Debug($"Initializing ImGui win32 with hwnd {PInvoke.FindWindow("FINAL FANTASY X"):X8}...");
-    //    ImGui.ImGui_ImplWin32_Init(PInvoke.FindWindow("FINAL FANTASY X"));
-    //    FhLog.Debug("Initializing ImGui DX11...");
-    //    ImGui.ImGui_ImplDX11_Init(pDevice, pContext);
+        FhLog.Debug($"Initializing ImGui win32 with hwnd {PInvoke.FindWindow(null, "FINAL FANTASY X"):X8}...");
+        ImGui.ImGui_ImplWin32_Init(PInvoke.FindWindow(null, "FINAL FANTASY X"));
+        FhLog.Debug("Initializing ImGui DX11...");
+        ImGui.ImGui_ImplDX11_Init(pDevice, pContext);
 
-    //    FhLog.Info("ImGui initialized!");
-    //    FhLog.Debug($"BackendPlatformName: {io.BackendPlatformName}: BackendPlatformUserData: {io.BackendPlatformUserData:X8}");
+        FhLog.Info("ImGui initialized!");
+        FhLog.Debug($"BackendPlatformName: {io.BackendPlatformName}: BackendPlatformUserData: {io.BackendPlatformUserData:X8}");
 
-    //    initialized_imgui = true;
-    //}
+        initialized_imgui = true;
+    }
 
     public nint h_wndproc(nint hWnd, uint msg, nint wParam, nint lParam) {
         if (_o_WndProcPtr == 0) throw new Exception("FH_E_OWNDPROC_NUL");
 
-        //TODO: Add ImGui dependency
-        //if (PInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1) {
-        //    return 1;
-        //}
+        if (PInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1) {
+            return 1;
+        }
 
-        // TODO: Fix WndProc hook causing StackOverflow
-        return Marshal.GetDelegateForFunctionPointer<WndProcDelegate>(_o_WndProcPtr)(hWnd, msg, wParam, lParam);
+        //FhLog.Debug($"WndProc [ hWnd: {hWnd:X8}h, msg: {msg:X4}h, wParam: {wParam:X4}h, lParam: {lParam:X4}h ]");
+
+        return PInvoke.CallWindowProcW(_o_WndProcPtr, hWnd, msg, wParam, lParam);
     }
 
     private bool try_hook_wndproc() {
         _h_WndProcPtr = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
-        nint hWnd     = PInvoke.FindWindow(null, "FINAL FANTASY X"); // shitfuck hack
+        nint hWnd     = PInvoke.FindWindow(null, "FINAL FANTASY X");
 
         if (hWnd == 0) {
             FhLog.Error("Could not find Final Fantasy X window");
