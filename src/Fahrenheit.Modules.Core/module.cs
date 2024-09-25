@@ -124,7 +124,7 @@ public unsafe class FhCoreModule : FhModule {
         }
     }
 
-    public void prep_init_imgui(
+    public nint prep_init_imgui(
             nint pAdapter,
             nint DriverType,
             nint Software,
@@ -137,7 +137,7 @@ public unsafe class FhCoreModule : FhModule {
             nint ppDevice,
             nint pFeatureLevel,
             nint ppImmediateContext) {
-        _prep_init_imgui.orig_fptr(
+        nint result = _prep_init_imgui.orig_fptr(
                 pAdapter,
                 DriverType,
                 Software,
@@ -151,13 +151,14 @@ public unsafe class FhCoreModule : FhModule {
                 pFeatureLevel,
                 ppImmediateContext);
 
-        if (initialized_imgui)
-            return;
+        if (initialized_imgui || result != 0)
+            return result;
 
         pDevice = *(nint**)ppDevice;
         pContext = *(nint**)ppImmediateContext;
 
         ready_to_init_imgui = true;
+        return result;
     }
 
     private void init_imgui() {
