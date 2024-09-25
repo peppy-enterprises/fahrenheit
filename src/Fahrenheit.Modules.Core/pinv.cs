@@ -35,7 +35,7 @@ internal static unsafe partial class PInvoke {
     public delegate nint WndProcDelegate(nint hWnd, uint msg, nint wParam, nint lParam);
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate void D3D11CreateDeviceAndSwapChain(
+    public delegate nint D3D11CreateDeviceAndSwapChain(
             nint pAdapter,
             nint DriverType,
             nint Software,
