@@ -31,7 +31,11 @@ public unsafe partial class DebugModule {
 
     public bool hook() {
         return _FUN_00a594c0.hook()
-            && _FUN_00a5a640.hook();
+            && _FUN_00a5a640.hook()
+            && _printf_22F6B0.hook()
+            && _printf_22FDA0.hook()
+            && _printf_473C10.hook()
+            && _printf_473C20.hook();
     }
 
     private static void render_sphere_grid(u8* text, i32 p2, i32 p3) {
