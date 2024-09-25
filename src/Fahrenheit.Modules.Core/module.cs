@@ -39,7 +39,6 @@ public unsafe class FhCoreModule : FhModule {
     private          nint                                 _o_WndProcPtr;
     private readonly PInvoke.WndProcDelegate              _h_WndProc;
     private          nint                                 _h_WndProcPtr;
-    private bool hooked_wndproc = false;
 
     private bool ready_to_init_imgui = false;
     private bool initialized_imgui = false;
@@ -75,12 +74,10 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public void main_loop(float delta) {
-        //TODO: Fix WndProc hook causing StackOverflow
-        //if (!hooked_wndproc)
-        //    try_hook_wndproc();
-
-        if (!initialized_imgui && ready_to_init_imgui)
+        if (!initialized_imgui && ready_to_init_imgui) {
             init_imgui();
+            try_hook_wndproc();
+        }
 
         foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
             fmctx.Module.pre_update();
@@ -189,8 +186,9 @@ public unsafe class FhCoreModule : FhModule {
             return 1;
         }
 
-        // TODO: Fix WndProc hook causing StackOverflow
-        return Marshal.GetDelegateForFunctionPointer<PInvoke.WndProcDelegate>(_o_WndProcPtr)(hWnd, msg, wParam, lParam);
+        FhLog.Debug($"WndProc [ hWnd: {hWnd:X8}h, msg: {msg:X4}h, wParam: {wParam:X4}h, lParam: {lParam:X4}h ]");
+
+        return PInvoke.CallWindowProcW(_o_WndProcPtr, hWnd, msg, wParam, lParam);
     }
 
     private bool try_hook_wndproc() {
