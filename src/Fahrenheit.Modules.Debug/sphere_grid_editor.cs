@@ -1,10 +1,9 @@
 ﻿using System.IO;
 
-using ImGuiNET;
-
 using Fahrenheit.CoreLib;
 using Fahrenheit.CoreLib.FFX;
 using static Fahrenheit.Modules.Debug.FuncLib;
+using System.Collections.Generic;
 
 namespace Fahrenheit.Modules.Debug;
 
@@ -140,7 +139,7 @@ public static unsafe class SphereGridEditor {
         Null = 0xFF,
     }
 
-    public static System.Collections.Generic.LinkedList<NodeType> NODE_TYPE_ORDER = new(
+    public static readonly LinkedList<NodeType> NODE_TYPE_ORDER = new(
         new NodeType[] {
             NodeType.EmptyNode,
             NodeType.Lock_1, NodeType.Lock_2, NodeType.Lock_3, NodeType.Lock_4,
@@ -282,10 +281,10 @@ public static unsafe class SphereGridEditor {
         i32 cur_idx = lpamng->selected_node_idx;
 
         NodeType cur_node = (NodeType)lpamng->nodes[cur_idx].node_type;
-        System.Collections.Generic.LinkedListNode<NodeType> next_node = NODE_TYPE_ORDER.Find(cur_node).Next;
+        LinkedListNode<NodeType> next_node = NODE_TYPE_ORDER.Find(cur_node).Next;
         next_node ??= NODE_TYPE_ORDER.First;
 
-        new_node_type = next_node.Value;
+        new_node_type = next_node!.Value;
 
         FUN_00a48740((i32)new_node_type, cur_idx);
         SndSepPlaySimple(0x8000006d);
@@ -295,10 +294,10 @@ public static unsafe class SphereGridEditor {
         i32 cur_idx = lpamng->selected_node_idx;
 
         NodeType cur_node = (NodeType)lpamng->nodes[cur_idx].node_type;
-        System.Collections.Generic.LinkedListNode<NodeType> next_node = NODE_TYPE_ORDER.Find(cur_node).Previous;
-        next_node ??= NODE_TYPE_ORDER.Last;
+        LinkedListNode<NodeType> next_node = NODE_TYPE_ORDER.Find(cur_node).Previous;
+        next_node ??= NODE_TYPE_ORDER.Last!;
 
-        new_node_type = next_node.Value;
+        new_node_type = next_node!.Value;
 
         FUN_00a48740((i32)new_node_type, cur_idx);
         SndSepPlaySimple(0x8000006d);
@@ -314,17 +313,6 @@ public static unsafe class SphereGridEditor {
          TOMkpCrossExtMesFontLClut(
                 0, FhCharset.Us.to_bytes(lpamng->selected_node_idx.ToString()),
                 50f, 50f, 0x00, 0, 0.69f, 0);
-
-        ImGui.ImGui_ImplDX11_NewFrame();
-        ImGui.ImGui_ImplWin32_NewFrame();
-        ImGui.NewFrame();
-
-        ImGui.ShowDemoWindow();
-
-        ImGui.Render();
-
-        // Hope it works?
-        ImGui.ImGui_ImplDX11_RenderDrawData(ImGui.GetDrawData());
     }
 
     public static void save() {
