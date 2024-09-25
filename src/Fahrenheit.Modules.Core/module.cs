@@ -186,7 +186,7 @@ public unsafe class FhCoreModule : FhModule {
             return 1;
         }
 
-        FhLog.Debug($"WndProc [ hWnd: {hWnd:X8}h, msg: {msg:X4}h, wParam: {wParam:X4}h, lParam: {lParam:X4}h ]");
+        //FhLog.Debug($"WndProc [ hWnd: {hWnd:X8}h, msg: {msg:X4}h, wParam: {wParam:X4}h, lParam: {lParam:X4}h ]");
 
         return PInvoke.CallWindowProcW(_o_WndProcPtr, hWnd, msg, wParam, lParam);
     }
