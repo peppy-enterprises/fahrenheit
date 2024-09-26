@@ -25,17 +25,11 @@ internal static unsafe partial class PInvoke {
     [DllImport("cimgui.dll")]
     public static extern nint ImGui_ImplWin32_WndProcHandler(nint hWnd, uint msg, nint wParam, nint lParam);
 
-    [DllImport("msvcrt.dll", CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int _scprintf(string format, __arglist);
-
-    [DllImport("msvcrt.dll", CharSet = CharSet.Ansi, BestFitMapping = false, ThrowOnUnmappableChar = true, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int sprintf(IntPtr buffer, string format, __arglist);
-
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate nint WndProcDelegate(nint hWnd, uint msg, nint wParam, nint lParam);
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate void D3D11CreateDeviceAndSwapChain(
+    public delegate nint D3D11CreateDeviceAndSwapChain(
             nint pAdapter,
             nint DriverType,
             nint Software,
