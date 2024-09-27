@@ -5,7 +5,7 @@
 @set NETTFM=net7.0
 
 @set SRCDIR=..\artifacts\build\CodeGenerator\Debug\%NETTFM%
-@set DESTDIR=%~dp0ImGui.NET\src\ImGui.NET\Generated
+@set DESTDIR=%~dp0fh-imgui-net\src\ImGui.NET\Generated
 
 :: Clean any existing generated output, then remake the generated directory.
 rd /s /q %DESTDIR%

@@ -4,6 +4,25 @@
 [submodule "extern/cimgui"]
 	path = extern/cimgui
 	url = https://github.com/cimgui/cimgui
-[submodule "extern/ImGui.NET"]
-	path = extern/ImGui.NET
-	url = https://github.com/fkelava/ImGui.NET
+[submodule "extern/fh-imgui-net"]
+	path = extern/fh-imgui-net
+	url = https://github.com/peppy-enterprises/fh-imgui-net
+[submodule "src/csr"]
+	path = src/csr
+	url = https://github.com/peppy-enterprises/fh-mods-csr
+[submodule "src/dbg"]
+	path = src/dbg
+	url = https://github.com/peppy-enterprises/fh-mods-debug
+[submodule "src/efl"]
+	path = src/efl
+	url = https://github.com/peppy-enterprises/fh-mods-efl
+[submodule "src/dedit"]
+	path = src/dedit
+	url = https://github.com/peppy-enterprises/fh-tools-dedit
+[submodule "src/h2cs"]
+	path = src/h2cs
+	url = https://github.com/peppy-enterprises/fh-tools-h2cs
+[submodule "src/truerng"]
+	path = src/truerng
+	url = https://github.com/peppy-enterprises/fh-mods-truerng
+
