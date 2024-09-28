@@ -112,4 +112,6 @@ public static unsafe class Globals {
 
     public static byte* hit_chance_table => FhUtil.ptr_at<byte>(0x8421E0);
 
+    public static i32* event_id => FhUtil.ptr_at<i32>(0xefbbf8);
+
 }
