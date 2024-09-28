@@ -101,7 +101,7 @@ public static unsafe class Globals {
         }
     }
 
-    public static Actor*         actors          => FhUtil.ptr_at<Actor>        (0x1FC44E4);
+    public static Actor*         actors          => (Actor*)*FhUtil.ptr_at<nint>(0x1FC44E4);
     public static Btl*           btl             => FhUtil.ptr_at<Btl>          (0xD2A8D0);
     public static BtlRewardData* btl_reward_data => FhUtil.ptr_at<BtlRewardData>(0x1F10EA0);
     public static SaveData*      save_data       => FhUtil.ptr_at<SaveData>     (0xD2CA90);
