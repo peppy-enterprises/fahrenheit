@@ -11,13 +11,11 @@ public static unsafe class FhUtil {
     public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                }
     public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;        }
 
-    public static nint get_mbase_or_throw() {
-        nint mbase;
-        if ((mbase = FhPInvoke.GetModuleHandle("FFX.exe")) == nint.Zero) {
-            if ((mbase = FhPInvoke.GetModuleHandle("FFX-2.exe")) == nint.Zero)
-                throw new Exception("FH_E_HOOK_TARGET_INDETERMINATE");
-        }
-        return mbase;
+    public static FhGameType get_game_type() {
+        FhGameType rv = 0;
+        if (FhPInvoke.GetModuleHandle("FFX.exe")   != 0) rv = FhGameType.FFX;
+        if (FhPInvoke.GetModuleHandle("FFX-2.exe") != 0) rv = FhGameType.FFX2;
+        return rv;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

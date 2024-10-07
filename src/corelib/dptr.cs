@@ -12,11 +12,6 @@ public enum FhStringType {
 
 public record struct FhPointerDeref(nint Offset, bool AsPtr);
 
-/* [fkelava 23/6/23 13:12]
- * Any use of FhPointer is _inherently_ unsafe in the sense that you will always be subject to possible AVs.
- * Since we have no control over execution, a pointer can become invalid in the instant _after_ internal validation
- * and _before_ a e.g. string deref. Hence, you MUST appropriately guard FhPointer operations lest you crash the game.
- */
 public unsafe readonly struct FhPointer {
 
     private readonly static List<nint>       _pending_waits;
