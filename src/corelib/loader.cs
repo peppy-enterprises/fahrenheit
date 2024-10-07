@@ -57,16 +57,12 @@ public static class FhLoader {
     private static bool load_single_module(string fullPath, [NotNullWhen(true)] out List<FhModuleConfig>? module_configs) {
         module_configs = new List<FhModuleConfig>();
 
-        string module_dir_name  = Path.GetDirectoryName(fullPath) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
-        string module_dll_name  = Path.GetFileNameWithoutExtension(fullPath).ToUpperInvariant();
-        string module_conf_name = Path.Join(module_dir_name, Path.GetFileName(fullPath).Replace(".dll", ".conf.json"));
+        string module_dir_name    = Path.GetDirectoryName(fullPath) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
+        string module_dll_name    = Path.GetFileNameWithoutExtension(fullPath).ToUpperInvariant();
+        string module_conf_name   = Path.Join(module_dir_name, Path.GetFileName(fullPath).Replace(".dll", ".conf.json"));
+        bool   should_load_config = File.Exists(module_conf_name);
 
-        bool should_load_config = File.Exists(module_conf_name);
-
-        if (is_assem_loaded(module_dll_name)) {
-            FhLog.Log(LogLevel.Info, $"{module_dll_name} already loaded; skipping.");
-            return true;
-        }
+        if (is_assem_loaded(module_dll_name)) return true;
 
         FhLog.Log(LogLevel.Info, $"Loading module {module_dll_name}.");
 
@@ -78,8 +74,6 @@ public static class FhLoader {
         // --> LOAD ORDERING; LOAD REFERENCED ASSEMBLIES FIRST <--
         foreach (AssemblyName refAssem in currentlyLoadingAssem.GetReferencedAssemblies()) {
             if (try_resolve_module_ref(module_dir_name, refAssem.Name ?? throw new Exception("FH_E_REF_ASSEM_NAME_NULL"), out string refAssemFullPath)) {
-                FhLog.Log(LogLevel.Info, $"{module_dll_name} depends on {refAssem.Name.ToUpperInvariant()}; trying to load it first.");
-
                 if (!load_single_module(refAssemFullPath, out List<FhModuleConfig>? ref_assem_module_configs))
                     throw new Exception("FH_E_REF_ASSEM_LOAD_FAULT");
 

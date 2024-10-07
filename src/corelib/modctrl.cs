@@ -71,14 +71,9 @@ public static class FhModuleController {
                     continue;
                 }
 
-                if (!fmcfg.TrySpawnModule(out FhModule? fm)) {
-                    FhLog.Log(LogLevel.Error, $"Module {fmcfg.ConfigName} [{fmcfg.Type}] constructor failed. Suppressing.");
+                FhModule fm = fmcfg.SpawnModule();
 
-                    retval = false;
-                    continue;
-                }
-
-                if (!fm.FhModuleInit()) {
+                if (!fm.init()) {
                     FhLog.Log(LogLevel.Warning, $"Module {fmcfg.ConfigName} [{fmcfg.Type}] initializer callback failed. Suppressing.");
 
                     retval = false;
