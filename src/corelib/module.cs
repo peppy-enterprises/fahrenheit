@@ -2,18 +2,8 @@
 
 namespace Fahrenheit.CoreLib;
 
-// TODO: Not yet fully defined/fleshed out
-public enum FhModuleState {
-    InitWaiting,
-    InitSuccess,
-    Started,
-    Stopped,
-    Fault
-}
-
 public abstract class FhModule {
-    protected string        _moduleName;
-    protected FhModuleState _moduleState;
+    protected string _moduleName;
 
     protected FhModule(FhModuleConfig moduleConfig) {
         _moduleName = moduleConfig.ConfigName;
@@ -27,13 +17,7 @@ public abstract class FhModule {
         get { return _moduleName; }
     }
 
-    public FhModuleState ModuleState {
-        get           { return _moduleState;  }
-        protected set { _moduleState = value; }
-    }
-
-    public virtual bool FhModuleInit()    => true;
-    public virtual bool FhModuleOnError() => true;
+    public abstract bool init();
 
     public virtual void pre_update()   { }
     public virtual void post_update()  { }

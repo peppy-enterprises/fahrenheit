@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -16,7 +15,7 @@ public abstract record FhConfigStruct {
 }
 
 public abstract record FhModuleConfig(string ConfigName, bool ConfigEnabled) : FhConfigStruct(ConfigName) {
-    public abstract bool TrySpawnModule([NotNullWhen(true)] out FhModule? fm);
+    public abstract FhModule SpawnModule();
 }
 
 /* [fkelava 27/2/23 00:02]
