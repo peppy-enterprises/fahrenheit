@@ -137,12 +137,8 @@ public static class FhLoader {
     }
 
     /* [fkelava 27/2/23 00:12]
-     * In systems such as ours where JSON-serialized objects contain their full type name
-     * to allow for polymorphic deserialization, we must prevent the spawning of arbitrary types.
-     *
-     * These methods take the "Type" variable of a given JSON configuration and try to resolve it
-     * to an actual Type instance while making sure that it not only exists, but is what we expect-
-     * usually a derived type of FhModuleConfig.
+     * Resolves a full type name in the "Type" variable of a given FhModuleConfig JSON
+     * to an actual Type instance, verifying that it is in fact derived from FhModuleConfig.
      */
     public static bool strict_resolve_descendant_of<T>(this ref Utf8JsonReader reader,
                                                                 Type           typeToConvert,

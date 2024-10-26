@@ -14,13 +14,6 @@ public static class FhModuleController {
         _moduleManipLock = new object();
     }
 
-    private static FhModuleContext? get_context_for_module(in FhModule module) {
-        foreach (FhModuleContext fmctx in _moduleContexts)
-            if (fmctx.Module == module) return fmctx;
-
-        return default;
-    }
-
     public static IEnumerable<FhModuleContext> find_all() {
         lock (_moduleManipLock) {
             foreach (FhModuleContext fmctx in _moduleContexts) yield return fmctx;
@@ -30,7 +23,7 @@ public static class FhModuleController {
     public static FhModuleContext? find<TModule>() where TModule : FhModule {
         lock (_moduleManipLock) {
             foreach (FhModuleContext fmctx in _moduleContexts) {
-                if (fmctx.Module is TModule tfm) return fmctx;
+                if (fmctx.Module is TModule) return fmctx;
             }
         }
         return null;
@@ -39,7 +32,7 @@ public static class FhModuleController {
     public static IEnumerable<FhModuleContext> find_all<TModule>() where TModule : FhModule {
         lock (_moduleManipLock) {
             foreach (FhModuleContext fmctx in _moduleContexts) {
-                if (fmctx.Module is TModule tfm) yield return fmctx;
+                if (fmctx.Module is TModule) yield return fmctx;
             }
         }
     }
@@ -73,15 +66,20 @@ public static class FhModuleController {
 
                 FhModule fm = fmcfg.SpawnModule();
 
+                FhLog.Log(LogLevel.Warning, $"Initialized module {fmcfg.ConfigName} [{fmcfg.Type}].");
+                _moduleContexts.Add(new FhModuleContext(fm, fmcfg));
+            }
+
+            foreach (FhModuleContext fmctx in _moduleContexts) {
+                FhModuleConfig fmcfg = fmctx.ModuleConfig;
+                FhModule       fm    = fmctx.Module;
+
                 if (!fm.init()) {
                     FhLog.Log(LogLevel.Warning, $"Module {fmcfg.ConfigName} [{fmcfg.Type}] initializer callback failed. Suppressing.");
 
                     retval = false;
                     continue;
                 }
-
-                FhLog.Log(LogLevel.Warning, $"Initialized module {fmcfg.ConfigName} [{fmcfg.Type}].");
-                _moduleContexts.Add(new FhModuleContext(fm, fmcfg));
             }
         }
 
