@@ -14,8 +14,8 @@ public unsafe struct AtelScriptHeader {
     [FieldOffset(0x14)] public uint   offset_var_table;
     [FieldOffset(0x18)] public uint   offset_int_table;
     [FieldOffset(0x1C)] public uint   offset_float_table;
-    [FieldOffset(0x20)] public uint   offset_script_begin_table;
-    [FieldOffset(0x24)] public uint   offset_jumps_begin_table;
+    [FieldOffset(0x20)] public uint   offset_entry_points_table;
+    [FieldOffset(0x24)] public uint   offset_jumps_table;
     [FieldOffset(0x28)] public uint   offset_data;
     [FieldOffset(0x2C)] public uint   offset_priv_data;
     [FieldOffset(0x30)] public uint   offset_shared_data;
