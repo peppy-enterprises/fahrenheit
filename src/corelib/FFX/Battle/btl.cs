@@ -60,6 +60,10 @@ public unsafe struct Btl {
     [FieldOffset(0x1988)] public       byte   group_idx;
     [FieldOffset(0x1989)] public       byte   formation_idx;
     [FieldOffset(0x198A)] public fixed byte   field_name[8];
+
+    [FieldOffset(0x1FC5)] public fixed byte   frontline[3];
+    [FieldOffset(0x1FD3)] public fixed byte   backline[4];
+
     [FieldOffset(0x2008)] public       uint   last_com;
     [FieldOffset(0x210C)] public       byte   ambush_state;
     [FieldOffset(0x2121)] public       byte   battle_end_type;
