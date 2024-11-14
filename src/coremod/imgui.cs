@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 using Fahrenheit.CoreLib;
@@ -136,7 +137,6 @@ public unsafe class FhImguiModule : FhModule {
     private readonly nint[]                                        _vtbl_d3d11_texture_2d;         // _p_surface   ->vtbl[]
     private          bool                                          _present_ready;                 // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
-    private readonly FhMethodHandle<Sg_MainLoop>                   _handle_main_loop;
     private readonly FhMethodHandle<graphicInitialize>             _handle_wndproc_init;
     private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _handle_d3d11_init;
     private          FhMethodHandle<DXGISwapChain_Present>?        _handle_present;
@@ -147,16 +147,14 @@ public unsafe class FhImguiModule : FhModule {
         _vtbl_device_ctx       = new nint[_D3D11_VTBL_DEVICE_CTX_COUNT];
         _vtbl_d3d11_texture_2d = new nint[_D3D11_VTBL_D3D11_TEXTURE_2D_COUNT];
 
-        _handle_main_loop      = new(this, "FFX.exe",   h_main_loop,    offset:  0x420C00);
         _handle_wndproc_init   = new(this, "FFX.exe",   h_init_wndproc, offset:  0x241B80);
         _handle_d3d11_init     = new(this, "D3D11.dll", h_init_d3d11,   fn_name: "D3D11CreateDeviceAndSwapChain");
         _h_WndProc             = h_wndproc;
     }
 
     public override bool init() {
-        return _handle_d3d11_init  .hook() &&
-               _handle_wndproc_init.hook() &&
-               _handle_main_loop   .hook();
+        return _handle_d3d11_init.hook()
+            && _handle_wndproc_init.hook();
     }
 
     private void init_imgui() {
@@ -178,7 +176,7 @@ public unsafe class FhImguiModule : FhModule {
     }
 
     private nint h_init_wndproc() {
-        nint result = _handle_wndproc_init.orig_fptr.Invoke();
+        nint result = _handle_wndproc_init.orig_fptr();
 
         _hWnd          = FhUtil.get_at<nint>(0x8C9CE8);
         _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
@@ -203,7 +201,7 @@ public unsafe class FhImguiModule : FhModule {
         nint*  pFeatureLevel,
         nint** ppImmediateContext) {
 
-        nint result = _handle_d3d11_init.orig_fptr.Invoke
+        nint result = _handle_d3d11_init.orig_fptr
             (pAdapter, DriverType, Software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, pSwapChainDesc, ppSwapChain, ppDevice, pFeatureLevel, ppImmediateContext);
 
         if (result != 0) return result; // S_FALSE is a possible return
@@ -224,15 +222,14 @@ public unsafe class FhImguiModule : FhModule {
         _device_CreateRenderTargetView = Marshal.GetDelegateForFunctionPointer<D3D11Device_CreateRenderTargetView>   (_vtbl_device[9]);
         _device_ctx_OMSetRenderTargets = Marshal.GetDelegateForFunctionPointer<D3D11DeviceContext_OMSetRenderTargets>(_vtbl_device_ctx[33]);
 
-        _handle_present = new FhMethodHandle<DXGISwapChain_Present>(this, _vtbl_swap_chain[8], h_present);
+        _handle_present = new(this, _vtbl_swap_chain[8], h_present);
         _handle_present.hook();
 
         init_imgui();
         return result;
     }
 
-    public void h_main_loop(float delta) {
-        _handle_main_loop.orig_fptr(delta);
+    public override void post_update() {
         _present_ready = true;
     }
 
@@ -242,18 +239,20 @@ public unsafe class FhImguiModule : FhModule {
         nint wParam,
         nint lParam) {
         return PInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1
-            ? 1
-            : PInvoke.CallWindowProcW(_ptr_o_WndProc, hWnd, msg, wParam, lParam);
+             ? 1
+             : PInvoke.CallWindowProcW(_ptr_o_WndProc, hWnd, msg, wParam, lParam);
     }
 
     public nint h_present(nint* pSwapChain, uint SyncInterval, uint Flags) {
-        if (_hWnd == 0                                                                                                        || // h_init_wndproc hasn't run yet?
-            _swap_chain_GetBuffer == null || _device_CreateRenderTargetView == null || _device_ctx_OMSetRenderTargets == null || // h_init_d3d11 hasn't run yet?
-            !_present_ready)                                                                                                     // game main loop hasn't run yet?
+        if (_hWnd == 0                             // > h_init_wndproc hasn't run yet?
+         || _swap_chain_GetBuffer == null          // |
+         || _device_CreateRenderTargetView == null // |
+         || _device_ctx_OMSetRenderTargets == null // | > h_init_d3d11 hasn't run yet?
+         || !_present_ready)                       // > game main loop hasn't run yet?
             return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
 
         if (!_present_init_complete) {
-            Guid _guid_d3d11texture2d = new Guid("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
+            Guid _guid_d3d11texture2d = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
 
             fixed (nint** ppSurface                 = &_p_surface)
             fixed (nint** ppRenderTargetView        = &_p_render_target_view)
@@ -273,10 +272,11 @@ public unsafe class FhImguiModule : FhModule {
         ImGui.ImGui_ImplDX11_NewFrame();
         ImGui.ImGui_ImplWin32_NewFrame();
 
-        // TODO: Eve can clean this up, or rather wire this up
         ImGui.NewFrame();
-        ImGui.Begin("Fahrenheit");
-        ImGui.End();
+
+        foreach (var context in FhModuleController.find_all()) {
+            context.Module.render_imgui();
+        }
 
         ImGui.Render();
 
