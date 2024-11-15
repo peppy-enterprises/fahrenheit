@@ -10,23 +10,14 @@ public abstract record FhConfigStruct {
         ConfigName = configName;
     }
 
-    public string Type          { get; }
-    public string ConfigName    { get; }
+    public string Type       { get; }
+    public string ConfigName { get; }
 }
 
 public abstract record FhModuleConfig(string ConfigName, bool ConfigEnabled) : FhConfigStruct(ConfigName) {
     public abstract FhModule SpawnModule();
 }
 
-/* [fkelava 27/2/23 00:02]
- * The core must be able to resolve descendants of FhModuleConfig in assemblies loaded at runtime.
- *
- * If all descendants of FhModuleConfig contain a [JsonConstructor] or are otherwise capable of being
- * constructed from a simple JsonSerializer.Deserialize call, then we can search loaded assemblies
- * at runtime to resolve the actual derived type and obtain an instance of it with no special wrangling.
- *
- * See StrictResolveDescendantOf<T> for the actual type-matching mechanism.
- */
 public class FhConfigParser<T> : JsonConverter<T> where T : FhModuleConfig {
     public override bool CanConvert(Type objtype) {
         return typeof(FhModuleConfig).IsAssignableFrom(objtype);
@@ -45,6 +36,9 @@ public class FhConfigParser<T> : JsonConverter<T> where T : FhModuleConfig {
         return t;
     }
 
+    /* [fkelava 9/10/2024 19:52]
+     * We serialize to <object> to ensure all fields are written out, not just derived class fields.
+     */
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options) {
         JsonSerializer.Serialize<object>(writer, value, options);
     }

@@ -123,6 +123,7 @@ public unsafe class FhImguiModule : FhModule {
     private const int _D3D11_VTBL_D3D11_TEXTURE_2D_COUNT = 3; // incorrect, but we don't need any method beyond ordinal 2 - IUnknown::Release()
 
     private          bool                                          _present_init_complete;         // has h_present finished one-time initialization?
+    private          bool                                          _dx11_init_complete;            // has h_init_d3d11 finished one-time initialization?
     private          DXGISwapChain_GetBuffer?                      _swap_chain_GetBuffer;          // _p_swap_chain->vtbl[9]  https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-getbuffer
     private          D3D11Device_CreateRenderTargetView?           _device_CreateRenderTargetView; // _p_device    ->vtbl[9]  https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-id3d11device-createrendertargetview
     private          D3D11DeviceContext_OMSetRenderTargets?        _device_ctx_OMSetRenderTargets; // _p_device_ctx->vtbl[33] https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-id3d11devicecontext-omsetrendertargets
@@ -204,7 +205,7 @@ public unsafe class FhImguiModule : FhModule {
         nint result = _handle_d3d11_init.orig_fptr
             (pAdapter, DriverType, Software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, pSwapChainDesc, ppSwapChain, ppDevice, pFeatureLevel, ppImmediateContext);
 
-        if (result != 0) return result; // S_FALSE is a possible return
+        if (result != 0 || _dx11_init_complete) return result; // S_FALSE is a possible return
 
         fixed (nint* vtbl_swap_chain_arr_ptr = _vtbl_swap_chain)
         fixed (nint* vtbl_device_arr_ptr     = _vtbl_device)
@@ -226,6 +227,8 @@ public unsafe class FhImguiModule : FhModule {
         _handle_present.hook();
 
         init_imgui();
+
+        _dx11_init_complete = true;
         return result;
     }
 

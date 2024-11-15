@@ -37,24 +37,24 @@ internal static unsafe partial class FhPInvoke {
 
     [LibraryImport(hook_lib_name)]
     internal static partial int MH_CreateHook(
-            nint pTarget,
-            nint pDetour,
-        ref nint ppOriginal);
+            nint  pTarget,
+            nint  pDetour,
+            nint* ppOriginal);
 
     [LibraryImport(hook_lib_name)]
     internal static partial int MH_CreateHookApi(
         [MarshalAs(UnmanagedType.LPWStr)] string pszModule,
         [MarshalAs(UnmanagedType.LPStr)]  string pszProcName,
                                           nint   pDetour,
-                                      ref nint   ppOriginal);
+                                          nint*  ppOriginal);
 
     [LibraryImport(hook_lib_name)]
     internal static partial int MH_CreateHookApiEx(
         [MarshalAs(UnmanagedType.LPWStr)] string pszModule,
         [MarshalAs(UnmanagedType.LPStr)]  string pszProcName,
                                           nint   pDetour,
-                                      ref nint   ppOriginal,
-                                      ref nint   ppTarget);
+                                          nint*  ppOriginal,
+                                          nint*  ppTarget);
 
     [LibraryImport(hook_lib_name)]
     internal static partial int MH_EnableHook(nint pTarget);
