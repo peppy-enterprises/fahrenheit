@@ -77,25 +77,23 @@ public unsafe struct AtelStack {
 
     public void push_int(int value) {
         if (size >= MAX_SIZE) throw new AtelStackOverflowException("Attempted to push onto a full stack");
-        int i = size - 1;
 
-        types[i] = AtelStackType.I32;
-        values_as_int[i] = value;
+        types[size] = AtelStackType.I32;
+        values_as_int[size] = value;
         size += 1;
     }
 
     public void push_float(float value) {
         if (size >= MAX_SIZE) throw new AtelStackOverflowException("Attempted to push onto a full stack");
-        int i = size - 1;
 
-        types[i] = AtelStackType.F32;
-        values_as_float[i] = value;
+        types[size] = AtelStackType.F32;
+        values_as_float[size] = value;
         size += 1;
     }
 
     public (AtelStackVar var, AtelStackType type) this[int i] {
         get {
-            if (i < 0 || i >= size) throw new System.IndexOutOfRangeException("Stack index should be between 0 and the stack's size");
+            if (i < 0 || i >= size) throw new IndexOutOfRangeException("Stack index should be between 0 and the stack's size");
             AtelStackVar return_value = new();
 
             switch (types[i]) {
@@ -112,7 +110,7 @@ public unsafe struct AtelStack {
         }
 
         set {
-            if (i < 0 || i >= size) throw new System.IndexOutOfRangeException("Stack index should be between 0 and the stack's size");
+            if (i < 0 || i >= size) throw new IndexOutOfRangeException("Stack index should be between 0 and the stack's size");
             switch (value.type) {
                 case AtelStackType.I32:
                     values_as_int[i] = value.var.as_int;
