@@ -3,7 +3,7 @@ using Fahrenheit.CoreLib.FFX.Battle;
 
 namespace Fahrenheit.CoreLib.FFX;
 
-public static unsafe class Globals {
+public unsafe static class Globals {
     public static LocalizationManager* localization_manager => (LocalizationManager*)FhUtil.get_at<nint>(0x8DED48);
 
     public static class Map {
