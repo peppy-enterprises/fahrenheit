@@ -112,11 +112,11 @@ static int DetourMain(void) {
     string_t host_path = host_path_buf;
     string_t cwd_path  = cwd_path_buf;
 
-    const string_t clrhost_config_path = cwd_path + STR("\\fhcorlib.runtimeconfig.json");
-    const string_t clrhost_lib_path    = cwd_path + STR("\\fhcorlib.dll");
-    const char_t*  clrhost_type        = STR("Fahrenheit.CoreLib.FhLoader, fhcorlib");
+    const string_t clrhost_config_path = cwd_path + STR("\\fhcore.runtimeconfig.json");
+    const string_t clrhost_lib_path    = cwd_path + STR("\\fhcore.dll");
+    const char_t*  clrhost_type        = STR("Fahrenheit.Core.FhLoader, fhcore");
     const char_t*  clrhost_init_method = STR("ldr_bootstrap");
-    const char_t*  clrhost_delegate    = STR("Fahrenheit.CoreLib.FhLoader+FhInitDelegate, fhcorlib");
+    const char_t*  clrhost_delegate    = STR("Fahrenheit.Core.FhLoader+FhInitDelegate, fhcore");
 
     auto host_dirsep_pos = host_path.find_last_of(DIR_SEPARATOR);
 
