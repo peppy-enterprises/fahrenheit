@@ -1,4 +1,6 @@
-﻿using Fahrenheit.CoreLib.FFX.Battle;
+﻿using System;
+
+using Fahrenheit.CoreLib.FFX.Battle;
 
 namespace Fahrenheit.CoreLib.FFX.Atel;
 
@@ -29,17 +31,20 @@ public unsafe struct AtelBasicWorker {
     [FieldOffset(0xC4)]  public AtelStack       stack;
     [FieldOffset(0x12C)] public AtelWorkThread* threads; // [9]
 
-    public readonly byte*           code_ptr          => (byte*)         ((nint)script_chunk + script_chunk ->offset_code);
-    public readonly uint*           table_event_data  => (uint*)         ((nint)script_chunk + script_chunk ->offset_event_data);
-    public readonly AtelScriptVar*  table_var         => (AtelScriptVar*)((nint)script_chunk + script_header->offset_var_table);
-    public readonly int*            table_int         => (int*)          ((nint)script_chunk + script_header->offset_int_table);
-    public readonly float*          table_float       => (float*)        ((nint)script_chunk + script_header->offset_float_table);
-    public readonly uint*           table_script      => (uint*)         ((nint)script_chunk + script_header->offset_script_begin_table);
-    public readonly uint*           table_jump        => (uint*)         ((nint)script_chunk + script_header->offset_jumps_begin_table);
-    public readonly uint*           table_data        => (uint*)         ((nint)script_chunk + script_header->offset_data);
-    public readonly uint*           table_priv_data   => (uint*)         ((nint)script_chunk + script_header->offset_priv_data);
-    public readonly uint*           table_shared_data => (uint*)         ((nint)script_chunk + script_header->offset_shared_data);
-    public readonly AtelWorkThread* current_thread    => threads + current_thread_priority;
+    public readonly byte*          code_ptr         => (byte*)         ((nint)script_chunk + script_chunk ->offset_code);
+    public readonly uint*          table_event_data => (uint*)         ((nint)script_chunk + script_chunk ->offset_event_data);
+    public readonly AtelScriptVar* table_var        => (AtelScriptVar*)((nint)script_chunk + script_header->offset_var_table);
+
+    // Not too willing to make the others like this until I've confirmed their elements' sizes are constant
+    public readonly ReadOnlySpan<int>   table_int          => new((int*)((nint)script_chunk + script_header->offset_int_table),           script_header->ref_int_count);
+    public readonly ReadOnlySpan<float> table_float        => new((float*)((nint)script_chunk + script_header->offset_float_table),       script_header->ref_float_count);
+    public readonly ReadOnlySpan<uint>  table_entry_points => new((uint*)((nint)script_chunk + script_header->offset_entry_points_table), script_header->entry_point_count);
+    public readonly ReadOnlySpan<uint>  table_jump         => new((uint*)((nint)script_chunk + script_header->offset_jumps_table),        script_header->jump_count);
+
+    public readonly uint*              table_data         => (uint*)         ((nint)script_chunk + script_header->offset_data);
+    public readonly uint*              table_priv_data    => (uint*)         ((nint)script_chunk + script_header->offset_priv_data);
+    public readonly uint*              table_shared_data  => (uint*)         ((nint)script_chunk + script_header->offset_shared_data);
+    public readonly AtelWorkThread*    current_thread     => threads + current_thread_priority;
 
     public int pc_of(AtelWorkThread* thread) => (int)(thread->pc - code_ptr);
 }

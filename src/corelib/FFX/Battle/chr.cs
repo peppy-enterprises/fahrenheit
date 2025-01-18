@@ -78,11 +78,11 @@ public unsafe struct Chr {
     [FieldOffset(0x590)] public       byte              gender;
     [FieldOffset(0x592)] public       byte              wpn_inv_idx;
     [FieldOffset(0x593)] public       byte              arm_inv_idx;
-    [FieldOffset(0x594)] public       uint              max_hp;
-    [FieldOffset(0x598)] public       uint              max_mp;
-    [FieldOffset(0x59C)] public       uint              base_max_hp;
-    [FieldOffset(0x5A0)] public       uint              base_max_mp;
-    [FieldOffset(0x5A4)] public       uint              overkill_threshold;
+    [FieldOffset(0x594)] public       int               max_hp;
+    [FieldOffset(0x598)] public       int               max_mp;
+    [FieldOffset(0x59C)] public       int               base_max_hp;
+    [FieldOffset(0x5A0)] public       int               base_max_mp;
+    [FieldOffset(0x5A4)] public       int               overkill_threshold;
     [FieldOffset(0x5A8)] public       byte              strength;
     [FieldOffset(0x5A9)] public       byte              defense;
     [FieldOffset(0x5AA)] public       byte              magic;
@@ -112,8 +112,8 @@ public unsafe struct Chr {
     [FieldOffset(0x5C8)] public       byte              doom_counter;
     [FieldOffset(0x5C9)] public       byte              doom_counter_init;
     [FieldOffset(0x5CB)] public       bool              stat_prov_command_flag;
-    [FieldOffset(0x5D0)] public       uint              hp;
-    [FieldOffset(0x5D4)] public       uint              mp;
+    [FieldOffset(0x5D0)] public       int               hp;
+    [FieldOffset(0x5D4)] public       int               mp;
     [FieldOffset(0x5D8)] public       byte              wpn_crit_bonus;
     [FieldOffset(0x5D9)] public       byte              elem_wpn;
     [FieldOffset(0x5DA)] public       byte              elem_absorb;
@@ -140,7 +140,7 @@ public unsafe struct Chr {
     [FieldOffset(0x641)] public       StatusMap         status_resist;
     [FieldOffset(0x65A)] public       ushort            status_resist_extra;
     [FieldOffset(0x65C)] public       byte              ctb;
-    [FieldOffset(0x65D)] public       uint              max_ctb;
+    [FieldOffset(0x65D)] public       byte              max_ctb;
     [FieldOffset(0x65E)] public       byte              cheer_stacks;
     [FieldOffset(0x65F)] public       byte              aim_stacks;
     [FieldOffset(0x660)] public       byte              focus_stacks;
