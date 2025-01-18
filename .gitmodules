@@ -26,3 +26,6 @@
 	path = src/truerng
 	url = https://github.com/peppy-enterprises/fh-mods-truerng
 
+[submodule "src/efp"]
+	path = src/efp
+	url = https://github.com/peppy-enterprises/fh-mods-efp
