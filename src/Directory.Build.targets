@@ -1,8 +1,6 @@
 <Project>
     <!-- LOCAL TESTING COPY TASK -->
 	<Target Name="CopyAfterBuild" AfterTargets="Build">
-	    
-	
 		<ItemGroup>
 			<ProjectFiles Include="$(TargetDir)\**\*.*" />
 		</ItemGroup>
@@ -13,4 +11,13 @@
 
 		<Message Text="Copied build files to $(CopyToDir)." Importance="High" />
 	</Target>
+
+    <!-- https://github.com/dotnet/sdk/issues/1366 --> 
+	<Target Name="_MakeTransitiveProjectRefsNonPrivate" AfterTargets="IncludeTransitiveProjectReferences">
+	    <ItemGroup>
+	        <!-- remove the transitive project references and re-add them as non-private project references -->
+	        <ProjectReference Remove="@(_TransitiveProjectReferences)" />
+	        <ProjectReference Include="@(_TransitiveProjectReferences)" Private="False" />
+	    </ItemGroup>
+    </Target>
 </Project>
