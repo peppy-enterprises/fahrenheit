@@ -30,4 +30,8 @@
         <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\..\extern\fh-imgui-net\src\ImGui.NET\ImGui.NET.csproj" />
+	</ItemGroup>
+
 </Project>
