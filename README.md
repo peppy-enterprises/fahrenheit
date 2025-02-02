@@ -47,8 +47,7 @@ Time permitting, the goals (in no specific order) of the project are:
 - In general, _polish_ every aspect of the solution.
 
 ## Can I contribute?
-Yes. Feel free to join us in the #modding channel of the
-[Final Fantasy X speedrunning Discord](https://discord.gg/tSvM6PUggU).
+Yes. Feel free to join us in [Cid's Salvage Ship](https://discord.gg/AGx2grw9nD), a Discord server that supports Fahrenheit and related efforts..
 
 ## License
 Fahrenheit source code is licensed under the [MIT](https://github.com/fkelava/fahrenheit/blob/main/LICENSE.txt) license.
