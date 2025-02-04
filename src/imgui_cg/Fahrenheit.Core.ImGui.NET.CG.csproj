@@ -1,0 +1,38 @@
+﻿<Project>
+
+	<!-- ASSEMBLY BASIC PROPERTIES -->
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<!-- ASSEMBLY ADDITIONAL PROPERTIES -->
+	<PropertyGroup>
+		<AssemblyName>fhimguicg</AssemblyName>
+		<AssemblyTitle>ImGui.NET code generator for Fahrenheit</AssemblyTitle>
+		<Product>ImGui.NET code generator for Fahrenheit</Product>
+	</PropertyGroup>
+
+	<!-- LOCAL DEPLOYMENT TARGET -->
+	<PropertyGroup>
+		<CopyToDir>$(SolutionDir)artifacts\imgui</CopyToDir>
+	</PropertyGroup>
+
+	<!-- SDK REFERENCES -->
+	<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+	<ItemGroup>
+        <Content Include="definitions\cimgui\structs_and_enums.json" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="definitions\cimgui\definitions.json" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="definitions\cimgui\variants.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+</Project>

@@ -33,7 +33,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\..\extern\fh-imgui-net\src\ImGui.NET\ImGui.NET.csproj">
+        <ProjectReference Include="..\imgui\Fahrenheit.Core.ImGui.NET.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>
         </ProjectReference>

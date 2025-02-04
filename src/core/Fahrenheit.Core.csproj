@@ -30,8 +30,9 @@
         <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
+    <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\..\extern\fh-imgui-net\src\ImGui.NET\ImGui.NET.csproj" />
-	</ItemGroup>
+		<ProjectReference Include="..\imgui\Fahrenheit.Core.ImGui.NET.csproj" />
+    </ItemGroup>
 
 </Project>

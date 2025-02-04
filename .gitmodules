@@ -1,6 +1,3 @@
-[submodule "extern/fh-imgui-net"]
-	path = extern/fh-imgui-net
-	url = https://github.com/peppy-enterprises/fh-imgui-net
 [submodule "src/csr"]
 	path = src/csr
 	url = https://github.com/peppy-enterprises/fh-mods-csr
