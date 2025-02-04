@@ -17,11 +17,17 @@ public static class FhLoader {
     // The point at which Fahrenheit execution begins. Stage1 calls into this method directly.
     public static void ldr_bootstrap() {
         string   load_order_path = Path.Join(FhRuntimeConst.Modules.LinkPath, "loadorder");
-        string[] load_order      = [ "fhruntime", .. File.ReadAllLines(load_order_path) ];
+        string[] load_order      = File.ReadAllLines(load_order_path);
+        string   runtime_path    = Path.Join(FhRuntimeConst.Binaries.LinkPath, "fhruntime.dll");
+
+        if (!_load(runtime_path, out List<FhModuleConfig>? module_configs)) {
+            throw new Exception("FH_E_RUNTIME_DLL_LOAD_FAILED");
+        }
+        FhModuleController.spawn_modules(module_configs);
 
         foreach (string module in load_order) {
             string module_path = Path.Join(FhRuntimeConst.Modules.LinkPath, module, $"{module}.dll");
-            if (!_load(module_path, out List<FhModuleConfig>? module_configs)) continue;
+            if (!_load(module_path, out module_configs)) continue;
             FhModuleController.spawn_modules(module_configs);
         }
 

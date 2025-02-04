@@ -1,0 +1,10 @@
+[
+  {
+    "Type": "Fahrenheit.Core.Runtime.FhCoreModuleConfig",
+    "Name": "FhCoreModule"
+  },
+  {
+    "Type": "Fahrenheit.Core.Runtime.FhImguiModuleConfig",
+    "Name": "FhImguiModule"
+  }
+]

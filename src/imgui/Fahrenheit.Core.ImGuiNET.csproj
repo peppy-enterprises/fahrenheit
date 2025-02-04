@@ -32,12 +32,7 @@
 	<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
-    <ItemGroup>
-        <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-        <PackageReference Include="System.Buffers" Version="4.5.1" />
-    </ItemGroup>
-
+	<!-- CONTENT -->
     <ItemGroup>
         <Content Include="deps\cimgui\win-x86\cimgui.dll">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

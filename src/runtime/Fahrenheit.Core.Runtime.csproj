@@ -19,7 +19,7 @@
 
     <!-- LOCAL DEPLOYMENT TARGET -->
     <PropertyGroup>
-        <CopyToDir>$(SolutionDir)artifacts\localdeploy\modules\$(AssemblyName)</CopyToDir>
+        <CopyToDir>$(SolutionDir)artifacts\localdeploy\bin</CopyToDir>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -29,6 +29,13 @@
     <!-- SHARED FILE LINKS -->
     <ItemGroup>
         <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
+    </ItemGroup>
+
+    <!-- CONTENT -->
+    <ItemGroup>
+        <Content Include="fhruntime.conf.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <!-- PROJECT REFERENCES -->
