@@ -1,12 +1,13 @@
-﻿namespace Fahrenheit.Core.ImGui.NET
+﻿using System;
+
+namespace Fahrenheit.Core.ImGui.NET;
+
+[Flags]
+public enum ImGuiModFlags
 {
-    [System.Flags]
-    public enum ImGuiModFlags
-    {
-        None = 0,
-        Ctrl = 1,
-        Shift = 2,
-        Alt = 4,
-        Super = 8,
-    }
+    None  = 0,
+    Ctrl  = 1,
+    Shift = 2,
+    Alt   = 4,
+    Super = 8,
 }
