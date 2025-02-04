@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Fahrenheit.Core.ImGui.NET.CG;
+namespace Fahrenheit.Core.ImGuiNET.CG;
 
 internal static class Program
 {
@@ -22,10 +22,10 @@ internal static class Program
 
         string projectNamespace = libraryName switch
         {
-            "cimgui"    => "Fahrenheit.Core.ImGui.NET",
-            "cimplot"   => "Fahrenheit.Core.ImPlot.NET",
-            "cimnodes"  => "Fahrenheit.Core.ImNodes.NET",
-            "cimguizmo" => "Fahrenheit.Core.ImGuizmo.NET",
+            "cimgui"    => "Fahrenheit.Core.ImGuiNET",
+            "cimplot"   => "Fahrenheit.Core.ImPlotNET",
+            "cimnodes"  => "Fahrenheit.Core.ImNodesNET",
+            "cimguizmo" => "Fahrenheit.Core.ImGuizmoNET",
             _           => throw new NotImplementedException($"Library \"{libraryName}\" is not supported.")
         };
 
@@ -95,7 +95,7 @@ internal static class Program
                 writer.Using("System.Text");
                 if (referencesImGui)
                 {
-                    writer.Using("ImGuiNET");
+                    writer.Using("Fahrenheit.Core.ImGuiNET");
                 }
                 writer.WriteLine(string.Empty);
                 writer.PushBlock($"namespace {projectNamespace}");
@@ -262,7 +262,7 @@ internal static class Program
             writer.Using("System.Runtime.InteropServices");
             if (referencesImGui)
             {
-                writer.Using("ImGuiNET");
+                writer.Using("Fahrenheit.Core.ImGuiNET");
             }
             writer.WriteLine(string.Empty);
             writer.PushBlock($"namespace {projectNamespace}");
@@ -335,7 +335,7 @@ internal static class Program
             writer.Using("System.Text");
             if (referencesImGui)
             {
-                writer.Using("ImGuiNET");
+                writer.Using("Fahrenheit.Core.ImGuiNET");
             }
             writer.WriteLine(string.Empty);
             writer.PushBlock($"namespace {projectNamespace}");

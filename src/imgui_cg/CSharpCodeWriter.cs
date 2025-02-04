@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Fahrenheit.Core.ImGui.NET.CG;
+namespace Fahrenheit.Core.ImGuiNET.CG;
 
 class CSharpCodeWriter : IDisposable
 {

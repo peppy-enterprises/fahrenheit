@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fahrenheit.Core.ImGui.NET;
+namespace Fahrenheit.Core.ImGuiNET;
 
 [Flags]
 public enum ImGuiModFlags

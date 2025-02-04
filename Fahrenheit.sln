@@ -32,9 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.H2CS", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.DEdit", "src\dedit\Fahrenheit.Tools.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGui.NET", "src\imgui\Fahrenheit.Core.ImGui.NET.csproj", "{BECB5E4B-716D-4D71-8AD0-3EF165A0D512}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET", "src\imgui\Fahrenheit.Core.ImGuiNET.csproj", "{BECB5E4B-716D-4D71-8AD0-3EF165A0D512}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGui.NET.CG", "src\imgui_cg\Fahrenheit.Core.ImGui.NET.CG.csproj", "{24B48D88-B846-409F-A2B7-0B09147CD63E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET.CG", "src\imgui_cg\Fahrenheit.Core.ImGuiNET.CG.csproj", "{24B48D88-B846-409F-A2B7-0B09147CD63E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

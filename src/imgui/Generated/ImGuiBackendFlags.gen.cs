@@ -1,4 +1,4 @@
-namespace Fahrenheit.Core.ImGui.NET
+namespace Fahrenheit.Core.ImGuiNET
 {
     [System.Flags]
     public enum ImGuiBackendFlags

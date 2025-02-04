@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Fahrenheit.Core.ImGui.NET;
+namespace Fahrenheit.Core.ImGuiNET;
 
 public        delegate void Platform_CreateWindow      (ImGuiViewportPtr vp);                   // Create a new platform window for the given viewport
 public        delegate void Platform_DestroyWindow     (ImGuiViewportPtr vp);

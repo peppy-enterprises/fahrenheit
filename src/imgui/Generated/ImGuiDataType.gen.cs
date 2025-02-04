@@ -1,4 +1,4 @@
-namespace Fahrenheit.Core.ImGui.NET
+namespace Fahrenheit.Core.ImGuiNET
 {
     public enum ImGuiDataType
     {
@@ -13,6 +13,7 @@ namespace Fahrenheit.Core.ImGui.NET
         Float = 8,
         Double = 9,
         Bool = 10,
-        COUNT = 11,
+        String = 11,
+        COUNT = 12,
     }
 }

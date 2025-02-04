@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Fahrenheit.Core.ImGui.NET;
+namespace Fahrenheit.Core.ImGuiNET;
 
 public unsafe struct ImVector
 {

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-using ImGuiNET;
+using Fahrenheit.Core.ImGuiNET;
 
 using static Fahrenheit.Core.FhHookDelegates;
 

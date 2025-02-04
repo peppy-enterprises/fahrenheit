@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Fahrenheit.Core.ImGui.NET;
+namespace Fahrenheit.Core.ImGuiNET;
 
 public unsafe struct RangeAccessor<T> where T : struct
 {

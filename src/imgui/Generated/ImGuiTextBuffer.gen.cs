@@ -3,7 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Fahrenheit.Core.ImGui.NET
+namespace Fahrenheit.Core.ImGuiNET
 {
     public unsafe partial struct ImGuiTextBuffer
     {
@@ -73,7 +73,7 @@ namespace Fahrenheit.Core.ImGui.NET
             }
         }
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-        public void appendf(ref ImGuiTextBuffer buffer, ReadOnlySpan<char> fmt)
+        public void appendf(ReadOnlySpan<char> fmt)
         {
             byte* native_fmt;
             int fmt_byteCount = 0;
@@ -93,17 +93,14 @@ namespace Fahrenheit.Core.ImGui.NET
                 native_fmt[native_fmt_offset] = 0;
             }
             else { native_fmt = null; }
-            fixed (ImGuiTextBuffer* native_buffer = &buffer)
+            ImGuiNative.ImGuiTextBuffer_appendf((ImGuiTextBuffer*)(NativePtr), native_fmt);
+            if (fmt_byteCount > Util.StackAllocationSizeLimit)
             {
-                ImGuiNative.ImGuiTextBuffer_appendf(native_buffer, native_fmt);
-                if (fmt_byteCount > Util.StackAllocationSizeLimit)
-                {
-                    Util.Free(native_fmt);
-                }
+                Util.Free(native_fmt);
             }
         }
 #endif
-        public void appendf(ref ImGuiTextBuffer buffer, string fmt)
+        public void appendf(string fmt)
         {
             byte* native_fmt;
             int fmt_byteCount = 0;
@@ -123,13 +120,10 @@ namespace Fahrenheit.Core.ImGui.NET
                 native_fmt[native_fmt_offset] = 0;
             }
             else { native_fmt = null; }
-            fixed (ImGuiTextBuffer* native_buffer = &buffer)
+            ImGuiNative.ImGuiTextBuffer_appendf((ImGuiTextBuffer*)(NativePtr), native_fmt);
+            if (fmt_byteCount > Util.StackAllocationSizeLimit)
             {
-                ImGuiNative.ImGuiTextBuffer_appendf(native_buffer, native_fmt);
-                if (fmt_byteCount > Util.StackAllocationSizeLimit)
-                {
-                    Util.Free(native_fmt);
-                }
+                Util.Free(native_fmt);
             }
         }
         public string begin()

@@ -3,7 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Fahrenheit.Core.ImGui.NET
+namespace Fahrenheit.Core.ImGuiNET
 {
     public unsafe partial struct ImGuiViewport
     {

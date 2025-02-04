@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Fahrenheit.Core.ImGui.NET;
+namespace Fahrenheit.Core.ImGuiNET;
 
 public static unsafe partial class ImGuiNative
 {

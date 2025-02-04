@@ -7,7 +7,7 @@ using System.Text;
 // This is a direct copy from ImGui.Manual.cs with all string parameters (not ref string) changed to ReadOnlySpan<char>.
 // TODO: This is far from ideal right now, maybe we could update the generator to do this for us.
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-namespace Fahrenheit.Core.ImGui.NET;
+namespace Fahrenheit.Core.ImGuiNET;
 
 public static unsafe partial class ImGui
 {

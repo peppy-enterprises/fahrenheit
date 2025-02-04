@@ -2,8 +2,7 @@ using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace Fahrenheit.Core.ImGui.NET
-{
+namespace Fahrenheit.Core.ImGuiNET {
     public static unsafe partial class ImGuiNative
     {
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
@@ -1107,7 +1106,33 @@ namespace Fahrenheit.Core.ImGui.NET
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImFontGlyphRangesBuilder_SetBit(ImFontGlyphRangesBuilder* self, uint n);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr* ImGuiFreeType_GetBuilderForFreeType();
+        public static extern byte ImGui_ImplDX11_CreateDeviceObjects();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern byte ImGui_ImplDX11_Init(nint* device, nint* device_context);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplDX11_InvalidateDeviceObjects();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplDX11_NewFrame();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplDX11_Shutdown();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplWin32_EnableAlphaCompositing(void* hwnd);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplWin32_EnableDpiAwareness();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float ImGui_ImplWin32_GetDpiScaleForHwnd(void* hwnd);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern float ImGui_ImplWin32_GetDpiScaleForMonitor(void* monitor);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern byte ImGui_ImplWin32_Init(void* hwnd);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern byte ImGui_ImplWin32_InitForOpenGL(void* hwnd);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplWin32_NewFrame();
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ImGui_ImplWin32_Shutdown();
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImGuiInputTextCallbackData_ClearSelection(ImGuiInputTextCallbackData* self);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
@@ -1281,7 +1306,7 @@ namespace Fahrenheit.Core.ImGui.NET
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ImGuiTextBuffer_append(ImGuiTextBuffer* self, byte* str, byte* str_end);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ImGuiTextBuffer_appendf(ImGuiTextBuffer* buffer, byte* fmt);
+        public static extern void ImGuiTextBuffer_appendf(ImGuiTextBuffer* self, byte* fmt);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
         public static extern byte* ImGuiTextBuffer_begin(ImGuiTextBuffer* self);
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]

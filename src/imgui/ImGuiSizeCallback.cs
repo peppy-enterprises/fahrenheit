@@ -1,3 +1,3 @@
-﻿namespace Fahrenheit.Core.ImGui.NET;
+﻿namespace Fahrenheit.Core.ImGuiNET;
 
 public unsafe delegate void ImGuiSizeCallback(ImGuiSizeCallbackData* data);

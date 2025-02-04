@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Fahrenheit.Core.ImGui.NET;
+namespace Fahrenheit.Core.ImGuiNET;
 
 public unsafe struct NullTerminatedString
 {

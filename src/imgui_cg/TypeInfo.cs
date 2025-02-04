@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Fahrenheit.Core.ImGui.NET.CG;
+namespace Fahrenheit.Core.ImGuiNET.CG;
 
 public class TypeInfo
 {

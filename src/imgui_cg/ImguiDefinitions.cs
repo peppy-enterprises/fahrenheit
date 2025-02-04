@@ -6,7 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Fahrenheit.Core.ImGui.NET.CG;
+namespace Fahrenheit.Core.ImGuiNET.CG;
 
 class ImguiDefinitions
 {
@@ -28,6 +28,13 @@ class ImguiDefinitions
         using (JsonTextReader jr = new JsonTextReader(fs))
         {
             typesJson = JObject.Load(jr);
+        }
+
+        JObject implFunctionsJson;
+        using (StreamReader fs = File.OpenText(Path.Combine(directory, "impl_definitions.json")))
+        using (JsonTextReader jr = new JsonTextReader(fs))
+        {
+            implFunctionsJson = JObject.Load(jr);
         }
 
         JObject functionsJson;
@@ -96,7 +103,7 @@ class ImguiDefinitions
             return new TypeDefinition(name, fields);
         }).Where(x => x != null).ToArray();
 
-        Functions = functionsJson.Children().Select(jt =>
+        Functions = functionsJson.Children().Concat(implFunctionsJson.Children()).Select(jt =>
         {
             JProperty jp = (JProperty)jt;
             string name = jp.Name;

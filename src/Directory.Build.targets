@@ -1,6 +1,6 @@
 <Project>
     <!-- LOCAL TESTING COPY TASK -->
-	<Target Name="CopyAfterBuild" AfterTargets="Build">
+	<Target Name="CopyAfterBuild" AfterTargets="Build" Condition="'$(CopyToDir)' != ''">
 		<ItemGroup>
 			<ProjectFiles Include="$(TargetDir)\**\*.*" />
 		</ItemGroup>

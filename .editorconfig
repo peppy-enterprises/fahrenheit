@@ -52,3 +52,6 @@ generated_code = true
 
 [*.g.cs]
 generated_code = true
+
+[*.gen.cs]
+generated_code = true
