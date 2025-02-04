@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET.CG", "src\imgui_cg\Fahrenheit.Core.ImGuiNET.CG.csproj", "{24B48D88-B846-409F-A2B7-0B09147CD63E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Tools.STEP", "src\step\Fahrenheit.Tools.STEP.csproj", "{5EB95380-0B38-4E7A-AC80-46426271DFC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -256,6 +258,22 @@ Global
 		{24B48D88-B846-409F-A2B7-0B09147CD63E}.Release|x64.Build.0 = Release|Any CPU
 		{24B48D88-B846-409F-A2B7-0B09147CD63E}.Release|x86.ActiveCfg = Release|Any CPU
 		{24B48D88-B846-409F-A2B7-0B09147CD63E}.Release|x86.Build.0 = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|x64.Build.0 = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Debug|x86.Build.0 = Debug|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|ARM64.Build.0 = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|x64.ActiveCfg = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|x64.Build.0 = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|x86.ActiveCfg = Release|Any CPU
+		{5EB95380-0B38-4E7A-AC80-46426271DFC1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

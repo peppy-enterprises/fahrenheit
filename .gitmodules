@@ -20,3 +20,6 @@
 [submodule "src/efp"]
 	path = src/efp
 	url = https://github.com/peppy-enterprises/fh-mods-efp
+[submodule "src/step"]
+	path = src/step
+	url = https://github.com/peppy-enterprises/fh-tools-step
