@@ -7,7 +7,7 @@ using static Fahrenheit.Core.FhHookDelegates;
 namespace Fahrenheit.Core.Runtime;
 
 public sealed record FhCoreModuleConfig : FhModuleConfig {
-    public FhCoreModuleConfig(string configName) : base(configName) { }
+    public FhCoreModuleConfig(string name) : base(name) { }
 
     public override FhModule SpawnModule() {
         return new FhCoreModule(this);
@@ -113,6 +113,7 @@ public unsafe class FhCoreModule : FhModule {
                 foreach (FhModuleContext fmctx in FhModuleController.find_all()) {
                     ImGui.Text($"{fmctx.Module.ModuleName} v{fmctx.Module.GetType().Assembly.GetName().Version}");
                 }
+                ImGui.End();
             }
         }
     }

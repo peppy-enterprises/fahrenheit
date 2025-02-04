@@ -8,7 +8,7 @@ using static Fahrenheit.Core.Runtime.PInvoke;
 namespace Fahrenheit.Core.Runtime;
 
 public sealed record FhImguiModuleConfig : FhModuleConfig {
-    public FhImguiModuleConfig(string configName) : base(configName) { }
+    public FhImguiModuleConfig(string name) : base(name) { }
 
     public override FhModule SpawnModule() {
         return new FhImguiModule(this);
