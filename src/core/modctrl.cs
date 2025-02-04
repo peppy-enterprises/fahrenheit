@@ -1,88 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Fahrenheit.Core;
 
-namespace Fahrenheit.Core;
-
-public sealed record FhModuleContext(FhModule Module, FhModuleConfig ModuleConfig);
+public sealed record FhModuleContext(
+    FhModule       Module,
+    FhModuleConfig ModuleConfig);
 
 public static class FhModuleController {
-    private static readonly object                _moduleManipLock;
-    private static readonly List<FhModuleContext> _moduleContexts;
+    private static readonly object                _lock;
+    private static readonly List<FhModuleContext> _contexts;
 
     static FhModuleController() {
-        _moduleContexts  = new List<FhModuleContext>(8);
-        _moduleManipLock = new object();
+        _contexts = new List<FhModuleContext>(8);
+        _lock     = new object();
     }
 
     public static IEnumerable<FhModuleContext> find_all() {
-        lock (_moduleManipLock) {
-            foreach (FhModuleContext fmctx in _moduleContexts) yield return fmctx;
+        lock (_lock) {
+            foreach (FhModuleContext ctx in _contexts) yield return ctx;
         }
     }
 
     public static FhModuleContext? find<TModule>() where TModule : FhModule {
-        lock (_moduleManipLock) {
-            foreach (FhModuleContext fmctx in _moduleContexts) {
-                if (fmctx.Module is TModule) return fmctx;
+        lock (_lock) {
+            foreach (FhModuleContext ctx in _contexts) {
+                if (ctx.Module is TModule) return ctx;
             }
         }
         return null;
     }
 
     public static IEnumerable<FhModuleContext> find_all<TModule>() where TModule : FhModule {
-        lock (_moduleManipLock) {
-            foreach (FhModuleContext fmctx in _moduleContexts) {
-                if (fmctx.Module is TModule) yield return fmctx;
+        lock (_lock) {
+            foreach (FhModuleContext ctx in _contexts) {
+                if (ctx.Module is TModule) yield return ctx;
             }
         }
     }
 
     public static FhModuleContext? find<TModule>(Predicate<TModule> match) where TModule : FhModule {
-        lock (_moduleManipLock) {
-            foreach (FhModuleContext fmctx in _moduleContexts) {
-                if (fmctx.Module is TModule tfm && match(tfm)) return fmctx;
+        lock (_lock) {
+            foreach (FhModuleContext ctx in _contexts) {
+                if (ctx.Module is TModule tfm && match(tfm)) return ctx;
             }
         }
         return null;
     }
 
     public static IEnumerable<FhModuleContext> find_all<TModule>(Predicate<TModule> match) where TModule : FhModule {
-        lock (_moduleManipLock) {
-            foreach (FhModuleContext fmctx in _moduleContexts) {
-                if (fmctx.Module is TModule tfm && match(tfm)) yield return fmctx;
+        lock (_lock) {
+            foreach (FhModuleContext ctx in _contexts) {
+                if (ctx.Module is TModule tfm && match(tfm)) yield return ctx;
             }
         }
     }
 
-    public static bool initialize_modules(in List<FhModuleConfig> moduleConfigs) {
-        bool retval = true;
-
-        lock (_moduleManipLock) {
-            foreach (FhModuleConfig fmcfg in moduleConfigs) {
-                if (!fmcfg.ConfigEnabled) {
-                    FhLog.Log(LogLevel.Warning, $"Module {fmcfg.ConfigName} [{fmcfg.Type}] is disabled in configuration. Suppressing.");
-                    continue;
-                }
-
-                FhModule fm = fmcfg.SpawnModule();
-
-                FhLog.Log(LogLevel.Warning, $"Initialized module {fmcfg.ConfigName} [{fmcfg.Type}].");
-                _moduleContexts.Add(new FhModuleContext(fm, fmcfg));
+    public static void spawn_modules(in List<FhModuleConfig> configs) {
+        lock (_lock) {
+            foreach (FhModuleConfig config in configs) {
+                _contexts.Add(new FhModuleContext(config.SpawnModule(), config));
+                FhLog.Log(LogLevel.Warning, $"Initialized module {config.Name} [{config.Type}].");
             }
+        }
+    }
 
-            foreach (FhModuleContext fmctx in _moduleContexts) {
-                FhModuleConfig fmcfg = fmctx.ModuleConfig;
-                FhModule       fm    = fmctx.Module;
+    public static void initialize_modules() {
+        lock (_lock) {
+            foreach (FhModuleContext context in _contexts) {
+                FhModuleConfig fmcfg = context.ModuleConfig;
+                FhModule       fm    = context.Module;
 
                 if (!fm.init()) {
-                    FhLog.Log(LogLevel.Warning, $"Module {fmcfg.ConfigName} [{fmcfg.Type}] initializer callback failed. Suppressing.");
-
-                    retval = false;
+                    FhLog.Log(LogLevel.Warning, $"Module {fmcfg.Name} [{fmcfg.Type}] initializer callback failed. Suppressing.");
                     continue;
                 }
             }
         }
-
-        return retval;
     }
 }

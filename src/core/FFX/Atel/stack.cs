@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fahrenheit.Core.FFX.Atel;
+﻿namespace Fahrenheit.Core.FFX.Atel;
 
 public class AtelStackOverflowException : Exception {
     public AtelStackOverflowException()                                         : base()                        { }

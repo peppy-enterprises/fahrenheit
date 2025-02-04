@@ -1,20 +1,20 @@
-﻿using System;
-
-namespace Fahrenheit.Core;
+﻿namespace Fahrenheit.Core;
 
 public abstract class FhModule {
-    protected string _moduleName;
+    protected readonly string _module_name;
+    protected readonly string _module_type_name;
 
     protected FhModule(FhModuleConfig moduleConfig) {
-        _moduleName = moduleConfig.ConfigName;
+        _module_name      = moduleConfig.Name;
+        _module_type_name = GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE");
     }
 
     internal string ModuleType {
-        get { return GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE"); }
+        get { return _module_type_name; }
     }
 
     public string ModuleName {
-        get { return _moduleName; }
+        get { return _module_name; }
     }
 
     public abstract bool init();

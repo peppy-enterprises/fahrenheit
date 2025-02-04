@@ -1,8 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Runtime.CompilerServices;
 
 namespace Fahrenheit.Core;
 

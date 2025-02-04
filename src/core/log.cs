@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Fahrenheit.Core;
@@ -25,7 +23,7 @@ public static class FhLog {
     static FhLog() {
         Trace.AutoFlush = true;
         Trace.Listeners.Add(new ConsoleTraceListener());
-        Trace.Listeners.Add(new TextWriterTraceListener(File.Open(Path.Join(FhRuntimeConst.DiagLogDir.Path, $"{FhUtil.get_timestamp_string()}.log"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)));
+        Trace.Listeners.Add(new TextWriterTraceListener(File.Open(Path.Join(FhRuntimeConst.Logs.LinkPath, $"{FhUtil.get_timestamp_string()}.log"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)));
     }
 
     public static void Log(                   LogLevel level,

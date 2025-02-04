@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fahrenheit.Core.FFX.Battle;
+﻿namespace Fahrenheit.Core.FFX.Battle;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x1B0)]
 public unsafe struct BtlRewardData {

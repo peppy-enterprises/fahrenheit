@@ -1,49 +1,45 @@
-﻿using System;
-using System.IO;
-
-namespace Fahrenheit.Core;
+﻿namespace Fahrenheit.Core;
 
 public sealed record FhDirLink {
     public string LinkSymbol { get; }
-    public string Path       { get; }
+    public string LinkPath   { get; }
 
-    public FhDirLink(string linkSymbol, string path) {
-        LinkSymbol = linkSymbol;
-
+    public FhDirLink(string link_symbol, string path) {
         /* [fkelava 31/3/23 13:10]
          * On Windows, Path.Join uses backwards slashes which do not escape properly in JSON.
          * Since we cannot tell it to use AltDirectorySeparatorChar, we just patch the path _anyway_
          * because both Windows and Linux deal with forward slashes well in modern versions.
          */
-        Path = path.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+        LinkSymbol = link_symbol;
+        LinkPath   = path.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
         Directory.CreateDirectory(path);
     }
 }
 
 public static class FhRuntimeConst {
-    internal const string _binDirName     = "bin";
-    internal const string _modulesDirName = "modules";
-    internal const string _logsDirName    = "logs";
-    internal const string _rsrcDirName    = "rsrc";
+    private const string _dirname_bin     = "bin";
+    private const string _dirname_modules = "modules";
+    private const string _dirname_logs    = "logs";
+    private const string _dirname_rsrc    = "rsrc";
 
     static FhRuntimeConst() {
-        string cwdParent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
+        string cwd_parent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
                            throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
 
-        string binDirPath     = Path.Join(cwdParent, _binDirName);
-        string modulesDirPath = Path.Join(cwdParent, _modulesDirName);
-        string logsDirPath    = Path.Join(cwdParent, _logsDirName);
-        string rsrcDirPath    = Path.Join(cwdParent, _rsrcDirName);
+        string path_bin     = Path.Join(cwd_parent, _dirname_bin);
+        string path_modules = Path.Join(cwd_parent, _dirname_modules);
+        string path_logs    = Path.Join(cwd_parent, _dirname_logs);
+        string path_rsrc    = Path.Join(cwd_parent, _dirname_rsrc);
 
-        BinDir     = new FhDirLink("$bindir",     binDirPath);
-        ModulesDir = new FhDirLink("$modulesdir", modulesDirPath);
-        DiagLogDir = new FhDirLink("$diaglogdir", logsDirPath);
-        RsrcDir    = new FhDirLink("$rsrcdir",    rsrcDirPath);
+        Binaries  = new FhDirLink("$bin",     path_bin);
+        Modules   = new FhDirLink("$modules", path_modules);
+        Logs      = new FhDirLink("$logs",    path_logs);
+        Resources = new FhDirLink("$rsrc",    path_rsrc);
     }
 
-    public static readonly FhDirLink BinDir;
-    public static readonly FhDirLink ModulesDir;
-    public static readonly FhDirLink DiagLogDir;
-    public static readonly FhDirLink RsrcDir;
+    public static readonly FhDirLink Binaries;
+    public static readonly FhDirLink Modules;
+    public static readonly FhDirLink Logs;
+    public static readonly FhDirLink Resources;
 }

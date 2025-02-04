@@ -1,6 +1,4 @@
-﻿using System;
-
-using Fahrenheit.Core.FFX.Battle;
+﻿using Fahrenheit.Core.FFX.Battle;
 
 namespace Fahrenheit.Core.FFX.Atel;
 

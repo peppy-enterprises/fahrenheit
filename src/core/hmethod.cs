@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Threading;
 
 namespace Fahrenheit.Core;
 
+// Tracks the current address at which the next hook in a chain must be inserted.
 internal static class FhMethodAddressRegistry {
-    private static readonly Dictionary<nint, nint> _method_addr_map;
-    private static readonly object                 _method_addr_map_lock;
+    private static readonly Dictionary<nint, nint> _map;
+    private static readonly Lock                   _lock;
 
     static FhMethodAddressRegistry() {
-        _method_addr_map      = new Dictionary<nint, nint>();
-        _method_addr_map_lock = new object();
+        _map  = [];
+        _lock = new Lock();
     }
 
-    public static nint Get(nint fn_addr_initial) {
-        lock (_method_addr_map_lock) {
-            return _method_addr_map.TryGetValue(fn_addr_initial, out nint fn_addr_current)
-                ? fn_addr_current
-                : fn_addr_initial;
+    public static nint Get(nint addr_initial) {
+        lock (_lock) {
+            return _map.TryGetValue(addr_initial, out nint addr_current)
+                ? addr_current
+                : addr_initial;
         }
     }
 
-    public static void Set(nint fn_addr_initial, nint fn_addr_new) {
-        lock (_method_addr_map_lock) {
-            _method_addr_map[fn_addr_initial] = fn_addr_new;
+    public static void Set(nint addr_initial, nint addr_new) {
+        lock (_lock) {
+            _map[addr_initial] = addr_new;
         }
     }
 }

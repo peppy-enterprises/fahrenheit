@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Fahrenheit.Core;
+﻿namespace Fahrenheit.Core;
 
 public class FhModuleHandle<T> where T : FhModule {
     private readonly FhModule         _handleOwner;

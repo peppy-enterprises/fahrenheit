@@ -20,7 +20,7 @@ public struct Vec2s16 {
             return i switch {
                 0 => x,
                 1 => y,
-                _ => throw new System.IndexOutOfRangeException(),
+                _ => throw new IndexOutOfRangeException(),
            };
         }
 
@@ -28,7 +28,7 @@ public struct Vec2s16 {
             switch (i) {
                 case 0: x = value; break;
                 case 1: y = value; break;
-                default: throw new System.IndexOutOfRangeException();
+                default: throw new IndexOutOfRangeException();
            }
         }
     }
@@ -43,7 +43,7 @@ public struct Vec2f {
             return i switch {
                 0 => x,
                 1 => y,
-                _ => throw new System.IndexOutOfRangeException(),
+                _ => throw new IndexOutOfRangeException(),
            };
         }
 
@@ -51,7 +51,7 @@ public struct Vec2f {
             switch (i) {
                 case 0: x = value; break;
                 case 1: y = value; break;
-                default: throw new System.IndexOutOfRangeException();
+                default: throw new IndexOutOfRangeException();
            }
         }
     }
@@ -68,7 +68,7 @@ public struct Vec3f {
                 0 => x,
                 1 => y,
                 2 => z,
-                _ => throw new System.IndexOutOfRangeException(),
+                _ => throw new IndexOutOfRangeException(),
            };
         }
 
@@ -77,7 +77,7 @@ public struct Vec3f {
                 case 0: x = value; break;
                 case 1: y = value; break;
                 case 2: z = value; break;
-                default: throw new System.IndexOutOfRangeException();
+                default: throw new IndexOutOfRangeException();
            }
         }
     }
@@ -96,7 +96,7 @@ public struct Vec4f {
                 1 => y,
                 2 => z,
                 3 => w,
-                _ => throw new System.IndexOutOfRangeException(),
+                _ => throw new IndexOutOfRangeException(),
            };
         }
 
@@ -106,7 +106,7 @@ public struct Vec4f {
                 case 1: y = value; break;
                 case 2: z = value; break;
                 case 3: w = value; break;
-                default: throw new System.IndexOutOfRangeException();
+                default: throw new IndexOutOfRangeException();
            }
         }
     }
@@ -122,7 +122,7 @@ public unsafe struct Mat4f {
     // Provide indexing
     public Vec4f this[int i] {
         get {
-            if (i < 0 || i > 3) throw new System.IndexOutOfRangeException();
+            if (i < 0 || i > 3) throw new IndexOutOfRangeException();
             fixed (Vec4f* p = &x)
             return *(p + i);
         }

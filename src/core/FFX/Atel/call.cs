@@ -1,6 +1,4 @@
-﻿using System;
-
-using static System.Diagnostics.Debug;
+﻿using static System.Diagnostics.Debug;
 
 namespace Fahrenheit.Core.FFX.Atel;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fahrenheit.Core.FFX;
+﻿namespace Fahrenheit.Core.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x68C0)]
 public unsafe struct SaveData {

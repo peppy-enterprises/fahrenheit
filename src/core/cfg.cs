@@ -1,20 +1,16 @@
-﻿using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace Fahrenheit.Core;
+﻿namespace Fahrenheit.Core;
 
 public abstract record FhConfigStruct {
-    protected FhConfigStruct(string configName) {
-        Type       = GetType().FullName ?? throw new Exception("E_CONFSTRUCT_TYPE_UNIDENTIFIABLE");
-        ConfigName = configName;
+    protected FhConfigStruct(string name) {
+        Type = GetType().FullName ?? throw new Exception("FH_E_CONFSTRUCT_TYPE_UNIDENTIFIABLE");
+        Name = name;
     }
 
-    public string Type       { get; }
-    public string ConfigName { get; }
+    public string Type { get; }
+    public string Name { get; }
 }
 
-public abstract record FhModuleConfig(string ConfigName, bool ConfigEnabled) : FhConfigStruct(ConfigName) {
+public abstract record FhModuleConfig(string Name) : FhConfigStruct(Name) {
     public abstract FhModule SpawnModule();
 }
 
@@ -24,13 +20,15 @@ public class FhConfigParser<T> : JsonConverter<T> where T : FhModuleConfig {
     }
 
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-        Utf8JsonReader readerClone = reader;
+        Utf8JsonReader reader_clone = reader;
+        reader_clone.enter_json_object();
 
-        readerClone.enter_json_object();
-        readerClone.strict_resolve_descendant_of<T>(typeToConvert, out Type actualType);
+        if (!reader_clone.resolve_descendant_of(typeToConvert, out Type? actualType)) {
+            throw new Exception("FH_E_CONF_TYPE_RESOLUTION_FAILED");
+        }
 
         if (JsonSerializer.Deserialize(ref reader, actualType, FhUtil.InternalJsonOpts) is not T t) {
-            throw new JsonException("E_CONFIG_DESERIALIZE_TO_DERIVED_TYPE_FAILED");
+            throw new JsonException("FH_E_CONF_TYPE_CAST_FAILED");
         }
 
         return t;

@@ -1,5 +1,3 @@
-using System;
-
 namespace Fahrenheit.Core.FFX;
 
 public enum SphereGridTilt : u8 {

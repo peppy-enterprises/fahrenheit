@@ -7,7 +7,7 @@ using static Fahrenheit.Core.FhHookDelegates;
 namespace Fahrenheit.Core.Runtime;
 
 public sealed record FhCoreModuleConfig : FhModuleConfig {
-    public FhCoreModuleConfig(string configName, bool configEnabled) : base(configName, configEnabled) { }
+    public FhCoreModuleConfig(string configName) : base(configName) { }
 
     public override FhModule SpawnModule() {
         return new FhCoreModule(this);
