@@ -29,7 +29,7 @@ public unsafe struct SaveData {
     [FieldOffset(0xE8)]   public       ushort    btl_end_tag_always;
     [FieldOffset(0xEA)]   public       ushort    sphere_monitor;
     [FieldOffset(0xBEC)]  public       ushort    story_progress;
-    [FieldOffset(0xC81)]  public       ushort    airship_destination_unlocks;
+    [FieldOffset(0xC81)]  public       ushort    unlocked_airship_destinations;
     [FieldOffset(0x3D0C)] public       uint      config;
     [FieldOffset(0x3D10)] public       uint      unlocked_primers;
     [FieldOffset(0x3D14)] public       uint      battle_count;
@@ -105,4 +105,17 @@ public unsafe struct SaveData {
     public bool has_unlocked_primer_24 { readonly get { return unlocked_primers.get_bit(23); } set { unlocked_primers.set_bit(23, value); } }
     public bool has_unlocked_primer_25 { readonly get { return unlocked_primers.get_bit(24); } set { unlocked_primers.set_bit(24, value); } }
     public bool has_unlocked_primer_26 { readonly get { return unlocked_primers.get_bit(25); } set { unlocked_primers.set_bit(25, value); } }
+
+    public bool has_unlocked_airship_destination_baaj_temple    { readonly get { return unlocked_airship_destinations.get_bit( 0); } set { unlocked_airship_destinations.set_bit( 0, value); } }
+    public bool has_unlocked_airship_destination_sin            { readonly get { return unlocked_airship_destinations.get_bit( 1); } set { unlocked_airship_destinations.set_bit( 1, value); } }
+    public bool has_unlocked_airship_destination_omega_ruins    { readonly get { return unlocked_airship_destinations.get_bit( 2); } set { unlocked_airship_destinations.set_bit( 2, value); } }
+    public bool has_unlocked_airship_destination_highbridge     { readonly get { return unlocked_airship_destinations.get_bit( 3); } set { unlocked_airship_destinations.set_bit( 3, value); } }
+    public bool has_unlocked_airship_destination_besaid_ruins_1 { readonly get { return unlocked_airship_destinations.get_bit( 4); } set { unlocked_airship_destinations.set_bit( 4, value); } }
+    public bool has_unlocked_airship_destination_mushroom_rock  { readonly get { return unlocked_airship_destinations.get_bit( 5); } set { unlocked_airship_destinations.set_bit( 5, value); } }
+    public bool has_unlocked_airship_destination_besaid_ruins_2 { readonly get { return unlocked_airship_destinations.get_bit( 6); } set { unlocked_airship_destinations.set_bit( 6, value); } }
+    public bool has_unlocked_airship_destination_besaid_falls   { readonly get { return unlocked_airship_destinations.get_bit( 7); } set { unlocked_airship_destinations.set_bit( 7, value); } }
+    public bool has_unlocked_airship_destination_miihen_ruins   { readonly get { return unlocked_airship_destinations.get_bit( 8); } set { unlocked_airship_destinations.set_bit( 8, value); } }
+    public bool has_unlocked_airship_destination_battle_site    { readonly get { return unlocked_airship_destinations.get_bit( 9); } set { unlocked_airship_destinations.set_bit( 9, value); } }
+    public bool has_unlocked_airship_destination_sanubia_sands  { readonly get { return unlocked_airship_destinations.get_bit(10); } set { unlocked_airship_destinations.set_bit(10, value); } }
+    public bool has_unlocked_airship_destination_penance        { readonly get { return unlocked_airship_destinations.get_bit(11); } set { unlocked_airship_destinations.set_bit(11, value); } }
 }
