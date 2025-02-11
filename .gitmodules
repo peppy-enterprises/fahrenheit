@@ -4,9 +4,6 @@
 [submodule "src/dbg"]
 	path = src/dbg
 	url = https://github.com/peppy-enterprises/fh-mods-debug
-[submodule "src/efl"]
-	path = src/efl
-	url = https://github.com/peppy-enterprises/fh-mods-efl
 [submodule "src/dedit"]
 	path = src/dedit
 	url = https://github.com/peppy-enterprises/fh-tools-dedit

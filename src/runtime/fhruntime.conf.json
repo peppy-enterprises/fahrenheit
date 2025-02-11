@@ -6,5 +6,9 @@
   {
     "Type": "Fahrenheit.Core.Runtime.FhImguiModuleConfig",
     "Name": "FhImguiModule"
+  },
+  {
+    "Type": "Fahrenheit.Core.Runtime.FhEFLModuleConfig",
+    "Name": "FhEflModule"
   }
 ]
