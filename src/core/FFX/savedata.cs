@@ -13,6 +13,8 @@ public unsafe struct SaveData {
     [FieldOffset(0xE)]    public       ushort    atel_save_dic_index;
     [FieldOffset(0x10)]   public       byte      atel_battle_scene_group;
     [FieldOffset(0x20)]   public       byte      atel_is_push_member;
+    [FieldOffset(0x21)]   public fixed byte      atel_push_frontline[3];
+    [FieldOffset(0x24)]   public       byte      atel_push_party;
     [FieldOffset(0x28)]   public       byte      is_cam_underwater;
     [FieldOffset(0x29)]   public       byte      is_map_underwater;
     [FieldOffset(0x2B)]   public       byte      tk_event_new_game;
@@ -27,6 +29,7 @@ public unsafe struct SaveData {
     [FieldOffset(0xE8)]   public       ushort    btl_end_tag_always;
     [FieldOffset(0xEA)]   public       ushort    sphere_monitor;
     [FieldOffset(0xBEC)]  public       ushort    story_progress;
+    [FieldOffset(0xC81)]  public       ushort    airship_destination_unlocks;
     [FieldOffset(0x3D0C)] public       uint      config;
     [FieldOffset(0x3D10)] public       uint      unlocked_primers;
     [FieldOffset(0x3D14)] public       uint      battle_count;

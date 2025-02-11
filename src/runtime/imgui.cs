@@ -137,6 +137,10 @@ public unsafe class FhImguiModule : FhModule {
     private readonly FhMethodHandle<graphicInitialize>             _handle_wndproc_init;
     private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _handle_d3d11_init;
     private          FhMethodHandle<DXGISwapChain_Present>?        _handle_present;
+    
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    public delegate int PInputUpdate();
+    private readonly FhMethodHandle<PInputUpdate> _handle_input_update;
 
     public FhImguiModule(FhImguiModuleConfig cfg) : base(cfg) {
         _vtbl_swap_chain       = new nint[_D3D11_VTBL_SWAP_CHAIN_COUNT];
@@ -146,12 +150,14 @@ public unsafe class FhImguiModule : FhModule {
 
         _handle_wndproc_init   = new(this, "FFX.exe",   h_init_wndproc, offset:  0x241B80);
         _handle_d3d11_init     = new(this, "D3D11.dll", h_init_d3d11,   fn_name: "D3D11CreateDeviceAndSwapChain");
+        _handle_input_update = new(this, "FFX.exe", h_input_update, offset: 0x00225930);
         _h_WndProc             = h_wndproc;
     }
 
     public override bool init() {
         return _handle_d3d11_init.hook()
-            && _handle_wndproc_init.hook();
+            && _handle_wndproc_init.hook()
+            && _handle_input_update.hook();
     }
 
     private void init_imgui() {
@@ -240,6 +246,19 @@ public unsafe class FhImguiModule : FhModule {
         return PInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1
              ? 1
              : PInvoke.CallWindowProcW(_ptr_o_WndProc, hWnd, msg, wParam, lParam);
+    }
+    public int h_input_update() {
+        if (_hWnd == 0 ||                        // h_init_wndproc hasn't run yet?
+            _p_device == null || _p_device_ctx == null) // h_init_d3d11 hasn't run yet?
+            return _handle_input_update.orig_fptr();
+
+        var io = ImGui.GetIO();
+        if (io.WantCaptureKeyboard) {
+            return 0;
+        }
+        else {
+            return _handle_input_update.orig_fptr();
+        }
     }
 
     public nint h_present(nint* pSwapChain, uint SyncInterval, uint Flags) {
