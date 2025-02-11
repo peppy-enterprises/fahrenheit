@@ -20,39 +20,35 @@ public static class FhLoader {
         string[] load_order      = File.ReadAllLines(load_order_path);
         string   runtime_path    = Path.Join(FhRuntimeConst.Binaries.LinkPath, "fhruntime.dll");
 
-        if (!_load(runtime_path, out List<FhModuleConfig>? module_configs)) {
-            throw new Exception("FH_E_RUNTIME_DLL_LOAD_FAILED");
-        }
+        _load(runtime_path, out List<FhModuleConfig> module_configs);
         FhModuleController.spawn_modules(module_configs);
 
         foreach (string module in load_order) {
             string module_path = Path.Join(FhRuntimeConst.Modules.LinkPath, module, $"{module}.dll");
-            if (!_load(module_path, out module_configs)) continue;
+            _load(module_path, out module_configs);
             FhModuleController.spawn_modules(module_configs);
         }
 
         FhModuleController.initialize_modules();
     }
 
-    private static bool _is_loaded(string refAssemName) {
+    private static bool _is_loaded(string dll_name) {
         foreach (Assembly assembly in _load_context.Assemblies) {
-            if (assembly.GetName().Name?.ToUpperInvariant() == refAssemName)
+            if (assembly.GetName().Name?.ToUpperInvariant() == dll_name)
                 return true;
         }
 
         return false;
     }
 
-    private static bool _should_load(string dirPath, string refAssemName, out string refAssemFullPath) {
-        refAssemFullPath = Path.Join(dirPath, $"{refAssemName}.dll");
+    private static bool _should_load(string dir_path, string dll_name, out string dll_full_path) {
+        dll_full_path = Path.Join(dir_path, $"{dll_name}.dll");
 
-        return File.Exists(refAssemFullPath) && !_is_loaded(refAssemName);
+        return File.Exists(dll_full_path) && !_is_loaded(dll_name);
     }
 
-    /// <summary>
-    ///     Loads a module while ensuring its references, if detected, are loaded before it.
-    /// </summary>
-    private static bool _load(string dll_full_path, [NotNullWhen(true)] out List<FhModuleConfig>? module_configs) {
+    // Loads a DLL while ensuring its references, if detected, are loaded before it.
+    private static void _load(string dll_full_path, out List<FhModuleConfig> module_configs) {
         module_configs = [];
 
         string module_dir_name    = Path.GetDirectoryName           (dll_full_path) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
@@ -60,28 +56,26 @@ public static class FhLoader {
         string module_conf_name   = dll_full_path.Replace(".dll", ".conf.json");
         bool   should_load_config = File.Exists(module_conf_name);
 
-        if (_is_loaded(module_dll_name)) return true;
+        if (_is_loaded(module_dll_name)) return;
 
         FhLog.Log(LogLevel.Info, $"Loading module {module_dll_name}.");
         Assembly this_assembly = _load_context.LoadFromAssemblyPath(dll_full_path);
 
-        // --> LOAD ORDERING; LOAD REFERENCED ASSEMBLIES FIRST <--
+        // Load dependencies first.
         foreach (AssemblyName dependency in this_assembly.GetReferencedAssemblies()) {
             if (_should_load(module_dir_name, dependency.Name ?? throw new Exception("FH_E_REF_DLL_NAME_NULL"), out string dependency_full_path)) {
-                if (!_load(dependency_full_path, out List<FhModuleConfig>? dependency_module_configs))
-                    throw new Exception("FH_E_REF_ASSEM_LOAD_FAULT");
-
+                _load(dependency_full_path, out List<FhModuleConfig> dependency_module_configs);
                 module_configs.AddRange(dependency_module_configs);
             }
         }
-        // --> END LOAD ORDERING <--
 
+        // Dependency DLLs may not be Fahrenheit modules themselves and thus have no config.
         if (!should_load_config) {
             FhLog.Log(LogLevel.Info, $"{module_dll_name} loaded.");
-            return true;
+            return;
         }
 
-        // --> LOAD CONFIGURATIONS <--
+        // Load configuration.
         string patched_json = File.ReadAllText(module_conf_name)._fix_up_link_symbols();
 
         List<FhModuleConfig> configs =
@@ -90,9 +84,6 @@ public static class FhLoader {
 
         FhLog.Log(LogLevel.Info, $"{module_dll_name} loaded, parsing {configs.Count.ToString()} configurations.");
         module_configs.AddRange(configs);
-        // --> END LOAD CONFIGURATIONS <--
-
-        return true;
     }
 
     /// <summary>
@@ -113,29 +104,17 @@ public static class FhLoader {
      * Resolves a full type name in the "Type" variable of a given FhModuleConfig JSON
      * to an actual Type instance, verifying that it is in fact derived from FhModuleConfig.
      */
-    public static bool resolve_descendant_of(                    this ref Utf8JsonReader reader,
-                                                                          Type           type_to_convert,
-                                             [NotNullWhen(true)]      out Type?          actual_type) {
+    public static Type resolve_type(ref Utf8JsonReader reader, Type target_type, bool strict = false) {
         string type_name = reader.deserialize_and_advance<string>("Type");
-        actual_type      = null;
 
         foreach (Assembly dll in _load_context.Assemblies) {
-            if ((actual_type = dll.GetType(type_name)) != null) break;
+            if (dll.GetType(type_name) is Type type
+                && (strict
+                    ? type == target_type
+                    : type.IsAssignableTo(target_type)))
+                return type;
         }
 
-        return actual_type != null && actual_type.IsAssignableTo(type_to_convert);
-    }
-
-    public static bool resolve_exact(                    this ref Utf8JsonReader reader,
-                                                                  Type           type_to_convert,
-                                     [NotNullWhen(true)]      out Type?          actual_type) {
-        string type_name = reader.deserialize_and_advance<string>("Type");
-        actual_type      = null;
-
-        foreach (Assembly dll in _load_context.Assemblies) {
-            if ((actual_type = dll.GetType(type_name)) != null) break;
-        }
-
-        return actual_type != null && actual_type == type_to_convert;
+        throw new Exception("FH_E_TYPE_RESOLUTION_FAILED");
     }
 }
