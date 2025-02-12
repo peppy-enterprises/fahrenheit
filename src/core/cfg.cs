@@ -23,11 +23,9 @@ public class FhConfigParser<T> : JsonConverter<T> where T : FhModuleConfig {
         Utf8JsonReader reader_clone = reader;
         reader_clone.enter_json_object();
 
-        if (!reader_clone.resolve_descendant_of(typeToConvert, out Type? actualType)) {
-            throw new Exception("FH_E_CONF_TYPE_RESOLUTION_FAILED");
-        }
+        Type actual_type = FhLoader.resolve_type(ref reader_clone, typeToConvert);
 
-        if (JsonSerializer.Deserialize(ref reader, actualType, FhUtil.InternalJsonOpts) is not T t) {
+        if (JsonSerializer.Deserialize(ref reader, actual_type, FhUtil.InternalJsonOpts) is not T t) {
             throw new JsonException("FH_E_CONF_TYPE_CAST_FAILED");
         }
 
