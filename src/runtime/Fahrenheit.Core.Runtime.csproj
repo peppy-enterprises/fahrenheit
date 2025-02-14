@@ -33,7 +33,7 @@
 
     <!-- CONTENT -->
     <ItemGroup>
-        <Content Include="fhruntime.conf.json">
+        <Content Include="fhruntime.config.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

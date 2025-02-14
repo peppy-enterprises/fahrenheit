@@ -53,7 +53,7 @@ public static class FhLoader {
 
         string module_dir_name    = Path.GetDirectoryName           (dll_full_path) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
         string module_dll_name    = Path.GetFileNameWithoutExtension(dll_full_path).ToUpperInvariant();
-        string module_conf_name   = dll_full_path.Replace(".dll", ".conf.json");
+        string module_conf_name   = dll_full_path.Replace(".dll", ".config.json");
         bool   should_load_config = File.Exists(module_conf_name);
 
         if (_is_loaded(module_dll_name)) return;
