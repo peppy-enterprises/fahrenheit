@@ -29,7 +29,8 @@ public static class FhLoader {
             FhModuleController.spawn_modules(module_configs);
         }
 
-        FhModuleController.initialize_modules();
+        FhLocalizationManager.construct_localization_map();
+        FhModuleController   .initialize_modules();
     }
 
     private static bool _is_loaded(string dll_name) {
@@ -94,10 +95,11 @@ public static class FhLoader {
     ///     e.g. $resdir (Linux) -> /opt/fahrenheit/resources, $resdir (Windows) -> C:\Users\USER1\fahrenheit\resources
     /// </summary>
     private static string _fix_up_link_symbols(this string configJson) {
-        return configJson.Replace(FhRuntimeConst.Binaries .LinkSymbol, FhRuntimeConst.Binaries .LinkPath).
-                          Replace(FhRuntimeConst.Modules  .LinkSymbol, FhRuntimeConst.Modules  .LinkPath).
-                          Replace(FhRuntimeConst.Logs     .LinkSymbol, FhRuntimeConst.Logs     .LinkPath).
-                          Replace(FhRuntimeConst.Resources.LinkSymbol, FhRuntimeConst.Resources.LinkPath);
+        return configJson.Replace(FhRuntimeConst.Binaries.LinkSymbol, FhRuntimeConst.Binaries.LinkPath).
+                          Replace(FhRuntimeConst.Modules .LinkSymbol, FhRuntimeConst.Modules .LinkPath).
+                          Replace(FhRuntimeConst.Logs    .LinkSymbol, FhRuntimeConst.Logs    .LinkPath).
+                          Replace(FhRuntimeConst.State   .LinkSymbol, FhRuntimeConst.State   .LinkPath).
+                          Replace(FhRuntimeConst.Saves   .LinkSymbol, FhRuntimeConst.Saves   .LinkPath);
     }
 
     /* [fkelava 27/2/23 00:12]

@@ -21,7 +21,8 @@ public static class FhRuntimeConst {
     private const string _dirname_bin     = "bin";
     private const string _dirname_modules = "modules";
     private const string _dirname_logs    = "logs";
-    private const string _dirname_rsrc    = "rsrc";
+    private const string _dirname_state   = "state";
+    private const string _dirname_saves   = "saves";
 
     static FhRuntimeConst() {
         string cwd_parent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
@@ -30,16 +31,19 @@ public static class FhRuntimeConst {
         string path_bin     = Path.Join(cwd_parent, _dirname_bin);
         string path_modules = Path.Join(cwd_parent, _dirname_modules);
         string path_logs    = Path.Join(cwd_parent, _dirname_logs);
-        string path_rsrc    = Path.Join(cwd_parent, _dirname_rsrc);
+        string path_state   = Path.Join(cwd_parent, _dirname_state);
+        string path_saves   = Path.Join(cwd_parent, _dirname_saves);
 
         Binaries  = new FhDirLink("$bin",     path_bin);
         Modules   = new FhDirLink("$modules", path_modules);
         Logs      = new FhDirLink("$logs",    path_logs);
-        Resources = new FhDirLink("$rsrc",    path_rsrc);
+        State     = new FhDirLink("$state",   path_state);
+        Saves     = new FhDirLink("$saves",   path_saves);
     }
 
     public static readonly FhDirLink Binaries;
     public static readonly FhDirLink Modules;
     public static readonly FhDirLink Logs;
-    public static readonly FhDirLink Resources;
+    public static readonly FhDirLink State;
+    public static readonly FhDirLink Saves;
 }
