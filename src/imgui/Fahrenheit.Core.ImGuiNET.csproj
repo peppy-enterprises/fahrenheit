@@ -34,8 +34,14 @@
 
 	<!-- CONTENT -->
     <ItemGroup>
-        <Content Include="deps\cimgui\win-x86\cimgui.dll">
+        <Content Include="deps\cimgui\win-x86\cimgui.dll" Condition="'$(Configuration)' == 'Release'">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="deps\cimgui\win-x86\cimguid.dll" Condition="'$(Configuration)' == 'Debug'">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="deps\cimgui\win-x86\cimguid.pdb" Condition="'$(Configuration)' == 'Debug'">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

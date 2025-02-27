@@ -51,7 +51,13 @@ internal static unsafe partial class PInvoke {
     internal static partial void WakeByAddressAll(
         void* Address);
 
-    [DllImport("cimgui.dll")]
+#if DEBUG
+    public const string cimgui_lib_name = "cimguid.dll";
+#else
+    public const string cimgui_lib_name = "cimgui.dll";
+#endif
+
+    [DllImport(cimgui_lib_name)]
     public static extern nint ImGui_ImplWin32_WndProcHandler(
         nint hWnd,
         uint msg,
