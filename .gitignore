@@ -85,6 +85,7 @@ StyleCopReport.xml
 *.iobj
 *.pch
 *.pdb
+!src/imgui/deps/cimgui/win-x86/cimguid.pdb
 *.ipdb
 *.pgc
 *.pgd
