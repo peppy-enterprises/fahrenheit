@@ -33,8 +33,7 @@ public static class FhLog {
                            [CallerLineNumber] int      lnb   = 0) {
         if (level < MinLevel) return;
 
-        long millis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        Trace.WriteLine($"{millis.ToString()} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}");
+        Trace.WriteLine($"{DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}");
     }
 
     public static void Debug(                   string msg,
