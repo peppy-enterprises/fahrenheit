@@ -19,7 +19,6 @@ public sealed record FhImguiModuleConfig : FhModuleConfig {
 public delegate nint graphicInitialize();
 
 /* [fkelava 6/10/24 01:54]
- * SharpDX reference:
  *
  *  /// <unmanaged>ULONG IUnknown::Release()</unmanaged>
  *  /// <unmanaged-short>IUnknown::Release</unmanaged-short>
@@ -33,6 +32,7 @@ public delegate nint graphicInitialize();
 public unsafe delegate uint ComIUnknown_Release(nint* p_object);
 
 /* [fkelava 6/10/24 01:54]
+ *
  * public unsafe Result Present(int syncInterval, PresentFlags flags)
  * {
  *     return ((delegate* unmanaged[Stdcall]<nint, int, int, int>)base[8])(base.NativePointer, syncInterval, (int)flags);
@@ -43,7 +43,6 @@ public unsafe delegate uint ComIUnknown_Release(nint* p_object);
 public unsafe delegate nint DXGISwapChain_Present(nint* pSwapChain, uint SyncInterval, uint Flags);
 
 /* [fkelava 6/10/24 01:54]
- * SharpDX reference:
  *
  * private unsafe Result GetBuffer(int buffer, Guid riid, out nint surface)
  * {
@@ -66,7 +65,6 @@ public unsafe delegate nint DXGISwapChain_Present(nint* pSwapChain, uint SyncInt
 public unsafe delegate nint DXGISwapChain_GetBuffer(nint* pSwapChain, uint Buffer, void* riid, nint** ppSurface);
 
 /* [fkelava 6/10/24 01:54]
- * SharpDX reference:
  *
  * public unsafe ID3D11RenderTargetView CreateRenderTargetView(ID3D11Resource resource, RenderTargetViewDescription? desc = null)
  * {
@@ -91,7 +89,6 @@ public unsafe delegate nint DXGISwapChain_GetBuffer(nint* pSwapChain, uint Buffe
 public unsafe delegate nint D3D11Device_CreateRenderTargetView(nint* pDevice, nint* pResource, nint* pDesc, nint** ppRTView);
 
 /* [fkelava 6/10/24 01:54]
- * SharpDX reference:
  *
  * private unsafe void OMSetRenderTargets(int numViews, void* renderTargetViews, ID3D11DepthStencilView depthStencilView)
  * {
@@ -104,6 +101,17 @@ public unsafe delegate nint D3D11Device_CreateRenderTargetView(nint* pDevice, ni
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 public unsafe delegate nint D3D11DeviceContext_OMSetRenderTargets(nint* pDeviceContext, uint NumViews, nint** ppRenderTargetViews, nint* pDepthStencilView);
+
+/* [fkelava 25/4/24 17:51]
+ *
+ * public unsafe Result ResizeBuffers(uint bufferCount, uint width, uint height, Format newFormat, SwapChainFlags swapChainFlags)
+ * {
+ *     return ((delegate* unmanaged[Stdcall]<nint, uint, uint, uint, uint, int, int>)base[13])(base.NativePointer, bufferCount, width, height, (uint)newFormat, (int)swapChainFlags);
+ * }
+ */
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+public unsafe delegate nint DXGISwapChain_ResizeBuffers(nint* pSwapChain, uint BufferCount, uint Width, uint Height, int NewFormat, uint SwapChainFlags);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 public delegate int PInputUpdate();
@@ -120,6 +128,7 @@ public unsafe class FhImguiModule : FhModule {
     private const int _D3D11_VTBL_DEVICE_COUNT           = 43;
     private const int _D3D11_VTBL_DEVICE_CTX_COUNT       = 144;
     private const int _D3D11_VTBL_D3D11_TEXTURE_2D_COUNT = 3; // incorrect, but we don't need any method beyond ordinal 2 - IUnknown::Release()
+    private const int _D3D11_VTBL_D3D11_RTV_COUNT        = 3; // incorrect, but we don't need any method beyond ordinal 2 - IUnknown::Release()
 
     private          bool                                          _present_init_complete;         // has h_present finished one-time initialization?
     private          bool                                          _dx11_init_complete;            // has h_init_d3d11 finished one-time initialization?
@@ -131,23 +140,26 @@ public unsafe class FhImguiModule : FhModule {
     private          nint*                                         _p_device_ctx;                  // ID3D11DeviceContext*    https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11devicecontext
     private          nint*                                         _p_surface;                     // ID3D11Texture2D*        https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11texture2d
     private          nint*                                         _p_render_target_view;          // ID3D11RenderTargetView* https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
-    private readonly nint[]                                        _vtbl_swap_chain;               // _p_swap_chain->vtbl[]
-    private readonly nint[]                                        _vtbl_device;                   // _p_device    ->vtbl[]
-    private readonly nint[]                                        _vtbl_device_ctx;               // _p_device_ctx->vtbl[]
-    private readonly nint[]                                        _vtbl_d3d11_texture_2d;         // _p_surface   ->vtbl[]
+    private readonly nint[]                                        _vtbl_swap_chain;               // _p_swap_chain        ->vtbl[]
+    private readonly nint[]                                        _vtbl_device;                   // _p_device            ->vtbl[]
+    private readonly nint[]                                        _vtbl_device_ctx;               // _p_device_ctx        ->vtbl[]
+    private readonly nint[]                                        _vtbl_d3d11_texture_2d;         // _p_surface           ->vtbl[]
+    private readonly nint[]                                        _vtbl_render_target_view;       // _p_render_target_view->vtbl[]
     private          bool                                          _present_ready;                 // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
     private readonly FhMethodHandle<graphicInitialize>             _handle_wndproc_init;
     private readonly FhMethodHandle<D3D11CreateDeviceAndSwapChain> _handle_d3d11_init;
     private          FhMethodHandle<DXGISwapChain_Present>?        _handle_present;
+    private          FhMethodHandle<DXGISwapChain_ResizeBuffers>?  _handle_resize_buffers;
 
     private readonly FhMethodHandle<PInputUpdate> _handle_input_update;
 
     public FhImguiModule(FhImguiModuleConfig cfg) : base(cfg) {
-        _vtbl_swap_chain       = new nint[_D3D11_VTBL_SWAP_CHAIN_COUNT];
-        _vtbl_device           = new nint[_D3D11_VTBL_DEVICE_COUNT];
-        _vtbl_device_ctx       = new nint[_D3D11_VTBL_DEVICE_CTX_COUNT];
-        _vtbl_d3d11_texture_2d = new nint[_D3D11_VTBL_D3D11_TEXTURE_2D_COUNT];
+        _vtbl_swap_chain         = new nint[_D3D11_VTBL_SWAP_CHAIN_COUNT];
+        _vtbl_device             = new nint[_D3D11_VTBL_DEVICE_COUNT];
+        _vtbl_device_ctx         = new nint[_D3D11_VTBL_DEVICE_CTX_COUNT];
+        _vtbl_d3d11_texture_2d   = new nint[_D3D11_VTBL_D3D11_TEXTURE_2D_COUNT];
+        _vtbl_render_target_view = new nint[_D3D11_VTBL_D3D11_RTV_COUNT];
 
         _handle_wndproc_init   = new(this, "FFX.exe",   h_init_wndproc, offset:  0x241B80);
         _handle_d3d11_init     = new(this, "D3D11.dll", h_init_d3d11,   fn_name: "D3D11CreateDeviceAndSwapChain");
@@ -226,8 +238,11 @@ public unsafe class FhImguiModule : FhModule {
         _device_CreateRenderTargetView = Marshal.GetDelegateForFunctionPointer<D3D11Device_CreateRenderTargetView>   (_vtbl_device[9]);
         _device_ctx_OMSetRenderTargets = Marshal.GetDelegateForFunctionPointer<D3D11DeviceContext_OMSetRenderTargets>(_vtbl_device_ctx[33]);
 
-        _handle_present = new(this, _vtbl_swap_chain[8], h_present);
-        _handle_present.hook();
+        _handle_present        = new(this, _vtbl_swap_chain[8],  h_present);
+        _handle_resize_buffers = new(this, _vtbl_swap_chain[13], h_resize_buffers);
+
+        _handle_present       .hook();
+        _handle_resize_buffers.hook();
 
         init_imgui();
 
@@ -248,19 +263,36 @@ public unsafe class FhImguiModule : FhModule {
              ? 1
              : PInvoke.CallWindowProcW(_ptr_o_WndProc, hWnd, msg, wParam, lParam);
     }
+
     public int h_input_update() {
         if (_hWnd == 0              // h_init_wndproc hasn't run yet?
          || _p_device == null       // h_init_d3d11 hasn't run yet?
-         || _p_device_ctx == null) 
+         || _p_device_ctx == null)
             return _handle_input_update.orig_fptr();
 
-        var io = ImGui.GetIO();
-        if (io.WantCaptureKeyboard) {
-            return 0;
+        ImGuiIOPtr io = ImGui.GetIO();
+        return io.WantCaptureKeyboard
+            ? 0
+            : _handle_input_update.orig_fptr();
+    }
+
+    public nint h_resize_buffers(nint* pSwapChain, uint BufferCount, uint Width, uint Height, int NewFormat, uint SwapChainFlags) {
+        if (_device_ctx_OMSetRenderTargets == null)
+            return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
+
+        if (_p_render_target_view != null) {
+            _device_ctx_OMSetRenderTargets(_p_device_ctx, 0, null, null);
+
+            fixed (nint* vtbl_d3d11_rtv_ptr = _vtbl_render_target_view) {
+                Buffer.MemoryCopy((*_p_render_target_view).ToPointer(), vtbl_d3d11_rtv_ptr, _D3D11_VTBL_D3D11_RTV_COUNT * sizeof(nint), _D3D11_VTBL_D3D11_RTV_COUNT * sizeof(nint));
+
+                ComIUnknown_Release com_release = Marshal.GetDelegateForFunctionPointer<ComIUnknown_Release>(_vtbl_render_target_view[2]);
+                com_release(_p_render_target_view);
+            }
         }
-        else {
-            return _handle_input_update.orig_fptr();
-        }
+
+        _present_init_complete = false; // forces regeneration of ImGui surfaces/RTV
+        return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     }
 
     public nint h_present(nint* pSwapChain, uint SyncInterval, uint Flags) {
