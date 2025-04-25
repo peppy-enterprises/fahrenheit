@@ -2,7 +2,7 @@
 <h3 align="center">A Final Fantasy X reverse-engineering project and mod framework</h3>
 
 <p align="center">
-<img alt="Logo Banner" src="https://github.com/fkelava/fahrenheit/blob/main/assets/fh_banner.png"/>
+<img alt="Logo Banner" src="https://github.com/peppy-enterprises/fahrenheit/blob/main/assets/fh_banner.png"/>
 <br/>
 <h4 align="center">See the world as you never have before.</h3>
 <p align="center">Art by <a href="https://mnemorie.etsy.com">Mnemorie</a></p>
@@ -30,14 +30,16 @@ It aims not only to exceed all these efforts in scope, but also to stay free for
 improve, learn from and use- now and forever.
 
 ## Building from source and testing
-You will require the following:
-- Visual Studio 2022 v17.6 or higher, with the [built-in `vcpkg` manager enabled](https://devblogs.microsoft.com/cppblog/vcpkg-is-now-included-with-visual-studio/).
-    - The .NET desktop development workload installed (at least the .NET 7 SDK)
-    - The C++ desktop development workload installed (latest version)
-- Build output, by default, is under ``artifacts\localdeploy`` in the top-level directory.
-    - Copy the contents of this directory (the folders ``bin``, ``modules``, etc.) to a subfolder named ``fahrenheit`` in your game directory (where ``FFX.exe`` is).
-    - Open a terminal in ``fahrenheit/bin``, then ``.\fhstage0.exe ..\..\FFX.exe``.
-    - Debugging can be performed from Visual Studio. Attach to either ``fhstage0.exe`` or ``FFX.exe``, and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
+Building requires Visual Studio 2022 with the [built-in `vcpkg` manager enabled](https://devblogs.microsoft.com/cppblog/vcpkg-is-now-included-with-visual-studio/), and the following workloads:
+- .NET desktop development (latest version)
+- C++ desktop development (latest version)
+
+To install/test your development build:
+- Build output is found under ``artifacts\localdeploy`` in the directory in which you cloned Fahrenheit.
+- Copy the contents of this directory (the folders ``bin``, ``modules``, etc.) to a subfolder named ``fahrenheit`` in your game directory (where ``FFX.exe`` is).
+- Create an empty, extensionless file called `loadorder` in the `modules` directory. Add the DLL names of modules you wish to load, each on their own line.
+- Open a terminal in ``fahrenheit/bin``, then ``.\fhstage0.exe ..\..\FFX.exe``.
+- Debugging can be performed from Visual Studio. Attach to either ``fhstage0.exe`` or ``FFX.exe``, and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
 
 ## What's next?
 Time permitting, the goals (in no specific order) of the project are:
