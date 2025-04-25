@@ -1,21 +1,21 @@
 ﻿namespace Fahrenheit.Core;
 
 public class FhModuleHandle<T> where T : FhModule {
-    private readonly FhModule         _handleOwner;
-    private          FhModuleContext? _matchCtx;
-    private readonly Predicate<T>     _matchFunc;
+    private readonly FhModule         _owner;
+    private          FhModuleContext? _match_ctx;
+    private readonly Predicate<T>     _match_func;
 
     public FhModuleHandle(FhModule     owner,
                           Predicate<T> match) {
-        _handleOwner = owner;
-        _matchFunc   = match;
+        _owner      = owner;
+        _match_func = match;
     }
 
     public bool try_get_handle([NotNullWhen(true)] out FhModuleContext? handle) {
-        return (handle = _matchCtx) != null;
+        return (handle = _match_ctx) != null;
     }
 
     public bool try_acquire() {
-        return (_matchCtx = FhModuleController.find(_matchFunc)) != null;
+        return (_match_ctx = FhInternal.ModuleController.find(_match_func)) != null;
     }
 }

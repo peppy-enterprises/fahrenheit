@@ -3,37 +3,15 @@ using System.Runtime.Loader;
 
 namespace Fahrenheit.Core;
 
-public static class FhLoader {
+public class FhLoader {
     // https://learn.microsoft.com/en-us/dotnet/core/dependency-loading/understanding-assemblyloadcontext
-    private readonly static AssemblyLoadContext _load_context;
+    private readonly AssemblyLoadContext _load_context;
 
-    static FhLoader() {
+    public FhLoader() {
         _load_context = AssemblyLoadContext.GetLoadContext(typeof(FhLoader).Assembly) ?? throw new Exception("FH_E_CANNOT_GET_OWN_ALC");
     }
 
-    // Stage1 references this delegate and method by name. If you change them or move them to a different type, Stage1 must be updated.
-    public delegate void FhInitDelegate();
-
-    // The point at which Fahrenheit execution begins. Stage1 calls into this method directly.
-    public static void ldr_bootstrap() {
-        string   load_order_path = Path.Join(FhRuntimeConst.Modules.LinkPath, "loadorder");
-        string[] load_order      = File.ReadAllLines(load_order_path);
-        string   runtime_path    = Path.Join(FhRuntimeConst.Binaries.LinkPath, "fhruntime.dll");
-
-        _load(runtime_path, out List<FhModuleConfig> module_configs);
-        FhModuleController.spawn_modules(module_configs);
-
-        foreach (string module in load_order) {
-            string module_path = Path.Join(FhRuntimeConst.Modules.LinkPath, module, $"{module}.dll");
-            _load(module_path, out module_configs);
-            FhModuleController.spawn_modules(module_configs);
-        }
-
-        FhLocalizationManager.construct_localization_map();
-        FhModuleController   .initialize_modules();
-    }
-
-    private static bool _is_loaded(string dll_name) {
+    private bool _is_loaded(string dll_name) {
         foreach (Assembly assembly in _load_context.Assemblies) {
             if (assembly.GetName().Name?.ToUpperInvariant() == dll_name)
                 return true;
@@ -42,14 +20,29 @@ public static class FhLoader {
         return false;
     }
 
-    private static bool _should_load(string dir_path, string dll_name, out string dll_full_path) {
+    private bool _should_load(string dir_path, string dll_name, out string dll_full_path) {
         dll_full_path = Path.Join(dir_path, $"{dll_name}.dll");
 
         return File.Exists(dll_full_path) && !_is_loaded(dll_name);
     }
 
+    /// <summary>
+    ///     Replaces instances of well-known directory substitution strings in a config JSON being loaded
+    ///     with the actual locations of these directories. This is provided so you can use the same, well-defined
+    ///     file path relative to the binary for any file across all supported platforms.
+    /// <para></para>
+    ///     e.g. $resdir (Linux) -> /opt/fahrenheit/resources, $resdir (Windows) -> C:\Users\USER1\fahrenheit\resources
+    /// </summary>
+    private static string _fix_up_link_symbols(string configJson) {
+        return configJson.Replace(FhRuntimeConst.Binaries.LinkSymbol, FhRuntimeConst.Binaries.LinkPath).
+                          Replace(FhRuntimeConst.Modules .LinkSymbol, FhRuntimeConst.Modules .LinkPath).
+                          Replace(FhRuntimeConst.Logs    .LinkSymbol, FhRuntimeConst.Logs    .LinkPath).
+                          Replace(FhRuntimeConst.State   .LinkSymbol, FhRuntimeConst.State   .LinkPath).
+                          Replace(FhRuntimeConst.Saves   .LinkSymbol, FhRuntimeConst.Saves   .LinkPath);
+    }
+
     // Loads a DLL while ensuring its references, if detected, are loaded before it.
-    private static void _load(string dll_full_path, out List<FhModuleConfig> module_configs) {
+    public void load(string dll_full_path, out List<FhModuleConfig> module_configs) {
         module_configs = [];
 
         string module_dir_name    = Path.GetDirectoryName           (dll_full_path) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
@@ -65,7 +58,7 @@ public static class FhLoader {
         // Load dependencies first.
         foreach (AssemblyName dependency in this_assembly.GetReferencedAssemblies()) {
             if (_should_load(module_dir_name, dependency.Name ?? throw new Exception("FH_E_REF_DLL_NAME_NULL"), out string dependency_full_path)) {
-                _load(dependency_full_path, out List<FhModuleConfig> dependency_module_configs);
+                load(dependency_full_path, out List<FhModuleConfig> dependency_module_configs);
                 module_configs.AddRange(dependency_module_configs);
             }
         }
@@ -77,7 +70,7 @@ public static class FhLoader {
         }
 
         // Load configuration.
-        string patched_json = File.ReadAllText(module_conf_name)._fix_up_link_symbols();
+        string patched_json = _fix_up_link_symbols(File.ReadAllText(module_conf_name));
 
         List<FhModuleConfig> configs =
             JsonSerializer.Deserialize<List<FhModuleConfig>>(patched_json, FhUtil.JsonOpts) ??
@@ -87,26 +80,11 @@ public static class FhLoader {
         module_configs.AddRange(configs);
     }
 
-    /// <summary>
-    ///     Replaces instances of well-known directory substitution strings in a config JSON being loaded
-    ///     with the actual locations of these directories. This is provided so you can use the same, well-defined
-    ///     file path relative to the binary for any file across all supported platforms.
-    /// <para></para>
-    ///     e.g. $resdir (Linux) -> /opt/fahrenheit/resources, $resdir (Windows) -> C:\Users\USER1\fahrenheit\resources
-    /// </summary>
-    private static string _fix_up_link_symbols(this string configJson) {
-        return configJson.Replace(FhRuntimeConst.Binaries.LinkSymbol, FhRuntimeConst.Binaries.LinkPath).
-                          Replace(FhRuntimeConst.Modules .LinkSymbol, FhRuntimeConst.Modules .LinkPath).
-                          Replace(FhRuntimeConst.Logs    .LinkSymbol, FhRuntimeConst.Logs    .LinkPath).
-                          Replace(FhRuntimeConst.State   .LinkSymbol, FhRuntimeConst.State   .LinkPath).
-                          Replace(FhRuntimeConst.Saves   .LinkSymbol, FhRuntimeConst.Saves   .LinkPath);
-    }
-
     /* [fkelava 27/2/23 00:12]
      * Resolves a full type name in the "Type" variable of a given FhModuleConfig JSON
      * to an actual Type instance, verifying that it is in fact derived from FhModuleConfig.
      */
-    public static Type resolve_type(ref Utf8JsonReader reader, Type target_type, bool strict = false) {
+    public Type resolve_type(ref Utf8JsonReader reader, Type target_type, bool strict = false) {
         string type_name = reader.deserialize_and_advance<string>("Type");
 
         foreach (Assembly dll in _load_context.Assemblies) {

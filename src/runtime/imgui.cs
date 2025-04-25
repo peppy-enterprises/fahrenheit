@@ -294,7 +294,7 @@ public unsafe class FhImguiModule : FhModule {
 
         ImGui.NewFrame();
 
-        foreach (var context in FhModuleController.find_all()) {
+        foreach (var context in FhInternal.ModuleController.find_all()) {
             context.Module.render_imgui();
         }
 

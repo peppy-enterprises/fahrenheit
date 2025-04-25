@@ -4,22 +4,22 @@ public sealed record FhModuleContext(
     FhModule       Module,
     FhModuleConfig ModuleConfig);
 
-public static class FhModuleController {
-    private static readonly object                _lock;
-    private static readonly List<FhModuleContext> _contexts;
+public class FhModuleController {
+    private readonly object                _lock;
+    private readonly List<FhModuleContext> _contexts;
 
-    static FhModuleController() {
-        _contexts = new List<FhModuleContext>(8);
+    public FhModuleController() {
+        _contexts = [];
         _lock     = new object();
     }
 
-    public static IEnumerable<FhModuleContext> find_all() {
+    public IEnumerable<FhModuleContext> find_all() {
         lock (_lock) {
             foreach (FhModuleContext ctx in _contexts) yield return ctx;
         }
     }
 
-    public static FhModuleContext? find<TModule>() where TModule : FhModule {
+    public FhModuleContext? find<TModule>() where TModule : FhModule {
         lock (_lock) {
             foreach (FhModuleContext ctx in _contexts) {
                 if (ctx.Module is TModule) return ctx;
@@ -28,7 +28,7 @@ public static class FhModuleController {
         return null;
     }
 
-    public static IEnumerable<FhModuleContext> find_all<TModule>() where TModule : FhModule {
+    public IEnumerable<FhModuleContext> find_all<TModule>() where TModule : FhModule {
         lock (_lock) {
             foreach (FhModuleContext ctx in _contexts) {
                 if (ctx.Module is TModule) yield return ctx;
@@ -36,7 +36,7 @@ public static class FhModuleController {
         }
     }
 
-    public static FhModuleContext? find<TModule>(Predicate<TModule> match) where TModule : FhModule {
+    public FhModuleContext? find<TModule>(Predicate<TModule> match) where TModule : FhModule {
         lock (_lock) {
             foreach (FhModuleContext ctx in _contexts) {
                 if (ctx.Module is TModule tfm && match(tfm)) return ctx;
@@ -45,7 +45,7 @@ public static class FhModuleController {
         return null;
     }
 
-    public static IEnumerable<FhModuleContext> find_all<TModule>(Predicate<TModule> match) where TModule : FhModule {
+    public IEnumerable<FhModuleContext> find_all<TModule>(Predicate<TModule> match) where TModule : FhModule {
         lock (_lock) {
             foreach (FhModuleContext ctx in _contexts) {
                 if (ctx.Module is TModule tfm && match(tfm)) yield return ctx;
@@ -53,7 +53,7 @@ public static class FhModuleController {
         }
     }
 
-    public static void spawn_modules(in List<FhModuleConfig> configs) {
+    public void spawn_modules(in List<FhModuleConfig> configs) {
         lock (_lock) {
             foreach (FhModuleConfig config in configs) {
                 _contexts.Add(new FhModuleContext(config.SpawnModule(), config));
@@ -62,7 +62,7 @@ public static class FhModuleController {
         }
     }
 
-    public static void initialize_modules() {
+    public void initialize_modules() {
         lock (_lock) {
             foreach (FhModuleContext context in _contexts) {
                 FhModuleConfig fmcfg = context.ModuleConfig;

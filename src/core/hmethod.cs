@@ -3,16 +3,16 @@
 namespace Fahrenheit.Core;
 
 // Tracks the current address at which the next hook in a chain must be inserted.
-internal static class FhMethodAddressRegistry {
-    private static readonly Dictionary<nint, nint> _map;
-    private static readonly Lock                   _lock;
+internal class FhMethodAddressMap {
+    private readonly Dictionary<nint, nint> _map;
+    private readonly Lock                   _lock;
 
-    static FhMethodAddressRegistry() {
+    public FhMethodAddressMap() {
         _map  = [];
         _lock = new Lock();
     }
 
-    public static nint Get(nint addr_initial) {
+    public nint get(nint addr_initial) {
         lock (_lock) {
             return _map.TryGetValue(addr_initial, out nint addr_current)
                 ? addr_current
@@ -20,7 +20,7 @@ internal static class FhMethodAddressRegistry {
         }
     }
 
-    public static void Set(nint addr_initial, nint addr_new) {
+    public void set(nint addr_initial, nint addr_new) {
         lock (_lock) {
             _map[addr_initial] = addr_new;
         }
@@ -42,7 +42,7 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
     {
         fn_addr      = calc_initial_fnaddr_or_throw(module_name, offset, fn_name);
         handle_owner = owner;
-        orig_fptr    = Marshal.GetDelegateForFunctionPointer<T>(FhMethodAddressRegistry.Get(fn_addr));
+        orig_fptr    = Marshal.GetDelegateForFunctionPointer<T>(FhInternal.MethodAddressMap.get(fn_addr));
         hook_fptr    = hook;
     }
 
@@ -69,17 +69,17 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
     }
 
     public bool hook() {
-        nint target_addr   = FhMethodAddressRegistry.Get(fn_addr);
-        nint hook_addr     = Marshal.GetFunctionPointerForDelegate(hook_fptr);
-        nint original_addr = 0;
+        nint addr_target   = FhInternal.MethodAddressMap.get(fn_addr);
+        nint addr_hook     = Marshal.GetFunctionPointerForDelegate(hook_fptr);
+        nint addr_original = 0;
 
-        FhLog.Info($"Hook {hook_fptr.Method.Name}; original -> 0x{target_addr.ToString("X8")}, hook -> 0x{hook_addr.ToString("X8")}.");
+        FhLog.Info($"Hook {hook_fptr.Method.Name}; original -> 0x{addr_target.ToString("X8")}, hook -> 0x{addr_hook.ToString("X8")}.");
 
-        if (FhPInvoke.MH_CreateHook(target_addr, hook_addr, &original_addr) != 0) throw new Exception("FH_E_NATIVE_HOOK_CREATE_FAILED");
-        if (FhPInvoke.MH_EnableHook(target_addr)                            != 0) throw new Exception("FH_E_NATIVE_HOOK_ENABLE_FAILED");
+        if (FhPInvoke.MH_CreateHook(addr_target, addr_hook, &addr_original) != 0) throw new Exception("FH_E_NATIVE_HOOK_CREATE_FAILED");
+        if (FhPInvoke.MH_EnableHook(addr_target)                            != 0) throw new Exception("FH_E_NATIVE_HOOK_ENABLE_FAILED");
 
-        orig_fptr = Marshal.GetDelegateForFunctionPointer<T>(original_addr);
-        FhMethodAddressRegistry.Set(fn_addr, original_addr);
+        orig_fptr = Marshal.GetDelegateForFunctionPointer<T>(addr_original);
+        FhInternal.MethodAddressMap.set(fn_addr, addr_original);
 
         return true;
     }
