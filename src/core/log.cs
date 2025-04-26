@@ -21,9 +21,11 @@ public static class FhLog {
 #endif
 
     static FhLog() {
+        string log_path = Path.Join(FhInternal.PathFinder.Logs.Path, $"{FhUtil.get_timestamp_string()}.log");
+
         Trace.AutoFlush = true;
         Trace.Listeners.Add(new ConsoleTraceListener());
-        Trace.Listeners.Add(new TextWriterTraceListener(File.Open(Path.Join(FhRuntimeConst.Logs.LinkPath, $"{FhUtil.get_timestamp_string()}.log"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)));
+        Trace.Listeners.Add(new TextWriterTraceListener(File.Open(log_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)));
     }
 
     public static void Log(                   LogLevel level,

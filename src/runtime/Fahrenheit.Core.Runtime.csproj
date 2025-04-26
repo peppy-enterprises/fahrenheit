@@ -33,6 +33,9 @@
 
     <!-- CONTENT -->
     <ItemGroup>
+        <Content Include="fhruntime.manifest.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="fhruntime.config.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>

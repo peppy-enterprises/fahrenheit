@@ -26,58 +26,41 @@ public class FhLoader {
         return File.Exists(dll_full_path) && !_is_loaded(dll_name);
     }
 
-    /// <summary>
-    ///     Replaces instances of well-known directory substitution strings in a config JSON being loaded
-    ///     with the actual locations of these directories. This is provided so you can use the same, well-defined
-    ///     file path relative to the binary for any file across all supported platforms.
-    /// <para></para>
-    ///     e.g. $resdir (Linux) -> /opt/fahrenheit/resources, $resdir (Windows) -> C:\Users\USER1\fahrenheit\resources
-    /// </summary>
-    private static string _fix_up_link_symbols(string configJson) {
-        return configJson.Replace(FhRuntimeConst.Binaries.LinkSymbol, FhRuntimeConst.Binaries.LinkPath).
-                          Replace(FhRuntimeConst.Modules .LinkSymbol, FhRuntimeConst.Modules .LinkPath).
-                          Replace(FhRuntimeConst.Logs    .LinkSymbol, FhRuntimeConst.Logs    .LinkPath).
-                          Replace(FhRuntimeConst.State   .LinkSymbol, FhRuntimeConst.State   .LinkPath).
-                          Replace(FhRuntimeConst.Saves   .LinkSymbol, FhRuntimeConst.Saves   .LinkPath);
-    }
+    public void load_mod(string mod_name, FhManifest manifest, out List<FhModuleContext> modules) {
+        modules = [];
 
-    // Loads a DLL while ensuring its references, if detected, are loaded before it.
-    public void load(string dll_full_path, out List<FhModuleConfig> module_configs) {
-        module_configs = [];
+        foreach (string fh_dll in manifest.DllList) {
+            FhModulePathInfo fh_dll_paths = FhInternal.PathFinder.create_module_paths(mod_name, fh_dll);
 
-        string module_dir_name    = Path.GetDirectoryName           (dll_full_path) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
-        string module_dll_name    = Path.GetFileNameWithoutExtension(dll_full_path).ToUpperInvariant();
-        string module_conf_name   = dll_full_path.Replace(".dll", ".config.json");
-        bool   should_load_config = File.Exists(module_conf_name);
+            load(fh_dll_paths.DllPath);
 
-        if (_is_loaded(module_dll_name)) return;
+            string           fh_dll_config  = FhInternal.PathFinder.fix_paths(File.ReadAllText(fh_dll_paths.ConfigPath));
+            FhModuleConfig[] fh_dll_configs = JsonSerializer.Deserialize<FhModuleConfig[]>(fh_dll_config, FhUtil.JsonOpts) ??
+                throw new Exception($"FH_E_CONF_DESERIALIZE_FAULT: {fh_dll}.");
 
-        FhLog.Log(LogLevel.Info, $"Loading module {module_dll_name}.");
-        Assembly this_assembly = _load_context.LoadFromAssemblyPath(dll_full_path);
-
-        // Load dependencies first.
-        foreach (AssemblyName dependency in this_assembly.GetReferencedAssemblies()) {
-            if (_should_load(module_dir_name, dependency.Name ?? throw new Exception("FH_E_REF_DLL_NAME_NULL"), out string dependency_full_path)) {
-                load(dependency_full_path, out List<FhModuleConfig> dependency_module_configs);
-                module_configs.AddRange(dependency_module_configs);
+            foreach (FhModuleConfig module_config in fh_dll_configs) {
+                modules.Add(new FhModuleContext(module_config.SpawnModule(), module_config, fh_dll_paths));
             }
         }
 
-        // Dependency DLLs may not be Fahrenheit modules themselves and thus have no config.
-        if (!should_load_config) {
-            FhLog.Log(LogLevel.Info, $"{module_dll_name} loaded.");
-            return;
+        FhLog.Info($"Loaded mod {mod_name} with {modules.Count} modules.");
+    }
+
+    public void load(string dll_full_path) {
+        string dir_name = Path.GetDirectoryName           (dll_full_path) ?? throw new Exception("FH_E_MODULE_DIR_UNIDENTIFIABLE");
+        string dll_name = Path.GetFileNameWithoutExtension(dll_full_path).ToUpperInvariant();
+
+        if (_is_loaded(dll_name)) return;
+
+        Assembly this_assembly = _load_context.LoadFromAssemblyPath(dll_full_path);
+        FhLog.Log(LogLevel.Info, $"Loaded DLL {dll_name}.");
+
+        // Load dependencies first.
+        foreach (AssemblyName dependency in this_assembly.GetReferencedAssemblies()) {
+            if (_should_load(dir_name, dependency.Name ?? throw new Exception("FH_E_REF_DLL_NAME_NULL"), out string dependency_full_path)) {
+                load(dependency_full_path);
+            }
         }
-
-        // Load configuration.
-        string patched_json = _fix_up_link_symbols(File.ReadAllText(module_conf_name));
-
-        List<FhModuleConfig> configs =
-            JsonSerializer.Deserialize<List<FhModuleConfig>>(patched_json, FhUtil.JsonOpts) ??
-            throw new Exception($"FH_E_CONF_DESERIALIZE_FAULT: {module_dll_name}.");
-
-        FhLog.Log(LogLevel.Info, $"{module_dll_name} loaded, parsing {configs.Count.ToString()} configurations.");
-        module_configs.AddRange(configs);
     }
 
     /* [fkelava 27/2/23 00:12]

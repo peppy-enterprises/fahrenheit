@@ -1,0 +1,9 @@
+{
+    "Name":"Fahrenheit Runtime",
+    "Desc":"The essential runtime components of the Fahrenheit mod framework.",
+    "Authors":"The Fahrenheit contributors",
+    "Link":"https://github.com/peppy-enterprises/fahrenheit",
+    "DllList":["fhruntime"],
+    "Dependencies":[],
+    "LoadAfter":[]
+}

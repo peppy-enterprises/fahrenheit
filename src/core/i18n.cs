@@ -746,31 +746,33 @@ public static class FhLocalizationManager {
     }
 
     internal static void construct_localization_map() {
-        foreach (string module_dir_path in Directory.EnumerateDirectories(FhRuntimeConst.Modules.LinkPath)) { // TODO: only look at loaded modules
-            string module_lang_dir_path = Path.Join(module_dir_path, "lang");
-            if (!Directory.Exists(module_lang_dir_path)) continue;
+        FhModContext[] mods = [ .. FhInternal.ModController.get_all() ];
 
-            foreach (string lang_file_path in Directory.EnumerateFiles(module_lang_dir_path)) {
-                string lang_id     = Path.GetFileNameWithoutExtension(lang_file_path);
-                string module_name = Path.GetDirectoryName(module_dir_path) ?? ""; // TODO: remove
+        foreach (FhModContext mod in mods) {
+            foreach (FileInfo lang_file_path in mod.Paths.LangDir.EnumerateFiles()) {
+                string lang_id  = Path.GetFileNameWithoutExtension(lang_file_path.FullName);
+                string mod_name = mod.Manifest.Name;
 
                 try {
-                    using FileStream lang_file_stream = File.Open(lang_file_path, FileMode.Open, FileAccess.Read);
+                    using FileStream lang_file_stream = lang_file_path.Open(FileMode.Open, FileAccess.Read);
                     LocaleData? locale = JsonSerializer.Deserialize<LocaleData>(lang_file_stream, FhUtil.JsonOpts);
                     if (locale == null) return;
 
                     if (!_localization_map.TryGetValue(lang_id, out LocaleData? locale_data)) {
-                        FhLog.Warning($"In module {module_name}: language ID {lang_id} is not known by Fahrenheit.");
+                        FhLog.Warning($"In mod {mod_name}: language ID {lang_id} is not known by Fahrenheit.");
                         return;
                     }
 
                     foreach (KeyValuePair<string, string> locale_kv in locale) {
-                        if (locale_data.TryAdd(locale_kv.Key, locale_kv.Value)) continue;
-                        FhLog.Warning($"In module {module_name}, locale {lang_id}: key {locale_kv.Key} is already declared.");
+                        if (locale_data.ContainsKey(locale_kv.Key)) {
+                            FhLog.Warning($"Mod {mod_name} is superseding key {locale_kv.Key} in locale {lang_id}");
+                        }
+
+                        locale_data[locale_kv.Key] = locale_kv.Value;
                     }
                 }
                 catch {
-                    FhLog.Error($"While parsing locale {lang_id} for module {module_name}:");
+                    FhLog.Error($"While parsing locale {lang_id} for module {mod_name}:");
                     throw;
                 }
             }

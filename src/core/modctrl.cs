@@ -1,76 +1,99 @@
 ﻿namespace Fahrenheit.Core;
 
+public sealed record FhModContext(
+    FhManifest            Manifest,
+    FhModPathInfo         Paths,
+    List<FhModuleContext> Modules);
+
 public sealed record FhModuleContext(
-    FhModule       Module,
-    FhModuleConfig ModuleConfig);
+    FhModule         Module,
+    FhModuleConfig   Config,
+    FhModulePathInfo Paths);
 
-public class FhModuleController {
-    private readonly object                _lock;
-    private readonly List<FhModuleContext> _contexts;
+public class FhModController {
+    private readonly object             _lock;
+    private readonly List<FhModContext> _contexts;
 
-    public FhModuleController() {
+    public FhModController() {
         _contexts = [];
         _lock     = new object();
     }
 
-    public IEnumerable<FhModuleContext> find_all() {
+    public IEnumerable<FhModContext> get_all() {
         lock (_lock) {
-            foreach (FhModuleContext ctx in _contexts) yield return ctx;
+            foreach (FhModContext ctx in _contexts) yield return ctx;
         }
     }
 
-    public FhModuleContext? find<TModule>() where TModule : FhModule {
+    public FhModuleContext? find_module<TModule>() where TModule : FhModule {
         lock (_lock) {
-            foreach (FhModuleContext ctx in _contexts) {
-                if (ctx.Module is TModule) return ctx;
+            foreach (FhModContext mod_ctx in _contexts) {
+                foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
+                    if (module_ctx.Module is TModule) return module_ctx;
+                }
             }
         }
         return null;
     }
 
-    public IEnumerable<FhModuleContext> find_all<TModule>() where TModule : FhModule {
+    public IEnumerable<FhModuleContext> find_all_modules<TModule>() where TModule : FhModule {
         lock (_lock) {
-            foreach (FhModuleContext ctx in _contexts) {
-                if (ctx.Module is TModule) yield return ctx;
+            foreach (FhModContext mod_ctx in _contexts) {
+                foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
+                    if (module_ctx.Module is TModule) yield return module_ctx;
+                }
             }
         }
     }
 
-    public FhModuleContext? find<TModule>(Predicate<TModule> match) where TModule : FhModule {
+    public FhModuleContext? find_module<TModule>(Predicate<TModule> match) where TModule : FhModule {
         lock (_lock) {
-            foreach (FhModuleContext ctx in _contexts) {
-                if (ctx.Module is TModule tfm && match(tfm)) return ctx;
+            foreach (FhModContext mod_ctx in _contexts) {
+                foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
+                    if (module_ctx.Module is TModule tfm && match(tfm)) return module_ctx;
+                }
             }
         }
         return null;
     }
 
-    public IEnumerable<FhModuleContext> find_all<TModule>(Predicate<TModule> match) where TModule : FhModule {
+    public IEnumerable<FhModuleContext> find_all_modules<TModule>(Predicate<TModule> match) where TModule : FhModule {
         lock (_lock) {
-            foreach (FhModuleContext ctx in _contexts) {
-                if (ctx.Module is TModule tfm && match(tfm)) yield return ctx;
+            foreach (FhModContext mod_ctx in _contexts) {
+                foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
+                    if (module_ctx.Module is TModule tfm && match(tfm)) yield return module_ctx;
+                }
             }
         }
     }
 
-    public void spawn_modules(in List<FhModuleConfig> configs) {
-        lock (_lock) {
-            foreach (FhModuleConfig config in configs) {
-                _contexts.Add(new FhModuleContext(config.SpawnModule(), config));
-                FhLog.Log(LogLevel.Warning, $"Initialized module {config.Name} [{config.Type}].");
-            }
+    internal void load_mods() {
+        string   load_order_path = Path.Join(FhInternal.PathFinder.Modules.Path, "loadorder");
+        string[] load_order      = [ "fhruntime", .. File.ReadAllLines(load_order_path) ];
+
+        foreach (string mod_name in load_order) {
+            FhModPathInfo    paths    = FhInternal.PathFinder.create_mod_paths(mod_name);
+            FhManifest       manifest = JsonSerializer.Deserialize<FhManifest>(File.OpenRead(paths.ManifestPath), FhUtil.InternalJsonOpts)
+                ?? throw new Exception("FH_E_MANIFEST_LOAD_FAILED");
+
+            FhInternal.Loader.load_mod(mod_name, manifest, out List<FhModuleContext> modules);
+            _contexts.Add(new FhModContext(manifest, paths, modules));
         }
     }
 
-    public void initialize_modules() {
+    internal void run_initializers() {
         lock (_lock) {
-            foreach (FhModuleContext context in _contexts) {
-                FhModuleConfig fmcfg = context.ModuleConfig;
-                FhModule       fm    = context.Module;
+            foreach (FhModContext mod_ctx in _contexts) {
+                foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
+                    FhModuleConfig fmcfg = module_ctx.Config;
+                    FhModule       fm    = module_ctx.Module;
 
-                if (!fm.init()) {
-                    FhLog.Log(LogLevel.Warning, $"Module {fmcfg.Name} [{fmcfg.Type}] initializer callback failed. Suppressing.");
-                    continue;
+                    if (!fm.init()) {
+                        FhLog.Log(LogLevel.Warning, $"Module {fmcfg.Name} [{fmcfg.Type}] initializer callback failed. Suppressing.");
+                        continue;
+                    }
+
+                    FhLog.Log(LogLevel.Info, $"Initialized module {fmcfg.Name} [{fmcfg.Type}].");
                 }
             }
         }

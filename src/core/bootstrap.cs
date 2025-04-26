@@ -14,20 +14,8 @@ public static class FhBootstrapper {
     public delegate void FhBootstrapDelegate();
 
     public static void bootstrap() {
-        string   load_order_path = Path.Join(FhRuntimeConst.Modules.LinkPath, "loadorder");
-        string[] load_order      = File.ReadAllLines(load_order_path);
-        string   runtime_path    = Path.Join(FhRuntimeConst.Binaries.LinkPath, "fhruntime.dll");
-
-        FhInternal.Loader.load(runtime_path, out List<FhModuleConfig> module_configs); // Entirety of FhInternal is initialized at this point.
-        FhInternal.ModuleController.spawn_modules(module_configs);
-
-        foreach (string module in load_order) {
-            string module_path = Path.Join(FhRuntimeConst.Modules.LinkPath, module, $"{module}.dll");
-            FhInternal.Loader.load(module_path, out module_configs);
-            FhInternal.ModuleController.spawn_modules(module_configs);
-        }
-
+        FhInternal.ModController.load_mods();
         FhLocalizationManager.construct_localization_map();
-        FhInternal.ModuleController.initialize_modules();
+        FhInternal.ModController.run_initializers();
     }
 }

@@ -49,14 +49,16 @@ public unsafe class FhEFLModule : FhModule {
     public void construct_index() {
         Stopwatch index_swatch     = Stopwatch.StartNew();
         string    data_subdir_name = FhGlobal.game_type switch {
-            FhGameType.FFX  => "efl/x",
-            FhGameType.FFX2 => "efl/x2",
+            FhGameType.FFX  => "x",
+            FhGameType.FFX2 => "x2",
             _               => throw new Exception("FH_E_INVALID_GAME_TYPE"),
         };
 
-        string efl_data_dir;
-        foreach (string module_directory in Directory.EnumerateDirectories(FhRuntimeConst.Modules.LinkPath)) {
-            efl_data_dir = normalize_path(Path.Join(module_directory, data_subdir_name));
+        string         efl_data_dir;
+        FhModContext[] mods = [ .. FhInternal.ModController.get_all() ];
+
+        foreach (FhModContext mod in mods) {
+            efl_data_dir = normalize_path(Path.Join(mod.Paths.EflDir.FullName, data_subdir_name));
             if (!Directory.Exists(efl_data_dir)) continue;
 
             foreach (string absolute_mod_file_path in Directory.GetFiles(efl_data_dir, "*.*", SearchOption.AllDirectories)) {
@@ -67,11 +69,11 @@ public unsafe class FhEFLModule : FhModule {
                     ? nt_absolute_mod_file_path
                     : absolute_mod_file_path);
 
-                if (!_index.TryAdd(
-                    key:   normalized_relative_path,
-                    value: normalized_absolute_path)) {
-                    FhLog.Warning($"{normalized_relative_path} was already loaded by a module higher in the load order; ignoring.");
+                if (_index.ContainsKey(normalized_relative_path)) {
+                    FhLog.Warning($"{normalized_relative_path} is being superseded by module {mod.Manifest.Name}");
                 }
+
+                _index[normalized_relative_path] = normalized_absolute_path;
             }
         }
 
