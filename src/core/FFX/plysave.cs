@@ -2,52 +2,52 @@ namespace Fahrenheit.Core.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x94)]
 public unsafe struct PlySave {
-    [FieldOffset(0x00)] private      uint               __0x0;
-    [FieldOffset(0x04)] public       uint               base_hp;
-    [FieldOffset(0x08)] public       uint               base_mp;
-    [FieldOffset(0x0C)] public       byte               base_strength;
-    [FieldOffset(0x0D)] public       byte               base_defense;
-    [FieldOffset(0x0E)] public       byte               base_magic;
-    [FieldOffset(0x0F)] public       byte               base_magic_defense;
-    [FieldOffset(0x10)] public       byte               base_agility;
-    [FieldOffset(0x11)] public       byte               base_luck;
-    [FieldOffset(0x12)] public       byte               base_evasion;
-    [FieldOffset(0x13)] public       byte               base_accuracy;
-    [FieldOffset(0x14)] private      ushort             __0x14;
-    [FieldOffset(0x16)] private      ushort             __0x16;
-    [FieldOffset(0x18)] public       uint               ap;
-    [FieldOffset(0x1C)] public       uint               hp;
-    [FieldOffset(0x20)] public       uint               mp;
-    [FieldOffset(0x24)] public       uint               max_hp;
-    [FieldOffset(0x28)] public       uint               max_mp;
-    [FieldOffset(0x2C)] public       byte               ply_flags;
-    [FieldOffset(0x2D)] public       byte               wpn_inv_idx;
-    [FieldOffset(0x2E)] public       byte               arm_inv_idx;
-    [FieldOffset(0x2F)] public       byte               strength;
-    [FieldOffset(0x30)] public       byte               defense;
-    [FieldOffset(0x31)] public       byte               magic;
-    [FieldOffset(0x32)] public       byte               magic_defense;
-    [FieldOffset(0x33)] public       byte               agility;
-    [FieldOffset(0x34)] public       byte               luck;
-    [FieldOffset(0x35)] public       byte               evasion;
-    [FieldOffset(0x36)] public       byte               accuracy;
-    [FieldOffset(0x37)] public       byte               poison_dmg;
-    [FieldOffset(0x38)] public       byte               ovr_mode_index;
-    [FieldOffset(0x39)] public       byte               ovr_charge;
-    [FieldOffset(0x3A)] public       byte               ovr_charge_max;
-    [FieldOffset(0x3B)] public       byte               slv_available;
-    [FieldOffset(0x3C)] public       byte               slv_spent;
-    [FieldOffset(0x3D)] private      byte               __0x3D;
-    [FieldOffset(0x3E)] public       AbilityMap         abi_map;
-    [FieldOffset(0x4A)] public       AutoAbilityMap      aabi_map;
-    [FieldOffset(0x50)] public       uint               battle_count;
-    [FieldOffset(0x54)] public       uint               enemies_defeated;
-    [FieldOffset(0x58)] private      uint               __0x58;
-    [FieldOffset(0x5C)] private      uint               __0x5C;
-    [FieldOffset(0x60)] public fixed ushort             ovr_mode_counters[20];
-    [FieldOffset(0x88)] public       OverdriveModeFlags ovr_mode_flags;
-    [FieldOffset(0x8C)] private      uint               __0x8C;
-    [FieldOffset(0x90)] private      uint               __0x90;
+    [FieldOffset(0x00)] private      uint                  __0x0;
+    [FieldOffset(0x04)] public       uint                  base_hp;
+    [FieldOffset(0x08)] public       uint                  base_mp;
+    [FieldOffset(0x0C)] public       byte                  base_strength;
+    [FieldOffset(0x0D)] public       byte                  base_defense;
+    [FieldOffset(0x0E)] public       byte                  base_magic;
+    [FieldOffset(0x0F)] public       byte                  base_magic_defense;
+    [FieldOffset(0x10)] public       byte                  base_agility;
+    [FieldOffset(0x11)] public       byte                  base_luck;
+    [FieldOffset(0x12)] public       byte                  base_evasion;
+    [FieldOffset(0x13)] public       byte                  base_accuracy;
+    [FieldOffset(0x14)] private      ushort                __0x14;
+    [FieldOffset(0x16)] private      ushort                __0x16;
+    [FieldOffset(0x18)] public       uint                  ap;
+    [FieldOffset(0x1C)] public       uint                  hp;
+    [FieldOffset(0x20)] public       uint                  mp;
+    [FieldOffset(0x24)] public       uint                  max_hp;
+    [FieldOffset(0x28)] public       uint                  max_mp;
+    [FieldOffset(0x2C)] public       byte                  ply_flags;
+    [FieldOffset(0x2D)] public       byte                  wpn_inv_idx;
+    [FieldOffset(0x2E)] public       byte                  arm_inv_idx;
+    [FieldOffset(0x2F)] public       byte                  strength;
+    [FieldOffset(0x30)] public       byte                  defense;
+    [FieldOffset(0x31)] public       byte                  magic;
+    [FieldOffset(0x32)] public       byte                  magic_defense;
+    [FieldOffset(0x33)] public       byte                  agility;
+    [FieldOffset(0x34)] public       byte                  luck;
+    [FieldOffset(0x35)] public       byte                  evasion;
+    [FieldOffset(0x36)] public       byte                  accuracy;
+    [FieldOffset(0x37)] public       byte                  poison_dmg;
+    [FieldOffset(0x38)] public       byte                  ovr_mode_index;
+    [FieldOffset(0x39)] public       byte                  ovr_charge;
+    [FieldOffset(0x3A)] public       byte                  ovr_charge_max;
+    [FieldOffset(0x3B)] public       byte                  slv_available;
+    [FieldOffset(0x3C)] public       byte                  slv_spent;
+    [FieldOffset(0x3D)] private      byte                  __0x3D;
+    [FieldOffset(0x3E)] public       AbilityMap            abi_map;
+    [FieldOffset(0x4A)] public       AutoAbilityEffectsMap auto_ability_effects;
+    [FieldOffset(0x50)] public       uint                  battle_count;
+    [FieldOffset(0x54)] public       uint                  enemies_defeated;
+    [FieldOffset(0x58)] private      uint                  __0x58;
+    [FieldOffset(0x5C)] private      uint                  __0x5C;
+    [FieldOffset(0x60)] public fixed ushort                ovr_mode_counters[20];
+    [FieldOffset(0x88)] public       OverdriveModeFlags    obtained_ovr_modes;
+    [FieldOffset(0x8C)] private      uint                  __0x8C;
+    [FieldOffset(0x90)] private      uint                  __0x90;
 
 
     public bool join   { readonly get { return ply_flags.get_bit(0); } set { ply_flags.set_bit(0, value); } }
@@ -103,42 +103,61 @@ public enum OverdriveModeFlags : uint {
 public static partial class EnumExt {
     public static bool warrior(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.WARRIOR);
+
     public static bool comrade(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.COMRADE);
+
     public static bool stoic(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.STOIC);
+
     public static bool healer(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.HEALER);
+
     public static bool tactician(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.TACTICIAN);
+
     public static bool victim(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.VICTIM);
+
     public static bool dancer(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.DANCER);
+
     public static bool avenger(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.AVENGER);
+
     public static bool slayer(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.SLAYER);
+
     public static bool hero(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.HERO);
+
     public static bool rook(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.ROOK);
+
     public static bool victor(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.VICTOR);
+
     public static bool coward(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.COWARD);
+
     public static bool ally(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.ALLY);
+
     public static bool sufferer(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.SUFFERER);
+
     public static bool daredevil(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.DAREDEVIL);
+
     public static bool loner(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.LONER);
+
     public static bool unused1(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.UNUSED1);
+
     public static bool unused2(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.UNUSED2);
+
     public static bool aeons(this OverdriveModeFlags flags)
         => flags.HasFlag(OverdriveModeFlags.AEONS);
 }

@@ -3,7 +3,7 @@
 namespace Fahrenheit.Core.FFX;
 
 [InlineArray(3)]
-public struct AutoAbilityMap {
+public struct AutoAbilityEffectsMap {
     private ushort _u;
 
     // Auto-Abilities

@@ -41,7 +41,7 @@ public struct Command {
     [FieldOffset(0x2A)] public  byte              power;
     [FieldOffset(0x2B)] public  byte              hit_count;
     [FieldOffset(0x2C)] public  byte              shatter_chance;
-    [FieldOffset(0x2D)] public  ElementalFlags    flags_element;
+    [FieldOffset(0x2D)] public  ElementFlags      element;
     [FieldOffset(0x2E)] public  StatusMap         status_map;
     [FieldOffset(0x47)] public  StatusDurationMap status_duration_map;
     [FieldOffset(0x54)] public  StatusExtraFlags  flags_status_extra;

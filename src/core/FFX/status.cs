@@ -66,26 +66,37 @@ public enum StatusPermanentFlags : ushort {
 public static partial class EnumExt {
     public static bool death(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.DEATH);
+
     public static bool zombie(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.ZOMBIE);
+    
     public static bool petrification(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.PETRIFICATION);
+    
     public static bool poison(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.POISON);
+    
     public static bool power_break(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.POWER_BREAK);
+    
     public static bool magic_break(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.MAGIC_BREAK);
+    
     public static bool armor_break(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.ARMOR_BREAK);
+    
     public static bool mental_break(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.MENTAL_BREAK);
+    
     public static bool confuse(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.CONFUSE);
+    
     public static bool berserk(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.BERSERK);
+    
     public static bool provoke(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.PROVOKE);
+    
     public static bool threaten(this StatusPermanentFlags flags)
         => flags.HasFlag(StatusPermanentFlags.THREATEN);
 }
@@ -110,31 +121,44 @@ public enum StatusTemporalFlags : ushort {
 public static partial class EnumExt {
     public static bool sleep(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.SLEEP);
+    
     public static bool silence(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.SILENCE);
+    
     public static bool darkness(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.DARKNESS);
+    
     public static bool shell(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.SHELL);
+    
     public static bool protect(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.PROTECT);
+    
     public static bool reflect(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.REFLECT);
+    
     public static bool nul_water(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.NUL_WATER);
+    
     public static bool nul_fire(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.NUL_FIRE);
+    
     public static bool nul_thunder(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.NUL_THUNDER);
+    
     public static bool nul_ice(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.NUL_ICE);
+    
     public static bool regen(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.REGEN);
+    
     public static bool haste(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.HASTE);
+    
     public static bool slow(this StatusTemporalFlags flags)
         => flags.HasFlag(StatusTemporalFlags.SLOW);
 }
+
 [Flags]
 public enum StatusExtraFlags : ushort {
     NONE            =       0,
@@ -157,32 +181,46 @@ public enum StatusExtraFlags : ushort {
 public static partial class EnumExt {
     public static bool scan(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.SCAN);
+    
     public static bool distill_power(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.DISTILL_POWER);
+   
     public static bool distill_mana(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.DISTILL_MANA);
+    
     public static bool distill_speed(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.DISTILL_SPEED);
+    
     public static bool distill_move(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.DISTILL_MOVE);
+    
     public static bool distill_ability(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.DISTILL_ABILITY);
+    
     public static bool shield(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.SHIELD);
+    
     public static bool boost(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.BOOST);
+    
     public static bool eject(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.EJECT);
+    
     public static bool auto_life(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.AUTO_LIFE);
+    
     public static bool curse(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.CURSE);
+    
     public static bool defend(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.DEFEND);
+    
     public static bool guard(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.GUARD);
+    
     public static bool sentinel(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.SENTINEL);
+    
     public static bool doom(this StatusExtraFlags flags)
         => flags.HasFlag(StatusExtraFlags.DOOM);
 }
