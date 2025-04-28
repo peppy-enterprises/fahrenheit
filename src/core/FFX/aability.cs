@@ -17,9 +17,9 @@ public partial struct AutoAbility {
     [FieldOffset(0x3C)] public StatusMap             status_resist;
     [FieldOffset(0x55)] public byte                  stat_inc_amount;
     [FieldOffset(0x56)] public StatIncreaseFlags     stat_inc_flags;
-    [FieldOffset(0x58)] public StatusPermanentFlags  auto_status_permanent;
-    [FieldOffset(0x5A)] public StatusTemporalFlags   auto_status_temporal;
-    [FieldOffset(0x5C)] public StatusExtraFlags      auto_status_extra;
+    [FieldOffset(0x58)] public StatusPermanentFlags  status_auto_permanent;
+    [FieldOffset(0x5A)] public StatusTemporalFlags   status_auto_temporal;
+    [FieldOffset(0x5C)] public StatusExtraFlags      status_auto_extra;
     [FieldOffset(0x5E)] public StatusExtraFlags      status_inflict_extra;
     [FieldOffset(0x60)] public StatusExtraFlags      status_resist_extra;
     [FieldOffset(0x62)] public AutoAbilityEffectsMap auto_ability_effects;
