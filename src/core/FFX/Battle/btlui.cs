@@ -53,6 +53,6 @@ public struct BtlStatusWindow {
     [FieldOffset(0x19)] public byte font_color;
     [FieldOffset(0x24)] public uint mp;
     [FieldOffset(0x28)] public uint mp2;
-    [FieldOffset(0x34)] public uint charged_ovr_bar_width;
-    [FieldOffset(0x38)] public uint charged_ovr_bar_width2;
+    [FieldOffset(0x34)] public uint charged_limit_bar_width;
+    [FieldOffset(0x38)] public uint charged_limit_bar_width2;
 }

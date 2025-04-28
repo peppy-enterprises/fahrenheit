@@ -104,9 +104,9 @@ public unsafe struct Chr {
     [FieldOffset(0x5B7)] public       byte                  accuracy_up;
     [FieldOffset(0x5B8)] public       ushort                extra_resist; //TODO: Figure out a better name for this
     [FieldOffset(0x5BA)] public       byte                  poison_dmg;
-    [FieldOffset(0x5BB)] public       byte                  ovr_mode_selected;
-    [FieldOffset(0x5BC)] public       byte                  ovr_charge;
-    [FieldOffset(0x5BD)] public       byte                  ovr_charge_max;
+    [FieldOffset(0x5BB)] public       byte                  limit_mode_selected;
+    [FieldOffset(0x5BC)] public       byte                  limit_charge;
+    [FieldOffset(0x5BD)] public       byte                  limit_charge_max;
     [FieldOffset(0x5C1)] public       byte                  wpn_dmg_formula;
     [FieldOffset(0x5C3)] public       byte                  stat_icon_number;
     [FieldOffset(0x5C4)] public       byte                  provoked_by_id;

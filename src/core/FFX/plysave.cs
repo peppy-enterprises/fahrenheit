@@ -32,9 +32,9 @@ public unsafe struct PlySave {
     [FieldOffset(0x35)] public       byte                  evasion;
     [FieldOffset(0x36)] public       byte                  accuracy;
     [FieldOffset(0x37)] public       byte                  poison_dmg;
-    [FieldOffset(0x38)] public       byte                  ovr_mode_index;
-    [FieldOffset(0x39)] public       byte                  ovr_charge;
-    [FieldOffset(0x3A)] public       byte                  ovr_charge_max;
+    [FieldOffset(0x38)] public       byte                  limit_mode_index;
+    [FieldOffset(0x39)] public       byte                  limit_charge;
+    [FieldOffset(0x3A)] public       byte                  limit_charge_max;
     [FieldOffset(0x3B)] public       byte                  slv_available;
     [FieldOffset(0x3C)] public       byte                  slv_spent;
     [FieldOffset(0x3D)] private      byte                  __0x3D;
@@ -44,8 +44,8 @@ public unsafe struct PlySave {
     [FieldOffset(0x54)] public       uint                  enemies_defeated;
     [FieldOffset(0x58)] private      uint                  __0x58;
     [FieldOffset(0x5C)] private      uint                  __0x5C;
-    [FieldOffset(0x60)] public fixed ushort                ovr_mode_counters[20];
-    [FieldOffset(0x88)] public       OverdriveModeFlags    obtained_ovr_modes;
+    [FieldOffset(0x60)] public fixed ushort                limit_mode_counters[20];
+    [FieldOffset(0x88)] public       OverdriveModeFlags    obtained_limit_modes;
     [FieldOffset(0x8C)] private      uint                  __0x8C;
     [FieldOffset(0x90)] private      uint                  __0x90;
 
@@ -53,26 +53,26 @@ public unsafe struct PlySave {
     public bool join   { readonly get { return ply_flags.get_bit(0); } set { ply_flags.set_bit(0, value); } }
     public bool joined { readonly get { return ply_flags.get_bit(4); } set { ply_flags.set_bit(4, value); } }
 
-    public ushort ovr_mode_ctr_warrior   { readonly get { return ovr_mode_counters[ 0]; } set { ovr_mode_counters[ 0]  = value; } }
-    public ushort ovr_mode_ctr_comrade   { readonly get { return ovr_mode_counters[ 1]; } set { ovr_mode_counters[ 1]  = value; } }
-    public ushort ovr_mode_ctr_stoic     { readonly get { return ovr_mode_counters[ 2]; } set { ovr_mode_counters[ 2]  = value; } }
-    public ushort ovr_mode_ctr_healer    { readonly get { return ovr_mode_counters[ 3]; } set { ovr_mode_counters[ 3]  = value; } }
-    public ushort ovr_mode_ctr_tactician { readonly get { return ovr_mode_counters[ 4]; } set { ovr_mode_counters[ 4]  = value; } }
-    public ushort ovr_mode_ctr_victim    { readonly get { return ovr_mode_counters[ 5]; } set { ovr_mode_counters[ 5]  = value; } }
-    public ushort ovr_mode_ctr_dancer    { readonly get { return ovr_mode_counters[ 6]; } set { ovr_mode_counters[ 6]  = value; } }
-    public ushort ovr_mode_ctr_avenger   { readonly get { return ovr_mode_counters[ 7]; } set { ovr_mode_counters[ 7]  = value; } }
-    public ushort ovr_mode_ctr_slayer    { readonly get { return ovr_mode_counters[ 8]; } set { ovr_mode_counters[ 8]  = value; } }
-    public ushort ovr_mode_ctr_hero      { readonly get { return ovr_mode_counters[ 9]; } set { ovr_mode_counters[ 9]  = value; } }
-    public ushort ovr_mode_ctr_rook      { readonly get { return ovr_mode_counters[10]; } set { ovr_mode_counters[10] = value; } }
-    public ushort ovr_mode_ctr_victor    { readonly get { return ovr_mode_counters[11]; } set { ovr_mode_counters[11] = value; } }
-    public ushort ovr_mode_ctr_coward    { readonly get { return ovr_mode_counters[12]; } set { ovr_mode_counters[12] = value; } }
-    public ushort ovr_mode_ctr_ally      { readonly get { return ovr_mode_counters[13]; } set { ovr_mode_counters[13] = value; } }
-    public ushort ovr_mode_ctr_sufferer  { readonly get { return ovr_mode_counters[14]; } set { ovr_mode_counters[14] = value; } }
-    public ushort ovr_mode_ctr_daredevil { readonly get { return ovr_mode_counters[15]; } set { ovr_mode_counters[15] = value; } }
-    public ushort ovr_mode_ctr_liner     { readonly get { return ovr_mode_counters[16]; } set { ovr_mode_counters[16] = value; } }
-    public ushort ovr_mode_ctr_unused1   { readonly get { return ovr_mode_counters[17]; } set { ovr_mode_counters[17] = value; } }
-    public ushort ovr_mode_ctr_unused2   { readonly get { return ovr_mode_counters[18]; } set { ovr_mode_counters[18] = value; } }
-    public ushort ovr_mode_ctr_aeons     { readonly get { return ovr_mode_counters[19]; } set { ovr_mode_counters[19] = value; } }
+    public ushort limit_mode_ctr_warrior   { readonly get { return limit_mode_counters[ 0]; } set { limit_mode_counters[ 0] = value; } }
+    public ushort limit_mode_ctr_comrade   { readonly get { return limit_mode_counters[ 1]; } set { limit_mode_counters[ 1] = value; } }
+    public ushort limit_mode_ctr_stoic     { readonly get { return limit_mode_counters[ 2]; } set { limit_mode_counters[ 2] = value; } }
+    public ushort limit_mode_ctr_healer    { readonly get { return limit_mode_counters[ 3]; } set { limit_mode_counters[ 3] = value; } }
+    public ushort limit_mode_ctr_tactician { readonly get { return limit_mode_counters[ 4]; } set { limit_mode_counters[ 4] = value; } }
+    public ushort limit_mode_ctr_victim    { readonly get { return limit_mode_counters[ 5]; } set { limit_mode_counters[ 5] = value; } }
+    public ushort limit_mode_ctr_dancer    { readonly get { return limit_mode_counters[ 6]; } set { limit_mode_counters[ 6] = value; } }
+    public ushort limit_mode_ctr_avenger   { readonly get { return limit_mode_counters[ 7]; } set { limit_mode_counters[ 7] = value; } }
+    public ushort limit_mode_ctr_slayer    { readonly get { return limit_mode_counters[ 8]; } set { limit_mode_counters[ 8] = value; } }
+    public ushort limit_mode_ctr_hero      { readonly get { return limit_mode_counters[ 9]; } set { limit_mode_counters[ 9] = value; } }
+    public ushort limit_mode_ctr_rook      { readonly get { return limit_mode_counters[10]; } set { limit_mode_counters[10] = value; } }
+    public ushort limit_mode_ctr_victor    { readonly get { return limit_mode_counters[11]; } set { limit_mode_counters[11] = value; } }
+    public ushort limit_mode_ctr_coward    { readonly get { return limit_mode_counters[12]; } set { limit_mode_counters[12] = value; } }
+    public ushort limit_mode_ctr_ally      { readonly get { return limit_mode_counters[13]; } set { limit_mode_counters[13] = value; } }
+    public ushort limit_mode_ctr_sufferer  { readonly get { return limit_mode_counters[14]; } set { limit_mode_counters[14] = value; } }
+    public ushort limit_mode_ctr_daredevil { readonly get { return limit_mode_counters[15]; } set { limit_mode_counters[15] = value; } }
+    public ushort limit_mode_ctr_liner     { readonly get { return limit_mode_counters[16]; } set { limit_mode_counters[16] = value; } }
+    public ushort limit_mode_ctr_unused1   { readonly get { return limit_mode_counters[17]; } set { limit_mode_counters[17] = value; } }
+    public ushort limit_mode_ctr_unused2   { readonly get { return limit_mode_counters[18]; } set { limit_mode_counters[18] = value; } }
+    public ushort limit_mode_ctr_aeons     { readonly get { return limit_mode_counters[19]; } set { limit_mode_counters[19] = value; } }
 
 }
 [Flags]
