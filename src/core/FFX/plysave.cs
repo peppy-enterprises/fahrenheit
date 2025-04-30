@@ -49,7 +49,6 @@ public unsafe struct PlySave {
     [FieldOffset(0x8C)] private      uint                  __0x8C;
     [FieldOffset(0x90)] private      uint                  __0x90;
 
-
     public bool join   { readonly get { return ply_flags.get_bit(0); } set { ply_flags.set_bit(0, value); } }
     public bool joined { readonly get { return ply_flags.get_bit(4); } set { ply_flags.set_bit(4, value); } }
 
@@ -73,8 +72,8 @@ public unsafe struct PlySave {
     public ushort limit_mode_ctr_unused1   { readonly get { return limit_mode_counters[17]; } set { limit_mode_counters[17] = value; } }
     public ushort limit_mode_ctr_unused2   { readonly get { return limit_mode_counters[18]; } set { limit_mode_counters[18] = value; } }
     public ushort limit_mode_ctr_aeons     { readonly get { return limit_mode_counters[19]; } set { limit_mode_counters[19] = value; } }
-
 }
+
 [Flags]
 public enum OverdriveModeFlags : uint {
     NONE      =       0,
@@ -101,63 +100,24 @@ public enum OverdriveModeFlags : uint {
 }
 
 public static partial class EnumExt {
-    public static bool warrior(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.WARRIOR);
-
-    public static bool comrade(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.COMRADE);
-
-    public static bool stoic(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.STOIC);
-
-    public static bool healer(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.HEALER);
-
-    public static bool tactician(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.TACTICIAN);
-
-    public static bool victim(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.VICTIM);
-
-    public static bool dancer(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.DANCER);
-
-    public static bool avenger(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.AVENGER);
-
-    public static bool slayer(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.SLAYER);
-
-    public static bool hero(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.HERO);
-
-    public static bool rook(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.ROOK);
-
-    public static bool victor(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.VICTOR);
-
-    public static bool coward(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.COWARD);
-
-    public static bool ally(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.ALLY);
-
-    public static bool sufferer(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.SUFFERER);
-
-    public static bool daredevil(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.DAREDEVIL);
-
-    public static bool loner(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.LONER);
-
-    public static bool unused1(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.UNUSED1);
-
-    public static bool unused2(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.UNUSED2);
-
-    public static bool aeons(this OverdriveModeFlags flags)
-        => flags.HasFlag(OverdriveModeFlags.AEONS);
+    public static bool warrior  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.WARRIOR);
+    public static bool comrade  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.COMRADE);
+    public static bool stoic    (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.STOIC);
+    public static bool healer   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.HEALER);
+    public static bool tactician(this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.TACTICIAN);
+    public static bool victim   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.VICTIM);
+    public static bool dancer   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.DANCER);
+    public static bool avenger  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.AVENGER);
+    public static bool slayer   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.SLAYER);
+    public static bool hero     (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.HERO);
+    public static bool rook     (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.ROOK);
+    public static bool victor   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.VICTOR);
+    public static bool coward   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.COWARD);
+    public static bool ally     (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.ALLY);
+    public static bool sufferer (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.SUFFERER);
+    public static bool daredevil(this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.DAREDEVIL);
+    public static bool loner    (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.LONER);
+    public static bool unused1  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.UNUSED1);
+    public static bool unused2  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.UNUSED2);
+    public static bool aeons    (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.AEONS);
 }

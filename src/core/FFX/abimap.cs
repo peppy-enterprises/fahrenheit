@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Fahrenheit.Core.FFX;
+﻿namespace Fahrenheit.Core.FFX;
 
 [InlineArray(3)]
 public struct AbilityMap {

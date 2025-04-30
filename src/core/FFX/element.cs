@@ -8,19 +8,11 @@ public enum ElementFlags : byte {
     WATER   = 1 << 3,
     HOLY    = 1 << 4,
 }
+
 public static partial class EnumExt {
-    public static bool fire(this ElementFlags flags)
-        => flags.HasFlag(ElementFlags.FIRE);
-
-    public static bool ice(this ElementFlags flags)
-        => flags.HasFlag(ElementFlags.ICE);
-
-    public static bool thunder(this ElementFlags flags)
-        => flags.HasFlag(ElementFlags.THUNDER);
-
-    public static bool water(this ElementFlags flags)
-        => flags.HasFlag(ElementFlags.WATER);
-
-    public static bool holy(this ElementFlags flags)
-        => flags.HasFlag(ElementFlags.HOLY);
+    public static bool fire   (this ElementFlags flags) => flags.HasFlag(ElementFlags.FIRE);
+    public static bool ice    (this ElementFlags flags) => flags.HasFlag(ElementFlags.ICE);
+    public static bool thunder(this ElementFlags flags) => flags.HasFlag(ElementFlags.THUNDER);
+    public static bool water  (this ElementFlags flags) => flags.HasFlag(ElementFlags.WATER);
+    public static bool holy   (this ElementFlags flags) => flags.HasFlag(ElementFlags.HOLY);
 }

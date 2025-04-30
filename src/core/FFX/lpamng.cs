@@ -17,18 +17,19 @@ public static class SphereGridZoomExt {
     public static float get_zoom(this SphereGridZoom zoom_level) {
         return zoom_level switch {
             SphereGridZoom.VeryFar => 0.125f,
-            SphereGridZoom.Far => 0.25f,
-            SphereGridZoom.Medium => 0.5f,
-            SphereGridZoom.Close => 1.0f,
+            SphereGridZoom.Far     => 0.25f,
+            SphereGridZoom.Medium  => 0.5f,
+            SphereGridZoom.Close   => 1.0f,
+            _                      => 0.5f,
         };
     }
 
     public static SphereGridZoom get_closest(float zoom, bool allow_very_far = false) {
         return zoom switch {
-            <= 0.1875f => allow_very_far ? SphereGridZoom.VeryFar : SphereGridZoom.Far,
-            <= 0.375f => SphereGridZoom.Far,
-            <= 0.75f => SphereGridZoom.Medium,
-            _ => SphereGridZoom.Close,
+             <= 0.1875f => allow_very_far ? SphereGridZoom.VeryFar : SphereGridZoom.Far,
+             <= 0.375f  => SphereGridZoom.Far,
+             <= 0.75f   => SphereGridZoom.Medium,
+            _           => SphereGridZoom.Close,
         };
     }
 }

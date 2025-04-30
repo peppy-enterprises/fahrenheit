@@ -149,7 +149,7 @@ public static class AtelInstExt {
     }
 
     public static AtelOpCode build(this AtelInst inst, u16? operand = null) {
-        if (!inst.has_operand() && operand.HasValue) throw new System.ArgumentException($"Tried to build an AtelOpCode with an operand and instruction that doesn't take an operand.");
+        if (!inst.has_operand() && operand.HasValue) throw new ArgumentException($"Tried to build an AtelOpCode with an operand and instruction that doesn't take an operand.");
         return new AtelOpCode { instruction = (u8)inst, operand = operand };
     }
 }

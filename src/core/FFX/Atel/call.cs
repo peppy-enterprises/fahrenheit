@@ -21,49 +21,49 @@ public enum AtelCallTargetNamespace {
 public unsafe static class CTNamespaceExt {
     public static AtelCallTargets.CallTarget[] get(this AtelCallTargetNamespace @namespace) {
         return @namespace switch {
-            AtelCallTargetNamespace.Common => AtelCallTargets.Common,
-            AtelCallTargetNamespace.Math => AtelCallTargets.Math,
+            AtelCallTargetNamespace.Common  => AtelCallTargets.Common,
+            AtelCallTargetNamespace.Math    => AtelCallTargets.Math,
             AtelCallTargetNamespace.SgEvent => AtelCallTargets.SgEvent,
             AtelCallTargetNamespace.ChEvent => AtelCallTargets.ChEvent,
-            AtelCallTargetNamespace.Camera => AtelCallTargets.Camera,
-            AtelCallTargetNamespace.Battle => AtelCallTargets.Battle,
-            AtelCallTargetNamespace.Map => AtelCallTargets.Map,
-            AtelCallTargetNamespace.Mount => AtelCallTargets.Mount,
-            AtelCallTargetNamespace.Movie => AtelCallTargets.Movie,
-            AtelCallTargetNamespace.Debug => AtelCallTargets.Debug,
-            AtelCallTargetNamespace.AbiMap => AtelCallTargets.AbiMap,
+            AtelCallTargetNamespace.Camera  => AtelCallTargets.Camera,
+            AtelCallTargetNamespace.Battle  => AtelCallTargets.Battle,
+            AtelCallTargetNamespace.Map     => AtelCallTargets.Map,
+            AtelCallTargetNamespace.Mount   => AtelCallTargets.Mount,
+            AtelCallTargetNamespace.Movie   => AtelCallTargets.Movie,
+            AtelCallTargetNamespace.Debug   => AtelCallTargets.Debug,
+            AtelCallTargetNamespace.AbiMap  => AtelCallTargets.AbiMap,
         };
     }
 
     public static AtelCallTarget* get_internal(this AtelCallTargetNamespace @namespace) {
         return FhUtil.ptr_at<AtelCallTarget>(@namespace switch {
-            AtelCallTargetNamespace.Common => 0x850050,
-            AtelCallTargetNamespace.Math => 0x852BE0,
+            AtelCallTargetNamespace.Common  => 0x850050,
+            AtelCallTargetNamespace.Math    => 0x852BE0,
             AtelCallTargetNamespace.SgEvent => 0x888D88,
             AtelCallTargetNamespace.ChEvent => 0x8891F8,
-            AtelCallTargetNamespace.Camera => 0x843988,
-            AtelCallTargetNamespace.Battle => 0x842618,
-            AtelCallTargetNamespace.Map => 0x85DC90,
-            AtelCallTargetNamespace.Mount => 0x85D8C0,
-            AtelCallTargetNamespace.Movie => 0x840E20,
-            AtelCallTargetNamespace.Debug => 0x852DD8,
-            AtelCallTargetNamespace.AbiMap => 0x885EB0,
+            AtelCallTargetNamespace.Camera  => 0x843988,
+            AtelCallTargetNamespace.Battle  => 0x842618,
+            AtelCallTargetNamespace.Map     => 0x85DC90,
+            AtelCallTargetNamespace.Mount   => 0x85D8C0,
+            AtelCallTargetNamespace.Movie   => 0x840E20,
+            AtelCallTargetNamespace.Debug   => 0x852DD8,
+            AtelCallTargetNamespace.AbiMap  => 0x885EB0,
         });
     }
 
     public static string to_string(this AtelCallTargetNamespace @namespace) {
         return @namespace switch {
-            AtelCallTargetNamespace.Common => "std",
-            AtelCallTargetNamespace.Math => "math",
+            AtelCallTargetNamespace.Common  => "std",
+            AtelCallTargetNamespace.Math    => "math",
             AtelCallTargetNamespace.SgEvent => "sg",
             AtelCallTargetNamespace.ChEvent => "ch",
-            AtelCallTargetNamespace.Camera => "cam",
-            AtelCallTargetNamespace.Battle => "btl",
-            AtelCallTargetNamespace.Map => "map",
-            AtelCallTargetNamespace.Mount => "mnt",
-            AtelCallTargetNamespace.Movie => "mov",
-            AtelCallTargetNamespace.Debug => "dbg",
-            AtelCallTargetNamespace.AbiMap => "abm",
+            AtelCallTargetNamespace.Camera  => "cam",
+            AtelCallTargetNamespace.Battle  => "btl",
+            AtelCallTargetNamespace.Map     => "map",
+            AtelCallTargetNamespace.Mount   => "mnt",
+            AtelCallTargetNamespace.Movie   => "mov",
+            AtelCallTargetNamespace.Debug   => "dbg",
+            AtelCallTargetNamespace.AbiMap  => "abm",
         };
     }
 }
@@ -80,17 +80,17 @@ public static unsafe class AtelCallTargets {
     static AtelCallTargets() {
         // Assert namespace lengths to avoid a dumb warning
         // and still make people do things properly
-        Assert(Common.Length == 616);
-        Assert(Math.Length == 30);
+        Assert(Common.Length  == 616);
+        Assert(Math.Length    == 30);
         Assert(SgEvent.Length == 71);
         Assert(ChEvent.Length == 145);
-        Assert(Camera.Length == 138);
-        Assert(Battle.Length == 296);
-        Assert(Map.Length == 108);
-        Assert(Mount.Length == 1);
-        Assert(Movie.Length == 16);
-        Assert(Debug.Length == 94);
-        Assert(AbiMap.Length == 1);
+        Assert(Camera.Length  == 138);
+        Assert(Battle.Length  == 296);
+        Assert(Map.Length     == 108);
+        Assert(Mount.Length   == 1);
+        Assert(Movie.Length   == 16);
+        Assert(Debug.Length   == 94);
+        Assert(AbiMap.Length  == 1);
     }
 
     public static string get_fn_name(ushort id, bool include_namespace) {

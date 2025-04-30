@@ -1,5 +1,8 @@
 ﻿[*.cs]
 
+# a final newline for sanity's sake
+insert_final_newline = true
+
 # Fahrenheit prefers block-bodied everything
 csharp_style_expression_bodied_constructors = false
 csharp_style_expression_bodied_methods = false

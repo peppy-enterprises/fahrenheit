@@ -27,7 +27,6 @@ public partial struct AutoAbility {
     [FieldOffset(0x69)] public byte                  group_idx;
     [FieldOffset(0x6A)] public byte                  group_level;
     [FieldOffset(0x6B)] public byte                  international_bonus_idx;
-
 }
 
 [Flags]
@@ -48,45 +47,22 @@ public enum StatIncreaseFlags : ushort {
     MAGIC_BONUS         = 1 << 12,
     MAGIC_DEFENSE_BONUS = 1 << 13,
 }
-public static partial class EnumExt {
-    public static bool strength(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.STRENGTH);
 
-    public static bool defense(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.DEFENSE);
-    
-    public static bool magic(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.MAGIC);
-    
-    public static bool magic_defense(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE);
-    
-    public static bool agility(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.AGILITY);
-    
-    public static bool luck(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.LUCK);
-    
-    public static bool evasion(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.EVASION);
-    
-    public static bool accuracy(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.ACCURACY);
-    
-    public static bool hp(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.HP);
-    
-    public static bool mp(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.MP);
-    
-    public static bool strength_bonus(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.STRENGTH_BONUS);
-    
-    public static bool defense_bonus(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.DEFENSE_BONUS);
-    
-    public static bool magic_bonus(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.MAGIC_BONUS);
-    public static bool magic_defense_bonus(this StatIncreaseFlags flags)
-        => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE_BONUS);
+public static partial class EnumExt {
+    public static bool strength     (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.STRENGTH);
+    public static bool defense      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.DEFENSE);
+    public static bool magic        (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC);
+    public static bool magic_defense(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE);
+    public static bool agility      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.AGILITY);
+    public static bool luck         (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.LUCK);
+    public static bool evasion      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.EVASION);
+    public static bool accuracy     (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.ACCURACY);
+
+    public static bool hp(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.HP);
+    public static bool mp(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MP);
+
+    public static bool strength_bonus     (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.STRENGTH_BONUS);
+    public static bool defense_bonus      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.DEFENSE_BONUS);
+    public static bool magic_bonus        (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_BONUS);
+    public static bool magic_defense_bonus(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE_BONUS);
 }

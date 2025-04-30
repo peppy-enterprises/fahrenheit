@@ -4,6 +4,7 @@ global using System.Diagnostics.CodeAnalysis; // [NotNullWhen()] and other nulla
 global using System.Globalization;            // CultureInfo.InvariantCulture et al.
 global using System.IO;                       // Path, File, and similar
 global using System.Numerics;                 // generic math - INumber<T>, IBinaryInteger<T>
+global using System.Runtime.CompilerServices; // [InlineArray]
 global using System.Runtime.InteropServices;
 global using System.Text.Json;                // For JSON (de)serialization, we use STJ.
 global using System.Text.Json.Serialization;

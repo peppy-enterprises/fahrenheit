@@ -24,7 +24,7 @@ public unsafe struct AtelWorkThreadStorage {
         int oversized_by = offset + sizeof(T) - sizeof(AtelWorkThreadStorage);
 
         if (oversized_by > 0) {
-            throw new System.ArgumentOutOfRangeException(
+            throw new ArgumentOutOfRangeException(
                 paramName: nameof(offset),
                 message:   $"Cannot {(is_read ? "read" : "write")} value of type {typeof(T).FullName} from AtelWorkThread storage at offset {offset}; the value is {oversized_by} bytes too large."
             );

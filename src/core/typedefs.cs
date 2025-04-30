@@ -13,7 +13,7 @@ global using T_FhDialoguePos         = System.UInt16;
 // X
 global using T_XCamMoveType   = System.Byte;   // x_idcam
 global using T_XCamSplineType = System.Byte;   // x_idcam
-global using T_XPlySaveId     = System.Byte;   // x_idplysave
+global using T_XPlySaveId     = System.Int32;  // x_idplysave
 global using T_XSeTypeId      = System.Byte;   // x_idsetype
 global using T_XCamTargetId   = System.Int16;  // x_idcam
 global using T_XChrStatId     = System.Int32;  // x_idchrstat
@@ -32,6 +32,7 @@ global using T_XSumId         = System.UInt16; // x_idsum
 global using T_XBtlId         = System.UInt32; // x_idbtl
 global using T_XBtlVoiceId    = System.UInt32; // x_idbtlvo
 global using T_XMotId         = System.UInt32; // x_idmot-*
+global using T_XMdlSubId      = System.Int32;  // x_idimdlsub
 
 // X-2
 global using T_X2PComId    = System.UInt16; // x2_idpcom

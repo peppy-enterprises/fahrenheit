@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Fahrenheit.Core;
+﻿namespace Fahrenheit.Core;
 
 public static unsafe class FhUtil {
     public static T* ptr_at<T>(nint address)          where T : unmanaged { return (T*)(FhGlobal.base_addr + address); }

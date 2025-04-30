@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Fahrenheit.Core;
+﻿namespace Fahrenheit.Core;
 
 public enum FhStringType {
     Uni  = 1,
