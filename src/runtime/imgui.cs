@@ -7,14 +7,6 @@ using static Fahrenheit.Core.Runtime.PInvoke;
 
 namespace Fahrenheit.Core.Runtime;
 
-public sealed record FhImguiModuleConfig : FhModuleConfig {
-    public FhImguiModuleConfig(string name) : base(name) { }
-
-    public override FhModule SpawnModule() {
-        return new FhImguiModule(this);
-    }
-}
-
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 public delegate nint graphicInitialize();
 
@@ -29,6 +21,8 @@ public delegate nint graphicInitialize();
  *      return __result__;
  *  }
  */
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 public unsafe delegate uint ComIUnknown_Release(nint* p_object);
 
 /* [fkelava 6/10/24 01:54]
@@ -116,6 +110,7 @@ public unsafe delegate nint DXGISwapChain_ResizeBuffers(nint* pSwapChain, uint B
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 public delegate int PInputUpdate();
 
+[FhLoaderMark]
 public unsafe class FhImguiModule : FhModule {
     // WndProc support
     private          nint            _hWnd;
@@ -154,7 +149,7 @@ public unsafe class FhImguiModule : FhModule {
 
     private readonly FhMethodHandle<PInputUpdate> _handle_input_update;
 
-    public FhImguiModule(FhImguiModuleConfig cfg) : base(cfg) {
+    public FhImguiModule() {
         _vtbl_swap_chain         = new nint[_D3D11_VTBL_SWAP_CHAIN_COUNT];
         _vtbl_device             = new nint[_D3D11_VTBL_DEVICE_COUNT];
         _vtbl_device_ctx         = new nint[_D3D11_VTBL_DEVICE_CTX_COUNT];

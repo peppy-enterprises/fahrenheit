@@ -7,7 +7,6 @@ public sealed record FhModContext(
 
 public sealed record FhModuleContext(
     FhModule         Module,
-    FhModuleConfig   Config,
     FhModulePathInfo Paths);
 
 public class FhModController {
@@ -85,15 +84,14 @@ public class FhModController {
         lock (_lock) {
             foreach (FhModContext mod_ctx in _contexts) {
                 foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                    FhModuleConfig fmcfg = module_ctx.Config;
-                    FhModule       fm    = module_ctx.Module;
+                    FhModule fm = module_ctx.Module;
 
                     if (!fm.init()) {
-                        FhLog.Log(LogLevel.Warning, $"Module {fmcfg.Name} [{fmcfg.Type}] initializer callback failed. Suppressing.");
+                        FhLog.Log(LogLevel.Warning, $"Module {fm.ModuleType} initializer callback failed. Suppressing.");
                         continue;
                     }
 
-                    FhLog.Log(LogLevel.Info, $"Initialized module {fmcfg.Name} [{fmcfg.Type}].");
+                    FhLog.Log(LogLevel.Info, $"Initialized module {fm.ModuleType}.");
                 }
             }
         }

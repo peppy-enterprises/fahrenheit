@@ -755,7 +755,7 @@ public static class FhLocalizationManager {
 
                 try {
                     using FileStream lang_file_stream = lang_file_path.Open(FileMode.Open, FileAccess.Read);
-                    LocaleData? locale = JsonSerializer.Deserialize<LocaleData>(lang_file_stream, FhUtil.JsonOpts);
+                    LocaleData? locale = JsonSerializer.Deserialize<LocaleData>(lang_file_stream, FhUtil.InternalJsonOpts);
                     if (locale == null) return;
 
                     if (!_localization_map.TryGetValue(lang_id, out LocaleData? locale_data)) {

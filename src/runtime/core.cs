@@ -6,24 +6,13 @@ using static Fahrenheit.Core.FhHookDelegates;
 
 namespace Fahrenheit.Core.Runtime;
 
-public sealed record FhCoreModuleConfig : FhModuleConfig {
-    public FhCoreModuleConfig(string name) : base(name) { }
-
-    public override FhModule SpawnModule() {
-        return new FhCoreModule(this);
-    }
-}
-
+[FhLoaderMark]
 public unsafe class FhCoreModule : FhModule {
-    private readonly FhCoreModuleConfig                        _moduleConfig;
-
     private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
     private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
 
-    public FhCoreModule(FhCoreModuleConfig cfg) : base(cfg) {
-        _moduleConfig = cfg;
-
+    public FhCoreModule() {
         _main_loop    = new(this, "FFX.exe", main_loop,    offset: 0x420C00);
         _update_input = new(this, "FFX.exe", update_input, offset: 0x471d10);
         _render_game  = new(this, "FFX.exe", render_game,  offset: 0x4abce0);
@@ -124,7 +113,7 @@ public unsafe class FhCoreModule : FhModule {
                 ImGui.Text($"{mod_count} mods loaded");
                 foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
                     foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                        ImGui.Text($"{module_ctx.Module.ModuleName} v{module_ctx.Module.GetType().Assembly.GetName().Version}");
+                        ImGui.Text($"{module_ctx.Module.ModuleType} v{module_ctx.Module.GetType().Assembly.GetName().Version}");
                     }
                 }
                 ImGui.End();

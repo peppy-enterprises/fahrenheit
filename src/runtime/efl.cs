@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text.Json.Serialization;
 
 using static Fahrenheit.Core.Runtime.PInvoke;
 
@@ -17,22 +16,12 @@ public struct FhFfxFile {
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public unsafe delegate FhFfxFile* fiosOpen(nint path_ptr, bool read_only);
 
-public sealed record FhEFLModuleConfig : FhModuleConfig {
-    [JsonConstructor]
-    public FhEFLModuleConfig(string name) : base(name) { }
-
-    public override FhEFLModule SpawnModule() {
-        return new FhEFLModule(this);
-    }
-}
-
+[FhLoaderMark]
 public unsafe class FhEFLModule : FhModule {
-    private readonly FhEFLModuleConfig          _config;
     private readonly Dictionary<string, string> _index;
     private readonly FhMethodHandle<fiosOpen>   _h_fiosOpen;
 
-    public FhEFLModule(FhEFLModuleConfig cfg) : base(cfg) {
-        _config     = cfg;
+    public FhEFLModule() {
         _index      = [];
         _h_fiosOpen = new(this, "FFX.exe", h_open, offset: 0x2798E0);
     }

@@ -22,7 +22,6 @@ namespace {
 
     // Forward declarations
     bool                                      load_hostfxr();
-    load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t* assembly);
 }
 
 /********************************************************************************************
@@ -59,32 +58,6 @@ namespace {
 
         return (init_fptr && get_delegate_fptr && close_fptr);
     }
-
-    // Load and initialize .NET Core and get desired function pointer for scenario
-    load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t* config_path) {
-        // Load .NET Core
-        void*          load_assembly_and_get_function_pointer = nullptr;
-        hostfxr_handle cxt                                    = nullptr;
-
-        int rc = init_fptr(config_path, nullptr, &cxt);
-        if (rc != 0 || cxt == nullptr) {
-            std::wcerr << "Init failed: " << std::hex << std::showbase << rc << std::endl;
-            close_fptr(cxt);
-            return nullptr;
-        }
-
-        // Get the load assembly function pointer
-        rc = get_delegate_fptr(
-            cxt,
-            hdt_load_assembly_and_get_function_pointer,
-            &load_assembly_and_get_function_pointer);
-        if (rc != 0 || load_assembly_and_get_function_pointer == nullptr)
-            std::wcerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
-
-        close_fptr(cxt);
-        return (load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer;
-    }
-    // </SnippetInitialize>
 }
 
 static int DetourMain(void) {
@@ -130,16 +103,48 @@ static int DetourMain(void) {
     host_path = host_path.substr(0, host_dirsep_pos + 1);
 
     // STEP 1: Load HostFxr and get exported hosting functions
+
     if (!load_hostfxr()) {
         std::cout << "load_hostfxr() failed" << std::endl;
         exit(EXIT_FAILURE);
     }
 
     // STEP 2: Initialize and start the .NET Core runtime
-    load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
-    load_assembly_and_get_function_pointer = get_dotnet_load_assembly(clrhost_config_path.c_str());
 
-    if (load_assembly_and_get_function_pointer == nullptr) {
+    void*          load_assembly_fptr        = nullptr;
+    void*          get_function_pointer_fptr = nullptr;
+    hostfxr_handle cxt                       = nullptr;
+
+    int rc = init_fptr(clrhost_config_path.c_str(), nullptr, &cxt);
+    if (rc != 0 || cxt == nullptr) {
+        std::wcerr << "Init failed: " << std::hex << std::showbase << rc << std::endl;
+        close_fptr(cxt);
+        exit(EXIT_FAILURE);
+    }
+
+    // Get the load assembly function pointer
+    rc = get_delegate_fptr(
+        cxt,
+        hdt_load_assembly,
+        &load_assembly_fptr);
+
+    if (rc != 0 || load_assembly_fptr == nullptr)
+        std::wcerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
+
+    rc = get_delegate_fptr(
+        cxt,
+        hdt_get_function_pointer,
+        &get_function_pointer_fptr);
+
+    if (rc != 0 || get_function_pointer_fptr == nullptr)
+        std::wcerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
+
+    close_fptr(cxt);
+
+    load_assembly_fn        load_assembly        = (load_assembly_fn)       load_assembly_fptr;
+    get_function_pointer_fn get_function_pointer = (get_function_pointer_fn)get_function_pointer_fptr;
+
+    if (load_assembly == nullptr) {
         std::wcout << "get_dotnet_load_assembly() failed" << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -147,16 +152,26 @@ static int DetourMain(void) {
     // STEP 3: Load managed assembly and get function pointer to a managed method
     fh_ldr_managed_init fh_init = nullptr;
 
-    int rc = load_assembly_and_get_function_pointer(
+    rc = load_assembly(
         clrhost_lib_path.c_str(),
+        nullptr,
+        nullptr);
+
+    if (rc != 0) {
+        std::wcout << "load_assembly() failed" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    rc = get_function_pointer(
         clrhost_type,
         clrhost_init_method,
         clrhost_delegate, /* Delegate type name, if using non-standard delegate */
         nullptr,
+        nullptr,
         (void**)&fh_init);
 
     if (rc != 0 || fh_init == nullptr) {
-        std::wcout << "load_assembly_and_get_function_pointer() failed" << std::endl;
+        std::wcout << "get_function_pointer() failed" << std::endl;
         exit(EXIT_FAILURE);
     }
 

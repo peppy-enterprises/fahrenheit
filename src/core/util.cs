@@ -149,14 +149,6 @@ public static unsafe class FhUtil {
         NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
     };
 
-    public static JsonSerializerOptions JsonOpts { get; } = new JsonSerializerOptions {
-        Converters = {
-            new FhConfigParser<FhModuleConfig>(),
-            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-        },
-        NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
-    };
-
     internal static void enter_json_object(this ref Utf8JsonReader reader) {
         while (reader.TokenType != JsonTokenType.StartObject) {
             reader.Read();
@@ -176,7 +168,7 @@ public static unsafe class FhUtil {
             throw new JsonException($"Expected {key}, got {reader.GetString()}.");
 
         reader.Read();
-        T tval = JsonSerializer.Deserialize<T>(ref reader, JsonOpts) ?? throw new JsonException();
+        T tval = JsonSerializer.Deserialize<T>(ref reader, InternalJsonOpts) ?? throw new JsonException();
         reader.Read();
 
         return tval;

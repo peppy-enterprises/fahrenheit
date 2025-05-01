@@ -29,20 +29,14 @@ public sealed record FhModulePathInfo(
 ///     and one DLL can contain any number of modules. Modules can be used to logically partition your functionality.
 /// </summary>
 public abstract class FhModule {
-    protected readonly string _module_name;
     protected readonly string _module_type_name;
 
-    protected FhModule(FhModuleConfig module_config) {
-        _module_name      = module_config.Name;
+    protected FhModule() {
         _module_type_name = GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE");
     }
 
     internal string ModuleType {
         get { return _module_type_name; }
-    }
-
-    public string ModuleName {
-        get { return _module_name; }
     }
 
     public abstract bool init();

@@ -1,5 +1,5 @@
-﻿/* [fkelava 13/9/22 08:11]
- * source: MS Store ver.
+﻿/* [fkelava 30/4/25 15:29]
+ * source: Switch ver.
  * header: __CAMERA_ATEL__
  *
  * /ffx_ps2/ffx/proj2/chr/ath/battle/camera.ath
