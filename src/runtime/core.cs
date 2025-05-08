@@ -2,20 +2,18 @@
 
 using Fahrenheit.Core.ImGuiNET;
 
-using static Fahrenheit.Core.FhHookDelegates;
-
 namespace Fahrenheit.Core.Runtime;
 
 [FhLoaderMark]
 public unsafe class FhCoreModule : FhModule {
-    private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
-    private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
-    private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
+    private readonly FhMethodHandle<FhCall.Sg_MainLoop>               _main_loop;
+    private readonly FhMethodHandle<FhCall.AtelExecInternal_00871d10> _update_input;
+    private readonly FhMethodHandle<FhCall.TODrawMessageWindow>       _render_game;
 
     public FhCoreModule() {
-        _main_loop    = new(this, "FFX.exe", main_loop,    offset: 0x420C00);
-        _update_input = new(this, "FFX.exe", update_input, offset: 0x471d10);
-        _render_game  = new(this, "FFX.exe", render_game,  offset: 0x4abce0);
+        _main_loop    = new(this, "FFX.exe", main_loop,    offset: FhCall.__addr_Sg_MainLoop);
+        _update_input = new(this, "FFX.exe", update_input, offset: FhCall.__addr_AtelExecInternal_00871d10);
+        _render_game  = new(this, "FFX.exe", render_game,  offset: FhCall.__addr_TODrawMessageWindow);
     }
 
     public override bool init() {

@@ -286,7 +286,7 @@ public unsafe class FhImguiModule : FhModule {
             }
         }
 
-        _present_init_complete = false; // forces regeneration of ImGui surfaces/RTV
+        _present_init_complete = false; // forces regeneration of ImGui surfaces/RTV in next `h_present`
         return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     }
 

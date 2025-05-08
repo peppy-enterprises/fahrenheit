@@ -4,65 +4,11 @@ using Fahrenheit.Core.FFX.Battle;
 namespace Fahrenheit.Core.FFX;
 
 public static unsafe class Call {
-    /*===== Util =====*/
-    [UnmanagedFunctionPointer(CallingConvention.FastCall)]
-    public delegate void SecCookieCheck(
-        uint p1);
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int MsCheckRange(
-        int n,
-        int min,
-        int max);
-
     /*===== RNG =====*/
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate uint getChrRngIdx(
         uint chr_id,
         uint type);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint brnd(
-        uint rng_seed_idx);
-
-    /*===== Save Data =====*/
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int MsSaveItemUse(
-        uint item_id,
-        int  amount);
-
-    /*===== Excel Data =====*/
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate nint MsGetExcelData(
-        uint req_elem_idx,
-        nint excel_data_ptr,
-        nint storage_var);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate Command* MsGetRomItem(
-        uint item_id,
-        nint param_2);
-
-    /*===== MsChr =====*/
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate Chr* MsGetChr(
-        uint chr_id);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate Chr* MsGetMon(
-        byte mon_id);
-
-    /*===== Battle =====*/
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool MsCalcEscape(
-        uint chr_id);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate nint MsApUp(
-        uint chr_id,
-        Chr* chr,
-        uint base_ap_add,
-        nint param_4);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int MsCalcDamage(
@@ -77,16 +23,6 @@ public static unsafe class Call {
         byte*    ref_used_def,
         byte*    ref_used_mdef,
         int      base_dmg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool MsSetRikkuLimit(
-        uint chr_id,
-        Chr* chr,
-        nint param_3);
-
-    /*===== ATEL =====*/
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate void AtelJumpGameOver();
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void AtelInitCallFunc(
