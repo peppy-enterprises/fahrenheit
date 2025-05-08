@@ -38,7 +38,7 @@ public class FhLoader {
                 if (type.BaseType != typeof(FhModule)) continue;
 
                 if (type.GetCustomAttribute<FhLoaderMarkAttribute>() == null) {
-                    FhLog.Warning($"Loader ignored module type {type.FullName} without [FhLoaderMark] applied. This may be an oversight.");
+                    FhInternal.Log.Warning($"Loader ignored module type {type.FullName} without [FhLoaderMark] applied. This may be an oversight.");
                     continue;
                 }
 
@@ -47,6 +47,6 @@ public class FhLoader {
             }
         }
 
-        FhLog.Info($"Loaded mod {mod_name} with {modules.Count} modules.");
+        FhInternal.Log.Info($"Loaded mod {mod_name} with {modules.Count} modules.");
     }
 }

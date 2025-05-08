@@ -73,7 +73,7 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         nint addr_hook     = Marshal.GetFunctionPointerForDelegate(hook_fptr);
         nint addr_original = 0;
 
-        FhLog.Info($"Hook {hook_fptr.Method.Name}; original -> 0x{addr_target.ToString("X8")}, hook -> 0x{addr_hook.ToString("X8")}.");
+        FhInternal.Log.Info($"Hook {hook_fptr.Method.Name}; original -> 0x{addr_target.ToString("X8")}, hook -> 0x{addr_hook.ToString("X8")}.");
 
         if (FhPInvoke.MH_CreateHook(addr_target, addr_hook, &addr_original) != 0) throw new Exception("FH_E_NATIVE_HOOK_CREATE_FAILED");
         if (FhPInvoke.MH_EnableHook(addr_target)                            != 0) throw new Exception("FH_E_NATIVE_HOOK_ENABLE_FAILED");

@@ -96,7 +96,7 @@ public unsafe readonly struct FhPointer {
 
     public bool try_await_value<T>(T target) where T : unmanaged {
         if (!deref_offsets(out nint vptr)) {
-            FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
+            FhInternal.Log.Warning($"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }
 
@@ -123,7 +123,7 @@ public unsafe readonly struct FhPointer {
         match = default;
 
         if (!deref_offsets(out nint vptr)) {
-            FhLog.Log(LogLevel.Warning, $"AwaitValue was called but the supplied pointer resolved to nothing.");
+            FhInternal.Log.Warning($"AwaitValue was called but the supplied pointer resolved to nothing.");
             return false;
         }
 

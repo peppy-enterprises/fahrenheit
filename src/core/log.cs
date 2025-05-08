@@ -12,63 +12,68 @@ public enum LogLevel {
     None    = 6
 }
 
-public static class FhLog {
+public class FhLogger {
 #if DEBUG
     private const LogLevel MinLevel = LogLevel.Debug;
 #else
     private const LogLevel MinLevel = LogLevel.Info;
 #endif
 
-    static FhLog() {
-        string log_path = Path.Join(FhInternal.PathFinder.Logs.Path, $"{FhUtil.get_timestamp_string()}.log");
+    private readonly TextWriterTraceListener _console;
+    private readonly TextWriterTraceListener _file;
 
-        Trace.AutoFlush = true;
-        Trace.Listeners.Add(new ConsoleTraceListener());
-        Trace.Listeners.Add(new TextWriterTraceListener(File.Open(log_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)));
+    public FhLogger(string log_file_name) {
+        string log_path = Path.Join(FhInternal.PathFinder.Logs.Path, log_file_name);
+
+        _console = new TextWriterTraceListener(Console.Out);
+        _file    = new TextWriterTraceListener(File.Open(log_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite));
     }
 
-    public static void Log(                   LogLevel level,
-                                              string   msg,
-                           [CallerMemberName] string   mname = "",
-                           [CallerFilePath]   string   fpath = "",
-                           [CallerLineNumber] int      lnb   = 0) {
+    public void Log(                   LogLevel level,
+                                       string   msg,
+                    [CallerMemberName] string   mname = "",
+                    [CallerFilePath]   string   fpath = "",
+                    [CallerLineNumber] int      lnb   = 0) {
         if (level < MinLevel) return;
+        string lstr = $"{DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}";
 
-        Trace.WriteLine($"{DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}");
+        _console.WriteLine(lstr);
+        _file   .WriteLine(lstr);
+        _file   .Flush();
     }
 
-    public static void Debug(                   string msg,
-                             [CallerMemberName] string mname = "",
-                             [CallerFilePath]   string fpath = "",
-                             [CallerLineNumber] int    lnb   = 0) {
+    public void Debug(                   string msg,
+                      [CallerMemberName] string mname = "",
+                      [CallerFilePath]   string fpath = "",
+                      [CallerLineNumber] int    lnb   = 0) {
         Log(LogLevel.Debug, msg, mname, fpath, lnb);
     }
 
-    public static void Info(                   string msg,
-                            [CallerMemberName] string mname = "",
-                            [CallerFilePath]   string fpath = "",
-                            [CallerLineNumber] int    lnb   = 0) {
+    public void Info(                   string msg,
+                     [CallerMemberName] string mname = "",
+                     [CallerFilePath]   string fpath = "",
+                     [CallerLineNumber] int    lnb   = 0) {
         Log(LogLevel.Info, msg, mname, fpath, lnb);
     }
 
-    public static void Warning(                   string msg,
-                               [CallerMemberName] string mname = "",
-                               [CallerFilePath]   string fpath = "",
-                               [CallerLineNumber] int    lnb   = 0) {
+    public void Warning(                   string msg,
+                        [CallerMemberName] string mname = "",
+                        [CallerFilePath]   string fpath = "",
+                        [CallerLineNumber] int    lnb   = 0) {
         Log(LogLevel.Warning, msg, mname, fpath, lnb);
     }
 
-    public static void Error(                   string msg,
-                             [CallerMemberName] string mname = "",
-                             [CallerFilePath]   string fpath = "",
-                             [CallerLineNumber] int    lnb   = 0) {
+    public void Error(                   string msg,
+                      [CallerMemberName] string mname = "",
+                      [CallerFilePath]   string fpath = "",
+                      [CallerLineNumber] int    lnb   = 0) {
         Log(LogLevel.Error, msg, mname, fpath, lnb);
     }
 
-    public static void Fatal(                   string msg,
-                             [CallerMemberName] string mname = "",
-                             [CallerFilePath]   string fpath = "",
-                             [CallerLineNumber] int    lnb   = 0) {
+    public void Fatal(                   string msg,
+                      [CallerMemberName] string mname = "",
+                      [CallerFilePath]   string fpath = "",
+                      [CallerLineNumber] int    lnb   = 0) {
         Log(LogLevel.Fatal, msg, mname, fpath, lnb);
     }
 }

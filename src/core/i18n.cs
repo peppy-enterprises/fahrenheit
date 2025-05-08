@@ -759,20 +759,20 @@ public static class FhLocalizationManager {
                     if (locale == null) return;
 
                     if (!_localization_map.TryGetValue(lang_id, out LocaleData? locale_data)) {
-                        FhLog.Warning($"In mod {mod_name}: language ID {lang_id} is not known by Fahrenheit.");
+                        FhInternal.Log.Warning($"In mod {mod_name}: language ID {lang_id} is not known by Fahrenheit.");
                         return;
                     }
 
                     foreach (KeyValuePair<string, string> locale_kv in locale) {
                         if (locale_data.ContainsKey(locale_kv.Key)) {
-                            FhLog.Warning($"Mod {mod_name} is superseding key {locale_kv.Key} in locale {lang_id}");
+                            FhInternal.Log.Warning($"Mod {mod_name} is superseding key {locale_kv.Key} in locale {lang_id}");
                         }
 
                         locale_data[locale_kv.Key] = locale_kv.Value;
                     }
                 }
                 catch {
-                    FhLog.Error($"While parsing locale {lang_id} for module {mod_name}:");
+                    FhInternal.Log.Error($"While parsing locale {lang_id} for module {mod_name}:");
                     throw;
                 }
             }

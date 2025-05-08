@@ -87,11 +87,11 @@ public class FhModController {
                     FhModule fm = module_ctx.Module;
 
                     if (!fm.init()) {
-                        FhLog.Log(LogLevel.Warning, $"Module {fm.ModuleType} initializer callback failed. Suppressing.");
+                        FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed. Suppressing.");
                         continue;
                     }
 
-                    FhLog.Log(LogLevel.Info, $"Initialized module {fm.ModuleType}.");
+                    FhInternal.Log.Info($"Initialized module {fm.ModuleType}.");
                 }
             }
         }

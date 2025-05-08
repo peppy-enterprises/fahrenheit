@@ -59,7 +59,7 @@ public unsafe class FhEFLModule : FhModule {
                     : absolute_mod_file_path);
 
                 if (_index.ContainsKey(normalized_relative_path)) {
-                    FhLog.Warning($"{normalized_relative_path} is being superseded by module {mod.Manifest.Name}");
+                    _logger.Warning($"{normalized_relative_path} is being superseded by module {mod.Manifest.Name}");
                 }
 
                 _index[normalized_relative_path] = normalized_absolute_path;
@@ -67,7 +67,7 @@ public unsafe class FhEFLModule : FhModule {
         }
 
         index_swatch.Stop();
-        FhLog.Warning($"EFL indexing complete in {index_swatch.ElapsedMilliseconds} ms.");
+        _logger.Warning($"EFL indexing complete in {index_swatch.ElapsedMilliseconds} ms.");
     }
 
     public FhFfxFile* h_open(nint path_ptr, bool read_only) {
@@ -95,7 +95,7 @@ public unsafe class FhEFLModule : FhModule {
             dwFlagsAndAttributes:  FILE_FLAG_SEQUENTIAL_SCAN,
             hTemplateFile:         0);
 
-        FhLog.Info($"{path} -> {modded_path}");
+        _logger.Info($"{path} -> {modded_path}");
         return file;
     }
 
