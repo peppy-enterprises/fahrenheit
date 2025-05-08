@@ -61,6 +61,11 @@ For third-party code license notices, please see
 
 ## Associated and/or derived projects
 You should check out the following projects if you want finished mods or approachable tools.
-- [Karifean](https://github.com/Karifean)'s [FFXDataParser](https://github.com/Karifean/FFXDataParser).
-- The [Cutscene Remover mod](https://github.com/erickt420/FFXCutsceneRemover) for FFX by B3dIntruder,
-Cereth, CrimsonInferno, Flobber, Roosta, shenef, and peppy.
+- The [FFXDataParser](https://github.com/Karifean/FFXDataParser) by [Karifean](https://github.com/Karifean)
+allows practical inspection and manipulation of an incredibly wide range of game data.
+- The [Cutscene Remover mod for FFX](https://github.com/erickt420/FFXCutsceneRemover) by B3dIntruder, Cereth, CrimsonInferno, Flobber, Roosta, shenef, and peppy
+strongly enhanced our understanding of the game and its scripting system, and remains a popular and powerful mod.
+- The [FFXProjectEditor](https://github.com/osdanova/FFXProjectEditor) by [osdanova](https://github.com/osdanova)
+allows both file and memory manipulation with an easy-to-use interface.
+- The [FFX Rando](https://github.com/nyterage/FFXRando) by [Taeznak](https://github.com/nyterage)
+is a highly versatile, Fahrenheit-compatible randomizer.
