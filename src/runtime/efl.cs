@@ -16,7 +16,7 @@ public struct FhFfxFile {
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public unsafe delegate FhFfxFile* fiosOpen(nint path_ptr, bool read_only);
 
-[FhLoaderMark]
+[FhLoad(FhGameType.FFX)]
 public unsafe class FhEFLModule : FhModule {
     private readonly Dictionary<string, string> _index;
     private readonly FhMethodHandle<fiosOpen>   _h_fiosOpen;
@@ -59,7 +59,7 @@ public unsafe class FhEFLModule : FhModule {
                     : absolute_mod_file_path);
 
                 if (_index.ContainsKey(normalized_relative_path)) {
-                    _logger.Warning($"{normalized_relative_path} is being superseded by module {mod.Manifest.Name}");
+                    _logger.Warning($"{normalized_relative_path} is being superseded by mod {mod.Manifest.Name}");
                 }
 
                 _index[normalized_relative_path] = normalized_absolute_path;

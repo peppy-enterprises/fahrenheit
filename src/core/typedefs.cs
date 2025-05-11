@@ -39,9 +39,13 @@ global using T_XDeathAnimationId = System.Byte;   // ids/anim_death
 global using T_XSubModelId       = System.Int32;  // ids/mdl_sub
 
 // X-2
-global using T_X2PComId    = System.UInt16; // x2_idpcom
-global using T_X2BtlId     = System.UInt32; // x2_idbtl
-global using T_X2ChrStatId = System.Int32;  // x2_idchrstat
+global using T_X2CommandId         = System.UInt16; // x2_idpcom
+global using T_X2BtlId             = System.UInt32; // x2_idbtl
+global using T_X2ChrStatId         = System.Int32;  // x2_idchrstat
+global using T_X2SeTypeId          = System.Byte;   // ids/setype
+global using T_X2BtlSeTypeId       = System.Byte;   // ids/btl_setype
+global using T_X2BtlRequestTagId   = System.Int16;  // ids/btl_req_tags
+global using T_X2BtlRequestActorId = System.Int16;  // ids/btl_req_tags
 
 // Rust-like aliases for those that prefer them.
 global using u8    = System.Byte;

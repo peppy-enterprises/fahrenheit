@@ -21,9 +21,9 @@ public static class SeTypeId {
     public const T_XSeTypeId SE_SAND           = 10;
     public const T_XSeTypeId SE_SNOW           = 11;
     public const T_XSeTypeId SE_STONE          = 12;
-    public const T_XSeTypeId SE_TREE           = 13;
+    public const T_XSeTypeId SE_WOOD           = 13;
     public const T_XSeTypeId SE_SHALLOW_WATER  = 14;
     public const T_XSeTypeId SE_DEEP_WATER     = 15;
     public const T_XSeTypeId SE_UNDERWATER_BTL = 16;
-    public const T_XSeTypeId SE_UNKNOWN02      = 17; // 濡れた鉄床 - what does this mean...?
+    public const T_XSeTypeId SE_UNKNOWN01      = 17; // 濡れた鉄床 - what does this mean...?
 }

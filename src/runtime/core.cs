@@ -4,7 +4,7 @@ using Fahrenheit.Core.ImGuiNET;
 
 namespace Fahrenheit.Core.Runtime;
 
-[FhLoaderMark]
+[FhLoad(FhGameType.FFX)]
 public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<FhCall.Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<FhCall.AtelExecInternal_00871d10> _update_input;
