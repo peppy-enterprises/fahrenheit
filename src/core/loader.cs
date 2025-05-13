@@ -4,7 +4,9 @@ using System.Runtime.Loader;
 namespace Fahrenheit.Core;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class FhLoaderMarkAttribute : Attribute;
+public class FhLoadAttribute(FhGameType supported_game_type) : Attribute {
+    public readonly FhGameType supported_game_type = supported_game_type;
+}
 
 public class FhLoadContext(string fh_dll_path) : AssemblyLoadContext {
     private readonly AssemblyDependencyResolver _resolver = new AssemblyDependencyResolver(fh_dll_path);
@@ -37,8 +39,15 @@ public class FhLoader {
             foreach (Type type in fh_dll.GetExportedTypes()) {
                 if (type.BaseType != typeof(FhModule)) continue;
 
-                if (type.GetCustomAttribute<FhLoaderMarkAttribute>() == null) {
-                    FhInternal.Log.Warning($"Loader ignored module type {type.FullName} without [FhLoaderMark] applied. This may be an oversight.");
+                FhLoadAttribute? loader_args = type.GetCustomAttribute<FhLoadAttribute>();
+
+                if (loader_args == null) {
+                    FhInternal.Log.Warning($"Loader ignored module type {type.FullName} without [{nameof(FhLoadAttribute)}] applied. This may be an oversight.");
+                    continue;
+                }
+
+                if (!loader_args.supported_game_type.HasFlag(FhGlobal.game_type)) {
+                    FhInternal.Log.Warning($"Loader ignored module type {type.FullName} that does not declare support for this game.");
                     continue;
                 }
 
