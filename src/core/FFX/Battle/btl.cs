@@ -1,28 +1,41 @@
 ﻿namespace Fahrenheit.Core.FFX.Battle;
 
+[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x28)]
+public struct BtlDebugFlags {
+    [FieldOffset(0x0)] public bool invincible_mon;
+    [FieldOffset(0x1)] public bool invincible_ply;
+    [FieldOffset(0x2)] public bool mon_control;
+
+    [FieldOffset(0x4)] public bool free_camera;
+
+    [FieldOffset(0x8)] public bool no_magic_effects;
+    [FieldOffset(0x9)] public bool no_mp_cost;
+
+    [FieldOffset(0x10)] public bool no_variance;
+    [FieldOffset(0x11)] public bool never_crit;
+    [FieldOffset(0x12)] public bool always_hit;
+
+    [FieldOffset(0x14)] public bool always_available_overdrive;
+    [FieldOffset(0x15)] public bool always_crit;
+    [FieldOffset(0x16)] public bool always_1_dmg;
+    [FieldOffset(0x17)] public bool always_9999_dmg;
+    [FieldOffset(0x18)] public bool always_99999_dmg;
+    [FieldOffset(0x19)] public bool always_rare_steal;
+    [FieldOffset(0x1A)] public bool ap_x100;
+    [FieldOffset(0x1B)] public bool gil_x100;
+    [FieldOffset(0x1C)] public bool never_overkill;
+    [FieldOffset(0x1D)] public bool permanent_sensor;
+    [FieldOffset(0x1E)] public bool never_charge_overdrive;
+
+    [FieldOffset(0x27)] public bool never_hit;
+}
+
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x2150)]
 public unsafe struct Btl {
     [FieldOffset(0x10)]   public       byte   battle_state;
     [FieldOffset(0x12)]   public       byte   battle_trigger;
 
-    [FieldOffset(0x28)]   public       bool   debug_invincible_mon;
-    [FieldOffset(0x29)]   public       bool   debug_invincible_ply;
-    [FieldOffset(0x2A)]   public       bool   debug_mon_control;
-    [FieldOffset(0x2C)]   public       bool   debug_free_camera;
-    [FieldOffset(0x30)]   public       bool   debug_no_magic_effects;
-    [FieldOffset(0x31)]   public       bool   debug_no_mp_cost;
-    [FieldOffset(0x38)]   public       bool   debug_no_variance;
-    [FieldOffset(0x39)]   public       bool   debug_never_crit;
-    [FieldOffset(0x3A)]   public       bool   debug_always_hit;
-    [FieldOffset(0x3C)]   public       bool   debug_always_available_overdrive;
-    [FieldOffset(0x3D)]   public       bool   debug_always_crit;
-    [FieldOffset(0x3E)]   public       bool   debug_always_1_dmg;
-    [FieldOffset(0x3F)]   public       bool   debug_always_9999_dmg;
-    [FieldOffset(0x40)]   public       bool   debug_always_99999_dmg;
-    [FieldOffset(0x41)]   public       bool   debug_always_rare_steal;
-    [FieldOffset(0x44)]   public       bool   debug_never_overkill;
-    [FieldOffset(0x46)]   public       bool   debug_never_charge_overdrive;
-    [FieldOffset(0x4F)]   public       bool   debug_never_hit;
+    [FieldOffset(0x28)]   public       BtlDebugFlags debug;
 
     [FieldOffset(0x5C)]   public       nint   ptr_command_bin;
     [FieldOffset(0x60)]   public       nint   ptr_monmagic1_bin;
