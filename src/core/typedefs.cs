@@ -46,21 +46,3 @@ global using T_X2SeTypeId          = System.Byte;   // ids/setype
 global using T_X2BtlSeTypeId       = System.Byte;   // ids/btl_setype
 global using T_X2BtlRequestTagId   = System.Int16;  // ids/btl_req_tags
 global using T_X2BtlRequestActorId = System.Int16;  // ids/btl_req_tags
-
-// Rust-like aliases for those that prefer them.
-global using u8    = System.Byte;
-global using u16   = System.UInt16;
-global using u32   = System.UInt32;
-global using u64   = System.UInt64;
-global using u128  = System.UInt128;
-global using usize = System.UIntPtr;
-
-global using i8    = System.SByte;
-global using i16   = System.Int16;
-global using i32   = System.Int32;
-global using i64   = System.Int64;
-global using i128  = System.Int128;
-global using isize = System.IntPtr;
-
-global using f32   = System.Single;
-global using f64   = System.Double;

@@ -20,12 +20,16 @@ int wmain(int argc, wchar_t* argv[ ]) {
         &si,
         &pi
     )) {
-        std::cerr << "Failed to create target process." << std::endl;
+        std::cerr << "Failed to create target process.\n";
         return 1;
     }
 
-    std::wcout << "Stage 0 Loader is ready. You can now attach a debugger; press any key to attempt launch." << std::endl;
-    int i = _getch();
+    if (argc > 2 && wcsncmp(argv[2], L"--nodebug", 9) == 0) {
+        std::wcout << "Stage 0 Loader is ready. You can now attach a debugger; press any key to attempt launch.\n";
+        int i = _getch();
+    } else {
+        std::wcout << "Stage 0 Loader is ready.\n";
+    }
 
     // copied verbatim for safety's sake, stupid as it is
     LPCSTR rlpDlls[2] {};
@@ -39,7 +43,7 @@ int wmain(int argc, wchar_t* argv[ ]) {
         return FALSE;
     }
 
-    std::wcout << "Stage 0 Loader complete. Moving to Stage 1." << std::endl;
+    std::wcout << "Stage 0 Loader complete. Moving to Stage 1.\n";
 
     ResumeThread       (pi.hThread);
     WaitForSingleObject(pi.hProcess, INFINITE);

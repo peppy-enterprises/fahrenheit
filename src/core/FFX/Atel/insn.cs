@@ -1,23 +1,23 @@
 ﻿namespace Fahrenheit.Core.FFX.Atel;
 
 public struct AtelOpCode {
-    public u8 instruction;
-    public u16? operand;
+    public byte instruction;
+    public ushort? operand;
 
     public byte[] to_bytes() {
         byte[] bytes = new byte[operand.HasValue ? 3 : 1];
 
         bytes[0] = instruction;
         if (operand.HasValue) {
-            bytes[1] = (u8)operand.Value;
-            bytes[2] = (u8)(operand.Value >> 8);
+            bytes[1] = (byte)operand.Value;
+            bytes[2] = (byte)(operand.Value >> 8);
         }
 
         return bytes;
     }
 }
 
-public enum AtelInst : u8 {
+public enum AtelInst : byte {
     NOP        = 0x0,
     LOR        = 0x1,
     LAND       = 0x2,
@@ -145,11 +145,11 @@ public enum AtelInst : u8 {
 
 public static class AtelInstExt {
     public static bool has_operand(this AtelInst inst) {
-        return ((u8)inst & 0x80) != 0;
+        return ((byte)inst & 0x80) != 0;
     }
 
-    public static AtelOpCode build(this AtelInst inst, u16? operand = null) {
+    public static AtelOpCode build(this AtelInst inst, ushort? operand = null) {
         if (!inst.has_operand() && operand.HasValue) throw new ArgumentException($"Tried to build an AtelOpCode with an operand and instruction that doesn't take an operand.");
-        return new AtelOpCode { instruction = (u8)inst, operand = operand };
+        return new AtelOpCode { instruction = (byte)inst, operand = operand };
     }
 }
