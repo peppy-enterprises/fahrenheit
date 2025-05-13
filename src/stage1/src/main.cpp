@@ -78,7 +78,7 @@ static int DetourMain(void) {
     auto cwd_size = ::GetCurrentDirectory(sizeof(cwd_path_buf) / sizeof(char_t), cwd_path_buf);
 
     if (size == 0 || cwd_size == 0) {
-        std::wcout << "Cannot determine game directory and/or working directory." << std::endl;
+        std::wcout << "Cannot determine game directory and/or working directory.\n";
         exit(EXIT_FAILURE);
     }
 
@@ -94,7 +94,7 @@ static int DetourMain(void) {
     auto host_dirsep_pos = host_path.find_last_of(DIR_SEPARATOR);
 
     if (host_dirsep_pos == string_t::npos) {
-        std::wcout << "Cannot normalize game directory path." << std::endl;
+        std::wcout << "Cannot normalize game directory path.\n";
         exit(EXIT_FAILURE);
     }
 
@@ -105,7 +105,7 @@ static int DetourMain(void) {
     // STEP 1: Load HostFxr and get exported hosting functions
 
     if (!load_hostfxr()) {
-        std::cout << "load_hostfxr() failed" << std::endl;
+        std::cout << "load_hostfxr() failed\n";
         exit(EXIT_FAILURE);
     }
 
@@ -145,7 +145,7 @@ static int DetourMain(void) {
     get_function_pointer_fn get_function_pointer = (get_function_pointer_fn)get_function_pointer_fptr;
 
     if (load_assembly == nullptr) {
-        std::wcout << "get_dotnet_load_assembly() failed" << std::endl;
+        std::wcout << "get_dotnet_load_assembly() failed\n";
         exit(EXIT_FAILURE);
     }
 
@@ -158,7 +158,7 @@ static int DetourMain(void) {
         nullptr);
 
     if (rc != 0) {
-        std::wcout << "load_assembly() failed" << std::endl;
+        std::wcout << "load_assembly() failed\n";
         exit(EXIT_FAILURE);
     }
 
@@ -171,7 +171,7 @@ static int DetourMain(void) {
         (void**)&fh_init);
 
     if (rc != 0 || fh_init == nullptr) {
-        std::wcout << "get_function_pointer() failed" << std::endl;
+        std::wcout << "get_function_pointer() failed\n";
         exit(EXIT_FAILURE);
     }
 
@@ -186,7 +186,7 @@ static int DetourMain(void) {
         exit(EXIT_FAILURE);
     }
 
-    std::wcout << "Stage 1 Loader complete: game execution will now resume." << std::endl;
+    std::wcout << "Stage 1 Loader complete: game execution will now resume.\n";
     return ffxMain();
 }
 
