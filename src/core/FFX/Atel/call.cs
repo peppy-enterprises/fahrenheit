@@ -124,7 +124,7 @@ public static unsafe class AtelCallTargets {
 
         public static CallTarget get(ushort id) {
             AtelCallTargetNamespace nmsp = (AtelCallTargetNamespace)(id >> 0xC);
-            i32 idx = id & 0xFFF;
+            int idx = id & 0xFFF;
             return nmsp.get()[idx];
         }
     }

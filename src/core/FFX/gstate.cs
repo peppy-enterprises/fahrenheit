@@ -15,12 +15,12 @@ public unsafe static class Globals {
     }
 
     public static class Magic {
-        public static i32* current_id           => FhUtil.ptr_at<i32>(0x864CA0);
-        public static i32* current_handle       => FhUtil.ptr_at<i32>(0x864CA8);
-        public static i32* to_be_deleted_id     => FhUtil.ptr_at<i32>(0x864CA4);
-        public static i32* to_be_deleted_handle => FhUtil.ptr_at<i32>(0x864CAC);
-        public static i32* effect_ptr           => FhUtil.ptr_at<i32>(0xD33360);
-        public static  u8* effect_status_flag   => FhUtil.ptr_at<u8> (0xD33364);
+        public static int*  current_id           => FhUtil.ptr_at<int> (0x864CA0);
+        public static int*  current_handle       => FhUtil.ptr_at<int> (0x864CA8);
+        public static int*  to_be_deleted_id     => FhUtil.ptr_at<int> (0x864CA4);
+        public static int*  to_be_deleted_handle => FhUtil.ptr_at<int> (0x864CAC);
+        public static int*  effect_ptr           => FhUtil.ptr_at<int> (0xD33360);
+        public static byte* effect_status_flag   => FhUtil.ptr_at<byte>(0xD33364);
     }
 
     public static class Atel {
@@ -112,5 +112,5 @@ public unsafe static class Globals {
 
     public static byte* hit_chance_table => FhUtil.ptr_at<byte>(0x8421E0);
 
-    public static i32* event_id => FhUtil.ptr_at<i32>(0xefbbf8);
+    public static int* event_id => FhUtil.ptr_at<int>(0xefbbf8);
 }

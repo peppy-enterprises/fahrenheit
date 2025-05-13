@@ -1,12 +1,12 @@
 namespace Fahrenheit.Core.FFX;
 
-public enum SphereGridTilt : u8 {
+public enum SphereGridTilt : byte {
     Flat,
     SlightTilt,
     FarTilt,
 }
 
-public enum SphereGridZoom : u8 {
+public enum SphereGridZoom : byte {
     Close,
     Medium,
     Far,
