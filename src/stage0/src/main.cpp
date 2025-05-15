@@ -54,6 +54,13 @@ int wmain(int argc, wchar_t* argv[ ]) {
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
 
-    std::cout << "Process exited with code " << exitCode << std::endl;
+    if (exitCode != 0) {
+        std::wcout << "Process exited with code " << exitCode << std::endl;
+        std::wcout << "If reporting an issue, please include any core dump (*.dmp) you see in the game directory.\n";
+    }
+    else {
+        std::wcout << "Process ended by user.\n";
+    }
+
     return exitCode;
 }
