@@ -46,9 +46,9 @@ public unsafe struct LpAbilityMapEngine {
     [FieldOffset(0xF828)]  private SphereGridNodeTypeInfo _node_type_infos_start;
     [FieldOffset(0x11088)] private SphereGridChrInfo      _party_infos_start;
     [FieldOffset(0x112FC)] public  ushort                 selected_node_idx;
-    [FieldOffset(0x11308)] public  Vec4f                  cam_desired_pos;
-    [FieldOffset(0x11318)] public  Vec4f                  cam_limited_pos;
-    [FieldOffset(0x11350)] public  Vec4f                  zoom_vector; // Only .x matters
+    [FieldOffset(0x11308)] public  Vector4                cam_desired_pos;
+    [FieldOffset(0x11318)] public  Vector4                cam_limited_pos;
+    [FieldOffset(0x11350)] public  Vector4                zoom_vector; // Only .x matters
     [FieldOffset(0x115CB)] public  SphereGridTilt         tilt_level;
     [FieldOffset(0x115CC)] public  SphereGridZoom         zoom_level;
     [FieldOffset(0x115D0)] public  ushort                 zoom_time_left; // in frames
@@ -64,11 +64,11 @@ public unsafe struct LpAbilityMapEngine {
 
     public float current_zoom {
         get {
-            return zoom_vector.x;
+            return zoom_vector.X;
         }
 
         set {
-            zoom_vector.x = zoom_vector.y = zoom_vector.z = value;
+            zoom_vector.X = zoom_vector.Y = zoom_vector.Z = value;
         }
     }
 }

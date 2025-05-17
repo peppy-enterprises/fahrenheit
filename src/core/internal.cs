@@ -1,4 +1,4 @@
-﻿[assembly: InternalsVisibleToAttribute("fhruntime")]
+﻿[assembly: InternalsVisibleTo("fhruntime")]
 
 namespace Fahrenheit.Core;
 

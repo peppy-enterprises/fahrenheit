@@ -3,7 +3,7 @@ using System.Runtime.Loader;
 
 namespace Fahrenheit.Core;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class FhLoadAttribute(FhGameType supported_game_type) : Attribute {
     public readonly FhGameType supported_game_type = supported_game_type;
 }

@@ -48,12 +48,12 @@ public unsafe struct SphereGridNodeTypeInfo {
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x50)]
 public unsafe struct SphereGridChrInfo {
-    [FieldOffset(0x0)]  public Vec4f  pos;
-    [FieldOffset(0x10)] public Vec4f  label_pos;
-    [FieldOffset(0x2C)] public byte*  chr_name;
-    [FieldOffset(0x30)] public short  name_width; // min 32
-    [FieldOffset(0x3C)] public float  pos_circle_radius;
-    [FieldOffset(0x44)] public ushort current_node_idx;
+    [FieldOffset(0x0)]  public Vector4 pos;
+    [FieldOffset(0x10)] public Vector4 label_pos;
+    [FieldOffset(0x2C)] public byte*   chr_name;
+    [FieldOffset(0x30)] public short   name_width; // min 32
+    [FieldOffset(0x3C)] public float   pos_circle_radius;
+    [FieldOffset(0x44)] public ushort  current_node_idx;
 }
 
 public enum NodeType : byte {
