@@ -46,3 +46,4 @@ global using T_X2SeTypeId          = System.Byte;   // ids/setype
 global using T_X2BtlSeTypeId       = System.Byte;   // ids/btl_setype
 global using T_X2BtlRequestTagId   = System.Int16;  // ids/btl_req_tags
 global using T_X2BtlRequestActorId = System.Int16;  // ids/btl_req_tags
+global using T_X2BtlVoiceId        = System.UInt32; // ids/btl_voice
