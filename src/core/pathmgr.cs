@@ -116,7 +116,7 @@ internal class FhPathFinder {
 
     public FhModulePathInfo create_module_paths(string mod_name, string module_name) {
         string global_state_dir  = Path.Join(State.Path, mod_name, "global");
-        string global_state_path = Path.Join(global_state_dir, $"{module_name}.state.json");
+        string global_state_path = Path.Join(global_state_dir, module_name);
 
         Directory.CreateDirectory(global_state_dir);
 

@@ -47,7 +47,7 @@ public unsafe class FhSaveLifecycleModule : FhModule {
 
         Directory.CreateDirectory(local_state_dir);
 
-        return Path.Join(local_state_dir, $"{file_name}.state.json");
+        return Path.Join(local_state_dir, file_name);
     }
 
     [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
