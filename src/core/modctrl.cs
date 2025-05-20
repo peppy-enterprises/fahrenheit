@@ -76,7 +76,7 @@ public class FhModController {
             foreach (FhModContext mod_ctx in _contexts) {
                 foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                     FhModule   fm       = module_ctx.Module;
-                    FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+                    FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
                     if (!fm.init(fm_state)) {
                         FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed. Suppressing.");
