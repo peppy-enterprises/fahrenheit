@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 using Fahrenheit.Core.ImGuiNET;
@@ -162,7 +163,7 @@ public unsafe class FhImguiModule : FhModule {
         _h_WndProc             = h_wndproc;
     }
 
-    public override bool init() {
+    public override bool init(FileStream global_state_file) {
         return _handle_d3d11_init.hook()
             && _handle_wndproc_init.hook()
             && _handle_input_update.hook();

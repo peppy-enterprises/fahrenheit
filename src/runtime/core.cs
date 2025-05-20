@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO;
+using System.Runtime.InteropServices;
 
 using Fahrenheit.Core.ImGuiNET;
 
@@ -16,7 +17,7 @@ public unsafe class FhCoreModule : FhModule {
         _render_game  = new(this, "FFX.exe", render_game,  offset: FhCall.__addr_TODrawMessageWindow);
     }
 
-    public override bool init() {
+    public override bool init(FileStream global_state_file) {
         return _main_loop   .hook()
             && _update_input.hook()
             && _render_game .hook();

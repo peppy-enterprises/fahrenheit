@@ -23,7 +23,7 @@ public unsafe class FhEFLModule : FhModule {
 
     public FhEFLModule() {
         _index      = [];
-        _h_fiosOpen = new(this, "FFX.exe", h_open, offset: 0x2798E0);
+        _h_fiosOpen = new(this, "FFX.exe", h_open, offset: FhCall.__addr_fiosOpen);
     }
 
     // the game uses a fixed stream prefix "../../../" - I don't see why ffgriever handled the other edge cases (yet)
@@ -99,7 +99,7 @@ public unsafe class FhEFLModule : FhModule {
         return file;
     }
 
-    public override bool init() {
+    public override bool init(FileStream global_state_file) {
         construct_index();
         return _h_fiosOpen.hook();
     }

@@ -1,14 +1,5 @@
 ﻿namespace Fahrenheit.Core;
 
-public sealed record FhModContext(
-    FhManifest            Manifest,
-    FhModPathInfo         Paths,
-    List<FhModuleContext> Modules);
-
-public sealed record FhModuleContext(
-    FhModule         Module,
-    FhModulePathInfo Paths);
-
 public class FhModController {
     private readonly object             _lock;
     private readonly List<FhModContext> _contexts;
@@ -84,9 +75,10 @@ public class FhModController {
         lock (_lock) {
             foreach (FhModContext mod_ctx in _contexts) {
                 foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                    FhModule fm = module_ctx.Module;
+                    FhModule   fm       = module_ctx.Module;
+                    FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
 
-                    if (!fm.init()) {
+                    if (!fm.init(fm_state)) {
                         FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed. Suppressing.");
                         continue;
                     }

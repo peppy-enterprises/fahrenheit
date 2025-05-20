@@ -1,5 +1,37 @@
 ﻿namespace Fahrenheit.Core;
 
+public sealed record FhModContext {
+    internal readonly FhModPathInfo         Paths;
+    public   readonly FhManifest            Manifest;
+    public   readonly List<FhModuleContext> Modules;
+
+    internal FhModContext(
+        FhManifest            manifest,
+        FhModPathInfo         paths,
+        List<FhModuleContext> modules)
+    {
+        Paths    = paths;
+        Manifest = manifest;
+        Modules  = modules;
+    }
+}
+
+public sealed record FhModuleContext {
+    internal readonly FhModulePathInfo Paths;
+    public   readonly FhModule         Module;
+
+    internal FhModuleContext(
+        FhModule         module,
+        FhModulePathInfo paths)
+    {
+        Paths  = paths;
+        Module = module;
+    }
+}
+
+/// <summary>
+///     Describes a unique Fahrenheit mod, consisting of zero to N DLLs, each containing zero to N <see cref="FhModule"/>.
+/// </summary>
 public sealed record FhManifest(
     string   Name,
     string   Desc,
@@ -9,18 +41,6 @@ public sealed record FhManifest(
     string[] Dependencies,
     string[] LoadAfter
     );
-
-public sealed record FhModPathInfo(
-    string        ManifestPath,
-    DirectoryInfo ModuleDir,
-    DirectoryInfo ResourcesDir,
-    DirectoryInfo EflDir,
-    DirectoryInfo LangDir,
-    DirectoryInfo StateDir);
-
-public sealed record FhModulePathInfo(
-    string DllPath,
-    string ConfigPath);
 
 /// <summary>
 ///     A 'module' is the base unit of functionality in Fahrenheit.
@@ -41,7 +61,17 @@ public abstract class FhModule {
         get { return _module_type_name; }
     }
 
-    public abstract bool init();
+    public abstract bool init(FileStream global_state_file);
+
+    /// <summary>
+    ///     Called when the game saves, allowing the module to save state specific to that save game.
+    /// </summary>
+    public virtual void save_local_state(FileStream local_state_file) { }
+
+    /// <summary>
+    ///     Called when the game loads, allowing the module to load state specific to that save game.
+    /// </summary>
+    public virtual void load_local_state(FileStream local_state_file) { }
 
     public virtual void pre_update()   { }
     public virtual void post_update()  { }

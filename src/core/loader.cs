@@ -32,7 +32,7 @@ public class FhLoader {
         modules = [];
 
         foreach (string fh_dll_name in manifest.DllList) {
-            FhModulePathInfo fh_dll_paths    = FhInternal.PathFinder.create_module_paths(mod_name, fh_dll_name);
+            FhLoaderPathInfo fh_dll_paths    = FhInternal.PathFinder.create_loader_paths(mod_name, fh_dll_name);
             FhLoadContext    fh_load_context = new FhLoadContext(fh_dll_paths.DllPath);
             Assembly         fh_dll          = fh_load_context.LoadFromAssemblyPath(fh_dll_paths.DllPath);
 
@@ -51,8 +51,10 @@ public class FhLoader {
                     continue;
                 }
 
-                FhModule module = Activator.CreateInstance(type) as FhModule ?? throw new Exception("FH_E_MODULE_TYPE_ACTIVATION_FAILED");
-                modules.Add(new FhModuleContext(module, fh_dll_paths));
+                FhModule         module       = Activator.CreateInstance(type) as FhModule ?? throw new Exception("FH_E_MODULE_TYPE_ACTIVATION_FAILED");
+                FhModulePathInfo module_paths = FhInternal.PathFinder.create_module_paths(mod_name, module.ModuleType);
+
+                modules.Add(new FhModuleContext(module, module_paths));
             }
         }
 
