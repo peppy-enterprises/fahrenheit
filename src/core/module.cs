@@ -1,5 +1,9 @@
 ﻿namespace Fahrenheit.Core;
 
+/// <summary>
+///     A representation of a fully loaded mod.
+///     Contains its <see cref="FhManifest"/> and a <see cref="FhModuleContext"/> for each of its constituent modules.
+/// </summary>
 public sealed record FhModContext {
     internal readonly FhModPathInfo         Paths;
     public   readonly FhManifest            Manifest;
@@ -16,6 +20,10 @@ public sealed record FhModContext {
     }
 }
 
+/// <summary>
+///     A representation of a loaded module.
+///     Contains a reference to it, and any metadata relating to it.
+/// </summary>
 public sealed record FhModuleContext {
     internal readonly FhModulePathInfo Paths;
     public   readonly FhModule         Module;
@@ -30,12 +38,20 @@ public sealed record FhModuleContext {
 }
 
 /// <summary>
+///     Contains metadata about a given local state file, such as the version of a module last used to write to it.
+/// </summary>
+public sealed record FhLocalStateInfo(
+    string Version
+    );
+
+/// <summary>
 ///     Describes a unique Fahrenheit mod, consisting of zero to N DLLs, each containing zero to N <see cref="FhModule"/>.
 /// </summary>
 public sealed record FhManifest(
     string   Name,
     string   Desc,
     string   Authors,
+    string   Version,
     string   Link,
     string[] DllList,
     string[] Dependencies,
@@ -71,7 +87,7 @@ public abstract class FhModule {
     /// <summary>
     ///     Called when the game loads, allowing the module to load state specific to that save game.
     /// </summary>
-    public virtual void load_local_state(FileStream local_state_file) { }
+    public virtual void load_local_state(FileStream local_state_file, FhLocalStateInfo local_state_info) { }
 
     public virtual void pre_update()   { }
     public virtual void post_update()  { }
