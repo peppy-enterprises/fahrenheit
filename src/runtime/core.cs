@@ -24,15 +24,15 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public void main_loop(float delta) {
-        foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.pre_update();
             }
         }
 
-         _main_loop.orig_fptr(delta);
+        _main_loop.orig_fptr(delta);
 
-        foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.post_update();
             }
@@ -48,7 +48,7 @@ public unsafe class FhCoreModule : FhModule {
 
         _update_input.orig_fptr();
 
-        foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.handle_input();
             }
@@ -80,7 +80,7 @@ public unsafe class FhCoreModule : FhModule {
     public new void render_game() {
         _render_game.orig_fptr();
 
-        foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.render_game();
             }
@@ -104,13 +104,13 @@ public unsafe class FhCoreModule : FhModule {
                 // I tried to increase this text's font size, but couldn't get ImGui.PushFont() to not throw an Access Violation (0xC0000005)
                 // - Eve
                 int mod_count = 0;
-                foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
+                foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
                     foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                         mod_count++;
                     }
                 }
                 ImGui.Text($"{mod_count} mods loaded");
-                foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
+                foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
                     foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                         ImGui.Text($"{module_ctx.Module.ModuleType} v{module_ctx.Module.GetType().Assembly.GetName().Version}");
                     }

@@ -44,7 +44,7 @@ public unsafe class FhEFLModule : FhModule {
         };
 
         string         efl_data_dir;
-        FhModContext[] mods = [ .. FhInternal.ModController.get_all() ];
+        FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
 
         foreach (FhModContext mod in mods) {
             efl_data_dir = normalize_path(Path.Join(mod.Paths.EflDir.FullName, data_subdir_name));
