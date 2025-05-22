@@ -32,5 +32,7 @@ public struct Vec2s16 {
            }
         }
     }
+
+    public Vector2 xy => new(x, y);
 }
 #pragma warning restore CS0649

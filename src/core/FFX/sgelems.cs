@@ -1,24 +1,60 @@
 ﻿namespace Fahrenheit.Core.FFX;
 
+public static class SphereGridClusterType {
+    public const short SINGLE = 0;
+    public const short SMALL  = 1;
+    public const short MEDIUM = 2;
+    public const short BIG    = 3;
+
+    public const short SINGLE_ALT = SINGLE + 4;
+    public const short SMALL_ALT  = SMALL  + 4;
+    public const short MEDIUM_ALT = MEDIUM + 4;
+    public const short BIG_ALT    = BIG    + 4;
+}
+
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x10)]
 public unsafe struct SphereGridCluster {
     [FieldOffset(0x0)] public short x;
     [FieldOffset(0x2)] public short y;
     [FieldOffset(0x6)] public short type;
+
+    public Vector2 pos {
+        get => new(x, y);
+        set {
+            x = (short)value.X;
+            y = (short)value.Y;
+        }
+    }
+
+    public readonly Vector2 size => Globals.SphereGrid.lpamng->cluster_sizes[type].xy;
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x14)]
 public unsafe struct SphereGridLink {
-    [FieldOffset(0x0)]  public ushort               node_a_idx;
-    [FieldOffset(0x2)]  public ushort               node_b_idx;
-    [FieldOffset(0x4)]  public ushort               anchor_idx;
-    [FieldOffset(0xC)]  public byte                 activated_by;
-    [FieldOffset(0xD)]  public byte                 point_count;
+    [FieldOffset(0x0)]  public short node_a_idx;
+    [FieldOffset(0x2)]  public short node_b_idx;
+    [FieldOffset(0x4)]  public short anchor_idx;
+    [FieldOffset(0xC)]  public byte  activated_by;
+    [FieldOffset(0xD)]  public byte  point_count;
     [FieldOffset(0x10)] public SphereGridLinkPoint* points;
 
     public readonly SphereGridNode node_a => Globals.SphereGrid.lpamng->nodes[node_a_idx];
     public readonly SphereGridNode node_b => Globals.SphereGrid.lpamng->nodes[node_b_idx];
     public readonly SphereGridNode anchor => Globals.SphereGrid.lpamng->nodes[anchor_idx];
+
+    public Vector2 get_midpoint() {
+        int mid_point_idx = (point_count - 1) / 2;
+        var mid_point = points + mid_point_idx;
+
+        if (point_count % 2 == 1) {
+            return mid_point->pos;
+        }
+
+        int mid_point2_idx = mid_point_idx + 1;
+        var mid_point2 = points + mid_point2_idx;
+
+        return (mid_point->pos + mid_point2->pos) / 2f;
+    }
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x18)]
@@ -29,21 +65,63 @@ public unsafe struct SphereGridLinkPoint {
     [FieldOffset(0xC)]  public float offset_y2;
     [FieldOffset(0x10)] public float offset_x2;
     [FieldOffset(0x14)] public float offset_y1;
+
+    public Vector2 pos {
+        get => Unsafe.As<float, Vector2>(ref x);
+        set => Unsafe.As<float, Vector2>(ref x) = value;
+    }
+    public Vector2 offset_1 => new(offset_x1, offset_y1);
+    public Vector2 offset_2 => new(offset_x2, offset_y2);
+}
+
+[Flags]
+public enum SphereGridNodeProperties : byte {
+    NONE             = 0,
+    CAN_MOVE_TO      = 1 << 0,
+    HAS_MOVE_OUTLINE = 1 << 1,
+}
+
+public static partial class EnumExt {
+    public static bool get(this SphereGridNodeProperties flags, SphereGridNodeProperties flag) {
+        return (flags & flag) != 0;
+    }
+
+    public static void set(this SphereGridNodeProperties flags, SphereGridNodeProperties flag, bool value) {
+        if (value) flags |= flag;
+        else flags &= ~flag;
+    }
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x28)]
 public unsafe struct SphereGridNode {
-    [FieldOffset(0x0)]  public       short  x;
-    [FieldOffset(0x2)]  public       short  y;
-    [FieldOffset(0x6)]  public       ushort node_type;
-    [FieldOffset(0xC)]  public fixed uint   links_ptr[5];
-    [FieldOffset(0x21)] public       byte   activated_by;
+    [FieldOffset(0x0)]  public        short x;
+    [FieldOffset(0x2)]  public        short y;
+    [FieldOffset(0x6)]  private       short _node_type;
+    [FieldOffset(0xC)]  private fixed uint  links_ptr[5];
+    [FieldOffset(0x21)] public        byte  activated_by;
+    [FieldOffset(0x22)] public        SphereGridNodeProperties properties;
+
+    public NodeType node_type {
+        get => _node_type == -1 ? NodeType.NULL : (NodeType)_node_type;
+        set => _node_type = (short)value;
+    }
+    public SphereGridNodeTypeInfo type_info => Globals.SphereGrid.lpamng->node_type_infos[node_type.normalize()];
+
+    public Vector2 pos => new(x, y);
+    public Vector2 size => type_info.size;
+
+    public SphereGridLink* get_link(int link_idx) {
+        if (link_idx is < 0 or > 5) throw new IndexOutOfRangeException(nameof(link_idx));
+        return (SphereGridLink*)links_ptr[link_idx];
+    }
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x30)]
 public unsafe struct SphereGridNodeTypeInfo {
     [FieldOffset(0xC)] public short width;
     [FieldOffset(0xE)] public short height;
+
+    public Vector2 size => new Vector2(width, height) * new Vector2(Globals.SphereGrid.lpamng->current_zoom);
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x50)]
@@ -231,4 +309,10 @@ public static partial class EnumExt {
 
     public static bool is_black_magic(this NodeType node_type)
         => node_type is (>= NodeType.BLIZZARD and <= NodeType.ULTIMA);
+
+    public static int normalize(this NodeType node_type) {
+        if (node_type == NodeType.NULL) return -1;
+        if ((int)node_type > (int)NodeType.QUICK_POCKETS) return 0;
+        return (int)node_type;
+    }
 }

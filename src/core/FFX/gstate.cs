@@ -32,6 +32,7 @@ public unsafe static class Globals {
     }
 
     public static class SphereGrid {
+        public static bool* is_open => FhUtil.ptr_at<bool>(0x1685f70);
         public static LpAbilityMapEngine* lpamng => (LpAbilityMapEngine*)FhUtil.get_at<nint>(0x1F05834);
     }
 
