@@ -16,6 +16,6 @@ public class FhModuleHandle<T> where T : FhModule {
     }
 
     public bool try_acquire() {
-        return (_match_ctx = FhInternal.ModController.find_module(_match_func)) != null;
+        return (_match_ctx = FhApi.ModController.find_module(_match_func)) != null;
     }
 }

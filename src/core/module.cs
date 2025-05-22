@@ -12,8 +12,8 @@ public sealed record FhModContext {
     internal FhModContext(
         FhManifest            manifest,
         FhModPathInfo         paths,
-        List<FhModuleContext> modules)
-    {
+        List<FhModuleContext> modules
+    ) {
         Paths    = paths;
         Manifest = manifest;
         Modules  = modules;
@@ -30,8 +30,8 @@ public sealed record FhModuleContext {
 
     internal FhModuleContext(
         FhModule         module,
-        FhModulePathInfo paths)
-    {
+        FhModulePathInfo paths
+    ) {
         Paths  = paths;
         Module = module;
     }
