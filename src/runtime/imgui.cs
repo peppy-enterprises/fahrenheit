@@ -322,7 +322,7 @@ public unsafe class FhImguiModule : FhModule {
 
         ImGui.NewFrame();
 
-        foreach (FhModContext mod_ctx in FhInternal.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.render_imgui();
             }

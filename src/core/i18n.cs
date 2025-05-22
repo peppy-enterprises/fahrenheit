@@ -8,12 +8,51 @@
  */
 using LocaleData = Dictionary<string, string>;
 
-public static class FhLocalizationManager {
+public class FhLocalizationManager {
+    private readonly string[]                       _lang_ids;
+    private readonly Dictionary<string, LocaleData> _localization_map;
 
-    private static readonly string[]                       _lang_ids;
-    private static readonly Dictionary<string, LocaleData> _localization_map;
+    internal void construct_localization_map() {
+        FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
 
-    static FhLocalizationManager() {
+        foreach (FhModContext mod in mods) {
+            foreach (FileInfo lang_file_path in mod.Paths.LangDir.EnumerateFiles()) {
+                string lang_id  = Path.GetFileNameWithoutExtension(lang_file_path.FullName);
+                string mod_name = mod.Manifest.Name;
+
+                try {
+                    using FileStream lang_file_stream = lang_file_path.Open(FileMode.Open, FileAccess.Read);
+                    LocaleData? locale = JsonSerializer.Deserialize<LocaleData>(lang_file_stream, FhUtil.InternalJsonOpts);
+                    if (locale == null) return;
+
+                    if (!_localization_map.TryGetValue(lang_id, out LocaleData? locale_data)) {
+                        FhInternal.Log.Warning($"In mod {mod_name}: language ID {lang_id} is not known by Fahrenheit.");
+                        return;
+                    }
+
+                    foreach (KeyValuePair<string, string> locale_kv in locale) {
+                        if (locale_data.ContainsKey(locale_kv.Key)) {
+                            FhInternal.Log.Warning($"Mod {mod_name} is superseding key {locale_kv.Key} in locale {lang_id}");
+                        }
+
+                        locale_data[locale_kv.Key] = locale_kv.Value;
+                    }
+                }
+                catch {
+                    FhInternal.Log.Error($"While parsing locale {lang_id} for module {mod_name}:");
+                    throw;
+                }
+            }
+        }
+    }
+
+    public string localize(string id, string lang_id = "en-US") {
+        return _localization_map.TryGetValue(lang_id, out LocaleData? locale) && locale.TryGetValue(id, out string? localized_string)
+            ? localized_string
+            : id;
+    }
+
+    internal FhLocalizationManager() {
         // https://www.localeplanet.com/api/codelist.json
         _lang_ids = [
             "af",
@@ -743,45 +782,5 @@ public static class FhLocalizationManager {
         _localization_map = new Dictionary<string, LocaleData>(_lang_ids.Length);
 
         foreach (string lang_id in _lang_ids) _localization_map.Add(lang_id, []);
-    }
-
-    internal static void construct_localization_map() {
-        FhModContext[] mods = [ .. FhInternal.ModController.get_all() ];
-
-        foreach (FhModContext mod in mods) {
-            foreach (FileInfo lang_file_path in mod.Paths.LangDir.EnumerateFiles()) {
-                string lang_id  = Path.GetFileNameWithoutExtension(lang_file_path.FullName);
-                string mod_name = mod.Manifest.Name;
-
-                try {
-                    using FileStream lang_file_stream = lang_file_path.Open(FileMode.Open, FileAccess.Read);
-                    LocaleData? locale = JsonSerializer.Deserialize<LocaleData>(lang_file_stream, FhUtil.InternalJsonOpts);
-                    if (locale == null) return;
-
-                    if (!_localization_map.TryGetValue(lang_id, out LocaleData? locale_data)) {
-                        FhInternal.Log.Warning($"In mod {mod_name}: language ID {lang_id} is not known by Fahrenheit.");
-                        return;
-                    }
-
-                    foreach (KeyValuePair<string, string> locale_kv in locale) {
-                        if (locale_data.ContainsKey(locale_kv.Key)) {
-                            FhInternal.Log.Warning($"Mod {mod_name} is superseding key {locale_kv.Key} in locale {lang_id}");
-                        }
-
-                        locale_data[locale_kv.Key] = locale_kv.Value;
-                    }
-                }
-                catch {
-                    FhInternal.Log.Error($"While parsing locale {lang_id} for module {mod_name}:");
-                    throw;
-                }
-            }
-        }
-    }
-
-    public static string localize(string id, string lang_id = "en-US") {
-        return _localization_map.TryGetValue(lang_id, out LocaleData? locale) && locale.TryGetValue(id, out string? localized_string)
-            ? localized_string
-            : id;
     }
 }

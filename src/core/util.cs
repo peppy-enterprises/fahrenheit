@@ -177,4 +177,18 @@ public static unsafe class FhUtil {
     public static TDelegate get_fptr<TDelegate>(nint funcAddress) {
         return Marshal.GetDelegateForFunctionPointer<TDelegate>(FhGlobal.base_addr + funcAddress);
     }
+
+    public static Vector2 game_remap_720p(this Vector2 vec) {
+        return new Vector2 {
+            X = vec.X * 512 / 1280,
+            Y = vec.Y * 416 / 720,
+        };
+    }
+
+    public static Vector2 game_remap_1080p(this Vector2 vec) {
+        return new Vector2 {
+            X = vec.X * 512 / 1920,
+            Y = vec.Y * 416 / 1080,
+        };
+    }
 }

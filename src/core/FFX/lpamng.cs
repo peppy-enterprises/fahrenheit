@@ -36,39 +36,58 @@ public static class SphereGridZoomExt {
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x12FC0)]
 public unsafe struct LpAbilityMapEngine {
-    [FieldOffset(0x0)]     public  short                  cluster_count;
-    [FieldOffset(0x2)]     public  short                  node_count;
-    [FieldOffset(0x4)]     public  short                  link_count;
-    [FieldOffset(0x8)]     private SphereGridCluster      _clusters_start;
-    [FieldOffset(0x808)]   private SphereGridNode         _nodes_start;
-    [FieldOffset(0xA808)]  private SphereGridLink         _links_start;
-    [FieldOffset(0xF808)]  private Vec2s16                _cluster_sizes_start;
-    [FieldOffset(0xF828)]  private SphereGridNodeTypeInfo _node_type_infos_start;
-    [FieldOffset(0x11088)] private SphereGridChrInfo      _party_infos_start;
-    [FieldOffset(0x112FC)] public  ushort                 selected_node_idx;
-    [FieldOffset(0x11308)] public  Vector4                cam_desired_pos;
-    [FieldOffset(0x11318)] public  Vector4                cam_limited_pos;
-    [FieldOffset(0x11350)] public  Vector4                zoom_vector; // Only .x matters
-    [FieldOffset(0x115CB)] public  SphereGridTilt         tilt_level;
-    [FieldOffset(0x115CC)] public  SphereGridZoom         zoom_level;
-    [FieldOffset(0x115D0)] public  ushort                 zoom_time_left; // in frames
-    [FieldOffset(0x115DC)] public  float                  start_zoom;
-    [FieldOffset(0x115E0)] public  float                  target_zoom;
+    [InlineArray(128)]
+    public struct SphereGridClusterArray {
+        private SphereGridCluster _data;
+    }
 
-    public Span<SphereGridCluster>      clusters        => MemoryMarshal.CreateSpan(ref _clusters_start,        128);
-    public Span<SphereGridNode>         nodes           => MemoryMarshal.CreateSpan(ref _nodes_start,           1024);
-    public Span<SphereGridLink>         links           => MemoryMarshal.CreateSpan(ref _links_start,           1024);
-    public Span<Vec2s16>                cluster_sizes   => MemoryMarshal.CreateSpan(ref _cluster_sizes_start,   8);
-    public Span<SphereGridNodeTypeInfo> node_type_infos => MemoryMarshal.CreateSpan(ref _node_type_infos_start, 130);
-    public Span<SphereGridChrInfo>      party_infos     => MemoryMarshal.CreateSpan(ref _party_infos_start,     7);
+    [InlineArray(1024)]
+    public struct SphereGridNodeArray {
+        private SphereGridNode _data;
+    }
+
+    [InlineArray(1024)]
+    public struct SphereGridLinkArray {
+        private SphereGridLink _data;
+    }
+
+    [InlineArray(8)]
+    public struct SphereGridClusterSizesArray {
+        private Vec2s16 _data;
+    }
+
+    [InlineArray(130)]
+    public struct SphereGridNodeTypeInfoArray {
+        private SphereGridNodeTypeInfo _data;
+    }
+
+    [InlineArray(7)]
+    public struct SphereGridChrInfoArray {
+        private SphereGridChrInfo _data;
+    }
+
+    [FieldOffset(0x0)]     public short                  cluster_count;
+    [FieldOffset(0x2)]     public short                  node_count;
+    [FieldOffset(0x4)]     public short                  link_count;
+    [FieldOffset(0x8)]     public SphereGridClusterArray clusters;
+    [FieldOffset(0x808)]   public SphereGridNodeArray    nodes;
+    [FieldOffset(0xA808)]  public SphereGridLinkArray    links;
+    [FieldOffset(0xF808)]  public SphereGridClusterSizesArray cluster_sizes;
+    [FieldOffset(0xF828)]  public SphereGridNodeTypeInfoArray node_type_infos;
+    [FieldOffset(0x11088)] public SphereGridChrInfoArray      party_infos;
+    [FieldOffset(0x112FC)] public ushort                 selected_node_idx;
+    [FieldOffset(0x11308)] public Vector4                cam_desired_pos;
+    [FieldOffset(0x11318)] public Vector4                cam_limited_pos;
+    [FieldOffset(0x11350)] public Vector4                zoom_vector; // Only .x matters
+    [FieldOffset(0x115CB)] public SphereGridTilt         tilt_level;
+    [FieldOffset(0x115CC)] public SphereGridZoom         zoom_level;
+    [FieldOffset(0x115D0)] public ushort                 zoom_time_left; // in frames
+    [FieldOffset(0x115DC)] public float                  start_zoom;
+    [FieldOffset(0x115E0)] public float                  target_zoom;
+
 
     public float current_zoom {
-        get {
-            return zoom_vector.X;
-        }
-
-        set {
-            zoom_vector.X = zoom_vector.Y = zoom_vector.Z = value;
-        }
+        get => zoom_vector.X;
+        set => zoom_vector.X = zoom_vector.Y = zoom_vector.Z = value;
     }
 }
