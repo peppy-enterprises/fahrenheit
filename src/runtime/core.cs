@@ -50,26 +50,16 @@ public unsafe class FhCoreModule : FhModule {
         }
     }
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
-            uint p1,
-            byte *text,
-            float x, float y,
-            byte color,
-            byte p6,
-            byte tint_r, byte tint_g, byte tint_b, byte tint_a,
-            float scale,
-            float _);
-
     public static void draw_text_rgba(
         byte[] text,
-        float x, float y,
-        byte color,
-        float scale
+        float  x,
+        float  y,
+        byte   color,
+        float  scale
     ) {
-        fixed (byte *text_ = text)
-            FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700)
-                (0, text_, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
+        fixed (byte* text_ptr = text)
+            FhUtil.get_fptr<FhCall.TOMkpCrossExtMesFontLClutTypeRGBA>(FhCall.__addr_TOMkpCrossExtMesFontLClutTypeRGBA)
+                (0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
     }
 
     public new void render_game() {
@@ -91,24 +81,22 @@ public unsafe class FhCoreModule : FhModule {
 
     public override void render_imgui() {
         // In the main menu
-        if (*FFX.Globals.event_id == 0x17) {
-            // Create a window for the mod list and render all the mods
-            ImGui.SetNextWindowPos(new System.Numerics.Vector2 { X = 0, Y = 0 });
-            ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
-            if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
-                // I tried to increase this text's font size, but couldn't get ImGui.PushFont() to not throw an Access Violation (0xC0000005)
-                // - Eve
-                int mod_count = 0;
-                foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
-                    mod_count++;
-                }
-                ImGui.Text($"{mod_count} mods loaded");
-                foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
-                    ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
-                }
-                ImGui.End();
+        if (*FFX.Globals.event_id != 0x17) return; // Deactivate the mod list outside the main menu.
+
+        // Create a window for the mod list and render all the mods
+        ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
+        ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
+
+        if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
+            // I tried to increase this text's font size, but couldn't get ImGui.PushFont() to not throw an Access Violation (0xC0000005)
+            // - Eve
+            FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
+
+            ImGui.Text($"{mods.Length} mods loaded");
+            foreach (FhModContext mod_ctx in mods) {
+                ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
             }
+            ImGui.End();
         }
     }
 }
-
