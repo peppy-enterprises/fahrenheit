@@ -58,7 +58,7 @@ public class FhModController {
     }
 
     internal void load_mods() {
-        string   load_order_path = Path.Join(FhInternal.PathFinder.Modules.Path, "loadorder");
+        string   load_order_path = Path.Join(FhInternal.PathFinder.Mods.Path, "loadorder");
         string[] load_order      = [ "fhruntime", .. File.ReadAllLines(load_order_path) ];
 
         foreach (string mod_name in load_order) {

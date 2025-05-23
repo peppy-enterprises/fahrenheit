@@ -1,9 +1,3 @@
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
-
-using Fahrenheit.Core.ImGuiNET;
-
 using static Fahrenheit.Core.Runtime.PInvoke;
 
 namespace Fahrenheit.Core.Runtime;

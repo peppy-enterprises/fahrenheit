@@ -1,9 +1,4 @@
-﻿using System.IO;
-using System.Runtime.InteropServices;
-
-using Fahrenheit.Core.ImGuiNET;
-
-namespace Fahrenheit.Core.Runtime;
+﻿namespace Fahrenheit.Core.Runtime;
 
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhCoreModule : FhModule {

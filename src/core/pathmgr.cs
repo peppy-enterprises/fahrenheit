@@ -30,17 +30,17 @@ public sealed record FhDirLink(
     string Path);
 
 internal class FhPathFinder {
-    private const string _dirname_bin     = "bin";
-    private const string _dirname_modules = "modules";
-    private const string _dirname_logs    = "logs";
-    private const string _dirname_state   = "state";
-    private const string _dirname_saves   = "saves";
-    private const string _dirname_lang    = "lang";
-    private const string _dirname_rsrc    = "resources";
-    private const string _dirname_efl     = "efl";
+    private const string _dirname_bin   = "bin";
+    private const string _dirname_mods  = "mods";
+    private const string _dirname_logs  = "logs";
+    private const string _dirname_state = "state";
+    private const string _dirname_saves = "saves";
+    private const string _dirname_lang  = "lang";
+    private const string _dirname_rsrc  = "resources";
+    private const string _dirname_efl   = "efl";
 
     internal readonly FhDirLink Binaries;
-    internal readonly FhDirLink Modules;
+    internal readonly FhDirLink Mods;
     internal readonly FhDirLink Logs;
     internal readonly FhDirLink State;
     internal readonly FhDirLink Saves;
@@ -49,23 +49,23 @@ internal class FhPathFinder {
         string cwd_parent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
                             throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
 
-        string path_bin     = Path.Join(cwd_parent, _dirname_bin);
-        string path_modules = Path.Join(cwd_parent, _dirname_modules);
-        string path_logs    = Path.Join(cwd_parent, _dirname_logs);
-        string path_state   = Path.Join(cwd_parent, _dirname_state);
-        string path_saves   = Path.Join(cwd_parent, _dirname_saves);
+        string path_bin   = Path.Join(cwd_parent, _dirname_bin);
+        string path_mods  = Path.Join(cwd_parent, _dirname_mods);
+        string path_logs  = Path.Join(cwd_parent, _dirname_logs);
+        string path_state = Path.Join(cwd_parent, _dirname_state);
+        string path_saves = Path.Join(cwd_parent, _dirname_saves);
 
         Directory.CreateDirectory(path_bin);
-        Directory.CreateDirectory(path_modules);
+        Directory.CreateDirectory(path_mods);
         Directory.CreateDirectory(path_logs);
         Directory.CreateDirectory(path_state);
         Directory.CreateDirectory(path_saves);
 
-        Binaries = new FhDirLink("$bin",     path_bin);
-        Modules  = new FhDirLink("$modules", path_modules);
-        Logs     = new FhDirLink("$logs",    path_logs);
-        State    = new FhDirLink("$state",   path_state);
-        Saves    = new FhDirLink("$saves",   path_saves);
+        Binaries = new FhDirLink("$bin",   path_bin);
+        Mods     = new FhDirLink("$mods",  path_mods);
+        Logs     = new FhDirLink("$logs",  path_logs);
+        State    = new FhDirLink("$state", path_state);
+        Saves    = new FhDirLink("$saves", path_saves);
     }
 
     public string get_save_path_for_index(int save_index) {
@@ -92,7 +92,7 @@ internal class FhPathFinder {
 
     public FhLoaderPathInfo create_loader_paths(string mod_name, string dll_name) {
         bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
-        string module_dir = is_runtime ? Binaries.Path : Path.Join(Modules.Path, mod_name);
+        string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
 
         return new FhLoaderPathInfo(
             DllPath:      Path.Join(module_dir, $"{dll_name}.dll"),
@@ -102,7 +102,7 @@ internal class FhPathFinder {
 
     public FhModPathInfo create_mod_paths(string mod_name) {
         bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
-        string module_dir = is_runtime ? Binaries.Path : Path.Join(Modules.Path, mod_name);
+        string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
 
         return new FhModPathInfo(
             ManifestPath: Path.Join(module_dir, $"{mod_name}.manifest.json"),
@@ -134,7 +134,7 @@ internal class FhPathFinder {
     /// </summary>
     public string fix_paths(string input) {
         return input.Replace(Binaries.Symbol, Binaries.Path).
-                     Replace(Modules .Symbol, Modules .Path).
+                     Replace(Mods    .Symbol, Mods    .Path).
                      Replace(Logs    .Symbol, Logs    .Path).
                      Replace(State   .Symbol, State   .Path).
                      Replace(Saves   .Symbol, Saves   .Path);

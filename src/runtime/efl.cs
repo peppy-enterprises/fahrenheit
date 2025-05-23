@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
 
 using static Fahrenheit.Core.Runtime.PInvoke;
 
@@ -17,11 +13,11 @@ public struct FhFfxFile {
 public unsafe delegate FhFfxFile* fiosOpen(nint path_ptr, bool read_only);
 
 [FhLoad(FhGameType.FFX)]
-public unsafe class FhEFLModule : FhModule {
+public unsafe class FhFileLoaderModule : FhModule {
     private readonly Dictionary<string, string> _index;
     private readonly FhMethodHandle<fiosOpen>   _h_fiosOpen;
 
-    public FhEFLModule() {
+    public FhFileLoaderModule() {
         _index      = [];
         _h_fiosOpen = new(this, "FFX.exe", h_open, offset: FhCall.__addr_fiosOpen);
     }

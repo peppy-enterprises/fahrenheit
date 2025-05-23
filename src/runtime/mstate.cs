@@ -1,19 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.Json;
-
-namespace Fahrenheit.Core.Runtime;
+﻿namespace Fahrenheit.Core.Runtime;
 
 // todo 2F0650 AUTOSAVE 2F0DA0 LISTALL
 
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public unsafe delegate void FUN_002F01B0_load(int save_list_idx);
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+public unsafe delegate void FUN_002F0650_autosave(nint arg1, nint arg2);
+
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+public unsafe delegate nint FUN_002F0DA0_list(nint arg1, nint arg2);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public unsafe delegate void FUN_002F09A0_save(int save_list_idx);
+public unsafe delegate void FUN_002F01B0_load(int menu_selection_index);
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+public unsafe delegate void FUN_002F09A0_save(int menu_selection_index);
 
 internal readonly struct FhSaveListEntry {
     public readonly int index;
@@ -22,18 +21,24 @@ internal readonly struct FhSaveListEntry {
 }
 
 [FhLoad(FhGameType.FFX)]
-public unsafe class FhSaveLifecycleModule : FhModule {
-    private readonly FhMethodHandle<FUN_002F01B0_load> _handle_onload;
-    private readonly FhMethodHandle<FUN_002F09A0_save> _handle_onsave;
+public unsafe class FhLocalStateModule : FhModule {
+    private readonly FhMethodHandle<FUN_002F01B0_load>     _handle_onload;
+    private readonly FhMethodHandle<FUN_002F09A0_save>     _handle_onsave;
+    private readonly FhMethodHandle<FUN_002F0650_autosave> _handle_onautosave;
+    private readonly FhMethodHandle<FUN_002F0DA0_list>     _handle_onlist;
 
-    public FhSaveLifecycleModule() {
-        _handle_onload = new(this, "FFX.exe", h_onload, offset: 0x2F01B0);
-        _handle_onsave = new(this, "FFX.exe", h_onsave, offset: 0x2F09A0);
+    public FhLocalStateModule() {
+        _handle_onload     = new(this, "FFX.exe", h_onload,     offset: 0x2F01B0);
+        _handle_onsave     = new(this, "FFX.exe", h_onsave,     offset: 0x2F09A0);
+        _handle_onautosave = new(this, "FFX.exe", h_onautosave, offset: 0x2F0650);
+        _handle_onlist     = new(this, "FFX.exe", h_onlist,     offset: 0x2F0DA0);
     }
 
     public override bool init(FileStream global_state_file) {
-        return _handle_onload.hook()
-            && _handle_onsave.hook();
+        return _handle_onload    .hook()
+            && _handle_onsave    .hook()
+            && _handle_onautosave.hook()
+            && _handle_onlist    .hook();
     }
 
     private string _get_state_dir_path_save(FhModContext mod_context, int menu_selection_index) {
@@ -68,6 +73,14 @@ public unsafe class FhSaveLifecycleModule : FhModule {
 
         Directory.CreateDirectory(local_state_dir);
         return local_state_dir;
+    }
+
+    private void h_onautosave(nint arg1, nint arg2) {
+        _handle_onautosave.orig_fptr(arg1, arg2);
+    }
+
+    private nint h_onlist(nint arg1, nint arg2) {
+        return _handle_onlist.orig_fptr(arg1, arg2);
     }
 
     [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]

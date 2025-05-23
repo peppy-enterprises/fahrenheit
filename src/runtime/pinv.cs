@@ -1,9 +1,8 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Fahrenheit.Core.Runtime;
+﻿namespace Fahrenheit.Core.Runtime;
 
 internal static unsafe partial class PInvoke {
-    [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Utf16)]
+    [LibraryImport("kernel32.dll",
+        StringMarshalling = StringMarshalling.Utf16)]
     internal static partial nint CreateFileW(
         string lpFileName,
         uint   dwDesiredAccess,
@@ -42,12 +41,17 @@ internal static unsafe partial class PInvoke {
         nint dwNewLong);
 
     // hacky
-    [LibraryImport("user32.dll", EntryPoint = "FindWindowA", SetLastError = true, StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
+    [LibraryImport("user32.dll",
+        EntryPoint                  = "FindWindowA",
+        SetLastError                = true,
+        StringMarshalling           = StringMarshalling.Custom,
+        StringMarshallingCustomType = typeof(System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
     internal static partial nint FindWindow(
         string? lpClassName,
         string  lpWindowName);
 
-    [LibraryImport("kernelbase.dll", SetLastError = true)]
+    [LibraryImport("kernelbase.dll",
+        SetLastError = true)]
     internal static partial void WakeByAddressAll(
         void* Address);
 
