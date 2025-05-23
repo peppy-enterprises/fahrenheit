@@ -12,6 +12,9 @@ public struct FhFfxFile {
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public unsafe delegate FhFfxFile* fiosOpen(nint path_ptr, bool read_only);
 
+/// <summary>
+///     Provides the ability to replace files loaded by the game with files outside the VBF archives.
+/// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhFileLoaderModule : FhModule {
     private readonly Dictionary<string, string> _index;

@@ -59,10 +59,10 @@ public sealed record FhManifest(
     );
 
 /// <summary>
-///     A 'module' is the base unit of functionality in Fahrenheit.
+///     A 'module' is the base unit of functionality in Fahrenheit. Modules are used to logically partition your functionality.
 ///     <para></para>
 ///     'Modules' are not the same as mods or even DLLs. Mods can be executed as one or several DLLs,
-///     and one DLL can contain any number of modules. Modules can be used to logically partition your functionality.
+///     and one DLL can contain any number of modules.
 /// </summary>
 public abstract class FhModule {
     protected readonly string   _module_type_name;

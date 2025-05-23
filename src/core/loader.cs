@@ -3,12 +3,19 @@ using System.Runtime.Loader;
 
 namespace Fahrenheit.Core;
 
+/// <summary>
+///     Instructs the <see cref="FhLoader"/> that this module type should be instantiated,
+///     providing the <paramref name="supported_game_type"/> matches the currently executing game.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class FhLoadAttribute(FhGameType supported_game_type) : Attribute {
     public readonly FhGameType supported_game_type = supported_game_type;
 }
 
-public class FhLoadContext(string fh_dll_path) : AssemblyLoadContext {
+/// <summary>
+///     Resolves the .NET or native dependencies of a given Fahrenheit DLL by adding its directory to the library search path.
+/// </summary>
+internal class FhLoadContext(string fh_dll_path) : AssemblyLoadContext {
     private readonly AssemblyDependencyResolver _resolver = new AssemblyDependencyResolver(fh_dll_path);
 
     protected override Assembly? Load(AssemblyName assembly_name) {
@@ -22,6 +29,10 @@ public class FhLoadContext(string fh_dll_path) : AssemblyLoadContext {
     }
 }
 
+/// <summary>
+///     Loads Fahrenheit DLLs and their .NET or native dependencies into the game process,
+///     and instantiates any <see cref="FhModule"/> with a valid <see cref="FhLoadAttribute"/> on them.
+/// </summary>
 public class FhLoader {
     public FhLoader() {
         // Loading `fhcore` into ALC.Default ensures it does not 'leak' into plugins' load contexts, causing type identity mismatches.

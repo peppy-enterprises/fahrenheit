@@ -2,7 +2,10 @@
 
 namespace Fahrenheit.Core;
 
-// Tracks the current address at which the next hook in a chain must be inserted.
+/// <summary>
+///     Internally tracks the address at which the next hook requested by a <see cref="FhMethodHandle{T}"/>
+///     must be inserted, if multiple hooks are created for the same method.
+/// </summary>
 internal class FhMethodAddressMap {
     private readonly Dictionary<nint, nint> _map;
     private readonly Lock                   _lock;
@@ -27,6 +30,10 @@ internal class FhMethodAddressMap {
     }
 }
 
+/// <summary>
+///     Provides access to a method whose signature is equal to <typeparamref name="T"/>.
+///     You may then invoke or hook the function.
+/// </summary>
 public unsafe class FhMethodHandle<T> where T : Delegate {
     private readonly nint fn_addr;
 

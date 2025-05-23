@@ -1,5 +1,9 @@
 ﻿namespace Fahrenheit.Core;
 
+/// <summary>
+///     Provides access to a <see cref="FhModule"/> of type <typeparamref name="T"/>.
+///     You may then access its <see cref="FhModuleContext"/>.
+/// </summary>
 public class FhModuleHandle<T> where T : FhModule {
     private readonly FhModule         _owner;
     private          FhModuleContext? _match_ctx;

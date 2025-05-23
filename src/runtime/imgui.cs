@@ -105,6 +105,9 @@ public unsafe delegate nint DXGISwapChain_ResizeBuffers(nint* pSwapChain, uint B
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 public delegate int PInputUpdate();
 
+/// <summary>
+///     Provides the ability to use the ImGui GUI toolkit within the game.
+/// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhImguiModule : FhModule {
     // WndProc support

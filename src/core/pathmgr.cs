@@ -25,10 +25,17 @@ internal sealed record FhModulePathInfo(
     string GlobalStatePath
     );
 
+/// <summary>
+///     Maps a <paramref name="Path"/> on disk to a shorthand <paramref name="Symbol"/>.
+///     Instances of the symbol can then be substituted by the full path.
+/// </summary>
 public sealed record FhDirLink(
     string Symbol,
     string Path);
 
+/// <summary>
+///     Internally resolves the paths of certain well-known directories and files required by the framework.
+/// </summary>
 internal class FhPathFinder {
     private const string _dirname_bin   = "bin";
     private const string _dirname_mods  = "mods";

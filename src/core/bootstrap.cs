@@ -2,6 +2,7 @@
 
 /// <summary>
 ///     Contains Fahrenheit boot logic. The execution of the C# segment of Fahrenheit begins here.
+///     When the bootstrapper completes, game execution commences.
 /// </summary>
 public static class FhBootstrapper {
     /* [fkelava 25/4/24 18:47]

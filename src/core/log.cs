@@ -12,6 +12,9 @@ public enum LogLevel {
     None    = 6
 }
 
+/// <summary>
+///     Provides access to a log file. All entries are additionally echoed to the console.
+/// </summary>
 public class FhLogger {
 #if DEBUG
     private const LogLevel MinLevel = LogLevel.Debug;

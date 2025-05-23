@@ -20,6 +20,15 @@ internal readonly struct FhSaveListEntry {
     public readonly int _0x08;
 }
 
+/// <summary>
+///     Implements the 'local state' and 'separate saves' mechanisms of Fahrenheit.
+///     <para></para>
+///     'Local state' is a unique file for each save that <see cref="FhModule"/>s have access to at save/load time.
+///     This allows information unique to that save game to be persisted to disk.
+///     <para></para>
+///     'Separate saves' is a mechanism by which mods can restrict the visibility of save games
+///     made using them. If such a mod is no longer loaded, these saves will not appear in the load menu.
+/// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhLocalStateModule : FhModule {
     private readonly FhMethodHandle<FUN_002F01B0_load>     _handle_onload;
