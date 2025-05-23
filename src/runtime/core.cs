@@ -100,15 +100,11 @@ public unsafe class FhCoreModule : FhModule {
                 // - Eve
                 int mod_count = 0;
                 foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
-                    foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                        mod_count++;
-                    }
+                    mod_count++;
                 }
                 ImGui.Text($"{mod_count} mods loaded");
                 foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
-                    foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                        ImGui.Text($"{module_ctx.Module.ModuleType} v{module_ctx.Module.GetType().Assembly.GetName().Version}");
-                    }
+                    ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
                 }
                 ImGui.End();
             }
