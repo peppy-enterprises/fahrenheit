@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -35,7 +36,7 @@ internal static class Program
             "cimplot"   => true,
             "cimnodes"  => true,
             "cimguizmo" => true,
-            _ => throw new NotImplementedException($"Library \"{libraryName}\" is not supported.")
+            _           => throw new NotImplementedException($"Library \"{libraryName}\" is not supported.")
         };
 
         string classPrefix = libraryName switch
@@ -313,12 +314,12 @@ internal static class Program
 
                     if (isUdtVariant)
                     {
-                        writer.WriteLine($"[DllImport(\"{dllName}\", CallingConvention = CallingConvention.Cdecl, EntryPoint = \"{exportedName}\")]");
+                        writer.WriteLine($"[DllImport(FhConst.cimgui_lib_name, CallingConvention = CallingConvention.Cdecl, EntryPoint = \"{exportedName}\")]");
 
                     }
                     else
                     {
-                        writer.WriteLine($"[DllImport(\"{dllName}\", CallingConvention = CallingConvention.Cdecl)]");
+                        writer.WriteLine($"[DllImport(FhConst.cimgui_lib_name, CallingConvention = CallingConvention.Cdecl)]");
                     }
                     writer.WriteLine($"public static extern {ret} {methodName}({parameters});");
                 }
@@ -838,7 +839,7 @@ internal static class Program
         }
     }
 
-    private static bool CorrectDefaultValue(string defaultVal, TypeReference tr, out string correctedDefault)
+    private static bool CorrectDefaultValue(string defaultVal, TypeReference tr, [NotNullWhen(true)] out string? correctedDefault)
     {
         if (tr.Type == "ImGuiContext*" || tr.Type == "ImPlotContext*" || tr.Type == "EditorContext*")
         {
@@ -858,14 +859,10 @@ internal static class Program
 
         if (tr.IsEnum)
         {
-            if (defaultVal.StartsWith("-"))
-            {
-                correctedDefault = $"({tr.Type})({defaultVal})";
-            }
-            else
-            {
-                correctedDefault = $"({tr.Type}){defaultVal}";
-            }
+            correctedDefault = defaultVal.StartsWith('-')
+                ? $"({tr.Type})({defaultVal})"
+                : $"({tr.Type}){defaultVal}";
+
             return true;
         }
 
@@ -897,14 +894,9 @@ internal static class Program
 
     private static string CorrectIdentifier(string identifier)
     {
-        if (TypeInfo.IdentifierReplacements.TryGetValue(identifier, out string replacement))
-        {
-            return replacement;
-        }
-        else
-        {
-            return identifier;
-        }
+        return TypeInfo.IdentifierReplacements.TryGetValue(identifier, out string? replacement)
+            ? replacement
+            : identifier;
     }
 }
 
@@ -912,15 +904,15 @@ class MarshalledParameter
 {
     public MarshalledParameter(string marshalledType, bool isPinned, string varName, bool hasDefaultValue)
     {
-        MarshalledType = marshalledType;
-        IsPinned = isPinned;
-        VarName = varName;
+        MarshalledType  = marshalledType;
+        IsPinned        = isPinned;
+        VarName         = varName;
         HasDefaultValue = hasDefaultValue;
     }
 
-    public string MarshalledType { get; }
-    public bool IsPinned { get; }
-    public string VarName { get; }
-    public bool HasDefaultValue { get; }
-    public string PinTarget { get; internal set; }
+    public string MarshalledType  { get; }
+    public bool   IsPinned        { get; }
+    public string VarName         { get; }
+    public bool   HasDefaultValue { get; }
+    public string PinTarget       { get; internal set; }
 }

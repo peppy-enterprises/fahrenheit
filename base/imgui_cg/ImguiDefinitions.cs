@@ -307,13 +307,13 @@ record TypeDefinition(string Name, TypeReference[] Fields);
 
 class TypeReference
 {
-    public string Name { get; }
-    public string Type { get; }
-    public string TemplateType { get; }
-    public int ArraySize { get; }
-    public bool IsFunctionPointer { get; }
-    public string[] TypeVariants { get; }
-    public bool IsEnum { get; }
+    public string   Name              { get; }
+    public string   Type              { get; }
+    public string   TemplateType      { get; }
+    public int      ArraySize         { get; }
+    public bool     IsFunctionPointer { get; }
+    public string[] TypeVariants      { get; }
+    public bool     IsEnum            { get; }
 
     public TypeReference(string name, string type, int asize, EnumDefinition[] enums)
         : this(name, type, asize, null, enums, null) { }
@@ -329,29 +329,18 @@ class TypeReference
         Name = name;
         Type = type.Replace("const", string.Empty).Trim();
 
-
         if (Type.StartsWith("ImVector_"))
         {
-            if (Type.EndsWith("*"))
-            {
-                Type = "ImVector*";
-            }
-            else
-            {
-                Type = "ImVector";
-            }
+            Type = Type.EndsWith('*')
+                ? "ImVector*"
+                : "ImVector";
         }
 
         if (Type.StartsWith("ImChunkStream_"))
         {
-            if (Type.EndsWith("*"))
-            {
-                Type = "ImChunkStream*";
-            }
-            else
-            {
-                Type = "ImChunkStream";
-            }
+            Type = Type.EndsWith('*')
+                ? "ImChunkStream*"
+                : "ImChunkStream";
         }
 
         TemplateType = templateType;
@@ -385,26 +374,23 @@ class TypeReference
             return firstVal + secondVal;
         }
 
-        if (!int.TryParse(sizePart, out int ret))
+        if (int.TryParse(sizePart, out int ret)) return ret;
+
+        foreach (EnumDefinition ed in enums)
         {
-            foreach (EnumDefinition ed in enums)
+            if (ed.Names.Any(n => sizePart.StartsWith(n)))
             {
-                if (ed.Names.Any(n => sizePart.StartsWith(n)))
+                foreach (EnumMember member in ed.Members)
                 {
-                    foreach (EnumMember member in ed.Members)
+                    if (member.Name == sizePart)
                     {
-                        if (member.Name == sizePart)
-                        {
-                            return int.Parse(member.Value);
-                        }
+                        return int.Parse(member.Value);
                     }
                 }
             }
-
-            ret = -1;
         }
 
-        return ret;
+        return -1;
     }
 
     public TypeReference WithVariant(int variantIndex, EnumDefinition[] enums)
