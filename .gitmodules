@@ -1,22 +1,21 @@
-[submodule "src/csr"]
-	path = src/csr
+[submodule "mods/csr"]
+	path = mods/csr
 	url = https://github.com/peppy-enterprises/fh-mods-csr
-[submodule "src/dbg"]
-	path = src/dbg
+[submodule "mods/dbg"]
+	path = mods/dbg
 	url = https://github.com/peppy-enterprises/fh-mods-debug
-[submodule "src/dedit"]
-	path = src/dedit
-	url = https://github.com/peppy-enterprises/fh-tools-dedit
-[submodule "src/h2cs"]
-	path = src/h2cs
-	url = https://github.com/peppy-enterprises/fh-tools-h2cs
-[submodule "src/truerng"]
-	path = src/truerng
+[submodule "mods/truerng"]
+	path = mods/truerng
 	url = https://github.com/peppy-enterprises/fh-mods-truerng
-
-[submodule "src/efp"]
-	path = src/efp
+[submodule "mods/efp"]
+	path = mods/efp
 	url = https://github.com/peppy-enterprises/fh-mods-efp
-[submodule "src/step"]
-	path = src/step
+[submodule "tools/dedit"]
+	path = tools/dedit
+	url = https://github.com/peppy-enterprises/fh-tools-dedit
+[submodule "tools/h2cs"]
+	path = tools/h2cs
+	url = https://github.com/peppy-enterprises/fh-tools-h2cs
+[submodule "tools/step"]
+	path = tools/step
 	url = https://github.com/peppy-enterprises/fh-tools-step

@@ -10,31 +10,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core", "src\core\Fahrenheit.Core.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core", "base\core\Fahrenheit.Core.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core.Runtime", "src\runtime\Fahrenheit.Core.Runtime.csproj", "{AA228653-784C-4FA2-84D2-DD5946D843AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core.Runtime", "base\runtime\Fahrenheit.Core.Runtime.csproj", "{AA228653-784C-4FA2-84D2-DD5946D843AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET", "src\imgui\Fahrenheit.Core.ImGuiNET.csproj", "{BECB5E4B-716D-4D71-8AD0-3EF165A0D512}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET", "base\imgui\Fahrenheit.Core.ImGuiNET.csproj", "{BECB5E4B-716D-4D71-8AD0-3EF165A0D512}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET.CG", "src\imgui_cg\Fahrenheit.Core.ImGuiNET.CG.csproj", "{24B48D88-B846-409F-A2B7-0B09147CD63E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ImGuiNET.CG", "base\imgui_cg\Fahrenheit.Core.ImGuiNET.CG.csproj", "{24B48D88-B846-409F-A2B7-0B09147CD63E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage0", "src\stage0\Fahrenheit.Loader.Stage0.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage0", "base\stage0\Fahrenheit.Loader.Stage0.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage1", "src\stage1\Fahrenheit.Loader.Stage1.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage1", "base\stage1\Fahrenheit.Loader.Stage1.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.TrueRNG", "src\truerng\Fahrenheit.Modules.TrueRNG.csproj", "{6DBF2D2F-C4A7-489C-AB0B-575993DDAB69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.TrueRNG", "mods\truerng\Fahrenheit.Modules.TrueRNG.csproj", "{6DBF2D2F-C4A7-489C-AB0B-575993DDAB69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.CSR", "src\csr\Fahrenheit.Modules.CSR.csproj", "{A12582B0-FC7F-4ABD-AF44-559CE9091D9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.CSR", "mods\csr\Fahrenheit.Modules.CSR.csproj", "{A12582B0-FC7F-4ABD-AF44-559CE9091D9D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.Debug", "src\dbg\Fahrenheit.Modules.Debug.csproj", "{5D809E89-173D-4A69-9F9E-B1AF99E902FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.Debug", "mods\dbg\Fahrenheit.Modules.Debug.csproj", "{5D809E89-173D-4A69-9F9E-B1AF99E902FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Modules.EFP", "src\efp\Fahrenheit.Modules.EFP.csproj", "{E10C9C4D-20BF-4CA5-9BE7-2111E1AD545D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Modules.EFP", "mods\efp\Fahrenheit.Modules.EFP.csproj", "{E10C9C4D-20BF-4CA5-9BE7-2111E1AD545D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.H2CS", "src\h2cs\Fahrenheit.Tools.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.H2CS", "tools\h2cs\Fahrenheit.Tools.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.DEdit", "src\dedit\Fahrenheit.Tools.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.DEdit", "tools\dedit\Fahrenheit.Tools.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Tools.STEP", "src\step\Fahrenheit.Tools.STEP.csproj", "{5EB95380-0B38-4E7A-AC80-46426271DFC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Tools.STEP", "tools\step\Fahrenheit.Tools.STEP.csproj", "{5EB95380-0B38-4E7A-AC80-46426271DFC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
