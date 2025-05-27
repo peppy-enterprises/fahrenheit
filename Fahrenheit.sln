@@ -24,13 +24,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage1", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Mods.Template", "mods\template\Fahrenheit.Mods.Template.csproj", "{77AB0272-D68D-4629-998A-FAD4CB108DC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.TrueRNG", "mods\truerng\Fahrenheit.Modules.TrueRNG.csproj", "{6DBF2D2F-C4A7-489C-AB0B-575993DDAB69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Mods.TrueRNG", "mods\truerng\Fahrenheit.Mods.TrueRNG.csproj", "{6DBF2D2F-C4A7-489C-AB0B-575993DDAB69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.CSR", "mods\csr\Fahrenheit.Modules.CSR.csproj", "{A12582B0-FC7F-4ABD-AF44-559CE9091D9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Mods.CSR", "mods\csr\Fahrenheit.Mods.CSR.csproj", "{A12582B0-FC7F-4ABD-AF44-559CE9091D9D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Modules.Debug", "mods\dbg\Fahrenheit.Modules.Debug.csproj", "{5D809E89-173D-4A69-9F9E-B1AF99E902FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Mods.Debug", "mods\dbg\Fahrenheit.Mods.Debug.csproj", "{5D809E89-173D-4A69-9F9E-B1AF99E902FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Modules.EFP", "mods\efp\Fahrenheit.Modules.EFP.csproj", "{E10C9C4D-20BF-4CA5-9BE7-2111E1AD545D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Mods.EFP", "mods\efp\Fahrenheit.Mods.EFP.csproj", "{E10C9C4D-20BF-4CA5-9BE7-2111E1AD545D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.H2CS", "tools\h2cs\Fahrenheit.Tools.H2CS.csproj", "{5122404E-4E71-4CFB-AF7C-92E6E4708E41}"
 EndProject
