@@ -1,3 +1,6 @@
+[submodule "mods/template"]
+	path = mods/template
+	url = https://github.com/peppy-enterprises/fh-mods-template
 [submodule "mods/csr"]
 	path = mods/csr
 	url = https://github.com/peppy-enterprises/fh-mods-csr

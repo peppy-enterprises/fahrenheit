@@ -29,7 +29,10 @@ Fahrenheit attempts to put an end to this.
 It aims not only to exceed all these efforts in scope, but also to stay free for others to analyze,
 improve, learn from and use- now and forever.
 
-## Building from source and testing
+## Cloning, building from source and testing
+Fahrenheit includes submodules. To clone the entire solution, use 
+``git clone --recurse-submodules https://github.com/peppy-enterprises/fahrenheit``.
+
 Building requires Visual Studio 2022 with the [built-in `vcpkg` manager enabled](https://devblogs.microsoft.com/cppblog/vcpkg-is-now-included-with-visual-studio/), and the following workloads:
 - .NET desktop development (latest version)
 - C++ desktop development (latest version)
