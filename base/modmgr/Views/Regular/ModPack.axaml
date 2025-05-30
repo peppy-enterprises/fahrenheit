@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:regular="clr-namespace:Fahrenheit.Core.ModManager.Views.Regular"
+             xmlns:vm="clr-namespace:Fahrenheit.Core.ModManager.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Fahrenheit.Core.ModManager.Views.Regular.ModPack"
+             x:DataType="vm:ModPackViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:ModPackViewModel/>
+    </Design.DataContext>
+
+    <StackPanel>
+        <!-- todo deliberately left vague -->
+        <!-- TODO: Add renaming, deleting, and other such buttons -->
+        <StackPanel Margin="0 8">
+            <TextBlock FontSize="22" HorizontalAlignment="Center" Text="{Binding name}"/>
+            <TextBlock Opacity="0.8" HorizontalAlignment="Center" Text="{Binding mod_count, StringFormat={}{0} mods}"/>
+        </StackPanel>
+        <DockPanel>
+            <!-- Hide this if a mod isn't selected or if "Show Mod Details" is off in the settings -->
+            <regular:ModPreview Name="ModPreview" DockPanel.Dock="Right" Width="360" Margin="5 0"/>
+            <StackPanel DockPanel.Dock="Left" Margin="5 0">
+                <!-- TODO: Separate these searchboxes into their own views -->
+                <DockPanel Margin="0 5">
+                    <Svg Margin="0 0 10 0" DockPanel.Dock="Left" Path="../../Assets/icons/lookup.svg" Width="24" Height="24"/>
+                    <TextBox Name="ModSearch" Watermark="Search..."/>
+                </DockPanel>
+                <StackPanel Name="Mods">
+                    <regular:ModListItem/>
+                    <regular:ModListItem/>
+                    <regular:ModListItem/>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </StackPanel>
+</UserControl>

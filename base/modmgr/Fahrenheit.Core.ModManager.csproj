@@ -1,41 +1,43 @@
-﻿<Project>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
 
-	<!-- ASSEMBLY BASIC PROPERTIES -->
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net9.0</TargetFramework>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-
-	<!-- ASSEMBLY ADDITIONAL PROPERTIES -->
-	<PropertyGroup>
-		<AssemblyName>fhmodmgr</AssemblyName>
-		<AssemblyTitle>Fahrenheit Mod Manager</AssemblyTitle>
-		<Product>Fahrenheit Mod Manager</Product>
-	</PropertyGroup>
-
-	<!-- LOCAL DEPLOYMENT TARGET -->
-	<PropertyGroup>
-		<CopyToDir>$(SolutionDir)artifacts\localdeploy\bin</CopyToDir>
-	</PropertyGroup>
-
-	<!-- SDK REFERENCES -->
-	<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-
-	<!-- SHARED FILE LINKS -->
-	<ItemGroup>
-		<None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
-	</ItemGroup>
-
-	<!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
-            <Private>false</Private>
-            <ExcludeAssets>runtime</ExcludeAssets>
-        </ProjectReference>
-	</ItemGroup>
+        <Folder Include="Models\"/>
+        <AvaloniaResource Include="Assets\**"/>
+        <Folder Include="Views\Compact\" />
+    </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0"/>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.0">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="Markdown.Avalonia.Tight" Version="11.0.2" />
+        <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.0.1" />
+        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.0.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Regular\ModListItem.axaml.cs">
+        <DependentUpon>ModListItem.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Regular\InstallListItem.axaml.cs">
+        <DependentUpon>InstallListItem.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>
