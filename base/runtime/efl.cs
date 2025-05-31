@@ -4,25 +4,25 @@ using static Fahrenheit.Core.Runtime.PInvoke;
 
 namespace Fahrenheit.Core.Runtime;
 
-public struct FhFfxFile {
+public struct PStreamFile {
     public nint handle_os;
     public nint handle_vbf;
 }
 
-[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public unsafe delegate FhFfxFile* fiosOpen(nint path_ptr, bool read_only);
+[UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+public unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5);
 
 /// <summary>
 ///     Provides the ability to replace files loaded by the game with files outside the VBF archives.
 /// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhFileLoaderModule : FhModule {
-    private readonly Dictionary<string, string> _index;
-    private readonly FhMethodHandle<fiosOpen>   _h_fiosOpen;
+    private readonly Dictionary<string, string>       _index;
+    private readonly FhMethodHandle<PStreamFile_ctor> _h_pstream_ctor;
 
     public FhFileLoaderModule() {
-        _index      = [];
-        _h_fiosOpen = new(this, "FFX.exe", h_open, offset: FhCall.__addr_fiosOpen);
+        _index          = [];
+        _h_pstream_ctor = new(this, "FFX.exe", h_pstream_ctor, offset: 0x207D80);
     }
 
     // the game uses a fixed stream prefix "../../../" - I don't see why ffgriever handled the other edge cases (yet)
@@ -62,6 +62,7 @@ public unsafe class FhFileLoaderModule : FhModule {
                 }
 
                 _index[normalized_relative_path] = normalized_absolute_path;
+                _logger.Info($"Mod {mod.Manifest.Name} replaces file {normalized_relative_path}");
             }
         }
 
@@ -69,12 +70,16 @@ public unsafe class FhFileLoaderModule : FhModule {
         _logger.Warning($"EFL indexing complete in {index_swatch.ElapsedMilliseconds} ms.");
     }
 
-    public FhFfxFile* h_open(nint path_ptr, bool read_only) {
-        string     path            = Marshal.PtrToStringAnsi(path_ptr) ?? throw new Exception("FH_E_EFL_FIOS_OPEN_PATH_NUL");
-        string     normalized_path = normalize_path(path);
-        FhFfxFile* file            = _h_fiosOpen.orig_fptr.Invoke(path_ptr, read_only);
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private nint h_pstream_ctor(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5) {
+        string path            = Marshal.PtrToStringAnsi(path_ptr) ?? throw new Exception("FH_E_EFL_PSTREAM_CTOR_OPEN_PATH_NUL");
+        string normalized_path = normalize_path(path);
 
-        if (!_index.TryGetValue(normalized_path, out string? modded_path)) return file;
+        _logger.Info(normalized_path);
+
+        if (!_index.TryGetValue(normalized_path, out string? modded_path)) {
+            return _h_pstream_ctor.orig_fptr.Invoke(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
+        }
 
         /* [fkelava 01/10/24 16:49]
          * FFX.exe+208100 at +2081B9 onward:
@@ -84,8 +89,8 @@ public unsafe class FhFileLoaderModule : FhModule {
          * No bookkeeping of the returned handle is necessary. The game closes it itself.
          */
 
-        file->handle_vbf = 0;
-        file->handle_os  = CreateFileW(
+        this_ptr->handle_vbf = 0;
+        this_ptr->handle_os  = CreateFileW(
             lpFileName:            modded_path,
             dwDesiredAccess:       read_only ? FILE_READ_DATA  : FILE_WRITE_DATA,
             dwShareMode:           read_only ? FILE_SHARE_READ : 0U,
@@ -95,11 +100,11 @@ public unsafe class FhFileLoaderModule : FhModule {
             hTemplateFile:         0);
 
         _logger.Info($"{path} -> {modded_path}");
-        return file;
+        return new nint(this_ptr);
     }
 
     public override bool init(FileStream global_state_file) {
         construct_index();
-        return _h_fiosOpen.hook();
+        return _h_pstream_ctor.hook();
     }
 }
