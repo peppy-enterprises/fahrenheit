@@ -1,41 +1,66 @@
 ﻿<Project>
 
-	<!-- ASSEMBLY BASIC PROPERTIES -->
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net9.0</TargetFramework>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
+    <!-- ASSEMBLY BASIC PROPERTIES -->
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-	<!-- ASSEMBLY ADDITIONAL PROPERTIES -->
-	<PropertyGroup>
-		<AssemblyName>fhmodmgr</AssemblyName>
-		<AssemblyTitle>Fahrenheit Mod Manager</AssemblyTitle>
-		<Product>Fahrenheit Mod Manager</Product>
-	</PropertyGroup>
+    <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
+    <PropertyGroup>
+        <AssemblyName>fhmodmgr</AssemblyName>
+        <AssemblyTitle>Fahrenheit Mod Manager</AssemblyTitle>
+        <Product>Fahrenheit Mod Manager</Product>
+    </PropertyGroup>
 
-	<!-- LOCAL DEPLOYMENT TARGET -->
-	<PropertyGroup>
-		<CopyToDir>$(SolutionDir)artifacts\localdeploy\bin</CopyToDir>
-	</PropertyGroup>
+    <!-- LOCAL DEPLOYMENT TARGET -->
+    <PropertyGroup>
+        <CopyToDir>$(SolutionDir)artifacts\localdeploy\bin</CopyToDir>
+    </PropertyGroup>
 
-	<!-- SDK REFERENCES -->
-	<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+    <!-- SDK REFERENCES -->
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
-	<!-- SHARED FILE LINKS -->
-	<ItemGroup>
-		<None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
-	</ItemGroup>
+    <!-- SHARED FILE LINKS -->
+    <ItemGroup>
+        <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
+    </ItemGroup>
 
-	<!-- PROJECT REFERENCES -->
+    <!-- PROJECT REFERENCES -->
     <ItemGroup>
         <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>
         </ProjectReference>
-	</ItemGroup>
+    </ItemGroup>
+
+    <!-- AVALONIA SPECIFIC -->
+    <PropertyGroup>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Folder Include="Models\" />
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.0" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.0">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+    </ItemGroup>
 
 </Project>
