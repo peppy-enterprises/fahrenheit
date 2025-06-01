@@ -1,7 +1,5 @@
 ﻿namespace Fahrenheit.Core.Runtime;
 
-// todo 2F0650 AUTOSAVE 2F0DA0 LISTALL
-
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public unsafe delegate void FUN_002F0650_autosave(nint arg1, nint arg2);
 

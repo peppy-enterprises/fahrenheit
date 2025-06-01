@@ -52,19 +52,15 @@ public unsafe readonly struct FhPointer {
         }
     }
 
-    private nint deref_offsets_internal() {
-        nint ptr = nint.Zero;
+    public bool deref_offsets(out nint vptr) {
+        vptr = nint.Zero;
 
         foreach (FhPointerDeref deref in _derefs) {
-            ptr = deref.AsPtr ? Marshal.ReadIntPtr(ptr + deref.Offset) : ptr + deref.Offset;
-            if (ptr == nint.Zero) return nint.MaxValue;
+            vptr = deref.AsPtr ? Marshal.ReadIntPtr(vptr + deref.Offset) : vptr + deref.Offset;
+            if (vptr == nint.Zero) return false;
         }
 
-        return ptr;
-    }
-
-    public bool deref_offsets(out nint vptr) {
-        return (vptr = deref_offsets_internal()) != nint.MaxValue;
+        return true;
     }
 
     public T deref_primitive<T>() where T : unmanaged {
@@ -72,10 +68,21 @@ public unsafe readonly struct FhPointer {
         return deref_offsets(out nint vptr) ? Unsafe.Read<T>(vptr.ToPointer()) : default;
     }
 
+    public T[] deref_primitive<T>(int length) where T : unmanaged {
+        throw_if_type_parameter_invalid<T>();
+        return deref_offsets(out nint vptr) ? new ReadOnlySpan<T>(vptr.ToPointer(), length).ToArray() : [];
+    }
+
     public void write_primitive<T>(T value) where T : unmanaged {
         throw_if_type_parameter_invalid<T>();
         if (!deref_offsets(out nint vptr)) return;
         Unsafe.Write(vptr.ToPointer(), value);
+    }
+
+    public void write_primitive<T>(T[] values) where T : unmanaged {
+        throw_if_type_parameter_invalid<T>();
+        if (!deref_offsets(out nint vptr)) return;
+        values.CopyTo(new Span<T>(vptr.ToPointer(), values.Length));
     }
 
     public string deref_string(FhStringType strtype) {
