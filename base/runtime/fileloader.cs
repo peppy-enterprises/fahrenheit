@@ -25,9 +25,10 @@ public unsafe class FhFileLoaderModule : FhModule {
         _h_pstream_ctor = new(this, "FFX.exe", h_pstream_ctor, offset: 0x207D80);
     }
 
-    // the game uses a fixed stream prefix "../../../" - I don't see why ffgriever handled the other edge cases (yet)
     private static string normalize_path(string path) {
-        string prefixless_path = path.Replace("../../../", "");
+        string host0_fixed_path  = path.Replace("host0:", "ffx_ps2");
+        int    stream_prefix_end = host0_fixed_path.IndexOf('f', StringComparison.InvariantCultureIgnoreCase);
+        string prefixless_path   = host0_fixed_path[stream_prefix_end..];
 
         return OperatingSystem.IsWindows()
             ? prefixless_path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)

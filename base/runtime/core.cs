@@ -7,9 +7,9 @@ public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<FhCall.TODrawMessageWindow>       _render_game;
 
     public FhCoreModule() {
-        _main_loop    = new(this, "FFX.exe", main_loop,    offset: FhCall.__addr_Sg_MainLoop);
-        _update_input = new(this, "FFX.exe", update_input, offset: FhCall.__addr_AtelExecInternal_00871d10);
-        _render_game  = new(this, "FFX.exe", render_game,  offset: FhCall.__addr_TODrawMessageWindow);
+        _main_loop    = new(this, "FFX.exe", h_main_loop,    offset: FhCall.__addr_Sg_MainLoop);
+        _update_input = new(this, "FFX.exe", h_update_input, offset: FhCall.__addr_AtelExecInternal_00871d10);
+        _render_game  = new(this, "FFX.exe", h_render_game,  offset: FhCall.__addr_TODrawMessageWindow);
     }
 
     public override bool init(FileStream global_state_file) {
@@ -18,7 +18,7 @@ public unsafe class FhCoreModule : FhModule {
             && _render_game .hook();
     }
 
-    public void main_loop(float delta) {
+    public void h_main_loop(float delta) {
         foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.pre_update();
@@ -38,7 +38,7 @@ public unsafe class FhCoreModule : FhModule {
         }
     }
 
-    public void update_input() {
+    public void h_update_input() {
         FFX.Globals.Input.update();
 
         _update_input.orig_fptr();
@@ -62,7 +62,7 @@ public unsafe class FhCoreModule : FhModule {
                 (0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
     }
 
-    public new void render_game() {
+    public new void h_render_game() {
         _render_game.orig_fptr();
 
         foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
