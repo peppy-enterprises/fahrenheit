@@ -1,15 +1,38 @@
 ﻿namespace Fahrenheit.Core.Runtime;
 
+/* [fkelava 21/6/25 01:52]
+ * Temporary until FhCall is restored to `ffx-v3` RE state.
+ */
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+public delegate void Sg_MainLoop(float delta);
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+public delegate void TODrawMessageWindow();
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+public delegate void AtelExecInternal_00871d10();
+
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+public unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
+        uint p1,
+        byte* text,
+        float x, float y,
+        byte color,
+        byte p6,
+        byte tint_r, byte tint_g, byte tint_b, byte tint_a,
+        float scale,
+        float _);
+
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhCoreModule : FhModule {
-    private readonly FhMethodHandle<FhCall.Sg_MainLoop>               _main_loop;
-    private readonly FhMethodHandle<FhCall.AtelExecInternal_00871d10> _update_input;
-    private readonly FhMethodHandle<FhCall.TODrawMessageWindow>       _render_game;
+    private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
+    private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
+    private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
 
     public FhCoreModule() {
-        _main_loop    = new(this, "FFX.exe", h_main_loop,    offset: FhCall.__addr_Sg_MainLoop);
-        _update_input = new(this, "FFX.exe", h_update_input, offset: FhCall.__addr_AtelExecInternal_00871d10);
-        _render_game  = new(this, "FFX.exe", h_render_game,  offset: FhCall.__addr_TODrawMessageWindow);
+        _main_loop    = new(this, "FFX.exe", h_main_loop,    offset: 0x420C00);
+        _update_input = new(this, "FFX.exe", h_update_input, offset: 0x471d10);
+        _render_game  = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
     }
 
     public override bool init(FileStream global_state_file) {
@@ -58,7 +81,7 @@ public unsafe class FhCoreModule : FhModule {
         float  scale
     ) {
         fixed (byte* text_ptr = text)
-            FhUtil.get_fptr<FhCall.TOMkpCrossExtMesFontLClutTypeRGBA>(FhCall.__addr_TOMkpCrossExtMesFontLClutTypeRGBA)
+            FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700)
                 (0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
     }
 
