@@ -8,6 +8,9 @@ public enum FhStringType {
 
 public record struct FhPointerDeref(nint Offset, bool AsPtr);
 
+/// <summary>
+///     A small helper structure for reading from and writing to pointers.
+/// </summary>
 public unsafe readonly struct FhPointer {
 
     private readonly static List<nint>       _pending_waits;
@@ -24,23 +27,9 @@ public unsafe readonly struct FhPointer {
     }
 
     /* [fkelava 23/6/23 14:03]
-     * Some one-liners require a hefty explanation. This one does. READ IT CAREFULLY.
-     *
-     * Unsafe.Read/Write<T> does not require a constraint. The constraint is there to make evident that
-     * > there must be SizeOf<T>() bytes of readable memory available starting at the location pointed to {...}
-     *
-     * The SizeOf<T> in question is `Unsafe.SizeOf<T>`, which returns the size of the `managed` view of T.
-     * > If T is a reference type, the return value is the size of the reference itself (sizeof(void*)) {...}
-     *
-     * Hence `where T : struct`. HOWEVER, additionally, the struct in question _must_ _exactly_
-     * represent its unmanaged equivalent (or at least be blittable). In short,
-     * `Marshal.SizeOf<T>` and `Unsafe.SizeOf<T>` must be equal. For instance:
-     *
-     * public struct TestStructA { public uint A; }
-     * public struct TestStructB { [MarshalAs(UnmanagedType.Bool)] public bool A; }
-     *
-     * TestStructA is valid. An `uint` is blittable, 4 bytes in managed and unmanaged view.
-     * TestStructB is invalid. A `bool` marshaled as Win32 BOOL is 1 byte managed, 4 bytes unmanaged. The request is invalid and Fahrenheit will crash the game before you do.
+     * FhPointer only supports blittable types. Blittable types require no marshalling logic, or more simply,
+     * have an identical representation in unmanaged and managed code.
+     * https://learn.microsoft.com/en-us/dotnet/framework/interop/blittable-and-non-blittable-types
      */
     private static void throw_if_type_parameter_invalid<T>() where T : unmanaged {
         if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_UNSAFE_OPERATION: {typeof(T).FullName}");
