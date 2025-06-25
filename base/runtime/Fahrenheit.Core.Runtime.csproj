@@ -40,10 +40,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\imgui\Fahrenheit.Core.ImGuiNET.csproj">
-            <Private>false</Private>
-            <ExcludeAssets>runtime</ExcludeAssets>
-        </ProjectReference>
+        <ProjectReference Include="..\imgui\Fahrenheit.Core.ImGuiNET.csproj" />
         <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>

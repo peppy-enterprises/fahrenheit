@@ -32,7 +32,7 @@ public unsafe readonly struct FhPointer {
      * https://learn.microsoft.com/en-us/dotnet/framework/interop/blittable-and-non-blittable-types
      */
     private static void throw_if_type_parameter_invalid<T>() where T : unmanaged {
-        if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_UNSAFE_OPERATION: {typeof(T).FullName}");
+        if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_TYPE_NOT_BLITTABLE: {typeof(T).FullName}");
     }
 
     public static IEnumerable<nint> get_pending_wait_addresses() {
