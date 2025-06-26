@@ -120,26 +120,14 @@ public static unsafe class FhUtil {
         return be;
     }
 
-    /* [fkelava 29/3/23 03:33]
-     * IDE0071 wants you to simplify interpolations by removing the ToString() call.
-     *
-     * Don't- the simplified syntax is not a zero-cost abstraction, but rather involves boxing and unboxing of value types. An explicit string conversion
-     * both eliminates that instance of boxing _and_ allows string.Concat() to be emitted in the actual string construction IL.
-     *
-     * https://github.com/dotnet/roslyn/issues/43711. Yes, I know that technically https://github.com/dotnet/roslyn/issues/55240, but it
-     * costs me nothing to include the .ToString() explicitly as opposed to guessing whether the compiler will reduce it.
-     */
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string get_timestamp_string() {
         DateTime dt = DateTime.UtcNow;
-        return $"{dt.Day.ToString("D2")}{dt.Month.ToString("D2")}{dt.Year.ToString("D2")}_{dt.Hour.ToString("D2")}{dt.Minute.ToString("D2")}{dt.Second.ToString("D2")}";
+        return $"{dt.Day:D2}{dt.Month:D2}{dt.Year:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}";
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string get_extended_timestamp_string() {
         DateTime dt = DateTime.UtcNow;
-        return $"{dt.Day.ToString("D2")}{dt.Month.ToString("D2")}{dt.Year.ToString("D2")}_{dt.Hour.ToString("D2")}{dt.Minute.ToString("D2")}{dt.Second.ToString("D2")}.{dt.Millisecond.ToString("D3")}";
+        return $"{dt.Day:D2}{dt.Month:D2}{dt.Year:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}.{dt.Millisecond:D3}";
     }
 
     internal static JsonSerializerOptions InternalJsonOpts { get; } = new JsonSerializerOptions {
