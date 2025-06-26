@@ -163,7 +163,7 @@ public unsafe class FhImguiModule : FhModule {
         _h_WndProc             = h_wndproc;
     }
 
-    public override bool init(FileStream global_state_file) {
+    public override bool init(FhModContext mod_context, FileStream global_state_file) {
         return _handle_d3d11_init  .hook()
             && _handle_wndproc_init.hook()
             && _handle_input_update.hook();

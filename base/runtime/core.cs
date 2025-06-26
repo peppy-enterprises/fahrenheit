@@ -35,7 +35,7 @@ public unsafe class FhCoreModule : FhModule {
         _render_game  = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
     }
 
-    public override bool init(FileStream global_state_file) {
+    public override bool init(FhModContext mod_context, FileStream global_state_file) {
         return _main_loop   .hook()
             && _update_input.hook()
             && _render_game .hook();

@@ -41,7 +41,7 @@ public unsafe class FhLocalStateModule : FhModule {
         _handle_onlist     = new(this, "FFX.exe", h_onlist,     offset: 0x2F0DA0);
     }
 
-    public override bool init(FileStream global_state_file) {
+    public override bool init(FhModContext mod_context, FileStream global_state_file) {
         return _handle_onload    .hook()
             && _handle_onsave    .hook()
             && _handle_onautosave.hook()

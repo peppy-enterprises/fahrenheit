@@ -81,7 +81,7 @@ public class FhModController {
                     FhModule   fm       = module_ctx.Module;
                     FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
-                    if (!fm.init(fm_state)) {
+                    if (!fm.init(mod_ctx, fm_state)) {
                         FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed. Suppressing.");
                         continue;
                     }

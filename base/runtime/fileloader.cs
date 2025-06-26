@@ -104,7 +104,7 @@ public unsafe class FhFileLoaderModule : FhModule {
         return new nint(this_ptr);
     }
 
-    public override bool init(FileStream global_state_file) {
+    public override bool init(FhModContext mod_context, FileStream global_state_file) {
         construct_index();
         return _h_pstream_ctor.hook();
     }

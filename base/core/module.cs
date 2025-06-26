@@ -77,7 +77,7 @@ public abstract class FhModule {
         get { return _module_type_name; }
     }
 
-    public abstract bool init(FileStream global_state_file);
+    public abstract bool init(FhModContext mod_context, FileStream global_state_file);
 
     /// <summary>
     ///     Called when the game saves, allowing the module to save state specific to that save game.
