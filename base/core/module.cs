@@ -5,9 +5,9 @@
 ///     Contains its <see cref="FhManifest"/> and a <see cref="FhModuleContext"/> for each of its constituent modules.
 /// </summary>
 public sealed record FhModContext {
-    internal readonly FhModPathInfo         Paths;
-    public   readonly FhManifest            Manifest;
-    public   readonly List<FhModuleContext> Modules;
+    public readonly FhModPathInfo         Paths;
+    public readonly FhManifest            Manifest;
+    public readonly List<FhModuleContext> Modules;
 
     internal FhModContext(
         FhManifest            manifest,
