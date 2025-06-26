@@ -1,0 +1,7 @@
+<Project>	
+	<PropertyGroup>
+        <BaseIntermediateOutputPath>$(SolutionDir)artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+        <OutDir>$(SolutionDir)artifacts\localdeploy\bin\</OutDir>
+        <Company>https://github.com/peppy-enterprises/fahrenheit</Company>
+	</PropertyGroup>
+</Project>

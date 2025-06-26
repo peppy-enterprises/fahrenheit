@@ -23,11 +23,11 @@ internal static unsafe partial class PInvoke {
 
     [LibraryImport("user32.dll")]
     internal static partial nint CallWindowProcW(
-        nint lpPrevWndFunc,
-        nint hWnd,
-        uint msg,
-        nint wParam,
-        nint lParam);
+        nint  lpPrevWndFunc,
+        nint  hWnd,
+        uint  msg,
+        nuint wParam,
+        nint  lParam);
 
     [LibraryImport("user32.dll")]
     internal static partial nint GetWindowLongA(
@@ -55,25 +55,12 @@ internal static unsafe partial class PInvoke {
     internal static partial void WakeByAddressAll(
         void* Address);
 
-#if DEBUG
-    public const string cimgui_lib_name = "cimguid.dll";
-#else
-    public const string cimgui_lib_name = "cimgui.dll";
-#endif
-
-    [DllImport(cimgui_lib_name)]
-    public static extern nint ImGui_ImplWin32_WndProcHandler(
-        nint hWnd,
-        uint msg,
-        nint wParam,
-        nint lParam);
-
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate nint WndProcDelegate(
-        nint hWnd,
-        uint msg,
-        nint wParam,
-        nint lParam);
+        nint  hWnd,
+        uint  msg,
+        nuint wParam,
+        nint  lParam);
 
     /* [fkelava 6/10/2024 00:57]
      * https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-d3d11createdeviceandswapchain

@@ -1,3 +1,6 @@
+using Hexa.NET.ImGui.Backends.D3D11;
+using Hexa.NET.ImGui.Backends.Win32;
+
 using static Fahrenheit.Core.Runtime.PInvoke;
 
 namespace Fahrenheit.Core.Runtime;
@@ -161,18 +164,18 @@ public unsafe class FhImguiModule : FhModule {
     }
 
     public override bool init(FileStream global_state_file) {
-        return _handle_d3d11_init.hook()
+        return _handle_d3d11_init  .hook()
             && _handle_wndproc_init.hook()
             && _handle_input_update.hook();
     }
 
     private void init_imgui() {
-        if (_hWnd == 0        ||                        // h_init_wndproc hasn't run yet?
+        if (_hWnd     == 0    ||                        // h_init_wndproc hasn't run yet?
             _p_device == null || _p_device_ctx == null) // h_init_d3d11 hasn't run yet?
             return;
 
-        ImGui.CreateContext();
-        ImGuiIOPtr io = ImGui.GetIO();
+        ImGuiContextPtr ctx = ImGui.CreateContext();
+        ImGuiIOPtr      io  = ImGui.GetIO();
 
         // Enable controls
         io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
@@ -180,8 +183,13 @@ public unsafe class FhImguiModule : FhModule {
 
         ImGui.StyleColorsDark();
 
-        ImGui.ImGui_ImplWin32_Init(_hWnd);
-        ImGui.ImGui_ImplDX11_Init (_p_device, _p_device_ctx);
+        ID3D11DevicePtr        ptr_device     = new((ID3D11Device*)       _p_device);
+        ID3D11DeviceContextPtr ptr_device_ctx = new((ID3D11DeviceContext*)_p_device_ctx);
+
+        ImGuiImplWin32.SetCurrentContext(ctx);
+        ImGuiImplWin32.Init(_hWnd);
+        ImGuiImplD3D11.SetCurrentContext(ctx);
+        ImGuiImplD3D11.Init(ptr_device, ptr_device_ctx);
     }
 
     private nint h_init_wndproc() {
@@ -228,7 +236,7 @@ public unsafe class FhImguiModule : FhModule {
         _p_device_ctx = *ppImmediateContext;
 
         _swap_chain_GetBuffer          = Marshal.GetDelegateForFunctionPointer<DXGISwapChain_GetBuffer>              (_vtbl_swap_chain[9]);
-        _device_CreateRenderTargetView = Marshal.GetDelegateForFunctionPointer<D3D11Device_CreateRenderTargetView>   (_vtbl_device[9]);
+        _device_CreateRenderTargetView = Marshal.GetDelegateForFunctionPointer<D3D11Device_CreateRenderTargetView>   (_vtbl_device    [9]);
         _device_ctx_OMSetRenderTargets = Marshal.GetDelegateForFunctionPointer<D3D11DeviceContext_OMSetRenderTargets>(_vtbl_device_ctx[33]);
 
         _handle_present        = new(this, _vtbl_swap_chain[8],  h_present);
@@ -248,18 +256,18 @@ public unsafe class FhImguiModule : FhModule {
     }
 
     public nint h_wndproc(
-        nint hWnd,
-        uint msg,
-        nint wParam,
-        nint lParam) {
-        return PInvoke.ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) == 1
+        nint  hWnd,
+        uint  msg,
+        nuint wParam,
+        nint  lParam) {
+        return ImGuiImplWin32.WndProcHandler(hWnd, msg, wParam, lParam) == 1
              ? 1
              : PInvoke.CallWindowProcW(_ptr_o_WndProc, hWnd, msg, wParam, lParam);
     }
 
     public int h_input_update() {
-        if (_hWnd == 0              // h_init_wndproc hasn't run yet?
-         || _p_device == null       // h_init_d3d11 hasn't run yet?
+        if (_hWnd         == 0    // h_init_wndproc hasn't run yet?
+         || _p_device     == null // h_init_d3d11 hasn't run yet?
          || _p_device_ctx == null)
             return _handle_input_update.orig_fptr();
 
@@ -314,8 +322,8 @@ public unsafe class FhImguiModule : FhModule {
             _present_init_complete = true;
         }
 
-        ImGui.ImGui_ImplDX11_NewFrame();
-        ImGui.ImGui_ImplWin32_NewFrame();
+        ImGuiImplD3D11.NewFrame();
+        ImGuiImplWin32.NewFrame();
 
         ImGui.NewFrame();
 
@@ -331,7 +339,7 @@ public unsafe class FhImguiModule : FhModule {
             _device_ctx_OMSetRenderTargets(_p_device_ctx, 1, ppRenderTargetView, null);
         }
 
-        ImGui.ImGui_ImplDX11_RenderDrawData(ImGui.GetDrawData());
+        ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
         return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
     }
 }
