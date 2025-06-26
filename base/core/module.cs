@@ -77,6 +77,14 @@ public abstract class FhModule {
         get { return _module_type_name; }
     }
 
+    /// <summary>
+    ///     Your module should perform all Fahrenheit-related initialization here. At the time this is called, all mods have been loaded, and:
+    ///     <br/>
+    ///     <br/> - you may call <see cref="FhModuleHandle{T}.try_acquire"/> to obtain references to other modules;
+    ///     <br/> - you receive a copy of the containing mod's <see cref="FhModContext"/>;
+    ///     <br/> - you receive a <see cref="FileStream"/> of the global state file for your module;
+    /// </summary>
+    /// <returns>Whether initialization succeeded. If <see cref="false"/>, an error is shown to the user, but execution continues.</returns>
     public abstract bool init(FhModContext mod_context, FileStream global_state_file);
 
     /// <summary>
@@ -89,9 +97,21 @@ public abstract class FhModule {
     /// </summary>
     public virtual void load_local_state(FileStream local_state_file, FhLocalStateInfo local_state_info) { }
 
-    public virtual void pre_update()   { }
-    public virtual void post_update()  { }
-    public virtual void handle_input() { }
+    /// <summary>
+    ///     Called before every main loop execution.
+    /// </summary>
+    public virtual void pre_update() { }
+
+    /// <summary>
+    ///     Called after every main loop execution.
+    /// </summary>
+    public virtual void post_update() { }
+
+    /// <summary>
+    ///     Called just before <see href="https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-present">
+    ///     IDXGISwapChain::Present</see> time. You may freely invoke ImGui methods here, and <i>only</i> here.
+    /// </summary>
     public virtual void render_imgui() { }
     public virtual void render_game()  { }
+    public virtual void handle_input() { }
 }
