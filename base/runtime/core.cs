@@ -23,6 +23,15 @@ public unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
         float scale,
         float _);
 
+/// <summary>
+///     Executes the lifecycle methods of <see cref="FhModule"/>.
+///     <para/>
+///     Do not interface with this module directly. Instead, implement:
+///     <br/> - <see cref="FhModule.pre_update"/>
+///     <br/> - <see cref="FhModule.post_update"/>
+///     <br/> - <see cref="FhModule.render_game"/>
+///     <br/> - <see cref="FhModule.render_imgui"/>
+/// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
@@ -41,7 +50,7 @@ public unsafe class FhCoreModule : FhModule {
             && _render_game .hook();
     }
 
-    public void h_main_loop(float delta) {
+    private void h_main_loop(float delta) {
         foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.pre_update();
@@ -61,7 +70,7 @@ public unsafe class FhCoreModule : FhModule {
         }
     }
 
-    public void h_update_input() {
+    private void h_update_input() {
         FFX.Globals.Input.update();
 
         _update_input.orig_fptr();
@@ -73,7 +82,7 @@ public unsafe class FhCoreModule : FhModule {
         }
     }
 
-    public static void draw_text_rgba(
+    private static void draw_text_rgba(
         byte[] text,
         float  x,
         float  y,
@@ -85,7 +94,7 @@ public unsafe class FhCoreModule : FhModule {
                 (0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
     }
 
-    public new void h_render_game() {
+    private void h_render_game() {
         _render_game.orig_fptr();
 
         foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {

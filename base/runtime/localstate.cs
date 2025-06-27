@@ -20,12 +20,16 @@ internal readonly struct FhSaveListEntry {
 
 /// <summary>
 ///     Implements the 'local state' and 'separate saves' mechanisms of Fahrenheit.
-///     <para></para>
+///     <para/>
 ///     'Local state' is a unique file for each save that <see cref="FhModule"/>s have access to at save/load time.
 ///     This allows information unique to that save game to be persisted to disk.
-///     <para></para>
+///     <para/>
 ///     'Separate saves' is a mechanism by which mods can restrict the visibility of save games
 ///     made using them. If such a mod is no longer loaded, these saves will not appear in the load menu.
+///     <para/>
+///     Do not interface with this module directly. Instead, implement:
+///     <br/> - <see cref="FhModule.load_local_state(FileStream, FhLocalStateInfo)"/>
+///     <br/> - <see cref="FhModule.save_local_state(FileStream)"/>
 /// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhLocalStateModule : FhModule {
@@ -130,7 +134,7 @@ public unsafe class FhLocalStateModule : FhModule {
     }
 
     [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
-    public void h_onload(int menu_selection_index) {
+    private void h_onload(int menu_selection_index) {
         foreach (FhModContext mod_context in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_context in mod_context.Modules) {
                 string module_type   = module_context.Module.ModuleType;

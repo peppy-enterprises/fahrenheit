@@ -110,6 +110,8 @@ public delegate int PInputUpdate();
 
 /// <summary>
 ///     Provides the ability to use the ImGui GUI toolkit within the game.
+///     <para/>
+///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_imgui"/>.
 /// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhImguiModule : FhModule {

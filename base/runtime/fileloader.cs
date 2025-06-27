@@ -14,6 +14,15 @@ public unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_pt
 
 /// <summary>
 ///     Provides the ability to replace files loaded by the game with files outside the VBF archives.
+///     <para/>
+///     Do not interface with this module directly. Instead, place any files you wish to use in this way
+///     in the <b>efl\x</b> or <b>efl\x2</b> subdirectory of your mod folder.
+///     <para/>
+///     These subdirectories are treated as the root of the VBF archive for their respective games;
+///     from that point, you must mirror the VBF's directory structure.
+///     <para/>
+///     For example, to replace <b>FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>,
+///     the full path is <b>{...}\efl\x\FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>.
 /// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhFileLoaderModule : FhModule {
@@ -23,6 +32,11 @@ public unsafe class FhFileLoaderModule : FhModule {
     public FhFileLoaderModule() {
         _index          = [];
         _h_pstream_ctor = new(this, "FFX.exe", h_pstream_ctor, offset: 0x207D80);
+    }
+
+    public override bool init(FhModContext mod_context, FileStream global_state_file) {
+        construct_index();
+        return _h_pstream_ctor.hook();
     }
 
     private static string normalize_path(string path) {
@@ -35,7 +49,7 @@ public unsafe class FhFileLoaderModule : FhModule {
             : prefixless_path;
     }
 
-    public void construct_index() {
+    private void construct_index() {
         Stopwatch index_swatch     = Stopwatch.StartNew();
         string    data_subdir_name = FhGlobal.game_type switch {
             FhGameType.FFX  => "x",
@@ -102,10 +116,5 @@ public unsafe class FhFileLoaderModule : FhModule {
 
         _logger.Info($"{path} -> {modded_path}");
         return new nint(this_ptr);
-    }
-
-    public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        construct_index();
-        return _h_pstream_ctor.hook();
     }
 }
