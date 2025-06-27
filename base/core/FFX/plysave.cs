@@ -99,7 +99,7 @@ public enum OverdriveModeFlags : uint {
     AEONS     = 1 << 19,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool warrior  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.WARRIOR);
     public static bool comrade  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.COMRADE);
     public static bool stoic    (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.STOIC);

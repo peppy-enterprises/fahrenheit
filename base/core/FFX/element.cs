@@ -9,7 +9,7 @@ public enum ElementFlags : byte {
     HOLY    = 1 << 4,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool fire   (this ElementFlags flags) => flags.HasFlag(ElementFlags.FIRE);
     public static bool ice    (this ElementFlags flags) => flags.HasFlag(ElementFlags.ICE);
     public static bool thunder(this ElementFlags flags) => flags.HasFlag(ElementFlags.THUNDER);

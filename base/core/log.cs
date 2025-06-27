@@ -2,7 +2,7 @@
 
 namespace Fahrenheit.Core;
 
-public enum LogLevel {
+public enum FhLogLevel {
     Trace   = 0,
     Debug   = 1,
     Info    = 2,
@@ -19,7 +19,7 @@ public class FhLogger {
 #if DEBUG
     private const LogLevel MinLevel = LogLevel.Debug;
 #else
-    private const LogLevel MinLevel = LogLevel.Info;
+    private const FhLogLevel MinLevel = FhLogLevel.Info;
 #endif
 
     private readonly TextWriterTraceListener _console;
@@ -32,7 +32,7 @@ public class FhLogger {
         _file    = new TextWriterTraceListener(File.Open(log_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite));
     }
 
-    public void Log(                   LogLevel level,
+    public void Log(                   FhLogLevel level,
                                        string   msg,
                     [CallerMemberName] string   mname = "",
                     [CallerFilePath]   string   fpath = "",
@@ -49,34 +49,34 @@ public class FhLogger {
                       [CallerMemberName] string mname = "",
                       [CallerFilePath]   string fpath = "",
                       [CallerLineNumber] int    lnb   = 0) {
-        Log(LogLevel.Debug, msg, mname, fpath, lnb);
+        Log(FhLogLevel.Debug, msg, mname, fpath, lnb);
     }
 
     public void Info(                   string msg,
                      [CallerMemberName] string mname = "",
                      [CallerFilePath]   string fpath = "",
                      [CallerLineNumber] int    lnb   = 0) {
-        Log(LogLevel.Info, msg, mname, fpath, lnb);
+        Log(FhLogLevel.Info, msg, mname, fpath, lnb);
     }
 
     public void Warning(                   string msg,
                         [CallerMemberName] string mname = "",
                         [CallerFilePath]   string fpath = "",
                         [CallerLineNumber] int    lnb   = 0) {
-        Log(LogLevel.Warning, msg, mname, fpath, lnb);
+        Log(FhLogLevel.Warning, msg, mname, fpath, lnb);
     }
 
     public void Error(                   string msg,
                       [CallerMemberName] string mname = "",
                       [CallerFilePath]   string fpath = "",
                       [CallerLineNumber] int    lnb   = 0) {
-        Log(LogLevel.Error, msg, mname, fpath, lnb);
+        Log(FhLogLevel.Error, msg, mname, fpath, lnb);
     }
 
     public void Fatal(                   string msg,
                       [CallerMemberName] string mname = "",
                       [CallerFilePath]   string fpath = "",
                       [CallerLineNumber] int    lnb   = 0) {
-        Log(LogLevel.Fatal, msg, mname, fpath, lnb);
+        Log(FhLogLevel.Fatal, msg, mname, fpath, lnb);
     }
 }

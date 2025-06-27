@@ -48,7 +48,7 @@ public enum StatIncreaseFlags : ushort {
     MAGIC_DEFENSE_BONUS = 1 << 13,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool strength     (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.STRENGTH);
     public static bool defense      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.DEFENSE);
     public static bool magic        (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC);
