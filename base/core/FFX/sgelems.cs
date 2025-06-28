@@ -43,15 +43,15 @@ public unsafe struct SphereGridLink {
     public readonly SphereGridNode anchor => Globals.SphereGrid.lpamng->nodes[anchor_idx];
 
     public Vector2 get_midpoint() {
-        int mid_point_idx = (point_count - 1) / 2;
-        var mid_point = points + mid_point_idx;
+        int                  mid_point_idx = (point_count - 1) / 2;
+        SphereGridLinkPoint* mid_point     = points + mid_point_idx;
 
         if (point_count % 2 == 1) {
             return mid_point->pos;
         }
 
-        int mid_point2_idx = mid_point_idx + 1;
-        var mid_point2 = points + mid_point2_idx;
+        int                  mid_point2_idx = mid_point_idx + 1;
+        SphereGridLinkPoint* mid_point2     = points + mid_point2_idx;
 
         return (mid_point->pos + mid_point2->pos) / 2f;
     }

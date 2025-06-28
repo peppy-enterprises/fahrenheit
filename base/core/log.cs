@@ -17,7 +17,7 @@ public enum FhLogLevel {
 /// </summary>
 public class FhLogger {
 #if DEBUG
-    private const LogLevel MinLevel = LogLevel.Debug;
+    private const FhLogLevel MinLevel = FhLogLevel.Debug;
 #else
     private const FhLogLevel MinLevel = FhLogLevel.Info;
 #endif
@@ -33,10 +33,10 @@ public class FhLogger {
     }
 
     public void Log(                   FhLogLevel level,
-                                       string   msg,
-                    [CallerMemberName] string   mname = "",
-                    [CallerFilePath]   string   fpath = "",
-                    [CallerLineNumber] int      lnb   = 0) {
+                                       string     msg,
+                    [CallerMemberName] string     mname = "",
+                    [CallerFilePath]   string     fpath = "",
+                    [CallerLineNumber] int        lnb   = 0) {
         if (level < MinLevel) return;
         string lstr = $"{DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}";
 

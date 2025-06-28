@@ -14,8 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core", "base\cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core.Runtime", "base\runtime\Fahrenheit.Core.Runtime.csproj", "{AA228653-784C-4FA2-84D2-DD5946D843AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.ModManager", "base\modmgr\Fahrenheit.Core.ModManager.csproj", "{BC69BBA6-76BC-4C28-B53A-765CEF94BDFD}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage0", "base\stage0\Fahrenheit.Loader.Stage0.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage1", "base\stage1\Fahrenheit.Loader.Stage1.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
@@ -35,6 +33,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Tools.DEdit", "tools\dedit\Fahrenheit.Tools.DEdit.csproj", "{6431D61B-0748-453E-844A-580D3C6C41D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Tools.STEP", "tools\step\Fahrenheit.Tools.STEP.csproj", "{5EB95380-0B38-4E7A-AC80-46426271DFC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Tools.ModManager", "tools\modmgr\Fahrenheit.Tools.ModManager.csproj", "{BC69BBA6-76BC-4C28-B53A-765CEF94BDFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

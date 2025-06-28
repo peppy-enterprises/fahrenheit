@@ -37,8 +37,7 @@
     <ItemGroup>
         <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
             <Private>false</Private>
-            <!-- Hack due to NuGet's complete inability to properly handle transitive native deps -->
-            <IncludeAssets>compile</IncludeAssets>
+            <ExcludeAssets>runtime;native</ExcludeAssets>
         </ProjectReference>
     </ItemGroup>
 

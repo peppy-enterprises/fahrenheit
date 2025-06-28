@@ -7,18 +7,15 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     </PropertyGroup>
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
+        <ApplicationIcon>..\..\assets\fh_base_256.ico</ApplicationIcon>
         <AssemblyName>fhmodmgr</AssemblyName>
         <AssemblyTitle>Fahrenheit Mod Manager</AssemblyTitle>
         <Product>Fahrenheit Mod Manager</Product>
-    </PropertyGroup>
-
-    <!-- LOCAL DEPLOYMENT TARGET -->
-    <PropertyGroup>
-        <CopyToDir>$(SolutionDir)artifacts\localdeploy\bin</CopyToDir>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -32,13 +29,13 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
-            <Private>false</Private>
-            <ExcludeAssets>runtime</ExcludeAssets>
+        <ProjectReference Include="..\..\base\core\Fahrenheit.Core.csproj">
+            <ExcludeAssets Condition="'$(Configuration)'=='Release'">runtime;native</ExcludeAssets>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
     </ItemGroup>
 
-    <!-- AVALONIA SPECIFIC -->
+    <!-- AVALONIA SPECIFIC BEGIN -->
     <PropertyGroup>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -55,12 +52,14 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
-        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <!-- Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration. -->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.0">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     </ItemGroup>
+
+    <!-- AVALONIA SPECIFIC END -->
 
 </Project>

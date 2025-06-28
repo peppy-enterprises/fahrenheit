@@ -1,7 +1,11 @@
 <Project>	
 	<PropertyGroup>
+        <!-- Do not mix debug and release artifacts in 'localdeploy' -->
+        <_FhLocalDeploySubDir Condition="'$(Configuration)'=='Release'">rel</_FhLocalDeploySubDir>
+        <_FhLocalDeploySubDir Condition="'$(Configuration)'=='Debug'">dbg</_FhLocalDeploySubDir>
+    
         <BaseIntermediateOutputPath>$(SolutionDir)artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-        <OutDir>$(SolutionDir)artifacts\localdeploy\bin\</OutDir>
+        <OutDir>$(SolutionDir)artifacts\localdeploy\$(_FhLocalDeploySubDir)\bin\</OutDir>
         <Company>https://github.com/peppy-enterprises/fahrenheit</Company>
 	</PropertyGroup>
 </Project>
