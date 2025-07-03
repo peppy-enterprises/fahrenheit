@@ -27,9 +27,11 @@ public unsafe readonly struct FhPointer {
     }
 
     /* [fkelava 23/6/23 14:03]
-     * FhPointer only supports blittable types. Blittable types require no marshalling logic, or more simply,
-     * have an identical representation in unmanaged and managed code.
-     * https://learn.microsoft.com/en-us/dotnet/framework/interop/blittable-and-non-blittable-types
+     * FhPointer only operates correctly on blittable types. Blittable types have an identical representation
+     * in unmanaged and managed code. https://learn.microsoft.com/en-us/dotnet/framework/interop/blittable-and-non-blittable-types
+     *
+     * There is no definitive way to know if a type is blittable short of following the spec.
+     * This simply checks for obvious cases like Win32 BOOL vs. .NET 'bool'. Do not assume validity just because this passes.
      */
     private static void throw_if_type_parameter_invalid<T>() where T : unmanaged {
         if (Marshal.SizeOf<T>() != Unsafe.SizeOf<T>()) throw new Exception($"FH_E_DPTR_TYPE_NOT_BLITTABLE: {typeof(T).FullName}");

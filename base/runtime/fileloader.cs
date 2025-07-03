@@ -61,16 +61,16 @@ public unsafe class FhFileLoaderModule : FhModule {
         FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
 
         foreach (FhModContext mod in mods) {
-            efl_data_dir = normalize_path(Path.Join(mod.Paths.EflDir.FullName, data_subdir_name));
+            efl_data_dir = Path.Join(mod.Paths.EflDir.FullName, data_subdir_name);
             if (!Directory.Exists(efl_data_dir)) continue;
 
             foreach (string absolute_mod_file_path in Directory.GetFiles(efl_data_dir, "*.*", SearchOption.AllDirectories)) {
                 string nt_absolute_mod_file_path = @$"\\?\{absolute_mod_file_path}";
                 string relative_mod_file_path    = Path.GetRelativePath(efl_data_dir, absolute_mod_file_path);
                 string normalized_relative_path  = normalize_path(relative_mod_file_path);
-                string normalized_absolute_path  = normalize_path(OperatingSystem.IsWindows()
+                string normalized_absolute_path  = OperatingSystem.IsWindows()
                     ? nt_absolute_mod_file_path
-                    : absolute_mod_file_path);
+                    : absolute_mod_file_path;
 
                 if (_index.ContainsKey(normalized_relative_path)) {
                     _logger.Warning($"{normalized_relative_path} is being superseded by mod {mod.Manifest.Name}");
