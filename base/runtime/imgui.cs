@@ -1,6 +1,3 @@
-using TerraFX.Interop.DirectX;
-using TerraFX.Interop.Windows;
-
 using static Fahrenheit.Core.Runtime.PInvoke;
 
 /* [fkelava 5/7/25 14:16]
@@ -70,7 +67,7 @@ public unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhImguiModule : FhModule {
     // WndProc support
-    private          nint                              _hWnd;
+    private          HWND                              _hWnd;
     private          nint                              _ptr_o_WndProc;
     private          nint                              _ptr_h_WndProc;
     private readonly WndProcDelegate                   _h_WndProc;
@@ -129,10 +126,10 @@ public unsafe class FhImguiModule : FhModule {
     private nint h_init_wndproc() {
         nint result = _handle_wndproc_init.orig_fptr();
 
-        _hWnd          = FhUtil.get_at<nint>(0x8C9CE8);
+        _hWnd          = (HWND)FhUtil.get_at<nint>(0x8C9CE8);
         _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
-        _ptr_o_WndProc = PInvoke.GetWindowLongA(_hWnd, PInvoke.GWLP_WNDPROC);
-        int _          = PInvoke.SetWindowLongA(_hWnd, PInvoke.GWLP_WNDPROC, _ptr_h_WndProc);
+        _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
+        nint _         = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
 
         init_imgui();
         return result;

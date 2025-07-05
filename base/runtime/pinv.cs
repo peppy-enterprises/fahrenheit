@@ -19,7 +19,6 @@ internal static unsafe partial class PInvoke {
     internal const uint OPEN_EXISTING             = 3;
     internal const uint OPEN_ALWAYS               = 4;
     internal const uint FILE_FLAG_SEQUENTIAL_SCAN = 0x08000000;
-    internal const int  GWLP_WNDPROC              = -4;
 
     [LibraryImport("user32.dll")]
     internal static partial nint CallWindowProcW(
@@ -28,27 +27,6 @@ internal static unsafe partial class PInvoke {
         uint  msg,
         nuint wParam,
         nint  lParam);
-
-    [LibraryImport("user32.dll")]
-    internal static partial nint GetWindowLongA(
-        nint hWnd,
-        int  nIndex);
-
-    [LibraryImport("user32.dll")]
-    internal static partial int SetWindowLongA(
-        nint hWnd,
-        int  nIndex,
-        nint dwNewLong);
-
-    // hacky
-    [LibraryImport("user32.dll",
-        EntryPoint                  = "FindWindowA",
-        SetLastError                = true,
-        StringMarshalling           = StringMarshalling.Custom,
-        StringMarshallingCustomType = typeof(System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
-    internal static partial nint FindWindow(
-        string? lpClassName,
-        string  lpWindowName);
 
     [LibraryImport("kernelbase.dll",
         SetLastError = true)]
