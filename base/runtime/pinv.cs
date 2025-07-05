@@ -61,23 +61,4 @@ internal static unsafe partial class PInvoke {
         uint  msg,
         nuint wParam,
         nint  lParam);
-
-    /* [fkelava 6/10/2024 00:57]
-     * https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-d3d11createdeviceandswapchain
-     */
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate nint D3D11CreateDeviceAndSwapChain(
-        nint*  pAdapter,
-        nint   DriverType,
-        nint   Software,
-        uint   Flags,
-        nint*  pFeatureLevels,
-        uint   FeatureLevels,
-        uint   SDKVersion,
-        nint*  pSwapChainDesc,
-        nint** ppSwapChain,
-        nint** ppDevice,
-        nint*  pFeatureLevel,
-        nint** ppImmediateContext);
 }
