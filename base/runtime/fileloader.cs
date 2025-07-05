@@ -39,6 +39,9 @@ public unsafe class FhFileLoaderModule : FhModule {
         return _h_pstream_ctor.hook();
     }
 
+    /// <summary>
+    ///     Normalizes the relative paths the game uses to address files in the VBF archives.
+    /// </summary>
     private static string normalize_path(string path) {
         string host0_fixed_path  = path.Replace("host0:", "ffx_ps2");
         int    stream_prefix_end = host0_fixed_path.IndexOf('f', StringComparison.InvariantCultureIgnoreCase);
