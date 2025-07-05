@@ -53,39 +53,39 @@ public unsafe class FhFileLoaderModule : FhModule {
     }
 
     private void construct_index() {
-        Stopwatch index_swatch     = Stopwatch.StartNew();
-        string    data_subdir_name = FhGlobal.game_type switch {
+        Stopwatch index_timer     = Stopwatch.StartNew();
+        string    efl_subdir_name = FhGlobal.game_type switch {
             FhGameType.FFX  => "x",
             FhGameType.FFX2 => "x2",
             _               => throw new Exception("FH_E_INVALID_GAME_TYPE"),
         };
 
-        string         efl_data_dir;
+        string         path_efl_dir;
         FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
 
         foreach (FhModContext mod in mods) {
-            efl_data_dir = Path.Join(mod.Paths.EflDir.FullName, data_subdir_name);
-            if (!Directory.Exists(efl_data_dir)) continue;
+            path_efl_dir = Path.Join(mod.Paths.EflDir.FullName, efl_subdir_name);
+            if (!Directory.Exists(path_efl_dir)) continue;
 
-            foreach (string absolute_mod_file_path in Directory.GetFiles(efl_data_dir, "*.*", SearchOption.AllDirectories)) {
-                string nt_absolute_mod_file_path = @$"\\?\{absolute_mod_file_path}";
-                string relative_mod_file_path    = Path.GetRelativePath(efl_data_dir, absolute_mod_file_path);
-                string normalized_relative_path  = normalize_path(relative_mod_file_path);
-                string normalized_absolute_path  = OperatingSystem.IsWindows()
-                    ? nt_absolute_mod_file_path
-                    : absolute_mod_file_path;
+            foreach (string path_efl_file in Directory.GetFiles(path_efl_dir, "*.*", SearchOption.AllDirectories)) {
+                string path_absolute_nt         = @$"\\?\{path_efl_file}";
+                string path_relative            = Path.GetRelativePath(path_efl_dir, path_efl_file);
+                string path_relative_normalized = normalize_path(path_relative);
+                string path_absolute = OperatingSystem.IsWindows()
+                    ? path_absolute_nt
+                    : path_efl_file;
 
-                if (_index.ContainsKey(normalized_relative_path)) {
-                    _logger.Warning($"{normalized_relative_path} is being superseded by mod {mod.Manifest.Name}");
+                if (_index.ContainsKey(path_relative_normalized)) {
+                    _logger.Warning($"{path_relative_normalized} is being superseded by mod {mod.Manifest.Name}");
                 }
 
-                _index[normalized_relative_path] = normalized_absolute_path;
-                _logger.Info($"Mod {mod.Manifest.Name} replaces file {normalized_relative_path}");
+                _index[path_relative_normalized] = path_absolute;
+                _logger.Info($"Mod {mod.Manifest.Name} replaces file {path_relative_normalized}");
             }
         }
 
-        index_swatch.Stop();
-        _logger.Warning($"EFL indexing complete in {index_swatch.ElapsedMilliseconds} ms.");
+        index_timer.Stop();
+        _logger.Warning($"EFL indexing complete in {index_timer.ElapsedMilliseconds} ms.");
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]

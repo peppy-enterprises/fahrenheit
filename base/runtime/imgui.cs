@@ -88,16 +88,20 @@ public unsafe class FhImguiModule : FhModule {
     private bool _present_ready;         // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
     public FhImguiModule() {
-        _handle_wndproc_init   = new(this, "FFX.exe",   h_init_wndproc, offset:  0x241B80);
-        _handle_d3d11_init     = new(this, "D3D11.dll", h_init_d3d11,   fn_name: "D3D11CreateDeviceAndSwapChain");
-        _handle_input_update   = new(this, "FFX.exe",   h_input_update, offset:  0x225930);
-        _h_WndProc             = h_wndproc;
+        _handle_wndproc_init = new(this, "FFX.exe",   h_init_wndproc, offset:  0x241B80);
+        _handle_d3d11_init   = new(this, "D3D11.dll", h_init_d3d11,   fn_name: "D3D11CreateDeviceAndSwapChain");
+        _handle_input_update = new(this, "FFX.exe",   h_input_update, offset:  0x225930);
+        _h_WndProc           = h_wndproc;
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         return _handle_d3d11_init  .hook()
             && _handle_wndproc_init.hook()
             && _handle_input_update.hook();
+    }
+
+    public override void post_update() {
+        _present_ready = true;
     }
 
     private void init_imgui() {
@@ -168,10 +172,6 @@ public unsafe class FhImguiModule : FhModule {
 
         _dx11_init_complete = true;
         return result;
-    }
-
-    public override void post_update() {
-        _present_ready = true;
     }
 
     private nint h_wndproc(

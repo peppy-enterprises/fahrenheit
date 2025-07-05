@@ -32,6 +32,7 @@ public unsafe static class CTNamespaceExt {
             AtelCallTargetNamespace.Movie   => AtelCallTargets.Movie,
             AtelCallTargetNamespace.Debug   => AtelCallTargets.Debug,
             AtelCallTargetNamespace.AbiMap  => AtelCallTargets.AbiMap,
+            _                               => [],
         };
     }
 
@@ -64,6 +65,7 @@ public unsafe static class CTNamespaceExt {
             AtelCallTargetNamespace.Movie   => "mov",
             AtelCallTargetNamespace.Debug   => "dbg",
             AtelCallTargetNamespace.AbiMap  => "abm",
+            _                               => "unk"
         };
     }
 }
