@@ -38,11 +38,13 @@ public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
     private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
+    private readonly TOMkpCrossExtMesFontLClutTypeRGBA         _draw_delegate;
 
     public FhCoreModule() {
-        _main_loop    = new(this, "FFX.exe", h_main_loop,    offset: 0x420C00);
-        _update_input = new(this, "FFX.exe", h_update_input, offset: 0x471d10);
-        _render_game  = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
+        _main_loop     = new(this, "FFX.exe", h_main_loop,    offset: 0x420C00);
+        _update_input  = new(this, "FFX.exe", h_update_input, offset: 0x471d10);
+        _render_game   = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
+        _draw_delegate = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
@@ -99,7 +101,7 @@ public unsafe class FhCoreModule : FhModule {
         }
     }
 
-    private static void draw_text_rgba(
+    private void draw_text_rgba(
         byte[] text,
         float  x,
         float  y,
@@ -107,8 +109,7 @@ public unsafe class FhCoreModule : FhModule {
         float  scale
     ) {
         fixed (byte* text_ptr = text)
-            FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700)
-                (0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
+            _draw_delegate(0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
     }
 
     private void h_render_game() {
