@@ -28,11 +28,6 @@ internal static unsafe partial class PInvoke {
         nuint wParam,
         nint  lParam);
 
-    [LibraryImport("kernelbase.dll",
-        SetLastError = true)]
-    internal static partial void WakeByAddressAll(
-        void* Address);
-
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate nint WndProcDelegate(
         nint  hWnd,

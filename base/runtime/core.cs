@@ -85,10 +85,6 @@ public unsafe class FhCoreModule : FhModule {
                 module_ctx.Module.post_update();
             }
         }
-
-        foreach (nint addr in FhPointer.get_pending_wait_addresses()) {
-            PInvoke.WakeByAddressAll(addr.ToPointer());
-        }
     }
 
     private void h_update_input() {
