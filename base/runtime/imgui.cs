@@ -65,6 +65,7 @@ internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
 ///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_imgui"/>.
 /// </summary>
 [FhLoad(FhGameType.FFX)]
+[SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe class FhImguiModule : FhModule {
     // WndProc support
     private          HWND                              _hWnd;

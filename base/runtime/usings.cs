@@ -3,6 +3,7 @@ global using System.Collections.Generic;      // List<T>, Dictionary<T,U> and ot
 global using System.IO;                       // Path, File, and similar
 global using System.Runtime.CompilerServices; // [InlineArray], [CallConvStdcall] et al.
 global using System.Runtime.InteropServices;  // [UnmanagedFunctionPointer], [DllImport], [LibraryImport] et al.
+global using System.Runtime.Versioning;       // [SupportedOSPlatform] guard
 global using System.Text;                     // Encoding.UTF8 et al.
 global using System.Text.Json;                // For JSON (de)serialization, we use STJ.
 
