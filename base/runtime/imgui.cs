@@ -126,6 +126,13 @@ public unsafe class FhImguiModule : FhModule {
         ImGuiImplD3D11.SetCurrentContext(ctx);
         ImGuiImplWin32.Init(_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
+
+        FhTextureLoader.createTexture2D          = (pDesc, pInitialData, ppTexture2D) => _p_device->CreateTexture2D(pDesc, pInitialData, ppTexture2D);
+        FhTextureLoader.createShaderResourceView = (pResource, pDesc, ppSRView) => _p_device->CreateShaderResourceView(pResource, pDesc, ppSRView);
+        
+        // Doesn't work?
+        //FhTextureLoader.createTexture2D          = _p_device->CreateTexture2D; 
+        //FhTextureLoader.createShaderResourceView = _p_device->CreateShaderResourceView;
     }
 
     private nint h_init_wndproc() {
