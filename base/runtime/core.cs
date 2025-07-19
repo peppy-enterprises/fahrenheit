@@ -4,24 +4,25 @@
  * Temporary until FhCall is restored to `ffx-v3` RE state.
  */
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public delegate void Sg_MainLoop(float delta);
+internal delegate void Sg_MainLoop(float delta);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public delegate void TODrawMessageWindow();
+internal delegate void TODrawMessageWindow();
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public delegate void AtelExecInternal_00871d10();
+internal delegate void AtelExecInternal_00871d10();
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
-        uint p1,
-        byte* text,
-        float x, float y,
-        byte color,
-        byte p6,
-        byte tint_r, byte tint_g, byte tint_b, byte tint_a,
-        float scale,
-        float _);
+internal unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
+    uint  p1,
+    byte* text,
+    float x,
+    float y,
+    byte  color,
+    byte  p6,
+    byte  tint_r, byte tint_g, byte tint_b, byte tint_a,
+    float scale,
+    float _);
 
 /// <summary>
 ///     Executes the lifecycle methods of <see cref="FhModule"/>.
@@ -48,6 +49,26 @@ public unsafe class FhCoreModule : FhModule {
         return _main_loop   .hook()
             && _update_input.hook()
             && _render_game .hook();
+    }
+
+    public override void render_imgui() {
+        if (*FFX.Globals.event_id != 0x17) return; // Deactivate the mod list outside the main menu.
+
+        // Create a window for the mod list and render all the mods
+        ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
+        ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
+
+        if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
+            // I tried to increase this text's font size, but couldn't get ImGui.PushFont() to not throw an Access Violation (0xC0000005)
+            // - Eve
+            FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
+
+            ImGui.Text($"{mods.Length} mods loaded");
+            foreach (FhModContext mod_ctx in mods) {
+                ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
+            }
+            ImGui.End();
+        }
     }
 
     private void h_main_loop(float delta) {
@@ -108,27 +129,6 @@ public unsafe class FhCoreModule : FhModule {
             // render some text so that people can't easily hide their use of Fahrenheit
             string text = $"Fahrenheit v{typeof(FhGlobal).Assembly.GetName().Version}";
             draw_text_rgba(FhCharset.Us.to_bytes(text), 5f, 400f, 0x00, 0.65f);
-        }
-    }
-
-    public override void render_imgui() {
-        // In the main menu
-        if (*FFX.Globals.event_id != 0x17) return; // Deactivate the mod list outside the main menu.
-
-        // Create a window for the mod list and render all the mods
-        ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
-
-        if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
-            // I tried to increase this text's font size, but couldn't get ImGui.PushFont() to not throw an Access Violation (0xC0000005)
-            // - Eve
-            FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
-
-            ImGui.Text($"{mods.Length} mods loaded");
-            foreach (FhModContext mod_ctx in mods) {
-                ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
-            }
-            ImGui.End();
         }
     }
 }

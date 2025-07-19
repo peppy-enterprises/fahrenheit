@@ -4,13 +4,13 @@ using static Fahrenheit.Core.Runtime.PInvoke;
 
 namespace Fahrenheit.Core.Runtime;
 
-public struct PStreamFile {
+internal struct PStreamFile {
     public nint handle_os;
     public nint handle_vbf;
 }
 
 [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-public unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5);
+internal unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5);
 
 /// <summary>
 ///     Provides the ability to replace files loaded by the game with files outside the VBF archives.

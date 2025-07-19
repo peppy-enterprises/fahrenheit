@@ -15,16 +15,16 @@ using ImGuiImplWin32             = Hexa.NET.ImGui.Backends.Win32.ImGuiImplWin32;
 namespace Fahrenheit.Core.Runtime;
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public delegate nint graphicInitialize();
+internal delegate nint graphicInitialize();
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public delegate int PInputUpdate();
+internal delegate int PInputUpdate();
 
 /* [fkelava 6/10/24 01:54]
  * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L93
  */
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public unsafe delegate nint DXGISwapChain_Present(
+internal unsafe delegate nint DXGISwapChain_Present(
     IDXGISwapChain* pSwapChain,
     uint            SyncInterval,
     uint            Flags);
@@ -33,7 +33,7 @@ public unsafe delegate nint DXGISwapChain_Present(
  * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L133
  */
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public unsafe delegate nint DXGISwapChain_ResizeBuffers(
+internal unsafe delegate nint DXGISwapChain_ResizeBuffers(
     IDXGISwapChain* pSwapChain,
     uint            BufferCount,
     uint            Width,
@@ -45,7 +45,7 @@ public unsafe delegate nint DXGISwapChain_ResizeBuffers(
  * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/um/d3d11/DirectX.cs#L25
  */
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
+internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
     IDXGIAdapter*         pAdapter,
     D3D_DRIVER_TYPE       DriverType,
     HMODULE               Software,
