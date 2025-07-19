@@ -127,12 +127,10 @@ public unsafe class FhImguiModule : FhModule {
         ImGuiImplWin32.Init(_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
 
-        FhTextureLoader.createTexture2D          = (pDesc, pInitialData, ppTexture2D) => _p_device->CreateTexture2D(pDesc, pInitialData, ppTexture2D);
-        FhTextureLoader.createShaderResourceView = (pResource, pDesc, ppSRView) => _p_device->CreateShaderResourceView(pResource, pDesc, ppSRView);
-        
-        // Doesn't work?
-        //FhTextureLoader.createTexture2D          = _p_device->CreateTexture2D; 
-        //FhTextureLoader.createShaderResourceView = _p_device->CreateShaderResourceView;
+        FhTextureLoader.createShaderResourceViewRaw = (pResource, pDesc, ppSRView) => _p_device->CreateShaderResourceView((ID3D11Resource*)pResource, pDesc, (ID3D11ShaderResourceView**)ppSRView);
+
+        FhTextureLoader.createTextureEx2 = (img, usage, bindFlags, cpuAccessFlags, miscFlags, createFlags, ppResource) => Hexa.NET.DirectXTex.DirectXTex.CreateTextureEx2((Hexa.NET.DirectXTex.ID3D11Device*)_p_device, img, usage, bindFlags, cpuAccessFlags, miscFlags, createFlags, ppResource);
+        FhTextureLoader.createShaderResourceView = (srcImages, nimages, metadata, ppSRV) => Hexa.NET.DirectXTex.DirectXTex.CreateShaderResourceView((Hexa.NET.DirectXTex.ID3D11Device*)_p_device, srcImages, nimages, metadata, ppSRV);
     }
 
     private nint h_init_wndproc() {
