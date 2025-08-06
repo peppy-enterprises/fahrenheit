@@ -6,6 +6,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
         <EnableDynamicLoading>true</EnableDynamicLoading>
     </PropertyGroup>
 
@@ -14,11 +15,6 @@
         <AssemblyName>fhcore</AssemblyName>
         <AssemblyTitle>Fahrenheit Core Library</AssemblyTitle>
         <Product>Fahrenheit Core Library</Product>
-    </PropertyGroup>
-
-    <!-- LOCAL DEPLOYMENT TARGET -->
-    <PropertyGroup>
-        <CopyToDir>$(SolutionDir)\artifacts\localdeploy\bin</CopyToDir>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -30,9 +26,11 @@
         <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
-    <!-- PROJECT REFERENCES -->
+    <!-- EXTERNAL PROJECT REFS -->
     <ItemGroup>
-		<ProjectReference Include="..\imgui\Fahrenheit.Core.ImGuiNET.csproj" />
+        <PackageReference Include="Hexa.NET.DirectXTex" Version="2.0.4" />
+        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.17.2" />
+        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.2" />
     </ItemGroup>
 
 </Project>

@@ -8,22 +8,22 @@ internal sealed record FhLoaderPathInfo(
     string SettingsPath);
 
 /// <summary>
+///     Contains path information required for the mod controller and Fahrenheit runtime to handle a module's lifecycle.
+/// </summary>
+internal sealed record FhModulePathInfo(
+    string GlobalStatePath
+    );
+
+/// <summary>
 ///     Contains path information required for the mod controller and Fahrenheit runtime to handle a mod's lifecycle.
 /// </summary>
-internal sealed record FhModPathInfo(
+public sealed record FhModPathInfo(
     string        ManifestPath,
     DirectoryInfo ModuleDir,
     DirectoryInfo ResourcesDir,
     DirectoryInfo EflDir,
     DirectoryInfo LangDir,
     DirectoryInfo StateDir);
-
-/// <summary>
-///     Contains path information required for the mod controller and Fahrenheit runtime to handle a module's lifecycle.
-/// </summary>
-internal sealed record FhModulePathInfo(
-    string GlobalStatePath
-    );
 
 /// <summary>
 ///     Maps a <paramref name="Path"/> on disk to a shorthand <paramref name="Symbol"/>.

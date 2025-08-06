@@ -6,41 +6,6 @@ to my attention by posting an issue in the repository.
 
 The attached notices are provided for information only.
 
-Regarding the lawfulness of the decompilation and reverse engineering performed for this project
----
-END USER SOFTWARE LICENSE AGREEMENT AND LIMITED WARRANTY
-FINAL FANTASY X/X-2 HD Remaster (the “Software Product”)
-
-Section 3. Restrictions
-
-> You are not permitted to:
-> (e) to reverse engineer, derive source code, modify, decompile, disassemble,
-> or create derivative works based on the whole or any part of the Software Product,
-> in whole or in part, except as the applicable law expressly permits. Where applicable
-> law expressly permits any such acts, any lawful modifications, adaptations and improvements
-> and all copyrights therein shall be deemed assigned to and shall belong to, vest in and be
-> the exclusive property of Square Enix and/or its licensors on creation to the maximum extent
-> permitted by law and you hereby waive all or any moral rights in such creations;
-
-To the best of our knowledge, the reverse-engineering and decompilation work carried out for the Fahrenheit project
-by EU residents is lawful based on the judgement rendered by the European Court of Justice in case C-13/20
-(https://curia.europa.eu/juris/document/document.jsf?text=&docid=247056&pageIndex=0&doclang=DE&mode=req&dir=&occ=first&part=1&cid=18380521),
-which explicitly permits decompilation for the purpose of fixing defects in software applications,
-and based on the extant work of other groups whose similar projects have not been ordered to desist.
-
-Additionally, Article 6 of Directive 91/250 (https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0024) states:
-
-> 1. The authorisation of the rightholder shall not be required where reproduction of the code and translation
-> of its form within the meaning of points (a) and (b) of Article 4(1) are indispensable to obtain the information
-> necessary to achieve the interoperability of an independently created computer program with other programs, provided
-> that the following conditions are met:
->
-> (a) those acts are performed by the licensee or by another person having a right to use a copy of a program, or on their behalf by a person authorised to do so;
-> (b) the information necessary to achieve interoperability has not previously been readily available to the persons referred to in point (a); and
-> (c) those acts are confined to the parts of the original program which are necessary in order to achieve interoperability.
-
-To the best of our knowledge, all three conditions stated herein are fulfilled.
-
 Uses MinHook.
 ----
 https://github.com/TsudaKageyu/minhook/blob/master/LICENSE.txt
@@ -127,7 +92,7 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Uses portions of code from Detours.NET
+Uses substantial portions of code from Detours.NET.
 ----
 https://github.com/citronneur/detours.net/blob/master/LICENSE
 
@@ -153,7 +118,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Uses portions of code from the .NET Samples.
+Uses substantial portions of code from the .NET Samples.
 ---
 https://github.com/dotnet/samples/blob/main/LICENSE-CODE
 
@@ -175,7 +140,7 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Uses portions of code from MS Detours
+Uses substantial portions of code from MS Detours.
 ---
 https://github.com/microsoft/Detours/blob/main/LICENSE
 
@@ -201,7 +166,62 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Uses Dear ImGui.
+Uses TerraFX.Interop.Windows.
+---
+https://github.com/terrafx/terrafx.interop.windows/blob/main/LICENSE.md
+
+Copyright © Tanner Gooding and Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Uses Hexa.NET.ImGui.
+---
+https://github.com/HexaEngine/Hexa.NET.ImGui/blob/master/LICENSE.txt
+
+MIT License
+
+Copyright (c) 2022 Juna Meinhold
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+**Naming Clause:**
+The use of the "Hexa.NET" name, prefix, or any derivative thereof in the naming of derivative projects,
+redistributed packages, or modified versions is not permitted without explicit written permission from
+the original author (Juna Meinhold). Any usage of the Hexa.NET name outside of the official projects
+must clearly indicate that it is not an official Hexa.NET package.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Uses Dear ImGui, as a native dependency of Hexa.NET.ImGui.
 ---
 https://github.com/ocornut/imgui/blob/master/LICENSE.txt
 
@@ -225,28 +245,37 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Uses ImGui.NET.
+Regarding the lawfulness of the decompilation and reverse engineering performed for this project
 ---
-https://github.com/ImGuiNET/ImGui.NET/blob/master/LICENSE
+END USER SOFTWARE LICENSE AGREEMENT AND LIMITED WARRANTY
+FINAL FANTASY X/X-2 HD Remaster (the “Software Product”)
 
-The MIT License (MIT)
+Section 3. Restrictions
 
-Copyright (c) 2017 Eric Mellino and ImGui.NET contributors
+> You are not permitted to:
+> (e) to reverse engineer, derive source code, modify, decompile, disassemble,
+> or create derivative works based on the whole or any part of the Software Product,
+> in whole or in part, except as the applicable law expressly permits. Where applicable
+> law expressly permits any such acts, any lawful modifications, adaptations and improvements
+> and all copyrights therein shall be deemed assigned to and shall belong to, vest in and be
+> the exclusive property of Square Enix and/or its licensors on creation to the maximum extent
+> permitted by law and you hereby waive all or any moral rights in such creations;
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+To the best of our knowledge, the reverse-engineering and decompilation work carried out for the Fahrenheit project
+by EU residents is lawful based on the judgement rendered by the European Court of Justice in case C-13/20
+(https://curia.europa.eu/juris/document/document.jsf?text=&docid=247056&pageIndex=0&doclang=DE&mode=req&dir=&occ=first&part=1&cid=18380521),
+which explicitly permits decompilation for the purpose of fixing defects in software applications,
+and based on the extant work of other groups whose similar projects have not been ordered to desist.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Additionally, Article 6 of Directive 91/250 (https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0024) states:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+> 1. The authorisation of the rightholder shall not be required where reproduction of the code and translation
+> of its form within the meaning of points (a) and (b) of Article 4(1) are indispensable to obtain the information
+> necessary to achieve the interoperability of an independently created computer program with other programs, provided
+> that the following conditions are met:
+>
+> (a) those acts are performed by the licensee or by another person having a right to use a copy of a program, or on their behalf by a person authorised to do so;
+> (b) the information necessary to achieve interoperability has not previously been readily available to the persons referred to in point (a); and
+> (c) those acts are confined to the parts of the original program which are necessary in order to achieve interoperability.
+
+To the best of our knowledge, all three conditions stated herein are fulfilled.

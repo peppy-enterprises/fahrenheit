@@ -5,18 +5,6 @@
  */
 
 internal static unsafe partial class FhPInvoke {
-    internal const uint INFINITE = 4294967295;
-
-    [LibraryImport("kernelbase.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static partial bool WaitOnAddress(void* Address, void* CompareAddress, nint AddressSize, uint dwMilliseconds);
-
-    [LibraryImport("kernelbase.dll", SetLastError = true)]
-    internal static partial void WakeByAddressSingle(void* Address);
-
-    [LibraryImport("kernelbase.dll", SetLastError = true)]
-    internal static partial void WakeByAddressAll(void* Address);
-
     [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)]
     internal static partial nint GetModuleHandle(string? lpModuleName);
 

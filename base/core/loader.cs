@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
+using HexaGen.Runtime;
+
 namespace Fahrenheit.Core;
 
 /// <summary>
@@ -37,6 +39,7 @@ public class FhLoader {
     public FhLoader() {
         // Loading `fhcore` into ALC.Default ensures it does not 'leak' into plugins' load contexts, causing type identity mismatches.
         AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhInternal.PathFinder.Binaries.Path, "fhcore.dll"));
+        LibraryLoader.CustomLoadFolders.Add(FhInternal.PathFinder.Binaries.Path); // required for Hexa.NET.ImGui's assembly-probing logic
     }
 
     public void load_mod(string mod_name, FhManifest manifest, out List<FhModuleContext> modules) {

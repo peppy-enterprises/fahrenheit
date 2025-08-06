@@ -402,9 +402,6 @@ FodyWeavers.xsd
 
 ##### FAHRENHEIT SPECIFIC BEGIN
 
-# Preserve the `cimgui` PDB when building in Debug.
-!base/imgui/deps/cimgui/win-x86/cimguid.pdb
-
 # Remove all `vcpkg` artifacts.
 **/vcpkg_installed/
 

@@ -63,7 +63,7 @@ public enum StatusPermanentFlags : ushort {
     THREATEN      = 1 << 11,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool death        (this StatusPermanentFlags flags) => flags.HasFlag(StatusPermanentFlags.DEATH);
     public static bool zombie       (this StatusPermanentFlags flags) => flags.HasFlag(StatusPermanentFlags.ZOMBIE);
     public static bool petrification(this StatusPermanentFlags flags) => flags.HasFlag(StatusPermanentFlags.PETRIFICATION);
@@ -97,7 +97,7 @@ public enum StatusTemporalFlags : ushort {
     SLOW        = 1 << 12,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool sleep   (this StatusTemporalFlags flags) => flags.HasFlag(StatusTemporalFlags.SLEEP);
     public static bool silence (this StatusTemporalFlags flags) => flags.HasFlag(StatusTemporalFlags.SILENCE);
     public static bool darkness(this StatusTemporalFlags flags) => flags.HasFlag(StatusTemporalFlags.DARKNESS);
@@ -135,7 +135,7 @@ public enum StatusExtraFlags : ushort {
     DOOM            = 1 << 14,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool distill_power  (this StatusExtraFlags flags) => flags.HasFlag(StatusExtraFlags.DISTILL_POWER);
     public static bool distill_mana   (this StatusExtraFlags flags) => flags.HasFlag(StatusExtraFlags.DISTILL_MANA);
     public static bool distill_speed  (this StatusExtraFlags flags) => flags.HasFlag(StatusExtraFlags.DISTILL_SPEED);

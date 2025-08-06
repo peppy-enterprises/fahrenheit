@@ -43,15 +43,15 @@ public unsafe struct SphereGridLink {
     public readonly SphereGridNode anchor => Globals.SphereGrid.lpamng->nodes[anchor_idx];
 
     public Vector2 get_midpoint() {
-        int mid_point_idx = (point_count - 1) / 2;
-        var mid_point = points + mid_point_idx;
+        int                  mid_point_idx = (point_count - 1) / 2;
+        SphereGridLinkPoint* mid_point     = points + mid_point_idx;
 
         if (point_count % 2 == 1) {
             return mid_point->pos;
         }
 
-        int mid_point2_idx = mid_point_idx + 1;
-        var mid_point2 = points + mid_point2_idx;
+        int                  mid_point2_idx = mid_point_idx + 1;
+        SphereGridLinkPoint* mid_point2     = points + mid_point2_idx;
 
         return (mid_point->pos + mid_point2->pos) / 2f;
     }
@@ -81,7 +81,7 @@ public enum SphereGridNodeProperties : byte {
     HAS_MOVE_OUTLINE = 1 << 1,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool get(this SphereGridNodeProperties flags, SphereGridNodeProperties flag) {
         return (flags & flag) != 0;
     }
@@ -191,101 +191,101 @@ public enum NodeType : byte {
     // LOCK_3 = 0x00,
     LOCK_4 = 0x29,
 
-    DELAY_ATTACK = 0x2A,
-    DELAY_BUSTER = 0x2B,
-    SLEEP_ATTACK = 0x2C,
+    DELAY_ATTACK   = 0x2A,
+    DELAY_BUSTER   = 0x2B,
+    SLEEP_ATTACK   = 0x2C,
     SILENCE_ATTACK = 0x2D,
-    DARK_ATTACK = 0x2E,
-    ZOMBIE_ATTACK = 0x2F,
-    SLEEP_BUSTER = 0x30,
+    DARK_ATTACK    = 0x2E,
+    ZOMBIE_ATTACK  = 0x2F,
+    SLEEP_BUSTER   = 0x30,
     SILENCE_BUSTER = 0x31,
-    DARK_BUSTER = 0x32,
-    TRIPLE_FOUL = 0x33,
-    POWER_BREAK = 0x34,
-    MAGIC_BREAK = 0x35,
-    ARMOR_BREAK = 0x36,
-    MENTAL_BREAK = 0x37,
-    MUG = 0x38,
-    QUICK_HIT = 0x39,
+    DARK_BUSTER    = 0x32,
+    TRIPLE_FOUL    = 0x33,
+    POWER_BREAK    = 0x34,
+    MAGIC_BREAK    = 0x35,
+    ARMOR_BREAK    = 0x36,
+    MENTAL_BREAK   = 0x37,
+    MUG            = 0x38,
+    QUICK_HIT      = 0x39,
 
-    STEAL = 0x3A,
-    USE = 0x3B,
-    FLEE = 0x3C,
-    PRAY = 0x3D,
-    CHEER = 0x3E,
-    FOCUS = 0x3F,
-    REFLEX = 0x40,
-    AIM = 0x41,
-    LUCK = 0x42,
-    JINX = 0x43,
-    LANCET = 0x44,
-    GUARD = 0x45,
-    SENTINEL = 0x46,
+    STEAL        = 0x3A,
+    USE          = 0x3B,
+    FLEE         = 0x3C,
+    PRAY         = 0x3D,
+    CHEER        = 0x3E,
+    FOCUS        = 0x3F,
+    REFLEX       = 0x40,
+    AIM          = 0x41,
+    LUCK         = 0x42,
+    JINX         = 0x43,
+    LANCET       = 0x44,
+    GUARD        = 0x45,
+    SENTINEL     = 0x46,
     SPARE_CHANGE = 0x47,
-    THREATEN = 0x48,
-    PROVOKE = 0x49,
-    ENTRUST = 0x4A,
-    COPYCAT = 0x4B,
-    DOUBLECAST = 0x4C,
-    BRIBE = 0x4D,
+    THREATEN     = 0x48,
+    PROVOKE      = 0x49,
+    ENTRUST      = 0x4A,
+    COPYCAT      = 0x4B,
+    DOUBLECAST   = 0x4C,
+    BRIBE        = 0x4D,
 
-    CURE = 0x4E,
-    CURA = 0x4F,
-    CURAGA = 0x50,
+    CURE      = 0x4E,
+    CURA      = 0x4F,
+    CURAGA    = 0x50,
     NUL_FROST = 0x51,
     NUL_BLAZE = 0x52,
     NUL_SHOCK = 0x53,
-    NUL_TIDE = 0x54,
-    SCAN = 0x55,
-    ESUNA = 0x56,
-    LIFE = 0x57,
+    NUL_TIDE  = 0x54,
+    SCAN      = 0x55,
+    ESUNA     = 0x56,
+    LIFE      = 0x57,
     FULL_LIFE = 0x58,
-    HASTE = 0x59,
-    HASTEGA = 0x5A,
-    SLOW = 0x5B,
-    SLOWGA = 0x5C,
-    SHELL = 0x5D,
-    PROTECT = 0x5E,
-    REFLECT = 0x5F,
-    DISPEL = 0x60,
-    REGEN = 0x61,
-    HOLY = 0x62,
+    HASTE     = 0x59,
+    HASTEGA   = 0x5A,
+    SLOW      = 0x5B,
+    SLOWGA    = 0x5C,
+    SHELL     = 0x5D,
+    PROTECT   = 0x5E,
+    REFLECT   = 0x5F,
+    DISPEL    = 0x60,
+    REGEN     = 0x61,
+    HOLY      = 0x62,
     AUTO_LIFE = 0x63,
 
     BLIZZARD = 0x64,
-    FIRE = 0x65,
-    THUNDER = 0x66,
-    WATER = 0x67,
-    FIRA = 0x68,
+    FIRE     = 0x65,
+    THUNDER  = 0x66,
+    WATER    = 0x67,
+    FIRA     = 0x68,
     BLIZZARA = 0x69,
     THUNDARA = 0x6A,
-    WATERA = 0x6B,
-    FIRAGA = 0x6C,
+    WATERA   = 0x6B,
+    FIRAGA   = 0x6C,
     BLIZZAGA = 0x6D,
     THUNDAGA = 0x6E,
-    WATERGA = 0x6F,
-    BIO = 0x70,
-    DEMI = 0x71,
-    DEATH = 0x72,
-    DRAIN = 0x73,
-    OSMOSE = 0x74,
-    FLARE = 0x75,
-    ULTIMA = 0x76,
+    WATERGA  = 0x6F,
+    BIO      = 0x70,
+    DEMI     = 0x71,
+    DEATH    = 0x72,
+    DRAIN    = 0x73,
+    OSMOSE   = 0x74,
+    FLARE    = 0x75,
+    ULTIMA   = 0x76,
 
-    PILFER_GIL = 0x77,
-    FULL_BREAK = 0x78,
-    EXTRACT_POWER = 0x79,
-    EXTRACT_MANA = 0x7A,
-    EXTRACT_SPEED = 0x7B,
+    PILFER_GIL      = 0x77,
+    FULL_BREAK      = 0x78,
+    EXTRACT_POWER   = 0x79,
+    EXTRACT_MANA    = 0x7A,
+    EXTRACT_SPEED   = 0x7B,
     EXTRACT_ABILITY = 0x7C,
 
-    NAB_GIL = 0x7D,
+    NAB_GIL       = 0x7D,
     QUICK_POCKETS = 0x7E,
 
     NULL = 0xFF,
 }
 
-public static partial class EnumExt {
+public static partial class FhEnumExt {
     public static bool is_lock_node(this NodeType node_type)
         => node_type is NodeType.LOCK_1
                      or NodeType.LOCK_2
