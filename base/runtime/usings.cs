@@ -1,5 +1,6 @@
 ﻿global using System;                          // primitives
 global using System.Collections.Generic;      // List<T>, Dictionary<T,U> and others
+global using System.Diagnostics.CodeAnalysis; // [NotNullWhen] contract
 global using System.IO;                       // Path, File, and similar
 global using System.Runtime.CompilerServices; // [InlineArray], [CallConvStdcall] et al.
 global using System.Runtime.InteropServices;  // [UnmanagedFunctionPointer], [DllImport], [LibraryImport] et al.
