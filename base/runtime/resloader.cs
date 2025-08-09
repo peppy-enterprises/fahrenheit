@@ -58,7 +58,7 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
     }
 
     private bool _create_srv(Hexa_ScratchImage hexa_image, Hexa_TexMetadata hexa_metadata, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = default;
+        texture = null;
 
         Hexa_ID3D11SRV* srv;
         Hexa_HRESULT    rc = DirectXTex.CreateShaderResourceView(
@@ -90,7 +90,7 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
     }
 
     public bool load_texture_from_memory(nint ptr, nuint size, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = default;
+        texture = null;
         if (_p_device == null) {
             _logger.Info($"device not ready");
             return false;
@@ -118,7 +118,7 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
     }
 
     public bool load_texture_from_disk(string file_name, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = default;
+        texture = null;
         if (_p_device == null) {
             _logger.Info($"{file_name} -> device not ready");
             return false;
