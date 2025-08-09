@@ -60,7 +60,7 @@ public class FhResourceLoader {
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_dds_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
+        texture = default;
         return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.DDS, out texture);
     }
 
@@ -71,7 +71,7 @@ public class FhResourceLoader {
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_wic_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
+        texture = default;
         return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.WIC, out texture);
     }
 
@@ -82,7 +82,7 @@ public class FhResourceLoader {
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_tga_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
+        texture = default;
         return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.TGA, out texture);
     }
 
@@ -93,7 +93,7 @@ public class FhResourceLoader {
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_jpeg_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
+        texture = default;
         return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.JPEG, out texture);
     }
 
@@ -104,7 +104,7 @@ public class FhResourceLoader {
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_png_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
+        texture = default;
         return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.PNG, out texture);
     }
 }
