@@ -40,7 +40,13 @@ public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
     private readonly TOMkpCrossExtMesFontLClutTypeRGBA         _draw_delegate;
 
+    private static readonly FhSettingsCategory _settings = new("fhruntime", [
+        new FhSettingToggle("display_mod_count", true),
+    ]);
+
     public FhCoreModule() {
+        settings = _settings;
+
         _main_loop     = new(this, "FFX.exe", h_main_loop,    offset: 0x420C00);
         _update_input  = new(this, "FFX.exe", h_update_input, offset: 0x471d10);
         _render_game   = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
@@ -56,21 +62,28 @@ public unsafe class FhCoreModule : FhModule {
     public override void render_imgui() {
         if (*FFX.Globals.event_id != 0x17) return; // Deactivate the mod list outside the main menu.
 
-        // Create a window for the mod list and render all the mods
-        ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
+        //TODO: Change this so the ModConfig window simply goes above the modlist
+        if (!ModConfig.is_open) {
+            // Create a window for the mod list and render all the mods
+            ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
+            ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
 
-        if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
-            // I tried to increase this text's font size, but couldn't get ImGui.PushFont() to not throw an Access Violation (0xC0000005)
-            // - Eve
-            FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
+            if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
+                ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 18f);
+                FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
 
-            ImGui.Text($"{mods.Length} mods loaded");
-            foreach (FhModContext mod_ctx in mods) {
-                ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
+                ImGui.Text($"{mods.Length} mods loaded");
+                foreach (FhModContext mod_ctx in mods) {
+                    ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
+                }
+                ImGui.PopFont();
             }
             ImGui.End();
         }
+
+        ModConfig.render();
+
+        //ImGui.ShowDemoWindow();
     }
 
     private void h_main_loop(float delta) {
