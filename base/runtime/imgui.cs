@@ -110,12 +110,26 @@ public unsafe class FhImguiModule : FhModule {
             _p_device == null || _p_device_ctx == null) // h_init_d3d11 hasn't run yet?
             return;
 
-        ImGuiContextPtr ctx = ImGui.CreateContext();
-        ImGuiIOPtr      io  = ImGui.GetIO();
+        ImGuiContextPtr ctx   = ImGui.CreateContext();
+        ImGuiIOPtr      io    = ImGui.GetIO();
+        ImGuiStylePtr   style = ImGui.GetStyle();
 
         // Enable controls
         io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags.NavEnableGamepad;
+
+        // Enable features
+        io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+        //io.ConfigFlags |= ImGuiConfigFlags.ViewportsEnable; //TODO: Figure out why dragging a viewport outside of the game window makes it crash
+
+        io.ConfigDpiScaleFonts = true;
+        io.ConfigDpiScaleViewports = true;
+
+        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+        if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0) {
+            style.WindowRounding = 0f;
+            style.Colors[(int)ImGuiCol.WindowBg].W = 1f;
+        }
 
         ImGui.StyleColorsDark();
 
@@ -126,6 +140,8 @@ public unsafe class FhImguiModule : FhModule {
         ImGuiImplD3D11.SetCurrentContext(ctx);
         ImGuiImplWin32.Init(_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
+
+        FhApi.ImGuiHelper.init();
     }
 
     private nint h_init_wndproc() {
@@ -249,6 +265,11 @@ public unsafe class FhImguiModule : FhModule {
         }
 
         ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
+
+        if ((ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0) {
+            ImGui.UpdatePlatformWindows();
+        }
+
         return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
     }
 }
