@@ -28,8 +28,13 @@
 
     <!-- CONTENT -->
     <ItemGroup>
+        <!-- RUNTIME MANIFEST -->
         <Content Include="fhruntime.manifest.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <!-- RUNTIME FONT -->
+        <Content Include="$(SolutionDir)\assets\NotoSans-VariableFont_wdth,wght.ttf" Link="resources\fonts\NotoSans-VariableFont_wdth,wght.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
