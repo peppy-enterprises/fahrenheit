@@ -126,6 +126,8 @@ public unsafe class FhImguiModule : FhModule {
         ImGuiImplD3D11.SetCurrentContext(ctx);
         ImGuiImplWin32.Init(_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
+
+        FhApi.ImGuiHelper.init();
     }
 
     private nint h_init_wndproc() {
