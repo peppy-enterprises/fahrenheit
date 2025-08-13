@@ -94,7 +94,7 @@ public unsafe class FhLocalStateModule : FhModule {
         return _handle_onlist.orig_fptr(arg1, arg2);
     }
 
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ])]
     private void h_onsave(int menu_selection_index) {
         foreach (FhModContext mod_context in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_context in mod_context.Modules) {
@@ -133,7 +133,7 @@ public unsafe class FhLocalStateModule : FhModule {
         _handle_onsave.orig_fptr(menu_selection_index);
     }
 
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ])]
     private void h_onload(int menu_selection_index) {
         foreach (FhModContext mod_context in FhApi.ModController.get_all()) {
             foreach (FhModuleContext module_context in mod_context.Modules) {

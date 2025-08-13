@@ -80,7 +80,7 @@ internal unsafe class ModConfig {
                 int mod_idx = 0;
 
                 float tab_width = ImGui.GetContentRegionAvail().X;
-                foreach (var mod in FhApi.ModController.get_all()) {
+                foreach (FhModContext mod in FhApi.ModController.get_all()) {
                     if (has_settings(mod))
                         render_mod_tab(mod, mod_idx++, tab_width);
                     else
@@ -93,7 +93,7 @@ internal unsafe class ModConfig {
             ImGui.SetNextWindowSize(new Vector2(viewport.WorkSize.X * 0.83f, viewport.WorkSize.Y));
             if (ImGui.Begin("ModSettings", ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove)) {
                 FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
-                foreach (var module in mods[selected_mod_idx].Modules) {
+                foreach (FhModuleContext module in mods[selected_mod_idx].Modules) {
                     module.Module.settings?.render_name();
                     module.Module.settings?.render();
                 }
@@ -117,7 +117,7 @@ internal unsafe class ModConfig {
     }
 
     private static bool has_settings(FhModContext mod) {
-        foreach (var module in mod.Modules) {
+        foreach (FhModuleContext module in mod.Modules) {
             if (module.Module.settings is not null) return true;
         }
 

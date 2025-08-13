@@ -24,10 +24,8 @@ public unsafe class FhImGuiHelper {
     }
 
     private void init_fonts() {
-        var io = ImGui.GetIO();
-
-        string homedir = Directory.GetCurrentDirectory();
-        string fontdir = homedir + @"\fahrenheit\bin\resources\fonts\";
+        ImGuiIOPtr io      = ImGui.GetIO();
+        string     fontdir = Path.Join(FhInternal.PathFinder.Binaries.Path, "resources", "fonts");
 
         FONT_DEFAULT = io.Fonts.AddFontFromFileTTF(
             fontdir + "NotoSans-VariableFont_wdth,wght.ttf",

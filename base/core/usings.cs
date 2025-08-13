@@ -5,6 +5,6 @@ global using System.Globalization;            // CultureInfo.InvariantCulture et
 global using System.IO;                       // Path, File, and similar
 global using System.Numerics;                 // generic math - INumber<T>, IBinaryInteger<T>
 global using System.Runtime.CompilerServices; // [InlineArray]
-global using System.Runtime.InteropServices;
+global using System.Runtime.InteropServices;  // [DllImport], [LibraryImport], et al.
 global using System.Text.Json;                // For JSON (de)serialization, we use STJ.
 global using System.Text.Json.Serialization;

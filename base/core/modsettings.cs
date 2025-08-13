@@ -1,7 +1,5 @@
 using Hexa.NET.ImGui;
 
-using static Fahrenheit.Core.FhLocalizationManager;
-
 namespace Fahrenheit.Core;
 
 public abstract class FhSetting(string id) {
@@ -40,7 +38,7 @@ public class FhSettingsCategory : FhSetting {
 
     public FhSettingsCategory(string id, FhSetting[] settings) : base(id) {
         string id_prefix = id + '.';
-        foreach (var setting in settings) {
+        foreach (FhSetting setting in settings) {
             setting.id = id_prefix + setting.id;
         }
 
@@ -67,7 +65,7 @@ public class FhSettingsCategory : FhSetting {
         ImGui.Dummy(new()); // Get rid of the SameLine from modconfig
         if (!collapsed) {
             ImGui.Indent(ImGui.GetTreeNodeToLabelSpacing());
-            foreach (var setting in settings) {
+            foreach (FhSetting setting in settings) {
                 setting.render_name();
                 ImGui.SameLine(FhSetting.NAME_WIDTH);
                 setting.render();
@@ -87,7 +85,7 @@ public class FhSettingsCategoryToggleable(string id, FhSetting[] settings) : FhS
     public bool get() => _enabled;
     public void set(bool enabled) {
         _enabled = enabled;
-        foreach (var setting in settings) setting.locked = !enabled;
+        foreach (FhSetting setting in settings) setting.locked = !enabled;
     }
 
     public override void render_name() {
@@ -148,9 +146,9 @@ public class FhSettingToggle(string id, bool def_value) : FhSetting(id) {
 
     public override void render() {
         // Mimic the game's config style
-        ImGui.PushStyleColor(ImGuiCol.Button, locked ? BUTTON_BG_LOCKED : BUTTON_BG);
+        ImGui.PushStyleColor(ImGuiCol.Button,        locked ? BUTTON_BG_LOCKED : BUTTON_BG);
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, locked ? BUTTON_BG_LOCKED : BUTTON_BG_HOVERED);
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, locked ? BUTTON_BG_LOCKED : BUTTON_BG_ACTIVE);
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive,  locked ? BUTTON_BG_LOCKED : BUTTON_BG_ACTIVE);
 
         render_half(false);
         ImGui.SameLine();
@@ -173,29 +171,29 @@ public class FhSettingToggle(string id, bool def_value) : FhSetting(id) {
     }
 
     private void render_underline() {
-        Vector2 min = ImGui.GetItemRectMin() + new Vector2(0, 2f);
-        Vector2 max = ImGui.GetItemRectMax() + new Vector2(0, 2f);
-        Vector2 center = min + (max - min) / 2;
-        uint start = ImGui.GetColorU32(locked ? UNDERLINE_GRADIENT_START_LOCKED : UNDERLINE_GRADIENT_START, 0f);
-        uint side_end = ImGui.GetColorU32(locked ? UNDERLINE_GRADIENT_SIDE_END_LOCKED : UNDERLINE_GRADIENT_SIDE_END, 1f);
-        uint center_end = ImGui.GetColorU32(UNDERLINE_GRADIENT_CENTER_END, 1f);
+        Vector2 min        = ImGui.GetItemRectMin() + new Vector2(0, 2f);
+        Vector2 max        = ImGui.GetItemRectMax() + new Vector2(0, 2f);
+        Vector2 center     = min + (max - min) / 2;
+        uint    start      = ImGui.GetColorU32(locked ? UNDERLINE_GRADIENT_START_LOCKED    : UNDERLINE_GRADIENT_START,    0f);
+        uint    side_end   = ImGui.GetColorU32(locked ? UNDERLINE_GRADIENT_SIDE_END_LOCKED : UNDERLINE_GRADIENT_SIDE_END, 1f);
+        uint    center_end = ImGui.GetColorU32(UNDERLINE_GRADIENT_CENTER_END, 1f);
 
         ImDrawListPtr draw_list = ImGui.GetWindowDrawList();
 
         draw_list.AddRectFilledMultiColor(min with { Y = max.Y - 1 }, center with { Y = max.Y },
-                start, side_end, side_end, start);
+            start, side_end, side_end, start);
         draw_list.AddRectFilledMultiColor(max with { Y = max.Y - 1 }, center with { Y = max.Y },
-                start, side_end, side_end, start);
+            start, side_end, side_end, start);
 
         draw_list.AddRectFilledMultiColor(min with { Y = max.Y + 1 }, center with { Y = max.Y },
-                start, center_end, center_end, start);
+            start, center_end, center_end, start);
         draw_list.AddRectFilledMultiColor(max with { Y = max.Y + 1 }, center with { Y = max.Y },
-                start, center_end, center_end, start);
+            start, center_end, center_end, start);
 
         draw_list.AddRectFilledMultiColor(min with { Y = max.Y + 2 }, center with { Y = max.Y + 1 },
-                start, side_end, side_end, start);
+            start, side_end, side_end, start);
         draw_list.AddRectFilledMultiColor(max with { Y = max.Y + 2 }, center with { Y = max.Y + 1 },
-                start, side_end, side_end, start);
+            start, side_end, side_end, start);
     }
 }
 
@@ -280,7 +278,7 @@ public class FhSettingBitfield<T>(string id, T def_value, int row_count) : FhSet
     public void set(T flag, bool enabled) {
         // Generic enums aren't very friendly, so we have to do the operations on a numeric value
         ulong int_value = Convert.ToUInt64(value);
-        ulong int_flag = Convert.ToUInt64(flag);
+        ulong int_flag  = Convert.ToUInt64(flag);
 
         if (enabled) int_value |= int_flag;
         else int_value &= ~int_flag;
@@ -390,18 +388,17 @@ public unsafe class FhSettingNumber<T>(string id, T def_value, T? min, T? max, T
 
     private static ImGuiDataType get_data_type(T example_value) {
         return example_value switch {
-            byte   _ => ImGuiDataType.U8,
-            ushort _ => ImGuiDataType.U16,
-            uint   _ => ImGuiDataType.U32,
-            ulong  _ => ImGuiDataType.U64,
-            sbyte  _ => ImGuiDataType.S8,
-            short  _ => ImGuiDataType.S16,
-            int    _ => ImGuiDataType.S32,
-            long   _ => ImGuiDataType.S64,
-            float  _ => ImGuiDataType.Float,
-            double _ => ImGuiDataType.Double,
-            // unreachable; I wish there was a way to notate as such
-            _ => throw new NotImplementedException($"FhSettingNumber<T> expected a built-in number type, not {typeof(T).Name}"),
+            byte   => ImGuiDataType.U8,
+            ushort => ImGuiDataType.U16,
+            uint   => ImGuiDataType.U32,
+            ulong  => ImGuiDataType.U64,
+            sbyte  => ImGuiDataType.S8,
+            short  => ImGuiDataType.S16,
+            int    => ImGuiDataType.S32,
+            long   => ImGuiDataType.S64,
+            float  => ImGuiDataType.Float,
+            double => ImGuiDataType.Double,
+            _      => throw new NotImplementedException($"FhSettingNumber<T> expected a built-in number type, not {typeof(T).Name}"),
         };
     }
 }

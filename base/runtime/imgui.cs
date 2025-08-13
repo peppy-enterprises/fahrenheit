@@ -122,7 +122,7 @@ public unsafe class FhImguiModule : FhModule {
         io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
         //io.ConfigFlags |= ImGuiConfigFlags.ViewportsEnable; //TODO: Figure out why dragging a viewport outside of the game window makes it crash
 
-        io.ConfigDpiScaleFonts = true;
+        io.ConfigDpiScaleFonts     = true;
         io.ConfigDpiScaleViewports = true;
 
         // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
