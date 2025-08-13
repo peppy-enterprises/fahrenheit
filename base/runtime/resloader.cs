@@ -83,7 +83,7 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
             hexa_metadata.MiscFlags2,
             (DXGI_FORMAT)             hexa_metadata.Format,
             (D3D11_RESOURCE_DIMENSION)hexa_metadata.Dimension);
-        ImTextureRef imgui_ref = new ImTextureRef(null, (nint)srv);
+        ImTextureRef imgui_ref = new ImTextureRef(null, srv);
 
         texture = new(imgui_ref, image_metadata);
         return true;
@@ -117,26 +117,26 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
         return rv;
     }
 
-    public bool load_texture_from_disk(string file_name, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
+    public bool load_texture_from_disk(string file_path, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
         if (_p_device == null) {
-            _logger.Info($"{file_name} -> device not ready");
+            _logger.Info($"{file_path} -> device not ready");
             return false;
         }
 
         Hexa_TexMetadata  image_metadata = default;
         Hexa_ScratchImage image = DirectXTex.CreateScratchImage();
         Hexa_HRESULT      rc    = texture_type switch {
-            FhTextureType.DDS  => DirectXTex.LoadFromDDSFile (file_name, Hexa_DDSFlags.None, &image_metadata, &image),
-            FhTextureType.TGA  => DirectXTex.LoadFromTGAFile (file_name, Hexa_TGAFlags.None, &image_metadata, &image),
-            FhTextureType.JPEG => DirectXTex.LoadFromJPEGFile(file_name,                     &image_metadata, &image),
-            FhTextureType.PNG  => DirectXTex.LoadFromPNGFile (file_name,                     &image_metadata, &image),
-            FhTextureType.WIC  => DirectXTex.LoadFromWICFile (file_name, Hexa_WICFlags.None, &image_metadata, &image, null),
+            FhTextureType.DDS  => DirectXTex.LoadFromDDSFile (file_path, Hexa_DDSFlags.None, &image_metadata, &image),
+            FhTextureType.TGA  => DirectXTex.LoadFromTGAFile (file_path, Hexa_TGAFlags.None, &image_metadata, &image),
+            FhTextureType.JPEG => DirectXTex.LoadFromJPEGFile(file_path,                     &image_metadata, &image),
+            FhTextureType.PNG  => DirectXTex.LoadFromPNGFile (file_path,                     &image_metadata, &image),
+            FhTextureType.WIC  => DirectXTex.LoadFromWICFile (file_path, Hexa_WICFlags.None, &image_metadata, &image, null),
             _                  => -1
         };
 
         if (rc.IsFailure) {
-            _logger.Info($"{file_name} -> 0x{rc:X}");
+            _logger.Info($"{file_path} -> 0x{rc:X}");
             return false;
         }
 
