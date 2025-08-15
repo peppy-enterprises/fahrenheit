@@ -159,4 +159,13 @@ public unsafe static class FhUtil {
             Y = vec.Y * 416 / 1080,
         };
     }
+
+    public static uint as_rgba(this Vector4 vec) {
+        return (uint)(
+            ((byte)(vec.X * 255f) << 0)
+          & ((byte)(vec.Y * 255f) << 8)
+          & ((byte)(vec.Z * 255f) << 16)
+          & ((byte)(vec.W * 255f) << 24)
+        );
+    }
 }

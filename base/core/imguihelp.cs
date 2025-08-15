@@ -28,7 +28,7 @@ public unsafe class FhImGuiHelper {
         string     fontdir = Path.Join(FhInternal.PathFinder.Binaries.Path, "resources", "fonts");
 
         FONT_DEFAULT = io.Fonts.AddFontFromFileTTF(
-            fontdir + "NotoSans-VariableFont_wdth,wght.ttf",
+            Path.Join(fontdir, "NotoSans-VariableFont_wdth,wght.ttf"),
             20f,
             null,
             io.Fonts.GetGlyphRangesDefault()

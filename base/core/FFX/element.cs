@@ -1,5 +1,6 @@
 ﻿namespace Fahrenheit.Core.FFX;
 
+[Flags]
 public enum ElementFlags : byte {
     NONE    = 0,
     FIRE    = 1 << 0,
