@@ -2,24 +2,41 @@ using System.Numerics;
 
 namespace Fahrenheit.Core.Runtime;
 
-internal unsafe class ModConfig {
-    private static bool dockbuilder_initialized = false;
-    internal static bool is_open;
-    private static int selected_mod_idx = 0;
+[FhLoad(FhGameType.FFX)]
+public unsafe class FhModConfigModule : FhModule {
+    private FhModContext _context;
+    private FileStream _global_state;
 
-    internal static void open() {
+    private bool _no_settings_warning_pass_done;
+
+    //private bool _dockbuilder_initialized = false;
+    internal bool is_open;
+    private int _selected_mod_idx;
+
+    public override bool init(FhModContext mod_context, FileStream global_state_file) {
+        _context = mod_context;
+        _global_state = global_state_file;
+
+        return true;
+    }
+
+    internal void open() {
         is_open = true;
         //TODO: Prevent the game from playing the Zanarkand scene while the config menu is open
     }
 
-    internal static void close() {
-        is_open = true;
-        selected_mod_idx = 0;
+    internal void close() {
+        is_open = false;
+        _selected_mod_idx = 0;
     }
 
-    internal static void render() {
+    public override void render_imgui() {
         //TODO: Add a proper open/close button in the topright corner
-        is_open ^= ImGui.IsKeyPressed(ImGuiKey.F7);
+        if (ImGui.IsKeyPressed(ImGuiKey.F7)) {
+            if (is_open) close();
+            else open();
+        }
+
         if (!is_open) return;
 
         ImGuiViewportPtr viewport = ImGui.GetMainViewport();
@@ -36,7 +53,7 @@ internal unsafe class ModConfig {
 
         if (ImGui.Begin("ModConfig", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN)) {
 
-        //TODO: Make this work
+            //TODO: Make this work
 
         // Build the dock
         // ImGuiIOPtr io = ImGui.GetIO();
@@ -81,11 +98,16 @@ internal unsafe class ModConfig {
 
                 float tab_width = ImGui.GetContentRegionAvail().X;
                 foreach (FhModContext mod in FhApi.ModController.get_all()) {
-                    if (has_settings(mod))
+                    if (has_settings(mod)) {
                         render_mod_tab(mod, mod_idx++, tab_width);
-                    else
+                    } else {
+                        if (!_no_settings_warning_pass_done) {
+                            _logger.Warning($"Mod {mod.Manifest.Name} has no settings!");
+                        }
                         mod_idx++;
+                    }
                 }
+                _no_settings_warning_pass_done = true;
             }
             ImGui.End();
 
@@ -93,7 +115,7 @@ internal unsafe class ModConfig {
             ImGui.SetNextWindowSize(new Vector2(viewport.WorkSize.X * 0.83f, viewport.WorkSize.Y));
             if (ImGui.Begin("ModSettings", ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove)) {
                 FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
-                foreach (FhModuleContext module in mods[selected_mod_idx].Modules) {
+                foreach (FhModuleContext module in mods[_selected_mod_idx].Modules) {
                     module.Module.settings?.render_name();
                     module.Module.settings?.render();
                 }
@@ -111,9 +133,9 @@ internal unsafe class ModConfig {
         ImGui.End(); // Closing the fullscreen window!
     }
 
-    private static void render_mod_tab(FhModContext mod, int mod_idx, float tab_width) {
+    private void render_mod_tab(FhModContext mod, int mod_idx, float tab_width) {
         if (ImGui.Button($"{mod.Manifest.Name}##mod{mod_idx}", new Vector2(tab_width, 0)))
-            selected_mod_idx = mod_idx;
+            _selected_mod_idx = mod_idx;
     }
 
     private static bool has_settings(FhModContext mod) {
