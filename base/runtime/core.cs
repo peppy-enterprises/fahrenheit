@@ -62,26 +62,21 @@ public unsafe class FhCoreModule : FhModule {
     public override void render_imgui() {
         if (*FFX.Globals.event_id != 0x17) return; // Deactivate the mod list outside the main menu.
 
-        //TODO: Change this so the ModConfig window simply goes above the modlist
-        if (!ModConfig.is_open) {
-            // Create a window for the mod list and render all the mods
-            ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
-            ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
+        // Create a window for the mod list and render all the mods
+        ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
+        ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
 
-            if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
-                ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 18f);
-                FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
+        if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
+            ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 18f);
+            FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
 
-                ImGui.Text($"{mods.Length} mods loaded");
-                foreach (FhModContext mod_ctx in mods) {
-                    ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
-                }
-                ImGui.PopFont();
+            ImGui.Text($"{mods.Length} mods loaded");
+            foreach (FhModContext mod_ctx in mods) {
+                ImGui.Text($"{mod_ctx.Manifest.Name} v{mod_ctx.Manifest.Version}");
             }
-            ImGui.End();
+            ImGui.PopFont();
         }
-
-        ModConfig.render();
+        ImGui.End();
 
         //ImGui.ShowDemoWindow();
     }

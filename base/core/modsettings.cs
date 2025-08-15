@@ -21,12 +21,12 @@ public abstract class FhSetting(string id) {
     }
 
     protected static void render_tooltip(string tooltip) {
-        if (ImGui.BeginItemTooltip()) {
-            ImGui.PushTextWrapPos(ImGui.GetFontSize() * TOOLTIP_SIZE);
-            ImGui.TextUnformatted(tooltip);
-            ImGui.PopTextWrapPos();
-            ImGui.EndTooltip();
-        }
+        if (!ImGui.BeginItemTooltip()) return;
+
+        ImGui.PushTextWrapPos(ImGui.GetFontSize() * TOOLTIP_SIZE);
+        ImGui.TextUnformatted(tooltip);
+        ImGui.PopTextWrapPos();
+        ImGui.EndTooltip();
     }
 }
 
@@ -37,12 +37,20 @@ public class FhSettingsCategory : FhSetting {
     protected readonly FhSetting[] settings;
 
     public FhSettingsCategory(string id, FhSetting[] settings) : base(id) {
-        string id_prefix = id + '.';
-        foreach (FhSetting setting in settings) {
-            setting.id = id_prefix + setting.id;
-        }
-
         this.settings = settings;
+        update_ids();
+    }
+
+    public void update_ids(string? prefix = null) {
+        prefix ??= id;
+        string dot_prefix = prefix + '.';
+        foreach (FhSetting setting in settings) {
+            // if (!setting.id.StartsWith(prefix))
+            setting.id = dot_prefix + setting.id;
+
+            if (setting is FhSettingsCategory category)
+                category.update_ids(prefix);
+        }
     }
 
     public bool collapsed;
@@ -106,6 +114,7 @@ public class FhSettingsCategoryToggleable(string id, FhSetting[] settings) : FhS
         ImGui.SameLine();
         ImGui.BeginDisabled(locked);
         ImGui.Checkbox(name, ref _enabled);
+        render_tooltip(desc);
         ImGui.EndDisabled();
 
         ImGui.SameLine();
@@ -250,7 +259,9 @@ public class FhSettingDropdown<T>(string id, T def_value) : FhSetting(id)
     }
 
     //TODO: FhSettingDropdown rendering
-    public override void render() {}
+    public override void render() {
+        ImGui.Dummy(new(100f, 50f));
+    }
 }
 
 /// <summary>
