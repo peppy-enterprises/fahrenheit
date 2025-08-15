@@ -2,20 +2,30 @@
 
     <!-- ASSEMBLY BASIC PROPERTIES -->
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     </PropertyGroup>
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <ApplicationIcon>..\..\assets\fh_base_256.ico</ApplicationIcon>
         <AssemblyName>fhmodmgr</AssemblyName>
         <AssemblyTitle>Fahrenheit Mod Manager</AssemblyTitle>
         <Product>Fahrenheit Mod Manager</Product>
+    </PropertyGroup>
+
+    <!-- PUBLISH SETTINGS -->
+    <PropertyGroup>
+        <PublishSingleFile>true</PublishSingleFile>
+        <PublishTrimmed>true</PublishTrimmed>
+    </PropertyGroup>
+
+    <!-- APPLICATION ASSETS -->
+    <PropertyGroup>
+        <ApplicationIcon>..\..\assets\fh_base_256.ico</ApplicationIcon>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -27,41 +37,10 @@
         <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
-    <!-- PROJECT REFERENCES -->
+    <!-- EXTERNAL PROJECT REFS -->
     <ItemGroup>
-        <ProjectReference Include="..\..\base\core\Fahrenheit.Core.csproj">
-            <ExcludeAssets Condition="'$(Configuration)'=='Release'">runtime;native</ExcludeAssets>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </ProjectReference>
+        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.17.4" />
+        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.2" />
     </ItemGroup>
-
-    <!-- AVALONIA SPECIFIC BEGIN -->
-    <PropertyGroup>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
-        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <Folder Include="Models\" />
-        <AvaloniaResource Include="Assets\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.2" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.2" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.2" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.2" />
-        <!-- Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration. -->
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.2">
-            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>none</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    </ItemGroup>
-
-    <!-- AVALONIA SPECIFIC END -->
 
 </Project>
