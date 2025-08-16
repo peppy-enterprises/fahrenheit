@@ -10,7 +10,7 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
     </PropertyGroup>
 
-    <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
+    <!-- ASSEMBLY IDENTIFICATION -->
     <PropertyGroup>
         <AssemblyName>fhruntime</AssemblyName>
         <AssemblyTitle>Fahrenheit Runtime Library</AssemblyTitle>
@@ -26,24 +26,39 @@
         <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
-    <!-- CONTENT -->
-    <ItemGroup>
-        <!-- RUNTIME MANIFEST -->
-        <Content Include="fhruntime.manifest.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <!-- RUNTIME FONT -->
-        <Content Include="$(SolutionDir)\assets\NotoSans-VariableFont_wdth,wght.ttf" Link="resources\fonts\NotoSans-VariableFont_wdth,wght.ttf">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
         <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime;native</ExcludeAssets>
         </ProjectReference>
+    </ItemGroup>
+
+    <!-- ASSETS: MANIFEST -->
+    <ItemGroup>
+        <None Include="$(AssemblyName).manifest.json" CopyToOutputDirectory="Always" />
+    </ItemGroup>
+
+    <!-- ASSETS: LOCALIZATION -->
+    <ItemGroup>
+        <None Remove="lang/**" />
+        <None Include="lang/*.json" CopyToOutputDirectory="Always" />
+    </ItemGroup>
+
+    <!-- ASSETS: EXTERNAL FILE LOADER -->
+    <ItemGroup>
+        <None Remove="efl/**" />
+        <None Include="efl/x/**/*;efl/x2/**/*" CopyToOutputDirectory="Always" />
+    </ItemGroup>
+
+    <!-- ASSETS: GENERIC -->
+    <ItemGroup>
+        <None Include="resources/**" CopyToOutputDirectory="Always" />
+
+        <!-- Runtime font. -->
+        <None Include="$(SolutionDir)\assets\NotoSans-VariableFont_wdth,wght.ttf" Link="resources\fonts\NotoSans-VariableFont_wdth,wght.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
