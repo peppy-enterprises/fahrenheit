@@ -2,6 +2,11 @@
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x68C0)]
 public unsafe struct SaveData {
+    [InlineArray(200)]
+    public struct GearArray {
+        private Gear _data;
+    }
+
     [FieldOffset(0x0)]    public       ushort       current_room_id;
     [FieldOffset(0x2)]    public       ushort       last_room_id;
     [FieldOffset(0x4)]    public       ushort       now_eventjump_map_no;
@@ -41,6 +46,7 @@ public unsafe struct SaveData {
     [FieldOffset(0x3ECC)] public fixed T_XCommandId inventory_ids[70];
     [FieldOffset(0x40CC)] public fixed byte         inventory_counts[70];
     [FieldOffset(0x448C)] public       uint         ptr_important_bin;
+    [FieldOffset(0x449C)] public       GearArray    gear;
     [FieldOffset(0x55CC)] public       PlySave      ply_tidus;
     [FieldOffset(0x5660)] public       PlySave      ply_yuna;
     [FieldOffset(0x56F4)] public       PlySave      ply_auron;
