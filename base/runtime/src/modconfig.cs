@@ -4,8 +4,8 @@ namespace Fahrenheit.Core.Runtime;
 
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhModConfigModule : FhModule {
-    private FhModContext _context;
-    private FileStream _global_state;
+    private FhModContext? _context;
+    private FileStream?   _global_state;
 
     private bool _no_settings_warning_pass_done;
 
@@ -14,7 +14,7 @@ public unsafe class FhModConfigModule : FhModule {
     private int _selected_mod_idx;
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        _context = mod_context;
+        _context      = mod_context;
         _global_state = global_state_file;
 
         return true;

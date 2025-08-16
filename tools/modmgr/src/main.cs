@@ -28,7 +28,6 @@ internal sealed unsafe class Program {
     private static IDXGISwapChain*         _p_swap_chain;         // https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nn-dxgi-idxgiswapchain
     private static ID3D11Device*           _p_device;             // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
     private static ID3D11DeviceContext*    _p_device_ctx;         // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11devicecontext
-    private static ID3D11Resource*         _p_surface;            // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11texture2d
     private static ID3D11RenderTargetView* _p_render_target_view; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
 
     // Window state
