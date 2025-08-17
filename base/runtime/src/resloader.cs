@@ -34,6 +34,9 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
         return _handle_d3d11_init.hook();
     }
 
+    /// <summary>
+    ///     Intercepts the game's D3D11 initialization to retrieve a handle to its <see cref="ID3D11Device"/>.
+    /// </summary>
     private HRESULT h_init_d3d11(
         IDXGIAdapter*         pAdapter,
         D3D_DRIVER_TYPE       DriverType,
@@ -57,6 +60,9 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
         return result;
     }
 
+    /// <summary>
+    ///     Creates a <see cref="ID3D11ShaderResourceView"/> from a given texture, then wraps it in a <see cref="FhTexture"/>.
+    /// </summary>
     private bool _create_srv(Hexa_ScratchImage hexa_image, Hexa_TexMetadata hexa_metadata, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
 
@@ -89,6 +95,10 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
         return true;
     }
 
+    /// <summary>
+    ///     Attempts to load a texture of type <paramref name="texture_type"/> located in
+    ///     a memory buffer of size <paramref name="size"/> pointed to by <paramref name="ptr"/>.
+    /// </summary>
     public bool load_texture_from_memory(nint ptr, nuint size, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
         if (_p_device == null) {
@@ -117,6 +127,9 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
         return rv;
     }
 
+    /// <summary>
+    ///     Attempts to load a texture of type <paramref name="texture_type"/> located at <paramref name="file_path"/> on disk.
+    /// </summary>
     public bool load_texture_from_disk(string file_path, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
         if (_p_device == null) {

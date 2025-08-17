@@ -144,6 +144,9 @@ public unsafe class FhImguiModule : FhModule {
         FhApi.ImGuiHelper.init();
     }
 
+    /// <summary>
+    ///     Replaces the game's window procedure with <see cref="h_wndproc"/>.
+    /// </summary>
     private nint h_init_wndproc() {
         nint result = _handle_wndproc_init.orig_fptr();
 
@@ -156,6 +159,10 @@ public unsafe class FhImguiModule : FhModule {
         return result;
     }
 
+    /// <summary>
+    ///     Intercepts the game's D3D11 initialization to retrieve a handle to its <see cref="ID3D11Device"/>,
+    ///     <see cref="ID3D11DeviceContext"/>, and <see cref="IDXGISwapChain"/>.
+    /// </summary>
     private HRESULT h_init_d3d11(
         IDXGIAdapter*         pAdapter,
         D3D_DRIVER_TYPE       DriverType,
@@ -191,6 +198,10 @@ public unsafe class FhImguiModule : FhModule {
         return result;
     }
 
+    /// <summary>
+    ///     Allows ImGui to intercept window messages sent to the game, such as <see cref="WM.WM_KEYDOWN"/>,
+    ///     enabling mouse and keyboard input to be directed to it.
+    /// </summary>
     private nint h_wndproc(
         nint  hWnd,
         uint  msg,
@@ -201,6 +212,9 @@ public unsafe class FhImguiModule : FhModule {
              : PInvoke.CallWindowProcW(_ptr_o_WndProc, hWnd, msg, wParam, lParam);
     }
 
+    /// <summary>
+    ///     Allows interception of raw input from the game, redirecting it to ImGui if appropriate.
+    /// </summary>
     private int h_input_update() {
         if (_hWnd         == 0    // h_init_wndproc hasn't run yet?
          || _p_device     == null // h_init_d3d11 hasn't run yet?
@@ -213,6 +227,9 @@ public unsafe class FhImguiModule : FhModule {
             : _handle_input_update.orig_fptr();
     }
 
+    /// <summary>
+    ///     Intercepts attempts to resize the game window to allow ImGui to continue drawing.
+    /// </summary>
     private nint h_resize_buffers(IDXGISwapChain* pSwapChain, uint BufferCount, uint Width, uint Height, DXGI_FORMAT NewFormat, uint SwapChainFlags) {
         if (_p_device_ctx == null)
             return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
@@ -226,6 +243,9 @@ public unsafe class FhImguiModule : FhModule {
         return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     }
 
+    /// <summary>
+    ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, uint)"/> call to display mods' user interfaces.
+    /// </summary>
     private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, uint Flags) {
         if (_hWnd         == 0    // > h_init_wndproc hasn't run yet?
          || _p_swap_chain == null // |
