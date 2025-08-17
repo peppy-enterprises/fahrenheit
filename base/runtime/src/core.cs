@@ -82,18 +82,14 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     private void h_main_loop(float delta) {
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
-            foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                module_ctx.Module.pre_update();
-            }
+        foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
+            module_ctx.Module.pre_update();
         }
 
         _main_loop.orig_fptr(delta);
 
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
-            foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                module_ctx.Module.post_update();
-            }
+        foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
+            module_ctx.Module.post_update();
         }
     }
 
@@ -102,10 +98,8 @@ public unsafe class FhCoreModule : FhModule {
 
         _update_input.orig_fptr();
 
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
-            foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                module_ctx.Module.handle_input();
-            }
+        foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
+            module_ctx.Module.handle_input();
         }
     }
 
@@ -123,10 +117,8 @@ public unsafe class FhCoreModule : FhModule {
     private void h_render_game() {
         _render_game.orig_fptr();
 
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
-            foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                module_ctx.Module.render_game();
-            }
+        foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
+            module_ctx.Module.render_game();
         }
 
         // In the main menu...
