@@ -47,9 +47,7 @@ public unsafe class FhFileLoaderModule : FhModule {
         int    stream_prefix_end = host0_fixed_path.IndexOf('f', StringComparison.InvariantCultureIgnoreCase);
         string prefixless_path   = host0_fixed_path[stream_prefix_end..];
 
-        return OperatingSystem.IsWindows()
-            ? prefixless_path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
-            : prefixless_path;
+        return prefixless_path;
     }
 
     private void construct_index() {
@@ -61,7 +59,7 @@ public unsafe class FhFileLoaderModule : FhModule {
         };
 
         string         path_efl_dir;
-        FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
+        FhModContext[] mods = [ .. FhApi.ModController.get_mods() ];
 
         foreach (FhModContext mod in mods) {
             path_efl_dir = Path.Join(mod.Paths.EflDir.FullName, efl_subdir_name);

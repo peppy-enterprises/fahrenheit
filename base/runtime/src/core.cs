@@ -68,7 +68,7 @@ public unsafe class FhCoreModule : FhModule {
 
         if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
             ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 18f);
-            FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
+            FhModContext[] mods = [ .. FhApi.ModController.get_mods() ];
 
             ImGui.Text($"{mods.Length} mods loaded");
             foreach (FhModContext mod_ctx in mods) {
@@ -82,7 +82,7 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     private void h_main_loop(float delta) {
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.pre_update();
             }
@@ -90,7 +90,7 @@ public unsafe class FhCoreModule : FhModule {
 
         _main_loop.orig_fptr(delta);
 
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.post_update();
             }
@@ -102,7 +102,7 @@ public unsafe class FhCoreModule : FhModule {
 
         _update_input.orig_fptr();
 
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.handle_input();
             }
@@ -123,7 +123,7 @@ public unsafe class FhCoreModule : FhModule {
     private void h_render_game() {
         _render_game.orig_fptr();
 
-        foreach (FhModContext mod_ctx in FhApi.ModController.get_all()) {
+        foreach (FhModContext mod_ctx in FhApi.ModController.get_mods()) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 module_ctx.Module.render_game();
             }

@@ -2,7 +2,7 @@
  * Place the mod manager UI in this method. The program stub will invoke it.
  */
 
-namespace Fahrenheit.Core.ModManager;
+namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe class ModManager {
     private static bool _show_demo_window = true;

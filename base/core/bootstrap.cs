@@ -17,6 +17,6 @@ public static class FhBootstrapper {
     public static void bootstrap() {
         FhApi.ModController.load_mods();
         FhApi.LocalizationManager.construct_localization_map();
-        FhApi.ModController.run_initializers();
+        FhApi.ModController.initialize_mods();
     }
 }

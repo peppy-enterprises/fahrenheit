@@ -10,7 +10,7 @@ using HexaID3D11DevicePtr        = Hexa.NET.ImGui.Backends.D3D11.ID3D11DevicePtr
 using ImGuiImplD3D11 = Hexa.NET.ImGui.Backends.D3D11.ImGuiImplD3D11;
 using ImGuiImplWin32 = Hexa.NET.ImGui.Backends.Win32.ImGuiImplWin32;
 
-namespace Fahrenheit.Core.ModManager;
+namespace Fahrenheit.Tools.ModManager;
 
 /* [fkelava 15/8/25 17:41]
  * This is the mod manager program stub. Do not edit this unless you encounter a bug.

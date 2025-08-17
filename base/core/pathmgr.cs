@@ -3,7 +3,7 @@
 /// <summary>
 ///     Contains path information required for the loader to process a DLL in the <see cref="FhManifest.DllList"/> of a Fahrenheit mod.
 /// </summary>
-internal sealed record FhLoaderPathInfo(
+internal sealed record FhDllPathInfo(
     string DllPath,
     string SettingsPath);
 
@@ -97,11 +97,11 @@ internal class FhPathFinder {
         return save_name;
     }
 
-    public FhLoaderPathInfo create_loader_paths(string mod_name, string dll_name) {
+    public FhDllPathInfo create_dll_paths(string mod_name, string dll_name) {
         bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
         string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
 
-        return new FhLoaderPathInfo(
+        return new FhDllPathInfo(
             DllPath:      Path.Join(module_dir, $"{dll_name}.dll"),
             SettingsPath: Path.Join(module_dir, $"{dll_name}.config.json")
             );

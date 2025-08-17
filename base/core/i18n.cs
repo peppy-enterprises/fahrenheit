@@ -13,7 +13,7 @@ public class FhLocalizationManager {
     private readonly Dictionary<string, LocaleData> _localization_map;
 
     internal void construct_localization_map() {
-        FhModContext[] mods = [ .. FhApi.ModController.get_all() ];
+        FhModContext[] mods = [ .. FhApi.ModController.get_mods() ];
 
         foreach (FhModContext mod in mods) {
             foreach (FileInfo lang_file_path in mod.Paths.LangDir.EnumerateFiles()) {
