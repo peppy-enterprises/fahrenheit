@@ -81,7 +81,7 @@ public abstract class FhModule {
     /// <summary>
     ///     Your module should perform all Fahrenheit-related initialization here. At the time this is called, all mods have been loaded, and:
     ///     <br/>
-    ///     <br/> - you may call <see cref="FhModuleHandle{T}.try_acquire"/> to obtain references to other modules;
+    ///     <br/> - you may call <see cref="FhModuleHandle{T}.try_get(out FhModuleContext?)"/> to obtain references to other modules;
     ///     <br/> - you receive a copy of the containing mod's <see cref="FhModContext"/>;
     ///     <br/> - you receive a <see cref="FileStream"/> of the global state file for your module;
     /// </summary>
@@ -109,8 +109,8 @@ public abstract class FhModule {
     public virtual void post_update() { }
 
     /// <summary>
-    ///     Called just before <see href="https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-present">
-    ///     IDXGISwapChain::Present</see> time. You may freely invoke ImGui methods here, and <i>only</i> here.
+    ///     Called just before <see cref="TerraFX.Interop.DirectX.IDXGISwapChain.Present"/> time.
+    ///     You may freely invoke ImGui methods here, and <i>only</i> here.
     /// </summary>
     public virtual void render_imgui() { }
     public virtual void render_game()  { }

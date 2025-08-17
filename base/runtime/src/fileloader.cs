@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 
-using static Fahrenheit.Core.Runtime.PInvoke;
-
 namespace Fahrenheit.Core.Runtime;
 
 internal struct PStreamFile {
@@ -25,18 +23,19 @@ internal unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_
 ///     the full path is <b>{...}\efl\x\FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>.
 /// </summary>
 [FhLoad(FhGameType.FFX)]
+[SupportedOSPlatform("windows")]
 public unsafe class FhFileLoaderModule : FhModule {
     private readonly Dictionary<string, string>       _index;
-    private readonly FhMethodHandle<PStreamFile_ctor> _h_pstream_ctor;
+    private readonly FhMethodHandle<PStreamFile_ctor> _h_fopen;
 
     public FhFileLoaderModule() {
-        _index          = [];
-        _h_pstream_ctor = new(this, "FFX.exe", h_pstream_ctor, offset: 0x207D80);
+        _index      = [];
+        _h_fopen    = new(this, "FFX.exe", h_fopen,    offset: 0x207D80);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         construct_index();
-        return _h_pstream_ctor.hook();
+        return _h_fopen.hook();
     }
 
     /// <summary>
@@ -47,7 +46,9 @@ public unsafe class FhFileLoaderModule : FhModule {
         int    stream_prefix_end = host0_fixed_path.IndexOf('f', StringComparison.InvariantCultureIgnoreCase);
         string prefixless_path   = host0_fixed_path[stream_prefix_end..];
 
-        return prefixless_path;
+        return OperatingSystem.IsWindows()
+            ? prefixless_path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+            : prefixless_path;
     }
 
     private void construct_index() {
@@ -87,14 +88,14 @@ public unsafe class FhFileLoaderModule : FhModule {
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private nint h_pstream_ctor(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5) {
+    private nint h_fopen(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5) {
         string path            = Marshal.PtrToStringAnsi(path_ptr) ?? throw new Exception("FH_E_EFL_PSTREAM_CTOR_OPEN_PATH_NUL");
         string normalized_path = normalize_path(path);
 
         _logger.Info(normalized_path);
 
         if (!_index.TryGetValue(normalized_path, out string? modded_path)) {
-            return _h_pstream_ctor.orig_fptr.Invoke(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
+            return _h_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
         }
 
         /* [fkelava 01/10/24 16:49]
@@ -105,15 +106,22 @@ public unsafe class FhFileLoaderModule : FhModule {
          * No bookkeeping of the returned handle is necessary. The game closes it itself.
          */
 
-        this_ptr->handle_vbf = 0;
-        this_ptr->handle_os  = CreateFileW(
-            lpFileName:            modded_path,
-            dwDesiredAccess:       read_only ? FILE_READ_DATA  : FILE_WRITE_DATA,
-            dwShareMode:           read_only ? FILE_SHARE_READ : 0U,
-            lpSecurityAttributes:  0,
-            dwCreationDisposition: read_only ? OPEN_EXISTING   : OPEN_ALWAYS,
-            dwFlagsAndAttributes:  FILE_FLAG_SEQUENTIAL_SCAN,
-            hTemplateFile:         0);
+        fixed (char* modded_path_ptr = modded_path) {
+            this_ptr->handle_vbf = 0;
+            this_ptr->handle_os  = Windows.CreateFileW(
+                lpFileName:            modded_path_ptr,
+                dwDesiredAccess:       (uint)(read_only ? FILE.FILE_READ_DATA  : FILE.FILE_WRITE_DATA),
+                dwShareMode:           (uint)(read_only ? FILE.FILE_SHARE_READ : 0),
+                lpSecurityAttributes:  null,
+                dwCreationDisposition: (uint)(read_only ? OPEN.OPEN_EXISTING   : OPEN.OPEN_ALWAYS),
+                dwFlagsAndAttributes:  FILE.FILE_FLAG_SEQUENTIAL_SCAN,
+                hTemplateFile:         HANDLE.NULL);
+        }
+
+        if (this_ptr->handle_os == HANDLE.INVALID_VALUE) {
+            _logger.Error($"File open failed for {modded_path} - bailing out");
+            return _h_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
+        }
 
         _logger.Info($"{path} -> {modded_path}");
         return new nint(this_ptr);

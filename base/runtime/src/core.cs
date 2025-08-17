@@ -31,7 +31,6 @@ internal unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
 ///     <br/> - <see cref="FhModule.pre_update"/>
 ///     <br/> - <see cref="FhModule.post_update"/>
 ///     <br/> - <see cref="FhModule.render_game"/>
-///     <br/> - <see cref="FhModule.render_imgui"/>
 /// </summary>
 [FhLoad(FhGameType.FFX)]
 public unsafe class FhCoreModule : FhModule {
@@ -81,6 +80,10 @@ public unsafe class FhCoreModule : FhModule {
         //ImGui.ShowDemoWindow();
     }
 
+    /// <summary>
+    ///     Overrides the game's main loop to execute the <see cref="FhModule.pre_update"/> and
+    ///     <see cref="FhModule.post_update"/> callbacks before and after every iteration, respectively.
+    /// </summary>
     private void h_main_loop(float delta) {
         foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
             module_ctx.Module.pre_update();

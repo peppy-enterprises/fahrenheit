@@ -46,7 +46,7 @@ public class FhModController {
 
     internal void load_mods() {
         _mods = [ .. FhInternal.Loader.load_mods() ];
-        Interlocked.Increment(ref _init);
+        Interlocked.Increment(ref _init); // _mods is now locked for the rest of program execution.
     }
 
     internal void initialize_mods() {

@@ -203,13 +203,13 @@ public unsafe class FhImguiModule : FhModule {
     ///     enabling mouse and keyboard input to be directed to it.
     /// </summary>
     private nint h_wndproc(
-        nint  hWnd,
-        uint  msg,
-        nuint wParam,
-        nint  lParam) {
+        HWND   hWnd,
+        uint   msg,
+        WPARAM wParam,
+        LPARAM lParam) {
         return ImGuiImplWin32.WndProcHandler(hWnd, msg, wParam, lParam) == 1
              ? 1
-             : PInvoke.CallWindowProcW(_ptr_o_WndProc, hWnd, msg, wParam, lParam);
+             : Windows.CallWindowProcW((delegate* unmanaged<HWND, uint, WPARAM, LPARAM, LRESULT>)_ptr_o_WndProc, hWnd, msg, wParam, lParam);
     }
 
     /// <summary>
