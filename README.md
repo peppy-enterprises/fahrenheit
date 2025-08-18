@@ -34,7 +34,7 @@ Fahrenheit includes submodules. To clone the entire solution, use
 ``git clone --recurse-submodules https://github.com/peppy-enterprises/fahrenheit``.
 
 > [!IMPORTANT]
-> Please ensure the folder you cloned to does not contain special characters. This can cause 
+> Please ensure the folder you cloned to does not contain special characters. This can cause build errors.
 
 > [!CAUTION]
 > **Fahrenheit is incompatible** with [Untitled Project X](https://github.com/Kaldaien/UnX)
