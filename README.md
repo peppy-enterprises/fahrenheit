@@ -41,10 +41,13 @@ Building requires Visual Studio 2022 with the following workloads:
 
 Once you have installed Visual Studio, enable the `vcpkg` package manager
 by issuing `vcpkg integrate install` at a Developer PowerShell prompt.
+Restart Visual Studio if it was open during this process.
 
 To install/test your development build:
-- Build output is found under ``artifacts\localdeploy`` in the directory in which you cloned Fahrenheit.
-- Copy the contents of the `dbg` or `rel` directory, depending on build type (the folders ``bin``, ``modules``, etc.) to a subfolder named ``fahrenheit`` in your game directory (where ``FFX.exe`` is).
+- Create a subfolder in your game directory (where ``FFX.exe`` is) named ``fahrenheit``.
+- In the directory in which you cloned Fahrenheit, navigate to the ``artifacts\localdeploy`` subdirectory.
+- Depending on build type (Debug or Release), navigate to the ``dbg`` or ``rel`` subdirectory.
+- Copy the contents of that directory (the folders ``bin``, ``mods``, etc.) to the ``fahrenheit`` subfolder in the game directory.
 - Create an empty, extensionless file called `loadorder` in the `mods` directory. Add the manifest names of mods you wish to load, each on their own line.
 - Open a terminal in ``fahrenheit/bin``, then issue ``.\fhstage0.exe ..\..\FFX.exe``.
 - Debugging can be performed from Visual Studio. Attach to either ``fhstage0.exe`` or ``FFX.exe``, and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
