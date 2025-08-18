@@ -33,7 +33,14 @@ improve, learn from and use- now and forever.
 Fahrenheit includes submodules. To clone the entire solution, use
 ``git clone --recurse-submodules https://github.com/peppy-enterprises/fahrenheit``.
 
-Please ensure the folder you cloned to does not contain special characters.
+> [!IMPORTANT]
+> Please ensure the folder you cloned to does not contain special characters. This can cause 
+
+> [!CAUTION]
+> **Fahrenheit is incompatible** with [Untitled Project X](https://github.com/Kaldaien/UnX)
+and ffgriever's [External File Loader for FFX/FFX-2](https://gitlab.com/ffgriever/ffx-x-2-hd-external-file-loader).
+> Fahrenheit supplies its own External File Loader, and you can use [Roelin's Asset Converter](https://www.nexusmods.com/finalfantasy12/mods/288)
+> for model and texture modding in conjunction with it.
 
 Building requires Visual Studio 2022 with the following workloads:
 - .NET desktop development (latest version)
