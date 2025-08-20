@@ -20,27 +20,23 @@ public class FhLocalizationManager {
                 string lang_id  = Path.GetFileNameWithoutExtension(lang_file_path.FullName);
                 string mod_name = mod.Manifest.Name;
 
-                try {
-                    using FileStream lang_file_stream = lang_file_path.Open(FileMode.Open, FileAccess.Read);
-                    LocaleData? locale = JsonSerializer.Deserialize<LocaleData>(lang_file_stream, FhUtil.InternalJsonOpts);
-                    if (locale == null) return;
-
-                    if (!_localization_map.TryGetValue(lang_id, out LocaleData? locale_data)) {
-                        FhInternal.Log.Warning($"In mod {mod_name}: language ID {lang_id} is not known by Fahrenheit.");
-                        return;
-                    }
-
-                    foreach (KeyValuePair<string, string> locale_kv in locale) {
-                        if (locale_data.ContainsKey(locale_kv.Key)) {
-                            FhInternal.Log.Warning($"Mod {mod_name} is superseding key {locale_kv.Key} in locale {lang_id}");
-                        }
-
-                        locale_data[locale_kv.Key] = locale_kv.Value;
-                    }
+                if (!_localization_map.TryGetValue(lang_id, out LocaleData? locale_data)) {
+                    FhInternal.Log.Warning($"In mod {mod_name}: language ID {lang_id} is not known by Fahrenheit.");
+                    continue;
                 }
-                catch {
-                    FhInternal.Log.Error($"While parsing locale {lang_id} for module {mod_name}:");
-                    throw;
+
+                FhInternal.Log.Info($"Parsing locale {lang_id} for mod {mod_name}.");
+
+                using FileStream lang_file_stream = lang_file_path.Open(FileMode.Open, FileAccess.Read);
+                LocaleData? locale = JsonSerializer.Deserialize<LocaleData>(lang_file_stream, FhUtil.InternalJsonOpts);
+                if (locale == null) continue;
+
+                foreach (KeyValuePair<string, string> locale_kv in locale) {
+                    if (locale_data.ContainsKey(locale_kv.Key)) {
+                        FhInternal.Log.Warning($"Mod {mod_name} is superseding key {locale_kv.Key} in locale {lang_id}");
+                    }
+
+                    locale_data[locale_kv.Key] = locale_kv.Value;
                 }
             }
         }
