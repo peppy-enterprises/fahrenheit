@@ -24,6 +24,19 @@ internal unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
     float scale,
     float _);
 
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+internal unsafe delegate nint TOAdpMesFontLXYZClutTypeRGBAChangeFontType(
+    nint p1,
+    uint p2,
+    byte* text,
+    float x,
+    float y,
+    nint p6,
+    nint p7,
+    nint p8,
+    nint tint_r, nint tint_g, nint tint_b, nint tint_a,
+    bool p13);
+
 /// <summary>
 ///     Executes the lifecycle methods of <see cref="FhModule"/>.
 ///     <para/>
@@ -32,12 +45,13 @@ internal unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA(
 ///     <br/> - <see cref="FhModule.post_update"/>
 ///     <br/> - <see cref="FhModule.render_game"/>
 /// </summary>
-[FhLoad(FhGameType.FFX)]
+[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
 public unsafe class FhCoreModule : FhModule {
-    private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
-    private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
-    private readonly FhMethodHandle<TODrawMessageWindow>       _render_game;
-    private readonly TOMkpCrossExtMesFontLClutTypeRGBA         _draw_delegate;
+    private readonly FhMethodHandle<Sg_MainLoop>                _main_loop;
+    private readonly FhMethodHandle<AtelExecInternal_00871d10>  _update_input;
+    private readonly FhMethodHandle<TODrawMessageWindow>        _render_game;
+    private readonly TOMkpCrossExtMesFontLClutTypeRGBA          _draw_delegate;
+    private readonly TOAdpMesFontLXYZClutTypeRGBAChangeFontType _TOAdpMesFontLXYZClutTypeRGBAChangeFontType;
 
     private static readonly FhSettingsCategory _settings = new("fhruntime", [
         new FhSettingToggle("display_mod_count", true),
@@ -46,10 +60,20 @@ public unsafe class FhCoreModule : FhModule {
     public FhCoreModule() {
         settings = _settings;
 
-        _main_loop     = new(this, "FFX.exe", h_main_loop,    offset: 0x420C00);
-        _update_input  = new(this, "FFX.exe", h_update_input, offset: 0x471d10);
-        _render_game   = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
-        _draw_delegate = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
+        switch (FhGlobal.game_type) {
+            case FhGameType.FFX:
+                _main_loop     = new(this, "FFX.exe", h_main_loop,    offset: 0x420C00);
+                _update_input  = new(this, "FFX.exe", h_update_input, offset: 0x471d10);
+                _render_game   = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
+                _draw_delegate = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
+                break;
+            case FhGameType.FFX2:
+                _main_loop                                  = new(this, "FFX-2.exe", h_main_loop,    offset: 0x205150);
+                _update_input                               = new(this, "FFX-2.exe", h_update_input, offset: 0x32ce90);
+                _render_game                                = new(this, "FFX-2.exe", h_render_game,  offset: 0x391D00);
+                _TOAdpMesFontLXYZClutTypeRGBAChangeFontType = FhUtil.get_fptr<TOAdpMesFontLXYZClutTypeRGBAChangeFontType>(0x3A7600);
+                break;
+        }
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
@@ -59,7 +83,12 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public override void render_imgui() {
-        if (*FFX.Globals.event_id != 0x17) return; // Deactivate the mod list outside the main menu.
+        int curr_event_id = FhGlobal.game_type switch { 
+            FhGameType.FFX => *FFX.Globals.event_id, 
+            FhGameType.FFX2 => *FFX2.Globals.event_id 
+        };
+        if (curr_event_id != 0x17) return; // Deactivate the mod list outside the main menu.
+
 
         // Create a window for the mod list and render all the mods
         ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
@@ -97,7 +126,7 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     private void h_update_input() {
-        FFX.Globals.Input.update();
+        FhApi.Input.update();
 
         _update_input.orig_fptr();
 
@@ -124,11 +153,23 @@ public unsafe class FhCoreModule : FhModule {
             module_ctx.Module.render_game();
         }
 
-        // In the main menu...
-        if (*FFX.Globals.event_id == 0x17) {
-            // render some text so that people can't easily hide their use of Fahrenheit
-            string text = $"Fahrenheit v{typeof(FhGlobal).Assembly.GetName().Version}";
-            draw_text_rgba(FhCharset.Us.to_bytes(text), 5f, 400f, 0x00, 0.65f);
+        string text = $"Fahrenheit v{typeof(FhGlobal).Assembly.GetName().Version}";
+        switch (FhGlobal.game_type) {
+            case FhGameType.FFX:
+                // In the main menu...
+                if (*FFX.Globals.event_id == 0x17) {
+                    // render some text so that people can't easily hide their use of Fahrenheit
+                    draw_text_rgba(FhCharset.Us.to_bytes(text), 5f, 400f, 0x00, 0.65f);
+                }
+                break;
+            case FhGameType.FFX2:
+                // Main menu draws over this
+                //if (*FFX2.Globals.event_id == 0x17) {
+                //    fixed (byte* s = FhCharset.Us.to_bytes(text)) {
+                //        _TOAdpMesFontLXYZClutTypeRGBAChangeFontType(0, 0xffffffff, s, 5f, 400f, 0x10, 0, 0, 0x00, 0x80, 0x80, 0x80, false);
+                //    }
+                //}
+                break;
         }
     }
 }

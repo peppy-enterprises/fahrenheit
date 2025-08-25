@@ -28,7 +28,7 @@ public unsafe static class Globals {
         public static AtelRequest*          request_list       => FhUtil.ptr_at<AtelRequest>         (0xD35D68);
         public static AtelWorkerController* controllers        => FhUtil.ptr_at<AtelWorkerController>(0xF25B60);
         public static AtelBasicWorker*      current_worker     => FhUtil.ptr_at<AtelBasicWorker>     (0xF270A4);
-        public static AtelWorkerController* current_controller => FhUtil.ptr_at<AtelWorkerController>(0xF26AE8);
+        public static AtelWorkerController* current_controller => (AtelWorkerController*)FhUtil.get_at<nint>(0xF26AE8);
     }
 
     public static class SphereGrid {
@@ -54,53 +54,7 @@ public unsafe static class Globals {
             public static float* tornado         => FhUtil.ptr_at<float>(0x886B6C);
         }
     }
-
-    public static class Input {
-        public static readonly InputAction l2       = new(0x1);
-        public static readonly InputAction r2       = new(0x2);
-        public static readonly InputAction l1       = new(0x4);
-        public static readonly InputAction r1       = new(0x8);
-        public static readonly InputAction square   = new(0x10);
-        public static readonly InputAction confirm  = new(0x20);
-        public static readonly InputAction cancel   = new(0x40);
-        public static readonly InputAction triangle = new(0x80);
-        public static readonly InputAction select   = new(0x100);
-        public static readonly InputAction start    = new(0x800);
-        public static readonly InputAction up       = new(0x1000);
-        public static readonly InputAction right    = new(0x2000);
-        public static readonly InputAction down     = new(0x4000);
-        public static readonly InputAction left     = new(0x8000);
-
-        public static ushort* raw { get { return FhUtil.ptr_at<ushort>(0xF27080); } }
-
-        private static ushort previous;
-
-        public static void update() {
-            previous = *raw;
-        }
-
-        public static void consume_all() {
-            previous = *raw = 0;
-        }
-
-        public class InputAction {
-            private ushort mask;
-
-            public InputAction(ushort mask) {
-                this.mask = mask;
-            }
-
-            public (bool held, bool just_pressed, bool just_released) consume() {
-                (bool, bool, bool) ret = (held, just_pressed, just_released);
-                *raw &= (ushort)~mask;
-                return ret;
-            }
-
-            public bool held          { get { return (*raw & mask) != 0;                           } }
-            public bool just_pressed  { get { return (*raw & mask) != 0 && (previous & mask) == 0; } }
-            public bool just_released { get { return (*raw & mask) == 0 && (previous & mask) != 0; } }
-        }
-    }
+    public static FhInput Input => FhApi.Input;
 
     public static Actor*         actors          => (Actor*)*FhUtil.ptr_at<nint>(0x1FC44E4);
     public static Btl*           btl             => FhUtil.ptr_at<Btl>          (0xD2A8D0);

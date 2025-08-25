@@ -22,15 +22,22 @@ internal unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_
 ///     For example, to replace <b>FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>,
 ///     the full path is <b>{...}\efl\x\FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>.
 /// </summary>
-[FhLoad(FhGameType.FFX)]
+[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
 [SupportedOSPlatform("windows")]
 public unsafe class FhFileLoaderModule : FhModule {
     private readonly Dictionary<string, string>       _index;
     private readonly FhMethodHandle<PStreamFile_ctor> _h_fopen;
 
     public FhFileLoaderModule() {
-        _index      = [];
-        _h_fopen    = new(this, "FFX.exe", h_fopen,    offset: 0x207D80);
+        _index = [];
+        switch (FhGlobal.game_type) {
+            case FhGameType.FFX:
+                _h_fopen = new(this, "FFX.exe", h_fopen, offset: 0x207D80);
+                break;
+            case FhGameType.FFX2:
+                _h_fopen = new(this, "FFX-2.exe", h_fopen, offset: 0x490e40);
+                break;
+        }
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {

@@ -31,7 +31,7 @@ internal readonly struct FhSaveListEntry {
 ///     <br/> - <see cref="FhModule.load_local_state(FileStream, FhLocalStateInfo)"/>
 ///     <br/> - <see cref="FhModule.save_local_state(FileStream)"/>
 /// </summary>
-[FhLoad(FhGameType.FFX)]
+[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
 public unsafe class FhLocalStateModule : FhModule {
     private readonly FhMethodHandle<FUN_002F01B0_load>     _handle_onload;
     private readonly FhMethodHandle<FUN_002F09A0_save>     _handle_onsave;
@@ -39,10 +39,20 @@ public unsafe class FhLocalStateModule : FhModule {
     private readonly FhMethodHandle<FUN_002F0DA0_list>     _handle_onlist;
 
     public FhLocalStateModule() {
-        _handle_onload     = new(this, "FFX.exe", h_onload,     offset: 0x2F01B0);
-        _handle_onsave     = new(this, "FFX.exe", h_onsave,     offset: 0x2F09A0);
-        _handle_onautosave = new(this, "FFX.exe", h_onautosave, offset: 0x2F0650);
-        _handle_onlist     = new(this, "FFX.exe", h_onlist,     offset: 0x2F0DA0);
+        switch (FhGlobal.game_type) {
+            case FhGameType.FFX:
+                _handle_onload     = new(this, "FFX.exe", h_onload,     offset: 0x2F01B0);
+                _handle_onsave     = new(this, "FFX.exe", h_onsave,     offset: 0x2F09A0);
+                _handle_onautosave = new(this, "FFX.exe", h_onautosave, offset: 0x2F0650);
+                _handle_onlist     = new(this, "FFX.exe", h_onlist,     offset: 0x2F0DA0);
+                break;
+            case FhGameType.FFX2:
+                _handle_onload     = new(this, "FFX-2.exe", h_onload,     offset: 0x11D040);
+                _handle_onsave     = new(this, "FFX-2.exe", h_onsave,     offset: 0x11D880);
+                _handle_onautosave = new(this, "FFX-2.exe", h_onautosave, offset: 0x11D510);
+                _handle_onlist     = new(this, "FFX-2.exe", h_onlist,     offset: 0x11DC50);
+                break;
+        }
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
@@ -56,7 +66,10 @@ public unsafe class FhLocalStateModule : FhModule {
         if (menu_selection_index != 0) return _get_state_dir_path_load(mod_context, menu_selection_index);
 
         // a list of 200 entries, 1 indicating the slot is used, -1 indicating it is unused
-        ReadOnlySpan<int> used_slots_list   = new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x8E7C68), 200);
+        ReadOnlySpan<int> used_slots_list   = FhGlobal.game_type switch {
+            FhGameType.FFX  => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x8E7C68), 200),
+            FhGameType.FFX2 => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x9ECD30), 200),
+        };
         int               actual_slot_index = 0;
 
         for (; actual_slot_index < 200; actual_slot_index++) {
@@ -75,7 +88,10 @@ public unsafe class FhLocalStateModule : FhModule {
         if (menu_selection_index < 0) menu_selection_index++; // game itself does this (?)
 
         // map the index in the save slot selector to the actual _index_ in the save filename
-        ReadOnlySpan<FhSaveListEntry> save_list     = new ReadOnlySpan<FhSaveListEntry>(FhUtil.ptr_at<nint>(0x8E7308), 200);
+        ReadOnlySpan<FhSaveListEntry> save_list     = FhGlobal.game_type switch {
+            FhGameType.FFX  => new ReadOnlySpan<FhSaveListEntry>(FhUtil.ptr_at<nint>(0x8E7308), 200),
+            FhGameType.FFX2 => new ReadOnlySpan<FhSaveListEntry>(FhUtil.ptr_at<nint>(0x9EC3D0), 200),
+        };
         FhSaveListEntry               selected_save = save_list[menu_selection_index];
 
         string local_state_dir = Path.Join(
