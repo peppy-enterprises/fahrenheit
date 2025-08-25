@@ -64,7 +64,7 @@ internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
 ///     <para/>
 ///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_imgui"/>.
 /// </summary>
-[FhLoad(FhGameType.FFX)]
+[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe class FhImguiModule : FhModule {
     // WndProc support
@@ -89,9 +89,17 @@ public unsafe class FhImguiModule : FhModule {
     private bool _present_ready;         // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
     public FhImguiModule() {
-        _handle_wndproc_init = new(this, "FFX.exe",   h_init_wndproc, offset:  0x241B80);
+        switch (FhGlobal.game_type) {
+            case FhGameType.FFX:
+                _handle_wndproc_init = new(this, "FFX.exe", h_init_wndproc, offset: 0x241B80);
+                _handle_input_update = new(this, "FFX.exe", h_input_update, offset: 0x225930);
+                break;
+            case FhGameType.FFX2:
+                _handle_wndproc_init = new(this, "FFX-2.exe", h_init_wndproc, offset: 0x0529A0);
+                _handle_input_update = new(this, "FFX-2.exe", h_input_update, offset: 0x6B51E0);
+                break;
+        }
         _handle_d3d11_init   = new(this, "D3D11.dll", h_init_d3d11,   fn_name: "D3D11CreateDeviceAndSwapChain");
-        _handle_input_update = new(this, "FFX.exe",   h_input_update, offset:  0x225930);
         _h_WndProc           = h_wndproc;
     }
 
@@ -149,8 +157,14 @@ public unsafe class FhImguiModule : FhModule {
     /// </summary>
     private nint h_init_wndproc() {
         nint result = _handle_wndproc_init.orig_fptr();
-
-        _hWnd          = (HWND)FhUtil.get_at<nint>(0x8C9CE8);
+        switch (FhGlobal.game_type) {
+            case FhGameType.FFX:
+                _hWnd = (HWND)FhUtil.get_at<nint>(0x8C9CE8);
+                break;
+            case FhGameType.FFX2:
+                _hWnd = (HWND)FhUtil.get_at<nint>(0x16641B8);
+                break;
+        }
         _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
         _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
         nint _         = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);

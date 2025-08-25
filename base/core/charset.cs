@@ -23,6 +23,11 @@ public abstract unsafe partial class FhCharset {
             dest[i] = to_byte(src[i]);
         }
     }
+    public void to_bytes(in ReadOnlySpan<char> src, byte* dest) {
+        for (int i = 0; i < src.Length; i++) {
+            dest[i] = to_byte(src[i]);
+        }
+    }
 
     public void to_chars(in ReadOnlySpan<byte> src, in Span<char> dest) {
         for (int i = 0; i < src.Length; i++) {
