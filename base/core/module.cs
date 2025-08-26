@@ -67,7 +67,6 @@ public sealed record FhManifest(
 public abstract class FhModule {
     protected readonly string   _module_type_name;
     protected readonly FhLogger _logger;
-    public FhSettingsCategory? settings { get; protected internal set; }
 
     protected FhModule() {
         _module_type_name = GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE");
@@ -76,6 +75,11 @@ public abstract class FhModule {
 
     internal string ModuleType {
         get { return _module_type_name; }
+    }
+
+    public FhSettingsCategory? settings {
+        get;
+        protected internal set;
     }
 
     /// <summary>

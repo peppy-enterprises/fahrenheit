@@ -39,20 +39,15 @@ public unsafe class FhLocalStateModule : FhModule {
     private readonly FhMethodHandle<FUN_002F0DA0_list>     _handle_onlist;
 
     public FhLocalStateModule() {
-        switch (FhGlobal.game_type) {
-            case FhGameType.FFX:
-                _handle_onload     = new(this, "FFX.exe", h_onload,     offset: 0x2F01B0);
-                _handle_onsave     = new(this, "FFX.exe", h_onsave,     offset: 0x2F09A0);
-                _handle_onautosave = new(this, "FFX.exe", h_onautosave, offset: 0x2F0650);
-                _handle_onlist     = new(this, "FFX.exe", h_onlist,     offset: 0x2F0DA0);
-                break;
-            case FhGameType.FFX2:
-                _handle_onload     = new(this, "FFX-2.exe", h_onload,     offset: 0x11D040);
-                _handle_onsave     = new(this, "FFX-2.exe", h_onsave,     offset: 0x11D880);
-                _handle_onautosave = new(this, "FFX-2.exe", h_onautosave, offset: 0x11D510);
-                _handle_onlist     = new(this, "FFX-2.exe", h_onlist,     offset: 0x11DC50);
-                break;
-        }
+        FhMethodLocation location_onload     = new(0x2F01B0, 0x11D040);
+        FhMethodLocation location_onsave     = new(0x2F09A0, 0x11D880);
+        FhMethodLocation location_onautosave = new(0x2F0650, 0x11D510);
+        FhMethodLocation location_onlist     = new(0x2F0DA0, 0x11DC50);
+
+        _handle_onload     = new(this, location_onload,     h_onload);
+        _handle_onsave     = new(this, location_onsave,     h_onsave);
+        _handle_onautosave = new(this, location_onautosave, h_onautosave);
+        _handle_onlist     = new(this, location_onlist,     h_onlist);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {

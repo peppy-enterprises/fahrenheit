@@ -29,6 +29,13 @@ internal class FhMethodAddressMap {
 }
 
 /// <summary>
+///     Used to target functions which are analogous but located at different offsets in FFX and FFX-2.
+/// </summary>
+public sealed record FhMethodLocation(
+    nint OffsetX,
+    nint OffsetX2);
+
+/// <summary>
 ///     Provides access to a method whose signature is equal to <typeparamref name="T"/>.
 ///     You may then invoke or hook the function.
 /// </summary>
@@ -39,13 +46,38 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
     public T        orig_fptr    { get; private set; } // Do not store the value of this field.
     public T        hook_fptr    { get; init;        }
 
+    public FhMethodHandle(FhModule         owner,
+                          FhMethodLocation location,
+                          T                hook)
+    {
+        bool is_ffx = FhGlobal.game_type == FhGameType.FFX;
+
+        string module_name = is_ffx ? "FFX.exe"        : "FFX-2.exe";
+        nint   offset      = is_ffx ? location.OffsetX : location.OffsetX2;
+
+        fn_addr      = calc_fnaddr(module_name, offset);
+        handle_owner = owner;
+        orig_fptr    = Marshal.GetDelegateForFunctionPointer<T>(FhInternal.MethodAddressMap.get(fn_addr));
+        hook_fptr    = hook;
+    }
+
     public FhMethodHandle(FhModule owner,
                           string   module_name,
-                          T        hook,
-                          nint     offset  = int.MaxValue,
-                          string?  fn_name = default)
+                          string   fn_name,
+                          T        hook)
     {
-        fn_addr      = calc_initial_fnaddr_or_throw(module_name, offset, fn_name);
+        fn_addr      = calc_fnaddr(module_name, fn_name);
+        handle_owner = owner;
+        orig_fptr    = Marshal.GetDelegateForFunctionPointer<T>(FhInternal.MethodAddressMap.get(fn_addr));
+        hook_fptr    = hook;
+    }
+
+    public FhMethodHandle(FhModule owner,
+                          string   module_name,
+                          nint     offset,
+                          T        hook)
+    {
+        fn_addr      = calc_fnaddr(module_name, offset);
         handle_owner = owner;
         orig_fptr    = Marshal.GetDelegateForFunctionPointer<T>(FhInternal.MethodAddressMap.get(fn_addr));
         hook_fptr    = hook;
@@ -61,16 +93,21 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         hook_fptr    = hook;
     }
 
-    private nint calc_initial_fnaddr_or_throw(string module_name, nint offset, string? fn_name) {
+    private nint calc_fnaddr(string module_name, string fn_name) {
         nint mod_addr = FhPInvoke.GetModuleHandle(module_name);
-        if (mod_addr == 0) throw new Exception("FH_E_METHOD_HANDLE_GETMODULEHANDLE_FAILED");
+        if (mod_addr == 0) throw new Exception($"Module {module_name} not loaded in memory.");
 
-        nint fn_addr_initial = fn_name == null
-            ? mod_addr + offset
-            : FhPInvoke.GetProcAddress(mod_addr, fn_name);
-        if (fn_addr_initial == 0) throw new Exception("FH_E_METHOD_HANDLE_GETPROCADDR_FAILED");
+        nint fn_addr  = NativeLibrary.GetExport(mod_addr, fn_name);
+        if (fn_addr == 0) throw new Exception($"Method {fn_name} not found in module {module_name}");
 
-        return fn_addr_initial;
+        return fn_addr;
+    }
+
+    private nint calc_fnaddr(string module_name, nint offset) {
+        nint mod_addr = FhPInvoke.GetModuleHandle(module_name);
+        if (mod_addr == 0) throw new Exception($"Module {module_name} not loaded in memory.");
+
+        return mod_addr + offset;
     }
 
     public bool hook() {

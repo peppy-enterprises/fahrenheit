@@ -50,28 +50,31 @@ public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<Sg_MainLoop>                _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10>  _update_input;
     private readonly FhMethodHandle<TODrawMessageWindow>        _render_game;
-    private readonly TOMkpCrossExtMesFontLClutTypeRGBA          _draw_delegate;
-    private readonly TOAdpMesFontLXYZClutTypeRGBAChangeFontType _TOAdpMesFontLXYZClutTypeRGBAChangeFontType;
+
+    private readonly TOMkpCrossExtMesFontLClutTypeRGBA?          _draw_delegate_x;
+    private readonly TOAdpMesFontLXYZClutTypeRGBAChangeFontType? _draw_delegate_x2;
 
     private static readonly FhSettingsCategory _settings = new("fhruntime", [
         new FhSettingToggle("display_mod_count", true),
     ]);
 
     public FhCoreModule() {
+        FhMethodLocation location_main_loop    = new(0x420C00, 0x205150);
+        FhMethodLocation location_update_input = new(0x471D10, 0x32CE90);
+        FhMethodLocation location_render_game  = new(0x4ABCE0, 0x391D00);
+
         settings = _settings;
+
+        _main_loop    = new(this, location_main_loop,    h_main_loop);
+        _update_input = new(this, location_update_input, h_update_input);
+        _render_game  = new(this, location_render_game,  h_render_game);
 
         switch (FhGlobal.game_type) {
             case FhGameType.FFX:
-                _main_loop     = new(this, "FFX.exe", h_main_loop,    offset: 0x420C00);
-                _update_input  = new(this, "FFX.exe", h_update_input, offset: 0x471d10);
-                _render_game   = new(this, "FFX.exe", h_render_game,  offset: 0x4abce0);
-                _draw_delegate = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
+                _draw_delegate_x = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
                 break;
             case FhGameType.FFX2:
-                _main_loop                                  = new(this, "FFX-2.exe", h_main_loop,    offset: 0x205150);
-                _update_input                               = new(this, "FFX-2.exe", h_update_input, offset: 0x32ce90);
-                _render_game                                = new(this, "FFX-2.exe", h_render_game,  offset: 0x391D00);
-                _TOAdpMesFontLXYZClutTypeRGBAChangeFontType = FhUtil.get_fptr<TOAdpMesFontLXYZClutTypeRGBAChangeFontType>(0x3A7600);
+                _draw_delegate_x2 = FhUtil.get_fptr<TOAdpMesFontLXYZClutTypeRGBAChangeFontType>(0x3A7600);
                 break;
         }
     }
@@ -83,12 +86,12 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public override void render_imgui() {
-        int curr_event_id = FhGlobal.game_type switch { 
-            FhGameType.FFX => *FFX.Globals.event_id, 
-            FhGameType.FFX2 => *FFX2.Globals.event_id 
+        int curr_event_id = FhGlobal.game_type switch {
+            FhGameType.FFX  => *FFX.Globals.event_id,
+            FhGameType.FFX2 => *FFX2.Globals.event_id
         };
-        if (curr_event_id != 0x17) return; // Deactivate the mod list outside the main menu.
 
+        if (curr_event_id != 0x17) return; // Deactivate the mod list outside the main menu.
 
         // Create a window for the mod list and render all the mods
         ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
@@ -143,7 +146,7 @@ public unsafe class FhCoreModule : FhModule {
         float  scale
     ) {
         fixed (byte* text_ptr = text)
-            _draw_delegate(0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
+            _draw_delegate_x?.Invoke(0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
     }
 
     private void h_render_game() {

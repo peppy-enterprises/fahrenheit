@@ -7,7 +7,7 @@ public enum FhGameType {
 
 public static unsafe class FhGlobal {
     static FhGlobal() {
-        base_addr = FhPInvoke.GetModuleHandle(null);
+        base_addr = NativeLibrary.GetMainProgramHandle();
         game_type = FhUtil.get_game_type();
     }
 

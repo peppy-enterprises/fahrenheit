@@ -8,9 +8,6 @@ internal static unsafe partial class FhPInvoke {
     [LibraryImport("kernel32.dll", EntryPoint = "GetModuleHandleW", StringMarshalling = StringMarshalling.Utf16)]
     internal static partial nint GetModuleHandle(string? lpModuleName);
 
-    [LibraryImport("kernel32.dll", StringMarshalling = StringMarshalling.Custom, StringMarshallingCustomType = typeof(System.Runtime.InteropServices.Marshalling.AnsiStringMarshaller))]
-    internal static partial nint GetProcAddress(nint hModule, string lpProcName);
-
 #if DEBUG
     private const string hook_lib_name = "minhook.x32d.dll";
 #else

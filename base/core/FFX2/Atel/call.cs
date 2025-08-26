@@ -29,25 +29,25 @@
 namespace Fahrenheit.Core.FFX2.Atel;
 
 public static unsafe class AtelCall {
-    private static nint __addr_NameSpace_Common    = 0x00958ab8;
-    private static nint __addr_NameSpace_Math      = 0x0095bb10;
-    private static nint __addr_NameSpace_SgEvent   = 0x009ba260;
-    private static nint __addr_NameSpace_ChEvent   = 0x009580a8;
-    private static nint __addr_NameSpace_Camera    = 0x00949d18;
-    private static nint __addr_NameSpace_Battle    = 0x009b7478;
-    private static nint __addr_NameSpace_MapFunc   = 0x0095c338;
-    private static nint __addr_NameSpace_MnFunc    = 0x00965890;
-    private static nint __addr_NameSpace_MovieFunc = 0x00944b60;
-    private static nint __addr_NameSpace_DebugFunc = 0x0095bd08;
-    private static nint __addr_NameSpace_Dungeon   = 0x009b6520;
+    private const nint __addr_NameSpace_Common    = 0x00958ab8;
+    private const nint __addr_NameSpace_Math      = 0x0095bb10;
+    private const nint __addr_NameSpace_SgEvent   = 0x009ba260;
+    private const nint __addr_NameSpace_ChEvent   = 0x009580a8;
+    private const nint __addr_NameSpace_Camera    = 0x00949d18;
+    private const nint __addr_NameSpace_Battle    = 0x009b7478;
+    private const nint __addr_NameSpace_MapFunc   = 0x0095c338;
+    private const nint __addr_NameSpace_MnFunc    = 0x00965890;
+    private const nint __addr_NameSpace_MovieFunc = 0x00944b60;
+    private const nint __addr_NameSpace_DebugFunc = 0x0095bd08;
+    private const nint __addr_NameSpace_Dungeon   = 0x009b6520;
 
     /* [fkelava 7/5/23 11:17]
      * Source: Steam ver.
      * Header: __ATEL_FUNCTION_LIST_6__
      *
      * /ffx_ps2/ffx2/master/jppc/battle/header/atelcam.ath
-	 *
-	 * This is funcspace 6 (F06), camera functions. 
+     *
+     * This is funcspace 6 (F06), camera functions.
      */
 
     public delegate int   camSleep(int arg1);
@@ -206,16 +206,16 @@ public static unsafe class AtelCall {
     public delegate int   btlAutoCameraInit();
     public delegate int   btlAutoCameraNext();
     public delegate float camGetZoomScrDpt();
-	
-	/* [fkelava 7/5/23 11:17]
+
+    /* [fkelava 7/5/23 11:17]
      * Source: Steam ver.
      * Header: __ATEL_FUNCTION_LIST_7__
      *
      * /ffx_ps2/ffx2/master/jppc/battle/header/btlatel.ath
-	 *
-	 * This is funcspace 7 (F07), battle functions.
+     *
+     * This is funcspace 7 (F07), battle functions.
      */
-	 
+
     public delegate int   btlTerminateAction();
     public delegate int   btlSetRandPosFlag(int arg1);
     public delegate int   btlExe(int arg1, int arg2);

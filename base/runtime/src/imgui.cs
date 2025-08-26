@@ -89,17 +89,12 @@ public unsafe class FhImguiModule : FhModule {
     private bool _present_ready;         // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
     public FhImguiModule() {
-        switch (FhGlobal.game_type) {
-            case FhGameType.FFX:
-                _handle_wndproc_init = new(this, "FFX.exe", h_init_wndproc, offset: 0x241B80);
-                _handle_input_update = new(this, "FFX.exe", h_input_update, offset: 0x225930);
-                break;
-            case FhGameType.FFX2:
-                _handle_wndproc_init = new(this, "FFX-2.exe", h_init_wndproc, offset: 0x0529A0);
-                _handle_input_update = new(this, "FFX-2.exe", h_input_update, offset: 0x6B51E0);
-                break;
-        }
-        _handle_d3d11_init   = new(this, "D3D11.dll", h_init_d3d11,   fn_name: "D3D11CreateDeviceAndSwapChain");
+        FhMethodLocation location_wndproc_init = new(0x241B80, 0x0529A0);
+        FhMethodLocation location_input_update = new(0x225930, 0x6B51E0);
+
+        _handle_wndproc_init = new(this, location_wndproc_init, h_init_wndproc);
+        _handle_input_update = new(this, location_input_update, h_input_update);
+        _handle_d3d11_init   = new(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", h_init_d3d11);
         _h_WndProc           = h_wndproc;
     }
 

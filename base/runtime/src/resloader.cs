@@ -26,7 +26,7 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
     private readonly FhMethodHandle<DirectX_D3D11CreateDeviceAndSwapChain> _handle_d3d11_init;
 
     public FhResourceLoaderModule() {
-        _handle_d3d11_init = new(this, "D3D11.dll", h_init_d3d11, fn_name: "D3D11CreateDeviceAndSwapChain");
+        _handle_d3d11_init = new(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", h_init_d3d11);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {

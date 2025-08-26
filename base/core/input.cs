@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Fahrenheit.Core;
 
-namespace Fahrenheit.Core; 
 public unsafe class FhInput {
 
     private static readonly nint _address = FhGlobal.game_type == FhGameType.FFX ? 0xF27080 : 0xD94A8C;

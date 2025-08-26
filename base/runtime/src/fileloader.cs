@@ -29,15 +29,10 @@ public unsafe class FhFileLoaderModule : FhModule {
     private readonly FhMethodHandle<PStreamFile_ctor> _h_fopen;
 
     public FhFileLoaderModule() {
-        _index = [];
-        switch (FhGlobal.game_type) {
-            case FhGameType.FFX:
-                _h_fopen = new(this, "FFX.exe", h_fopen, offset: 0x207D80);
-                break;
-            case FhGameType.FFX2:
-                _h_fopen = new(this, "FFX-2.exe", h_fopen, offset: 0x490e40);
-                break;
-        }
+        FhMethodLocation method_location = new FhMethodLocation(0x207D80, 0x490E40);
+
+        _index   = [];
+        _h_fopen = new(this, method_location, h_fopen);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {

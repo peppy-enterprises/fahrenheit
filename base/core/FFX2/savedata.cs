@@ -1,53 +1,7 @@
-﻿using Fahrenheit.Core.FFX;
-using Fahrenheit.Core.FFX.Ids;
-
-namespace Fahrenheit.Core.FFX2;
+﻿namespace Fahrenheit.Core.FFX2;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x16660)]
 public unsafe struct SaveData {
-    [InlineArray(0x17)]
-    public struct PlySaveArray {
-        private PlySave _data;
-
-        public PlySave* yuna          { get {fixed (PlySave* p =  &this[ 0]) return p;} }
-        public PlySave* rikku         { get {fixed (PlySave* p =  &this[ 1]) return p;} }
-        public PlySave* paine         { get {fixed (PlySave* p =  &this[ 2]) return p;} }
-        public PlySave* yuna_child_1  { get {fixed (PlySave* p =  &this[ 3]) return p;} }
-        public PlySave* yuna_child_2  { get {fixed (PlySave* p =  &this[ 4]) return p;} }
-        public PlySave* rikku_child_1 { get {fixed (PlySave* p =  &this[ 5]) return p;} }
-        public PlySave* rikku_child_2 { get {fixed (PlySave* p =  &this[ 6]) return p;} }
-        public PlySave* paine_child_1 { get {fixed (PlySave* p =  &this[ 7]) return p;} }
-        public PlySave* paine_child_2 { get {fixed (PlySave* p =  &this[ 8]) return p;} }
-        public PlySave* dog           { get {fixed (PlySave* p =  &this[ 9]) return p;} }
-        public PlySave* monkey        { get {fixed (PlySave* p =  &this[10]) return p;} }
-        public PlySave* bird          { get {fixed (PlySave* p =  &this[11]) return p;} }
-        public PlySave* dummy_1       { get {fixed (PlySave* p =  &this[12]) return p;} }
-        public PlySave* dummy_2       { get {fixed (PlySave* p =  &this[13]) return p;} }
-        public PlySave* dummy_3       { get {fixed (PlySave* p =  &this[14]) return p;} }
-        public PlySave* monster_1     { get {fixed (PlySave* p =  &this[15]) return p;} }
-        public PlySave* monster_2     { get {fixed (PlySave* p =  &this[16]) return p;} }
-        public PlySave* monster_3     { get {fixed (PlySave* p =  &this[17]) return p;} }
-        public PlySave* monster_4     { get {fixed (PlySave* p =  &this[18]) return p;} }
-        public PlySave* monster_5     { get {fixed (PlySave* p =  &this[19]) return p;} }
-        public PlySave* monster_6     { get {fixed (PlySave* p =  &this[20]) return p;} }
-        public PlySave* monster_7     { get {fixed (PlySave* p =  &this[21]) return p;} }
-        public PlySave* monster_8     { get {fixed (PlySave* p =  &this[22]) return p;} }
-    }
-
-    [InlineArray(8)]
-    public struct FriendMonsterArray {
-        private FriendMonster _data;
-        public FriendMonster* monster_1 { get { fixed (FriendMonster* p = &this[0]) return p; } }
-        public FriendMonster* monster_2 { get { fixed (FriendMonster* p = &this[1]) return p; } }
-        public FriendMonster* monster_3 { get { fixed (FriendMonster* p = &this[2]) return p; } }
-        public FriendMonster* monster_4 { get { fixed (FriendMonster* p = &this[3]) return p; } }
-        public FriendMonster* monster_5 { get { fixed (FriendMonster* p = &this[4]) return p; } }
-        public FriendMonster* monster_6 { get { fixed (FriendMonster* p = &this[5]) return p; } }
-        public FriendMonster* monster_7 { get { fixed (FriendMonster* p = &this[6]) return p; } }
-        public FriendMonster* monster_8 { get { fixed (FriendMonster* p = &this[7]) return p; } }
-
-    }
-
     public struct Name {
         private fixed byte _name[40];
 
@@ -67,34 +21,6 @@ public unsafe struct SaveData {
         }
     }
 
-    [InlineArray(0x17)]
-    public struct NamesGroup {
-        private Name _data;
-
-        public Name* yuna          { get { fixed (Name* p = &this[ 0]) return p; } }
-        public Name* rikku         { get { fixed (Name* p = &this[ 1]) return p; } }
-        public Name* paine         { get { fixed (Name* p = &this[ 2]) return p; } }
-        public Name* yuna_child_1  { get { fixed (Name* p = &this[ 3]) return p; } }
-        public Name* yuna_child_2  { get { fixed (Name* p = &this[ 4]) return p; } }
-        public Name* rikku_child_1 { get { fixed (Name* p = &this[ 5]) return p; } }
-        public Name* rikku_child_2 { get { fixed (Name* p = &this[ 6]) return p; } }
-        public Name* paine_child_1 { get { fixed (Name* p = &this[ 7]) return p; } }
-        public Name* paine_child_2 { get { fixed (Name* p = &this[ 8]) return p; } }
-        public Name* dog           { get { fixed (Name* p = &this[ 9]) return p; } }
-        public Name* monkey        { get { fixed (Name* p = &this[10]) return p; } }
-        public Name* bird          { get { fixed (Name* p = &this[11]) return p; } }
-        public Name* dummy_1       { get { fixed (Name* p = &this[12]) return p; } }
-        public Name* dummy_2       { get { fixed (Name* p = &this[13]) return p; } }
-        public Name* dummy_3       { get { fixed (Name* p = &this[14]) return p; } }
-        public Name* monster_1     { get { fixed (Name* p = &this[15]) return p; } }
-        public Name* monster_2     { get { fixed (Name* p = &this[16]) return p; } }
-        public Name* monster_3     { get { fixed (Name* p = &this[17]) return p; } }
-        public Name* monster_4     { get { fixed (Name* p = &this[18]) return p; } }
-        public Name* monster_5     { get { fixed (Name* p = &this[19]) return p; } }
-        public Name* monster_6     { get { fixed (Name* p = &this[20]) return p; } }
-        public Name* monster_7     { get { fixed (Name* p = &this[21]) return p; } }
-        public Name* monster_8     { get { fixed (Name* p = &this[22]) return p; } }
-    }
     public struct LearnJobs {
         public fixed ushort jobs[30];
 
@@ -120,19 +46,24 @@ public unsafe struct SaveData {
         public ushort festivalist   { get { return jobs[29]; } set { jobs[29] = value; } }
     }
 
+    [InlineArray(0x17)]
+    public struct PlySaveArray {
+        private PlySave _data;
+    }
+
+    [InlineArray(8)]
+    public struct FriendMonsterArray {
+        private FriendMonster _data;
+    }
+
+    [InlineArray(0x17)]
+    public struct NamesGroup {
+        private Name _data;
+    }
+
     [InlineArray(9)]
     public struct Learn {
         private LearnJobs _data;
-
-        public LearnJobs* yuna          { get { fixed (LearnJobs* p = &this[0]) return p;} }
-        public LearnJobs* rikku         { get { fixed (LearnJobs* p = &this[1]) return p;} }
-        public LearnJobs* paine         { get { fixed (LearnJobs* p = &this[2]) return p;} }
-        public LearnJobs* yuna_child_1  { get { fixed (LearnJobs* p = &this[3]) return p;} }
-        public LearnJobs* yuna_child_2  { get { fixed (LearnJobs* p = &this[4]) return p;} }
-        public LearnJobs* rikku_child_1 { get { fixed (LearnJobs* p = &this[5]) return p;} }
-        public LearnJobs* rikku_child_2 { get { fixed (LearnJobs* p = &this[6]) return p;} }
-        public LearnJobs* paine_child_1 { get { fixed (LearnJobs* p = &this[7]) return p;} }
-        public LearnJobs* paine_child_2 { get { fixed (LearnJobs* p = &this[8]) return p;} }
     }
 
     [FieldOffset(0x0)]     public       ushort             current_room_id;
@@ -199,8 +130,8 @@ public unsafe struct SaveData {
     [FieldOffset(0x77E4)]  public       uint               battle_count;
     [FieldOffset(0x77E8)]  public fixed byte               party[3];
     [FieldOffset(0x77EB)]  public       byte               atb_speed; // 0: Slow, 1: Normal, 2: Fast
-    [FieldOffset(0x77EC)]  public fixed ushort             item_type[8];   
-    [FieldOffset(0x77FC)]  public fixed byte               item_num[8];    
+    [FieldOffset(0x77EC)]  public fixed ushort             item_type[8];
+    [FieldOffset(0x77FC)]  public fixed byte               item_num[8];
     [FieldOffset(0x7804)]  public fixed int                plate[2]; // bitfield
     [FieldOffset(0x780C)]  public fixed byte               dre_sphere[30];
     [FieldOffset(0x782C)]  public       int                reserve5;
@@ -231,18 +162,41 @@ public unsafe struct SaveData {
 
     [FieldOffset(0x14730)] public       byte               dgn_save_data;
 
-    public bool get_met_monster(int monster_id) => monster_id < 0x200 && monster_meet[monster_id / 16].get_bit(monster_id % 16);
-    public void set_met_monster(int monster_id, bool value) { if (monster_id < 0x200) monster_meet[monster_id / 16].set_bit(monster_id % 16, value); }
+    public bool get_met_monster(int monster_id) {
+        return monster_id < 0x200 && monster_meet[monster_id / 16].get_bit(monster_id % 16);
+    }
 
-    public bool get_defeated_monster(int monster_id) => monster_id < 0x200 && monster_defeat[monster_id / 16].get_bit(monster_id % 16);
-    public void set_defeated_monster(int monster_id, bool value) { if (monster_id < 0x200) monster_defeat[monster_id / 16].set_bit(monster_id % 16, value); }
+    public void set_met_monster(int monster_id, bool value) {
+        if (monster_id >= 0x200) return;
+        monster_meet[monster_id / 16].set_bit(monster_id % 16, value);
+    }
 
-    public bool get_oversoul_monster(int monster_id) => monster_id < 0x200 && monster_oversoul[monster_id / 16].get_bit(monster_id % 16);
-    public void set_oversoul_monster(int monster_id, bool value) { if (monster_id < 0x200) monster_oversoul[monster_id / 16].set_bit(monster_id % 16, value); }
+    public bool get_defeated_monster(int monster_id) {
+        return monster_id < 0x200 && monster_defeat[monster_id / 16].get_bit(monster_id % 16);
+    }
 
+    public void set_defeated_monster(int monster_id, bool value) {
+        if (monster_id >= 0x200) return;
+        monster_defeat[monster_id / 16].set_bit(monster_id % 16, value);
+    }
 
-    public bool get_affection_room_gained(int room_id) => room_id < 0x280 && affection_room_flags[room_id / 32].get_bit(room_id % 32);
-    public void set_affection_room_gained(int room_id, bool value) { if (room_id < 0x280) affection_room_flags[room_id / 32].set_bit(room_id % 32, value); }
+    public bool get_oversoul_monster(int monster_id) {
+        return monster_id < 0x200 && monster_oversoul[monster_id / 16].get_bit(monster_id % 16);
+    }
+
+    public void set_oversoul_monster(int monster_id, bool value) {
+        if (monster_id >= 0x200) return;
+        monster_oversoul[monster_id / 16].set_bit(monster_id % 16, value);
+    }
+
+    public bool get_affection_room_gained(int room_id) {
+        return room_id < 0x280 && affection_room_flags[room_id / 32].get_bit(room_id % 32);
+    }
+
+    public void set_affection_room_gained(int room_id, bool value) {
+        if (room_id >= 0x280) return;
+        affection_room_flags[room_id / 32].set_bit(room_id % 32, value);
+    }
 
     public uint get_item_count(int item_id) {
         for (int i = 0; i < 0x44; i++) {
@@ -251,8 +205,14 @@ public unsafe struct SaveData {
         return 0;
     }
 
-    public bool has_key_item(int key_item_id) => key_item_id < 0x80 && important_items[key_item_id / 16].get_bit(key_item_id % 16);
-    public void set_key_item(int key_item_id, bool value) { if (key_item_id < 0x80) important_items[key_item_id / 16].set_bit(key_item_id % 16, value); }
+    public bool has_key_item(int key_item_id) {
+        return key_item_id < 0x80 && important_items[key_item_id / 16].get_bit(key_item_id % 16);
+    }
+
+    public void set_key_item(int key_item_id, bool value) {
+        if (key_item_id >= 0x80) return;
+        important_items[key_item_id / 16].set_bit(key_item_id % 16, value);
+    }
 
     // untested
     public bool rand_encounters_no_fanfare  { readonly get { return rand_encounter_modifiers.get_bit( 8); } set { rand_encounter_modifiers.set_bit( 8, value); } }
