@@ -20,7 +20,7 @@ namespace Fahrenheit.Core.Runtime;
 ///     <para/>
 ///     Do not interface with this module directly. Instead, call <see cref="FhApi.ResourceLoader"/>.
 /// </summary>
-[FhLoad(FhGameType.FFX)]
+[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
 public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
     private          ID3D11Device*                                         _p_device; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
     private readonly FhMethodHandle<DirectX_D3D11CreateDeviceAndSwapChain> _handle_d3d11_init;
