@@ -210,8 +210,8 @@ public unsafe struct SaveData {
     [FieldOffset(0x7B40)]  public fixed byte               inventory_counts[0x44];
     [FieldOffset(0x7C40)]  public       ushort             inventory_check; // bitfield of unknown size
     [FieldOffset(0x7C60)]  public       byte               inventory_use;   // unused?
-    [FieldOffset(0x7C80)]  public fixed ushort             accessory_ids[0x7F];
-    [FieldOffset(0x7D80)]  public fixed byte               accessory_counts[0x7F];
+    [FieldOffset(0x7C80)]  public fixed ushort             accessory_ids[0x80];
+    [FieldOffset(0x7D80)]  public fixed byte               accessory_counts[0x80];
     [FieldOffset(0x7E00)]  public       byte               accessory_check; // unused?
     [FieldOffset(0x7E10)]  public       byte               accessory_use;   // unused?
     [FieldOffset(0x8020)]  public fixed ushort             monster_meet[0x20];   // bitfield
