@@ -84,6 +84,8 @@ public unsafe struct LpAbilityMapEngine {
     [FieldOffset(0x115D0)] public ushort                 zoom_time_left; // in frames
     [FieldOffset(0x115DC)] public float                  start_zoom;
     [FieldOffset(0x115E0)] public float                  target_zoom;
+    [FieldOffset(0x116A8)] public int                    should_update_node; // -1 updates all nodes
+    [FieldOffset(0x116AC)] public int                    should_update;
 
 
     public float current_zoom {

@@ -1,6 +1,6 @@
 ﻿namespace Fahrenheit.Core.FFX.Atel;
 
-public struct AtelOpCode {
+public struct AtelOpCode: IEquatable<AtelOpCode> {
     public byte instruction;
     public ushort? operand;
 
@@ -15,6 +15,11 @@ public struct AtelOpCode {
 
         return bytes;
     }
+
+    public override bool Equals(object? obj) => obj is AtelOpCode other && this.Equals(other);
+    public bool Equals(AtelOpCode other) => instruction == other.instruction && operand == other.operand;
+    public static bool operator ==(AtelOpCode lhs, AtelOpCode rhs) => lhs.Equals(rhs);
+    public static bool operator !=(AtelOpCode lhs, AtelOpCode rhs) => !(lhs == rhs);
 }
 
 public enum AtelInst : byte {

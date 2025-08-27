@@ -7,7 +7,7 @@ public unsafe struct Equipment {
     [FieldOffset(0x3)] public        byte   flags;
     [FieldOffset(0x4)] public        byte   owner;
     [FieldOffset(0x5)] public        byte   type;
-    [FieldOffset(0x6)] private       byte   __0x6;
+    [FieldOffset(0x6)] public        byte   __0x6;
     [FieldOffset(0x7)] private       byte   __0x7;
     [FieldOffset(0x8)] public        byte   dmg_formula;
     [FieldOffset(0x9)] public        byte   power;
