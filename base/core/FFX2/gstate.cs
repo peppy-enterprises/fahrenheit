@@ -1,6 +1,7 @@
 ﻿using Fahrenheit.Core.FFX.Atel;
 
 namespace Fahrenheit.Core.FFX2;
+
 public unsafe static class Globals {
     public static class Atel {
         public static int*                  request_count      => FhUtil.ptr_at<int>(0xA116C4);

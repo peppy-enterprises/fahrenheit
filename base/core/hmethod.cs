@@ -46,6 +46,11 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
     public T        orig_fptr    { get; private set; } // Do not store the value of this field.
     public T        hook_fptr    { get; init;        }
 
+    /// <summary>
+    ///     This constructor is used for functions which are analogous between FF X and X-2.
+    ///     The handle implicitly targets the currently running game and selects the appropriate
+    ///     offset from <paramref name="location"/>.
+    /// </summary>
     public FhMethodHandle(FhModule         owner,
                           FhMethodLocation location,
                           T                hook)
@@ -61,6 +66,9 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         hook_fptr    = hook;
     }
 
+    /// <summary>
+    ///     This constructor is used for exported functions in external modules, such as D3D11.dll.
+    /// </summary>
     public FhMethodHandle(FhModule owner,
                           string   module_name,
                           string   fn_name,
@@ -72,6 +80,10 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         hook_fptr    = hook;
     }
 
+    /// <summary>
+    ///     This constructor is used for private/non-exported functions in external modules, such as D3D11.dll,
+    ///     or functions exclusive to either FF X or X-2.
+    /// </summary>
     public FhMethodHandle(FhModule owner,
                           string   module_name,
                           nint     offset,
@@ -83,6 +95,10 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         hook_fptr    = hook;
     }
 
+    /// <summary>
+    ///     This constructor is used for member functions or vtable entries of objects, such as
+    ///     <see cref="TerraFX.Interop.DirectX.IDXGISwapChain.Present(uint, uint)"/>.
+    /// </summary>
     public FhMethodHandle(FhModule owner,
                           nint     abs_fnaddr,
                           T        hook)
@@ -93,6 +109,10 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         hook_fptr    = hook;
     }
 
+    /// <summary>
+    ///     Obtains the absolute address of export <paramref name="fn_name"/>
+    ///     in module <paramref name="module_name"/>.
+    /// </summary>
     private nint calc_fnaddr(string module_name, string fn_name) {
         nint mod_addr = FhPInvoke.GetModuleHandle(module_name);
         if (mod_addr == 0) throw new Exception($"Module {module_name} not loaded in memory.");
@@ -103,6 +123,10 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         return fn_addr;
     }
 
+    /// <summary>
+    ///     Obtains the absolute address of the function at <paramref name="offset"/> in
+    ///     module <paramref name="module_name"/>.
+    /// </summary>
     private nint calc_fnaddr(string module_name, nint offset) {
         nint mod_addr = FhPInvoke.GetModuleHandle(module_name);
         if (mod_addr == 0) throw new Exception($"Module {module_name} not loaded in memory.");
@@ -110,6 +134,9 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         return mod_addr + offset;
     }
 
+    /// <summary>
+    ///     Inserts the hook specified at construction time into the hook chain of the targeted method.
+    /// </summary>
     public bool hook() {
         nint addr_target   = FhInternal.MethodAddressMap.get(fn_addr);
         nint addr_hook     = Marshal.GetFunctionPointerForDelegate(hook_fptr);

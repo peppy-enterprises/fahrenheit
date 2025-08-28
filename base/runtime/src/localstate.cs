@@ -117,26 +117,16 @@ public unsafe class FhLocalStateModule : FhModule {
 
                 FhLocalStateInfo state_meta = new(mod_context.Manifest.Version);
 
-                try {
-                    using (FileStream   state_meta_fs = File.Open(state_meta_fn, FileMode.Create, FileAccess.Write, FileShare.None))
-                    using (StreamWriter writer        = new StreamWriter(state_meta_fs, Encoding.UTF8)) {
-                        writer.Write(JsonSerializer.Serialize(state_meta, FhUtil.InternalJsonOpts));
-                    }
-                }
-                catch  {
-                    _logger.Fatal($"While attempting to save local state metadata for module {module_type}:");
-                    throw;
+                _logger.Info($"Saving local state metadata for module {module_type}.");
+                using (FileStream   state_meta_fs = File.Open(state_meta_fn, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (StreamWriter writer        = new StreamWriter(state_meta_fs, Encoding.UTF8)) {
+                    writer.Write(JsonSerializer.Serialize(state_meta, FhUtil.InternalJsonOpts));
                 }
 
-                try {
-                    using (FileStream state_fs = File.Open(state_fn, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read)) {
-                        _logger.Info($"{module_type} -> {state_fn}");
-                        module_context.Module.save_local_state(state_fs);
-                    }
-                }
-                catch {
-                    _logger.Fatal($"While attempting to save local state for module {module_type}:");
-                    throw;
+                _logger.Info($"Saving local state for module {module_type} to {state_fn}.");
+                using (FileStream state_fs = File.Open(state_fn, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read)) {
+                    _logger.Info($"{module_type} -> {state_fn}");
+                    module_context.Module.save_local_state(state_fs);
                 }
             }
         }
@@ -158,26 +148,16 @@ public unsafe class FhLocalStateModule : FhModule {
 
                 FhLocalStateInfo? state_meta;
 
-                try {
-                    using (FileStream state_meta_fs = File.Open(state_meta_fn, FileMode.Open, FileAccess.Read, FileShare.None)) {
-                        state_meta = JsonSerializer.Deserialize<FhLocalStateInfo>(state_meta_fs, FhUtil.InternalJsonOpts)
-                            ?? throw new Exception("FH_E_LOCAL_STATE_META_BLOCK_NULL");
-                    }
-                }
-                catch {
-                    _logger.Fatal($"While attempting to load local state metadata for module {module_type}:");
-                    throw;
+                _logger.Info($"Loading local state metadata for module {module_type}.");
+                using (FileStream state_meta_fs = File.Open(state_meta_fn, FileMode.Open, FileAccess.Read, FileShare.None)) {
+                    state_meta = JsonSerializer.Deserialize<FhLocalStateInfo>(state_meta_fs, FhUtil.InternalJsonOpts)
+                        ?? throw new Exception("FH_E_LOCAL_STATE_META_BLOCK_NULL");
                 }
 
-                try {
-                    using (FileStream state_fs = File.Open(state_fn, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read)) {
-                        _logger.Info($"{module_type} -> {state_fn}");
-                        module_context.Module.load_local_state(state_fs, state_meta!);
-                    }
-                }
-                catch {
-                    _logger.Fatal($"While attempting to load local state for module {module_type}:");
-                    throw;
+                _logger.Info($"Loading local state for module {module_type}.");
+                using (FileStream state_fs = File.Open(state_fn, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read)) {
+                    _logger.Info($"{module_type} -> {state_fn}");
+                    module_context.Module.load_local_state(state_fs, state_meta!);
                 }
             }
         }
