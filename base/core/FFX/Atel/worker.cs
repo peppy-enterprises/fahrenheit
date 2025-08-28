@@ -2,6 +2,11 @@
 
 namespace Fahrenheit.Core.FFX.Atel;
 
+[InlineArray(18)]
+public struct WorkerThreadsArray {
+    private AtelWorkThread _data;
+}
+
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x700)]
 public unsafe struct AtelBasicWorker {
     [FieldOffset(0x0)] public AtelScriptHeader* script_header;
@@ -21,13 +26,13 @@ public unsafe struct AtelBasicWorker {
     [FieldOffset(0x80)] public       AtelSignal* pending_signal_queue;
     [FieldOffset(0x88)] public       AtelSignal* free_signals;
 
-    [FieldOffset(0x90)]  public AtelSignal*     current_signal;
-    [FieldOffset(0x94)]  public float           __0x94;
-    [FieldOffset(0x98)]  public float           __0x98;
-    [FieldOffset(0x9C)]  public Chr*            chr_handle;
-    [FieldOffset(0xA8)]  public ushort          event_chr_id;
-    [FieldOffset(0xC4)]  public AtelStack       stack;
-    [FieldOffset(0x12C)] public AtelWorkThread* threads; // [9]
+    [FieldOffset(0x90)]  public AtelSignal*          current_signal;
+    [FieldOffset(0x94)]  public float                __0x94;
+    [FieldOffset(0x98)]  public float                __0x98;
+    [FieldOffset(0x9C)]  public Chr*                 chr_handle;
+    [FieldOffset(0xA8)]  public ushort               event_chr_id;
+    [FieldOffset(0xC4)]  public AtelStack            stack;
+    [FieldOffset(0x12C)] public WorkerThreadsArray   threads; // [9]
 
     public readonly byte*          code_ptr         => (byte*)         ((nint)script_chunk + script_chunk ->offset_code);
     public readonly uint*          table_event_data => (uint*)         ((nint)script_chunk + script_chunk ->offset_event_data);
@@ -42,7 +47,8 @@ public unsafe struct AtelBasicWorker {
     public readonly uint*              table_data         => (uint*)         ((nint)script_chunk + script_header->offset_data);
     public readonly uint*              table_priv_data    => (uint*)         ((nint)script_chunk + script_header->offset_priv_data);
     public readonly uint*              table_shared_data  => (uint*)         ((nint)script_chunk + script_header->offset_shared_data);
-    public readonly AtelWorkThread*    current_thread     => threads + current_thread_priority;
+
+    [UnscopedRef] public ref AtelWorkThread current_thread => ref threads[current_thread_priority];
 
     public int pc_of(AtelWorkThread* thread) => (int)(thread->pc - code_ptr);
 }

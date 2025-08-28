@@ -58,9 +58,12 @@ public unsafe struct BtlRewardData {
     [FieldOffset(0x80)] public        PlyArrayU32  get_ap_temp;
     [FieldOffset(0xCC)] public        uint         gil;
     [FieldOffset(0xD0)] public        byte         item_count;
+    [FieldOffset(0xD1)] public        byte         key_item_count;
     [FieldOffset(0xD2)] public        byte         gear_count;
     [FieldOffset(0xD4)] public  fixed T_XCommandId items[8];
     [FieldOffset(0xE4)] public  fixed byte         items_amounts[8];
+    [FieldOffset(0xEC)] public        ushort       key_item;
+    [FieldOffset(0xEE)] public        ushort       gear_inv_idx;
     [FieldOffset(0xFE)] private       Equipment    _gear_arr_start;
 
     public Span<Equipment> gear => MemoryMarshal.CreateSpan(ref _gear_arr_start, 8);
