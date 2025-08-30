@@ -22,3 +22,6 @@
 [submodule "tools/step"]
 	path = tools/step
 	url = https://github.com/peppy-enterprises/fh-tools-step
+[submodule "tools/atelier"]
+	path = tools/atelier
+	url = https://github.com/peppy-enterprises/fh-tools-atelier
