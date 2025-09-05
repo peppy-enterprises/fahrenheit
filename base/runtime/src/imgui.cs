@@ -264,11 +264,9 @@ public unsafe class FhImguiModule : FhModule {
             return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
 
         if (!_present_init_complete) {
-            Guid _guid_d3d11texture2d = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
-
             fixed (ID3D11Resource**         ppSurface          = &_p_surface)
             fixed (ID3D11RenderTargetView** ppRenderTargetView = &_p_render_target_view) {
-                _p_swap_chain->GetBuffer(0, &_guid_d3d11texture2d, (void**)ppSurface);
+                _p_swap_chain->GetBuffer(0, Windows.__uuidof<ID3D11Texture2D>(), (void**)ppSurface);
                 _p_device    ->CreateRenderTargetView(_p_surface, null, ppRenderTargetView);
                 _p_surface   ->Release();
             }
