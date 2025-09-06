@@ -2,6 +2,28 @@
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x68C0)]
 public unsafe struct SaveData {
+    public struct Name {
+        private fixed byte _name[20];
+
+        public byte* raw { get { fixed (byte* temp = _name) return temp; } }
+        public string name {
+            get {
+                fixed (byte* temp = _name) return FhCharset.Us.to_string(temp);
+            }
+            set {
+                fixed (byte* temp = _name) {
+                    FhCharset.Us.to_bytes(value, temp);
+                    for (int j = value.Length; j < 20; j++) {
+                        temp[j] = 0;
+                    }
+                }
+            }
+        }
+    }
+    [InlineArray(18)]
+    public struct NamesGroup {
+        private Name _data;
+    }
     [InlineArray(200)]
     public struct EquipmentArray {
         private Equipment _data;
@@ -17,6 +39,10 @@ public unsafe struct SaveData {
     [FieldOffset(0xD)]    public       byte           last_spawnpoint;
     [FieldOffset(0xE)]    public       ushort         atel_save_dic_index;
     [FieldOffset(0x10)]   public       byte           atel_battle_scene_group;
+    [FieldOffset(0x11)]   public       byte           fade_mode;
+    [FieldOffset(0x12)]   public       byte           fade_time;
+    [FieldOffset(0x13)]   public       byte           battle_status; // bitfield
+    [FieldOffset(0x18)]   public fixed uint           flying_ship_pos[2]; // bitfield
     [FieldOffset(0x20)]   public       byte           atel_is_push_member;
     [FieldOffset(0x21)]   public fixed byte           atel_push_frontline[3];
     [FieldOffset(0x24)]   public       byte           atel_push_party;
@@ -24,7 +50,13 @@ public unsafe struct SaveData {
     [FieldOffset(0x29)]   public       byte           is_map_underwater;
     [FieldOffset(0x2B)]   public       byte           tk_event_new_game;
     [FieldOffset(0x2C)]   public fixed uint           affection[8];
+    [FieldOffset(0x4C)]   public fixed uint           affection_room_flags[20]; // bitfield
+    [FieldOffset(0xB4)]   public       ushort         item_map_x; // meaning unknown
+    [FieldOffset(0xB6)]   public       ushort         item_map_y; // meaning unknown
+    [FieldOffset(0xBC)]   public       int            time;
     [FieldOffset(0xD1)]   public       byte           albhed_rikku;
+    [FieldOffset(0xD2)]   public       byte           drop_shadow_mode;
+    [FieldOffset(0xD4)]   public       ushort         atel_force_place_id_value;
     [FieldOffset(0xD6)]   public       byte           atel_force_place_id;
     [FieldOffset(0xD7)]   public       byte           atel_water_btl_effect;
     [FieldOffset(0xD8)]   public       uint           on_memory_movie_file_no;
@@ -41,11 +73,17 @@ public unsafe struct SaveData {
     [FieldOffset(0x3D48)] public       uint           gil;
     [FieldOffset(0x3D58)] public fixed byte           party_order[7];
     [FieldOffset(0x3DA4)] public       uint           yojimbo_compatibility;
+    [FieldOffset(0x3DA8)] public       uint           yojimbo_type; // unknown size
+    [FieldOffset(0x3DAC)] public       uint           tidus_limit_uses;
     [FieldOffset(0x3DB0)] public       uint           successful_rikku_steals;
     [FieldOffset(0x3DB4)] public       uint           bribe_gil_spent;
+    [FieldOffset(0x3DCC)] public fixed byte           event_flags[0x80];
+    [FieldOffset(0x3E4C)] public fixed byte           help_flags[0x80]; // Size unconfirmed
     [FieldOffset(0x3ECC)] public fixed T_XCommandId   inventory_ids[70];
     [FieldOffset(0x40CC)] public fixed byte           inventory_counts[70];
-    [FieldOffset(0x448C)] public       uint           ptr_important_bin;
+    [FieldOffset(0x41CC)] public       ushort         inventory_check; // bitfield of unknown size
+    [FieldOffset(0x41EC)] public       byte           inventory_use;   // unused?
+    [FieldOffset(0x448C)] public fixed ushort         important_items[8];
     [FieldOffset(0x449C)] public       EquipmentArray equipment;
     [FieldOffset(0x55CC)] public       PlySave        ply_tidus;
     [FieldOffset(0x5660)] public       PlySave        ply_yuna;
@@ -65,13 +103,41 @@ public unsafe struct SaveData {
     [FieldOffset(0x5E78)] public       PlySave        ply_cindy;
     [FieldOffset(0x5F0C)] public       PlySave        ply_sandy;
     [FieldOffset(0x5FA0)] public       PlySave        ply_mindy;
-    [FieldOffset(0x634C)] public fixed byte           character_names[360]; // each name is at most 20 bytes long. C# won't let me make a 2D array
+    [FieldOffset(0x634C)] public       NamesGroup     character_names;
 
     public ReadOnlySpan<PlySave> ply_arr => MemoryMarshal.CreateReadOnlySpan(ref ply_tidus, 18);
+
+    public bool get_affection_room_gained(int room_id) {
+        return room_id < 0x280 && affection_room_flags[room_id / 32].get_bit(room_id % 32);
+    }
+
+    public void set_affection_room_gained(int room_id, bool value) {
+        if (room_id >= 0x280) return;
+        affection_room_flags[room_id / 32].set_bit(room_id % 32, value);
+    }
+
+    public uint get_item_count(int item_id) {
+        for (int i = 0; i < 70; i++) {
+            if (inventory_ids[i] == item_id) return inventory_counts[i];
+        }
+        return 0;
+    }
+
+    public bool has_key_item(int key_item_id) {
+        return key_item_id < 0x80 && important_items[key_item_id / 16].get_bit(key_item_id % 16);
+    }
+
+    public void set_key_item(int key_item_id, bool value) {
+        if (key_item_id >= 0x80) return;
+        important_items[key_item_id / 16].set_bit(key_item_id % 16, value);
+    }
 
     public bool rand_encounters_no_fanfare  { readonly get { return rand_encounter_modifiers.get_bit( 8); } set { rand_encounter_modifiers.set_bit( 8, value); } }
     public bool rand_encounters_no_gameover { readonly get { return rand_encounter_modifiers.get_bit( 9); } set { rand_encounter_modifiers.set_bit( 9, value); } }
     public bool rand_encounters_no_music    { readonly get { return rand_encounter_modifiers.get_bit(10); } set { rand_encounter_modifiers.set_bit(10, value); } }
+
+    public bool battle_status_sys       { readonly get { return battle_status.get_bit(1); } set { battle_status.set_bit(1, value); } }
+    public bool battle_status_dummy_enc { readonly get { return battle_status.get_bit(2); } set { battle_status.set_bit(2, value); } }
 
     public bool config_stereo          { readonly get { return config.get_bit ( 0);    } set { config.set_bit ( 0, value);    } }
     public bool config_memory_cursor   { readonly get { return config.get_bit ( 1);    } set { config.set_bit ( 1, value);    } }
