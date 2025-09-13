@@ -65,8 +65,8 @@ public unsafe class FhLocalStateModule : FhModule {
             FhGameType.FFX  => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x8E7C68), 200),
             FhGameType.FFX2 => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x9ECD30), 200),
         };
-        int               actual_slot_index = 0;
 
+        int actual_slot_index = 0;
         for (; actual_slot_index < 200; actual_slot_index++) {
             if (used_slots_list[actual_slot_index] == -1) break;
         }

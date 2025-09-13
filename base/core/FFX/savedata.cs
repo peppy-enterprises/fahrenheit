@@ -20,10 +20,12 @@ public unsafe struct SaveData {
             }
         }
     }
+
     [InlineArray(18)]
     public struct NamesGroup {
         private Name _data;
     }
+
     [InlineArray(200)]
     public struct EquipmentArray {
         private Equipment _data;

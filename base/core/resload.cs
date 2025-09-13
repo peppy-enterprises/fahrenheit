@@ -51,7 +51,7 @@ public record FhTexture(
 ///     Allows for loading of resources such as images for use in ImGui code.
 /// </summary>
 public class FhResourceLoader {
-    internal readonly FhRuntimeBinding<IFhResourceLoader> loader = new(); // RT connects here.
+    internal readonly FhRuntimeHandle<IFhResourceLoader> loader = new(); // RT connects here.
 
     /// <summary>
     ///     Attempts to load a DDS-format image from disk.

@@ -1,6 +1,5 @@
 ﻿namespace Fahrenheit.Core.FFX.Atel;
 
-
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x20)]
 public unsafe struct MapEntrance {
     [FieldOffset(0x00)] public int   unknown00;
@@ -40,7 +39,11 @@ public unsafe struct AtelScriptChunk {
 
     public ushort* script_header_offsets { get { fixed (AtelScriptChunk* address = &this) { return (ushort*)(address + 1); } } }
 
-    public readonly ReadOnlySpan<MapEntrance> map_entrances { get { fixed (AtelScriptChunk* address = &this) {
+    public readonly ReadOnlySpan<MapEntrance> map_entrances {
+        get {
+            fixed (AtelScriptChunk* address = &this) {
                 return new((MapEntrance*)((nint)address + map_start), (int)(offset_author - map_start) / 0x20);
-            } } }
+            }
+        }
+    }
 }

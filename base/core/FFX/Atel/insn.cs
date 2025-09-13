@@ -1,6 +1,5 @@
 ﻿namespace Fahrenheit.Core.FFX.Atel;
 
-
 public record struct AtelInst(byte instruction, ushort? operand) {
     public byte[] to_bytes() {
         byte[] bytes = new byte[operand.HasValue ? 3 : 1];

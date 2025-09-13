@@ -117,7 +117,7 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         nint mod_addr = FhPInvoke.GetModuleHandle(module_name);
         if (mod_addr == 0) throw new Exception($"Module {module_name} not loaded in memory.");
 
-        nint fn_addr  = NativeLibrary.GetExport(mod_addr, fn_name);
+        nint fn_addr = NativeLibrary.GetExport(mod_addr, fn_name);
         if (fn_addr == 0) throw new Exception($"Method {fn_name} not found in module {module_name}");
 
         return fn_addr;

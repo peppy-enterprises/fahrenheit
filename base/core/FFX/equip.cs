@@ -1,20 +1,25 @@
 ﻿namespace Fahrenheit.Core.FFX;
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x16)]
-public unsafe struct Equipment {
-    [FieldOffset(0x0)] public        ushort       name_id;
-    [FieldOffset(0x2)] public        bool         exists;
-    [FieldOffset(0x3)] public        byte         flags;
-    [FieldOffset(0x4)] public        byte         owner;
-    [FieldOffset(0x5)] public        byte         type;
-    [FieldOffset(0x6)] public        T_XPlySaveId equipped_by;
-    [FieldOffset(0x7)] private       byte         __0x7;
-    [FieldOffset(0x8)] public        byte         dmg_formula;
-    [FieldOffset(0x9)] public        byte         power;
-    [FieldOffset(0xA)] public        byte         crit_bonus;
-    [FieldOffset(0xB)] public        byte         slot_count;
-    [FieldOffset(0xC)] public        ushort       model_id;
-    [FieldOffset(0xE)] public  fixed ushort       abilities[4];
+[InlineArray(4)]
+public struct EquipmentAbilityArray {
+    private ushort _u;
+}
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct Equipment {
+    public ushort                name_id;
+    public bool                  exists;
+    public byte                  flags;
+    public byte                  owner;
+    public byte                  type;
+    public byte                  equipped_by;
+    public byte                  __0x7;
+    public byte                  dmg_formula;
+    public byte                  power;
+    public byte                  crit_bonus;
+    public byte                  slot_count;
+    public ushort                model_id;
+    public EquipmentAbilityArray abilities;
 
     public bool is_hidden       { readonly get { return flags.get_bit(1); } set { flags.set_bit(1, value); } }
     public bool is_celestial    { readonly get { return flags.get_bit(2); } set { flags.set_bit(2, value); } }
@@ -24,17 +29,17 @@ public unsafe struct Equipment {
     public readonly bool is_armor  { get { return (type & 1) != 0; } }
 }
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x10)]
-public unsafe struct UnownedEquipment {
-    [FieldOffset(0x0)] public        byte   flags;
-    [FieldOffset(0x1)] public        byte   owner;
-    [FieldOffset(0x2)] public        byte   type;
-    [FieldOffset(0x3)] private       byte   __0x6;
-    [FieldOffset(0x4)] public        byte   dmg_formula;
-    [FieldOffset(0x5)] public        byte   power;
-    [FieldOffset(0x6)] public        byte   crit_bonus;
-    [FieldOffset(0x7)] public        byte   slot_count;
-    [FieldOffset(0x8)] public  fixed ushort abilities[4];
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct UnownedEquipment {
+    public byte                  flags;
+    public byte                  owner;
+    public byte                  type;
+    public byte                  __0x3;
+    public byte                  dmg_formula;
+    public byte                  power;
+    public byte                  crit_bonus;
+    public byte                  slot_count;
+    public EquipmentAbilityArray abilities;
 
     public bool is_hidden       { readonly get { return flags.get_bit(1); } set { flags.set_bit(1, value); } }
     public bool is_celestial    { readonly get { return flags.get_bit(2); } set { flags.set_bit(2, value); } }

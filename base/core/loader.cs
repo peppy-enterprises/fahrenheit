@@ -75,7 +75,7 @@ public class FhLoader {
     ///     whichever version of the dependency the user actually has installed will be loaded instead.
     /// </summary>
     internal Assembly? get_shared_assembly(AssemblyName assembly_name) {
-        if (!_load_contexts.TryGetValue(assembly_name.Name!, out FhLoadContext? load_context)) return null;
+        if (!_load_contexts.TryGetValue(assembly_name.Name ?? "", out FhLoadContext? load_context)) return null;
 
         foreach (Assembly assembly in load_context.Assemblies) {
             AssemblyName loaded_assembly_name = assembly.GetName();

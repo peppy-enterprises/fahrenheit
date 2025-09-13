@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents an object of type <typeparamref name="T"/> initialized at runtime.
 /// </summary>
-internal class FhRuntimeBinding<T> {
+internal class FhRuntimeHandle<T> {
     protected readonly Lock _impl_lock = new Lock();
     protected          T?   _impl;
 

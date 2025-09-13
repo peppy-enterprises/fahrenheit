@@ -53,6 +53,9 @@ public unsafe class FhFileLoaderModule : FhModule {
             : prefixless_path;
     }
 
+    /// <summary>
+    ///     Creates the immutable map of EFL replacements for this game session.
+    /// </summary>
     private void construct_index() {
         Stopwatch index_timer     = Stopwatch.StartNew();
         string    efl_subdir_name = FhGlobal.game_type switch {

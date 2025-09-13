@@ -11,8 +11,7 @@ internal sealed record FhDllPathInfo(
 ///     Contains path information required for the mod controller and Fahrenheit runtime to handle a module's lifecycle.
 /// </summary>
 internal sealed record FhModulePathInfo(
-    string GlobalStatePath
-    );
+    string GlobalStatePath);
 
 /// <summary>
 ///     Contains path information required for the mod controller and Fahrenheit runtime to handle a mod's lifecycle.
