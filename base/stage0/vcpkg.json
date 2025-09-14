@@ -1,7 +1,5 @@
 {
   "dependencies": [
-    "minhook",
-    "nethost",
     "detours"
   ]
 }

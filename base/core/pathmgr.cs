@@ -3,20 +3,20 @@
 /// <summary>
 ///     Contains path information required for the loader to process a DLL in the <see cref="FhManifest.DllList"/> of a Fahrenheit mod.
 /// </summary>
-internal sealed record FhDllPathInfo(
+internal sealed record FhDllPaths(
     string DllPath,
     string SettingsPath);
 
 /// <summary>
 ///     Contains path information required for the mod controller and Fahrenheit runtime to handle a module's lifecycle.
 /// </summary>
-internal sealed record FhModulePathInfo(
+internal sealed record FhModulePaths(
     string GlobalStatePath);
 
 /// <summary>
 ///     Contains path information required for the mod controller and Fahrenheit runtime to handle a mod's lifecycle.
 /// </summary>
-public sealed record FhModPathInfo(
+public sealed record FhModPaths(
     string        ManifestPath,
     DirectoryInfo ModuleDir,
     DirectoryInfo ResourcesDir,
@@ -74,7 +74,7 @@ internal class FhPathFinder {
         Saves    = new FhDirLink("$saves", path_saves);
     }
 
-    public string get_save_path_for_index(int save_index) {
+    public string get_path_savefile(int save_index) {
         bool   is_ffx         = FhGlobal.game_type == FhGameType.FFX;
         string save_subfolder = is_ffx ? "FINAL FANTASY X" : "FINAL FANTASY X-2";
         string save_prefix    = is_ffx ? "ffx"             : "ffx2";
@@ -96,21 +96,21 @@ internal class FhPathFinder {
         return save_name;
     }
 
-    public FhDllPathInfo create_dll_paths(string mod_name, string dll_name) {
+    public FhDllPaths get_paths_dll(string mod_name, string dll_name) {
         bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
         string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
 
-        return new FhDllPathInfo(
+        return new FhDllPaths(
             DllPath:      Path.Join(module_dir, $"{dll_name}.dll"),
             SettingsPath: Path.Join(module_dir, $"{dll_name}.config.json")
             );
     }
 
-    public FhModPathInfo create_mod_paths(string mod_name) {
+    public FhModPaths get_paths_mod(string mod_name) {
         bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
         string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
 
-        return new FhModPathInfo(
+        return new FhModPaths(
             ManifestPath: Path.Join(module_dir, $"{mod_name}.manifest.json"),
             ModuleDir:    Directory.CreateDirectory(module_dir),
             ResourcesDir: Directory.CreateDirectory(Path.Join(module_dir, _dirname_rsrc)),
@@ -120,23 +120,22 @@ internal class FhPathFinder {
             );
     }
 
-    public FhModulePathInfo create_module_paths(string mod_name, string module_name) {
+    public FhModulePaths get_paths_module(string mod_name, string module_name) {
         string global_state_dir  = Path.Join(State.Path, mod_name, "global");
         string global_state_path = Path.Join(global_state_dir, module_name);
 
         Directory.CreateDirectory(global_state_dir);
 
-        return new FhModulePathInfo(
+        return new FhModulePaths(
             GlobalStatePath: global_state_path
             );
     }
 
     /// <summary>
-    ///     Replaces instances of well-known directory substitution strings in a input string
-    ///     with the actual locations of these directories. This is provided so you can use the same, well-defined
-    ///     file path relative to the binary for any file across all supported platforms.
-    /// <para></para>
-    ///     e.g. $resdir (Linux) -> /opt/fahrenheit/resources, $resdir (Windows) -> C:\Users\USER1\fahrenheit\resources
+    ///     Fixes up paths in manifest and configuration JSONs by replacing <see cref="FhDirLink.Symbol"/>
+    ///     with <see cref="FhDirLink.Path"/> for all well-known framework folders.
+    ///     <para/>
+    ///     e.g. $bin -> /opt/games/ffx/fahrenheit/bin OR C:\opt\games\ffx\fahrenheit\bin
     /// </summary>
     public string fix_paths(string input) {
         return input.Replace(Binaries.Symbol, Binaries.Path).

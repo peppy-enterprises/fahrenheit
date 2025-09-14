@@ -175,7 +175,6 @@
     <ClInclude Include="inc\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\detours.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -32,7 +32,7 @@ internal class FhLoadContext(string context_name, string fh_dll_path) : Assembly
 /// <summary>
 ///     Contains the information the <see cref="FhLoader"/> needs to process a mod.
 /// </summary>
-internal record FhLoaderInfo(
+internal record FhModLoadInfo(
     string   ModName,
     string[] ModDllList
     );
@@ -63,8 +63,8 @@ public class FhLoader {
     /// <summary>
     ///     Reads the <see cref="FhManifest"/> for a mod from disk, throwing if that fails.
     /// </summary>
-    private FhManifest _get_manifest(FhModPathInfo paths) {
-        return JsonSerializer.Deserialize<FhManifest>(File.OpenRead(paths.ManifestPath), FhUtil.InternalJsonOpts)
+    private FhManifest _get_manifest(FhModPaths mod_paths) {
+        return JsonSerializer.Deserialize<FhManifest>(File.OpenRead(mod_paths.ManifestPath), FhUtil.InternalJsonOpts)
             ?? throw new Exception("FH_E_MANIFEST_LOAD_FAILED");
     }
 
@@ -88,9 +88,9 @@ public class FhLoader {
     /// <summary>
     ///     Performs DLL loading for a mod, returning the <see cref="FhModuleContext"/>s of the instantiated mods.
     /// </summary>
-    private IEnumerable<FhModuleContext> _load_mod(FhLoaderInfo load_info) {
-        foreach (string dll_name in load_info.ModDllList) {
-            FhDllPathInfo dll_paths    = FhInternal.PathFinder.create_dll_paths(load_info.ModName, dll_name);
+    private IEnumerable<FhModuleContext> _load_mod(FhModLoadInfo mod_info) {
+        foreach (string dll_name in mod_info.ModDllList) {
+            FhDllPaths    dll_paths    = FhInternal.PathFinder.get_paths_dll(mod_info.ModName, dll_name);
             FhLoadContext dll_load_ctx = new FhLoadContext(dll_name, dll_paths.DllPath);
             Assembly      dll          = dll_load_ctx.LoadFromAssemblyPath(dll_paths.DllPath);
 
@@ -111,8 +111,8 @@ public class FhLoader {
                     continue;
                 }
 
-                FhModule         module       = Activator.CreateInstance(type) as FhModule ?? throw new Exception("FH_E_MODULE_TYPE_ACTIVATION_FAILED");
-                FhModulePathInfo module_paths = FhInternal.PathFinder.create_module_paths(load_info.ModName, module.ModuleType);
+                FhModule      module       = Activator.CreateInstance(type) as FhModule ?? throw new Exception($"Constructor of module {type.FullName} threw or faulted.");
+                FhModulePaths module_paths = FhInternal.PathFinder.get_paths_module(mod_info.ModName, module.ModuleType);
 
                 yield return new FhModuleContext(module, module_paths);
             }
@@ -129,9 +129,9 @@ public class FhLoader {
 
         for (int i = 0; i < load_order.Length; i++) {
             string        mod_name      = load_order[i];
-            FhModPathInfo mod_paths     = FhInternal.PathFinder.create_mod_paths(mod_name);
+            FhModPaths    mod_paths     = FhInternal.PathFinder.get_paths_mod(mod_name);
             FhManifest    mod_manifest  = _get_manifest(mod_paths);
-            FhLoaderInfo  mod_load_info = new(mod_name, mod_manifest.DllList);
+            FhModLoadInfo mod_load_info = new(mod_name, mod_manifest.DllList);
 
             mods[i] = new FhModContext(mod_manifest, mod_paths, [ .. _load_mod(mod_load_info) ]);
         }

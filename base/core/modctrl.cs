@@ -5,16 +5,16 @@
 ///     and exposes facilities to find <see cref="FhModule"/>s at runtime.
 /// </summary>
 public class FhModController {
-    // != 0 indicates the mod array is populated and immutable for the rest of program execution.
-    private int            _init = 0;
-    private FhModContext[] _mods = [];
+    private readonly FhModContext[] _mods;
+
+    internal FhModController(FhModContext[]? mods = default) {
+        _mods = mods ?? [];
+    }
 
     /// <summary>
     ///     Returns the <see cref="FhModContext"/>s of all loaded mods for this session.
     /// </summary>
     public IEnumerable<FhModContext> get_mods() {
-        if (Interlocked.CompareExchange(ref _init, 0, 0) == 0) yield break;
-
         foreach (FhModContext ctx in _mods) {
             yield return ctx;
         }
@@ -24,8 +24,6 @@ public class FhModController {
     ///     Returns the <see cref="FhModuleContext"/>s of all loaded modules for this session.
     /// </summary>
     public IEnumerable<FhModuleContext> get_modules() {
-        if (Interlocked.CompareExchange(ref _init, 0, 0) == 0) yield break;
-
         foreach (FhModContext mod_ctx in _mods) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 yield return module_ctx;
@@ -44,11 +42,9 @@ public class FhModController {
         return null;
     }
 
-    internal void load_mods() {
-        _mods = [ .. FhInternal.Loader.load_mods() ];
-        Interlocked.Increment(ref _init); // _mods is now locked for the rest of program execution.
-    }
-
+    /// <summary>
+    ///     Invokes <see cref="FhModule.init(FhModContext, FileStream)"/> for all loaded modules.
+    /// </summary>
     internal void initialize_mods() {
         foreach (FhModContext mod_ctx in _mods) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {

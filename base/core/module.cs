@@ -5,15 +5,14 @@
 ///     Contains its <see cref="FhManifest"/> and a <see cref="FhModuleContext"/> for each of its constituent modules.
 /// </summary>
 public sealed record FhModContext {
-    public readonly FhModPathInfo         Paths;
+    public readonly FhModPaths            Paths;
     public readonly FhManifest            Manifest;
     public readonly List<FhModuleContext> Modules;
 
-    internal FhModContext(
-        FhManifest            manifest,
-        FhModPathInfo         paths,
-        List<FhModuleContext> modules
-    ) {
+    internal FhModContext(FhManifest            manifest,
+                          FhModPaths            paths,
+                          List<FhModuleContext> modules)
+    {
         Paths    = paths;
         Manifest = manifest;
         Modules  = modules;
@@ -25,13 +24,12 @@ public sealed record FhModContext {
 ///     Contains a reference to it, and any metadata relating to it.
 /// </summary>
 public sealed record FhModuleContext {
-    internal readonly FhModulePathInfo Paths;
-    public   readonly FhModule         Module;
+    internal readonly FhModulePaths Paths;
+    public   readonly FhModule      Module;
 
-    internal FhModuleContext(
-        FhModule         module,
-        FhModulePathInfo paths
-    ) {
+    internal FhModuleContext(FhModule      module,
+                             FhModulePaths paths)
+    {
         Paths  = paths;
         Module = module;
     }
@@ -41,8 +39,7 @@ public sealed record FhModuleContext {
 ///     Contains metadata about a given local state file, such as the version of a module last used to write to it.
 /// </summary>
 public sealed record FhLocalStateInfo(
-    string Version
-    );
+    string Version);
 
 /// <summary>
 ///     Describes a unique Fahrenheit mod, consisting of zero to N DLLs, each containing zero to N <see cref="FhModule"/>.
@@ -55,8 +52,7 @@ public sealed record FhManifest(
     string   Link,
     string[] DllList,
     string[] Dependencies,
-    string[] LoadAfter
-    );
+    string[] LoadAfter);
 
 /// <summary>
 ///     A 'module' is the base unit of functionality in Fahrenheit. Modules are used to logically partition your functionality.

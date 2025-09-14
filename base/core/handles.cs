@@ -1,42 +1,45 @@
 ﻿namespace Fahrenheit.Core;
 
 /// <summary>
-///     Internally tracks the address at which the next hook requested by a <see cref="FhMethodHandle{T}"/>
-///     must be inserted, if multiple hooks are created for the same method.
+///     Provides runtime binding to a <see cref="FhModule"/> of type <typeparamref name="TTarget"/>.
+///     You may then access its <see cref="FhModuleContext"/>.
 /// </summary>
-internal class FhMethodAddressMap {
-    private readonly Dictionary<nint, nint> _map;
-    private readonly Lock                   _lock;
+public class FhModuleHandle<TTarget>(FhModule owner) where TTarget : FhModule {
+    private readonly FhModule         _owner = owner;
+    private          FhModuleContext? _match;
 
-    public FhMethodAddressMap() {
-        _map  = [];
-        _lock = new Lock();
+    /// <summary>
+    ///     Queries the <see cref="FhModController"/> for a module of type <typeparamref name="TTarget"/>,
+    ///     caching the match if found, and returns its <see cref="FhModuleContext"/>.
+    /// </summary>
+    public bool try_get([NotNullWhen(true)] out FhModuleContext? target_context) {
+        return (target_context = (_match ??= FhApi.ModController.get_module<TTarget>())) != null;
     }
+}
 
-    public nint get(nint addr_initial) {
-        lock (_lock) {
-            return _map.TryGetValue(addr_initial, out nint addr_current)
-                ? addr_current
-                : addr_initial;
+/// <summary>
+///     Represents an object of type <typeparamref name="T"/> initialized at runtime.
+/// </summary>
+internal class FhRuntimeHandle<T> {
+    protected readonly Lock _impl_lock = new Lock();
+    protected          T?   _impl;
+
+    public bool get_impl([NotNullWhen(true)] out T? impl) {
+        lock (_impl_lock) {
+            return (impl = _impl) != null;
         }
     }
 
-    public void set(nint addr_initial, nint addr_new) {
-        lock (_lock) {
-            _map[addr_initial] = addr_new;
+    public void set_impl(T impl) {
+        lock (_impl_lock) {
+            FhInternal.Log.Info(typeof(T).Name);
+            _impl = impl;
         }
     }
 }
 
 /// <summary>
-///     Used to target functions which are analogous but located at different offsets in FFX and FFX-2.
-/// </summary>
-public sealed record FhMethodLocation(
-    nint OffsetX,
-    nint OffsetX2);
-
-/// <summary>
-///     Provides access to a method whose signature is equal to <typeparamref name="T"/>.
+///     Represents a method whose signature is equal to <typeparamref name="T"/>.
 ///     You may then invoke or hook the function.
 /// </summary>
 public unsafe class FhMethodHandle<T> where T : Delegate {
@@ -142,7 +145,7 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         nint addr_hook     = Marshal.GetFunctionPointerForDelegate(hook_fptr);
         nint addr_original = 0;
 
-        FhInternal.Log.Info($"{hook_fptr.Method.Name}; 0x{addr_target.ToString("X8")} -> 0x{addr_hook.ToString("X8")}.");
+        FhInternal.Log.Info($"{hook_fptr.Method.Name}; 0x{addr_target:X8} -> 0x{addr_hook:X8}.");
 
         if (FhPInvoke.MH_CreateHook(addr_target, addr_hook, &addr_original) != 0) throw new Exception("FH_E_NATIVE_HOOK_CREATE_FAILED");
         if (FhPInvoke.MH_EnableHook(addr_target)                            != 0) throw new Exception("FH_E_NATIVE_HOOK_ENABLE_FAILED");
@@ -153,3 +156,34 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
         return true;
     }
 }
+
+/// <summary>
+///     Tracks the address at which the next hook requested by a <see cref="FhMethodHandle{T}"/>
+///     must be inserted, if multiple hooks are created for the same method.
+/// </summary>
+internal class FhMethodAddressMap {
+    private readonly Dictionary<nint, nint> _map  = [];
+    private readonly Lock                   _lock = new Lock();
+
+    public nint get(nint addr_initial) {
+        lock (_lock) {
+            return _map.TryGetValue(addr_initial, out nint addr_current)
+                ? addr_current
+                : addr_initial;
+        }
+    }
+
+    public void set(nint addr_initial, nint addr_new) {
+        lock (_lock) {
+            _map[addr_initial] = addr_new;
+        }
+    }
+}
+
+/// <summary>
+///     Used by <see cref="FhMethodHandle{T}"/> to target functions which are
+///     analogous but located at different offsets in FF X and FF X-2.
+/// </summary>
+public sealed record FhMethodLocation(
+    nint OffsetX,
+    nint OffsetX2);

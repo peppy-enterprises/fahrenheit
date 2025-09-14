@@ -4,15 +4,9 @@ using TerraFX.Interop.DirectX;
 
 namespace Fahrenheit.Core;
 
-/* [fkelava 9/8/25 01:52]
- * The internal contract between Core and RT is abstracted here to allow us to arrange it
- * differently from FhResourceLoader's public API, if need be.
- */
-internal interface IFhResourceLoader {
-    public bool load_texture_from_memory(nint ptr, nuint size, FhTextureType file_type, [NotNullWhen(true)] out FhTexture? texture);
-    public bool load_texture_from_disk(string file_path, FhTextureType file_type, [NotNullWhen(true)] out FhTexture? texture);
-}
-
+/// <summary>
+///     Indicates the type of texture the input to <see cref="IFhResourceLoader"/> should be interpreted as.
+/// </summary>
 public enum FhTextureType {
     NULL = 0,
     DDS  = 1,
@@ -26,6 +20,7 @@ public enum FhTextureType {
  * A direct reimplementation of TexMetadata (https://github.com/microsoft/DirectXTex/wiki/TexMetadata)
  * to abstract Hexa implementation details from consumers and use more correct TerraFX defs.
  */
+
 /// <summary>
 ///     Describes the properties of a <see cref="FhTexture"/>, such as its dimensions and format.
 /// </summary>
@@ -46,6 +41,33 @@ public record FhTextureMetadata(
 public record FhTexture(
     ImTextureRef      TextureRef,
     FhTextureMetadata Metadata);
+
+/* [fkelava 9/8/25 01:52]
+ * The internal contract between Core and RT is abstracted here to allow us to arrange it
+ * differently from FhResourceLoader's public API, if need be.
+ */
+internal interface IFhResourceLoader {
+    /// <summary>
+    ///     Loads a texture of type <paramref name="file_type"/> from a memory buffer
+    ///     of size <paramref name="size"/> at <paramref name="ptr"/> and returns, if
+    ///     successful, a <see cref="FhTexture"/>.
+    /// </summary>
+    public bool load_texture_from_memory(
+                                nint          ptr,
+                                nuint         size,
+                                FhTextureType file_type,
+        [NotNullWhen(true)] out FhTexture?    texture);
+
+    /// <summary>
+    ///     Loads a texture of type <paramref name="file_type"/> from a
+    ///     file at <paramref name="file_path"/> and returns, if
+    ///     successful, a <see cref="FhTexture"/>.
+    /// </summary>
+    public bool load_texture_from_disk(
+                                string        file_path,
+                                FhTextureType file_type,
+        [NotNullWhen(true)] out FhTexture?    texture);
+}
 
 /// <summary>
 ///     Allows for loading of resources such as images for use in ImGui code.

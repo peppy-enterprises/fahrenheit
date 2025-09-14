@@ -11,8 +11,8 @@ typedef void (CORECLR_DELEGATE_CALLTYPE* fh_ldr_managed_init)();
 using string_t = std::basic_string<char_t>;
 using main_t   = int(*)(void);
 
-main_t ffxMain       = nullptr;
-main_t ffxMainTarget = nullptr;
+main_t pMainOriginal = nullptr; // Original program entrypoint.
+main_t pMainTarget   = nullptr; // Detour of program entrypoint.
 
 namespace {
     // Globals to hold hostfxr exports
@@ -21,7 +21,7 @@ namespace {
     hostfxr_close_fn                         close_fptr;
 
     // Forward declarations
-    bool                                      load_hostfxr();
+    bool load_hostfxr();
 }
 
 /********************************************************************************************
@@ -29,16 +29,37 @@ namespace {
  ********************************************************************************************/
 
 namespace {
-    void* load_library(const char_t* path) {
+    // Forward declarations
+    void *load_library(const char_t *);
+    void *get_export(void *, const char *);
+
+#ifdef _WIN32
+    void *load_library(const char_t *path)
+    {
         HMODULE h = ::LoadLibraryW(path);
         assert(h != nullptr);
         return (void*)h;
     }
-    void* get_export(void* h, const char* name) {
-        void* f = ::GetProcAddress((HMODULE)h, name);
+    void *get_export(void *h, const char *name)
+    {
+        void *f = ::GetProcAddress((HMODULE)h, name);
         assert(f != nullptr);
         return f;
     }
+#else
+    void *load_library(const char_t *path)
+    {
+        void *h = dlopen(path, RTLD_LAZY | RTLD_LOCAL);
+        assert(h != nullptr);
+        return h;
+    }
+    void *get_export(void *h, const char *name)
+    {
+        void *f = dlsym(h, name);
+        assert(f != nullptr);
+        return f;
+    }
+#endif
 
     // Using the nethost library, discover the location of hostfxr and get exports
     bool load_hostfxr() {
@@ -61,6 +82,10 @@ namespace {
 }
 
 static int DetourMain(void) {
+    //
+    // STEP 1:
+    // Attach to the Stage0 console and forward stdout/stderr to it.
+    //
     AttachConsole(ATTACH_PARENT_PROCESS);
 
     FILE* parent_stdout;
@@ -71,6 +96,12 @@ static int DetourMain(void) {
         exit(EXIT_FAILURE);
     }
 
+    //
+    // STEP 2:
+    // Determine the current working directory and the location
+    // of the executable being launched, to which we will swap
+    // the working directory later.
+    //
     char_t host_path_buf[MAX_PATH]; // where is the game?
     char_t cwd_path_buf [MAX_PATH]; // where are _we_?
 
@@ -78,18 +109,26 @@ static int DetourMain(void) {
     auto cwd_size = ::GetCurrentDirectory(sizeof(cwd_path_buf) / sizeof(char_t), cwd_path_buf);
 
     if (size == 0 || cwd_size == 0) {
-        std::wcout << "Cannot determine game directory and/or working directory.\n";
+        std::wcout << "Cannot determine game directory.\n";
+        exit(EXIT_FAILURE);
+    }
+
+    if (cwd_size == 0) {
+        std::wcout << "Cannot determine working directory.\n";
         exit(EXIT_FAILURE);
     }
 
     string_t host_path = host_path_buf;
     string_t cwd_path  = cwd_path_buf;
 
+    //
+    // STEP 3:
+    // Declare the name, type, and location of the bootstrap method to invoke.
+    //
     const string_t clrhost_config_path = cwd_path + STR("\\fhcore.runtimeconfig.json");
     const string_t clrhost_lib_path    = cwd_path + STR("\\fhcore.dll");
     const char_t*  clrhost_type        = STR("Fahrenheit.Core.FhBootstrapper, fhcore");
     const char_t*  clrhost_init_method = STR("bootstrap");
-    const char_t*  clrhost_delegate    = STR("Fahrenheit.Core.FhBootstrapper+FhBootstrapDelegate, fhcore");
 
     auto host_dirsep_pos = host_path.find_last_of(DIR_SEPARATOR);
 
@@ -102,15 +141,19 @@ static int DetourMain(void) {
 
     host_path = host_path.substr(0, host_dirsep_pos + 1);
 
-    // STEP 1: Load HostFxr and get exported hosting functions
-
+    //
+    // STEP 4:
+    // Load HostFxr.
+    //
     if (!load_hostfxr()) {
         std::cout << "load_hostfxr() failed\n";
         exit(EXIT_FAILURE);
     }
 
-    // STEP 2: Initialize and start the .NET Core runtime
-
+    //
+    // STEP 5:
+    // Initialize and start the .NET Core runtime.
+    //
     void*          load_assembly_fptr        = nullptr;
     void*          get_function_pointer_fptr = nullptr;
     hostfxr_handle cxt                       = nullptr;
@@ -122,7 +165,10 @@ static int DetourMain(void) {
         exit(EXIT_FAILURE);
     }
 
-    // Get the load assembly function pointer
+    //
+    // STEP 6:
+    // Get function pointers to HostFxr's `load_assembly()` and `get_function_pointer()`.
+    //
     rc = get_delegate_fptr(
         cxt,
         hdt_load_assembly,
@@ -149,7 +195,10 @@ static int DetourMain(void) {
         exit(EXIT_FAILURE);
     }
 
-    // STEP 3: Load managed assembly and get function pointer to a managed method
+    //
+    // STEP 7:
+    // Load managed assembly and get function pointer to bootstrap function.
+    //
     fh_ldr_managed_init fh_init = nullptr;
 
     rc = load_assembly(
@@ -158,36 +207,40 @@ static int DetourMain(void) {
         nullptr);
 
     if (rc != 0) {
-        std::wcout << "load_assembly() failed\n";
+        std::wcout << "Failed to load managed assembly.\n";
         exit(EXIT_FAILURE);
     }
 
     rc = get_function_pointer(
         clrhost_type,
         clrhost_init_method,
-        clrhost_delegate, /* Delegate type name, if using non-standard delegate */
+        UNMANAGEDCALLERSONLY_METHOD,
         nullptr,
         nullptr,
         (void**)&fh_init);
 
     if (rc != 0 || fh_init == nullptr) {
-        std::wcout << "get_function_pointer() failed\n";
+        std::wcout << "Failed to get pointer to bootstrap function.\n";
         exit(EXIT_FAILURE);
     }
 
-    // native -> managed
+    // TRANSITION: NATIVE -> MANAGED
     fh_init();
-    // managed -> native
+    // TRANSITION: MANAGED -> NATIVE
 
-    // return the working directory to the executable, now that bootstrapping is complete
+    //
+    // STEP 8:
+    // Change the working directory to the targeted executable's location,
+    // now that we have finished initialization.
+    //
     int chrc = _wchdir(host_path.c_str());
     if (chrc != 0) {
         std::wcout << "_wchdir failed, rc:" << chrc << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    std::wcout << "Stage 1 Loader complete: game execution will now resume.\n";
-    return ffxMain();
+    std::wcout << "Stage 1 Loader complete: execution will now resume.\n";
+    return pMainOriginal();
 }
 
 BOOL APIENTRY DllMain( HMODULE hModule,
@@ -205,11 +258,11 @@ BOOL APIENTRY DllMain( HMODULE hModule,
             auto pImgNTHeaders = reinterpret_cast<PIMAGE_NT_HEADERS> ((reinterpret_cast<LPBYTE>(pImgDosHeaders) + pImgDosHeaders->e_lfanew));
             if (pImgNTHeaders->Signature != IMAGE_NT_SIGNATURE) return TRUE;
 
-            ffxMainTarget = reinterpret_cast<main_t>(pImgNTHeaders->OptionalHeader.AddressOfEntryPoint + reinterpret_cast<LPBYTE>(hMainModule));
+            pMainTarget = reinterpret_cast<main_t>(pImgNTHeaders->OptionalHeader.AddressOfEntryPoint + reinterpret_cast<LPBYTE>(hMainModule));
 
-            if (MH_Initialize()                                                               != MH_OK) return TRUE;
-            if (MH_CreateHook(ffxMainTarget, &DetourMain, reinterpret_cast<void**>(&ffxMain)) != MH_OK) return TRUE;
-            if (MH_EnableHook(ffxMainTarget)                                                  != MH_OK) return TRUE;
+            if (MH_Initialize()                                                                   != MH_OK) return TRUE;
+            if (MH_CreateHook(pMainTarget, &DetourMain, reinterpret_cast<void**>(&pMainOriginal)) != MH_OK) return TRUE;
+            if (MH_EnableHook(pMainTarget)                                                        != MH_OK) return TRUE;
         }
         case DLL_THREAD_ATTACH:
         case DLL_THREAD_DETACH:

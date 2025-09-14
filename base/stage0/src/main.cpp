@@ -8,6 +8,11 @@ int wmain(int argc, wchar_t* argv[ ]) {
 
     si.cb = sizeof(si);
 
+    //
+    // STEP 1:
+    // Create process in PROCESS_SUSPENDED state.
+    //
+
     if (!CreateProcess(
         argv[1],
         cmdLineStr,
@@ -20,18 +25,27 @@ int wmain(int argc, wchar_t* argv[ ]) {
         &si,
         &pi
     )) {
-        std::cerr << "Failed to create target process.\n";
+        std::wcerr << "Failed to create target process.\n";
         return 1;
     }
 
-    if (argc > 2 && wcsncmp(argv[2], L"--nodebug", 9) == 0) {
+    //
+    // STEP 2:
+    // Pause for debugger attach if `--debug` arg is passed.
+    //
+
+    if (argc > 2 && wcsncmp(argv[2], L"--debug", 9) == 0) {
         std::wcout << "Stage 0 Loader is ready. You can now attach a debugger; press any key to attempt launch.\n";
         int i = _getch();
     } else {
         std::wcout << "Stage 0 Loader is ready.\n";
     }
 
-    // copied verbatim for safety's sake, stupid as it is
+    //
+    // STEP 3:
+    // Patch IAT of suspended process to inject Stage 1 DLL at position 1.
+    //
+
     LPCSTR rlpDlls[2] {};
     DWORD  nDlls = 0;
     if (szDllPath != NULL) {
@@ -45,8 +59,20 @@ int wmain(int argc, wchar_t* argv[ ]) {
 
     std::wcout << "Stage 0 Loader complete. Moving to Stage 1.\n";
 
+    //
+    // STEP 4:
+    // Stage 1 loads first, hooks program entrypoint and performs .NET hosting and
+    // initialization, undoes IAT changes, pipes process stdout/stderr to Stage 0
+    // console, then program execution proceeds.
+    //
+
     ResumeThread       (pi.hThread);
     WaitForSingleObject(pi.hProcess, INFINITE);
+
+    //
+    // STEP 5:
+    // Wait for program to (un)naturally terminate.
+    //
 
     DWORD exitCode;
     BOOL  result = GetExitCodeProcess(pi.hProcess, &exitCode);

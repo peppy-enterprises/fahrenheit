@@ -13,8 +13,8 @@ namespace Fahrenheit.Core;
 ///     An accessor for objects private to the Fahrenheit core and runtime libraries.
 /// </summary>
 internal static class FhInternal {
-    public static FhPathFinder       PathFinder       = new FhPathFinder();
-    public static FhLogger           Log              = new FhLogger($"{FhUtil.get_timestamp_string()}__core.log");
-    public static FhLoader           Loader           = new FhLoader();
-    public static FhMethodAddressMap MethodAddressMap = new FhMethodAddressMap();
+    public static readonly FhPathFinder       PathFinder       = new FhPathFinder();
+    public static readonly FhLogger           Log              = new FhLogger($"{FhUtil.get_timestamp_string()}__core.log");
+    public static readonly FhLoader           Loader           = new FhLoader();
+    public static readonly FhMethodAddressMap MethodAddressMap = new FhMethodAddressMap();
 }

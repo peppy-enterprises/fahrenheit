@@ -113,12 +113,12 @@ public unsafe static class FhUtil {
 
     public static string get_timestamp_string() {
         DateTime dt = DateTime.UtcNow;
-        return $"{dt.Day:D2}{dt.Month:D2}{dt.Year:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}";
+        return $"{dt.Year:D2}{dt.Month:D2}{dt.Day:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}";
     }
 
     public static string get_extended_timestamp_string() {
         DateTime dt = DateTime.UtcNow;
-        return $"{dt.Day:D2}{dt.Month:D2}{dt.Year:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}.{dt.Millisecond:D3}";
+        return $"{dt.Year:D2}{dt.Month:D2}{dt.Day:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}.{dt.Millisecond:D3}";
     }
 
     internal static JsonSerializerOptions InternalJsonOpts { get; } = new JsonSerializerOptions {
