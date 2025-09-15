@@ -2,7 +2,7 @@
 
 /// <summary>
 ///     A representation of a fully loaded mod.
-///     Contains its <see cref="FhManifest"/> and a <see cref="FhModuleContext"/> for each of its constituent modules.
+///     Contains its <see cref="FhManifest"/> and a <see cref="FhModuleContext"/> for each of its modules.
 /// </summary>
 public sealed record FhModContext {
     public readonly FhModPaths            Paths;
@@ -56,7 +56,7 @@ public sealed record FhManifest(
 
 /// <summary>
 ///     A 'module' is the base unit of functionality in Fahrenheit. Modules are used to logically partition your functionality.
-///     <para></para>
+///     <para/>
 ///     'Modules' are not the same as mods or even DLLs. Mods can be executed as one or several DLLs,
 ///     and one DLL can contain any number of modules.
 /// </summary>
@@ -90,11 +90,17 @@ public abstract class FhModule {
 
     /// <summary>
     ///     Called when the game saves, allowing the module to save state specific to that save game.
+    ///     <para/>
+    ///     Do not flush, dispose/close, or save <paramref name="local_state_file"/> as a local variable.
+    ///     The stream only lasts for the duration of this call, and the framework cleans it up.
     /// </summary>
     public virtual void save_local_state(FileStream local_state_file) { }
 
     /// <summary>
     ///     Called when the game loads, allowing the module to load state specific to that save game.
+    ///     <para/>
+    ///     Do not flush, dispose/close, or save <paramref name="local_state_file"/> as a local variable.
+    ///     The stream only lasts for the duration of this call, and the framework cleans it up.
     /// </summary>
     public virtual void load_local_state(FileStream local_state_file, FhLocalStateInfo local_state_info) { }
 

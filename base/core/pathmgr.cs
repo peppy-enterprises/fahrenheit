@@ -1,20 +1,23 @@
 ﻿namespace Fahrenheit.Core;
 
 /// <summary>
-///     Contains path information required for the loader to process a DLL in the <see cref="FhManifest.DllList"/> of a Fahrenheit mod.
+///     Contains path information required for the loader to process
+///     a DLL in the <see cref="FhManifest.DllList"/> of a Fahrenheit mod.
 /// </summary>
 internal sealed record FhDllPaths(
     string DllPath,
     string SettingsPath);
 
 /// <summary>
-///     Contains path information required for the mod controller and Fahrenheit runtime to handle a module's lifecycle.
+///     Contains path information required for the mod controller
+///     and Fahrenheit runtime to handle a module's lifecycle.
 /// </summary>
 internal sealed record FhModulePaths(
     string GlobalStatePath);
 
 /// <summary>
-///     Contains path information required for the mod controller and Fahrenheit runtime to handle a mod's lifecycle.
+///     Contains path information required for the mod controller
+///     and Fahrenheit runtime to handle a mod's lifecycle.
 /// </summary>
 public sealed record FhModPaths(
     string        ManifestPath,
@@ -33,7 +36,8 @@ public sealed record FhDirLink(
     string Path);
 
 /// <summary>
-///     Internally resolves the paths of certain well-known directories and files required by the framework.
+///     Internally resolves the paths of certain well-known
+///     directories and files required by the framework.
 /// </summary>
 internal class FhPathFinder {
     private const string _dirname_bin   = "bin";
@@ -74,11 +78,15 @@ internal class FhPathFinder {
         Saves    = new FhDirLink("$saves", path_saves);
     }
 
-    public string get_path_savefile(int save_index) {
+    /// <summary>
+    ///     Gets the full path of the save file in slot <paramref name="slot_index"/>,
+    ///     in the game's default save directory.
+    /// </summary>
+    public string get_path_savefile(int slot_index) {
         bool   is_ffx         = FhGlobal.game_type == FhGameType.FFX;
         string save_subfolder = is_ffx ? "FINAL FANTASY X" : "FINAL FANTASY X-2";
         string save_prefix    = is_ffx ? "ffx"             : "ffx2";
-        string save_name      = $"{save_prefix}_{save_index:000}";
+        string save_name      = $"{save_prefix}_{slot_index:000}";
 
         return Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.Personal),
@@ -88,14 +96,21 @@ internal class FhPathFinder {
             save_name);
     }
 
-    public string get_save_name_for_index(int save_index) {
+    /// <summary>
+    ///     Gets the file name of the save file in slot <paramref name="slot_index"/>.
+    /// </summary>
+    public string get_save_name_for_index(int slot_index) {
         bool   is_ffx      = FhGlobal.game_type == FhGameType.FFX;
         string save_prefix = is_ffx ? "ffx" : "ffx2";
-        string save_name   = $"{save_prefix}_{save_index:000}";
+        string save_name   = $"{save_prefix}_{slot_index:000}";
 
         return save_name;
     }
 
+    /// <summary>
+    ///     Returns path information for DLL <paramref name="dll_name"/>
+    ///     belonging to mod <paramref name="mod_name"/>.
+    /// </summary>
     public FhDllPaths get_paths_dll(string mod_name, string dll_name) {
         bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
         string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
@@ -106,6 +121,9 @@ internal class FhPathFinder {
             );
     }
 
+    /// <summary>
+    ///     Returns path information for mod <paramref name="mod_name"/>.
+    /// </summary>
     public FhModPaths get_paths_mod(string mod_name) {
         bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
         string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
@@ -120,6 +138,10 @@ internal class FhPathFinder {
             );
     }
 
+    /// <summary>
+    ///     Returns path information for module <paramref name="module_name"/>
+    ///     belonging to mod <paramref name="mod_name"/>.
+    /// </summary>
     public FhModulePaths get_paths_module(string mod_name, string module_name) {
         string global_state_dir  = Path.Join(State.Path, mod_name, "global");
         string global_state_path = Path.Join(global_state_dir, module_name);
@@ -137,7 +159,7 @@ internal class FhPathFinder {
     ///     <para/>
     ///     e.g. $bin -> /opt/games/ffx/fahrenheit/bin OR C:\opt\games\ffx\fahrenheit\bin
     /// </summary>
-    public string fix_paths(string input) {
+    private string fix_paths(string input) {
         return input.Replace(Binaries.Symbol, Binaries.Path).
                      Replace(Mods    .Symbol, Mods    .Path).
                      Replace(Logs    .Symbol, Logs    .Path).
