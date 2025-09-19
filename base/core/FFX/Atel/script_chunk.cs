@@ -1,17 +1,16 @@
 ﻿namespace Fahrenheit.Core.FFX.Atel;
 
-[StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x20)]
-public unsafe struct MapEntrance {
-    [FieldOffset(0x00)] public int   unknown00;
-    [FieldOffset(0x02)] public short unknown02;
-    [FieldOffset(0x04)] public short unknown04;
-    [FieldOffset(0x06)] public short unknown06;
-    [FieldOffset(0x08)] public float rotation;
-    [FieldOffset(0x0C)] public float x;
-    [FieldOffset(0x10)] public float y;
-    [FieldOffset(0x14)] public float z;
-    [FieldOffset(0x18)] public int   unknown18;
-    [FieldOffset(0x1C)] public int   unknown1C;
+public struct MapEntrance {
+    public short unknown00;
+    public short unknown02;
+    public short unknown04;
+    public short unknown06;
+    public float rotation;
+    public float x;
+    public float y;
+    public float z;
+    public int   unknown18;
+    public int   unknown1C;
 
     public readonly Vector3 pos => new(x, y, z);
 }
