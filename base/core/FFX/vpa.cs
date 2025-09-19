@@ -33,12 +33,11 @@ public unsafe struct VpaTri {
     public int                  upper           { readonly get { return data.get_bits(17, 15);                     } set { data.set_bits(17, 15, value);      } }
 }
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x8)]
-public unsafe struct VpaVertex {
-    [FieldOffset(0x0)] public  short x;
-    [FieldOffset(0x2)] public  short y;
-    [FieldOffset(0x4)] public  short z;
-    [FieldOffset(0x6)] private short unused;
+public struct VpaVertex {
+    public  short x;
+    public  short y;
+    public  short z;
+    private short unused;
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x20)]

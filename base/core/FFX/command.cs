@@ -6,10 +6,9 @@ public struct PCommandData {
     [FieldOffset(0x01)] public byte sphere_grid_role;
 }
 
-[StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x60)]
 public struct PCommand {
-    [FieldOffset(0x00)] public Command      command;
-    [FieldOffset(0x5C)] public PCommandData command_pdata;
+    public Command      command;
+    public PCommandData command_pdata;
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x5C)]
