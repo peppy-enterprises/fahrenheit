@@ -63,9 +63,12 @@ public class FhLoader {
     private readonly Dictionary<string, FhLoadContext> _load_contexts = [];
 
     public FhLoader() {
-        // Loading `fhcore` into ALC.Default ensures it does not 'leak' into plugins' load contexts, causing type identity mismatches.
+        // Loading the core libraries into ALC.Default ensures they do not 'leak' into plugins' load contexts, causing type identity mismatches.
         AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhInternal.PathFinder.Binaries.Path, "fhcore.dll"));
-        HexaGen.Runtime.LibraryLoader.CustomLoadFolders.Add(FhInternal.PathFinder.Binaries.Path); // required for Hexa.NET.ImGui's assembly-probing logic
+        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhInternal.PathFinder.Binaries.Path, "fhx.dll"));
+        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhInternal.PathFinder.Binaries.Path, "fhx2.dll"));
+        // required for Hexa.NET.ImGui's assembly-probing logic
+        HexaGen.Runtime.LibraryLoader.CustomLoadFolders.Add(FhInternal.PathFinder.Binaries.Path);
     }
 
     /// <summary>

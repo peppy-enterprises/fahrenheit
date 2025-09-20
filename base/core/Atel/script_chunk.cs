@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Core.FFX.Atel;
+namespace Fahrenheit.Core.Atel;
 
 public struct MapEntrance {
     public short unknown00;

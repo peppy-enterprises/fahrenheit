@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Core.FFX.Atel;
+namespace Fahrenheit.Core.Atel;
 
 public enum AtelSignalState : byte {
     Ignore       = 0x0,

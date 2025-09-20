@@ -1,9 +1,7 @@
-﻿// Deprecated until further notice.
+﻿// SPDX-License-Identifier: MIT
 
 using System.Buffers.Binary;
 using System.Text;
-
-using Fahrenheit.Core.FFX;
 
 namespace Fahrenheit.Core;
 

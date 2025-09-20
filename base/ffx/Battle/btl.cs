@@ -7,6 +7,7 @@ public unsafe struct PosAreaSomeInfo {
     [FieldOffset(0x00)] public   uint offset_something;
     [FieldOffset(0x06)] public   byte count_something;
 }
+
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x60)]
 public unsafe struct BtlArea {
     [FieldOffset(0x0)]  public   byte    area_type;

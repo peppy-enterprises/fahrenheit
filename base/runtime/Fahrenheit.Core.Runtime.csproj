@@ -32,6 +32,14 @@
             <Private>false</Private>
             <ExcludeAssets>runtime;native</ExcludeAssets>
         </ProjectReference>
+        <ProjectReference Include="..\ffx\Fahrenheit.Core.FFX.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>runtime;native</ExcludeAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\ffx2\Fahrenheit.Core.FFX2.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>runtime;native</ExcludeAssets>
+        </ProjectReference>
     </ItemGroup>
 
     <!-- ASSETS: MANIFEST -->

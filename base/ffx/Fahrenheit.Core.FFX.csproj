@@ -1,0 +1,37 @@
+﻿<Project>
+
+    <!-- ASSEMBLY BASIC PROPERTIES -->
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+    </PropertyGroup>
+
+    <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
+    <PropertyGroup>
+        <AssemblyName>fhx</AssemblyName>
+        <AssemblyTitle>Fahrenheit FF X Support Library</AssemblyTitle>
+        <Product>Fahrenheit FF X Support Library</Product>
+    </PropertyGroup>
+
+    <!-- SDK REFERENCES -->
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+    <!-- SHARED FILE LINKS -->
+    <ItemGroup>
+        <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
+
+    <!-- PROJECT REFERENCES -->
+    <ItemGroup>
+        <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>runtime;native</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+
+</Project>

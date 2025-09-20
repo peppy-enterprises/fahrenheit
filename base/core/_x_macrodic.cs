@@ -1,6 +1,6 @@
-﻿// Deprecated until further notice.
+﻿// SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Core.FFX;
+namespace Fahrenheit.Core;
 
 public readonly struct FhDialogueIndex {
     public readonly T_FhDialoguePos         index;

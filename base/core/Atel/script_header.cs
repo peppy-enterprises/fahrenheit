@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Core.FFX.Atel;
+namespace Fahrenheit.Core.Atel;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x34)]
 public unsafe struct AtelScriptHeader {

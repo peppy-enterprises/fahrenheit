@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Core.FFX.Atel;
+namespace Fahrenheit.Core.Atel;
 
 public record struct AtelInst(byte instruction, ushort? operand) {
     public byte[] to_bytes() {
