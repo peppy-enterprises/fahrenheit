@@ -1,25 +1,24 @@
 ﻿namespace Fahrenheit.Core.FFX.Battle;
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x0C)]
 public struct ChrItemLoot {
-    [FieldOffset(0x00)] public ushort item_primary_common;
-    [FieldOffset(0x02)] public ushort item_primary_rare;
-    [FieldOffset(0x04)] public ushort item_secondary_common;
-    [FieldOffset(0x06)] public ushort item_secondary_rare;
-    [FieldOffset(0x08)] public byte   amount_primary_common;
-    [FieldOffset(0x09)] public byte   amount_primary_rare;
-    [FieldOffset(0x0A)] public byte   amount_secondary_common;
-    [FieldOffset(0x0B)] public byte   amount_secondary_rare;
+    public ushort item_primary_common;
+    public ushort item_primary_rare;
+    public ushort item_secondary_common;
+    public ushort item_secondary_rare;
+    public byte   amount_primary_common;
+    public byte   amount_primary_rare;
+    public byte   amount_secondary_common;
+    public byte   amount_secondary_rare;
 }
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x09)]
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct ChrStealLoot {
-    [FieldOffset(0x00)] public ushort item_common;
-    [FieldOffset(0x02)] public ushort item_rare;
-    [FieldOffset(0x04)] public byte   amount_common;
-    [FieldOffset(0x05)] public byte   amount_rare;
-    [FieldOffset(0x06)] public ushort item_bribe;
-    [FieldOffset(0x08)] public byte   amount_bribe;
+    public ushort item_common;
+    public ushort item_rare;
+    public byte   amount_common;
+    public byte   amount_rare;
+    public ushort item_bribe;
+    public byte   amount_bribe;
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x20)]
@@ -28,21 +27,20 @@ public unsafe struct ChrEquipmentLootAbilities {
     [FieldOffset(0x10)] public fixed ushort armor_abilities [8];
 }
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0xE5)]
 public struct ChrEquipmentLoot {
-    [FieldOffset(0x00)] public byte slot_count;
-    [FieldOffset(0x01)] public byte dmg_formula;
-    [FieldOffset(0x02)] public byte crit_bonus;
-    [FieldOffset(0x03)] public byte power;
-    [FieldOffset(0x04)] public byte ability_count;
+    public byte slot_count;
+    public byte dmg_formula;
+    public byte crit_bonus;
+    public byte power;
+    public byte ability_count;
 
-    [FieldOffset(0x05)] public ChrEquipmentLootAbilities abilities_tidus;
-    [FieldOffset(0x25)] public ChrEquipmentLootAbilities abilities_yuna;
-    [FieldOffset(0x45)] public ChrEquipmentLootAbilities abilities_auron;
-    [FieldOffset(0x65)] public ChrEquipmentLootAbilities abilities_kimahri;
-    [FieldOffset(0x85)] public ChrEquipmentLootAbilities abilities_wakka;
-    [FieldOffset(0xA5)] public ChrEquipmentLootAbilities abilities_lulu;
-    [FieldOffset(0xC5)] public ChrEquipmentLootAbilities abilities_rikku;
+    public ChrEquipmentLootAbilities abilities_tidus;
+    public ChrEquipmentLootAbilities abilities_yuna;
+    public ChrEquipmentLootAbilities abilities_auron;
+    public ChrEquipmentLootAbilities abilities_kimahri;
+    public ChrEquipmentLootAbilities abilities_wakka;
+    public ChrEquipmentLootAbilities abilities_lulu;
+    public ChrEquipmentLootAbilities abilities_rikku;
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x118)]

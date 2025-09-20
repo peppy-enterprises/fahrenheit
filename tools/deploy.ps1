@@ -9,3 +9,4 @@ dotnet.exe publish ".\step" --no-build -c "Release"  -o "$($SolutionDir)\artifac
 dotnet.exe publish ".\h2cs" --no-build -c "Release" -o "$($SolutionDir)\artifacts\localdeploy\rel\bin" -p:SolutionDir=$($SolutionDir)
 dotnet.exe publish ".\modmgr" --no-build -c "Release" -o "$($SolutionDir)\artifacts\localdeploy\rel\bin" -p:SolutionDir=$($SolutionDir)
 dotnet.exe publish ".\dedit" --no-build -c "Release" -o "$($SolutionDir)\artifacts\localdeploy\rel\bin" -p:SolutionDir=$($SolutionDir)
+dotnet.exe publish ".\inspector" --no-build -c "Release" -o "$($SolutionDir)\artifacts\localdeploy\rel\bin" -p:SolutionDir=$($SolutionDir)

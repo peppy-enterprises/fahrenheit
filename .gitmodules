@@ -25,3 +25,6 @@
 [submodule "tools/atelier"]
 	path = tools/atelier
 	url = https://github.com/peppy-enterprises/fh-tools-atelier
+[submodule "tools/inspector"]
+	path = tools/inspector
+	url = https://github.com/peppy-enterprises/fh-tools-inspector

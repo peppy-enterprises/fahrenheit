@@ -13,6 +13,7 @@ public class FhModuleHandle<TTarget>(FhModule owner) where TTarget : FhModule {
     ///     caching the match if found, and returns its <see cref="FhModuleContext"/>.
     /// </summary>
     public bool try_get([NotNullWhen(true)] out FhModuleContext? target_context) {
+        FhInternal.Log.Info($"{_owner.ModuleType} acquiring handle to {typeof(TTarget).FullName}");
         return (target_context = (_match ??= FhApi.ModController.get_module<TTarget>())) != null;
     }
 }
@@ -127,8 +128,8 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
     }
 
     /// <summary>
-    ///     Obtains the absolute address of the function at <paramref name="offset"/> in
-    ///     module <paramref name="module_name"/>.
+    ///     Obtains the absolute address of the function at <paramref name="offset"/>
+    ///     in module <paramref name="module_name"/>.
     /// </summary>
     private nint calc_fnaddr(string module_name, nint offset) {
         nint mod_addr = FhPInvoke.GetModuleHandle(module_name);
