@@ -12,9 +12,9 @@
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <AssemblyName>fhx2</AssemblyName>
-        <AssemblyTitle>Fahrenheit FF X-2 Support Library</AssemblyTitle>
-        <Product>Fahrenheit FF X-2 Support Library</Product>
+        <AssemblyName>fhx</AssemblyName>
+        <AssemblyTitle>Fahrenheit FF X Support Library</AssemblyTitle>
+        <Product>Fahrenheit FF X Support Library</Product>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -28,7 +28,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\core\Fahrenheit.Core.csproj">
+        <ProjectReference Include="..\framework\Fahrenheit.Core.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime;native</ExcludeAssets>
         </ProjectReference>

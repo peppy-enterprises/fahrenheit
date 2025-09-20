@@ -10,13 +10,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core", "base\core\Fahrenheit.Core.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core", "core\framework\Fahrenheit.Core.csproj", "{395F4045-232F-4AEC-A32B-F2FE35480B61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core.Runtime", "base\runtime\Fahrenheit.Core.Runtime.csproj", "{AA228653-784C-4FA2-84D2-DD5946D843AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fahrenheit.Core.Runtime", "core\runtime\Fahrenheit.Core.Runtime.csproj", "{AA228653-784C-4FA2-84D2-DD5946D843AB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage0", "base\stage0\Fahrenheit.Loader.Stage0.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.FFX", "core\ffx\Fahrenheit.Core.FFX.csproj", "{9DD95297-35C2-45FE-1348-9290FF4705D3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage1", "base\stage1\Fahrenheit.Loader.Stage1.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.FFX2", "core\ffx2\Fahrenheit.Core.FFX2.csproj", "{38D2622A-1889-B04C-2D3D-A93E53B431F1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage0", "core\stage0\Fahrenheit.Loader.Stage0.vcxproj", "{287D8EE5-E211-4CD5-923C-3E82AD4BE07D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fahrenheit.Loader.Stage1", "core\stage1\Fahrenheit.Loader.Stage1.vcxproj", "{650214FC-8A0D-4430-A5DE-73D05B2982AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Mods.Template", "mods\template\Fahrenheit.Mods.Template.csproj", "{77AB0272-D68D-4629-998A-FAD4CB108DC4}"
 EndProject
@@ -39,10 +43,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Tools.Atelier", "tools\atelier\Fahrenheit.Tools.Atelier.csproj", "{F0A5F16E-B95B-138D-B4B9-7608A9FC69A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Tools.Inspector", "tools\inspector\Fahrenheit.Tools.Inspector.csproj", "{DB5D8F8A-D87C-5003-E827-49059907CE39}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.FFX", "base\ffx\Fahrenheit.Core.FFX.csproj", "{9DD95297-35C2-45FE-1348-9290FF4705D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fahrenheit.Core.FFX2", "base\ffx2\Fahrenheit.Core.FFX2.csproj", "{38D2622A-1889-B04C-2D3D-A93E53B431F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
