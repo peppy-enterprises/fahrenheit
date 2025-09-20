@@ -1,4 +1,4 @@
-# Fahrenheit Core Library
-This library contains all relevant method and structure definitions for Final Fantasy X/X-2, as well as the Fahrenheit module API.
+# Fahrenheit Framework
+This library contains the Fahrenheit module API, and method and structure definitions shared between Final Fantasy X and X-2.
 
-All Fahrenheit modules _must_ link, at the very least, against the Core Library.
+All Fahrenheit modules _must_ link, at the very least, against the Framework.
