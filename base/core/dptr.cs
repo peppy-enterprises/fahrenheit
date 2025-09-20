@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core;
 
 public enum FhStringType {
     Uni  = 1,

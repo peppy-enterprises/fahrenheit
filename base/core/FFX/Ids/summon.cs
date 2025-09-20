@@ -1,4 +1,6 @@
-﻿/* [fkelava 13/9/22 08:16]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 13/9/22 08:16]
  * Source: MS Store ver.
  * Header: __chr_sum_h
  *

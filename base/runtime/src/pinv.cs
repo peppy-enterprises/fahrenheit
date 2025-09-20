@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.Runtime;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.Runtime;
 
 internal static unsafe partial class PInvoke {
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]

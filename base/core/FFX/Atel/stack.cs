@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.FFX.Atel;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.FFX.Atel;
 
 public class AtelStackOverflowException : Exception {
     public AtelStackOverflowException()                                         : base()                        { }

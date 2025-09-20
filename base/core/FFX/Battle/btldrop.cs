@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.FFX.Battle;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.FFX.Battle;
 
 public struct ChrItemLoot {
     public ushort item_primary_common;

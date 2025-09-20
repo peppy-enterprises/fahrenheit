@@ -1,4 +1,6 @@
-﻿using static System.Diagnostics.Debug;
+﻿// SPDX-License-Identifier: MIT
+
+using static System.Diagnostics.Debug;
 
 namespace Fahrenheit.Core.FFX.Atel;
 

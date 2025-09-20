@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.FFX.Atel;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.FFX.Atel;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x4C)]
 public unsafe struct AtelWorkThread {

@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿// SPDX-License-Identifier: MIT
+
+using System.Text;
 
 namespace Fahrenheit.Core;
 

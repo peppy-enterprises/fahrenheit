@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.FFX.Battle;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.FFX.Battle;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x10)]
 public unsafe struct PosAreaSomeInfo {

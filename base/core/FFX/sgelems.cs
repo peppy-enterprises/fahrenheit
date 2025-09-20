@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.FFX;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.FFX;
 
 public static class SphereGridClusterType {
     public const short SINGLE = 0;

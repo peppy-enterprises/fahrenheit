@@ -12,4 +12,3 @@ global using Hexa.NET.ImGui;                  // ImGui is required to render lar
 
 global using TerraFX.Interop.DirectX;         // D3D/DXGI bindings
 global using TerraFX.Interop.Windows;         // Win32 bindings
-

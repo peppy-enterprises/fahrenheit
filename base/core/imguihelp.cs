@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 using Hexa.NET.ImGui;
 
 namespace Fahrenheit.Core;

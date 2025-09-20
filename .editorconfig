@@ -1,5 +1,8 @@
 ﻿[*.cs]
 
+# copyright notice
+file_header_template = SPDX-License-Identifier: MIT
+
 # a final newline for sanity's sake
 insert_final_newline = true
 
@@ -51,6 +54,9 @@ dotnet_naming_rule.fh_const_naming.severity = suggestion
 # v. https://github.com/dotnet/roslyn/issues/3705#issuecomment-570687450
 
 [*typedefs.cs]
+generated_code = true
+
+[*usings.cs]
 generated_code = true
 
 [*.g.cs]

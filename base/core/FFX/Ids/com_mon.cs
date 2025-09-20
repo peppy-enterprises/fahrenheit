@@ -1,4 +1,6 @@
-﻿/* [fkelava 30/4/25 08:12]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 30/4/25 08:12]
  * source: Switch ver.
  * header: header_btl_monmagic1
  *

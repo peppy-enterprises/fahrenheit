@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core;
 
 /* [fkelava 6/6/23 21:29]
  * Vararg P/Invokes must be declared assembly-local due to https://github.com/dotnet/runtime/issues/87188.

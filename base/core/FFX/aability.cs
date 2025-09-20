@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.FFX;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x6C)]
 public partial struct AutoAbility {

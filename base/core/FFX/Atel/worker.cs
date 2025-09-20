@@ -1,4 +1,6 @@
-﻿using Fahrenheit.Core.FFX.Battle;
+﻿// SPDX-License-Identifier: MIT
+
+using Fahrenheit.Core.FFX.Battle;
 
 namespace Fahrenheit.Core.FFX.Atel;
 

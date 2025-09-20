@@ -1,4 +1,6 @@
-﻿/* [fkelava 13/9/22 08:11]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 13/9/22 08:11]
  * source: MS Store ver.
  * header: __BATTLE_MAP_HEADER__
  *

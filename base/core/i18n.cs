@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core;
 
 /* [fkelava 14/2/25 14:52]
  * A locale file takes the name {LANG_ID}.json, where {LANG_ID} is a ISO 639 ID.

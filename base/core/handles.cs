@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core;
 
 /// <summary>
 ///     Provides runtime binding to a <see cref="FhModule"/> of type <typeparamref name="TTarget"/>.

@@ -1,4 +1,6 @@
-﻿/* [fkelava 5/7/25 14:16]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 5/7/25 14:16]
  * Hexa bundles some definitions for D3D11 structures that we need to use when interfacing
  * with its API. They are defined this way because we prefer the TerraFX definitions in all other cases.
  */

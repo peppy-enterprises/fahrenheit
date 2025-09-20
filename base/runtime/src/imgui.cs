@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 using static Fahrenheit.Core.Runtime.PInvoke;
 
 /* [fkelava 5/7/25 14:16]

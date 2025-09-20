@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.FFX;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x1C)]
 public struct LocalizationManager {

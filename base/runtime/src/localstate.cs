@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core.Runtime;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core.Runtime;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public unsafe delegate void FUN_002F0650_autosave(nint arg1, nint arg2);

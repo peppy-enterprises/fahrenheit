@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 namespace Fahrenheit.Core.FFX.Battle;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0xF90)]

@@ -1,4 +1,6 @@
-﻿/* [fkelava 9/5/23 23:37]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 9/5/23 23:37]
  * source: MS Store ver.
  * header: __BATTLE_ATEL__
  *

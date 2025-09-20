@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core;
 
 /// <summary>
 ///     A representation of a fully loaded mod.
@@ -55,9 +57,9 @@ public sealed record FhManifest(
     string[] LoadAfter);
 
 /// <summary>
-///     A 'module' is the base unit of functionality in Fahrenheit. Modules are used to logically partition your functionality.
+///     A module is the base unit of functionality in Fahrenheit. Modules are used to logically partition your functionality.
 ///     <para/>
-///     'Modules' are not the same as mods or even DLLs. Mods can be executed as one or several DLLs,
+///     Modules are not the same as mods or even DLLs. Mods can be executed as one or several DLLs,
 ///     and one DLL can contain any number of modules.
 /// </summary>
 public abstract class FhModule {

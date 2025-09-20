@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 namespace Fahrenheit.Core.FFX;
 
 public enum SphereGridTilt : byte {

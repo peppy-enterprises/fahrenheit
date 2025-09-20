@@ -1,4 +1,6 @@
-﻿/* [fkelava 7/5/23 17:04]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 7/5/23 17:04]
  * source: MS Store ver.
  * header: _battle_atel_std_motion
  *

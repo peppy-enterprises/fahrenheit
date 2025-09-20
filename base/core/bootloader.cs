@@ -1,4 +1,6 @@
-﻿namespace Fahrenheit.Core;
+﻿// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.Core;
 
 /// <summary>
 ///     Contains Fahrenheit boot logic. When the bootstrapper completes, game execution commences.

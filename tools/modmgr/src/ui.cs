@@ -1,4 +1,6 @@
-﻿/* [fkelava 15/8/25 17:41]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 15/8/25 17:41]
  * Place the mod manager UI in this method. The program stub will invoke it.
  */
 

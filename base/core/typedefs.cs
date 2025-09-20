@@ -1,4 +1,6 @@
-﻿/* [fkelava 7/5/23 15:37]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 7/5/23 15:37]
  * Many primitive IDs and enumerations in this game are given merely as `#define`s. What the true underlying type is is unknown.
  *
  * Fahrenheit introduces strongly typed constants for all such IDs and enumerations. Because I have to guess the underlying type,

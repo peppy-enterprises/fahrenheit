@@ -1,4 +1,6 @@
-﻿using Hexa.NET.ImGui;
+﻿// SPDX-License-Identifier: MIT
+
+using Hexa.NET.ImGui;
 
 using TerraFX.Interop.DirectX;
 

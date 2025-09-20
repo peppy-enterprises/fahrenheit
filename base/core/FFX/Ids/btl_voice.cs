@@ -1,4 +1,6 @@
-﻿/* [fkelava 13/9/22 08:11]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 13/9/22 08:11]
  * source: MS Store ver.
  * header: __VOICE_HEADER_VOICE_BATTLE_AB_ATH__,
  *         __VOICE_HEADER_VOICE_BATTLE_BTEV_ATH__,

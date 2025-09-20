@@ -1,4 +1,6 @@
-﻿/* [fkelava 7/5/23 17:25]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 7/5/23 17:25]
  * source: MS Store ver.
  * header: __CAMERA_ATEL__
  *

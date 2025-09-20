@@ -1,4 +1,6 @@
-﻿/* [fkelava 30/4/25 15:29]
+﻿// SPDX-License-Identifier: MIT
+
+/* [fkelava 30/4/25 15:29]
  * source: Switch ver.
  * header: __BATTLE_ATEL__
  *

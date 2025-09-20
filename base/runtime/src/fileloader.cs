@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// SPDX-License-Identifier: MIT
+
+using System.Diagnostics;
 
 namespace Fahrenheit.Core.Runtime;
 
