@@ -404,6 +404,7 @@ FodyWeavers.xsd
 
 # Remove any headers used for sourcegen.
 generation/**/*.h
+generation/**/*.ath
 
 # Do not exclude sourcegen response files.
 !generation/**/*.rsp

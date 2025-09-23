@@ -1,9 +1,9 @@
 @../../../../../../settings.rsp
 @../../../../../../remap.rsp
 --file
-a_ability.h
+accessory.h
 --methodClassName
-AutoAbilityId
+AccessoryId
 --namespace
 Fahrenheit.Core.FFX2
 --output
