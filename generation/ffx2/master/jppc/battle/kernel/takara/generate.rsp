@@ -1,0 +1,11 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+takara.h
+takara.ath
+--methodClassName
+TreasureId
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/

@@ -2,3 +2,5 @@
 btl_a_ability=@AutoAbility
 btl_accessory=@Accessory
 btl_command=@Command
+btl_important=@Important
+btl_takara=@Treasure
