@@ -1,3 +1,4 @@
 --remap
 btl_a_ability=@AutoAbility
 btl_accessory=@Accessory
+btl_command=@Command
