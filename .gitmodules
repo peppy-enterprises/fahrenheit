@@ -16,9 +16,6 @@
 [submodule "tools/dedit"]
 	path = tools/dedit
 	url = https://github.com/peppy-enterprises/fh-tools-dedit
-[submodule "tools/h2cs"]
-	path = tools/h2cs
-	url = https://github.com/peppy-enterprises/fh-tools-h2cs
 [submodule "tools/step"]
 	path = tools/step
 	url = https://github.com/peppy-enterprises/fh-tools-step
