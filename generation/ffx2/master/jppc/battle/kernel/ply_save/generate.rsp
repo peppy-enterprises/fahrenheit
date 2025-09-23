@@ -1,0 +1,10 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+ply_save.h
+--methodClassName
+PlySaveId
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/
