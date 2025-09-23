@@ -1,0 +1,10 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+prepare.h
+--methodClassName
+PrepareId
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/

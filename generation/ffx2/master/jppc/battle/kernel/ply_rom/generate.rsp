@@ -1,0 +1,10 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+ply_rom.h
+--methodClassName
+PlyRomId
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/

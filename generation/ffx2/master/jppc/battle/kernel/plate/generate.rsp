@@ -1,0 +1,10 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+plate.h
+--methodClassName
+PlateId
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/
