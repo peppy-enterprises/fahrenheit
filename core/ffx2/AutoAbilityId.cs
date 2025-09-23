@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-// Ported from ffx2/master/jppc/battle/kernel/a_ability.h in the Switch release of FFX/X-2 HD
+// ffx2/master/jppc/battle/kernel/a_ability.h
+// Switch release of FFX/X-2 HD
+
 namespace Fahrenheit.Core.FFX2;
 
 public static partial class AutoAbilityId

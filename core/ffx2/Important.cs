@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-// Ported from ffx2/master/jppc/battle/kernel/important.h in the Switch release of FFX/X-2 HD
+// ffx2/master/jppc/battle/kernel/important.h 
+// Switch release of FFX/X-2 HD
+
 namespace Fahrenheit.Core.FFX2;
 
 public partial struct Important

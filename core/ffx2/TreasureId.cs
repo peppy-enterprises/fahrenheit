@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-// Ported from ffx2/master/jppc/battle/kernel/takara.h in the Switch release of FFX/X-2 HD
-// Ported from ffx2/master/jppc/battle/kernel/takara.ath in the Switch release of FFX/X-2 HD
+// ffx2/master/jppc/battle/kernel/takara.h
+// ffx2/master/jppc/battle/kernel/takara.ath
+// Switch release of FFX/X-2 HD
+
 namespace Fahrenheit.Core.FFX2;
 
 public static partial class TreasureId

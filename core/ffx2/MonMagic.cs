@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-// ffx2/master/jppc/battle/kernel/command.h 
+// ffx2/master/jppc/battle/kernel/monmagic.h
 // Switch release of FFX/X-2 HD
 
 namespace Fahrenheit.Core.FFX2;
 
-public unsafe partial struct Command
+public unsafe partial struct MonMagic
 {
     [NativeTypeName("unsigned int")]
     public uint name;
@@ -13,8 +13,8 @@ public unsafe partial struct Command
     [NativeTypeName("unsigned int")]
     public uint help;
 
-    [NativeTypeName("short[2]")]
-    public fixed short effect[2];
+    [NativeTypeName("unsigned short[2]")]
+    public fixed ushort effect[2];
 
     [NativeTypeName("unsigned char")]
     public byte process;
@@ -86,7 +86,7 @@ public unsafe partial struct Command
     public byte icon;
 
     [NativeTypeName("unsigned short")]
-    public ushort monster_killer;
+    public ushort monseter_killer;
 
     [NativeTypeName("unsigned char")]
     public byte magic_cancel;
@@ -99,19 +99,4 @@ public unsafe partial struct Command
 
     [NativeTypeName("unsigned short")]
     public ushort reserve2;
-
-    [NativeTypeName("unsigned char")]
-    public byte btl_seq;
-
-    [NativeTypeName("unsigned char")]
-    public byte get_ap;
-
-    [NativeTypeName("unsigned short")]
-    public ushort ap;
-
-    [NativeTypeName("unsigned short")]
-    public ushort use_job;
-
-    [NativeTypeName("unsigned short")]
-    public ushort reserve4;
 }
