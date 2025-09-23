@@ -1,0 +1,8 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+a_ability.h
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/

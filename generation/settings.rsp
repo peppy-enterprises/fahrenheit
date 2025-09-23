@@ -1,0 +1,6 @@
+--config
+generate-file-scoped-namespaces
+log-potential-typedef-remappings
+multi-file
+--headerFile
+header.txt

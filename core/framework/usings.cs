@@ -1,5 +1,6 @@
 ﻿global using System;                          // primitives
 global using System.Collections.Generic;      // List<T>, Dictionary<T,U> and others
+global using System.Diagnostics;              // [Conditional] et al.
 global using System.Diagnostics.CodeAnalysis; // [NotNullWhen()] and other nullability static analysis attributes
 global using System.Globalization;            // CultureInfo.InvariantCulture et al.
 global using System.IO;                       // Path, File, and similar

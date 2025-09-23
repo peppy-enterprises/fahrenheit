@@ -402,6 +402,12 @@ FodyWeavers.xsd
 
 ##### FAHRENHEIT SPECIFIC BEGIN
 
+# Remove any headers used for sourcegen.
+generation/**/*.h
+
+# Do not exclude sourcegen response files.
+!generation/**/*.rsp
+
 # Remove all `vcpkg` artifacts.
 **/vcpkg_installed/
 
