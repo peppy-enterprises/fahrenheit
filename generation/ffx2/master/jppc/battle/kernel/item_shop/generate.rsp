@@ -1,0 +1,11 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+item_shop.h
+item_shop.ath
+--methodClassName
+ItemShopId
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/
