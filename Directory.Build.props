@@ -1,0 +1,13 @@
+<Project>	
+	<PropertyGroup>
+        <_FhOutDir Condition="'$(Configuration)'=='Release'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'deploy', 'rel'))</_FhOutDir>
+        <_FhOutDir Condition="'$(Configuration)'=='Debug'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'deploy', 'dbg'))</_FhOutDir>
+        <_FhBaseIntermediateOutputPath>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'obj', '$(MSBuildProjectName)'))</_FhBaseIntermediateOutputPath>
+        <_FhBaseOutputPath>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'build', '$(MSBuildProjectName)'))</_FhBaseOutputPath>
+        <_FhOutDirBin>$([MSBuild]::NormalizeDirectory('$(_FhOutDir)', 'bin'))</_FhOutDirBin>
+        <_FhOutDirMods>$([MSBuild]::NormalizeDirectory('$(_FhOutDir)', 'mods', '$(AssemblyName)'))</_FhOutDirMods>
+        
+        <BaseIntermediateOutputPath>$(_FhBaseIntermediateOutputPath)</BaseIntermediateOutputPath>
+        <Company>https://github.com/peppy-enterprises/fahrenheit</Company>
+	</PropertyGroup>
+</Project>
