@@ -49,6 +49,12 @@ jobs:
       run: |
         cd "$VCPKG_INSTALLATION_ROOT"      
         bootstrap-vcpkg.bat -disableMetrics
+        
+    - name: Integrate vcpkg
+      shell: pwsh
+      run: |
+        cd "$VCPKG_INSTALLATION_ROOT"      
+        vcpkg integrate install
 
     - name: Add NuGet sources
       shell: pwsh
