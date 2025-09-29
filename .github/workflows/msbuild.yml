@@ -21,7 +21,6 @@ env:
   # https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages?pivots=windows-runner
   # VCPKG binary caching setup
   USERNAME: peppy-enterprises
-  VCPKG_EXE: ${{ github.workspace }}/vcpkg/vcpkg
   FEED_URL: https://nuget.pkg.github.com/peppy-enterprises/index.json
   VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/peppy-enterprises/index.json,readwrite"
 
@@ -34,7 +33,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Print environment vars
+      run: env
+    
+    - name: Checkout Fahrenheit and submodules
+      uses: actions/checkout@v4
       with:
         submodules: 'recursive'
 
@@ -43,19 +46,22 @@ jobs:
 
     - name: Bootstrap vcpkg
       shell: pwsh
-      run: ${{ github.workspace }}/vcpkg/bootstrap-vcpkg.bat
+      run: |
+        cd "$VCPKG_INSTALLATION_ROOT"      
+        bootstrap-vcpkg.bat -disableMetrics
 
     - name: Add NuGet sources
       shell: pwsh
       run: |
-        .$(${{ env.VCPKG_EXE }} fetch nuget) `
+        cd "$VCPKG_INSTALLATION_ROOT"
+        .$(vcpkg fetch nuget) `
           sources add `
           -Source "${{ env.FEED_URL }}" `
           -StorePasswordInClearText `
           -Name GitHubPackages `
           -UserName "${{ env.USERNAME }}" `
           -Password "${{ secrets.GITHUB_TOKEN }}"
-        .$(${{ env.VCPKG_EXE }} fetch nuget) `
+        .$(vcpkg fetch nuget) `
           setapikey "${{ secrets.GITHUB_TOKEN }}" `
           -Source "${{ env.FEED_URL }}"
 
