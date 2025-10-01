@@ -81,9 +81,10 @@ jobs:
           setapikey "${{ secrets.GITHUB_TOKEN }}" `
           -Source "${{ env.FEED_URL }}"
 
+      # Compensate for https://github.com/NuGet/Home/issues/14113
     - name: Restore NuGet packages
       working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: nuget restore ${{ env.SOLUTION_FILE_PATH }}
+      run: msbuild -t:Restore ${{ env.SOLUTION_FILE_PATH }}
 
     - name: Build
       working-directory: ${{ env.GITHUB_WORKSPACE }}
