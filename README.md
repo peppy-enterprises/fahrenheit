@@ -52,7 +52,7 @@ Restart Visual Studio if it was open during this process.
 
 To install/test your development build:
 - Create a subfolder in your game directory (where ``FFX.exe`` is) named ``fahrenheit``.
-- In the directory in which you cloned Fahrenheit, navigate to the ``artifacts\localdeploy`` subdirectory.
+- In the directory in which you cloned Fahrenheit, navigate to the ``artifacts\deploy`` subdirectory.
 - Depending on build type (Debug or Release), navigate to the ``dbg`` or ``rel`` subdirectory.
 - Copy the contents of that directory (the folders ``bin``, ``mods``, etc.) to the ``fahrenheit`` subfolder in the game directory.
 - Create an empty, extensionless file called `loadorder` in the `mods` directory. Add the manifest names of mods you wish to load, each on their own line.

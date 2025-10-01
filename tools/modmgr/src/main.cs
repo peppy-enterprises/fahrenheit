@@ -161,10 +161,9 @@ internal sealed unsafe class Program {
      */
     private static void _create_render_target() {
         ID3D11Texture2D* pBackBuffer;
-        Guid             guid = new("6F15AAF2-D208-4E89-9AB4-489535D34F9C");
 
         fixed (ID3D11RenderTargetView** pp_rtv = &_p_render_target_view) {
-            _p_swap_chain->GetBuffer(0, &guid, (void**)&pBackBuffer);
+            _p_swap_chain->GetBuffer(0, Windows.__uuidof<ID3D11Texture2D>(), (void**)&pBackBuffer);
             _p_device    ->CreateRenderTargetView((ID3D11Resource*)pBackBuffer, null, pp_rtv);
             pBackBuffer  ->Release();
         }

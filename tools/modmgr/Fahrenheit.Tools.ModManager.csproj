@@ -7,7 +7,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     </PropertyGroup>
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
@@ -20,7 +20,7 @@
     <!-- PUBLISH SETTINGS -->
     <PropertyGroup>
         <PublishSingleFile>true</PublishSingleFile>
-        <PublishTrimmed>true</PublishTrimmed>
+        <SelfContained>false</SelfContained>
     </PropertyGroup>
 
     <!-- APPLICATION ASSETS -->
@@ -39,8 +39,12 @@
 
     <!-- EXTERNAL PROJECT REFS -->
     <ItemGroup>
-        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.17.4" />
-        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.2" />
+        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.17.4">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </PackageReference>
+        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.2">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </PackageReference>
     </ItemGroup>
 
 </Project>
