@@ -29,7 +29,7 @@ env:
   VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/peppy-enterprises/index.json,readwrite"
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
