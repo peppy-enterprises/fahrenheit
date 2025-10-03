@@ -1,0 +1,10 @@
+@../../../../../settings.rsp
+@../../../../../remap.rsp
+--file
+skl.ath
+--methodClassName
+SkeletonId
+--namespace
+Fahrenheit.Core.FFX
+--output
+../../../../../../core/ffx/ids

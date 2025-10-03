@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-// Ported from ffx2/master/jppc/battle/kernel/item_shop.h in the Switch release of FFX/X-2 HD
+// ffx_ps2/ffx2/master/jppc/battle/kernel/item_shop.h
+// Switch release of FFX/X-2 HD
+
 namespace Fahrenheit.Core.FFX2;
 
 public unsafe partial struct ItemShop

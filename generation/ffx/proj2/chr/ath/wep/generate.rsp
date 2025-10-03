@@ -1,0 +1,10 @@
+@../../../../../settings.rsp
+@../../../../../remap.rsp
+--file
+wep.ath
+--methodClassName
+WeaponId
+--namespace
+Fahrenheit.Core.FFX
+--output
+../../../../../../core/ffx/ids

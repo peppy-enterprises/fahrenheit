@@ -1,0 +1,10 @@
+@../../../../../settings.rsp
+@../../../../../remap.rsp
+--file
+pc.ath
+--methodClassName
+PcModelId
+--namespace
+Fahrenheit.Core.FFX
+--output
+../../../../../../core/ffx/ids

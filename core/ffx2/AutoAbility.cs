@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-// ffx2/master/jppc/battle/kernel/a_ability.h
+// ffx_ps2/ffx2/master/jppc/battle/kernel/a_ability.h
 // Switch release of FFX/X-2 HD
 
 namespace Fahrenheit.Core.FFX2;

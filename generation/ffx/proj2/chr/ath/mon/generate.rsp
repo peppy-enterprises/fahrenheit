@@ -1,0 +1,10 @@
+@../../../../../settings.rsp
+@../../../../../remap.rsp
+--file
+mon.ath
+--methodClassName
+MonsterId
+--namespace
+Fahrenheit.Core.FFX
+--output
+../../../../../../core/ffx/ids
