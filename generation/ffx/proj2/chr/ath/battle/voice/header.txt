@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: MIT
+
+// ffx_ps2/ffx/proj2/chr/ath/battle/voice/*.ath
+// Switch release of FFX/X-2 HD

@@ -1,0 +1,14 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+voice_battle_ab.ath
+voice_battle_btev.ath
+voice_battle_iop.ath
+voice_battle_sce.ath
+voice_battle_tuto.ath
+--methodClassName
+BattleVoiceId
+--namespace
+Fahrenheit.Core.FFX
+--output
+../../../../../../../core/ffx/ids
