@@ -44,7 +44,7 @@ k999.ath
 --methodClassName
 SkeletonModelElementId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids
 --define-macro

@@ -83,7 +83,7 @@ w103.ath
 --methodClassName
 WeaponModelElementId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids
 --define-macro

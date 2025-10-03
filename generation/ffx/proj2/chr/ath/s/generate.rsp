@@ -34,7 +34,7 @@ s125.ath
 --methodClassName
 SummonModelElementId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids
 --define-macro

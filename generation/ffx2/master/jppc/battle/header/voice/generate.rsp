@@ -10,6 +10,6 @@ btl_winlost.ath
 --methodClassName
 BattleVoiceId
 --namespace
-Fahrenheit.Core.FFX2
+Fahrenheit.Core.FFX2.Ids
 --output
 ../../../../../../../core/ffx2/ids

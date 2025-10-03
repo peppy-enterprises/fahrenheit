@@ -3,7 +3,7 @@
 // ffx_ps2/ffx2/master/jppc/battle/header/voice/btl_*.ath
 // Switch release of FFX/X-2 HD
 
-namespace Fahrenheit.Core.FFX2;
+namespace Fahrenheit.Core.FFX2.Ids;
 
 public static partial class BattleVoiceId
 {

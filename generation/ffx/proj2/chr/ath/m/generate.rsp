@@ -345,7 +345,7 @@ m999.ath
 --methodClassName
 MonsterModelElementId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids
 --define-macro

@@ -228,7 +228,7 @@ n999.ath
 --methodClassName
 NpcModelElementId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids
 --define-macro

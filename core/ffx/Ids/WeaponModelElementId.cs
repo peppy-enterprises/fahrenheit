@@ -3,7 +3,7 @@
 // ffx_ps2/ffx/proj2/chr/ath/w/*.ath
 // Switch release of FFX/X-2 HD
 
-namespace Fahrenheit.Core.FFX;
+namespace Fahrenheit.Core.FFX.Ids;
 
 public static partial class WeaponModelElementId
 {

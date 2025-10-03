@@ -5,6 +5,6 @@ npc.ath
 --methodClassName
 NpcId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids

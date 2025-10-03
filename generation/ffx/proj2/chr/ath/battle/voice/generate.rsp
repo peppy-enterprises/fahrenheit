@@ -9,6 +9,6 @@ voice_battle_tuto.ath
 --methodClassName
 BattleVoiceId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../../core/ffx/ids

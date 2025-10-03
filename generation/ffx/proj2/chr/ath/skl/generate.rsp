@@ -5,6 +5,6 @@ skl.ath
 --methodClassName
 SkeletonId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids

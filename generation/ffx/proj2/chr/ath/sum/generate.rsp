@@ -5,6 +5,6 @@ sum.ath
 --methodClassName
 SummonId
 --namespace
-Fahrenheit.Core.FFX
+Fahrenheit.Core.FFX.Ids
 --output
 ../../../../../../core/ffx/ids
