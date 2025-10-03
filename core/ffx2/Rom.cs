@@ -3,9 +3,11 @@
 // ffx_ps2/ffx2/master/jppc/battle/kernel/rom.h
 // Switch release of FFX/X-2 HD
 
+using System.Runtime.CompilerServices;
+
 namespace Fahrenheit.Core.FFX2;
 
-public unsafe partial struct Rom
+public partial struct Rom
 {
     [NativeTypeName("unsigned int")]
     public uint poison_time;
@@ -20,17 +22,47 @@ public unsafe partial struct Rom
     public uint regen_damage;
 
     [NativeTypeName("unsigned int[2]")]
-    public fixed uint count_value[2];
+    public _count_value_e__FixedBuffer count_value;
 
     [NativeTypeName("int[3]")]
-    public fixed int rapid_shot[3];
+    public _rapid_shot_e__FixedBuffer rapid_shot;
 
     [NativeTypeName("short[4]")]
-    public fixed short ATB_speed[4];
+    public _ATB_speed_e__FixedBuffer ATB_speed;
 
     [NativeTypeName("unsigned int[2]")]
-    public fixed uint delay_count[2];
+    public _delay_count_e__FixedBuffer delay_count;
 
     [NativeTypeName("unsigned int[24]")]
-    public fixed uint off_count[24];
+    public _off_count_e__FixedBuffer off_count;
+
+    [InlineArray(2)]
+    public partial struct _count_value_e__FixedBuffer
+    {
+        public uint e0;
+    }
+
+    [InlineArray(3)]
+    public partial struct _rapid_shot_e__FixedBuffer
+    {
+        public int e0;
+    }
+
+    [InlineArray(4)]
+    public partial struct _ATB_speed_e__FixedBuffer
+    {
+        public short e0;
+    }
+
+    [InlineArray(2)]
+    public partial struct _delay_count_e__FixedBuffer
+    {
+        public uint e0;
+    }
+
+    [InlineArray(24)]
+    public partial struct _off_count_e__FixedBuffer
+    {
+        public uint e0;
+    }
 }

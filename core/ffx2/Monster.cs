@@ -3,9 +3,11 @@
 // ffx_ps2/ffx2/master/jppc/battle/kernel/monster.h
 // Switch release of FFX/X-2 HD
 
+using System.Runtime.CompilerServices;
+
 namespace Fahrenheit.Core.FFX2;
 
-public unsafe partial struct Monster
+public partial struct Monster
 {
     [NativeTypeName("unsigned int")]
     public uint name;
@@ -65,20 +67,20 @@ public unsafe partial struct Monster
     public byte weak_element;
 
     [NativeTypeName("unsigned char[24]")]
-    public fixed byte def_status[24];
+    public _def_status_e__FixedBuffer def_status;
 
     [NativeTypeName("unsigned char[24]")]
-    public fixed byte def_status2[24];
+    public _def_status2_e__FixedBuffer def_status2;
 
     public int auto_status;
 
     public int auto_status2;
 
     [NativeTypeName("char[24]")]
-    public fixed sbyte status_time[24];
+    public _status_time_e__FixedBuffer status_time;
 
     [NativeTypeName("unsigned short[16]")]
-    public fixed ushort waza[16];
+    public _waza_e__FixedBuffer waza;
 
     [NativeTypeName("unsigned short")]
     public ushort basaku;
@@ -114,13 +116,13 @@ public unsafe partial struct Monster
     public byte steal;
 
     [NativeTypeName("unsigned short[4]")]
-    public fixed ushort drop_item[4];
+    public _drop_item_e__FixedBuffer drop_item;
 
     [NativeTypeName("unsigned short[4]")]
-    public fixed ushort steal_item[4];
+    public _steal_item_e__FixedBuffer steal_item;
 
     [NativeTypeName("unsigned short[4]")]
-    public fixed ushort bribery_item[4];
+    public _bribery_item_e__FixedBuffer bribery_item;
 
     [NativeTypeName("unsigned char")]
     public byte def_zantetu;
@@ -130,4 +132,46 @@ public unsafe partial struct Monster
 
     [NativeTypeName("unsigned short")]
     public ushort reserve2;
+
+    [InlineArray(24)]
+    public partial struct _def_status_e__FixedBuffer
+    {
+        public byte e0;
+    }
+
+    [InlineArray(24)]
+    public partial struct _def_status2_e__FixedBuffer
+    {
+        public byte e0;
+    }
+
+    [InlineArray(24)]
+    public partial struct _status_time_e__FixedBuffer
+    {
+        public sbyte e0;
+    }
+
+    [InlineArray(16)]
+    public partial struct _waza_e__FixedBuffer
+    {
+        public ushort e0;
+    }
+
+    [InlineArray(4)]
+    public partial struct _drop_item_e__FixedBuffer
+    {
+        public ushort e0;
+    }
+
+    [InlineArray(4)]
+    public partial struct _steal_item_e__FixedBuffer
+    {
+        public ushort e0;
+    }
+
+    [InlineArray(4)]
+    public partial struct _bribery_item_e__FixedBuffer
+    {
+        public ushort e0;
+    }
 }

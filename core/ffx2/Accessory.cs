@@ -3,9 +3,11 @@
 // ffx2/master/jppc/battle/kernel/accessory.h
 // Switch release of FFX/X-2 HD
 
+using System.Runtime.CompilerServices;
+
 namespace Fahrenheit.Core.FFX2;
 
-public unsafe partial struct Accessory
+public partial struct Accessory
 {
     [NativeTypeName("unsigned int")]
     public uint name;
@@ -32,11 +34,23 @@ public unsafe partial struct Accessory
     public byte reserve;
 
     [NativeTypeName("char[10]")]
-    public fixed sbyte up_status[10];
+    public _up_status_e__FixedBuffer up_status;
 
     [NativeTypeName("unsigned short[4]")]
-    public fixed ushort ability[4];
+    public _ability_e__FixedBuffer ability;
 
     [NativeTypeName("unsigned int")]
     public uint price;
+
+    [InlineArray(10)]
+    public partial struct _up_status_e__FixedBuffer
+    {
+        public sbyte e0;
+    }
+
+    [InlineArray(4)]
+    public partial struct _ability_e__FixedBuffer
+    {
+        public ushort e0;
+    }
 }

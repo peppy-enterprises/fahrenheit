@@ -1,0 +1,15 @@
+@../../../../../settings.rsp
+@../../../../../remap.rsp
+--file
+anc_n010.ath
+anc_n034.ath
+anc_n041.ath
+anc_n051.ath
+anc_n135.ath
+anc_n225.ath
+--methodClassName
+NpcAnimationCycle
+--namespace
+Fahrenheit.Core.FFX
+--output
+../../../../../../core/ffx/ids

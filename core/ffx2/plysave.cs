@@ -3,9 +3,11 @@
 // ffx_ps2/ffx2/master/jppc/battle/kernel/ply_save.h
 // Switch release of FFX/X-2 HD
 
+using System.Runtime.CompilerServices;
+
 namespace Fahrenheit.Core.FFX2;
 
-public unsafe partial struct PlySave
+public partial struct PlySave
 {
     [NativeTypeName("unsigned int")]
     public uint name;
@@ -95,7 +97,7 @@ public unsafe partial struct PlySave
     public ushort plate;
 
     [NativeTypeName("unsigned short[2]")]
-    public fixed ushort accessory[2];
+    public _accessory_e__FixedBuffer accessory;
 
     [NativeTypeName("unsigned short")]
     public ushort command;
@@ -112,8 +114,20 @@ public unsafe partial struct PlySave
     public int status;
 
     [NativeTypeName("unsigned short[3]")]
-    public fixed ushort ability_type[3];
+    public _ability_type_e__FixedBuffer ability_type;
 
     [NativeTypeName("unsigned short")]
     public ushort before_job;
+
+    [InlineArray(2)]
+    public partial struct _accessory_e__FixedBuffer
+    {
+        public ushort e0;
+    }
+
+    [InlineArray(3)]
+    public partial struct _ability_type_e__FixedBuffer
+    {
+        public ushort e0;
+    }
 }

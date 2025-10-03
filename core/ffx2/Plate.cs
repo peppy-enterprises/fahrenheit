@@ -3,9 +3,11 @@
 // ffx_ps2/ffx2/master/jppc/battle/kernel/plate.h
 // Switch release of FFX/X-2 HD
 
+using System.Runtime.CompilerServices;
+
 namespace Fahrenheit.Core.FFX2;
 
-public unsafe partial struct Plate
+public partial struct Plate
 {
     [NativeTypeName("unsigned int")]
     public uint name;
@@ -32,7 +34,7 @@ public unsafe partial struct Plate
     public byte icon;
 
     [NativeTypeName("char[10]")]
-    public fixed sbyte up_status[10];
+    public _up_status_e__FixedBuffer up_status;
 
     [NativeTypeName("unsigned char")]
     public byte reserve;
@@ -44,5 +46,17 @@ public unsafe partial struct Plate
     public byte reserve3;
 
     [NativeTypeName("unsigned short[16]")]
-    public fixed ushort skill[16];
+    public _skill_e__FixedBuffer skill;
+
+    [InlineArray(10)]
+    public partial struct _up_status_e__FixedBuffer
+    {
+        public sbyte e0;
+    }
+
+    [InlineArray(16)]
+    public partial struct _skill_e__FixedBuffer
+    {
+        public ushort e0;
+    }
 }

@@ -3,9 +3,11 @@
 // ffx_ps2/ffx2/master/jppc/battle/kernel/monmagic.h
 // Switch release of FFX/X-2 HD
 
+using System.Runtime.CompilerServices;
+
 namespace Fahrenheit.Core.FFX2;
 
-public unsafe partial struct MonMagic
+public partial struct MonMagic
 {
     [NativeTypeName("unsigned int")]
     public uint name;
@@ -14,7 +16,7 @@ public unsafe partial struct MonMagic
     public uint help;
 
     [NativeTypeName("unsigned short[2]")]
-    public fixed ushort effect[2];
+    public _effect_e__FixedBuffer effect;
 
     [NativeTypeName("unsigned char")]
     public byte process;
@@ -74,13 +76,13 @@ public unsafe partial struct MonMagic
     public byte atc_element;
 
     [NativeTypeName("unsigned char[24]")]
-    public fixed byte atc_status[24];
+    public _atc_status_e__FixedBuffer atc_status;
 
     [NativeTypeName("unsigned char[24]")]
-    public fixed byte atc_status2[24];
+    public _atc_status2_e__FixedBuffer atc_status2;
 
     [NativeTypeName("char[24]")]
-    public fixed sbyte status_time[24];
+    public _status_time_e__FixedBuffer status_time;
 
     [NativeTypeName("unsigned char")]
     public byte icon;
@@ -99,4 +101,28 @@ public unsafe partial struct MonMagic
 
     [NativeTypeName("unsigned short")]
     public ushort reserve2;
+
+    [InlineArray(2)]
+    public partial struct _effect_e__FixedBuffer
+    {
+        public ushort e0;
+    }
+
+    [InlineArray(24)]
+    public partial struct _atc_status_e__FixedBuffer
+    {
+        public byte e0;
+    }
+
+    [InlineArray(24)]
+    public partial struct _atc_status2_e__FixedBuffer
+    {
+        public byte e0;
+    }
+
+    [InlineArray(24)]
+    public partial struct _status_time_e__FixedBuffer
+    {
+        public sbyte e0;
+    }
 }
