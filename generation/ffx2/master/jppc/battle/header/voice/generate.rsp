@@ -1,0 +1,15 @@
+@../../../../../../settings.rsp
+@../../../../../../remap.rsp
+--file
+btl_ability.ath
+btl_ffx.ath
+btl_follow.ath
+btl_iop.ath
+btl_start.ath
+btl_winlost.ath
+--methodClassName
+BattleVoiceId
+--namespace
+Fahrenheit.Core.FFX2
+--output
+../../../../../../../core/ffx2/ids
