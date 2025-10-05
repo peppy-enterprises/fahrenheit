@@ -6,7 +6,7 @@ namespace Fahrenheit.Core;
 ///     Stores all loaded mods' <see cref="FhModContext"/> for runtime lookup,
 ///     and exposes facilities to find <see cref="FhModule"/>s at runtime.
 /// </summary>
-public class FhModController {
+public sealed class FhModController {
     private readonly FhModContext[] _mods;
 
     internal FhModController(FhModContext[]? mods = default) {

@@ -23,14 +23,14 @@ public static class FhBootstrapper {
 ///     providing the <paramref name="supported_game_type"/> matches the currently executing game.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class FhLoadAttribute(FhGameType supported_game_type) : Attribute {
+public sealed class FhLoadAttribute(FhGameType supported_game_type) : Attribute {
     public readonly FhGameType supported_game_type = supported_game_type;
 }
 
 /// <summary>
 ///     Resolves the .NET or native dependencies of a given Fahrenheit mod by adding its directory to the library search path.
 /// </summary>
-internal class FhLoadContext(string context_name, string fh_dll_path) : AssemblyLoadContext(context_name) {
+internal sealed class FhLoadContext(string context_name, string fh_dll_path) : AssemblyLoadContext(context_name) {
     private readonly AssemblyDependencyResolver _resolver = new AssemblyDependencyResolver(fh_dll_path);
 
     protected override Assembly? Load(AssemblyName assembly_name) {
@@ -50,7 +50,7 @@ internal class FhLoadContext(string context_name, string fh_dll_path) : Assembly
 /// <summary>
 ///     Contains the information the <see cref="FhLoader"/> needs to process a mod.
 /// </summary>
-internal record FhModLoadInfo(
+internal sealed record FhModLoadInfo(
     string   ModName,
     string[] ModDllList
     );
@@ -59,7 +59,7 @@ internal record FhModLoadInfo(
 ///     Loads Fahrenheit DLLs and their .NET or native dependencies into the game process,
 ///     and instantiates any <see cref="FhModule"/> with a valid <see cref="FhLoadAttribute"/> on them.
 /// </summary>
-public class FhLoader {
+public sealed class FhLoader {
     private readonly Dictionary<string, FhLoadContext> _load_contexts = [];
 
     public FhLoader() {

@@ -10,7 +10,7 @@ namespace Fahrenheit.Core;
  */
 using LocaleData = Dictionary<string, string>;
 
-public class FhLocalizationManager {
+public sealed class FhLocalizationManager {
     private readonly string[]                       _lang_ids;
     private readonly Dictionary<string, LocaleData> _localization_map;
 

@@ -23,9 +23,9 @@ public class FhModuleHandle<TTarget>(FhModule owner) where TTarget : FhModule {
 /// <summary>
 ///     Represents an object of type <typeparamref name="T"/> initialized at runtime.
 /// </summary>
-internal class FhRuntimeHandle<T> {
-    protected readonly Lock _impl_lock = new Lock();
-    protected          T?   _impl;
+internal sealed class FhRuntimeHandle<T> {
+    private readonly Lock _impl_lock = new Lock();
+    private          T?   _impl;
 
     public bool get_impl([NotNullWhen(true)] out T? impl) {
         lock (_impl_lock) {

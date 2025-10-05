@@ -41,7 +41,7 @@ public sealed record FhDirLink(
 ///     Internally resolves the paths of certain well-known
 ///     directories and files required by the framework.
 /// </summary>
-internal class FhPathFinder {
+internal sealed class FhPathFinder {
     private const string _dirname_bin   = "bin";
     private const string _dirname_mods  = "mods";
     private const string _dirname_logs  = "logs";

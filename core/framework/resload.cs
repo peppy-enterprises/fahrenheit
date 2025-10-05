@@ -26,7 +26,7 @@ public enum FhTextureType {
 /// <summary>
 ///     Describes the properties of a <see cref="FhTexture"/>, such as its dimensions and format.
 /// </summary>
-public record FhTextureMetadata(
+public sealed record FhTextureMetadata(
     nuint                    width,
     nuint                    height,
     nuint                    depth,
@@ -40,7 +40,7 @@ public record FhTextureMetadata(
 /// <summary>
 ///     A handle to an image on disk that can be used in ImGui flows.
 /// </summary>
-public record FhTexture(
+public sealed record FhTexture(
     ImTextureRef      TextureRef,
     FhTextureMetadata Metadata);
 
@@ -74,7 +74,7 @@ internal interface IFhResourceLoader {
 /// <summary>
 ///     Allows for loading of resources such as images for use in ImGui code.
 /// </summary>
-public class FhResourceLoader {
+public sealed class FhResourceLoader {
     internal readonly FhRuntimeHandle<IFhResourceLoader> loader = new(); // RT connects here.
 
     /// <summary>
