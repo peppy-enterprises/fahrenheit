@@ -85,7 +85,7 @@ public unsafe class FhGameUiModule : FhModule {
                 // In the main menu...
                 if (*FFX.Globals.event_id == 0x17) {
                     // render some text so that people can't easily hide their use of Fahrenheit
-                    draw_text_rgba(FhCharset.Us.to_bytes(text), 5f, 400f, 0x00, 0.65f);
+                    draw_text_rgba(FFX.FhCharsetSelector.Us.to_bytes(text), 5f, 400f, 0x00, 0.65f);
                 }
                 break;
             case FhGameType.FFX2:

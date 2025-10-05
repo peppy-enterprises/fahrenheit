@@ -10,11 +10,11 @@ public unsafe struct SaveData {
         public byte* raw { get { fixed (byte* temp = _name) return temp; } }
         public string name {
             get {
-                fixed (byte* temp = _name) return FhCharset.Us.to_string(temp);
+                fixed (byte* temp = _name) return FhCharsetSelector.Us.to_string(temp);
             }
             set {
                 fixed (byte* temp = _name) {
-                    FhCharset.Us.to_bytes(value, temp);
+                    FhCharsetSelector.Us.to_bytes(value, temp);
                     for (int j = value.Length; j < 20; j++) {
                         temp[j] = 0;
                     }
