@@ -17,24 +17,17 @@ public enum FhLangId {
 }
 
 public abstract unsafe partial class FhCharset {
-    public const char InvalidChar = char.MaxValue;
-    public const byte InvalidByte = byte.MaxValue;
-
     public void to_bytes(in ReadOnlySpan<char> src, in Span<byte> dest) {
-        for (int i = 0; i < src.Length; i++) {
-            dest[i] = to_byte(src[i]);
-        }
+        throw new NotImplementedException(); // TODO: handle 2b encoding properly
     }
 
     public void to_bytes(in ReadOnlySpan<char> src, byte* dest) {
-        for (int i = 0; i < src.Length; i++) {
-            dest[i] = to_byte(src[i]);
-        }
+        throw new NotImplementedException(); // TODO: handle 2b encoding properly
     }
 
     public void to_chars(in ReadOnlySpan<byte> src, in Span<char> dest) {
         for (int i = 0; i < src.Length; i++) {
-            dest[i] = to_char(src[i]);
+            dest[i] = decode(src[i]);
         }
     }
 
@@ -54,7 +47,7 @@ public abstract unsafe partial class FhCharset {
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < src.Length; i++) {
-            result.Append(to_char(src[i]));
+            result.Append(decode(src[i]));
         }
 
         return result.ToString();
@@ -64,12 +57,12 @@ public abstract unsafe partial class FhCharset {
         StringBuilder result = new StringBuilder();
 
         for (byte b = *src; b != 0x00; b = *++src) {
-            result.Append(to_char(b));
+            result.Append(decode(b));
         }
 
         return result.ToString();
     }
 
-    public abstract char to_char(byte b);
-    public abstract byte to_byte(char c);
+    public abstract char   decode(ushort b);
+    public abstract ushort encode(char   c);
 }

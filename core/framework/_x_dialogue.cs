@@ -52,7 +52,7 @@ public static class FhDialogueUtil {
     internal static char ResolveChar(FhLangId cs, byte b) {
         // We check that CharSet is not invalid in DEditDecompile().
         return cs switch {
-            FhLangId.English => FhCharset.Us.to_char(b),
+            FhLangId.English => FhCharset.Us.decode(b),
             _                => throw new Exception("E_INVALID_CHARSET_ID")
         };
     }
