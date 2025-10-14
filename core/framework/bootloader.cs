@@ -11,10 +11,11 @@ public static class FhBootstrapper {
      */
     [UnmanagedCallersOnly]
     public static void bootstrap() {
-        FhApi.ModController = new(FhInternal.Loader.load_mods());
+        FhModContext[] mods = FhInternal.Loader.load_mods();
 
-        FhApi.LocalizationManager.construct_localization_map();
-        FhApi.ModController.initialize_mods();
+        FhApi.Mods = new(mods);
+        FhApi.Localization.initialize(mods);
+        FhApi.Mods.initialize_mods();
     }
 }
 

@@ -80,6 +80,14 @@ internal sealed class FhPathFinder {
         Saves    = new FhDirLink("$saves", path_saves);
     }
 
+    public string get_path_settings() {
+        return Path.Join(
+            Environment.GetFolderPath(Environment.SpecialFolder.Personal),
+            "SQUARE ENIX",
+            "FINAL FANTASY X&X-2 HD Remaster",
+            "GameSetting.ini");
+    }
+
     /// <summary>
     ///     Gets the full path of the save file in slot <paramref name="slot_index"/>,
     ///     in the game's default save directory.

@@ -7,20 +7,7 @@ public unsafe struct SaveData {
     public struct Name {
         private fixed byte _name[40];
 
-        public byte*  raw  { get { fixed (byte* temp = _name) return temp; } }
-        public string name {
-            get {
-                fixed (byte* temp = _name) return FhCharsetSelector.Us.to_string(temp);
-            }
-            set {
-                fixed (byte* temp = _name) {
-                    FhCharsetSelector.Us.to_bytes(value, temp);
-                    for (int j = value.Length; j < 40; j++) {
-                        temp[j] = 0;
-                    }
-                }
-            }
-        }
+        public byte* raw  { get { fixed (byte* temp = _name) return temp; } }
     }
 
     public struct LearnJobs {

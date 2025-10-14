@@ -323,7 +323,7 @@ https://github.com/ocornut/imgui/blob/master/LICENSE.txt
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 
-Regarding the lawfulness of the decompilation and reverse engineering performed for this project
+Regarding the lawfulness of software modifications performed by this project
 ----
     END USER SOFTWARE LICENSE AGREEMENT AND LIMITED WARRANTY
     FINAL FANTASY X/X-2 HD Remaster (the “Software Product”)
@@ -339,21 +339,16 @@ Regarding the lawfulness of the decompilation and reverse engineering performed 
     > the exclusive property of Square Enix and/or its licensors on creation to the maximum extent
     > permitted by law and you hereby waive all or any moral rights in such creations;
 
-    To the best of our knowledge, the reverse-engineering and decompilation work carried out for the Fahrenheit project
-    by EU residents is lawful based on the judgement rendered by the European Court of Justice in case C-13/20
-    (https://curia.europa.eu/juris/document/document.jsf?text=&docid=247056&pageIndex=0&doclang=DE&mode=req&dir=&occ=first&part=1&cid=18380521),
-    which explicitly permits decompilation for the purpose of fixing defects in software applications,
-    and based on the extant work of other groups whose similar projects have not been ordered to desist.
+    In the jurisdiction of the author of this software, in case C-159/23
+    (https://curia.europa.eu/juris/document/document.jsf;jsessionid=2B08E337AB809C646699F5EE3A838B30?text=&docid=291248&pageIndex=0&doclang=EN&mode=req&dir=&occ=first&part=1&cid=3458130), 
+    it has been ruled that:
+    
+    > Article 1(1) to (3) of Directive 2009/24/EC of the European Parliament and of the Council of 23 April 2009 on the legal protection of computer programs
 
-    Additionally, Article 6 of Directive 91/250 (https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0024) states:
+    > must be interpreted as meaning that the content of the variable data transferred by a protected computer program to the RAM of a computer
+    > and used by that program in its running does not fall within the protection conferred by that directive, in so far as that content does not
+    > enable such a program to be reproduced or subsequently created.
 
-    > 1. The authorisation of the rightholder shall not be required where reproduction of the code and translation
-    > of its form within the meaning of points (a) and (b) of Article 4(1) are indispensable to obtain the information
-    > necessary to achieve the interoperability of an independently created computer program with other programs, provided
-    > that the following conditions are met:
-    >
-    > (a) those acts are performed by the licensee or by another person having a right to use a copy of a program, or on their behalf by a person authorised to do so;
-    > (b) the information necessary to achieve interoperability has not previously been readily available to the persons referred to in point (a); and
-    > (c) those acts are confined to the parts of the original program which are necessary in order to achieve interoperability.
-
-    To the best of our knowledge, all three conditions stated herein are fulfilled.
+    Fahrenheit explicitly and only performs modifications to the in-memory, loaded in RAM data of the games
+    it supports. It under no circumstances performs modifications to the object code of the application on disk.
+    It cannot be utilized to reproduce or subsequently recreate any game it supports.

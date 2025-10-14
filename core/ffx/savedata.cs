@@ -8,19 +8,6 @@ public unsafe struct SaveData {
         private fixed byte _name[20];
 
         public byte* raw { get { fixed (byte* temp = _name) return temp; } }
-        public string name {
-            get {
-                fixed (byte* temp = _name) return FhCharsetSelector.Us.to_string(temp);
-            }
-            set {
-                fixed (byte* temp = _name) {
-                    FhCharsetSelector.Us.to_bytes(value, temp);
-                    for (int j = value.Length; j < 20; j++) {
-                        temp[j] = 0;
-                    }
-                }
-            }
-        }
     }
 
     [InlineArray(18)]

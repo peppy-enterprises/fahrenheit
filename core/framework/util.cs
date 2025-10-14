@@ -7,10 +7,47 @@ public unsafe static class FhUtil {
     public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                }
     public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;        }
 
+    public static FhLangId get_game_lang() {
+        string ini_path     = FhInternal.PathFinder.get_path_settings();
+        string ini_lang_key = "Language=";
+        // linebreaks can be inconsistent depending on whether INI edited by hand or by launcher
+        char[] line_breaks  = [ '\r', '\n' ];
+
+        try {
+            using (FileStream   ini_stream = File.OpenRead(ini_path))
+            using (StreamReader ini_reader = new StreamReader(ini_stream)) {
+                string ini = ini_reader.ReadToEnd();
+
+                int ini_lang_s = ini.IndexOf(ini_lang_key) + ini_lang_key.Length;
+                int ini_lang_e = ini[ ini_lang_s .. ].IndexOfAny(line_breaks) + ini_lang_s;
+
+                return ini[ ini_lang_s .. ini_lang_e ] switch {
+                    "en"         => FhLangId.English,
+                    "ch" or "cn" => FhLangId.Chinese,
+                    "jp"         => FhLangId.Japanese,
+                    "kr"         => FhLangId.Korean,
+                    "fr"         => FhLangId.French,
+                    "es"         => FhLangId.Spanish,
+                    "it"         => FhLangId.Italian,
+                    "de"         => FhLangId.German,
+                    _            => FhLangId.Japanese, // mirror game default behavior
+                };
+            }
+        }
+        catch (Exception e) {
+            FhInternal.Log.Error($"faulted while probing game language: {e}");
+            FhInternal.Log.Error("falling back to JP to mirror game default");
+
+            return FhLangId.Japanese;
+        }
+    }
+
     public static FhGameType get_game_type() {
-        FhGameType rv = 0;
+        FhGameType rv = FhGameType.NULL;
+
         if (FhPInvoke.GetModuleHandle("FFX.exe")   != 0) rv = FhGameType.FFX;
         if (FhPInvoke.GetModuleHandle("FFX-2.exe") != 0) rv = FhGameType.FFX2;
+
         return rv;
     }
 

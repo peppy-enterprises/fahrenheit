@@ -10,8 +10,8 @@ public abstract class FhSetting(string id) {
 
     public string id { get; set; } = id;
     public bool locked;
-    public string name { get { return FhApi.LocalizationManager.localize($"{id}.name"); } }
-    public string desc { get { return FhApi.LocalizationManager.localize($"{id}.desc"); } }
+    public string name { get { return FhApi.Localization.localize($"{id}.name"); } }
+    public string desc { get { return FhApi.Localization.localize($"{id}.desc"); } }
 
     public abstract void save(ref Utf8JsonWriter writer);
     public abstract void load(ref Utf8JsonReader reader);
@@ -342,10 +342,10 @@ public class FhSettingBitfield<T>(string id, T def_value, int row_count) : FhSet
     }
 
     private string get_flag_name(T val)
-            => FhApi.LocalizationManager.localize($"{id}.values.{get_bit_idx(val)}.name");
+            => FhApi.Localization.localize($"{id}.values.{get_bit_idx(val)}.name");
 
     private string get_flag_desc(T val)
-            => FhApi.LocalizationManager.localize($"{id}.values.{get_bit_idx(val)}.desc");
+            => FhApi.Localization.localize($"{id}.values.{get_bit_idx(val)}.desc");
 }
 
 /// <summary>

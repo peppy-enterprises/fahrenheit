@@ -16,7 +16,7 @@ public class FhModuleHandle<TTarget>(FhModule owner) where TTarget : FhModule {
     /// </summary>
     public bool try_get([NotNullWhen(true)] out FhModuleContext? target_context) {
         FhInternal.Log.Info($"{_owner.ModuleType} acquiring handle to {typeof(TTarget).FullName}");
-        return (target_context = (_match ??= FhApi.ModController.get_module<TTarget>())) != null;
+        return (target_context = (_match ??= FhApi.Mods.get_module<TTarget>())) != null;
     }
 }
 

@@ -109,7 +109,7 @@ public unsafe class FhLocalStateModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ])]
     private void h_onsave(int menu_selection_index) {
-        foreach (FhModContext mod_context in FhApi.ModController.get_mods()) {
+        foreach (FhModContext mod_context in FhApi.Mods.get_mods()) {
             foreach (FhModuleContext module_context in mod_context.Modules) {
                 string module_type   = module_context.Module.ModuleType;
                 string state_dir     = _get_state_dir_path_save(mod_context, menu_selection_index);
@@ -138,7 +138,7 @@ public unsafe class FhLocalStateModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ])]
     private void h_onload(int menu_selection_index) {
-        foreach (FhModContext mod_context in FhApi.ModController.get_mods()) {
+        foreach (FhModContext mod_context in FhApi.Mods.get_mods()) {
             foreach (FhModuleContext module_context in mod_context.Modules) {
                 string module_type   = module_context.Module.ModuleType;
                 string state_dir     = _get_state_dir_path_load(mod_context, menu_selection_index);

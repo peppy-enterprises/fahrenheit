@@ -56,7 +56,7 @@ public unsafe class FhCoreModule : FhModule {
 
         if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
             ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 18f);
-            FhModContext[] mods = [ .. FhApi.ModController.get_mods() ];
+            FhModContext[] mods = [ .. FhApi.Mods.get_mods() ];
 
             ImGui.Text($"{mods.Length} mods loaded");
             foreach (FhModContext mod_ctx in mods) {
@@ -74,13 +74,13 @@ public unsafe class FhCoreModule : FhModule {
     ///     <see cref="FhModule.post_update"/> callbacks before and after every iteration, respectively.
     /// </summary>
     private void h_main_loop(float delta) {
-        foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
+        foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             module_ctx.Module.pre_update();
         }
 
         _main_loop.orig_fptr(delta);
 
-        foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
+        foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             module_ctx.Module.post_update();
         }
     }
@@ -94,7 +94,7 @@ public unsafe class FhCoreModule : FhModule {
 
         _update_input.orig_fptr();
 
-        foreach (FhModuleContext module_ctx in FhApi.ModController.get_modules()) {
+        foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             module_ctx.Module.handle_input();
         }
     }

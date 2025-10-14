@@ -99,7 +99,7 @@ public unsafe class FhModConfigModule : FhModule {
                 int mod_idx = 0;
 
                 float tab_width = ImGui.GetContentRegionAvail().X;
-                foreach (FhModContext mod in FhApi.ModController.get_mods()) {
+                foreach (FhModContext mod in FhApi.Mods.get_mods()) {
                     if (has_settings(mod)) {
                         render_mod_tab(mod, mod_idx++, tab_width);
                     } else {
@@ -116,7 +116,7 @@ public unsafe class FhModConfigModule : FhModule {
             ImGui.SetNextWindowPos(new Vector2(viewport.WorkPos.X + viewport.WorkSize.X * 0.17f, viewport.WorkPos.Y));
             ImGui.SetNextWindowSize(new Vector2(viewport.WorkSize.X * 0.83f, viewport.WorkSize.Y));
             if (ImGui.Begin("ModSettings", ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove)) {
-                FhModContext[] mods = [ .. FhApi.ModController.get_mods() ];
+                FhModContext[] mods = [ .. FhApi.Mods.get_mods() ];
                 foreach (FhModuleContext module in mods[_selected_mod_idx].Modules) {
                     module.Module.settings?.render_name();
                     module.Module.settings?.render();

@@ -67,7 +67,7 @@ public unsafe class FhFileLoaderModule : FhModule {
         };
 
         string         path_efl_dir;
-        FhModContext[] mods = [ .. FhApi.ModController.get_mods() ];
+        FhModContext[] mods = [ .. FhApi.Mods.get_mods() ];
 
         foreach (FhModContext mod in mods) {
             path_efl_dir = Path.Join(mod.Paths.EflDir.FullName, efl_subdir_name);

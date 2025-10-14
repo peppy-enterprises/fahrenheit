@@ -14,9 +14,10 @@ public sealed class FhLocalizationManager {
     private readonly string[]                       _lang_ids;
     private readonly Dictionary<string, LocaleData> _localization_map;
 
-    internal void construct_localization_map() {
-        FhModContext[] mods = [ .. FhApi.ModController.get_mods() ];
-
+    /// <summary>
+    ///     Concatenates the localization data of all loaded modules into a map.
+    /// </summary>
+    internal void initialize(FhModContext[] mods) {
         foreach (FhModContext mod in mods) {
             foreach (FileInfo lang_file_path in mod.Paths.LangDir.EnumerateFiles()) {
                 string lang_id  = Path.GetFileNameWithoutExtension(lang_file_path.FullName);
@@ -44,6 +45,11 @@ public sealed class FhLocalizationManager {
         }
     }
 
+    /// <summary>
+    ///     Attempts to retrieve the string with ID <paramref name="id"/>
+    ///     for the locale with ID <paramref name="lang_id"/>,
+    ///     falling back to <paramref name="id"/> if unavailable.
+    /// </summary>
     public string localize(string id, string lang_id = "en-US") {
         return _localization_map.TryGetValue(lang_id, out LocaleData? locale) && locale.TryGetValue(id, out string? localized_string)
             ? localized_string

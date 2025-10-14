@@ -20,7 +20,7 @@ namespace Fahrenheit.Core.Runtime;
 /// <summary>
 ///     Loads textures and other resources at runtime.
 ///     <para/>
-///     Do not interface with this module directly. Instead, call <see cref="FhApi.ResourceLoader"/>.
+///     Do not interface with this module directly. Instead, call <see cref="FhApi.Resources"/>.
 /// </summary>
 [FhLoad(FhGameType.FFX | FhGameType.FFX2)]
 public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
@@ -32,7 +32,7 @@ public unsafe class FhResourceLoaderModule : FhModule, IFhResourceLoader {
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        FhApi.ResourceLoader.loader.set_impl(this);
+        FhApi.Resources.loader.set_impl(this);
         return _handle_d3d11_init.hook();
     }
 
