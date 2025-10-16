@@ -87,7 +87,7 @@ public sealed class FhLoader {
     /// </summary>
     private FhManifest _get_manifest(FhModPaths mod_paths) {
         return JsonSerializer.Deserialize<FhManifest>(File.OpenRead(mod_paths.ManifestPath), FhUtil.InternalJsonOpts)
-            ?? throw new Exception("FH_E_MANIFEST_LOAD_FAILED");
+            ?? throw new Exception($"Failed to load manifest at {mod_paths.ManifestPath}");
     }
 
     /// <summary>

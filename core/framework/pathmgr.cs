@@ -80,6 +80,9 @@ internal sealed class FhPathFinder {
         Saves    = new FhDirLink("$saves", path_saves);
     }
 
+    /// <summary>
+    ///     Gets the full path of the game's INI setting file.
+    /// </summary>
     public string get_path_settings() {
         return Path.Join(
             Environment.GetFolderPath(Environment.SpecialFolder.Personal),

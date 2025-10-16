@@ -115,41 +115,6 @@ public unsafe static class FhUtil {
         for (; len > 0; len--, offset++) { bitfield.set_bit(offset, value.get_bit(offset)); }
     }
 
-    public static ulong u64_swap_endian(ulong x) {
-        // swap adjacent 32-bit blocks
-        x = (x >> 32) | (x << 32);
-        // swap adjacent 16-bit blocks
-        x = ((x & 0xFFFF0000FFFF0000) >> 16) | ((x & 0x0000FFFF0000FFFF) << 16);
-        // swap adjacent 8-bit blocks
-        return ((x & 0xFF00FF00FF00FF00) >> 8) | ((x & 0x00FF00FF00FF00FF) << 8);
-    }
-
-    /// <summary>
-    ///     Packs a byte span into an <see cref="ulong"/>, little-endian.
-    ///     Undefined on inputs over 8 bytes in length.
-    /// </summary>
-    public static ulong pack_bytes_le(this ReadOnlySpan<byte> bytes) {
-        ulong le = 0;
-
-        for (int i = bytes.Length - 1; i >= 0; i--)
-            le += (ulong)bytes[i] << (8 * i);
-
-        return le;
-    }
-
-    /// <summary>
-    ///     Packs a byte span into an <see cref="ulong"/>, big-endian.
-    ///     Undefined on inputs over 8 bytes in length.
-    /// </summary>
-    public static ulong pack_bytes_be(this ReadOnlySpan<byte> bytes) {
-        ulong be = 0;
-
-        for (int i = bytes.Length - 1, j = 0; i >= 0; i--, j++)
-            be += (ulong)bytes[i] << (8 * j);
-
-        return be;
-    }
-
     public static string get_timestamp_string() {
         DateTime dt = DateTime.UtcNow;
         return $"{dt.Year:D2}{dt.Month:D2}{dt.Day:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}";
