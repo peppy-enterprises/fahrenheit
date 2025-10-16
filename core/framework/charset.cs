@@ -14,6 +14,11 @@ public enum FhLangId {
     Debug    = 11
 }
 
+/* [fkelava 16/10/25 19:54]
+ * In game dialogue files, the raw dialogue lines are preceded
+ * by a section of indices, which embed line offsets, option count
+ * for multiple-choice selections, and so on.
+ */
 public enum FhDialogueIndexType {
     I32_X2 = 1,
     I32_X1 = 2,
@@ -21,7 +26,13 @@ public enum FhDialogueIndexType {
     I16_X1 = 4,
 }
 
-// incomplete
+/* [fkelava 16/10/25 19:55]
+ * Bytes below 0x30 are to be interpreted as a dialogue 'op',
+ * which is a modifier to the dialogue that follows it.
+ *
+ * These ops may take one or two arguments, and the opcode itself
+ * sometimes acts as one of them after transformation.
+ */
 public enum FhDialogueOpCode {
     PAUSE      = 0x01,
     LINE_BREAK = 0x03,
@@ -39,6 +50,13 @@ public enum FhDialogueOpCode {
     CJK_EXT_4  = 0x2F,
 }
 
+/* [fkelava 16/10/25 20:13]
+ * A macro dictionary is conceptually a concatenation of up to ten dialogue files
+ * with a 64-byte header that indicates the start of each 'section', or individual
+ * dialogue file within the dictionary. In dialogue, the op {MACRO:X:Y} then points
+ * to the Y'th line of section X.
+ */
+
 [InlineArray(10)]
 public struct FhMacroDictSections {
     private int _i;
@@ -54,17 +72,14 @@ public struct FhMacroDictHeader {
     public FhMacroDictSections sections;
 }
 
+/// <summary>
+///     Exposes low-level transforms between UTF-8 and game encoding.
+/// </summary>
 public static class FhCharset {
 
     /* [fkelava 14/10/25 14:58]
-     * Bytes below 0x30 are to be interpreted as a dialogue 'op',
-     * which is a modifier to the dialogue that follows it.
-     *
-     * These ops may take one or two arguments, and the opcode itself
-     * sometimes acts as one of them after transformation.
-     *
      * These literals and methods control the textual representation of
-     * these ops when decoding, and how the encoder shall identify them.
+     * dialogue ops when decoding, and how the encoder shall identify them.
      * Changing them constitutes a breaking change.
      */
 
@@ -80,26 +95,39 @@ public static class FhCharset {
     private static ReadOnlySpan<byte> _op_key     => "{KEY:"u8;
     private static ReadOnlySpan<byte> _op_unknown => "{UNKNOWN:"u8;
 
-    private static byte _op_decode_arg1(in ReadOnlySpan<byte> expression, in ReadOnlySpan<byte> op) {
-        return byte.Parse(expression[op.Length .. (op.Length + 2)], NumberStyles.HexNumber);
+    private static byte _get_op_arg1(in ReadOnlySpan<byte> expression, in ReadOnlySpan<byte> op) {
+        return byte.Parse(expression[ op.Length .. (op.Length + 2) ], NumberStyles.HexNumber);
     }
 
-    private static byte _op_decode_arg2(in ReadOnlySpan<byte> expression, in ReadOnlySpan<byte> op) {
-        return byte.Parse(expression[(op.Length + 3) .. (op.Length + 5)], NumberStyles.HexNumber);
+    private static byte _get_op_arg2(in ReadOnlySpan<byte> expression, in ReadOnlySpan<byte> op) {
+        return byte.Parse(expression[ (op.Length + 3) .. (op.Length + 5) ], NumberStyles.HexNumber);
     }
 
-    private static ReadOnlySpan<byte> _op_encode_arg1(byte op_arg1) {
-        return Encoding.UTF8.GetBytes($"{op_arg1:X2}}}");
+    private static int _decode_op(in Span<byte> dest, byte op_code) {
+        ReadOnlySpan<byte> op = _select_op_literal(op_code);
+        op.CopyTo(dest);
+
+        return op.Length;
     }
 
-    private static ReadOnlySpan<byte> _op_encode_arg2(byte op_arg1, byte op_arg2) {
-        return Encoding.UTF8.GetBytes($"{op_arg1:X2}:{op_arg2:X2}}}");
+    private static int _decode_op(in Span<byte> dest, byte op_code, byte op_arg1) {
+        ReadOnlySpan<byte> op = _select_op_literal(op_code);
+        op.CopyTo(dest);
+
+        return op.Length + Encoding.UTF8.GetBytes($"{op_arg1:X2}}}", dest[op.Length .. ]);
     }
 
-    private static bool _should_ignore_code_point(Rune codepoint) {
-        return codepoint.Value is 0x0D    // U+000D - <Carriage Return> (CR)
-                               or 0x0A    // U+000A - <End of Line> (EOL, LF, NL)
-                               or 0xFEFF; // U+FEFF - Zero Width No-Break Space (BOM, ZWNBSP)
+    private static int _decode_op(in Span<byte> dest, byte op_code, byte op_arg1, byte op_arg2) {
+        ReadOnlySpan<byte> op = _select_op_literal(op_code);
+        op.CopyTo(dest);
+
+        return op.Length + Encoding.UTF8.GetBytes($"{op_arg1:X2}:{op_arg2:X2}}}", dest[op.Length .. ]);
+    }
+
+    private static bool _should_ignore_code_point(Rune code_point) {
+        return code_point.Value is 0x0D    // U+000D - <Carriage Return> (CR)
+                                or 0x0A    // U+000A - <End of Line> (EOL, LF, NL)
+                                or 0xFEFF; // U+FEFF - Zero Width No-Break Space (BOM, ZWNBSP)
     }
 
     /// <summary>
@@ -135,9 +163,9 @@ public static class FhCharset {
             _ when expression.IndexOf(_op_btn    ) != -1 => 0x0B,
             _ when expression.IndexOf(_op_choice ) != -1 => 0x10,
             _ when expression.IndexOf(_op_var    ) != -1 => 0x12,
-            _ when expression.IndexOf(_op_macro  ) != -1 => byte.CreateChecked(0x13 + _op_decode_arg1(expression, _op_macro)),
+            _ when expression.IndexOf(_op_macro  ) != -1 => byte.CreateChecked(0x13 + _get_op_arg1(expression, _op_macro)),
             _ when expression.IndexOf(_op_key    ) != -1 => 0x23,
-            _                                            => _op_decode_arg1(expression, _op_unknown),
+            _                                            => _get_op_arg1(expression, _op_unknown),
         };
     }
 
@@ -146,8 +174,7 @@ public static class FhCharset {
      * which is a long UTF-8 string. These are called 'sjistbl', or Shift-JIS tables.
      *
      * Fahrenheit does not support modifying the game's original tables. While doing so is technically
-     * possible, it would have no effect since all font atlases would have to be rebuilt, which is currently
-     * (and possibly forever) completely out of reach.
+     * possible, it would have no effect since all font atlases would have to be rebuilt, which is out of reach.
      *
      * The game's original Shift-JIS tables are constant-folded into the library and selected from here.
      */
@@ -240,7 +267,7 @@ public static class FhCharset {
          */
 
         if (sjistbl_idx > sjistbl.Length) {
-            FhInternal.Log.Error($"Rejected expression {e0:X2} {e1:X2} {e2:X2} in lang {game_lang}");
+            Console.WriteLine($"Rejected expression {e0:X2} {e1:X2} {e2:X2} in lang {game_lang}");
             return 3;
         }
 
@@ -720,19 +747,19 @@ public static class FhCharset {
 
         // {(COLOR|BTN|KEY):X2}
         if (op_code is 0x0A or 0x0B or 0x23) {
-            dest[1] = _op_decode_arg1(expression, op);
+            dest[1] = _get_op_arg1(expression, op);
             return 2;
         }
 
         // {(SPACE|TIME|CHOICE):(X2 - 0x30)}
         if (op_code is 0x07 or 0x09 or 0x10) {
-            dest[1] = byte.CreateChecked(0x30 + _op_decode_arg1(expression, op));
+            dest[1] = byte.CreateChecked(0x30 + _get_op_arg1(expression, op));
             return 2;
         }
 
         // {MACRO:(X2 - 0x13):(X2 - 0x30)}
         if (op_code is (>= 0x13 and <= 0x22)) {
-            dest[1] = byte.CreateChecked(0x30 + _op_decode_arg2(expression, op));
+            dest[1] = byte.CreateChecked(0x30 + _get_op_arg2(expression, op));
             return 2;
         }
 
@@ -743,7 +770,7 @@ public static class FhCharset {
 
         // {UNKNOWN:ARG1:ARG2}
         if (op_code is 0x06 or 0x08 or (>= 0x0C and <= 0x0F) or 0x11 or 0x12 or (>= 0x24 and <= 0x2B)) {
-            dest[1] = _op_decode_arg2(expression, op);
+            dest[1] = _get_op_arg2(expression, op);
             return 2;
         }
 
@@ -781,7 +808,7 @@ public static class FhCharset {
              * If it is U+000D (CR), U+000A (LF), or U+FEFF (BOM), bypass it.
              */
 
-            OperationStatus decode_status = Rune.DecodeFromUtf8(src[src_offset..], out Rune code_point, out int consumed);
+            OperationStatus decode_status = Rune.DecodeFromUtf8(src[ src_offset .. ], out Rune code_point, out int consumed);
 
             if (decode_status != OperationStatus.Done) {
                 FhInternal.Log.Info($"failed to get complete UTF8 codepoint in input; aborting (pos {src_offset}, R {decode_status})");
@@ -815,7 +842,7 @@ public static class FhCharset {
                     src_offset += consumed;
                 }
 
-                dest_offset += _encode_expr(src[expr_start_offset .. src_offset], dest[dest_offset .. ]);
+                dest_offset += _encode_expr(src[ expr_start_offset .. src_offset ], dest[ dest_offset .. ]);
                 continue;
             }
 
@@ -847,10 +874,8 @@ public static class FhCharset {
             }
 
             if ((sjistbl_index + 0x30) > 0xFF) {
-                byte e0 = byte.CreateChecked((sjistbl_index / 0xD0) + 0x2B);
-                byte e1 = byte.CreateChecked((sjistbl_index % 0xD0) + 0x30);
-                dest[dest_offset++] = e0;
-                dest[dest_offset++] = e1;
+                dest[dest_offset++] = byte.CreateChecked((sjistbl_index / 0xD0) + 0x2B);
+                dest[dest_offset++] = byte.CreateChecked((sjistbl_index % 0xD0) + 0x30);
             }
             else {
                 dest[dest_offset++] = byte.CreateChecked(sjistbl_index + 0x30);
@@ -882,107 +907,61 @@ public static class FhCharset {
         FhLangId   game_lang = game_lang_override ?? FhGlobal.game_lang;
         FhGameType game_type = game_type_override ?? FhGlobal.game_type;
 
-        ReadOnlySpan<byte> op;        // for ops which are standalone
-        ReadOnlySpan<byte> op_suffix; // for ops which take arguments
-
         byte op_arg1,    op_arg2;
         int  src_offset, dest_offset;
 
         for (src_offset = 0, dest_offset = 0; src_offset < src.Length; ) {
             switch (src[src_offset]) {
-                case 0x00:
-                    op = _select_op_literal(src[src_offset]);
-                    op.CopyTo(dest[dest_offset .. ]);
+                case 0x00: // {END}
+                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset]);
 
                     // for legibility's sake
                     ReadOnlySpan<byte> newline = "\r\n"u8;
-                    newline.CopyTo(dest[(dest_offset + op.Length) .. ]);
+                    newline.CopyTo(dest[dest_offset .. ]);
 
-                    return dest_offset + op.Length + newline.Length;
+                    return dest_offset + newline.Length;
 
                 // 0-arg ops
 
-                case 0x01: // {PAUSE}
-                case 0x03: // {LF}
-                    op = _select_op_literal(src[src_offset]);
-                    op.CopyTo(dest[dest_offset..]);
-
+                case 0x01 or 0x03: // {PAUSE}, {LF}
+                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset]);
                     src_offset  += 1;
-                    dest_offset += op.Length;
                     break;
 
                 // 1-arg ops
 
-                case 0x0A: // {COLOR}
-                case 0x0B: // {BTN}
-                case 0x23: // {KEY}
-                    op        = _select_op_literal(src[src_offset]);
-                    op_arg1   = src[src_offset + 1];
-                    op_suffix = _op_encode_arg1(op_arg1);
-
-                    op       .CopyTo(dest[dest_offset .. ]);
-                    op_suffix.CopyTo(dest[(dest_offset + op.Length) .. ]);
-
+                case 0x0A or 0x0B or 0x23: // {COLOR}, {BTN}, {KEY}
+                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset + 1]);
                     src_offset  += 2;
-                    dest_offset += (op.Length + op_suffix.Length);
                     break;
 
                 // 1-arg ops with 0x30-based indexing
 
-                case 0x07: // {SPACE}
-                case 0x09: // {TIME}
-                case 0x10: // {CHOICE}
-                    op        = _select_op_literal(src[src_offset]);
-                    op_arg1   = byte.CreateChecked(src[src_offset + 1] - 0x30);
-                    op_suffix = _op_encode_arg1(op_arg1);
+                case 0x07 or 0x09 or 0x10: // {SPACE}, {TIME}, {CHOICE}
+                    op_arg1 = byte.CreateChecked(src[src_offset + 1] - 0x30);
 
-                    op       .CopyTo(dest[dest_offset .. ]);
-                    op_suffix.CopyTo(dest[(dest_offset + op.Length) .. ]);
-
+                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], op_arg1);
                     src_offset  += 2;
-                    dest_offset += (op.Length + op_suffix.Length);
                     break;
 
                 // 2-arg ops where the op itself is transformed to an argument
 
-                case 0x13: // {MACRO}
-                case 0x14:
-                case 0x15:
-                case 0x17:
-                case 0x18:
-                case 0x19:
-                case 0x1A:
-                case 0x1B:
-                case 0x1C:
-                case 0x1D:
-                case 0x1E:
-                case 0x1F:
-                case 0x20:
-                case 0x21:
-                case 0x22:
-                    op        = _select_op_literal(src[src_offset]);
-                    op_arg1   = byte.CreateChecked(src[src_offset]     - 0x13);
-                    op_arg2   = byte.CreateChecked(src[src_offset + 1] - 0x30);
-                    op_suffix = _op_encode_arg2(op_arg1, op_arg2);
+                case >= 0x13 and <= 0x22: // {MACRO}
+                    op_arg1 = byte.CreateChecked(src[src_offset]     - 0x13);
+                    op_arg2 = byte.CreateChecked(src[src_offset + 1] - 0x30);
 
-                    op       .CopyTo(dest[dest_offset .. ]);
-                    op_suffix.CopyTo(dest[(dest_offset + op.Length) .. ]);
-
+                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], op_arg1, op_arg2);
                     src_offset  += 2;
-                    dest_offset += (op.Length + op_suffix.Length);
                     break;
 
                 // Multi-byte character expressions
 
                 case 0x04: // {CJK_EXT_0}
-                    dest_offset += _decode_cjk(src[src_offset..], dest[dest_offset..], game_lang, game_type);
+                    dest_offset += _decode_cjk(src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type);
                     src_offset  += src[src_offset + 1] < 0x30 ? 3 : 2;
                     break;
 
-                case 0x2C: // {CJK_EXT_1}
-                case 0x2D: // {CJK_EXT_2}
-                case 0x2E: // {CJK_EXT_3}
-                case 0x2F: // {CJK_EXT_4}
+                case >= 0x2C and <= 0x2F: // {CJK_EXT_(1|2|3|4)}
                     dest_offset += game_lang is FhLangId.Japanese or FhLangId.Korean or FhLangId.Chinese
                         ? _decode_cjk(src[src_offset..], dest[dest_offset..], game_lang, game_type)
                         : _decode_us (src[src_offset..], dest[dest_offset..], game_lang, game_type);
@@ -992,51 +971,25 @@ public static class FhCharset {
 
                 // Unknown-unhandled ops embedded literally
 
-                case 0x02:
-                case 0x05:
-                    op        = _select_op_literal(src[src_offset]);
-                    op_arg1   = src[src_offset + 1];
-                    op_suffix = Encoding.UTF8.GetBytes($"{op_arg1:X2}}}");
-
-                    op       .CopyTo(dest[dest_offset .. ]);
-                    op_suffix.CopyTo(dest[(dest_offset + op.Length) .. ]);
-
+                case 0x02 or 0x05:
+                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset + 1]);
                     src_offset  += 1;
-                    dest_offset += (op.Length + op_suffix.Length);
                     break;
 
                 case 0x06:
                 case 0x08:
-                case 0x0C:
-                case 0x0D:
-                case 0x0E:
-                case 0x0F:
+                case >= 0x0C and <= 0x0F:
                 case 0x11:
                 case 0x12:
-                case 0x24:
-                case 0x25:
-                case 0x26:
-                case 0x27:
-                case 0x28:
-                case 0x29:
-                case 0x2A:
-                case 0x2B:
-                    op        = _select_op_literal(src[src_offset]);
-                    op_arg1   = src[src_offset];
-                    op_arg2   = src[src_offset + 1];
-                    op_suffix = _op_encode_arg2(op_arg1, op_arg2);
-
-                    op       .CopyTo(dest[dest_offset .. ]);
-                    op_suffix.CopyTo(dest[(dest_offset + op.Length) .. ]);
-
+                case >= 0x24 and <= 0x2B:
+                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset], src[src_offset + 1]);
                     src_offset  += 2;
-                    dest_offset += (op.Length + op_suffix.Length);
                     break;
 
                 default:
                     dest_offset += game_lang is FhLangId.Japanese or FhLangId.Korean or FhLangId.Chinese
-                        ? _decode_cjk(src[src_offset..], dest[dest_offset..], game_lang, game_type)
-                        : _decode_us (src[src_offset..], dest[dest_offset..], game_lang, game_type);
+                        ? _decode_cjk(src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type)
+                        : _decode_us (src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type);
 
                     src_offset += 1;
                     break;

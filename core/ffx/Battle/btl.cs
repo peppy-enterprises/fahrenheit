@@ -28,12 +28,12 @@ public unsafe struct BtlArea {
     [FieldOffset(0x40)] public   Vector4 b;
     [FieldOffset(0x50)] public   Vector4 c;
 }
+
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x60)]
 public unsafe struct BtlAreas {
     [FieldOffset(0x0)] private BtlArea areas;
     [FieldOffset(0x0)] public  byte    area_type;
     [FieldOffset(0x1)] public  byte    area_count;
-
 
     public ref BtlArea this[int i] {
         get { fixed (BtlArea* pAreas = &areas) { return ref *(pAreas + i); } }

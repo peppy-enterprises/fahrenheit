@@ -23,10 +23,14 @@ public struct ChrStealLoot {
     public byte   amount_bribe;
 }
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x20)]
-public unsafe struct ChrEquipmentLootAbilities {
-    [FieldOffset(0x00)] public fixed ushort weapon_abilities[8];
-    [FieldOffset(0x10)] public fixed ushort armor_abilities [8];
+[InlineArray(8)]
+public struct ChrEquipmentLootAbilitiesArray {
+    private ushort _u;
+}
+
+public struct ChrEquipmentLootAbilities {
+    public ChrEquipmentLootAbilitiesArray weapon_abilities;
+    public ChrEquipmentLootAbilitiesArray armor_abilities;
 }
 
 public struct ChrEquipmentLoot {
