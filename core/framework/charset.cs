@@ -253,32 +253,21 @@ public static class FhCharset {
             throw new Exception($"Rejected expression {e0:X2} {e1:X2} {e2:X2} in lang {game_lang}");
         }
 
-        if (sjistbl_idx == 0x1E && game_lang is FhLangId.Korean) {
-            dest[0] = 0x20;
-            return 1;
-        }
-        if (sjistbl_idx <= 0x32) {
-            sjistbl[ sjistbl_idx .. (sjistbl_idx + 3) ].CopyTo(dest[ 0 .. 3 ]);
-            return 3;
-        }
-        if (sjistbl_idx == 0x33) {
-            sjistbl[ 0x33 .. 0x35 ].CopyTo(dest[ 0 .. 2 ]);
-            return 2;
-        }
-        if (sjistbl_idx > 0x33 && (game_lang is FhLangId.Chinese || sjistbl_idx < 0x78)) {
-            sjistbl[ (sjistbl_idx - 1) .. (sjistbl_idx + 2) ].CopyTo(dest[ 0 .. 3 ]);
-            return 3;
-        }
-        if (sjistbl_idx == 0x78) {
-            sjistbl[ 0x77 .. 0x79 ].CopyTo(dest[ 0 .. 2 ]);
-            return 2;
-        }
-        if (sjistbl_idx < 0x79) {
-            return 0;
-        }
+        Range? copy_range = sjistbl_idx switch {
+               0x1E when game_lang is FhLangId.Korean                        => 0x20              .. 0x21,
+            <= 0x32                                                          => sjistbl_idx       .. (sjistbl_idx + 3),
+               0x33                                                          => 0x33              .. 0x35,
+             > 0x33 when game_lang is FhLangId.Chinese || sjistbl_idx < 0x78 => (sjistbl_idx - 1) .. (sjistbl_idx + 2),
+               0x78                                                          => 0x77              .. 0x79,
+             < 0x79                                                          => null,
+               _                                                             => (sjistbl_idx - 2) .. (sjistbl_idx + 1)
+        };
 
-        sjistbl[ (sjistbl_idx - 2) .. (sjistbl_idx + 1) ].CopyTo(dest[ 0 .. 3 ]);
-        return 3;
+        if (copy_range is not Range valid_range)
+            return 0;
+
+        sjistbl[valid_range].CopyTo(dest);
+        return valid_range.End.Value - valid_range.Start.Value;
     }
 
     /* [fkelava 08/10/25 19:51]
@@ -316,18 +305,68 @@ public static class FhCharset {
         byte e1 = src[i];
         sjistbl_idx += (e1 - 0x30);
 
+        Range? copy_range = sjistbl_idx switch {
+            < 0xC  => sjistbl_idx          .. (sjistbl_idx + 0x01),
+              0xC  => 0xC                  .. 0xF,
+              0x3F => 0x43                 .. 0x46,
+              0x5E => (sjistbl_idx + 0x06) .. (sjistbl_idx + 0x08),
+              0x5F => (sjistbl_idx + 0x07) .. (sjistbl_idx + 0x0A),
+              0x60 => (sjistbl_idx + 0x09) .. (sjistbl_idx + 0x0C),
+              0x61 => (sjistbl_idx + 0x0B) .. (sjistbl_idx + 0x0E),
+              0x62 => (sjistbl_idx + 0x0D) .. (sjistbl_idx + 0x10),
+              0x63 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x10),
+              0x64 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x12),
+              0x65 => (sjistbl_idx + 0x11) .. (sjistbl_idx + 0x14),
+              0x66 => (sjistbl_idx + 0x13) .. (sjistbl_idx + 0x16),
+              0x67 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x16),
+              0x68 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x17),
+              0x69 => (sjistbl_idx + 0x16) .. (sjistbl_idx + 0x19),
+              0x6A => (sjistbl_idx + 0x18) .. (sjistbl_idx + 0x1B),
+              0x6B => (sjistbl_idx + 0x1A) .. (sjistbl_idx + 0x1D),
+              0x6C => (sjistbl_idx + 0x1C) .. (sjistbl_idx + 0x1F),
+              0x70 => 0x91                 .. 0x92,
+              0xA0 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x51),
+              0xA1 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x52),
+              0xA2 => (sjistbl_idx + 0x51) .. (sjistbl_idx + 0x54),
+              0xA3 => (sjistbl_idx + 0x53) .. (sjistbl_idx + 0x56),
+              0xA4 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x56),
+              0xA5 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x58),
+              0xA6 => (sjistbl_idx + 0x57) .. (sjistbl_idx + 0x5A),
+              0xA7 or
+              0xA8 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5A),
+              0xA9 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5C),
+              0xAA => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5C),
+              0xAB => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5E),
+              0xAC => (sjistbl_idx + 0x5D) .. (sjistbl_idx + 0x5F),
+              0xAD => (sjistbl_idx + 0x5E) .. (sjistbl_idx + 0x60),
+              0xAE => (sjistbl_idx + 0x5F) .. (sjistbl_idx + 0x61),
+              0xAF => (sjistbl_idx + 0x60) .. (sjistbl_idx + 0x62),
+              0xB0 => (sjistbl_idx + 0x61) .. (sjistbl_idx + 0x63),
+              0xB1 => (sjistbl_idx + 0x62) .. (sjistbl_idx + 0x64),
+              0xB2 => (sjistbl_idx + 0x63) .. (sjistbl_idx + 0x65),
+              0xB3 => (sjistbl_idx + 0x64) .. (sjistbl_idx + 0x66),
+              0xB4 => (sjistbl_idx + 0x65) .. (sjistbl_idx + 0x67),
+              0xB5 => (sjistbl_idx + 0x66) .. (sjistbl_idx + 0x68),
+              0xB6 => (sjistbl_idx + 0x67) .. (sjistbl_idx + 0x69),
+              0xB7 => (sjistbl_idx + 0x68) .. (sjistbl_idx + 0x6A),
+              0xB8 => (sjistbl_idx + 0x69) .. (sjistbl_idx + 0x6C),
+              0xB9 => (sjistbl_idx + 0x6B) .. (sjistbl_idx + 0x6E),
+              0xBA => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6E),
+              0xBB => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6F),
+              0xBC => (sjistbl_idx + 0x6E) .. (sjistbl_idx + 0x71),
+              0xBD => (sjistbl_idx + 0x70) .. (sjistbl_idx + 0x73),
+              0xBE => (sjistbl_idx + 0x72) .. (sjistbl_idx + 0x75),
+              0xBF => (sjistbl_idx + 0x74) .. (sjistbl_idx + 0x77),
+              _    => null,
+        };
+
+        if (copy_range is Range valid_range) {
+            sjistbl[valid_range].CopyTo(dest);
+            return valid_range.End.Value - valid_range.Start.Value;
+        }
+
         // L16-L116
         if (sjistbl_idx < 0x6D) {
-            if (sjistbl_idx < 0xC) {
-                dest[0] = sjistbl[sjistbl_idx];
-                return 1;
-            }
-            if (sjistbl_idx == 0xC) {
-                dest[0] = sjistbl[0xC];
-                dest[1] = sjistbl[0xD];
-                dest[2] = sjistbl[0xE];
-                return 3;
-            }
             if (sjistbl_idx - 0xD < 0x04) {
                 dest[0] = sjistbl[sjistbl_idx + 2];
                 return 1;
@@ -337,246 +376,26 @@ public static class FhCharset {
                     dest[0] = sjistbl[sjistbl_idx + 4];
                     return 1;
                 }
-                if (sjistbl_idx == 0x3F) {
-                    dest[0] = sjistbl[0x43];
-                    dest[1] = sjistbl[0x44];
-                    dest[2] = sjistbl[0x45];
-                    return 3;
-                }
                 if (sjistbl_idx - 0x40 < 0x1E) {
                     dest[0] = sjistbl[sjistbl_idx + 6];
                     return 1;
                 }
 
-                switch (sjistbl_idx) {
-                    case 0x5E:
-                        dest[0] = sjistbl[sjistbl_idx + 0x06];
-                        dest[1] = sjistbl[sjistbl_idx + 0x07];
-                        return 2;
-                    case 0x5F:
-                        dest[0] = sjistbl[sjistbl_idx + 0x07];
-                        dest[1] = sjistbl[sjistbl_idx + 0x08];
-                        dest[2] = sjistbl[sjistbl_idx + 0x09];
-                        return 3;
-                    case 0x60:
-                        dest[0] = sjistbl[sjistbl_idx + 0x09];
-                        dest[1] = sjistbl[sjistbl_idx + 0x0A];
-                        dest[2] = sjistbl[sjistbl_idx + 0x0B];
-                        return 3;
-                    case 0x61:
-                        dest[0] = sjistbl[sjistbl_idx + 0x0B];
-                        dest[1] = sjistbl[sjistbl_idx + 0x0C];
-                        dest[2] = sjistbl[sjistbl_idx + 0x0D];
-                        return 3;
-                    case 0x62:
-                        dest[0] = sjistbl[sjistbl_idx + 0x0D];
-                        dest[1] = sjistbl[sjistbl_idx + 0x0E];
-                        dest[2] = sjistbl[sjistbl_idx + 0x0F];
-                        return 3;
-                    case 0x63:
-                        dest[0] = sjistbl[sjistbl_idx + 0x0F];
-                        return 1;
-                    case 0x64:
-                        dest[0] = sjistbl[sjistbl_idx + 0x0F];
-                        dest[1] = sjistbl[sjistbl_idx + 0x10];
-                        dest[2] = sjistbl[sjistbl_idx + 0x11];
-                        return 3;
-                    case 0x65:
-                        dest[0] = sjistbl[sjistbl_idx + 0x11];
-                        dest[1] = sjistbl[sjistbl_idx + 0x12];
-                        dest[2] = sjistbl[sjistbl_idx + 0x13];
-                        return 3;
-                    case 0x66:
-                        dest[0] = sjistbl[sjistbl_idx + 0x13];
-                        dest[1] = sjistbl[sjistbl_idx + 0x14];
-                        dest[2] = sjistbl[sjistbl_idx + 0x15];
-                        return 3;
-                    case 0x67:
-                        dest[0] = sjistbl[sjistbl_idx + 0x15];
-                        return 1;
-                    case 0x68:
-                        dest[0] = sjistbl[sjistbl_idx + 0x15];
-                        dest[1] = sjistbl[sjistbl_idx + 0x16];
-                        return 2;
-                    case 0x69:
-                        dest[0] = sjistbl[sjistbl_idx + 0x16];
-                        dest[1] = sjistbl[sjistbl_idx + 0x17];
-                        dest[2] = sjistbl[sjistbl_idx + 0x18];
-                        return 3;
-                    case 0x6A:
-                        dest[0] = sjistbl[sjistbl_idx + 0x18];
-                        dest[1] = sjistbl[sjistbl_idx + 0x19];
-                        dest[2] = sjistbl[sjistbl_idx + 0x1A];
-                        return 3;
-                    case 0x6B:
-                        dest[0] = sjistbl[sjistbl_idx + 0x1A];
-                        dest[1] = sjistbl[sjistbl_idx + 0x1B];
-                        dest[2] = sjistbl[sjistbl_idx + 0x1C];
-                        return 3;
-                    case 0x6C:
-                        dest[0] = sjistbl[sjistbl_idx + 0x1C];
-                        dest[1] = sjistbl[sjistbl_idx + 0x1D];
-                        dest[2] = sjistbl[sjistbl_idx + 0x1E];
-                        return 3;
-                    default:
-                        return 0;
-                }
+                return 0;
             }
         }
 
-        // L117-L244 - control flow is EXTREMELY unclear
+        // L117-L244
         if (sjistbl_idx - 0x6D < 0x03) {
             dest[0] = sjistbl[(sjistbl_idx * 2) - 0x4F];
             dest[1] = sjistbl[(sjistbl_idx * 2) - 0x4F + 1];
             return 2;
         }
         else {
-            if (sjistbl_idx == 0x70) {
-                dest[0] = sjistbl[0x91];
-                return 1;
-            }
-
             if (0x2E >= sjistbl_idx - 0x71U) {
                 dest[0] = sjistbl[(sjistbl_idx * 2) - 0x50];
                 dest[1] = sjistbl[(sjistbl_idx * 2) - 0x50 + 1];
                 return 2;
-            }
-        }
-
-        if (0x9F < sjistbl_idx) {
-            switch (sjistbl_idx) {
-                case 0xA0:
-                    dest[0] = sjistbl[sjistbl_idx + 0x50];
-                    return 1;
-                case 0xA1:
-                    dest[0] = sjistbl[sjistbl_idx + 0x50];
-                    dest[1] = sjistbl[sjistbl_idx + 0x51];
-                    return 2;
-                case 0xA2:
-                    dest[0] = sjistbl[sjistbl_idx + 0x51];
-                    dest[1] = sjistbl[sjistbl_idx + 0x52];
-                    dest[2] = sjistbl[sjistbl_idx + 0x53];
-                    return 3;
-                case 0xA3:
-                    dest[0] = sjistbl[sjistbl_idx + 0x53];
-                    dest[1] = sjistbl[sjistbl_idx + 0x54];
-                    dest[2] = sjistbl[sjistbl_idx + 0x55];
-                    return 3;
-                case 0xA4:
-                    dest[0] = sjistbl[sjistbl_idx + 0x55];
-                    return 1;
-                case 0xA5:
-                    dest[0] = sjistbl[sjistbl_idx + 0x55];
-                    dest[1] = sjistbl[sjistbl_idx + 0x56];
-                    dest[2] = sjistbl[sjistbl_idx + 0x57];
-                    return 3;
-                case 0xA6:
-                    dest[0] = sjistbl[sjistbl_idx + 0x57];
-                    dest[1] = sjistbl[sjistbl_idx + 0x58];
-                    dest[2] = sjistbl[sjistbl_idx + 0x59];
-                    return 3;
-                case 0xA7:
-                case 0xA8:
-                    dest[0] = sjistbl[sjistbl_idx + 0x59];
-                    return 1;
-                case 0xA9:
-                    dest[0] = sjistbl[sjistbl_idx + 0x59];
-                    dest[1] = sjistbl[sjistbl_idx + 0x5A];
-                    dest[2] = sjistbl[sjistbl_idx + 0x5B];
-                    return 3;
-                case 0xAA:
-                    dest[0] = sjistbl[sjistbl_idx + 0x5B];
-                    return 1;
-                case 0xAB:
-                    dest[0] = sjistbl[sjistbl_idx + 0x5B];
-                    dest[1] = sjistbl[sjistbl_idx + 0x5C];
-                    dest[2] = sjistbl[sjistbl_idx + 0x5D];
-                    return 3;
-                case 0xAC:
-                    dest[0] = sjistbl[sjistbl_idx + 0x5D];
-                    dest[1] = sjistbl[sjistbl_idx + 0x5E];
-                    return 2;
-                case 0xAD:
-                    dest[0] = sjistbl[sjistbl_idx + 0x5E];
-                    dest[1] = sjistbl[sjistbl_idx + 0x5F];
-                    return 2;
-                case 0xAE:
-                    dest[0] = sjistbl[sjistbl_idx + 0x5F];
-                    dest[1] = sjistbl[sjistbl_idx + 0x60];
-                    return 2;
-                case 0xAF:
-                    dest[0] = sjistbl[sjistbl_idx + 0x60];
-                    dest[1] = sjistbl[sjistbl_idx + 0x61];
-                    return 2;
-                case 0xB0:
-                    dest[0] = sjistbl[sjistbl_idx + 0x61];
-                    dest[1] = sjistbl[sjistbl_idx + 0x62];
-                    return 2;
-                case 0xB1:
-                    dest[0] = sjistbl[sjistbl_idx + 0x62];
-                    dest[1] = sjistbl[sjistbl_idx + 0x63];
-                    return 2;
-                case 0xB2:
-                    dest[0] = sjistbl[sjistbl_idx + 0x63];
-                    dest[1] = sjistbl[sjistbl_idx + 0x64];
-                    return 2;
-                case 0xB3:
-                    dest[0] = sjistbl[sjistbl_idx + 0x64];
-                    dest[1] = sjistbl[sjistbl_idx + 0x65];
-                    return 2;
-                case 0xB4:
-                    dest[0] = sjistbl[sjistbl_idx + 0x65];
-                    dest[1] = sjistbl[sjistbl_idx + 0x66];
-                    return 1;
-                case 0xB5:
-                    dest[0] = sjistbl[sjistbl_idx + 0x66];
-                    dest[1] = sjistbl[sjistbl_idx + 0x67];
-                    return 2;
-                case 0xB6:
-                    dest[0] = sjistbl[sjistbl_idx + 0x67];
-                    dest[1] = sjistbl[sjistbl_idx + 0x68];
-                    return 2;
-                case 0xB7:
-                    dest[0] = sjistbl[sjistbl_idx + 0x68];
-                    dest[1] = sjistbl[sjistbl_idx + 0x69];
-                    return 2;
-                case 0xB8:
-                    dest[0] = sjistbl[sjistbl_idx + 0x69];
-                    dest[1] = sjistbl[sjistbl_idx + 0x6A];
-                    dest[2] = sjistbl[sjistbl_idx + 0x6B];
-                    return 3;
-                case 0xB9:
-                    dest[0] = sjistbl[sjistbl_idx + 0x6B];
-                    dest[1] = sjistbl[sjistbl_idx + 0x6C];
-                    dest[2] = sjistbl[sjistbl_idx + 0x6D];
-                    return 3;
-                case 0xBA:
-                    dest[0] = sjistbl[sjistbl_idx + 0x6D];
-                    return 1;
-                case 0xBB:
-                    dest[0] = sjistbl[sjistbl_idx + 0x6D];
-                    dest[1] = sjistbl[sjistbl_idx + 0x6E];
-                    return 2;
-                case 0xBC:
-                    dest[0] = sjistbl[sjistbl_idx + 0x6E];
-                    dest[1] = sjistbl[sjistbl_idx + 0x6F];
-                    dest[2] = sjistbl[sjistbl_idx + 0x70];
-                    return 3;
-                case 0xBD:
-                    dest[0] = sjistbl[sjistbl_idx + 0x70];
-                    dest[1] = sjistbl[sjistbl_idx + 0x71];
-                    dest[2] = sjistbl[sjistbl_idx + 0x72];
-                    return 3;
-                case 0xBE:
-                    dest[0] = sjistbl[sjistbl_idx + 0x72];
-                    dest[1] = sjistbl[sjistbl_idx + 0x73];
-                    dest[1] = sjistbl[sjistbl_idx + 0x74];
-                    return 3;
-                case 0xBF:
-                    dest[0] = sjistbl[sjistbl_idx + 0x74];
-                    dest[1] = sjistbl[sjistbl_idx + 0x75];
-                    dest[0] = sjistbl[sjistbl_idx + 0x76];
-                    return 3;
             }
         }
 
