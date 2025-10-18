@@ -86,6 +86,7 @@ public static class FhCharset {
     private static ReadOnlySpan<byte> _op_end     => "{END}"u8;     // 0x00
     private static ReadOnlySpan<byte> _op_pause   => "{PAUSE}"u8;   // 0x01
     private static ReadOnlySpan<byte> _op_newline => "{LF}"u8;      // 0x03
+    private static ReadOnlySpan<byte> _op_space   => "{SPACE:"u8;   // 0x07
     private static ReadOnlySpan<byte> _op_time    => "{TIME:"u8;    // 0x09
     private static ReadOnlySpan<byte> _op_color   => "{COLOR:"u8;   // 0x0A
     private static ReadOnlySpan<byte> _op_btn     => "{BTN:"u8;     // 0x0B
@@ -145,6 +146,7 @@ public static class FhCharset {
             0x00                => _op_end,
             0x01                => _op_pause,
             0x03                => _op_newline,
+            0x07                => _op_space,
             0x09                => _op_time,
             0x0A                => _op_color,
             0x0B                => _op_btn,
@@ -165,6 +167,7 @@ public static class FhCharset {
             _ when expression.IndexOf(_op_end    ) != -1 => 0x00,
             _ when expression.IndexOf(_op_pause  ) != -1 => 0x01,
             _ when expression.IndexOf(_op_newline) != -1 => 0x03,
+            _ when expression.IndexOf(_op_space  ) != -1 => 0x07,
             _ when expression.IndexOf(_op_time   ) != -1 => 0x09,
             _ when expression.IndexOf(_op_color  ) != -1 => 0x0A,
             _ when expression.IndexOf(_op_btn    ) != -1 => 0x0B,
