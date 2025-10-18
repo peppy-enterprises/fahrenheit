@@ -83,18 +83,19 @@ public static class FhCharset {
      * Changing them constitutes a breaking change.
      */
 
-    private static ReadOnlySpan<byte> _op_end     => "{END}"u8;
-    private static ReadOnlySpan<byte> _op_pause   => "{PAUSE}"u8;
-    private static ReadOnlySpan<byte> _op_newline => "{LF}"u8;
-    private static ReadOnlySpan<byte> _op_time    => "{TIME:"u8;
-    private static ReadOnlySpan<byte> _op_color   => "{COLOR:"u8;
-    private static ReadOnlySpan<byte> _op_btn     => "{BTN:"u8;
-    private static ReadOnlySpan<byte> _op_choice  => "{CHOICE:"u8;
-    private static ReadOnlySpan<byte> _op_var     => "{VAR:"u8;
-    private static ReadOnlySpan<byte> _op_macro   => "{MACRO:"u8;
-    private static ReadOnlySpan<byte> _op_key     => "{KEY:"u8;
-    private static ReadOnlySpan<byte> _op_unknown => "{UNKNOWN:"u8;
+    private static ReadOnlySpan<byte> _op_end     => "{END}"u8;     // 0x00
+    private static ReadOnlySpan<byte> _op_pause   => "{PAUSE}"u8;   // 0x01
+    private static ReadOnlySpan<byte> _op_newline => "{LF}"u8;      // 0x03
+    private static ReadOnlySpan<byte> _op_time    => "{TIME:"u8;    // 0x09
+    private static ReadOnlySpan<byte> _op_color   => "{COLOR:"u8;   // 0x0A
+    private static ReadOnlySpan<byte> _op_btn     => "{BTN:"u8;     // 0x0B
+    private static ReadOnlySpan<byte> _op_choice  => "{CHOICE:"u8;  // 0x10
+    private static ReadOnlySpan<byte> _op_var     => "{VAR:"u8;     // 0x12
+    private static ReadOnlySpan<byte> _op_macro   => "{MACRO:"u8;   // 0x13-0x22
+    private static ReadOnlySpan<byte> _op_key     => "{KEY:"u8;     // 0x23
+    private static ReadOnlySpan<byte> _op_unknown => "{UNKNOWN:"u8; // any other
 
+    // the effective inverse of $"{arg1:X2}:{arg2:X2}" - see _decode_op() below
     private static byte _get_op_arg1(in ReadOnlySpan<byte> expression, in ReadOnlySpan<byte> op) {
         return byte.Parse(expression[ op.Length .. (op.Length + 2) ], NumberStyles.HexNumber);
     }
@@ -124,6 +125,12 @@ public static class FhCharset {
         return op.Length + Encoding.UTF8.GetBytes($"{op_arg1:X2}:{op_arg2:X2}}}", dest[op.Length .. ]);
     }
 
+    private static int _decode_char(in ReadOnlySpan<byte> src, Span<byte> dest, FhLangId game_lang, FhGameType game_type) {
+        return game_lang is FhLangId.Japanese or FhLangId.Korean or FhLangId.Chinese
+            ? _decode_cjk(src, dest, game_lang, game_type)
+            : _decode_us (src, dest, game_lang, game_type);
+    }
+
     private static bool _should_ignore_code_point(Rune code_point) {
         return code_point.Value is 0x0D    // U+000D - <Carriage Return> (CR)
                                 or 0x0A    // U+000A - <End of Line> (EOL, LF, NL)
@@ -131,10 +138,10 @@ public static class FhCharset {
     }
 
     /// <summary>
-    ///     For a given <paramref name="opcode"/>, produces the UTF-8 textual literal that represents it.
+    ///     For a given <paramref name="op_code"/>, produces the UTF-8 textual literal that represents it.
     /// </summary>
-    private static ReadOnlySpan<byte> _select_op_literal(byte opcode) {
-        return opcode switch {
+    private static ReadOnlySpan<byte> _select_op_literal(byte op_code) {
+        return op_code switch {
             0x00                => _op_end,
             0x01                => _op_pause,
             0x03                => _op_newline,
@@ -197,11 +204,6 @@ public static class FhCharset {
         };
     }
 
-    /* [fkelava 08/10/25 19:51]
-     * FFX.exe+646250 (DecodingGamecodeJPCHKR)
-     * literal rewrite - unoptimized
-     */
-
     /// <summary>
     ///     Decodes an expression at the start of <paramref name="src"/> and
     ///     writes the resulting UTF-8 character into <paramref name="dest"/>.
@@ -215,31 +217,21 @@ public static class FhCharset {
            Span        <byte> dest,
            FhLangId           game_lang,
            FhGameType         game_type) {
-
+        // FFX.exe+646250 (DecodingGamecodeJPCHKR) - cleaned up rewrite
         Trace.Assert(game_lang is FhLangId.Chinese or FhLangId.Japanese or FhLangId.Korean);
 
-        // L12-18
         ReadOnlySpan<byte> sjistbl     = _select_sjistbl(game_lang, game_type);
         int                sjistbl_idx = 0; // iVar4
 
-        int  i  = 0;      // simulates increment of `src` pointer
-        byte e0 = src[0]; // bVar2
+        byte e0 = src[0];             // bVar2
+        int  i  = e0 == 0x04 ? 1 : 0; // simulates increment of `src` pointer
+        byte e1 = src[i];             // bVar1
 
-        if (e0 == 0x04) {
-            i++;
-        }
-
-        byte e1 = src[i]; // bVar1
-
-        // L19-23
         if (0x5B < e1 && e1 < 0x5F && game_lang is FhLangId.Japanese) {
-            dest[0] = sjistbl[0x1E];
-            dest[1] = sjistbl[0x1F];
-            dest[2] = sjistbl[0x20];
+            sjistbl[ 0x1E .. 0x21 ].CopyTo(dest[ 0 .. 3 ]);
             return 3;
         }
 
-        // L24-32
         if (e1 < 0x30) {
             sjistbl_idx = (e1 - 0x2B) * 0xD0;
             i++;
@@ -254,59 +246,35 @@ public static class FhCharset {
 
         sjistbl_idx *= 3;
 
-        /* [fkelava 08/10/25 16:40]
-         * The game doesn't in any way bounds-check indexing into the current `sjistbl`.
-         * This is a bug, but doesn't crash the game outright. This is because the game
-         * allocates the backing buffer with TkMalloc, which:
-         *
-         * - aligns the allocation to the nearest 0x40
-         * - overallocates to the nearest multiple of ~2/4kB, presumably for page alignment
-         *
-         * so while natural game expressions can in fact overreach the sjistbl,
-         * they don't read garbage but instead return all zeroes. We mirror this more directly.
-         */
-
         if (sjistbl_idx > sjistbl.Length) {
-            Console.WriteLine($"Rejected expression {e0:X2} {e1:X2} {e2:X2} in lang {game_lang}");
-            return 3;
+            throw new Exception($"Rejected expression {e0:X2} {e1:X2} {e2:X2} in lang {game_lang}");
         }
 
-        // L33-65
-        if (sjistbl_idx == 0x1E) {
-            if (game_lang is FhLangId.Korean) {
-                dest[0] = 0x20;
-                return 1;
-            }
+        if (sjistbl_idx == 0x1E && game_lang is FhLangId.Korean) {
+            dest[0] = 0x20;
+            return 1;
         }
-        else if (0x32 < sjistbl_idx) {
-            if (sjistbl_idx == 0x33) {
-                dest[0] = sjistbl[0x33];
-                dest[1] = sjistbl[0x34];
-                return 2;
-            }
-            if (0x33 < sjistbl_idx && (game_lang is FhLangId.Chinese || sjistbl_idx < 0x78)) {
-                dest[0] = sjistbl[sjistbl_idx - 1];
-                dest[1] = sjistbl[sjistbl_idx];
-                dest[2] = sjistbl[sjistbl_idx + 1];
-                return 3;
-            }
-            if (sjistbl_idx == 0x78) {
-                dest[0] = sjistbl[0x77];
-                dest[1] = sjistbl[0x78];
-                return 2;
-            }
-            if (sjistbl_idx < 0x79) {
-                return 0;
-            }
-            dest[0] = sjistbl[sjistbl_idx - 2];
-            dest[1] = sjistbl[sjistbl_idx - 1];
-            dest[2] = sjistbl[sjistbl_idx];
+        if (sjistbl_idx <= 0x32) {
+            sjistbl[ sjistbl_idx .. (sjistbl_idx + 3) ].CopyTo(dest[ 0 .. 3 ]);
             return 3;
         }
+        if (sjistbl_idx == 0x33) {
+            sjistbl[ 0x33 .. 0x35 ].CopyTo(dest[ 0 .. 2 ]);
+            return 2;
+        }
+        if (sjistbl_idx > 0x33 && (game_lang is FhLangId.Chinese || sjistbl_idx < 0x78)) {
+            sjistbl[ (sjistbl_idx - 1) .. (sjistbl_idx + 2) ].CopyTo(dest[ 0 .. 3 ]);
+            return 3;
+        }
+        if (sjistbl_idx == 0x78) {
+            sjistbl[ 0x77 .. 0x79 ].CopyTo(dest[ 0 .. 2 ]);
+            return 2;
+        }
+        if (sjistbl_idx < 0x79) {
+            return 0;
+        }
 
-        dest[0] = sjistbl[sjistbl_idx];
-        dest[1] = sjistbl[sjistbl_idx + 1];
-        dest[2] = sjistbl[sjistbl_idx + 2];
+        sjistbl[ (sjistbl_idx - 2) .. (sjistbl_idx + 1) ].CopyTo(dest[ 0 .. 3 ]);
         return 3;
     }
 
@@ -736,10 +704,7 @@ public static class FhCharset {
     ///     Converts a given DEdit syntax <paramref name="expression"/>- a UTF-8 byte sequence starting with
     ///     U+007B and ending with U+007D- to game encoding and writes it to <paramref name="dest"/>.
     /// </summary>
-    private static int _encode_expr(
-        in ReadOnlySpan<byte> expression,
-           Span<byte>         dest) {
-
+    private static int _encode_expr(in ReadOnlySpan<byte> expression, Span<byte> dest) {
         byte               op_code = _select_op_code   (expression);
         ReadOnlySpan<byte> op      = _select_op_literal(op_code);
 
@@ -777,10 +742,80 @@ public static class FhCharset {
         throw new Exception($"unreachable - illegal expr {Convert.ToHexString(expression)}");
     }
 
+    public static int compute_encode_buffer_size(
+        in ReadOnlySpan<byte> src,
+           FhLangId?          game_lang_override = default,
+           FhGameType?        game_type_override = default) {
+
+        FhLangId   game_lang = game_lang_override ?? FhGlobal.game_lang;
+        FhGameType game_type = game_type_override ?? FhGlobal.game_type;
+
+        ReadOnlySpan<byte> sjistbl = _select_sjistbl(game_lang, game_type);
+
+        int src_offset, size;
+
+        for (src_offset = 0, size = 0; src_offset < src.Length; ) {
+            OperationStatus decode_status = Rune.DecodeFromUtf8(src[ src_offset .. ], out Rune code_point, out int consumed);
+
+            if (decode_status != OperationStatus.Done) {
+                FhInternal.Log.Info($"failed to get complete UTF8 codepoint in input; aborting (pos {src_offset}, R {decode_status})");
+                return size;
+            }
+
+            if (_should_ignore_code_point(code_point)) {
+                src_offset += consumed;
+                continue;
+            }
+
+            ReadOnlySpan<byte> bytes = src[ src_offset .. (src_offset + consumed) ];
+
+            if (code_point.Value == 0x007B) { // '{' (U+007B) - dialogue op statement opener
+                while (code_point.Value != 0x007D) {  // '}' (U+007D) - dialogue op statement terminator
+                    decode_status = Rune.DecodeFromUtf8(src[src_offset..], out code_point, out consumed);
+
+                    if (decode_status != OperationStatus.Done) {
+                        FhInternal.Log.Info($"failed to get complete UTF8 codepoint while parsing op statement; aborting (pos {src_offset}, R {decode_status})");
+                        return size;
+                    }
+
+                    src_offset += consumed;
+                }
+
+                size += 2; // worst-case
+                continue;
+            }
+
+            int sjistbl_index = sjistbl.IndexOf(bytes) + bytes.Length;
+
+            if (sjistbl_index == -1) {
+                FhInternal.Log.Error($"sequence {Convert.ToHexString(bytes)} not in sjistbl of lang {game_lang}; aborting (pos {src_offset})");
+                continue;
+            }
+
+            if (game_lang is FhLangId.Chinese or FhLangId.Japanese or FhLangId.Korean) {
+                // CJK-specific unwind - TODO: PROBABLY MORE REQUIRED
+                if (0x33 < (sjistbl_index + 0x30) && (game_lang is FhLangId.Chinese || (sjistbl_index + 0x30) < 0x78)) {
+                    sjistbl_index -= 1;
+                }
+
+                sjistbl_index /= 3;
+
+                if (sjistbl_index >= 0x410) {
+                    sjistbl_index -= 0x410;
+                    size++;
+                }
+            }
+
+            size       += (sjistbl_index + 0x30) > 0xFF ? 2 : 1;
+            src_offset += consumed;
+        }
+
+        return size;
+    }
+
     /// <summary>
-    ///     Writes into <paramref name="dest"/> the game encoding
-    ///     representation of a UTF-8 string contained in <paramref name="src"/>,
-    ///     for a given game type and language.
+    ///     Writes into <paramref name="dest"/> the game encoding representation of a
+    ///     UTF-8 string contained in <paramref name="src"/>, for a given game type and language.
     ///     <para/>
     ///     If <paramref name="game_lang_override"/> or <paramref name="game_type_override"/>
     ///     are not explicitly specified, the active game type and language are used.
@@ -888,9 +923,53 @@ public static class FhCharset {
     }
 
     /// <summary>
+    ///     Computes, in bytes, how large a buffer should be to store the decoded contents of <paramref name="src"/>.
+    /// </summary>
+    public static int compute_decode_buffer_size(
+        in ReadOnlySpan<byte> src,
+           FhLangId?          game_lang_override = default,
+           FhGameType?        game_type_override = default) {
+
+        FhLangId   game_lang = game_lang_override ?? FhGlobal.game_lang;
+        FhGameType game_type = game_type_override ?? FhGlobal.game_type;
+
+        int src_offset, size;
+        Span<byte> scratch_buffer = stackalloc byte[64]; // no single expression can exceed this size
+
+        for (src_offset = 0, size = 0; src_offset < src.Length; ) {
+            byte current_op = src[src_offset];
+            (int src_increment, int size_increment) = current_op switch {
+                0x00                  => (0, _decode_op(scratch_buffer, src[src_offset])),
+                0x01 or 0x03          => (1, _decode_op(scratch_buffer, src[src_offset])),
+                0x0A or 0x0B or 0x23  => (2, _decode_op(scratch_buffer, src[src_offset], src[src_offset + 1])),
+                0x07 or 0x09 or 0x10  => (2, _decode_op(scratch_buffer, src[src_offset], byte.CreateChecked(src[src_offset + 1] - 0x30))),
+                >= 0x13 and <= 0x22   => (2, _decode_op(scratch_buffer, src[src_offset], byte.CreateChecked(src[src_offset] - 0x13), byte.CreateChecked(src[src_offset + 1] - 0x30))),
+                0x04                  => (src[src_offset + 1] < 0x30 ? 3 : 2, _decode_cjk (src[ src_offset .. ], scratch_buffer, game_lang, game_type)),
+                >= 0x2C and <= 0x2F   => (2,                                  _decode_char(src[ src_offset .. ], scratch_buffer, game_lang, game_type)),
+                0x02 or 0x05          => (1, _decode_op(scratch_buffer, src[src_offset], src[src_offset + 1])),
+                0x06 or
+                0x08 or
+                (>= 0x0C and <= 0x0F) or
+                0x11 or
+                0x12 or
+                (>= 0x24 and <= 0x2B) => (2, _decode_op(scratch_buffer, src[src_offset], src[src_offset], src[src_offset + 1])),
+                _                     => (1, _decode_char(src[ src_offset .. ], scratch_buffer, game_lang, game_type))
+            };
+
+            src_offset += src_increment;
+            size       += size_increment;
+
+            if (current_op == 0x00) {
+                return size + "\r\n"u8.Length;
+            }
+        }
+
+        return size;
+    }
+
+    /// <summary>
     ///     Writes into <paramref name="dest"/> the UTF-8 representation of a
-    ///     game encoding string contained in <paramref name="src"/>, for a
-    ///     given game type and language.
+    ///     game encoding string contained in <paramref name="src"/>, for a given game type and language.
     ///     <para/>
     ///     If <paramref name="game_lang_override"/> or <paramref name="game_type_override"/>
     ///     are not explicitly specified, the active game type and language are used.
@@ -907,92 +986,45 @@ public static class FhCharset {
         FhLangId   game_lang = game_lang_override ?? FhGlobal.game_lang;
         FhGameType game_type = game_type_override ?? FhGlobal.game_type;
 
-        byte op_arg1,    op_arg2;
-        int  src_offset, dest_offset;
+        int src_offset, dest_offset;
 
         for (src_offset = 0, dest_offset = 0; src_offset < src.Length; ) {
-            switch (src[src_offset]) {
-                case 0x00: // {END}
-                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset]);
+            byte current_op = src[src_offset];
 
-                    // for legibility's sake
-                    ReadOnlySpan<byte> newline = "\r\n"u8;
-                    newline.CopyTo(dest[dest_offset .. ]);
+            (int src_increment, int dest_increment) = current_op switch {
+                // {END} - statement terminator
+                0x00                  => (0, _decode_op(dest[ dest_offset .. ], src[src_offset])),
+                // {PAUSE|LF} - 0-arg ops
+                0x01 or 0x03          => (1, _decode_op(dest[ dest_offset .. ], src[src_offset])),
+                // {COLOR|BTN|KEY} - 1-arg ops
+                0x0A or 0x0B or 0x23  => (2, _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset + 1])),
+                // {SPACE|TIME|CHOICE} - 1-arg ops with 0x30-based indexing
+                0x07 or 0x09 or 0x10  => (2, _decode_op(dest[ dest_offset .. ], src[src_offset], byte.CreateChecked(src[src_offset + 1] - 0x30))),
+                // {MACRO} - 2-arg ops where the op itself is transformed to an argument:
+                >= 0x13 and <= 0x22   => (2, _decode_op(dest[ dest_offset .. ], src[src_offset], byte.CreateChecked(src[src_offset] - 0x13), byte.CreateChecked(src[src_offset + 1] - 0x30))),
+                // Multi-byte character expressions - 0x04 is CJK-only, 0x2C-2F for any charset
+                0x04                  => (src[src_offset + 1] < 0x30 ? 3 : 2, _decode_cjk (src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type)),
+                >= 0x2C and <= 0x2F   => (2,                                  _decode_char(src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type)),
+                // Unknown ops, embedded literally
+                0x02 or 0x05          => (1, _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset + 1])),
+                0x06 or
+                0x08 or
+                (>= 0x0C and <= 0x0F) or
+                0x11 or
+                0x12 or
+                (>= 0x24 and <= 0x2B) => (2, _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset], src[src_offset + 1])),
+                // fall through: regular character
+                _                     => (1, _decode_char(src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type))
+            };
 
-                    return dest_offset + newline.Length;
+            src_offset  += src_increment;
+            dest_offset += dest_increment;
 
-                // 0-arg ops
+            if (current_op == 0x00) {
+                ReadOnlySpan<byte> newline = "\r\n"u8;
+                newline.CopyTo(dest[dest_offset .. ]);
 
-                case 0x01 or 0x03: // {PAUSE}, {LF}
-                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset]);
-                    src_offset  += 1;
-                    break;
-
-                // 1-arg ops
-
-                case 0x0A or 0x0B or 0x23: // {COLOR}, {BTN}, {KEY}
-                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset + 1]);
-                    src_offset  += 2;
-                    break;
-
-                // 1-arg ops with 0x30-based indexing
-
-                case 0x07 or 0x09 or 0x10: // {SPACE}, {TIME}, {CHOICE}
-                    op_arg1 = byte.CreateChecked(src[src_offset + 1] - 0x30);
-
-                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], op_arg1);
-                    src_offset  += 2;
-                    break;
-
-                // 2-arg ops where the op itself is transformed to an argument
-
-                case >= 0x13 and <= 0x22: // {MACRO}
-                    op_arg1 = byte.CreateChecked(src[src_offset]     - 0x13);
-                    op_arg2 = byte.CreateChecked(src[src_offset + 1] - 0x30);
-
-                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], op_arg1, op_arg2);
-                    src_offset  += 2;
-                    break;
-
-                // Multi-byte character expressions
-
-                case 0x04: // {CJK_EXT_0}
-                    dest_offset += _decode_cjk(src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type);
-                    src_offset  += src[src_offset + 1] < 0x30 ? 3 : 2;
-                    break;
-
-                case >= 0x2C and <= 0x2F: // {CJK_EXT_(1|2|3|4)}
-                    dest_offset += game_lang is FhLangId.Japanese or FhLangId.Korean or FhLangId.Chinese
-                        ? _decode_cjk(src[src_offset..], dest[dest_offset..], game_lang, game_type)
-                        : _decode_us (src[src_offset..], dest[dest_offset..], game_lang, game_type);
-
-                    src_offset += 2;
-                    break;
-
-                // Unknown-unhandled ops embedded literally
-
-                case 0x02 or 0x05:
-                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset + 1]);
-                    src_offset  += 1;
-                    break;
-
-                case 0x06:
-                case 0x08:
-                case >= 0x0C and <= 0x0F:
-                case 0x11:
-                case 0x12:
-                case >= 0x24 and <= 0x2B:
-                    dest_offset += _decode_op(dest[ dest_offset .. ], src[src_offset], src[src_offset], src[src_offset + 1]);
-                    src_offset  += 2;
-                    break;
-
-                default:
-                    dest_offset += game_lang is FhLangId.Japanese or FhLangId.Korean or FhLangId.Chinese
-                        ? _decode_cjk(src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type)
-                        : _decode_us (src[ src_offset .. ], dest[ dest_offset .. ], game_lang, game_type);
-
-                    src_offset += 1;
-                    break;
+                return dest_offset + newline.Length;
             }
         }
 
