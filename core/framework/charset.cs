@@ -26,30 +26,6 @@ public enum FhDialogueIndexType {
     I16_X1 = 4,
 }
 
-/* [fkelava 16/10/25 19:55]
- * Bytes below 0x30 are to be interpreted as a dialogue 'op',
- * which is a modifier to the dialogue that follows it.
- *
- * These ops may take one or two arguments, and the opcode itself
- * sometimes acts as one of them after transformation.
- */
-public enum FhDialogueOpCode {
-    PAUSE      = 0x01,
-    LINE_BREAK = 0x03,
-    CJK_EXT_0  = 0x04,
-    SPACE      = 0x07,
-    TIME       = 0x09,
-    COLOR      = 0x0A,
-    CTRL_BTN   = 0x0B,
-    CHOICE     = 0x10,
-    MACRO      = 0x13,
-    KEY        = 0x23,
-    CJK_EXT_1  = 0x2C,
-    CJK_EXT_2  = 0x2D,
-    CJK_EXT_3  = 0x2E,
-    CJK_EXT_4  = 0x2F,
-}
-
 /* [fkelava 16/10/25 20:13]
  * A macro dictionary is conceptually a concatenation of up to ten dialogue files
  * with a 64-byte header that indicates the start of each 'section', or individual
@@ -231,7 +207,7 @@ public static class FhCharset {
         byte e1 = src[i];             // bVar1
 
         if (0x5B < e1 && e1 < 0x5F && game_lang is FhLangId.Japanese) {
-            sjistbl[ 0x1E .. 0x21 ].CopyTo(dest[ 0 .. 3 ]);
+            sjistbl[ 0x1E .. 0x21 ].CopyTo(dest);
             return 3;
         }
 
@@ -270,10 +246,6 @@ public static class FhCharset {
         return valid_range.End.Value - valid_range.Start.Value;
     }
 
-    /* [fkelava 08/10/25 19:51]
-     * FFX.exe+6463a0 (DecodingGamecodeUK)
-     * literal rewrite - unoptimized
-     */
     /// <summary>
     ///     Decodes an expression at the start of <paramref name="src"/> and
     ///     writes the resulting UTF-8 character into <paramref name="dest"/>.
@@ -287,7 +259,7 @@ public static class FhCharset {
            Span        <byte> dest,
            FhLangId           game_lang,
            FhGameType         game_type) {
-
+        // FFX.exe+6463a0 (DecodingGamecodeUK) - cleaned up rewrite
         Trace.Assert(game_lang is not (FhLangId.Chinese or FhLangId.Korean or FhLangId.Japanese));
 
         // L9-15
@@ -306,58 +278,62 @@ public static class FhCharset {
         sjistbl_idx += (e1 - 0x30);
 
         Range? copy_range = sjistbl_idx switch {
-            < 0xC  => sjistbl_idx          .. (sjistbl_idx + 0x01),
-              0xC  => 0xC                  .. 0xF,
-              0x3F => 0x43                 .. 0x46,
-              0x5E => (sjistbl_idx + 0x06) .. (sjistbl_idx + 0x08),
-              0x5F => (sjistbl_idx + 0x07) .. (sjistbl_idx + 0x0A),
-              0x60 => (sjistbl_idx + 0x09) .. (sjistbl_idx + 0x0C),
-              0x61 => (sjistbl_idx + 0x0B) .. (sjistbl_idx + 0x0E),
-              0x62 => (sjistbl_idx + 0x0D) .. (sjistbl_idx + 0x10),
-              0x63 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x10),
-              0x64 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x12),
-              0x65 => (sjistbl_idx + 0x11) .. (sjistbl_idx + 0x14),
-              0x66 => (sjistbl_idx + 0x13) .. (sjistbl_idx + 0x16),
-              0x67 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x16),
-              0x68 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x17),
-              0x69 => (sjistbl_idx + 0x16) .. (sjistbl_idx + 0x19),
-              0x6A => (sjistbl_idx + 0x18) .. (sjistbl_idx + 0x1B),
-              0x6B => (sjistbl_idx + 0x1A) .. (sjistbl_idx + 0x1D),
-              0x6C => (sjistbl_idx + 0x1C) .. (sjistbl_idx + 0x1F),
-              0x70 => 0x91                 .. 0x92,
-              0xA0 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x51),
-              0xA1 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x52),
-              0xA2 => (sjistbl_idx + 0x51) .. (sjistbl_idx + 0x54),
-              0xA3 => (sjistbl_idx + 0x53) .. (sjistbl_idx + 0x56),
-              0xA4 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x56),
-              0xA5 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x58),
-              0xA6 => (sjistbl_idx + 0x57) .. (sjistbl_idx + 0x5A),
-              0xA7 or
-              0xA8 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5A),
-              0xA9 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5C),
-              0xAA => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5C),
-              0xAB => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5E),
-              0xAC => (sjistbl_idx + 0x5D) .. (sjistbl_idx + 0x5F),
-              0xAD => (sjistbl_idx + 0x5E) .. (sjistbl_idx + 0x60),
-              0xAE => (sjistbl_idx + 0x5F) .. (sjistbl_idx + 0x61),
-              0xAF => (sjistbl_idx + 0x60) .. (sjistbl_idx + 0x62),
-              0xB0 => (sjistbl_idx + 0x61) .. (sjistbl_idx + 0x63),
-              0xB1 => (sjistbl_idx + 0x62) .. (sjistbl_idx + 0x64),
-              0xB2 => (sjistbl_idx + 0x63) .. (sjistbl_idx + 0x65),
-              0xB3 => (sjistbl_idx + 0x64) .. (sjistbl_idx + 0x66),
-              0xB4 => (sjistbl_idx + 0x65) .. (sjistbl_idx + 0x67),
-              0xB5 => (sjistbl_idx + 0x66) .. (sjistbl_idx + 0x68),
-              0xB6 => (sjistbl_idx + 0x67) .. (sjistbl_idx + 0x69),
-              0xB7 => (sjistbl_idx + 0x68) .. (sjistbl_idx + 0x6A),
-              0xB8 => (sjistbl_idx + 0x69) .. (sjistbl_idx + 0x6C),
-              0xB9 => (sjistbl_idx + 0x6B) .. (sjistbl_idx + 0x6E),
-              0xBA => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6E),
-              0xBB => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6F),
-              0xBC => (sjistbl_idx + 0x6E) .. (sjistbl_idx + 0x71),
-              0xBD => (sjistbl_idx + 0x70) .. (sjistbl_idx + 0x73),
-              0xBE => (sjistbl_idx + 0x72) .. (sjistbl_idx + 0x75),
-              0xBF => (sjistbl_idx + 0x74) .. (sjistbl_idx + 0x77),
-              _    => null,
+          < 0xC  => sjistbl_idx          .. (sjistbl_idx + 0x01),
+            0xC  => 0xC                  .. 0xF,
+          < 0x11 => (sjistbl_idx + 0x02) .. (sjistbl_idx + 0x03),
+            0x11 => 0x13                 .. 0x16,
+          < 0x3F => (sjistbl_idx + 0x04) .. (sjistbl_idx + 0x05),
+            0x3F => 0x43                 .. 0x46,
+          < 0x5E => (sjistbl_idx + 0x06) .. (sjistbl_idx + 0x07),
+            0x5E => (sjistbl_idx + 0x06) .. (sjistbl_idx + 0x08),
+            0x5F => (sjistbl_idx + 0x07) .. (sjistbl_idx + 0x0A),
+            0x60 => (sjistbl_idx + 0x09) .. (sjistbl_idx + 0x0C),
+            0x61 => (sjistbl_idx + 0x0B) .. (sjistbl_idx + 0x0E),
+            0x62 => (sjistbl_idx + 0x0D) .. (sjistbl_idx + 0x10),
+            0x63 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x10),
+            0x64 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x12),
+            0x65 => (sjistbl_idx + 0x11) .. (sjistbl_idx + 0x14),
+            0x66 => (sjistbl_idx + 0x13) .. (sjistbl_idx + 0x16),
+            0x67 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x16),
+            0x68 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x17),
+            0x69 => (sjistbl_idx + 0x16) .. (sjistbl_idx + 0x19),
+            0x6A => (sjistbl_idx + 0x18) .. (sjistbl_idx + 0x1B),
+            0x6B => (sjistbl_idx + 0x1A) .. (sjistbl_idx + 0x1D),
+            0x6C => (sjistbl_idx + 0x1C) .. (sjistbl_idx + 0x1F),
+            0x70 => 0x91                 .. 0x92,
+            0xA0 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x51),
+            0xA1 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x52),
+            0xA2 => (sjistbl_idx + 0x51) .. (sjistbl_idx + 0x54),
+            0xA3 => (sjistbl_idx + 0x53) .. (sjistbl_idx + 0x56),
+            0xA4 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x56),
+            0xA5 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x58),
+            0xA6 => (sjistbl_idx + 0x57) .. (sjistbl_idx + 0x5A),
+            0xA7 or
+            0xA8 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5A),
+            0xA9 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5C),
+            0xAA => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5C),
+            0xAB => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5E),
+            0xAC => (sjistbl_idx + 0x5D) .. (sjistbl_idx + 0x5F),
+            0xAD => (sjistbl_idx + 0x5E) .. (sjistbl_idx + 0x60),
+            0xAE => (sjistbl_idx + 0x5F) .. (sjistbl_idx + 0x61),
+            0xAF => (sjistbl_idx + 0x60) .. (sjistbl_idx + 0x62),
+            0xB0 => (sjistbl_idx + 0x61) .. (sjistbl_idx + 0x63),
+            0xB1 => (sjistbl_idx + 0x62) .. (sjistbl_idx + 0x64),
+            0xB2 => (sjistbl_idx + 0x63) .. (sjistbl_idx + 0x65),
+            0xB3 => (sjistbl_idx + 0x64) .. (sjistbl_idx + 0x66),
+            0xB4 => (sjistbl_idx + 0x65) .. (sjistbl_idx + 0x67),
+            0xB5 => (sjistbl_idx + 0x66) .. (sjistbl_idx + 0x68),
+            0xB6 => (sjistbl_idx + 0x67) .. (sjistbl_idx + 0x69),
+            0xB7 => (sjistbl_idx + 0x68) .. (sjistbl_idx + 0x6A),
+            0xB8 => (sjistbl_idx + 0x69) .. (sjistbl_idx + 0x6C),
+            0xB9 => (sjistbl_idx + 0x6B) .. (sjistbl_idx + 0x6E),
+            0xBA => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6E),
+            0xBB => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6F),
+            0xBC => (sjistbl_idx + 0x6E) .. (sjistbl_idx + 0x71),
+            0xBD => (sjistbl_idx + 0x70) .. (sjistbl_idx + 0x73),
+            0xBE => (sjistbl_idx + 0x72) .. (sjistbl_idx + 0x75),
+            0xBF => (sjistbl_idx + 0x74) .. (sjistbl_idx + 0x77),
+            _    => null,
         };
 
         if (copy_range is Range valid_range) {
@@ -365,38 +341,16 @@ public static class FhCharset {
             return valid_range.End.Value - valid_range.Start.Value;
         }
 
-        // L16-L116
-        if (sjistbl_idx < 0x6D) {
-            if (sjistbl_idx - 0xD < 0x04) {
-                dest[0] = sjistbl[sjistbl_idx + 2];
-                return 1;
-            }
-            if (sjistbl_idx != 0x11) {
-                if (sjistbl_idx - 0x12 < 0x2D) {
-                    dest[0] = sjistbl[sjistbl_idx + 4];
-                    return 1;
-                }
-                if (sjistbl_idx - 0x40 < 0x1E) {
-                    dest[0] = sjistbl[sjistbl_idx + 6];
-                    return 1;
-                }
-
-                return 0;
-            }
-        }
-
         // L117-L244
-        if (sjistbl_idx - 0x6D < 0x03) {
+        if (sjistbl_idx < 0x70) {
             dest[0] = sjistbl[(sjistbl_idx * 2) - 0x4F];
             dest[1] = sjistbl[(sjistbl_idx * 2) - 0x4F + 1];
             return 2;
         }
-        else {
-            if (0x2E >= sjistbl_idx - 0x71U) {
-                dest[0] = sjistbl[(sjistbl_idx * 2) - 0x50];
-                dest[1] = sjistbl[(sjistbl_idx * 2) - 0x50 + 1];
-                return 2;
-            }
+        else if (sjistbl_idx <= 0x9F) {
+            dest[0] = sjistbl[(sjistbl_idx * 2) - 0x50];
+            dest[1] = sjistbl[(sjistbl_idx * 2) - 0x50 + 1];
+            return 2;
         }
 
         return 0;
