@@ -229,21 +229,17 @@ public static class FhCharset {
             throw new Exception($"Rejected expression {e0:X2} {e1:X2} {e2:X2} in lang {game_lang}");
         }
 
-        Range? copy_range = sjistbl_idx switch {
-               0x1E when game_lang is FhLangId.Korean                        => 0x20              .. 0x21,
-            <= 0x32                                                          => sjistbl_idx       .. (sjistbl_idx + 3),
-               0x33                                                          => 0x33              .. 0x35,
-             > 0x33 when game_lang is FhLangId.Chinese || sjistbl_idx < 0x78 => (sjistbl_idx - 1) .. (sjistbl_idx + 2),
-               0x78                                                          => 0x77              .. 0x79,
-             < 0x79                                                          => null,
-               _                                                             => (sjistbl_idx - 2) .. (sjistbl_idx + 1)
+        Range copy_range = sjistbl_idx switch {
+            0x1E when game_lang is FhLangId.Korean                        => 0x20              .. 0x21,
+         <= 0x32                                                          => sjistbl_idx       .. (sjistbl_idx + 3),
+            0x33                                                          => 0x33              .. 0x35,
+          > 0x33 when game_lang is FhLangId.Chinese || sjistbl_idx < 0x78 => (sjistbl_idx - 1) .. (sjistbl_idx + 2),
+            0x78                                                          => 0x77              .. 0x79,
+            _                                                             => (sjistbl_idx - 2) .. (sjistbl_idx + 1)
         };
 
-        if (copy_range is not Range valid_range)
-            return 0;
-
-        sjistbl[valid_range].CopyTo(dest);
-        return valid_range.End.Value - valid_range.Start.Value;
+        sjistbl[copy_range].CopyTo(dest);
+        return copy_range.End.Value - copy_range.Start.Value;
     }
 
     /// <summary>
@@ -262,7 +258,6 @@ public static class FhCharset {
         // FFX.exe+6463a0 (DecodingGamecodeUK) - cleaned up rewrite
         Trace.Assert(game_lang is not (FhLangId.Chinese or FhLangId.Korean or FhLangId.Japanese));
 
-        // L9-15
         ReadOnlySpan<byte> sjistbl     = _select_sjistbl(game_lang, game_type);
         int                sjistbl_idx = 0; // iVar2
 
@@ -278,82 +273,150 @@ public static class FhCharset {
         sjistbl_idx += (e1 - 0x30);
 
         Range? copy_range = sjistbl_idx switch {
-          < 0xC  => sjistbl_idx          .. (sjistbl_idx + 0x01),
-            0xC  => 0xC                  .. 0xF,
-          < 0x11 => (sjistbl_idx + 0x02) .. (sjistbl_idx + 0x03),
-            0x11 => 0x13                 .. 0x16,
-          < 0x3F => (sjistbl_idx + 0x04) .. (sjistbl_idx + 0x05),
-            0x3F => 0x43                 .. 0x46,
-          < 0x5E => (sjistbl_idx + 0x06) .. (sjistbl_idx + 0x07),
-            0x5E => (sjistbl_idx + 0x06) .. (sjistbl_idx + 0x08),
-            0x5F => (sjistbl_idx + 0x07) .. (sjistbl_idx + 0x0A),
-            0x60 => (sjistbl_idx + 0x09) .. (sjistbl_idx + 0x0C),
-            0x61 => (sjistbl_idx + 0x0B) .. (sjistbl_idx + 0x0E),
-            0x62 => (sjistbl_idx + 0x0D) .. (sjistbl_idx + 0x10),
-            0x63 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x10),
-            0x64 => (sjistbl_idx + 0x0F) .. (sjistbl_idx + 0x12),
-            0x65 => (sjistbl_idx + 0x11) .. (sjistbl_idx + 0x14),
-            0x66 => (sjistbl_idx + 0x13) .. (sjistbl_idx + 0x16),
-            0x67 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x16),
-            0x68 => (sjistbl_idx + 0x15) .. (sjistbl_idx + 0x17),
-            0x69 => (sjistbl_idx + 0x16) .. (sjistbl_idx + 0x19),
-            0x6A => (sjistbl_idx + 0x18) .. (sjistbl_idx + 0x1B),
-            0x6B => (sjistbl_idx + 0x1A) .. (sjistbl_idx + 0x1D),
-            0x6C => (sjistbl_idx + 0x1C) .. (sjistbl_idx + 0x1F),
-            0x70 => 0x91                 .. 0x92,
-            0xA0 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x51),
-            0xA1 => (sjistbl_idx + 0x50) .. (sjistbl_idx + 0x52),
-            0xA2 => (sjistbl_idx + 0x51) .. (sjistbl_idx + 0x54),
-            0xA3 => (sjistbl_idx + 0x53) .. (sjistbl_idx + 0x56),
-            0xA4 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x56),
-            0xA5 => (sjistbl_idx + 0x55) .. (sjistbl_idx + 0x58),
-            0xA6 => (sjistbl_idx + 0x57) .. (sjistbl_idx + 0x5A),
+          < 0xC  => sjistbl_idx                .. (sjistbl_idx + 0x01),
+            0xC  => 0xC                        .. 0xF,
+          < 0x11 => (sjistbl_idx + 0x02)       .. (sjistbl_idx + 0x03),
+            0x11 => 0x13                       .. 0x16,
+          < 0x3F => (sjistbl_idx + 0x04)       .. (sjistbl_idx + 0x05),
+            0x3F => 0x43                       .. 0x46,
+          < 0x5E => (sjistbl_idx + 0x06)       .. (sjistbl_idx + 0x07),
+            0x5E => (sjistbl_idx + 0x06)       .. (sjistbl_idx + 0x08),
+            0x5F => (sjistbl_idx + 0x07)       .. (sjistbl_idx + 0x0A),
+            0x60 => (sjistbl_idx + 0x09)       .. (sjistbl_idx + 0x0C),
+            0x61 => (sjistbl_idx + 0x0B)       .. (sjistbl_idx + 0x0E),
+            0x62 => (sjistbl_idx + 0x0D)       .. (sjistbl_idx + 0x10),
+            0x63 => (sjistbl_idx + 0x0F)       .. (sjistbl_idx + 0x10),
+            0x64 => (sjistbl_idx + 0x0F)       .. (sjistbl_idx + 0x12),
+            0x65 => (sjistbl_idx + 0x11)       .. (sjistbl_idx + 0x14),
+            0x66 => (sjistbl_idx + 0x13)       .. (sjistbl_idx + 0x16),
+            0x67 => (sjistbl_idx + 0x15)       .. (sjistbl_idx + 0x16),
+            0x68 => (sjistbl_idx + 0x15)       .. (sjistbl_idx + 0x17),
+            0x69 => (sjistbl_idx + 0x16)       .. (sjistbl_idx + 0x19),
+            0x6A => (sjistbl_idx + 0x18)       .. (sjistbl_idx + 0x1B),
+            0x6B => (sjistbl_idx + 0x1A)       .. (sjistbl_idx + 0x1D),
+            0x6C => (sjistbl_idx + 0x1C)       .. (sjistbl_idx + 0x1F),
+          < 0x70 => ((sjistbl_idx * 2) - 0x4F) .. ((sjistbl_idx * 2) - 0x4F + 2),
+            0x70 => 0x91                       .. 0x92,
+         <= 0x9F => ((sjistbl_idx * 2) - 0x50) .. ((sjistbl_idx * 2) - 0x50 + 2),
+            0xA0 => (sjistbl_idx + 0x50)       .. (sjistbl_idx + 0x51),
+            0xA1 => (sjistbl_idx + 0x50)       .. (sjistbl_idx + 0x52),
+            0xA2 => (sjistbl_idx + 0x51)       .. (sjistbl_idx + 0x54),
+            0xA3 => (sjistbl_idx + 0x53)       .. (sjistbl_idx + 0x56),
+            0xA4 => (sjistbl_idx + 0x55)       .. (sjistbl_idx + 0x56),
+            0xA5 => (sjistbl_idx + 0x55)       .. (sjistbl_idx + 0x58),
+            0xA6 => (sjistbl_idx + 0x57)       .. (sjistbl_idx + 0x5A),
             0xA7 or
-            0xA8 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5A),
-            0xA9 => (sjistbl_idx + 0x59) .. (sjistbl_idx + 0x5C),
-            0xAA => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5C),
-            0xAB => (sjistbl_idx + 0x5B) .. (sjistbl_idx + 0x5E),
-            0xAC => (sjistbl_idx + 0x5D) .. (sjistbl_idx + 0x5F),
-            0xAD => (sjistbl_idx + 0x5E) .. (sjistbl_idx + 0x60),
-            0xAE => (sjistbl_idx + 0x5F) .. (sjistbl_idx + 0x61),
-            0xAF => (sjistbl_idx + 0x60) .. (sjistbl_idx + 0x62),
-            0xB0 => (sjistbl_idx + 0x61) .. (sjistbl_idx + 0x63),
-            0xB1 => (sjistbl_idx + 0x62) .. (sjistbl_idx + 0x64),
-            0xB2 => (sjistbl_idx + 0x63) .. (sjistbl_idx + 0x65),
-            0xB3 => (sjistbl_idx + 0x64) .. (sjistbl_idx + 0x66),
-            0xB4 => (sjistbl_idx + 0x65) .. (sjistbl_idx + 0x67),
-            0xB5 => (sjistbl_idx + 0x66) .. (sjistbl_idx + 0x68),
-            0xB6 => (sjistbl_idx + 0x67) .. (sjistbl_idx + 0x69),
-            0xB7 => (sjistbl_idx + 0x68) .. (sjistbl_idx + 0x6A),
-            0xB8 => (sjistbl_idx + 0x69) .. (sjistbl_idx + 0x6C),
-            0xB9 => (sjistbl_idx + 0x6B) .. (sjistbl_idx + 0x6E),
-            0xBA => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6E),
-            0xBB => (sjistbl_idx + 0x6D) .. (sjistbl_idx + 0x6F),
-            0xBC => (sjistbl_idx + 0x6E) .. (sjistbl_idx + 0x71),
-            0xBD => (sjistbl_idx + 0x70) .. (sjistbl_idx + 0x73),
-            0xBE => (sjistbl_idx + 0x72) .. (sjistbl_idx + 0x75),
-            0xBF => (sjistbl_idx + 0x74) .. (sjistbl_idx + 0x77),
+            0xA8 => (sjistbl_idx + 0x59)       .. (sjistbl_idx + 0x5A),
+            0xA9 => (sjistbl_idx + 0x59)       .. (sjistbl_idx + 0x5C),
+            0xAA => (sjistbl_idx + 0x5B)       .. (sjistbl_idx + 0x5C),
+            0xAB => (sjistbl_idx + 0x5B)       .. (sjistbl_idx + 0x5E),
+            0xAC => (sjistbl_idx + 0x5D)       .. (sjistbl_idx + 0x5F),
+            0xAD => (sjistbl_idx + 0x5E)       .. (sjistbl_idx + 0x60),
+            0xAE => (sjistbl_idx + 0x5F)       .. (sjistbl_idx + 0x61),
+            0xAF => (sjistbl_idx + 0x60)       .. (sjistbl_idx + 0x62),
+            0xB0 => (sjistbl_idx + 0x61)       .. (sjistbl_idx + 0x63),
+            0xB1 => (sjistbl_idx + 0x62)       .. (sjistbl_idx + 0x64),
+            0xB2 => (sjistbl_idx + 0x63)       .. (sjistbl_idx + 0x65),
+            0xB3 => (sjistbl_idx + 0x64)       .. (sjistbl_idx + 0x66),
+            0xB4 => (sjistbl_idx + 0x65)       .. (sjistbl_idx + 0x67),
+            0xB5 => (sjistbl_idx + 0x66)       .. (sjistbl_idx + 0x68),
+            0xB6 => (sjistbl_idx + 0x67)       .. (sjistbl_idx + 0x69),
+            0xB7 => (sjistbl_idx + 0x68)       .. (sjistbl_idx + 0x6A),
+            0xB8 => (sjistbl_idx + 0x69)       .. (sjistbl_idx + 0x6C),
+            0xB9 => (sjistbl_idx + 0x6B)       .. (sjistbl_idx + 0x6E),
+            0xBA => (sjistbl_idx + 0x6D)       .. (sjistbl_idx + 0x6E),
+            0xBB => (sjistbl_idx + 0x6D)       .. (sjistbl_idx + 0x6F),
+            0xBC => (sjistbl_idx + 0x6E)       .. (sjistbl_idx + 0x71),
+            0xBD => (sjistbl_idx + 0x70)       .. (sjistbl_idx + 0x73),
+            0xBE => (sjistbl_idx + 0x72)       .. (sjistbl_idx + 0x75),
+            0xBF => (sjistbl_idx + 0x74)       .. (sjistbl_idx + 0x77),
             _    => null,
         };
 
-        if (copy_range is Range valid_range) {
-            sjistbl[valid_range].CopyTo(dest);
-            return valid_range.End.Value - valid_range.Start.Value;
-        }
+        if (copy_range is not Range valid_range)
+            return 0;
 
-        // L117-L244
-        if (sjistbl_idx < 0x70) {
-            dest[0] = sjistbl[(sjistbl_idx * 2) - 0x4F];
-            dest[1] = sjistbl[(sjistbl_idx * 2) - 0x4F + 1];
-            return 2;
-        }
-        else if (sjistbl_idx <= 0x9F) {
-            dest[0] = sjistbl[(sjistbl_idx * 2) - 0x50];
-            dest[1] = sjistbl[(sjistbl_idx * 2) - 0x50 + 1];
-            return 2;
-        }
+        sjistbl[valid_range].CopyTo(dest);
+        return valid_range.End.Value - valid_range.Start.Value;
+    }
 
-        return 0;
+    /* [fkelava 20/10/25 14:03]
+     * Shift-JIS tables can arbitrarily combine ASCII and UTF-8 characters, most prominently
+     * in the Western encoding tables. In the original game they 'account' for this by
+     * manually fixing up the byte offset, as seen above in _decode_cjk() and _decode_us().
+     *
+     * These functions apply the inverse, for encoding purposes.
+     */
+
+    private static int _select_remap_cjk(int sjistbl_idx, FhLangId game_lang) {
+        sjistbl_idx += sjistbl_idx switch {
+            0x1E when game_lang is FhLangId.Korean                         => 2,
+         <= 0x33                                                           => 0,
+          > 0x33 when game_lang is FhLangId.Chinese || sjistbl_idx <= 0x78 => -1,
+            _                                                              => -2
+        };
+
+        return sjistbl_idx /= 3;
+    }
+
+    private static int _select_remap_us(int sjistbl_idx) {
+        return sjistbl_idx switch {
+         <= 0xC  => sjistbl_idx,
+         <= 0x11 => sjistbl_idx - 0x02,
+         <= 0x3F => sjistbl_idx - 0x04,
+          < 0x5E => sjistbl_idx - 0x06,
+            0x5E => sjistbl_idx - 0x06,
+            0x5F => sjistbl_idx - 0x07,
+            0x60 => sjistbl_idx - 0x09,
+            0x61 => sjistbl_idx - 0x0B,
+            0x62 => sjistbl_idx - 0x0D,
+            0x63 => sjistbl_idx - 0x0F,
+            0x64 => sjistbl_idx - 0x0F,
+            0x65 => sjistbl_idx - 0x11,
+            0x66 => sjistbl_idx - 0x13,
+            0x67 => sjistbl_idx - 0x15,
+            0x68 => sjistbl_idx - 0x15,
+            0x69 => sjistbl_idx - 0x16,
+            0x6A => sjistbl_idx - 0x18,
+            0x6B => sjistbl_idx - 0x1A,
+            0x6C => sjistbl_idx - 0x1C,
+          < 0x70 => (sjistbl_idx * 2) - 0x4F,
+            0x70 => 0x91,
+         <= 0x9F => (sjistbl_idx * 2) - 0x50,
+            0xA0 => sjistbl_idx - 0x50,
+            0xA1 => sjistbl_idx - 0x50,
+            0xA2 => sjistbl_idx - 0x51,
+            0xA3 => sjistbl_idx - 0x53,
+            0xA4 => sjistbl_idx - 0x55,
+            0xA5 => sjistbl_idx - 0x55,
+            0xA6 => sjistbl_idx - 0x57,
+            0xA7 or
+            0xA8 => sjistbl_idx - 0x59,
+            0xA9 => sjistbl_idx - 0x59,
+            0xAA => sjistbl_idx - 0x5B,
+            0xAB => sjistbl_idx - 0x5B,
+            0xAC => sjistbl_idx - 0x5D,
+            0xAD => sjistbl_idx - 0x5E,
+            0xAE => sjistbl_idx - 0x5F,
+            0xAF => sjistbl_idx - 0x60,
+            0xB0 => sjistbl_idx - 0x61,
+            0xB1 => sjistbl_idx - 0x62,
+            0xB2 => sjistbl_idx - 0x63,
+            0xB3 => sjistbl_idx - 0x64,
+            0xB4 => sjistbl_idx - 0x65,
+            0xB5 => sjistbl_idx - 0x66,
+            0xB6 => sjistbl_idx - 0x67,
+            0xB7 => sjistbl_idx - 0x68,
+            0xB8 => sjistbl_idx - 0x69,
+            0xB9 => sjistbl_idx - 0x6B,
+            0xBA => sjistbl_idx - 0x6D,
+            0xBB => sjistbl_idx - 0x6D,
+            0xBC => sjistbl_idx - 0x6E,
+            0xBD => sjistbl_idx - 0x70,
+            0xBE => sjistbl_idx - 0x72,
+            0xBF => sjistbl_idx - 0x74,
+            _    => throw new Exception($"no remap rule for {sjistbl_idx}")
+        };
     }
 
     /// <summary>
@@ -518,6 +581,9 @@ public static class FhCharset {
         throw new Exception($"unreachable - illegal expr {Convert.ToHexString(expression)}");
     }
 
+    /// <summary>
+    ///     Computes, in bytes, how large a buffer should be to store the encoded contents of <paramref name="src"/>.
+    /// </summary>
     public static int compute_encode_buffer_size(
         in ReadOnlySpan<byte> src,
            FhLangId?          game_lang_override = default,
@@ -663,25 +729,20 @@ public static class FhCharset {
              * of _decode_us() and _decode_cjk().
              */
 
-            int sjistbl_index = sjistbl.IndexOf(bytes) + bytes.Length;
+            int sjistbl_index = sjistbl.IndexOf(bytes) + (bytes.Length - 1);
 
             if (sjistbl_index == -1) {
                 FhInternal.Log.Error($"sequence {Convert.ToHexString(bytes)} not in sjistbl of lang {game_lang}; aborting (pos {src_offset})");
                 continue;
             }
 
-            if (game_lang is FhLangId.Chinese or FhLangId.Japanese or FhLangId.Korean) {
-                // CJK-specific unwind - TODO: PROBABLY MORE REQUIRED
-                if (0x33 < (sjistbl_index + 0x30) && (game_lang is FhLangId.Chinese || (sjistbl_index + 0x30) < 0x78)) {
-                    sjistbl_index -= 1;
-                }
+            sjistbl_index = game_lang is FhLangId.Chinese or FhLangId.Japanese or FhLangId.Korean
+                ? _select_remap_cjk(sjistbl_index, game_lang)
+                : _select_remap_us (sjistbl_index);
 
-                sjistbl_index /= 3;
-
-                if (sjistbl_index >= 0x410) {
-                    sjistbl_index -= 0x410;
-                    dest[dest_offset++] = 0x04;
-                }
+            if (sjistbl_index >= 0x410) {
+                sjistbl_index -= 0x410;
+                dest[dest_offset++] = 0x04;
             }
 
             if ((sjistbl_index + 0x30) > 0xFF) {
