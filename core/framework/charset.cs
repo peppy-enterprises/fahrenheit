@@ -634,18 +634,13 @@ public static class FhCharset {
                 continue;
             }
 
-            if (game_lang is FhLangId.Chinese or FhLangId.Japanese or FhLangId.Korean) {
-                // CJK-specific unwind - TODO: PROBABLY MORE REQUIRED
-                if (0x33 < (sjistbl_index + 0x30) && (game_lang is FhLangId.Chinese || (sjistbl_index + 0x30) < 0x78)) {
-                    sjistbl_index -= 1;
-                }
+            sjistbl_index = game_lang is FhLangId.Chinese or FhLangId.Japanese or FhLangId.Korean
+                ? _select_remap_cjk(sjistbl_index, game_lang)
+                : _select_remap_us (sjistbl_index);
 
-                sjistbl_index /= 3;
-
-                if (sjistbl_index >= 0x410) {
-                    sjistbl_index -= 0x410;
-                    size++;
-                }
+            if (sjistbl_index >= 0x410) {
+                sjistbl_index -= 0x410;
+                size++;
             }
 
             size       += (sjistbl_index + 0x30) > 0xFF ? 2 : 1;
