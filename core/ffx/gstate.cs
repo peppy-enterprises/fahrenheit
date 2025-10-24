@@ -41,6 +41,17 @@ public unsafe static class Globals {
     public static class Battle {
         public static Chr* player_characters  => (Chr*)FhUtil.get_at<nint>(0xD334CC);
         public static Chr* monster_characters => (Chr*)FhUtil.get_at<nint>(0xD34460);
+
+        public static Btl* btl => FhUtil.ptr_at<Btl>(0xD2A8D0);
+        public static BtlRewardData* reward_data => FhUtil.ptr_at<BtlRewardData>(0x1F10EA0);
+
+        public static BtlWindow* windows => FhUtil.ptr_at<BtlWindow>(0xF3C910);
+        public static BtlWindow* cur_window => windows + FhUtil.get_at<byte>(0x1FCC092);
+        public static BtlStatusWindow* status_windows => FhUtil.ptr_at<BtlStatusWindow>(0xF3F798);
+
+        public static byte* hit_chance_table => FhUtil.ptr_at<byte>(0x8421E0);
+
+        public static EncounterLevel* encounter_level => FhUtil.ptr_at<EncounterLevel>(0xC421C8);
     }
 
     public static class OverdriveInfo {
@@ -58,16 +69,9 @@ public unsafe static class Globals {
     }
     public static FhInput Input => FhApi.Input;
 
+    public static SaveData* save_data => FhUtil.ptr_at<SaveData>(0xD2CA90);
+
     public static Actor*         actors          => (Actor*)*FhUtil.ptr_at<nint>(0x1FC44E4);
-    public static Btl*           btl             => FhUtil.ptr_at<Btl>          (0xD2A8D0);
-    public static BtlRewardData* btl_reward_data => FhUtil.ptr_at<BtlRewardData>(0x1F10EA0);
-    public static SaveData*      save_data       => FhUtil.ptr_at<SaveData>     (0xD2CA90);
-
-    public static BtlWindow*       btl_windows        => FhUtil.ptr_at<BtlWindow>(0xF3C910);
-    public static BtlWindow*       cur_btl_window     => btl_windows + FhUtil.get_at<byte>(0x1FCC092);
-    public static BtlStatusWindow* btl_status_windows => FhUtil.ptr_at<BtlStatusWindow>(0xF3F798);
-
-    public static byte* hit_chance_table => FhUtil.ptr_at<byte>(0x8421E0);
 
     public static int* event_id => FhUtil.ptr_at<int>(0xefbbf8);
 }
