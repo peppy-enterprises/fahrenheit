@@ -35,7 +35,7 @@ internal delegate void TODrawMessageWindow();
 ///     <para/>
 ///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_game"/>.
 /// </summary>
-[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
 public unsafe class FhGameUiModule : FhModule {
 
     private readonly FhMethodHandle<TODrawMessageWindow>         _render_game;
@@ -48,11 +48,11 @@ public unsafe class FhGameUiModule : FhModule {
 
         _render_game = new(this, location_render_game, h_render_game);
 
-        switch (FhGlobal.game_type) {
-            case FhGameType.FFX:
+        switch (FhGlobal.game_id) {
+            case FhGameId.FFX:
                 _draw_delegate_x = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
                 break;
-            case FhGameType.FFX2:
+            case FhGameId.FFX2:
                 _draw_delegate_x2 = FhUtil.get_fptr<TOAdpMesFontLXYZClutTypeRGBAChangeFontType>(0x3A7600);
                 break;
         }
@@ -80,15 +80,15 @@ public unsafe class FhGameUiModule : FhModule {
         }
 
         string text = $"Fahrenheit v{typeof(FhGlobal).Assembly.GetName().Version}";
-        switch (FhGlobal.game_type) {
-            case FhGameType.FFX:
+        switch (FhGlobal.game_id) {
+            case FhGameId.FFX:
                 // In the main menu...
                 if (*FFX.Globals.event_id == 0x17) {
                     // render some text so that people can't easily hide their use of Fahrenheit
                     //draw_text_rgba(FFX.FhCharsetSelector.Us.to_bytes(text), 5f, 400f, 0x00, 0.65f);
                 }
                 break;
-            case FhGameType.FFX2:
+            case FhGameId.FFX2:
                 // Main menu draws over this
                 //if (*FFX2.Globals.event_id == 0x17) {
                 //    fixed (byte* s = FhCharset.Us.to_bytes(text)) {

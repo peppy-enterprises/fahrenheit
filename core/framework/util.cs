@@ -7,7 +7,7 @@ public unsafe static class FhUtil {
     public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                }
     public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;        }
 
-    public static FhLangId get_game_lang() {
+    public static FhLangId get_lang_id() {
         string ini_path     = FhInternal.PathFinder.get_path_settings();
         string ini_lang_key = "Language=";
         // linebreaks can be inconsistent depending on whether INI edited by hand or by launcher
@@ -42,11 +42,11 @@ public unsafe static class FhUtil {
         }
     }
 
-    public static FhGameType get_game_type() {
-        FhGameType rv = FhGameType.NULL;
+    public static FhGameId get_game_id() {
+        FhGameId rv = FhGameId.NULL;
 
-        if (FhPInvoke.GetModuleHandle("FFX.exe")   != 0) rv = FhGameType.FFX;
-        if (FhPInvoke.GetModuleHandle("FFX-2.exe") != 0) rv = FhGameType.FFX2;
+        if (FhPInvoke.GetModuleHandle("FFX.exe")   != 0) rv = FhGameId.FFX;
+        if (FhPInvoke.GetModuleHandle("FFX-2.exe") != 0) rv = FhGameId.FFX2;
 
         return rv;
     }

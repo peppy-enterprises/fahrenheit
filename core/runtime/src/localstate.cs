@@ -33,7 +33,7 @@ internal readonly struct FhSaveListEntry {
 ///     <br/> - <see cref="FhModule.load_local_state(FileStream, FhLocalStateInfo)"/>
 ///     <br/> - <see cref="FhModule.save_local_state(FileStream)"/>
 /// </summary>
-[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
 public unsafe class FhLocalStateModule : FhModule {
     private readonly FhMethodHandle<FUN_002F01B0_load>     _handle_onload;
     private readonly FhMethodHandle<FUN_002F09A0_save>     _handle_onsave;
@@ -63,9 +63,9 @@ public unsafe class FhLocalStateModule : FhModule {
         if (menu_selection_index != 0) return _get_state_dir_path_load(mod_context, menu_selection_index);
 
         // a list of 200 entries, 1 indicating the slot is used, -1 indicating it is unused
-        ReadOnlySpan<int> used_slots_list   = FhGlobal.game_type switch {
-            FhGameType.FFX  => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x8E7C68), 200),
-            FhGameType.FFX2 => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x9ECD30), 200),
+        ReadOnlySpan<int> used_slots_list   = FhGlobal.game_id switch {
+            FhGameId.FFX  => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x8E7C68), 200),
+            FhGameId.FFX2 => new ReadOnlySpan<int>(FhUtil.ptr_at<nint>(0x9ECD30), 200),
         };
 
         int actual_slot_index = 0;
@@ -85,9 +85,9 @@ public unsafe class FhLocalStateModule : FhModule {
         if (menu_selection_index < 0) menu_selection_index++; // game itself does this (?)
 
         // map the index in the save slot selector to the actual _index_ in the save filename
-        ReadOnlySpan<FhSaveListEntry> save_list     = FhGlobal.game_type switch {
-            FhGameType.FFX  => new ReadOnlySpan<FhSaveListEntry>(FhUtil.ptr_at<nint>(0x8E7308), 200),
-            FhGameType.FFX2 => new ReadOnlySpan<FhSaveListEntry>(FhUtil.ptr_at<nint>(0x9EC3D0), 200),
+        ReadOnlySpan<FhSaveListEntry> save_list     = FhGlobal.game_id switch {
+            FhGameId.FFX  => new ReadOnlySpan<FhSaveListEntry>(FhUtil.ptr_at<nint>(0x8E7308), 200),
+            FhGameId.FFX2 => new ReadOnlySpan<FhSaveListEntry>(FhUtil.ptr_at<nint>(0x9EC3D0), 200),
         };
         FhSaveListEntry               selected_save = save_list[menu_selection_index];
 

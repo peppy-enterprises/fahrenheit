@@ -2,7 +2,7 @@
 
 namespace Fahrenheit.Core;
 
-public enum FhGameType {
+public enum FhGameId {
     NULL = 0,
     FFX  = 1,
     FFX2 = 2
@@ -11,11 +11,11 @@ public enum FhGameType {
 public static unsafe class FhGlobal {
     static FhGlobal() {
         base_addr = NativeLibrary.GetMainProgramHandle();
-        game_type = FhUtil.get_game_type();
-        game_lang = FhUtil.get_game_lang();
+        game_id   = FhUtil.get_game_id();
+        lang_id   = FhUtil.get_lang_id();
     }
 
-    public static readonly FhLangId   game_lang;
-    public static readonly FhGameType game_type;
-    public static readonly nint       base_addr;
+    public static readonly FhLangId lang_id;
+    public static readonly FhGameId game_id;
+    public static readonly nint     base_addr;
 }

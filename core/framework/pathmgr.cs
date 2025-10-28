@@ -96,7 +96,7 @@ internal sealed class FhPathFinder {
     ///     in the game's default save directory.
     /// </summary>
     public string get_path_savefile(int slot_index) {
-        bool   is_ffx         = FhGlobal.game_type == FhGameType.FFX;
+        bool   is_ffx         = FhGlobal.game_id == FhGameId.FFX;
         string save_subfolder = is_ffx ? "FINAL FANTASY X" : "FINAL FANTASY X-2";
         string save_prefix    = is_ffx ? "ffx"             : "ffx2";
         string save_name      = $"{save_prefix}_{slot_index:000}";
@@ -113,7 +113,7 @@ internal sealed class FhPathFinder {
     ///     Gets the file name of the save file in slot <paramref name="slot_index"/>.
     /// </summary>
     public string get_save_name_for_index(int slot_index) {
-        bool   is_ffx      = FhGlobal.game_type == FhGameType.FFX;
+        bool   is_ffx      = FhGlobal.game_id == FhGameId.FFX;
         string save_prefix = is_ffx ? "ffx" : "ffx2";
         string save_name   = $"{save_prefix}_{slot_index:000}";
 

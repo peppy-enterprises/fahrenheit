@@ -61,7 +61,7 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
                           FhMethodLocation location,
                           T                hook)
     {
-        bool is_ffx = FhGlobal.game_type == FhGameType.FFX;
+        bool is_ffx = FhGlobal.game_id == FhGameId.FFX;
 
         string module_name = is_ffx ? "FFX.exe"        : "FFX-2.exe";
         nint   offset      = is_ffx ? location.OffsetX : location.OffsetX2;

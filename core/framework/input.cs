@@ -4,7 +4,7 @@ namespace Fahrenheit.Core;
 
 public unsafe class FhInput {
 
-    private static readonly nint _address = FhGlobal.game_type == FhGameType.FFX ? 0xF27080 : 0xD94A8C;
+    private static readonly nint _address = FhGlobal.game_id == FhGameId.FFX ? 0xF27080 : 0xD94A8C;
 
     public readonly InputAction l2       = new(0x1);
     public readonly InputAction r2       = new(0x2);

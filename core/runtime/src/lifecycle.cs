@@ -18,7 +18,7 @@ internal delegate void AtelExecInternal_00871d10();
 ///     <br/> - <see cref="FhModule.pre_update"/>
 ///     <br/> - <see cref="FhModule.post_update"/>
 /// </summary>
-[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
 public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
@@ -43,9 +43,9 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public override void render_imgui() {
-        int curr_event_id = FhGlobal.game_type switch {
-            FhGameType.FFX  => *FFX.Globals.event_id,
-            FhGameType.FFX2 => *FFX2.Globals.event_id
+        int curr_event_id = FhGlobal.game_id switch {
+            FhGameId.FFX  => *FFX.Globals.event_id,
+            FhGameId.FFX2 => *FFX2.Globals.event_id
         };
 
         if (curr_event_id != 0x17) return; // Deactivate the mod list outside the main menu.

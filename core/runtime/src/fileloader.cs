@@ -24,7 +24,7 @@ internal unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_
 ///     For example, to replace <b>FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>,
 ///     the full path is <b>{...}\efl\x\FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>.
 /// </summary>
-[FhLoad(FhGameType.FFX | FhGameType.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
 [SupportedOSPlatform("windows")]
 public unsafe class FhFileLoaderModule : FhModule {
     private readonly Dictionary<string, string>       _index;
@@ -60,9 +60,9 @@ public unsafe class FhFileLoaderModule : FhModule {
     /// </summary>
     private void construct_index() {
         Stopwatch index_timer     = Stopwatch.StartNew();
-        string    efl_subdir_name = FhGlobal.game_type switch {
-            FhGameType.FFX  => "x",
-            FhGameType.FFX2 => "x2",
+        string    efl_subdir_name = FhGlobal.game_id switch {
+            FhGameId.FFX  => "x",
+            FhGameId.FFX2 => "x2",
             _               => throw new Exception("FH_E_INVALID_GAME_TYPE"),
         };
 

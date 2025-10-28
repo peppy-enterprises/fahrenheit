@@ -21,11 +21,11 @@ public static class FhBootstrapper {
 
 /// <summary>
 ///     Instructs the <see cref="FhLoader"/> that this module type should be instantiated,
-///     providing the <paramref name="supported_game_type"/> matches the currently executing game.
+///     providing the currently executing game is one of <paramref name="supported_games"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public sealed class FhLoadAttribute(FhGameType supported_game_type) : Attribute {
-    public readonly FhGameType supported_game_type = supported_game_type;
+public sealed class FhLoadAttribute(FhGameId supported_games) : Attribute {
+    public readonly FhGameId supported_games = supported_games;
 }
 
 /// <summary>
@@ -128,7 +128,7 @@ public sealed class FhLoader {
                     continue;
                 }
 
-                if (!loader_args.supported_game_type.HasFlag(FhGlobal.game_type)) {
+                if (!loader_args.supported_games.HasFlag(FhGlobal.game_id)) {
                     FhInternal.Log.Warning($"Loader ignored module type {type.FullName} that does not declare support for this game.");
                     continue;
                 }

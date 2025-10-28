@@ -29,6 +29,7 @@
   <Project Path="mods/truerng/Fahrenheit.Mods.TrueRNG.csproj" />
   <Project Path="tools/atelier/Fahrenheit.Tools.Atelier.csproj" />
   <Project Path="tools/dedit/Fahrenheit.Tools.DEdit.csproj" />
+  <Project Path="tools/eedit/Fahrenheit.Tools.EEdit.csproj" />
   <Project Path="tools/inspector/Fahrenheit.Tools.Inspector.csproj" />
   <Project Path="tools/modmgr/Fahrenheit.Tools.ModManager.csproj" />
   <Project Path="tools/step/Fahrenheit.Tools.STEP.csproj" />

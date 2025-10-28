@@ -25,3 +25,6 @@
 [submodule "tools/inspector"]
 	path = tools/inspector
 	url = https://github.com/peppy-enterprises/fh-tools-inspector
+[submodule "tools/eedit"]
+	path = tools/eedit
+	url = https://github.com/peppy-enterprises/fh-tools-eedit
