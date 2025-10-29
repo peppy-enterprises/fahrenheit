@@ -22,6 +22,7 @@
     <Platform Solution="*|Any CPU" Project="Win32" />
     <Platform Solution="*|ARM64" Project="x64" />
   </Project>
+  <Project Path="test/Fahrenheit.Core.Tests.csproj" />
   <Project Path="mods/csr/Fahrenheit.Mods.CSR.csproj" />
   <Project Path="mods/dbg/Fahrenheit.Mods.Debug.csproj" />
   <Project Path="mods/efp/Fahrenheit.Mods.EFP.csproj" />

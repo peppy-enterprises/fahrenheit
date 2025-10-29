@@ -1,0 +1,45 @@
+﻿<Project>
+
+    <!-- ASSEMBLY BASIC PROPERTIES -->
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
+    <PropertyGroup>
+        <AssemblyName>fhtest</AssemblyName>
+        <AssemblyTitle>Fahrenheit Test Suite</AssemblyTitle>
+        <Product>Fahrenheit Test Suite</Product>
+    </PropertyGroup>
+
+    <!-- SDK REFERENCES -->
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+    <!-- SHARED FILE LINKS -->
+    <ItemGroup>
+        <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
+    </ItemGroup>
+
+    <!-- PROJECT REFERENCES -->
+    <ItemGroup>
+        <ProjectReference Include="..\core\framework\Fahrenheit.Core.csproj" />
+        <ProjectReference Include="..\core\ffx\Fahrenheit.Core.FFX.csproj" />
+        <ProjectReference Include="..\core\ffx2\Fahrenheit.Core.FFX2.csproj" />
+    </ItemGroup>
+
+    <!-- EXTERNAL PROJECT REFS -->
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.2" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+        <PackageReference Include="NUnit" Version="4.2.2" />
+        <PackageReference Include="NUnit.Analyzers" Version="4.4.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    </ItemGroup>
+
+</Project>
