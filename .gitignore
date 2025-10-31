@@ -407,6 +407,10 @@ generation/**/*.h
 generation/**/*.ath
 generation/**/*.bak
 
+# Remove any data used in 'env' scripting.
+env/**/*
+!env/
+
 # Do not exclude sourcegen response files.
 !generation/**/*.rsp
 

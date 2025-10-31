@@ -53,6 +53,12 @@ dotnet_naming_rule.fh_const_naming.severity = suggestion
 # Exempt any global using file from Code Cleanup
 # v. https://github.com/dotnet/roslyn/issues/3705#issuecomment-570687450
 
+[*Id.cs]
+generated_code = true
+
+[*AnimationCycle.cs]
+generated_code = true
+
 [*typedefs.cs]
 generated_code = true
 
@@ -60,7 +66,4 @@ generated_code = true
 generated_code = true
 
 [*.g.cs]
-generated_code = true
-
-[*.gen.cs]
 generated_code = true
