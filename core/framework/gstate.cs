@@ -2,13 +2,14 @@
 
 namespace Fahrenheit.Core;
 
+[Flags]
 public enum FhGameId {
     NULL = 0,
     FFX  = 1,
-    FFX2 = 2
+    FFX2 = 2,
 }
 
-public static unsafe class FhGlobal {
+public static class FhGlobal {
     static FhGlobal() {
         base_addr = NativeLibrary.GetMainProgramHandle();
         game_id   = FhUtil.get_game_id();
