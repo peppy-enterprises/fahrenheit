@@ -111,25 +111,28 @@ public struct BtlDebugFlags {
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x2150)]
 public unsafe struct Btl {
-    [FieldOffset(0x10)]   public       byte   battle_state;
-    [FieldOffset(0x12)]   public       byte   battle_trigger;
+    [FieldOffset(0x10)]   public   byte battle_state;
+    [FieldOffset(0x12)]   public   byte battle_trigger;
 
-    [FieldOffset(0x28)]   public       BtlDebugFlags debug;
+    [FieldOffset(0x28)]   public   BtlDebugFlags debug;
 
-    [FieldOffset(0x5C)]   public       nint   ptr_command_bin;
-    [FieldOffset(0x60)]   public       nint   ptr_monmagic1_bin;
-    [FieldOffset(0x64)]   public       nint   ptr_monmagic2_bin;
-    [FieldOffset(0x68)]   public       nint   ptr_ply_rom_bin;
-    [FieldOffset(0x70)]   public       nint   ptr_item_bin;
-    [FieldOffset(0x74)]   public       nint   ptr_a_ability_bin;
-    [FieldOffset(0x78)]   public       nint   ptr_sum_assure_bin;
-    [FieldOffset(0x7C)]   public       nint   ptr_ctb_base_bin;
-    [FieldOffset(0x80)]   public       nint   ptr_magic_bin;
-    [FieldOffset(0x84)]   public       nint   ptr_mot_bin;
-    [FieldOffset(0x88)]   public       nint   ptr_st_number_bin;
-    [FieldOffset(0x90)]   public       nint   ptr_sum_grow_bin;
-    [FieldOffset(0x94)]   public       nint   ptr_kaizou_bin;
+    [FieldOffset(0x5C)]   internal ExcelFile<ExcelElement_command>*    ptr_command_bin;
+    [FieldOffset(0x60)]   internal ExcelFile<ExcelElement_monmagic1>*  ptr_monmagic1_bin;
+    [FieldOffset(0x64)]   internal ExcelFile<ExcelElement_monmagic2>*  ptr_monmagic2_bin;
+    [FieldOffset(0x68)]   internal ExcelFile<ExcelElement_ply_rom>*    ptr_ply_rom_bin;
+    [FieldOffset(0x70)]   internal ExcelFile<ExcelElement_item>*       ptr_item_bin;
+    [FieldOffset(0x74)]   internal ExcelFile<ExcelElement_a_ability>*  ptr_a_ability_bin;
+    [FieldOffset(0x78)]   internal ExcelFile<ExcelElement_sum_assure>* ptr_sum_assure_bin;
+    [FieldOffset(0x7C)]   internal ExcelFile<ExcelElement_ctb_base>*   ptr_ctb_base_bin;
 
+    [FieldOffset(0x80)]   internal nint ptr_magic_bin;
+    [FieldOffset(0x84)]   internal nint ptr_mot_bin;
+
+    [FieldOffset(0x88)]   internal ExcelFile<ExcelElement_st_number>*  ptr_st_number_bin;
+    [FieldOffset(0x90)]   internal ExcelFile<ExcelElement_sum_grow>*   ptr_sum_grow_bin;
+    [FieldOffset(0x94)]   internal ExcelFile<ExcelElement_kaizou>*     ptr_kaizou_bin;
+
+    // Fahrenheit overwrites these, and makes the game support nint-sized excel files instead.
     [FieldOffset(0x98)]   public       ushort size_command_bin;
     [FieldOffset(0x9A)]   public       ushort size_ply_rom_bin;
     [FieldOffset(0x9E)]   public       ushort size_item_bin;
