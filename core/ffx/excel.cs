@@ -3,36 +3,60 @@ using System.Text;
 namespace Fahrenheit.Core.FFX;
 
 /// <summary>
+/// A representation of offsets to text commonly used in Excel files.
+/// </summary>
+[StructLayout(LayoutKind.Sequential, Size=0x8)]
+public struct ExcelString2 {
+    /// <summary>
+    /// The offset to the text.
+    /// </summary>
+    public  ushort text_offset;
+    private ushort __0x2; // Clearly related to the text, but unknown
+
+    /// <summary>
+    /// The offset to the simplified text. In Japanese, this would have been the hiragana version of the text.
+    /// This is completely unused.
+    /// </summary>
+    private ushort simplified_offset;
+    private ushort __0x6; // Clearly related to the simplified text, but unknown
+}
+
+/// <summary>
 /// The header of Excel files.
 /// </summary>
-[StructLayout(LayoutKind.Explicit, Size=0xC)]
-public struct ExcelHeader {
+[StructLayout(LayoutKind.Sequential)]
+internal struct ExcelHeader {
     /// <summary>
     /// The index of the first element in the file.
     /// </summary>
-    [FieldOffset(0x0)] public ushort first_idx;
+    public ushort first_idx;
 
     /// <summary>
     /// The index of the last element in the file.
     /// </summary>
-    [FieldOffset(0x2)] public ushort last_idx;
+    public ushort last_idx;
 
     /// <summary>
     /// The size of one element in the file.
     /// </summary>
-    [FieldOffset(0x4)] public ushort element_size;
+    public ushort element_size;
 
     /// <summary>
     /// The length of all the elements in the file.
     /// Beyond the data there may be text, referenced using offsets in the elements.
     /// </summary>
-    [FieldOffset(0x6)] public ushort data_length;
+    public ushort data_length;
 
     /// <summary>
     /// An offset from the start of the file to the start of the data.
     /// In vanilla, always equivalent to the size of this header.
     /// </summary>
-    [FieldOffset(0x8)] public nint data_start;
+    public nint data_start;
+
+    /// <summary>
+    /// The length of the array of elements defined by this header.
+    /// </summary>
+    public readonly int length => last_idx + 1 - first_idx;
 }
 
 /// <summary>
@@ -40,69 +64,100 @@ public struct ExcelHeader {
 /// </summary>
 /// <typeparam name="T">The type of elements in the file.</typeparam>
 [StructLayout(LayoutKind.Explicit, Size=0x14)]
-public unsafe struct ExcelFile<T> where T : unmanaged {
+internal unsafe struct ExcelFile<T> where T : unmanaged {
     /// <summary>
     /// The amount of headers that map out this file.
     ///
     /// <remarks>
     /// In the games, this amount is always 1.
-    /// Fahrenheit does not support amounts higher than 1.
+    /// Both the games and Fahrenheit support amounts higher than 1.
     /// </remarks>
     /// </summary>
     [FieldOffset(0x0)] public ushort header_count;
 
-    /// <summary>
-    /// The file's header.
-    ///
-    /// <remarks>
-    /// Technically, this is an <c>ExcelHeader</c> <i>array</i>, <see cref="header_count"/> long.
-    /// However, if we tried to accomodate this, we would not be able to provide <see cref="elements"/>.
-    /// Other ways to provide support for this appear unsafe.
-    /// If anyone ever <i>really</i> needs to use multi-headered excel files,
-    /// the game is equipped to handle those requests through <c>MsGetExcelData</c>.
-    /// </remarks>
-    /// </summary>
-    [FieldOffset(0x8)] public ExcelHeader header;
+    // Private fields for creating spans through MemoryMarshal.CreateSpan
+    [FieldOffset(0x0)] private T _dummy_element;
+    [FieldOffset(0x8)] private ExcelHeader _first_header;
 
     /// <summary>
-    /// The length of the array of elements in the file.
-    /// </summary>
-    public readonly int length => header.last_idx + 1 - header.first_idx;
-
-    [FieldOffset(0x14)] private T _first_element; // Private field used for the MemoryMarshal call below.
-
-    /// <summary>
-    /// The elements in this file.
+    /// The headers in this file. Each header defines a section of the file.
     /// </summary>
     [UnscopedRef]
-    public Span<T> elements => MemoryMarshal.CreateSpan(ref _first_element, length);
+    public Span<ExcelHeader> headers
+        => MemoryMarshal.CreateSpan(ref _first_header, header_count);
+
+
+    /// <summary>
+    /// The elements indicated by a given header.
+    /// </summary>
+    [UnscopedRef]
+    public Span<T> elements(ExcelHeader header)
+        => MemoryMarshal.CreateSpan(ref Unsafe.AddByteOffset(ref _dummy_element, header.data_start), header.length);
+
+    /// <summary>
+    /// Finds a header that contains the element at a given index.
+    /// </summary>
+    /// <param name="index">The index of the desired element.</param>
+    /// <returns>The header containing the element at the given index, or <c>null</c> if not found.</returns>
+    public ExcelHeader? find_header_for_index(int index) {
+        foreach (ExcelHeader header in headers) {
+            if (header.first_idx <= index && index <= header.last_idx) {
+                return header;
+            }
+        }
+
+        return null;
+    }
 
     /// <summary>
     /// Gets the element at the specified index, with boundary checking.
     /// </summary>
-    /// <param name="idx">The index of the desired element. Must be withing the bounds specified by the header.</param>
+    /// <param name="index">The index of the desired element. Must be withing the bounds specified by one of the headers.</param>
     /// <returns>The element at the specified index.</returns>
     /// <exception cref="IndexOutOfRangeException">
-    /// index is less than <see cref="ExcelHeader.first_idx"><c>header.first_idx</c></see> or greater than <see cref="ExcelHeader.last_idx"><c>header.last_idx</c></see>.
+    /// index is less than <see cref="ExcelHeader.first_idx"><c>header.first_idx</c></see>
+    /// or greater than <see cref="ExcelHeader.last_idx"><c>header.last_idx</c></see>
+    /// for all <see cref="headers"/>.
     /// </exception>
     [UnscopedRef]
-    public ref T get(int idx) {
-        if (idx < header.first_idx || idx > header.last_idx)
-            throw new IndexOutOfRangeException($"Cannot access element {idx} of excel file. Index must be between {header.first_idx} and {header.last_idx}");
+    public ref T get(int index) {
+        ExcelHeader header = find_header_for_index(index)
+            ?? throw new IndexOutOfRangeException($"Cannot access element {index} of excel file. No header contains this index.");
 
-        idx -= header.first_idx;
-        return ref elements[idx];
+        return ref elements(header)[index - header.first_idx];
     }
 
     /// <summary>
-    /// Gets the text at the specified offset from the end of the data.
+    /// Gets the text at the specified offset from a header containing the given index.
     /// <remarks>
-    /// This method performs no bound checking, it is up to the caller to ensure the offset is valid.
+    /// This method performs no bound checking on the <paramref name="offset"/> and <i>may</i> read garbage data if it is not valid.
     /// </remarks>
     /// </summary>
+    /// <param name="index">The index of the element containing the offset.</param>
     /// <param name="offset">The offset of the text.</param>
     /// <returns>The decoded text from the specified offset.</returns>
-    public string get_text(nint offset = 0) {
+    /// <exception cref="IndexOutOfRangeException">
+    /// index is less than <see cref="ExcelHeader.first_idx"><c>header.first_idx</c></see>
+    /// or greater than <see cref="ExcelHeader.last_idx"><c>header.last_idx</c></see>
+    /// for all <see cref="headers"/>.
+    /// </exception>
+    public string get_text(int index, nint offset) {
+        ExcelHeader header = find_header_for_index(index)
+            ?? throw new IndexOutOfRangeException($"Cannot find header for index {index} in excel file.");
+
+        return get_text(header, offset);
+    }
+
+    /// <summary>
+    /// Gets the text at the specified offset from the given header.
+    /// <remarks>
+    /// This method performs no bound checking on the <paramref name="offset"/> and <i>may</i> read garbage data if it is not valid.
+    /// </remarks>
+    /// </summary>
+    /// <param name="header">The header containing the text.</param>
+    /// <param name="offset">The offset of the text.</param>
+    /// <returns>The decoded text from the specified offset.</returns>
+    public string get_text(ExcelHeader header, nint offset) {
         ReadOnlySpan<byte> encoded_text;
 
         fixed (ExcelFile<T>* this_ptr = &this) {
