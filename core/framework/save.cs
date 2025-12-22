@@ -7,7 +7,10 @@ namespace Fahrenheit.Core;
  * We reuse them for simplicity, ignoring the stored creation date/time logic in favor of OS API calls.
  */
 
-public enum FhSaveDataManagerState : int {
+/// <summary>
+///     Represents the possible states of the game's save data manager.
+/// </summary>
+public enum FhSaveSystemState : int {
     IDLE           = 0x00,
     SAVE           = 0x01,
     SAVE_SUCCEED   = 0x02,
@@ -15,37 +18,6 @@ public enum FhSaveDataManagerState : int {
     LOAD_SUCCEED   = 0x04,
     DELETE         = 0x05,
     DELETE_SUCCEED = 0x06
-}
-
-[StructLayout(LayoutKind.Sequential, Size = 0x488)]
-public unsafe struct FhSaveDataManager {
-    public int                    save_enabled;
-    public int                    cb_result;
-    public FhSaveDataManagerState state;
-    public int                    __0xC;
-    public InlineArray64 <byte>   game_name;
-    public InlineArray128<byte>   description;
-    public InlineArray512<byte>   description_detailed;
-    public InlineArray64 <byte>   path_icon_1;
-    public InlineArray64 <byte>   path_icon_2;
-    public byte*                  ref_buffer;
-    public int                    ref_buffer_size;
-    public int                    operation_canceled;
-}
-
-[StructLayout(LayoutKind.Sequential, Size = 0x4B0)]
-public unsafe struct FhSaveDataManager2 {
-    public FhSaveDataManagerState state;
-    public int                    save_enabled;
-    public int                    cb_result;
-    public InlineArray64 <byte>   game_name;
-    public InlineArray128<byte>   description;
-    public InlineArray512<byte>   description_detailed;
-    public InlineArray64 <byte>   path_icon_1;
-    public InlineArray64 <byte>   path_icon_2;
-    public byte*                  ref_buffer;
-    public int                    ref_buffer_size;
-    public int                    operation_canceled;
 }
 
 public enum FhSaveDialogState {
@@ -60,6 +32,41 @@ public enum FhSaveScreenState {
     UNK3    = 0x03,
     UNK4    = 0x04
 }
+
+[StructLayout(LayoutKind.Sequential, Size = 0x488)]
+public unsafe struct FhSaveDataManager {
+    public int                    save_enabled;
+    public int                    cb_result;
+    public FhSaveSystemState      state;
+    public int                    __0xC;
+    public InlineArray64 <byte>   game_name;
+    public InlineArray128<byte>   description;
+    public InlineArray512<byte>   description_detailed;
+    public InlineArray64 <byte>   path_icon_1;
+    public InlineArray64 <byte>   path_icon_2;
+    public byte*                  ref_buffer;
+    public int                    ref_buffer_size;
+    public int                    operation_canceled;
+}
+
+[StructLayout(LayoutKind.Sequential, Size = 0x4B0)]
+public unsafe struct FhSaveDataManager2 {
+    public FhSaveSystemState      state;
+    public int                    save_enabled;
+    public int                    cb_result;
+    public InlineArray64 <byte>   game_name;
+    public InlineArray128<byte>   description;
+    public InlineArray512<byte>   description_detailed;
+    public InlineArray64 <byte>   path_icon_1;
+    public InlineArray64 <byte>   path_icon_2;
+    public byte*                  ref_buffer;
+    public int                    ref_buffer_size;
+    public int                    operation_canceled;
+}
+
+/* [fkelava 22/12/25 15:54]
+ * This enum is not used, but is provided as documentation of base game behavior.
+ */
 
 public enum FhIggySaveUiState {
     // NOP, flows from SAVE_TERMINATING
@@ -178,28 +185,6 @@ internal struct FhSaveHeader2 {
     public byte   _0x2A;
     public byte   _0x2B;
     public byte   _0x2C;
-}
-
-/// <summary>
-///     Provides platform abstractions for the game's internal save manager.
-/// </summary>
-internal static class FhSavePal {
-
-    /// <summary>
-    ///     Retrieves an array of base game slot states. 1 indicates used, -1 indicates unused.
-    /// </summary>
-    internal unsafe static ReadOnlySpan<int> get_slots() {
-        return new ReadOnlySpan<int>(
-            FhUtil.ptr_at<nint>(FhGlobal.game_id is FhGameId.FFX ? 0x8E7C68 : 0x9ECD30), 200);
-    }
-
-    /// <summary>
-    ///     Retrieves an array with base game per-slot save information.
-    /// </summary>
-    internal unsafe static ReadOnlySpan<FhSaveListEntry> get_save_info() {
-        return new ReadOnlySpan<FhSaveListEntry>(
-            FhUtil.ptr_at<nint>(FhGlobal.game_id is FhGameId.FFX ? 0x8E7308 : 0x9EC3D0), 200);
-    }
 }
 
 /// <summary>
