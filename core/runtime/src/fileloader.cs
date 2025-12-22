@@ -16,30 +16,31 @@ internal unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_
 ///     Provides the ability to replace files loaded by the game with files outside the VBF archives.
 ///     <para/>
 ///     Do not interface with this module directly. Instead, place any files you wish to use in this way
-///     in the <b>efl\x</b> or <b>efl\x2</b> subdirectory of your mod folder.
+///     in the <c>efl\x</c> or <c>efl\x2</c> subdirectory of your mod folder.
 ///     <para/>
 ///     These subdirectories are treated as the root of the VBF archive for their respective games;
 ///     from that point, you must mirror the VBF's directory structure.
 ///     <para/>
-///     For example, to replace <b>FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>,
-///     the full path is <b>{...}\efl\x\FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</b>.
+///     For example, to replace <c>FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</c>,
+///     the full path is <c>{...}\efl\x\FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</c>.
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")]
-public unsafe class FhFileLoaderModule : FhModule {
+public unsafe sealed class FhFileLoaderModule : FhModule {
+
     private readonly Dictionary<string, string>       _index;
-    private readonly FhMethodHandle<PStreamFile_ctor> _h_fopen;
+    private readonly FhMethodHandle<PStreamFile_ctor> _handle_fopen;
 
     public FhFileLoaderModule() {
         FhMethodLocation method_location = new FhMethodLocation(0x207D80, 0x490E40);
 
-        _index   = [];
-        _h_fopen = new(this, method_location, h_fopen);
+        _index        = [];
+        _handle_fopen = new(this, method_location, h_fopen);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         construct_index();
-        return _h_fopen.hook();
+        return _handle_fopen.hook();
     }
 
     /// <summary>
@@ -47,8 +48,8 @@ public unsafe class FhFileLoaderModule : FhModule {
     /// </summary>
     private static string normalize_path(string path) {
         string host0_fixed_path  = path.Replace("host0:", "ffx_ps2");
-        int    stream_prefix_end = host0_fixed_path.IndexOf('f', StringComparison.InvariantCultureIgnoreCase);
-        string prefixless_path   = host0_fixed_path[stream_prefix_end..];
+        int    stream_prefix_end = host0_fixed_path.IndexOf('f', StringComparison.OrdinalIgnoreCase);
+        string prefixless_path   = host0_fixed_path[ stream_prefix_end .. ];
 
         return OperatingSystem.IsWindows()
             ? prefixless_path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
@@ -61,8 +62,9 @@ public unsafe class FhFileLoaderModule : FhModule {
     private void construct_index() {
         Stopwatch index_timer     = Stopwatch.StartNew();
         string    efl_subdir_name = FhGlobal.game_id switch {
-            FhGameId.FFX  => "x",
-            FhGameId.FFX2 => "x2",
+            FhGameId.FFX    => "x",
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => "x2",
             _               => throw new Exception("FH_E_INVALID_GAME_TYPE"),
         };
 
@@ -90,7 +92,6 @@ public unsafe class FhFileLoaderModule : FhModule {
             }
         }
 
-        index_timer.Stop();
         _logger.Warning($"EFL indexing complete in {index_timer.ElapsedMilliseconds} ms.");
     }
 
@@ -102,7 +103,7 @@ public unsafe class FhFileLoaderModule : FhModule {
         _logger.Info(normalized_path);
 
         if (!_index.TryGetValue(normalized_path, out string? modded_path)) {
-            return _h_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
+            return _handle_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
         }
 
         /* [fkelava 01/10/24 16:49]
@@ -116,18 +117,18 @@ public unsafe class FhFileLoaderModule : FhModule {
         fixed (char* modded_path_ptr = modded_path) {
             this_ptr->handle_vbf = 0;
             this_ptr->handle_os  = Windows.CreateFileW(
-                lpFileName:            modded_path_ptr,
-                dwDesiredAccess:       (uint)(read_only ? FILE.FILE_READ_DATA  : FILE.FILE_WRITE_DATA),
-                dwShareMode:           (uint)(read_only ? FILE.FILE_SHARE_READ : 0),
-                lpSecurityAttributes:  null,
-                dwCreationDisposition: (uint)(read_only ? OPEN.OPEN_EXISTING   : OPEN.OPEN_ALWAYS),
-                dwFlagsAndAttributes:  FILE.FILE_FLAG_SEQUENTIAL_SCAN,
-                hTemplateFile:         HANDLE.NULL);
+                modded_path_ptr,
+                (uint)(read_only ? FILE.FILE_READ_DATA  : FILE.FILE_WRITE_DATA),
+                (uint)(read_only ? FILE.FILE_SHARE_READ : 0),
+                null,
+                (uint)(read_only ? OPEN.OPEN_EXISTING   : OPEN.OPEN_ALWAYS),
+                FILE.FILE_FLAG_SEQUENTIAL_SCAN,
+                HANDLE.NULL);
         }
 
         if (this_ptr->handle_os == HANDLE.INVALID_VALUE) {
             _logger.Error($"File open failed for {modded_path} - bailing out");
-            return _h_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
+            return _handle_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
         }
 
         _logger.Info($"{path} -> {modded_path}");

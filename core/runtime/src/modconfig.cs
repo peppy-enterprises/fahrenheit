@@ -5,7 +5,7 @@ using System.Numerics;
 namespace Fahrenheit.Core.Runtime;
 
 [FhLoad(FhGameId.FFX | FhGameId.FFX2)]
-public unsafe class FhModConfigModule : FhModule {
+public unsafe sealed class FhModConfigModule : FhModule {
     private FhModContext? _context;
     private FileStream?   _global_state;
 

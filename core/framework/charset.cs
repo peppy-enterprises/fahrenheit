@@ -15,9 +15,8 @@ public enum FhLangId {
 }
 
 /* [fkelava 16/10/25 19:54]
- * Raw text lines are preceded by an array of indices,
- * which embed line offsets, option count for
- * multiple-choice selections, and so on.
+ * Raw text lines are preceded by an array of indices, which embed line offsets,
+ * option count for multiple-choice selections, and so on.
  */
 
 public enum FhTextIndexType {
@@ -28,23 +27,17 @@ public enum FhTextIndexType {
 }
 
 /* [fkelava 16/10/25 20:13]
- * A macro dictionary is a concatenation of up to ten text files with a 64-byte header
+ * A macro dictionary is a concatenation of up to sixteen text files with a 64-byte header
  * that indicates the start of each 'section', or individual text file.
  * In text, the op {MACRO:X:Y} then gets the Y'th line of section/file X.
  */
 
-[InlineArray(6)]
-public struct FhMacroDictReserved {
-    private int _i; // all reserved fields are typically zero
-}
-
-[InlineArray(10)]
+[InlineArray(16)]
 public struct FhMacroDictSections {
     private int _i;
 }
 
 public struct FhMacroDictHeader {
-    public FhMacroDictReserved reserved;
     public FhMacroDictSections sections;
 }
 
@@ -55,12 +48,13 @@ public struct FhMacroDictHeader {
 public enum FhEncodingFlags {
     IGNORE_DEST_BUFFER = 1,      // `dest` is not iterated through in `encode`/`decode`. Allows size to be calculated with cheap stackalloc buffer.
     IGNORE_EXPRESSIONS = 1 << 1, // U+007B and U+007D are no longer considered expression opener and closer, respectively.
+    IMPLICIT_END       = 1 << 2, // Do not emit the {END} mark on phrase termination. This output style is not roundtrippable.
 }
 
 /// <summary>
 ///     Exposes low-level transforms between UTF-8 and game encoding.
 /// </summary>
-public static class FhCharset {
+public static class FhEncoding {
 
     /* [fkelava 14/10/25 14:58]
      * These literals and methods control the plaintext representation of
@@ -252,7 +246,7 @@ public static class FhCharset {
         sjistbl_idx *= 3;
 
         if (sjistbl_idx > sjistbl.Length) {
-            throw new Exception($"invalid expr {e0:X2} {e1:X2} {e2:X2} in lang {lang}");
+            throw new Exception($"lang {lang}: invalid expr {e0:X2} {e1:X2} {e2:X2}");
         }
 
         Range copy_range = sjistbl_idx switch {
@@ -396,8 +390,8 @@ public static class FhCharset {
                0x82  => index - 0x18,
                0x85  => index - 0x1A,
                0x88  => index - 0x1C,
-             < 0xBF  => ((index + 0x4F) + 1) / 2, // +1 to round up
-            <= 0xEF  => ((index + 0x50) + 1) / 2,
+             < 0xBF  => (index + 0x4F + 1) / 2, // +1 to round up
+            <= 0xEF  => (index + 0x50 + 1) / 2,
                0xF0  => index - 0x50,
                0xF1  => index - 0x50,
                0xF3  => index - 0x51,
@@ -569,8 +563,8 @@ public static class FhCharset {
             return 2;
         }
 
-        // {(SPACE|TIME|CHOICE):(X2 - 0x30)}
-        if (op_code is 0x07 or 0x09 or 0x10) {
+        // {(SPACE|TIME|CHOICE|VAR):(X2 - 0x30)}
+        if (op_code is 0x07 or 0x09 or 0x10 or 0x12) {
             dest[1] = byte.CreateChecked(0x30 + _get_op_arg1(expression, op));
             return 2;
         }
@@ -587,7 +581,7 @@ public static class FhCharset {
         }
 
         // {UNKNOWN:ARG1:ARG2}
-        if (op_code is 0x06 or 0x08 or (>= 0x0C and <= 0x0F) or 0x11 or 0x12 or (>= 0x24 and <= 0x2B)) {
+        if (op_code is 0x06 or 0x08 or (>= 0x0C and <= 0x0F) or 0x11 or (>= 0x24 and <= 0x2B)) {
             dest[1] = _get_op_arg2(expression, op);
             return 2;
         }
@@ -656,8 +650,10 @@ public static class FhCharset {
 
             if (code_point.Value == 0x007B && !flags.HasFlag(FhEncodingFlags.IGNORE_EXPRESSIONS)) { // '{' (U+007B) - dialogue op statement opener
                 // check for '{{' sequence - escape '{'
-                if (Rune.DecodeFromUtf8(src[ (src_offset + consumed) .. ], out code_point, out consumed) == OperationStatus.Done && code_point.Value == 0x007B)
+                if (Rune.DecodeFromUtf8(src[ (src_offset + consumed) .. ], out code_point, out consumed) == OperationStatus.Done && code_point.Value == 0x007B) {
+                    src_offset += consumed;
                     goto encode;
+                }
 
                 int expr_start_offset = src_offset;
                 src_offset += consumed;
@@ -685,7 +681,7 @@ public static class FhCharset {
 
             if (index == -1) {
                 FhInternal.Log.Error($"sequence {Convert.ToHexString(bytes)} not in sjistbl of lang {lang_id}; aborting (pos {src_offset})");
-                continue;
+                return dest_offset;
             }
 
             index = lang_id is FhLangId.Chinese or FhLangId.Japanese or FhLangId.Korean
@@ -738,6 +734,9 @@ public static class FhCharset {
             Span        <byte> dst_slice = flags.HasFlag(FhEncodingFlags.IGNORE_DEST_BUFFER) ? dest : dest[ dest_offset .. ];
 
             if (op == 0x00) { // {END} - statement terminator
+                if (flags.HasFlag(FhEncodingFlags.IMPLICIT_END))
+                    return dest_offset;
+
                 _newline.CopyTo(dst_slice[ _decode_op(dst_slice, op) .. ]);
                 return dest_offset + _op_end.Length + _newline.Length;
             }

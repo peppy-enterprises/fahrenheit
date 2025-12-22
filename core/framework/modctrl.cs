@@ -9,8 +9,36 @@ namespace Fahrenheit.Core;
 public sealed class FhModController {
     private readonly FhModContext[] _mods;
 
-    internal FhModController(FhModContext[]? mods = default) {
-        _mods = mods ?? [];
+    internal FhModController() {
+        _mods = new FhModContext[FhEnvironment.Manifests.Length];
+    }
+
+    internal void load_mods() {
+        FhModPaths[] mod_paths = FhEnvironment.ModPaths;
+        FhManifest[] manifests = FhEnvironment.Manifests;
+
+        for (int i = 0; i < manifests.Length; i++) {
+            _mods[i] = new FhModContext(manifests[i], mod_paths[i], [ .. FhInternal.Loader.load_mod(manifests[i]) ]);
+        }
+    }
+
+    /// <summary>
+    ///     Invokes the initializer callback for all loaded modules.
+    /// </summary>
+    internal void initialize_mods() {
+        foreach (FhModContext mod_ctx in _mods) {
+            foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
+                FhModule   fm       = module_ctx.Module;
+                FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+
+                if (!fm.init(mod_ctx, fm_state)) {
+                    FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed. Suppressing.");
+                    continue;
+                }
+
+                FhInternal.Log.Info($"Initialized module {fm.ModuleType}.");
+            }
+        }
     }
 
     /// <summary>
@@ -42,24 +70,5 @@ public sealed class FhModController {
             if (module_ctx.Module is TModule) return module_ctx;
         }
         return null;
-    }
-
-    /// <summary>
-    ///     Invokes <see cref="FhModule.init(FhModContext, FileStream)"/> for all loaded modules.
-    /// </summary>
-    internal void initialize_mods() {
-        foreach (FhModContext mod_ctx in _mods) {
-            foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                FhModule   fm       = module_ctx.Module;
-                FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-
-                if (!fm.init(mod_ctx, fm_state)) {
-                    FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed. Suppressing.");
-                    continue;
-                }
-
-                FhInternal.Log.Info($"Initialized module {fm.ModuleType}.");
-            }
-        }
     }
 }

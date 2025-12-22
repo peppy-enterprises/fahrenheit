@@ -26,7 +26,7 @@ public class FhLogger {
     private readonly TextWriterTraceListener _file;
 
     public FhLogger(string log_file_name) {
-        string log_path = Path.Join(FhInternal.PathFinder.Logs.Path, log_file_name);
+        string log_path = Path.Join(FhEnvironment.Finder.Logs.FullName, log_file_name);
 
         _console = new TextWriterTraceListener(Console.Out);
         _file    = new TextWriterTraceListener(File.Open(log_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite));

@@ -36,7 +36,7 @@ internal delegate void TODrawMessageWindow();
 ///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_game"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2)]
-public unsafe class FhGameUiModule : FhModule {
+public unsafe sealed class FhGameUiModule : FhModule {
 
     private readonly FhMethodHandle<TODrawMessageWindow>         _render_game;
 

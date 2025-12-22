@@ -6,9 +6,19 @@ namespace Fahrenheit.Core;
 
 public unsafe class FhImGuiHelper {
 
+    public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
+        float size      = ImGui.CalcTextSize(label).X + padding;
+        float available = ImGui.GetContentRegionAvail().X;
+        float offset    = (available - size) * t;
+
+        if (offset > 0) {
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offset);
+        }
+    }
+
     private void _init_fonts() {
         ImGuiIOPtr io      = ImGui.GetIO();
-        string     fontdir = Path.Join(FhInternal.PathFinder.Binaries.Path, "resources", "fonts");
+        string     fontdir = Path.Join(FhEnvironment.Finder.Binaries.FullName, "resources", "fonts");
 
         FONT_DEFAULT = io.Fonts.AddFontFromFileTTF(
             Path.Join(fontdir, "NotoSans-VariableFont_wdth,wght.ttf"),

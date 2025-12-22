@@ -23,8 +23,8 @@ public struct AtelStackTypeArray {
 public struct AtelStackValueArray {
     private byte _b;
 
-    [UnscopedRef] public Span<int>   as_int  () { return MemoryMarshal.Cast<byte, int>  (this); }
-    [UnscopedRef] public Span<float> as_float() { return MemoryMarshal.Cast<byte, float>(this); }
+    [UnscopedRef] public Span<int>   as_int  () { return MemoryMarshal.Cast<byte, int>  ((Span<byte>)this); }
+    [UnscopedRef] public Span<float> as_float() { return MemoryMarshal.Cast<byte, float>((Span<byte>)this); }
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x4)]

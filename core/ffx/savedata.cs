@@ -4,10 +4,9 @@ namespace Fahrenheit.Core.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x68C0)]
 public unsafe struct SaveData {
+    [InlineArray(20)]
     public struct Name {
-        private fixed byte _name[20];
-
-        public byte* raw { get { fixed (byte* temp = _name) return temp; } }
+        private byte _b;
     }
 
     [InlineArray(18)]

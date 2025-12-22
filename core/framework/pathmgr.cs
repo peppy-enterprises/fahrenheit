@@ -3,45 +3,27 @@
 namespace Fahrenheit.Core;
 
 /// <summary>
-///     Contains path information required for the loader to process
-///     a DLL in the <see cref="FhManifest.DllList"/> of a Fahrenheit mod.
-/// </summary>
-internal sealed record FhDllPaths(
-    string DllPath,
-    string SettingsPath);
-
-/// <summary>
-///     Contains path information required for the mod controller
-///     and Fahrenheit runtime to handle a module's lifecycle.
+///     Provides access to a module's essential files and directories.
 /// </summary>
 internal sealed record FhModulePaths(
-    string GlobalStatePath);
+    string        GlobalStatePath,
+    DirectoryInfo LocalStateDir);
 
 /// <summary>
-///     Contains path information required for the mod controller
-///     and Fahrenheit runtime to handle a mod's lifecycle.
+///     Provides access to a mod's essential files and directories.
 /// </summary>
 public sealed record FhModPaths(
     string        ManifestPath,
-    DirectoryInfo ModuleDir,
+    string        SettingsPath,
+    DirectoryInfo ModDir,
     DirectoryInfo ResourcesDir,
     DirectoryInfo EflDir,
-    DirectoryInfo LangDir,
-    DirectoryInfo StateDir);
+    DirectoryInfo LangDir);
 
 /// <summary>
-///     Maps a <paramref name="Path"/> on disk to a shorthand <paramref name="Symbol"/>.
-///     Instances of the symbol can then be substituted by the full path.
+///     Resolves the paths of directories and files required by the framework.
 /// </summary>
-public sealed record FhDirLink(
-    string Symbol,
-    string Path);
-
-/// <summary>
-///     Internally resolves the paths of certain well-known
-///     directories and files required by the framework.
-/// </summary>
-internal sealed class FhPathFinder {
+internal sealed class FhFinder {
     private const string _dirname_bin   = "bin";
     private const string _dirname_mods  = "mods";
     private const string _dirname_logs  = "logs";
@@ -51,33 +33,21 @@ internal sealed class FhPathFinder {
     private const string _dirname_rsrc  = "resources";
     private const string _dirname_efl   = "efl";
 
-    internal readonly FhDirLink Binaries;
-    internal readonly FhDirLink Mods;
-    internal readonly FhDirLink Logs;
-    internal readonly FhDirLink State;
-    internal readonly FhDirLink Saves;
+    internal readonly DirectoryInfo Binaries;
+    internal readonly DirectoryInfo Mods;
+    internal readonly DirectoryInfo Logs;
+    internal readonly DirectoryInfo State;
+    internal readonly DirectoryInfo Saves;
 
-    public FhPathFinder() {
+    internal FhFinder() {
         string cwd_parent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
                             throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
 
-        string path_bin   = Path.Join(cwd_parent, _dirname_bin);
-        string path_mods  = Path.Join(cwd_parent, _dirname_mods);
-        string path_logs  = Path.Join(cwd_parent, _dirname_logs);
-        string path_state = Path.Join(cwd_parent, _dirname_state);
-        string path_saves = Path.Join(cwd_parent, _dirname_saves);
-
-        Directory.CreateDirectory(path_bin);
-        Directory.CreateDirectory(path_mods);
-        Directory.CreateDirectory(path_logs);
-        Directory.CreateDirectory(path_state);
-        Directory.CreateDirectory(path_saves);
-
-        Binaries = new FhDirLink("$bin",   path_bin);
-        Mods     = new FhDirLink("$mods",  path_mods);
-        Logs     = new FhDirLink("$logs",  path_logs);
-        State    = new FhDirLink("$state", path_state);
-        Saves    = new FhDirLink("$saves", path_saves);
+        Binaries = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_bin));
+        Mods     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_mods));
+        Logs     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_logs));
+        State    = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_state));
+        Saves    = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_saves));
     }
 
     /// <summary>
@@ -92,91 +62,44 @@ internal sealed class FhPathFinder {
     }
 
     /// <summary>
-    ///     Gets the full path of the save file in slot <paramref name="slot_index"/>,
-    ///     in the game's default save directory.
+    ///     Returns path information for the DLL belonging to mod <paramref name="mod_name"/>.
     /// </summary>
-    public string get_path_savefile(int slot_index) {
-        bool   is_ffx         = FhGlobal.game_id == FhGameId.FFX;
-        string save_subfolder = is_ffx ? "FINAL FANTASY X" : "FINAL FANTASY X-2";
-        string save_prefix    = is_ffx ? "ffx"             : "ffx2";
-        string save_name      = $"{save_prefix}_{slot_index:000}";
+    public string get_for_dll(string mod_name) {
+        bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.OrdinalIgnoreCase);
+        string mod_dir    = is_runtime ? Binaries.FullName : Path.Join(Mods.FullName, mod_name);
 
-        return Path.Join(
-            Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-            "SQUARE ENIX",
-            "FINAL FANTASY X&X-2 HD Remaster",
-            save_subfolder,
-            save_name);
-    }
-
-    /// <summary>
-    ///     Gets the file name of the save file in slot <paramref name="slot_index"/>.
-    /// </summary>
-    public string get_save_name_for_index(int slot_index) {
-        bool   is_ffx      = FhGlobal.game_id == FhGameId.FFX;
-        string save_prefix = is_ffx ? "ffx" : "ffx2";
-        string save_name   = $"{save_prefix}_{slot_index:000}";
-
-        return save_name;
-    }
-
-    /// <summary>
-    ///     Returns path information for DLL <paramref name="dll_name"/>
-    ///     belonging to mod <paramref name="mod_name"/>.
-    /// </summary>
-    public FhDllPaths get_paths_dll(string mod_name, string dll_name) {
-        bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
-        string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
-
-        return new FhDllPaths(
-            DllPath:      Path.Join(module_dir, $"{dll_name}.dll"),
-            SettingsPath: Path.Join(module_dir, $"{dll_name}.config.json")
-            );
+        return Path.Join(mod_dir, $"{mod_name}.dll");
     }
 
     /// <summary>
     ///     Returns path information for mod <paramref name="mod_name"/>.
     /// </summary>
-    public FhModPaths get_paths_mod(string mod_name) {
-        bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.InvariantCultureIgnoreCase);
-        string module_dir = is_runtime ? Binaries.Path : Path.Join(Mods.Path, mod_name);
+    public FhModPaths get_for_mod(string mod_name) {
+        bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.OrdinalIgnoreCase);
+        string mod_dir    = is_runtime ? Binaries.FullName : Path.Join(Mods.FullName, mod_name);
 
         return new FhModPaths(
-            ManifestPath: Path.Join(module_dir, $"{mod_name}.manifest.json"),
-            ModuleDir:    Directory.CreateDirectory(module_dir),
-            ResourcesDir: Directory.CreateDirectory(Path.Join(module_dir, _dirname_rsrc)),
-            EflDir:       Directory.CreateDirectory(Path.Join(module_dir, _dirname_efl)),
-            LangDir:      Directory.CreateDirectory(Path.Join(module_dir, _dirname_lang)),
-            StateDir:     Directory.CreateDirectory(Path.Join(State.Path, mod_name))
+            ManifestPath: Path.Join(mod_dir, $"{mod_name}.manifest.json"),
+            SettingsPath: Path.Join(mod_dir, $"{mod_name}.config.json"),
+            ModDir:       Directory.CreateDirectory(mod_dir),
+            ResourcesDir: Directory.CreateDirectory(Path.Join(mod_dir, _dirname_rsrc)),
+            EflDir:       Directory.CreateDirectory(Path.Join(mod_dir, _dirname_efl)),
+            LangDir:      Directory.CreateDirectory(Path.Join(mod_dir, _dirname_lang))
             );
     }
 
     /// <summary>
-    ///     Returns path information for module <paramref name="module_name"/>
-    ///     belonging to mod <paramref name="mod_name"/>.
+    ///     Returns path information for module <paramref name="module_name"/> of mod <paramref name="mod_name"/>.
     /// </summary>
-    public FhModulePaths get_paths_module(string mod_name, string module_name) {
-        string global_state_dir  = Path.Join(State.Path, mod_name, "global");
+    public FhModulePaths get_for_module(string mod_name, string module_name) {
+        string global_state_dir  = Path.Join(State.FullName, "global", mod_name);
         string global_state_path = Path.Join(global_state_dir, module_name);
 
         Directory.CreateDirectory(global_state_dir);
 
         return new FhModulePaths(
-            GlobalStatePath: global_state_path
+            GlobalStatePath: global_state_path,
+            LocalStateDir:   Directory.CreateDirectory(Path.Join(State.FullName, FhInternal.Saves.StateHash, FhSaveManager.get_save_subfolder(), mod_name, module_name))
             );
-    }
-
-    /// <summary>
-    ///     Fixes up paths in manifest and configuration JSONs by replacing <see cref="FhDirLink.Symbol"/>
-    ///     with <see cref="FhDirLink.Path"/> for all well-known framework folders.
-    ///     <para/>
-    ///     e.g. $bin -> /opt/games/ffx/fahrenheit/bin OR C:\opt\games\ffx\fahrenheit\bin
-    /// </summary>
-    private string fix_paths(string input) {
-        return input.Replace(Binaries.Symbol, Binaries.Path).
-                     Replace(Mods    .Symbol, Mods    .Path).
-                     Replace(Logs    .Symbol, Logs    .Path).
-                     Replace(State   .Symbol, State   .Path).
-                     Replace(Saves   .Symbol, Saves   .Path);
     }
 }

@@ -2,23 +2,24 @@
 
 namespace Fahrenheit.Core.Atel;
 
-[StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x34)]
-public unsafe struct AtelScriptHeader {
-    [FieldOffset(0x00)] public ushort script_type;
-    [FieldOffset(0x02)] public ushort var_count;
-    [FieldOffset(0x04)] public ushort ref_int_count;
-    [FieldOffset(0x06)] public ushort ref_float_count;
-    [FieldOffset(0x08)] public ushort entry_point_count;
-    [FieldOffset(0x0A)] public ushort jump_count;
-    [FieldOffset(0x10)] public uint   priv_data_len;
-    [FieldOffset(0x14)] public uint   offset_var_table;
-    [FieldOffset(0x18)] public uint   offset_int_table;
-    [FieldOffset(0x1C)] public uint   offset_float_table;
-    [FieldOffset(0x20)] public uint   offset_entry_points_table;
-    [FieldOffset(0x24)] public uint   offset_jumps_table;
-    [FieldOffset(0x28)] public uint   offset_data;
-    [FieldOffset(0x2C)] public uint   offset_priv_data;
-    [FieldOffset(0x30)] public uint   offset_shared_data;
+[StructLayout(LayoutKind.Sequential)]
+public struct AtelScriptHeader {
+    public ushort script_type;
+    public ushort var_count;
+    public ushort ref_int_count;
+    public ushort ref_float_count;
+    public ushort entry_point_count;
+    public ushort jump_count;
+    public uint   _0x0C;
+    public uint   priv_data_len;
+    public uint   offset_var_table;
+    public uint   offset_int_table;
+    public uint   offset_float_table;
+    public uint   offset_entry_points_table;
+    public uint   offset_jumps_table;
+    public uint   offset_data;
+    public uint   offset_priv_data;
+    public uint   offset_shared_data;
 }
 
 public enum AtelScriptVarLocation {
@@ -42,7 +43,7 @@ public enum AtelScriptVarType {
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x4)]
-public unsafe struct AtelScriptVarValue {
+public struct AtelScriptVarValue {
     [FieldOffset(0x0)] public byte   as_byte;
     [FieldOffset(0x0)] public sbyte  as_sbyte;
     [FieldOffset(0x0)] public ushort as_ushort;

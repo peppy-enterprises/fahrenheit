@@ -23,11 +23,11 @@ public class FhCharsetTests {
         ReadOnlySpan<byte> sjistbl      = FhShiftJisTables.get_table(lang, game);
         string             sjistbl_utf8 = Encoding.UTF8.GetString(sjistbl);
 
-        byte[] sjistbl_to_game = new byte[ FhCharset.compute_encode_buffer_size(sjistbl, lang, game, FhEncodingFlags.IGNORE_EXPRESSIONS) ];
-        FhCharset.encode(sjistbl, sjistbl_to_game, lang, game, FhEncodingFlags.IGNORE_EXPRESSIONS);
+        byte[] sjistbl_to_game = new byte[ FhEncoding.compute_encode_buffer_size(sjistbl, lang, game, FhEncodingFlags.IGNORE_EXPRESSIONS) ];
+        FhEncoding.encode(sjistbl, sjistbl_to_game, lang, game, FhEncodingFlags.IGNORE_EXPRESSIONS);
 
-        byte[] game_to_utf8 = new byte[ FhCharset.compute_decode_buffer_size(sjistbl_to_game, lang, game, FhEncodingFlags.IGNORE_EXPRESSIONS) ];
-        FhCharset.decode(sjistbl_to_game, game_to_utf8, lang, game);
+        byte[] game_to_utf8 = new byte[ FhEncoding.compute_decode_buffer_size(sjistbl_to_game, lang, game, FhEncodingFlags.IGNORE_EXPRESSIONS) ];
+        FhEncoding.decode(sjistbl_to_game, game_to_utf8, lang, game);
 
         string sjistbl_utf8_roundtripped = Encoding.UTF8.GetString(game_to_utf8);
 
@@ -51,8 +51,8 @@ public class FhCharsetRegressionTests {
     public void ffx_we_square_brackets(string input) {
         ReadOnlySpan<byte> utf8_bytes_input = Encoding.UTF8.GetBytes(input);
 
-        byte[] encoded = new byte[ FhCharset.compute_encode_buffer_size(utf8_bytes_input, FhLangId.English, FhGameId.FFX) ];
-        FhCharset.encode(utf8_bytes_input, encoded, FhLangId.English, FhGameId.FFX);
+        byte[] encoded = new byte[ FhEncoding.compute_encode_buffer_size(utf8_bytes_input, FhLangId.English, FhGameId.FFX) ];
+        FhEncoding.encode(utf8_bytes_input, encoded, FhLangId.English, FhGameId.FFX);
 
         ReadOnlySpan<byte> expected_result =
             [ 0x6A, 0x50, 0x7C, 0x84, 0x7B, 0x74, 0x83, 0x6C, 0x3A, 0x87, 0x3A, 0x39, 0x30 ];
@@ -64,8 +64,8 @@ public class FhCharsetRegressionTests {
     public void ffx_we_curly_brackets_in_ignore_expr(string input) {
         ReadOnlySpan<byte> utf8_bytes_input = Encoding.UTF8.GetBytes(input);
 
-        byte[] encoded = new byte[ FhCharset.compute_encode_buffer_size(utf8_bytes_input, FhLangId.English, FhGameId.FFX, FhEncodingFlags.IGNORE_EXPRESSIONS) ];
-        FhCharset.encode(utf8_bytes_input, encoded, FhLangId.English, FhGameId.FFX, FhEncodingFlags.IGNORE_EXPRESSIONS);
+        byte[] encoded = new byte[ FhEncoding.compute_encode_buffer_size(utf8_bytes_input, FhLangId.English, FhGameId.FFX, FhEncodingFlags.IGNORE_EXPRESSIONS) ];
+        FhEncoding.encode(utf8_bytes_input, encoded, FhLangId.English, FhGameId.FFX, FhEncodingFlags.IGNORE_EXPRESSIONS);
 
         ReadOnlySpan<byte> expected_result =
             [ 0x8A, 0x52, 0x5E, 0x5B, 0x5E, 0x61, 0x4A, 0x38, 0x38, 0x8C, 0x5F, 0x70, 0x81,

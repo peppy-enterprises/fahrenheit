@@ -3,7 +3,7 @@
 namespace Fahrenheit.Core.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x6C)]
-public partial struct AutoAbility {
+public struct AutoAbility {
     [FieldOffset(0x00)] public ushort                name_offset;
     [FieldOffset(0x04)] public ushort                dash_offset;
     [FieldOffset(0x08)] public ushort                desc_offset;

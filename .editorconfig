@@ -1,5 +1,8 @@
 ﻿[*.cs]
 
+# guidelines
+guidelines = 100
+
 # copyright notice
 file_header_template = SPDX-License-Identifier: MIT
 

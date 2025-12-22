@@ -3,53 +3,9 @@
 namespace Fahrenheit.Core;
 
 public unsafe static class FhUtil {
-    public static T* ptr_at<T>(nint address)          where T : unmanaged { return (T*)(FhGlobal.base_addr + address); }
-    public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                }
-    public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;        }
-
-    public static FhLangId get_lang_id() {
-        string ini_path     = FhInternal.PathFinder.get_path_settings();
-        string ini_lang_key = "Language=";
-        // linebreaks can be inconsistent depending on whether INI edited by hand or by launcher
-        char[] line_breaks  = [ '\r', '\n' ];
-
-        try {
-            using (FileStream   ini_stream = File.OpenRead(ini_path))
-            using (StreamReader ini_reader = new StreamReader(ini_stream)) {
-                string ini = ini_reader.ReadToEnd();
-
-                int ini_lang_s = ini.IndexOf(ini_lang_key) + ini_lang_key.Length;
-                int ini_lang_e = ini[ ini_lang_s .. ].IndexOfAny(line_breaks) + ini_lang_s;
-
-                return ini[ ini_lang_s .. ini_lang_e ] switch {
-                    "en"         => FhLangId.English,
-                    "ch" or "cn" => FhLangId.Chinese,
-                    "jp"         => FhLangId.Japanese,
-                    "kr"         => FhLangId.Korean,
-                    "fr"         => FhLangId.French,
-                    "es"         => FhLangId.Spanish,
-                    "it"         => FhLangId.Italian,
-                    "de"         => FhLangId.German,
-                    _            => FhLangId.Japanese, // mirror game default behavior
-                };
-            }
-        }
-        catch (Exception e) {
-            FhInternal.Log.Error($"faulted while probing game language: {e}");
-            FhInternal.Log.Error("falling back to JP to mirror game default");
-
-            return FhLangId.Japanese;
-        }
-    }
-
-    public static FhGameId get_game_id() {
-        FhGameId rv = FhGameId.NULL;
-
-        if (FhPInvoke.GetModuleHandle("FFX.exe")   != 0) rv = FhGameId.FFX;
-        if (FhPInvoke.GetModuleHandle("FFX-2.exe") != 0) rv = FhGameId.FFX2;
-
-        return rv;
-    }
+    public static T* ptr_at<T>(nint address)          where T : unmanaged { return (T*)(FhEnvironment.BaseAddr + address); }
+    public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                    }
+    public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;            }
 
     public static void cast_to_bytes<T>(in ReadOnlySpan<T> src, in Span<byte> dest, out int bytesWritten) where T : struct {
         bytesWritten = Unsafe.SizeOf<T>() * src.Length;
@@ -127,7 +83,7 @@ public unsafe static class FhUtil {
 
     internal static JsonSerializerOptions InternalJsonOpts { get; } = new JsonSerializerOptions {
         Converters = {
-            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseUpper)
         },
         NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
     };
@@ -146,8 +102,8 @@ public unsafe static class FhUtil {
         reader.Read();
     }
 
-    public static TDelegate get_fptr<TDelegate>(nint funcAddress) {
-        return Marshal.GetDelegateForFunctionPointer<TDelegate>(FhGlobal.base_addr + funcAddress);
+    public static TDelegate get_fptr<TDelegate>(nint address) {
+        return Marshal.GetDelegateForFunctionPointer<TDelegate>(FhEnvironment.BaseAddr + address);
     }
 
     public static Vector2 game_remap_720p(this Vector2 vec) {

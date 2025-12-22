@@ -18,7 +18,7 @@ internal delegate void AtelExecInternal_00871d10();
 ///     <br/> - <see cref="FhModule.pre_update"/>
 ///     <br/> - <see cref="FhModule.post_update"/>
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
