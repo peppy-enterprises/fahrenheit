@@ -29,6 +29,7 @@ global using T_XNpcId            = System.UInt16; // ids/npc
 global using T_XObjId            = System.UInt16; // ids/object
 global using T_XPcModelId        = System.UInt16; // ids/mdl_pc
 global using T_XCommandId        = System.UInt16; // ids/com_boss, com_mon, com_ply, item
+global using T_XAutoAbilityId    = System.UInt16; // ids/a_ability
 global using T_XSkeletonId       = System.UInt16; // ids/mdl_skl
 global using T_XSummonId         = System.UInt16; // ids/summon
 global using T_XBtlId            = System.UInt32; // ids/btl

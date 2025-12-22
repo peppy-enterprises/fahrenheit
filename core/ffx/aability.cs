@@ -68,3 +68,40 @@ public static partial class FhEnumExt {
     public static bool magic_bonus        (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_BONUS);
     public static bool magic_defense_bonus(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE_BONUS);
 }
+
+[Flags]
+public enum GearType : byte {
+    NONE = 0,
+    WEAPON = 1,
+    ARMOR = 2,
+}
+
+public static partial class FhEnumExt {
+    public static bool weapon(this GearType gear_type) => gear_type.HasFlag(GearType.WEAPON);
+    public static bool armor(this GearType gear_type) => gear_type.HasFlag(GearType.ARMOR);
+}
+
+/// <summary>
+/// Recipe for customizing an auto-ability onto gear using a set amount of an item.
+/// </summary>
+public struct CustomizationRecipe {
+    /// <summary>
+    /// The gear type that can be customized using this recipe.
+    /// </summary>
+    public GearType target_gear_type;
+
+    /// <summary>
+    /// The auto-ability that results from this recipe.
+    /// </summary>
+    public T_XAutoAbilityId auto_ability;
+
+    /// <summary>
+    /// The item to be spent on the customization.
+    /// </summary>
+    public T_XCommandId item;
+
+    /// <summary>
+    /// The amount of the item that is needed.
+    /// </summary>
+    public ushort item_cost;
+}
