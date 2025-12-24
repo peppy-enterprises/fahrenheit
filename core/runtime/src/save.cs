@@ -405,10 +405,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
             save_stream.Write(save);
         }
 
-        // TODO: popup if success
-        impl_exit_success();
-
         (_lsm!.Module as FhLocalStateModule)!.state_save_slot(slot);
+        impl_exit_success(); // TODO: popup if success
     }
 
     /// <summary>
@@ -437,10 +435,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
 
         FhUtil.set_at(pal_addr_force_player_rename(), player_needs_rename);
 
-        // TODO: popup if success
-        impl_exit_success();
-
         (_lsm!.Module as FhLocalStateModule)!.state_load_slot(slot);
+        impl_exit_success(); // TODO: popup if success
     }
 
     /// <summary>
