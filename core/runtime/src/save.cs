@@ -1,7 +1,5 @@
 ﻿// SPDX-License-Identifier: MIT
 
-using System.Numerics;
-
 namespace Fahrenheit.Core.Runtime;
 
 /* [fkelava 13/11/25 22:03]
@@ -121,16 +119,16 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
             && _lsm_handle     .try_get(out _lsm);
     }
 
+    /// <summary>
+    ///     Displays the main save/load menu,
+    /// </summary>
     private void ui_mainwindow() {
-        ImGuiIOPtr    io    = ImGui.GetIO();
-        ImGuiStylePtr style = ImGui.GetStyle();
-
-        ImGuiWindowFlags flags = FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoScrollbar);
+        ImGuiIOPtr io = ImGui.GetIO();
 
         ImGui.SetNextWindowPos (new Vector2(io.DisplaySize.X * 0.008F, io.DisplaySize.Y * 0.105F));
         ImGui.SetNextWindowSize(new Vector2(io.DisplaySize.X * 0.984F, io.DisplaySize.Y * 0.88F));
 
-        if (!ImGui.Begin("###Fh.Runtime.SaveSystem.SaveLoadUI", flags)) {
+        if (!ImGui.Begin("###Fh.Runtime.SaveSystem.SaveLoadUI", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoScrollbar))) {
             ImGui.End();
             return;
         }

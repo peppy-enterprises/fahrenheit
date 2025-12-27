@@ -3,6 +3,7 @@ global using System.Buffers.Binary;           // BinaryPrimitives et al.
 global using System.Collections.Generic;      // List<T>, Dictionary<T,U> and others
 global using System.Diagnostics.CodeAnalysis; // [NotNullWhen] contract
 global using System.IO;                       // Path, File, and similar
+global using System.Numerics;                 // Vector2, et al.
 global using System.Runtime.CompilerServices; // [InlineArray], [CallConvStdcall] et al.
 global using System.Runtime.InteropServices;  // [UnmanagedFunctionPointer], [DllImport], [LibraryImport] et al.
 global using System.Runtime.Versioning;       // [SupportedOSPlatform] guard

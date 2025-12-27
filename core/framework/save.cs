@@ -371,21 +371,19 @@ internal class FhSaveManager {
     ///     For a given <paramref name="menu_index"/>, returns the slot number being saved to.
     /// </summary>
     internal int get_slot_save(int menu_index) {
-        // TODO: can this method ever be re-entrant? if so, locking is req'd
-        if (menu_index == 0) menu_index++;
-
+        // This method is not re-entrant.
         ReadOnlySpan<int>             slots = _slots;
         ReadOnlySpan<FhSaveListEntry> saves = _saves;
 
-        bool is_overwrite = saves[menu_index].slot != -1;
-        int  target_slot  = is_overwrite
+        int target_slot = menu_index != 0
             ? saves[menu_index].slot
             : slots.IndexOf(-1);
+        Debug.Assert(target_slot != -1);
 
         _slots[target_slot]      = 1;
         _saves[target_slot].slot = target_slot;
 
-        if (!is_overwrite) _save_count++;
+        if (menu_index == 0) _save_count++;
 
         return target_slot;
     }

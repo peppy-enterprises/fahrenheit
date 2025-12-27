@@ -152,17 +152,14 @@ public unsafe sealed class FhImguiModule : FhModule {
     /// </summary>
     private nint h_init_wndproc() {
         nint result = _handle_wndproc_init.orig_fptr();
-        switch (FhGlobal.game_id) {
-            case FhGameId.FFX:
-                _hWnd = (HWND)FhUtil.get_at<nint>(0x8C9CE8);
-                break;
-            case FhGameId.FFX2:
-                _hWnd = (HWND)FhUtil.get_at<nint>(0x16641B8);
-                break;
-        }
+
+        _hWnd = FhGlobal.game_id is FhGameId.FFX
+            ? FhUtil.get_at<HWND>(0x8C9CE8)
+            : FhUtil.get_at<HWND>(0x16641B8);
+
         _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
         _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
-        nint _         = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
+        _              = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
 
         init_imgui();
         return result;
