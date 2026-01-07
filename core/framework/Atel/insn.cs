@@ -130,6 +130,7 @@ public enum AtelOp : byte {
 
 public static class AtelOpExt {
     extension(AtelOp value) {
+        public byte opcode => ((byte)value).get_bits(0, 7);
         public bool has_operand => ((byte)value).get_bit(7);
     }
 
@@ -157,19 +158,32 @@ public record struct AtelInst(AtelOp instruction, ushort? operand) {
         return bytes;
     }
 
-    public static AtelInst[] disassemble(ReadOnlySpan<byte> source) {
-        List<AtelInst> instructions = new();
+    public static int count_inst(ReadOnlySpan<byte> source) {
+        int length = 0;
 
         bool has_operand;
         for (int i = 0; i < source.Length; i += has_operand ? 3 : 1) {
-            AtelOp op = (AtelOp)source[i];
-            has_operand = op.has_operand;
-
-            ushort? operand = has_operand ? BitConverter.ToUInt16(source[(i+1)..(i+3)]) : null;
-
-            instructions.Add(new AtelInst { instruction = op, operand = operand });
+            has_operand = source[i].get_bit(7);
+            length += 1;
         }
 
-        return instructions.ToArray();
+        return length;
+    }
+
+    public static int disassemble(in Span<AtelInst> dest, ReadOnlySpan<byte> source) {
+        int inst_idx = 0;
+
+        bool has_operand;
+        for (int byte_idx = 0; byte_idx < source.Length; byte_idx += has_operand ? 3 : 1) {
+            AtelOp op = (AtelOp)source[byte_idx];
+            has_operand = op.has_operand;
+
+            ushort? operand = has_operand ? BitConverter.ToUInt16(source[(byte_idx+1)..(byte_idx+3)]) : null;
+
+            dest[inst_idx] = new AtelInst { instruction = op, operand = operand };
+            inst_idx += 1;
+        }
+
+        return inst_idx;
     }
 }
