@@ -1,5 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 
+using Fahrenheit.Core.FFX.Ids;
+
 namespace Fahrenheit.Core.FFX;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x68C0)]
@@ -14,9 +16,137 @@ public unsafe struct SaveData {
         private Name _data;
     }
 
+    [InlineArray(256)]
+    public struct EventFlags {
+        private byte _data;
+    }
+
+    [InlineArray(256)]
+    public struct InventoryTypes {
+        private T_XCommandId _data;
+    }
+
+    [InlineArray(256)]
+    public struct InventoryCounts {
+        private byte _data;
+    }
+
+    [InlineArray(16)]
+    public struct ItemCheckField {
+        private ushort _data;
+
+        public bool get(int item_id) {
+            int id = item_id & 0xFFF;
+            return this[id >> 4].get_bit(id & 0xF);
+        }
+
+        public void set(int item_id, bool value) {
+            int id = item_id & 0xFFF;
+            this[id >> 4].set_bit(id & 0xF, value);
+        }
+    }
+
+    [InlineArray(512)]
+    public struct MonsterCaptureCounts {
+        private byte _data;
+    }
+
+    [InlineArray(32)]
+    public struct MonsterCheckField {
+        private ushort _data;
+
+        public bool get(int mon_id) {
+            int id = mon_id & 0xFFF;
+            return this[id >> 4].get_bit(id & 0xF);
+        }
+
+        public void set(int mon_id, bool value) {
+            int id = mon_id & 0xFFF;
+            this[id >> 4].set_bit(id & 0xF, value);
+        }
+    }
+
+    [InlineArray(8)]
+    public struct KeyItemsCheckField {
+        private ushort _data;
+
+        public bool get(int key_item_id) {
+            int id = key_item_id & 0xFFF;
+            return this[id >> 4].get_bit(id & 0xF);
+        }
+
+        public void set(int key_item_id, bool value) {
+            int id = key_item_id & 0xFFF;
+            this[id >> 4].set_bit(id & 0xF, value);
+        }
+    }
+
     [InlineArray(200)]
     public struct EquipmentArray {
         private Equipment _data;
+    }
+
+    [InlineArray(18)]
+    public struct PlySaveArray {
+        private PlySave _data;
+
+        public PlySave tidus   => this[PlySaveId.PC_TIDUS];
+        public PlySave yuna    => this[PlySaveId.PC_YUNA];
+        public PlySave auron   => this[PlySaveId.PC_AURON];
+        public PlySave kimahri => this[PlySaveId.PC_KIMAHRI];
+        public PlySave wakka   => this[PlySaveId.PC_WAKKA];
+        public PlySave lulu    => this[PlySaveId.PC_LULU];
+        public PlySave rikku   => this[PlySaveId.PC_RIKKU];
+        public PlySave seymour => this[PlySaveId.PC_SEYMOUR];
+        public PlySave valefor => this[PlySaveId.PC_VALEFOR];
+        public PlySave ifrit   => this[PlySaveId.PC_IFRIT];
+        public PlySave ixion   => this[PlySaveId.PC_IXION];
+        public PlySave shiva   => this[PlySaveId.PC_SHIVA];
+        public PlySave bahamut => this[PlySaveId.PC_BAHAMUT];
+        public PlySave anima   => this[PlySaveId.PC_ANIMA];
+        public PlySave yojimbo => this[PlySaveId.PC_YOJIMBO];
+        public PlySave cindy   => this[PlySaveId.PC_MAGUS1];
+        public PlySave sandy   => this[PlySaveId.PC_MAGUS2];
+        public PlySave mindy   => this[PlySaveId.PC_MAGUS3];
+    }
+
+    [InlineArray(22)]
+    public struct PlyComCheckField {
+        private ushort _data;
+
+        public bool get(int com_id) {
+            int id = com_id & 0xFFF;
+            return this[id >> 4].get_bit(id & 0xF);
+        }
+
+        public void set(int com_id, bool value) {
+            int id = com_id & 0xFFF;
+            this[id >> 4].set_bit(id & 0xF, value);
+        }
+    }
+
+    [InlineArray(18)]
+    public struct PlyComCheckFields {
+        private PlyComCheckField _data;
+
+        public PlyComCheckField tidus   => this[PlySaveId.PC_TIDUS];
+        public PlyComCheckField yuna    => this[PlySaveId.PC_YUNA];
+        public PlyComCheckField auron   => this[PlySaveId.PC_AURON];
+        public PlyComCheckField kimahri => this[PlySaveId.PC_KIMAHRI];
+        public PlyComCheckField wakka   => this[PlySaveId.PC_WAKKA];
+        public PlyComCheckField lulu    => this[PlySaveId.PC_LULU];
+        public PlyComCheckField rikku   => this[PlySaveId.PC_RIKKU];
+        public PlyComCheckField seymour => this[PlySaveId.PC_SEYMOUR];
+        public PlyComCheckField valefor => this[PlySaveId.PC_VALEFOR];
+        public PlyComCheckField ifrit   => this[PlySaveId.PC_IFRIT];
+        public PlyComCheckField ixion   => this[PlySaveId.PC_IXION];
+        public PlyComCheckField shiva   => this[PlySaveId.PC_SHIVA];
+        public PlyComCheckField bahamut => this[PlySaveId.PC_BAHAMUT];
+        public PlyComCheckField anima   => this[PlySaveId.PC_ANIMA];
+        public PlyComCheckField yojimbo => this[PlySaveId.PC_YOJIMBO];
+        public PlyComCheckField cindy   => this[PlySaveId.PC_MAGUS1];
+        public PlyComCheckField sandy   => this[PlySaveId.PC_MAGUS2];
+        public PlyComCheckField mindy   => this[PlySaveId.PC_MAGUS3];
     }
 
     [FieldOffset(0x0)]    public       ushort         current_room_id;
@@ -67,35 +197,20 @@ public unsafe struct SaveData {
     [FieldOffset(0x3DAC)] public       uint           tidus_limit_uses;
     [FieldOffset(0x3DB0)] public       uint           successful_rikku_steals;
     [FieldOffset(0x3DB4)] public       uint           bribe_gil_spent;
-    [FieldOffset(0x3DCC)] public fixed byte           event_flags[0x80];
-    [FieldOffset(0x3E4C)] public fixed byte           help_flags[0x80]; // Size unconfirmed
-    [FieldOffset(0x3ECC)] public fixed T_XCommandId   inventory_ids[70];
-    [FieldOffset(0x40CC)] public fixed byte           inventory_counts[70];
-    [FieldOffset(0x41CC)] public       ushort         inventory_check; // bitfield of unknown size
-    [FieldOffset(0x41EC)] public       byte           inventory_use;   // unused?
-    [FieldOffset(0x448C)] public fixed ushort         important_items[8];
-    [FieldOffset(0x449C)] public       EquipmentArray equipment;
-    [FieldOffset(0x55CC)] public       PlySave        ply_tidus;
-    [FieldOffset(0x5660)] public       PlySave        ply_yuna;
-    [FieldOffset(0x56F4)] public       PlySave        ply_auron;
-    [FieldOffset(0x5788)] public       PlySave        ply_kimahri;
-    [FieldOffset(0x581C)] public       PlySave        ply_wakka;
-    [FieldOffset(0x58B0)] public       PlySave        ply_lulu;
-    [FieldOffset(0x5944)] public       PlySave        ply_rikku;
-    [FieldOffset(0x59D8)] public       PlySave        ply_seymour;
-    [FieldOffset(0x5A6C)] public       PlySave        ply_valefor;
-    [FieldOffset(0x5B00)] public       PlySave        ply_ifrit;
-    [FieldOffset(0x5B94)] public       PlySave        ply_ixion;
-    [FieldOffset(0x5C28)] public       PlySave        ply_shiva;
-    [FieldOffset(0x5CBC)] public       PlySave        ply_bahamut;
-    [FieldOffset(0x5D50)] public       PlySave        ply_anima;
-    [FieldOffset(0x5DE4)] public       PlySave        ply_yojimbo;
-    [FieldOffset(0x5E78)] public       PlySave        ply_cindy;
-    [FieldOffset(0x5F0C)] public       PlySave        ply_sandy;
-    [FieldOffset(0x5FA0)] public       PlySave        ply_mindy;
-    [FieldOffset(0x634C)] public       NamesGroup     character_names;
 
-    public ReadOnlySpan<PlySave> ply_arr => MemoryMarshal.CreateReadOnlySpan(ref ply_tidus, 18);
+    [FieldOffset(0x3DCC)] public EventFlags           event_flags;
+    [FieldOffset(0x3ECC)] public InventoryTypes       inventory_ids;
+    [FieldOffset(0x40CC)] public InventoryCounts      inventory_counts;
+    [FieldOffset(0x41CC)] public ItemCheckField       items_acquired;
+    [FieldOffset(0x41EC)] public ItemCheckField       items_used;
+    [FieldOffset(0x420C)] public MonsterCaptureCounts monsters_captured;
+    [FieldOffset(0x440C)] public MonsterCheckField    monsters_seen;
+    [FieldOffset(0x444C)] public MonsterCheckField    monsters_defeated;
+    [FieldOffset(0x448C)] public KeyItemsCheckField   key_items;
+    [FieldOffset(0x449C)] public EquipmentArray       equipment;
+    [FieldOffset(0x55CC)] public PlySaveArray         ply_saves;
+    [FieldOffset(0x6034)] public PlyComCheckFields    commands_used;
+    [FieldOffset(0x634C)] public NamesGroup           character_names;
 
     public bool get_affection_room_gained(int room_id) {
         return room_id < 0x280 && affection_room_flags[room_id / 32].get_bit(room_id % 32);
@@ -111,15 +226,6 @@ public unsafe struct SaveData {
             if (inventory_ids[i] == item_id) return inventory_counts[i];
         }
         return 0;
-    }
-
-    public bool has_key_item(int key_item_id) {
-        return key_item_id < 0x80 && important_items[key_item_id / 16].get_bit(key_item_id % 16);
-    }
-
-    public void set_key_item(int key_item_id, bool value) {
-        if (key_item_id >= 0x80) return;
-        important_items[key_item_id / 16].set_bit(key_item_id % 16, value);
     }
 
     public bool rand_encounters_no_fanfare  { readonly get { return rand_encounter_modifiers.get_bit( 8); } set { rand_encounter_modifiers.set_bit( 8, value); } }
