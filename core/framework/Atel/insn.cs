@@ -130,12 +130,12 @@ public enum AtelOp : byte {
 
 public static class AtelOpExt {
     extension(AtelOp value) {
-        public bool has_operand => ((byte)value & 0x80) != 0;
+        public bool has_operand => ((byte)value).get_bit(7);
     }
 
     public static AtelInst build(this AtelOp inst, ushort? operand = null) {
         if (!inst.has_operand && operand.HasValue)
-            throw new ArgumentException($"Tried to build an {typeof(AtelInst)} with an operand and an instruction that doesn't take an operand.");
+            throw new ArgumentException($"Tried to build an {nameof(AtelInst)} with an operand and an instruction that doesn't take an operand.");
         return new AtelInst { instruction = inst, operand = operand };
     }
 }
