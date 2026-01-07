@@ -2,20 +2,6 @@
 
 namespace Fahrenheit.Core.Atel;
 
-public record struct AtelInst(byte instruction, ushort? operand) {
-    public byte[] to_bytes() {
-        byte[] bytes = new byte[operand.HasValue ? 3 : 1];
-
-        bytes[0] = instruction;
-        if (operand.HasValue) {
-            bytes[1] = (byte)operand.Value;
-            bytes[2] = (byte)(operand.Value >> 8);
-        }
-
-        return bytes;
-    }
-}
-
 public enum AtelOp : byte {
     NOP        = 0x0,
     LOR        = 0x1,
@@ -143,12 +129,47 @@ public enum AtelOp : byte {
 }
 
 public static class AtelOpExt {
-    public static bool has_operand(this AtelOp inst) {
-        return ((byte)inst & 0x80) != 0;
+    extension(AtelOp value) {
+        public bool has_operand => ((byte)value & 0x80) != 0;
     }
 
     public static AtelInst build(this AtelOp inst, ushort? operand = null) {
-        if (!inst.has_operand() && operand.HasValue) throw new ArgumentException($"Tried to build an AtelOpCode with an operand and instruction that doesn't take an operand.");
-        return new AtelInst { instruction = (byte)inst, operand = operand };
+        if (!inst.has_operand && operand.HasValue)
+            throw new ArgumentException($"Tried to build an {typeof(AtelInst)} with an operand and an instruction that doesn't take an operand.");
+        return new AtelInst { instruction = inst, operand = operand };
+    }
+}
+
+public record struct AtelInst(AtelOp instruction, ushort? operand) {
+    public bool validate() {
+        return instruction.has_operand == operand.HasValue;
+    }
+
+    public byte[] to_bytes() {
+        byte[] bytes = new byte[instruction.has_operand ? 3 : 1];
+
+        bytes[0] = (byte)instruction;
+        if (operand.HasValue) {
+            bytes[1] = (byte)operand.Value;
+            bytes[2] = (byte)(operand.Value >> 8);
+        }
+
+        return bytes;
+    }
+
+    public static AtelInst[] disassemble(ReadOnlySpan<byte> source) {
+        List<AtelInst> instructions = new();
+
+        bool has_operand;
+        for (int i = 0; i < source.Length; i += has_operand ? 3 : 1) {
+            AtelOp op = (AtelOp)source[i];
+            has_operand = op.has_operand;
+
+            ushort? operand = has_operand ? BitConverter.ToUInt16(source[(i+1)..(i+3)]) : null;
+
+            instructions.Add(new AtelInst { instruction = op, operand = operand });
+        }
+
+        return instructions.ToArray();
     }
 }
