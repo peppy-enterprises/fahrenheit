@@ -1,5 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 
+using System.Text;
+
 namespace Fahrenheit.Core.FFX.Battle;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x10)]
@@ -111,6 +113,31 @@ public struct BtlDebugFlags {
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x2150)]
 public unsafe struct Btl {
+    [InlineArray(32)]
+    public struct CtbList {
+        private CtbEntry _data;
+    }
+
+    [InlineArray(62)]
+    public struct InputCueList {
+        private InputCue _data;
+    }
+
+    [InlineArray(62)]
+    public struct AttackCueList {
+        private AttackCue _data;
+    }
+
+    [InlineArray(32)]
+    public struct ReadCueList {
+        private ReadCue _data;
+    }
+
+    [InlineArray(14)]
+    public struct FieldName {
+        private byte _b;
+    }
+
     [FieldOffset(0x10)]   public       byte   battle_state;
     [FieldOffset(0x12)]   public       byte   battle_trigger;
 
@@ -159,15 +186,41 @@ public unsafe struct Btl {
     [FieldOffset(0x124)]  public       uint   ptr_btl_bin_cur_encounter;
     [FieldOffset(0x128)]  public       uint   ptr_btl_bin_cur_group;
     [FieldOffset(0x12C)]  public       uint   ptr_btl_bin_cur_formation;
+
+    [FieldOffset(0x130)]  public       CtbList ctb_list;
+
+    [FieldOffset(0x1B0)]  public       InputCueList  input_cues;
+    [FieldOffset(0x3a0)]  public       AttackCueList attack_cues;
+    [FieldOffset(0x1510)] public       byte          input_cues_size;
+    [FieldOffset(0x1511)] public       byte          attack_cues_size;
+
+    // I don't know what this is; `BtlMimic` struct has size 0x48
+    // [FieldOffset(0x1568] public        BtlMimic      mimic;
+
     [FieldOffset(0x15C0)] public       uint   chosen_gil;
+
+    [FieldOffset(0x15D0)] public       ReadCueList   read_cues;
+    [FieldOffset(0x1751)] public       byte          read_cues_size;
+
+    // 128 long list of 4-byte structs, something to do with sound
+    // [FieldOffset(0x175C)] public       undefined4    sep[128];
+
+
     [FieldOffset(0x1984)] public       ushort battlefield_id;
     [FieldOffset(0x1986)] public       ushort field_idx;
     [FieldOffset(0x1988)] public       byte   group_idx;
     [FieldOffset(0x1989)] public       byte   formation_idx;
-    [FieldOffset(0x198A)] public fixed byte   field_name[8];
+    [FieldOffset(0x198A)] public FieldName field_name;
 
-    [FieldOffset(0x1FC5)] public fixed byte   frontline[3];
-    [FieldOffset(0x1FD3)] public fixed byte   backline[4];
+    // [FieldOffset(0x1C56)] public undefined2 __0x1C56[200]; // Something related to weapons, model ids?
+    // [FieldOffset(0x1DE6)] public short __0x1DE6[112];  // Something related to items
+    // [FieldOffset(0x1EC6)] public short __0x1EC6[112];  // Something related to items
+
+    [FieldOffset(0x1FA6)] public fixed byte __0x1FA6[31];
+    [FieldOffset(0x1FC5)] public fixed byte __0x1FC5[7];
+    [FieldOffset(0x1FCC)] public fixed byte __0x1FCC[7];
+    [FieldOffset(0x1FD3)] public fixed byte __0x1FD3[17];
+    [FieldOffset(0x1FE4)] public fixed byte __0x1FE4[17];
 
     [FieldOffset(0x2008)] public       uint   last_com;
     [FieldOffset(0x210C)] public       byte   ambush_state;
