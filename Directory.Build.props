@@ -8,6 +8,7 @@
         <_FhOutDirMods>$([MSBuild]::NormalizeDirectory('$(_FhOutDir)', 'mods', '$(AssemblyName)'))</_FhOutDirMods>
         
         <PublishDir>$(_FhOutDirBin)</PublishDir>
+        <BaseOutputPath>$(_FhBaseOutputPath)</BaseOutputPath>
         <BaseIntermediateOutputPath>$(_FhBaseIntermediateOutputPath)</BaseIntermediateOutputPath>
         <Company>https://github.com/peppy-enterprises/fahrenheit</Company>
 	</PropertyGroup>

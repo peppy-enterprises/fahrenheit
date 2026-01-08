@@ -4,6 +4,6 @@
 
     <PropertyGroup>
         <!-- Set output directory for mod projects. -->
-        <OutDir>$(_FhOutDirMods)</OutDir>
+        <PublishDir>$(_FhOutDirMods)</PublishDir>
 	</PropertyGroup>
 </Project>

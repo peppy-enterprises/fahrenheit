@@ -3,19 +3,71 @@
 namespace Fahrenheit.Core;
 
 /// <summary>
-///     Contains Fahrenheit boot logic. When the bootstrapper completes, game execution commences.
+///     Contains Fahrenheit boot logic and basic internal runtime constants.
 /// </summary>
-public static class FhBootstrapper {
-    /* [fkelava 25/4/24 18:47]
-     * This class and method are referenced by Stage1. Updating or renaming either requires a Stage1 update.
-     */
-    [UnmanagedCallersOnly]
-    public static void bootstrap() {
-        FhModContext[] mods = FhInternal.Loader.load_mods();
+internal static class FhEnvironment {
 
-        FhApi.Mods = new(mods);
-        FhApi.Localization.initialize(mods);
+    internal static readonly FhFinder     Finder;
+    internal static readonly nint         BaseAddr;
+    internal static readonly string[]     LoadOrder;
+    internal static readonly FhModPaths[] ModPaths;
+    internal static readonly FhManifest[] Manifests;
+
+    static FhEnvironment() {
+        Finder    = new();
+        BaseAddr  = NativeLibrary.GetMainProgramHandle();
+        LoadOrder = _init_load_order();
+        ModPaths  = _init_mod_paths();
+        Manifests = _init_manifests();
+    }
+
+    /* [fkelava 25/4/24 18:47]
+     * This class and the `boot` method are referenced by Stage1.
+     * Updating or renaming either requires a Stage1 update.
+     */
+
+    [UnmanagedCallersOnly]
+    public static void boot() {
+        FhApi.Mods.load_mods();
+        FhApi.Localization.initialize();
         FhApi.Mods.initialize_mods();
+    }
+
+    /// <summary>
+    ///     Reads the load order for this session from disk.
+    /// </summary>
+    private static string[] _init_load_order() {
+        string load_order_path = Path.Join(Finder.Mods.FullName, "loadorder");
+        return [ "fhruntime", .. File.ReadAllLines(load_order_path) ];
+    }
+
+    /// <summary>
+    ///     Creates path information for the current load order.
+    /// </summary>
+    private static FhModPaths[] _init_mod_paths() {
+        FhModPaths[] result = new FhModPaths[LoadOrder.Length];
+
+        for (int i = 0; i < LoadOrder.Length; i++) {
+            result[i] = Finder.get_for_mod(LoadOrder[i]);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Reads the <see cref="FhManifest"/>s for the current load order from disk, throwing if that fails.
+    /// </summary>
+    private static FhManifest[] _init_manifests() {
+        FhManifest[] result = new FhManifest[ModPaths.Length];
+
+        for (int i = 0; i < ModPaths.Length; i++) {
+            using FileStream manifest_file = File.OpenRead(ModPaths[i].ManifestPath);
+
+            result[i] = JsonSerializer.Deserialize<FhManifest>(manifest_file, FhUtil.InternalJsonOpts)
+                ?? throw new Exception($"Failed to load manifest at {ModPaths[i].ManifestPath}");
+        }
+
+        return result;
     }
 }
 
@@ -49,45 +101,19 @@ internal sealed class FhLoadContext(string context_name, string fh_dll_path) : A
 }
 
 /// <summary>
-///     Contains the information the <see cref="FhLoader"/> needs to process a mod.
-/// </summary>
-internal sealed record FhModLoadInfo(
-    string   ModName,
-    string[] ModDllList
-    );
-
-/// <summary>
 ///     Loads Fahrenheit DLLs and their .NET or native dependencies into the game process,
 ///     and instantiates any <see cref="FhModule"/> with a valid <see cref="FhLoadAttribute"/> on them.
 /// </summary>
-public sealed class FhLoader {
+internal sealed class FhLoader {
     private readonly Dictionary<string, FhLoadContext> _load_contexts = [];
 
-    public FhLoader() {
+    internal FhLoader() {
         // Loading the core libraries into ALC.Default ensures they do not 'leak' into plugins' load contexts, causing type identity mismatches.
-        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhInternal.PathFinder.Binaries.Path, "fhcore.dll"));
-        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhInternal.PathFinder.Binaries.Path, "fhx.dll"));
-        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhInternal.PathFinder.Binaries.Path, "fhx2.dll"));
+        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhEnvironment.Finder.Binaries.FullName, "fhcore.dll"));
+        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhEnvironment.Finder.Binaries.FullName, "fhx.dll"));
+        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhEnvironment.Finder.Binaries.FullName, "fhx2.dll"));
         // required for Hexa.NET.ImGui's assembly-probing logic
-        HexaGen.Runtime.LibraryLoader.CustomLoadFolders.Add(FhInternal.PathFinder.Binaries.Path);
-    }
-
-    /// <summary>
-    ///     Reads the load order for this session from disk.
-    /// </summary>
-    private string[] _get_load_order() {
-        string   load_order_path = Path.Join(FhInternal.PathFinder.Mods.Path, "loadorder");
-        string[] load_order      = [ "fhruntime", .. File.ReadAllLines(load_order_path) ];
-
-        return load_order;
-    }
-
-    /// <summary>
-    ///     Reads the <see cref="FhManifest"/> for a mod from disk, throwing if that fails.
-    /// </summary>
-    private FhManifest _get_manifest(FhModPaths mod_paths) {
-        return JsonSerializer.Deserialize<FhManifest>(File.OpenRead(mod_paths.ManifestPath), FhUtil.InternalJsonOpts)
-            ?? throw new Exception($"Failed to load manifest at {mod_paths.ManifestPath}");
+        HexaGen.Runtime.LibraryLoader.CustomLoadFolders.Add(FhEnvironment.Finder.Binaries.FullName);
     }
 
     /// <summary>
@@ -110,54 +136,32 @@ public sealed class FhLoader {
     /// <summary>
     ///     Performs DLL loading for a mod, returning the <see cref="FhModuleContext"/>s of the instantiated mods.
     /// </summary>
-    private IEnumerable<FhModuleContext> _load_mod(FhModLoadInfo mod_info) {
-        foreach (string dll_name in mod_info.ModDllList) {
-            FhDllPaths    dll_paths    = FhInternal.PathFinder.get_paths_dll(mod_info.ModName, dll_name);
-            FhLoadContext dll_load_ctx = new FhLoadContext(dll_name, dll_paths.DllPath);
-            Assembly      dll          = dll_load_ctx.LoadFromAssemblyPath(dll_paths.DllPath);
+    internal IEnumerable<FhModuleContext> load_mod(FhManifest manifest) {
+        string        dll_path     = FhEnvironment.Finder.get_for_dll(manifest.Id);
+        FhLoadContext load_context = new FhLoadContext(manifest.Id, dll_path);
+        Assembly      assembly     = load_context.LoadFromAssemblyPath(dll_path);
 
-            _load_contexts[dll_name] = dll_load_ctx;
+        _load_contexts[manifest.Id] = load_context;
 
-            foreach (Type type in dll.GetExportedTypes()) {
-                if (type.BaseType != typeof(FhModule)) continue;
+        foreach (Type type in assembly.GetExportedTypes()) {
+            if (type.BaseType != typeof(FhModule)) continue;
 
-                FhLoadAttribute? loader_args = type.GetCustomAttribute<FhLoadAttribute>();
+            FhLoadAttribute? loader_args = type.GetCustomAttribute<FhLoadAttribute>();
 
-                if (loader_args == null) {
-                    FhInternal.Log.Warning($"Loader ignored module type {type.FullName} without [{nameof(FhLoadAttribute)}] applied. This may be an oversight.");
-                    continue;
-                }
-
-                if (!loader_args.supported_games.HasFlag(FhGlobal.game_id)) {
-                    FhInternal.Log.Warning($"Loader ignored module type {type.FullName} that does not declare support for this game.");
-                    continue;
-                }
-
-                FhModule      module       = Activator.CreateInstance(type) as FhModule ?? throw new Exception($"Constructor of module {type.FullName} threw or faulted.");
-                FhModulePaths module_paths = FhInternal.PathFinder.get_paths_module(mod_info.ModName, module.ModuleType);
-
-                yield return new FhModuleContext(module, module_paths);
+            if (loader_args == null) {
+                FhInternal.Log.Warning($"Loader ignored module type {type.FullName} without [{nameof(FhLoadAttribute)}] applied. This may be an oversight.");
+                continue;
             }
+
+            if (!loader_args.supported_games.HasFlag(FhGlobal.game_id)) {
+                FhInternal.Log.Warning($"Loader ignored module type {type.FullName} that does not declare support for this game.");
+                continue;
+            }
+
+            FhModule      module       = Activator.CreateInstance(type) as FhModule ?? throw new Exception($"Constructor of module {type.FullName} threw or faulted.");
+            FhModulePaths module_paths = FhEnvironment.Finder.get_for_module(manifest.Id, module.ModuleType);
+
+            yield return new FhModuleContext(module, module_paths);
         }
-    }
-
-    /// <summary>
-    ///     Processes the load order for this session, performs DLL loading,
-    ///     and returns the <see cref="FhModContext"/>s of the instantiated mods.
-    /// </summary>
-    internal FhModContext[] load_mods() {
-        string[]       load_order = _get_load_order();
-        FhModContext[] mods       = new FhModContext[load_order.Length];
-
-        for (int i = 0; i < load_order.Length; i++) {
-            string        mod_name      = load_order[i];
-            FhModPaths    mod_paths     = FhInternal.PathFinder.get_paths_mod(mod_name);
-            FhManifest    mod_manifest  = _get_manifest(mod_paths);
-            FhModLoadInfo mod_load_info = new(mod_name, mod_manifest.DllList);
-
-            mods[i] = new FhModContext(mod_manifest, mod_paths, [ .. _load_mod(mod_load_info) ]);
-        }
-
-        return mods;
     }
 }

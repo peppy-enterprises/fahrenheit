@@ -17,8 +17,8 @@ public sealed class FhLocalizationManager {
     /// <summary>
     ///     Concatenates the localization data of all loaded modules into a map.
     /// </summary>
-    internal void initialize(FhModContext[] mods) {
-        foreach (FhModContext mod in mods) {
+    internal void initialize() {
+        foreach (FhModContext mod in FhApi.Mods.get_mods()) {
             foreach (FileInfo lang_file_path in mod.Paths.LangDir.EnumerateFiles()) {
                 string lang_id  = Path.GetFileNameWithoutExtension(lang_file_path.FullName);
                 string mod_name = mod.Manifest.Name;

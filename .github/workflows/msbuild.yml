@@ -84,7 +84,7 @@ jobs:
       # Compensate for https://github.com/NuGet/Home/issues/14113
     - name: Restore NuGet packages
       working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: msbuild -t:Restore ${{ env.SOLUTION_FILE_PATH }}
+      run: msbuild /m /p:Configuration=${{ env.BUILD_CONFIGURATION }} /t:Restore ${{ env.SOLUTION_FILE_PATH }}
 
     - name: Build
       working-directory: ${{ env.GITHUB_WORKSPACE }}
@@ -92,12 +92,9 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{ env.BUILD_CONFIGURATION }} ${{ env.SOLUTION_FILE_PATH }}
 
-    - name: Publish tools
-      working-directory: ${{ github.workspace }}
-      shell: pwsh
-      run: |
-        cd .\tools
-        .\deploy.ps1
+    - name: Publish
+      working-directory: ${{ env.GITHUB_WORKSPACE }}
+      run: msbuild /m /p:Configuration=${{ env.BUILD_CONFIGURATION }} /t:Publish ${{ env.SOLUTION_FILE_PATH }}
 
     - name: Create release ZIP
       if: github.event_name == 'release' && github.event.action == 'published'

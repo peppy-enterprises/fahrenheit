@@ -127,8 +127,8 @@ static int DetourMain(void) {
     //
     const string_t clrhost_config_path = cwd_path + STR("\\fhcore.runtimeconfig.json");
     const string_t clrhost_lib_path    = cwd_path + STR("\\fhcore.dll");
-    const char_t*  clrhost_type        = STR("Fahrenheit.Core.FhBootstrapper, fhcore");
-    const char_t*  clrhost_init_method = STR("bootstrap");
+    const char_t*  clrhost_type        = STR("Fahrenheit.Core.FhEnvironment, fhcore");
+    const char_t*  clrhost_init_method = STR("boot");
 
     auto host_dirsep_pos = host_path.find_last_of(DIR_SEPARATOR);
 

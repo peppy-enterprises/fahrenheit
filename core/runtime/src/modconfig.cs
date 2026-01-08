@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-using System.Numerics;
-
 namespace Fahrenheit.Core.Runtime;
 
 [FhLoad(FhGameId.FFX | FhGameId.FFX2)]
-public unsafe class FhModConfigModule : FhModule {
+public unsafe sealed class FhModConfigModule : FhModule {
     private FhModContext? _context;
     private FileStream?   _global_state;
 
@@ -43,8 +41,8 @@ public unsafe class FhModConfigModule : FhModule {
 
         ImGuiViewportPtr viewport = ImGui.GetMainViewport();
 
-        ImGui.SetNextWindowPos(viewport.WorkPos);
-        ImGui.SetNextWindowSize(viewport.WorkSize);
+        ImGui.SetNextWindowPos     (viewport.WorkPos);
+        ImGui.SetNextWindowSize    (viewport.WorkSize);
         ImGui.SetNextWindowViewport(viewport.ID);
 
         ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 0f);

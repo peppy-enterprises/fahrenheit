@@ -1,8 +1,13 @@
 #include "fhstage0.h"
 
 int wmain(int argc, wchar_t* argv[ ]) {
+    if (argc < 2) {
+        std::wcerr << "Invalid call. You must specify an executable to launch.\n";
+        std::wcerr << "Usage: fhstage0.exe {EXECUTABLE_TO_LAUNCH} {ARGS}\n";
+        return 1;
+    }
+
     LPCSTR              szDllPath  = "fhstage1.dll";
-    LPWSTR              cmdLineStr = GetCommandLineW();
     PROCESS_INFORMATION pi;
     STARTUPINFO         si = { 0 };
 
@@ -10,12 +15,24 @@ int wmain(int argc, wchar_t* argv[ ]) {
 
     //
     // STEP 1:
+    // Set up args as the game expects them to be..
+    //
+
+    std::wstring args;
+
+    for (int i = 1; i < argc; i++) {
+        args.append(argv[i]);
+        args.append(L" ");
+    }
+
+    //
+    // STEP 2:
     // Create process in PROCESS_SUSPENDED state.
     //
 
     if (!CreateProcess(
-        argv[1],
-        cmdLineStr,
+        NULL,
+        &args[0],
         NULL,
         NULL,
         FALSE,
@@ -30,11 +47,11 @@ int wmain(int argc, wchar_t* argv[ ]) {
     }
 
     //
-    // STEP 2:
+    // STEP 3:
     // Pause for debugger attach if `--debug` arg is passed.
     //
 
-    if (argc > 2 && wcsncmp(argv[2], L"--debug", 9) == 0) {
+    if (wcsstr(args.c_str(), L"--debug") != NULL) {
         std::wcout << "Stage 0 Loader is ready. You can now attach a debugger; press any key to attempt launch.\n";
         int i = _getch();
     } else {
@@ -42,17 +59,11 @@ int wmain(int argc, wchar_t* argv[ ]) {
     }
 
     //
-    // STEP 3:
+    // STEP 4:
     // Patch IAT of suspended process to inject Stage 1 DLL at position 1.
     //
 
-    LPCSTR rlpDlls[2] {};
-    DWORD  nDlls = 0;
-    if (szDllPath != NULL) {
-        rlpDlls[nDlls++] = szDllPath;
-    }
-
-    if (!DetourUpdateProcessWithDll(pi.hProcess, rlpDlls, nDlls)) {
+    if (!DetourUpdateProcessWithDll(pi.hProcess, &szDllPath, 1)) {
         TerminateProcess(pi.hProcess, ~0u);
         return FALSE;
     }
@@ -60,7 +71,7 @@ int wmain(int argc, wchar_t* argv[ ]) {
     std::wcout << "Stage 0 Loader complete. Moving to Stage 1.\n";
 
     //
-    // STEP 4:
+    // STEP 5:
     // Stage 1 loads first, hooks program entrypoint and performs .NET hosting and
     // initialization, undoes IAT changes, pipes process stdout/stderr to Stage 0
     // console, then program execution proceeds.
@@ -70,7 +81,7 @@ int wmain(int argc, wchar_t* argv[ ]) {
     WaitForSingleObject(pi.hProcess, INFINITE);
 
     //
-    // STEP 5:
+    // STEP 6:
     // Wait for program to (un)naturally terminate.
     //
 

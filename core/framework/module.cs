@@ -43,24 +43,32 @@ public sealed record FhModuleContext {
 public sealed record FhLocalStateInfo(
     string Version);
 
-/// <summary>
-///     Describes a unique Fahrenheit mod, consisting of zero to N DLLs, each containing zero to N <see cref="FhModule"/>.
-/// </summary>
-public sealed record FhManifest(
-    string   Name,
-    string   Desc,
-    string   Authors,
-    string   Version,
-    string   Link,
-    string[] DllList,
-    string[] Dependencies,
-    string[] LoadAfter);
+[Flags]
+public enum FhManifestFlags {
+    NONE           = 0,
+    SEPARATE_SAVES = 1
+}
 
 /// <summary>
-///     A module is the base unit of functionality in Fahrenheit. Modules are used to logically partition your functionality.
+///     Describes a unique Fahrenheit mod, consisting of one DLL containing any number of <see cref="FhModule"/>.
+/// </summary>
+public sealed record FhManifest(
+    string          Id,
+    string          Name,
+    string          Desc,
+    string          Authors,
+    string          Version,
+    string          Link,
+    string[]        Dependencies,
+    string[]        LoadAfter,
+    FhManifestFlags Flags);
+
+/// <summary>
+///     A module is the base unit of functionality in Fahrenheit.
+///     Modules are used to logically partition your functionality.
 ///     <para/>
-///     Modules are not the same as mods or even DLLs. Mods can be executed as one or several DLLs,
-///     and one DLL can contain any number of modules.
+///     A mod can consist of any number of modules. Modules can link with
+///     other modules at runtime using <see cref="FhModuleHandle{TTarget}"/>.
 /// </summary>
 public abstract class FhModule {
     protected readonly string   _module_type_name;
@@ -81,7 +89,7 @@ public abstract class FhModule {
     }
 
     /// <summary>
-    ///     Your module should perform all Fahrenheit-related initialization here. At the time this is called, all mods have been loaded, and:
+    ///     Your module should perform all Fahrenheit-related initialization here. When this is called, all mods are loaded, and:
     ///     <br/>
     ///     <br/> - you may call <see cref="FhModuleHandle{T}.try_get(out FhModuleContext?)"/> to obtain references to other modules;
     ///     <br/> - you receive a copy of the containing mod's <see cref="FhModContext"/>;

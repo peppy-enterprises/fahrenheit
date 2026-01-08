@@ -18,7 +18,7 @@ internal delegate void AtelExecInternal_00871d10();
 ///     <br/> - <see cref="FhModule.pre_update"/>
 ///     <br/> - <see cref="FhModule.post_update"/>
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe class FhCoreModule : FhModule {
     private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
@@ -44,15 +44,16 @@ public unsafe class FhCoreModule : FhModule {
 
     public override void render_imgui() {
         int curr_event_id = FhGlobal.game_id switch {
-            FhGameId.FFX  => *FFX.Globals.event_id,
-            FhGameId.FFX2 => *FFX2.Globals.event_id
+            FhGameId.FFX    => *FFX .Globals.event_id,
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => *FFX2.Globals.event_id
         };
 
         if (curr_event_id != 0x17) return; // Deactivate the mod list outside the main menu.
 
         // Create a window for the mod list and render all the mods
-        ImGui.SetNextWindowPos (new System.Numerics.Vector2 { X = 0,   Y = 0   });
-        ImGui.SetNextWindowSize(new System.Numerics.Vector2 { X = 350, Y = 500 });
+        ImGui.SetNextWindowPos (new Vector2(0,   0  ));
+        ImGui.SetNextWindowSize(new Vector2(350, 500));
 
         if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
             ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 18f);

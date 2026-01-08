@@ -1,11 +1,31 @@
 ﻿// SPDX-License-Identifier: MIT
 
+namespace Fahrenheit.Core;
+
+[InlineArray(0x20)]
+public struct InlineArray32<T> {
+    private T _b;
+}
+
+[InlineArray(0x40)]
+public struct InlineArray64<T> {
+    private T _b;
+}
+
+[InlineArray(0x80)]
+public struct InlineArray128<T> {
+    private T _b;
+}
+
+[InlineArray(0x200)]
+public struct InlineArray512<T> {
+    private T _b;
+}
+
 /* [fkelava 23/9/25 18:56]
  * These types are copied verbatim from ClangSharp `generate-helper-types` source.
  * They are used to preserve information about the source native type ClangSharp projected to C#.
  */
-
-namespace Fahrenheit.Core;
 
 /// <summary>Defines the annotation found in a native declaration.</summary>
 [AttributeUsage(AttributeTargets.Struct | AttributeTargets.Enum | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue, AllowMultiple = true, Inherited = false)]

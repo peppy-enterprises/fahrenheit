@@ -46,7 +46,7 @@ public abstract class FhSetting<T>(string id, T defval) : FhSetting(id) where T 
 }
 
 /// <summary>
-/// An indented group of settings.
+///     An indented group of settings.
 /// </summary>
 public class FhSettingsCategory : FhSetting {
     protected readonly FhSetting[] settings;
@@ -99,8 +99,8 @@ public class FhSettingsCategory : FhSetting {
 }
 
 /// <summary>
-/// An indented group of settings.
-/// Automatically syncs inner settings' <c>locked</c> to the opposite its <c>enabled</c> status.
+///     An indented group of settings.
+///     Automatically syncs inner settings' <c>locked</c> to the opposite its <c>enabled</c> status.
 /// </summary>
 public class FhSettingsCategoryToggleable(string id, FhSetting[] settings) : FhSettingsCategory(id, settings) {
     private bool _enabled;
@@ -140,37 +140,26 @@ public class FhSettingsCategoryToggleable(string id, FhSetting[] settings) : FhS
 }
 
 /// <summary>
-/// An ON/OFF toggle setting.
+///     An ON/OFF toggle setting.
 /// </summary>
 public sealed class FhSettingToggle(string id, bool def_value) : FhSetting<bool>(id, def_value) {
-    private const uint BUTTON_BG         = 0x10ffffff;
-    private const uint BUTTON_BG_HOVERED = 0x20ffffff;
-    private const uint BUTTON_BG_ACTIVE  = 0x60ffffff;
-    private const uint UNDERLINE_GRADIENT_START      = 0xff0098ff;
-    private const uint UNDERLINE_GRADIENT_SIDE_END   = 0xff00c9ff;
-    private const uint UNDERLINE_GRADIENT_CENTER_END = 0xffffffff;
 
     internal override void save(ref Utf8JsonWriter writer) {
         writer.WriteBoolean(id, _value);
     }
 
     internal override void load(ref Utf8JsonReader reader) {
-        //TODO: Add FhSettingToggle loading
+        // TODO: Add FhSettingToggle loading
 
         //if (reader.get_bool(id, out var value)) _enabled = value;
     }
 
     internal override void render() {
-        // Mimic the game's config style
-        ImGui.PushStyleColor(ImGuiCol.Button,        BUTTON_BG);
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, BUTTON_BG_HOVERED);
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive,  BUTTON_BG_ACTIVE);
+        // TODO: Consider mimicking the game's button style as a setting
 
         render_half(false);
         ImGui.SameLine();
         render_half(true);
-
-        ImGui.PopStyleColor(3);
     }
 
     private void render_half(bool second_half) {
@@ -180,43 +169,18 @@ public sealed class FhSettingToggle(string id, bool def_value) : FhSetting<bool>
         button_region.Y = ImGui.GetTextLineHeightWithSpacing() + 4f;
 
         ImGui.BeginDisabled(_disabled);
+        if (_value ^ second_half) ImGui.PushStyleColor(ImGuiCol.Text, ImGui.GetStyle().Colors[(int)ImGuiCol.NavCursor]);
         if (ImGui.Button(second_half ? "OFF" : "ON", button_region))
             _value = !second_half;
         ImGui.EndDisabled();
-        if (_value ^ second_half) render_underline();
-    }
-
-    private void render_underline() {
-        Vector2 min        = ImGui.GetItemRectMin() + new Vector2(0, 2f);
-        Vector2 max        = ImGui.GetItemRectMax() + new Vector2(0, 2f);
-        Vector2 center     = min + (max - min) / 2;
-        uint    start      = ImGui.GetColorU32(UNDERLINE_GRADIENT_START,      0f);
-        uint    side_end   = ImGui.GetColorU32(UNDERLINE_GRADIENT_SIDE_END,   1f);
-        uint    center_end = ImGui.GetColorU32(UNDERLINE_GRADIENT_CENTER_END, 1f);
-
-        ImDrawListPtr draw_list = ImGui.GetWindowDrawList();
-
-        draw_list.AddRectFilledMultiColor(min with { Y = max.Y - 1 }, center with { Y = max.Y },
-            start, side_end, side_end, start);
-        draw_list.AddRectFilledMultiColor(max with { Y = max.Y - 1 }, center with { Y = max.Y },
-            start, side_end, side_end, start);
-
-        draw_list.AddRectFilledMultiColor(min with { Y = max.Y + 1 }, center with { Y = max.Y },
-            start, center_end, center_end, start);
-        draw_list.AddRectFilledMultiColor(max with { Y = max.Y + 1 }, center with { Y = max.Y },
-            start, center_end, center_end, start);
-
-        draw_list.AddRectFilledMultiColor(min with { Y = max.Y + 2 }, center with { Y = max.Y + 1 },
-            start, side_end, side_end, start);
-        draw_list.AddRectFilledMultiColor(max with { Y = max.Y + 2 }, center with { Y = max.Y + 1 },
-            start, side_end, side_end, start);
+        if (_value ^ second_half) ImGui.PopStyleColor();
     }
 }
 
-//TODO: Support callbacks. ImGuiNET is annoying with this, and only provides a delegate for an unsafe function for it
-//TODO: We should instead provide a C# wrapper over that for interop with imgui.
+// TODO: Support callbacks. ImGuiNET is annoying with this, and only provides a delegate for an unsafe function for it
+// TODO: We should instead provide a C# wrapper over that for interop with imgui.
 /// <summary>
-/// A text input setting, with flags. Callbacks are not currently supported.
+///     A text input setting, with flags. Callbacks are not currently supported.
 /// </summary>
 public class FhSettingText(string id, string def_value, ImGuiInputTextFlags flags = ImGuiInputTextFlags.None) : FhSetting<string>(id, def_value) {
     public const int MAX_LENGTH = 1 << 10;
@@ -239,12 +203,18 @@ public class FhSettingText(string id, string def_value, ImGuiInputTextFlags flag
 }
 
 /// <summary>
-/// A dropdown of different values.
-/// Allows the player to select only one variant of an enum.
-/// In localization, <c>id.values.{i}.name</c> and <c>id.values.{i}.desc</c> should be used
+///     A dropdown of different values. Allows the player to select only one variant of an enum.
+///     <para/>
+///     In localization, <c>id.values.{i}.name</c> and <c>id.values.{i}.desc</c> should be used
 ///     to define the variant names and descriptions, where <c>{i}</c> is the value of that variant in the enum.
 /// </summary>
-public class FhSettingDropdown<T>(string id, T def_value) : FhSetting<T>(id, def_value) where T : Enum {
+public class FhSettingDropdown<T>(string id, T def_value) : FhSetting<T>(id, def_value) where T : struct, Enum {
+    protected readonly T[] _values = Enum.GetValues<T>();
+
+    protected string get_value_name(T value) {
+        return FhApi.Localization.localize($"{id}.values.{Convert.ToUInt64(value)}.name");
+    }
+
     internal override void save(ref Utf8JsonWriter writer) {
         writer.WriteNumber(id, Convert.ToUInt64(_value));
     }
@@ -257,17 +227,27 @@ public class FhSettingDropdown<T>(string id, T def_value) : FhSetting<T>(id, def
 
     //TODO: FhSettingDropdown rendering
     internal override void render() {
-        ImGui.Dummy(new(100f, 50f));
+        if (ImGui.BeginCombo($"###{id}", get_value_name(_value))) {
+            for (int i = 0; i < _values.Length; i++) {
+                bool is_selected = (Convert.ToUInt64(_value) == Convert.ToUInt64(_values[i]));
+                if (ImGui.Selectable($"{get_value_name(_values[i])}###{i}", is_selected))
+                    _value = _values[i];
+                if (is_selected)
+                    ImGui.SetItemDefaultFocus();
+            }
+            ImGui.EndCombo();
+        }
     }
 }
 
 /// <summary>
-/// A radio button group. Provides the same functionality as an <c>FhSettingDropdown</c>, but renders as radio buttons.
-/// In localization, <c>id.values.{i}.name</c> and <c>id.values.{i}.desc</c> should be used
+///     A radio button group. Provides the same functionality as an <c>FhSettingDropdown</c>, but renders as radio buttons.
+///     <para/>
+///     In localization, <c>id.values.{i}.name</c> and <c>id.values.{i}.desc</c> should be used
 ///     to define the variant names and descriptions, where <c>{i}</c> is the value of that variant in the enum.
 /// </summary>
 public class FhSettingRadio<T>(string id, T def_value, int row_count) : FhSettingDropdown<T>(id, def_value)
-        where T : Enum {
+        where T : struct, Enum {
     protected readonly int row_count = row_count;
 
     //TODO: FhSettingRadio rendering
@@ -279,8 +259,7 @@ public class FhSettingRadio<T>(string id, T def_value, int row_count) : FhSettin
 /// In localization, <c>id.values.{i}.name</c> and <c>id.values.{i}.desc</c> should be used
 ///     to define the variant names and descriptions, where <c>{i}</c> is the 0-based index the flag is at in the enum.
 /// </summary>
-public class FhSettingBitfield<T>(string id, T def_value, int row_count) : FhSettingRadio<T>(id, def_value, row_count)
-        where T : struct, Enum {
+public class FhSettingBitfield<T>(string id, T def_value, int row_count) : FhSettingRadio<T>(id, def_value, row_count) where T : unmanaged, Enum {
     private readonly T[] _flags = Enum.GetValues<T>();
 
     public void set(T flag, bool enabled) {
@@ -387,12 +366,12 @@ public unsafe class FhSettingNumber<T>(string id, T def_value, T? min, T? max, T
         fixed(T* value     = &_value)
         fixed(T* increment = &_step) {
             ImGui.InputScalar($"##{id}", _data_type, value, increment);
-            _value = T.Clamp(_value, _min, _max);
+            set(_value);
         }
     }
 
-    private static ImGuiDataType get_data_type(T example_value) {
-        return example_value switch {
+    private static ImGuiDataType get_data_type(T value) {
+        return value switch {
             byte   => ImGuiDataType.U8,
             ushort => ImGuiDataType.U16,
             uint   => ImGuiDataType.U32,
@@ -409,7 +388,7 @@ public unsafe class FhSettingNumber<T>(string id, T def_value, T? min, T? max, T
 }
 
 /// <summary>
-/// A numeric input using a slider.
+///     A numeric input using a slider.
 /// </summary>
 /// <param name="id">The setting's identifier</param>
 /// <param name="def_value">The default value of the setting</param>
@@ -417,112 +396,18 @@ public unsafe class FhSettingNumber<T>(string id, T def_value, T? min, T? max, T
 /// <param name="max">The biggest accepted number, defaults to 1</param>
 /// <param name="step">The amount the arrows increase/decrease the value, defaults to 1</param>
 /// <typeparam name="T">The underlying numeric type for the value</typeparam>
-public class FhSettingSlider<T>(string id, T def_value, T? min, T? max, T? step)
-        : FhSettingNumber<T>(id, def_value, min, max, step)
+public class FhSettingSlider<T>(string id, T def_value, T? min, T? max, T? step) : FhSettingNumber<T>(id, def_value, min, max, step)
         where T : unmanaged, INumber<T> {
     //TODO: FhSettingSlider rendering
     internal override void render() {}
 }
 
-public class FhSettingVector2<T> : FhSetting where T : unmanaged, INumber<T> {
-    public FhSettingNumber<T> x { get; }
-    public FhSettingNumber<T> y { get; }
 
-    public FhSettingVector2(string id, FhSettingNumber<T> x, FhSettingNumber<T> y) : base(id) {
-        x.id = id + ".x";
-        y.id = id + ".y";
+//TODO: Triage whether FhSettingVector{2|3|4|T} is desired
 
-        this.x = x;
-        this.y = y;
-    }
+public class FhSettingColor : FhSetting<Vector4> {
 
-    public (T x, T y) get() {
-        return (x.get(), y.get());
-    }
-
-    public void set(T new_x, T new_y) {
-        x.set(new_x);
-        y.set(new_y);
-    }
-
-    internal override void save(ref Utf8JsonWriter writer) {
-        x.save(ref writer);
-        y.save(ref writer);
-    }
-
-    internal override void load(ref Utf8JsonReader reader) {
-        x.load(ref reader);
-        y.load(ref reader);
-    }
-
-    //TODO: Fix FhSettingVector2 rendering
-    internal override void render() {
-        float part_width = (ImGui.GetContentRegionAvail().X - NAME_WIDTH) / 2 - 4f;
-
-        ImGui.SetNextItemWidth(part_width);
-        x.render();
-        render_tooltip("X");
-
-        ImGui.SameLine(NAME_WIDTH + part_width + 8f);
-
-        ImGui.SetNextItemWidth(part_width);
-        y.render();
-        render_tooltip("Y");
-    }
-}
-
-public class FhSettingVector3<T> : FhSetting where T : unmanaged, INumber<T> {
-    public FhSettingNumber<T> x { get; }
-    public FhSettingNumber<T> y { get; }
-    public FhSettingNumber<T> z { get; }
-
-    public FhSettingVector3(string id, FhSettingNumber<T> x, FhSettingNumber<T> y, FhSettingNumber<T> z) : base(id) {
-        x.id = id + ".x";
-        y.id = id + ".y";
-        z.id = id + ".z";
-
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public (T x, T y, T z) get() {
-        return (x.get(), y.get(), z.get());
-    }
-
-    public void set(T new_x, T new_y, T new_z) {
-        x.set(new_x);
-        y.set(new_y);
-        z.set(new_z);
-    }
-
-    internal override void save(ref Utf8JsonWriter writer) {
-        x.save(ref writer);
-        y.save(ref writer);
-        z.save(ref writer);
-    }
-
-    internal override void load(ref Utf8JsonReader reader) {
-        x.load(ref reader);
-        y.load(ref reader);
-        z.load(ref reader);
-    }
-
-    //TODO: FhSettingVector3 rendering
-    internal override void render() {}
-}
-
-//TODO: Triage whether FhSettingVector4 is desired
-
-public class FhSettingColor : FhSetting {
-    private Vector4 _value;
-
-    public FhSettingColor(string id, uint rgba8) : base(id) {
-        set_rgba8(rgba8);
-    }
-
-    public Vector4 get()              => _value;
-    public void    set(Vector4 value) => _value = value;
+    public FhSettingColor(string id, Vector4 defval) : base(id, defval) { }
 
     public void set_rgba8(uint value) => set_rgba8(
             r: (byte)(value & 0xff),

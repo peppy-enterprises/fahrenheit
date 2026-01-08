@@ -66,9 +66,9 @@ internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
 ///     <para/>
 ///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_imgui"/>.
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
-public unsafe class FhImguiModule : FhModule {
+public unsafe sealed class FhImguiModule : FhModule {
     // WndProc support
     private          HWND                              _hWnd;
     private          nint                              _ptr_o_WndProc;
@@ -87,7 +87,6 @@ public unsafe class FhImguiModule : FhModule {
     private          FhMethodHandle<DXGISwapChain_ResizeBuffers>?          _handle_resize_buffers;
 
     private bool _present_init_complete; // has h_present finished one-time initialization?
-    private bool _dx11_init_complete;    // has h_init_d3d11 finished one-time initialization?
     private bool _present_ready;         // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
     public FhImguiModule() {
@@ -130,10 +129,9 @@ public unsafe class FhImguiModule : FhModule {
         io.ConfigDpiScaleFonts     = true;
         io.ConfigDpiScaleViewports = true;
 
-        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+        // When viewports are enabled we tweak WindowRounding so platform windows can look identical to regular ones.
         if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0) {
             style.WindowRounding = 0f;
-            style.Colors[(int)ImGuiCol.WindowBg].W = 1f;
         }
 
         ImGui.StyleColorsDark();
@@ -154,25 +152,22 @@ public unsafe class FhImguiModule : FhModule {
     /// </summary>
     private nint h_init_wndproc() {
         nint result = _handle_wndproc_init.orig_fptr();
-        switch (FhGlobal.game_id) {
-            case FhGameId.FFX:
-                _hWnd = (HWND)FhUtil.get_at<nint>(0x8C9CE8);
-                break;
-            case FhGameId.FFX2:
-                _hWnd = (HWND)FhUtil.get_at<nint>(0x16641B8);
-                break;
-        }
+
+        _hWnd = FhGlobal.game_id is FhGameId.FFX
+            ? FhUtil.get_at<HWND>(0x8C9CE8)
+            : FhUtil.get_at<HWND>(0x16641B8);
+
         _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
         _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
-        nint _         = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
+        _              = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
 
         init_imgui();
         return result;
     }
 
     /// <summary>
-    ///     Intercepts the game's D3D11 initialization to retrieve a handle to its <see cref="ID3D11Device"/>,
-    ///     <see cref="ID3D11DeviceContext"/>, and <see cref="IDXGISwapChain"/>.
+    ///     Intercepts the game's D3D11 initialization to retrieve a handle to its
+    ///     <see cref="ID3D11Device"/>, <see cref="ID3D11DeviceContext"/>, and <see cref="IDXGISwapChain"/>.
     /// </summary>
     private HRESULT h_init_d3d11(
         IDXGIAdapter*         pAdapter,
@@ -188,10 +183,28 @@ public unsafe class FhImguiModule : FhModule {
         D3D_FEATURE_LEVEL*    pFeatureLevel,
         ID3D11DeviceContext** ppImmediateContext) {
 
-        HRESULT result = _handle_d3d11_init.orig_fptr
-            (pAdapter, DriverType, Software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, pSwapChainDesc, ppSwapChain, ppDevice, pFeatureLevel, ppImmediateContext);
+        HRESULT hr = _handle_d3d11_init.orig_fptr(
+            pAdapter,
+            DriverType,
+            Software,
+            Flags,
+            pFeatureLevels,
+            FeatureLevels,
+            SDKVersion,
+            pSwapChainDesc,
+            ppSwapChain,
+            ppDevice,
+            pFeatureLevel,
+            ppImmediateContext);
 
-        if (result != 0 || _dx11_init_complete) return result; // S_FALSE is a possible return
+        /* [fkelava 19/11/25 15:08]
+         * The game has strange behavior on multi-GPU systems. The method will be invoked several
+         * times, usually with garbage. For this reason we ignore a result that doesn't contain
+         * all three of a valid device, device context, and swap chain.
+         */
+
+        if (hr != S.S_OK || ppSwapChain == null || ppDevice == null || ppImmediateContext == null)
+            return hr;
 
         _p_swap_chain = *ppSwapChain;
         _p_device     = *ppDevice;
@@ -205,8 +218,7 @@ public unsafe class FhImguiModule : FhModule {
 
         init_imgui();
 
-        _dx11_init_complete = true;
-        return result;
+        return hr;
     }
 
     /// <summary>
