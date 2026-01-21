@@ -20,7 +20,7 @@ public sealed class FhSaveManagerModule : FhModule {
      */
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate void Sg_MainInit(nint arg1, nint arg2);
+    private delegate void Sg_MainInit();
 
     private          int                 _sm_lock;
     private readonly HashSet<string>     _sm_sets;
@@ -52,7 +52,7 @@ public sealed class FhSaveManagerModule : FhModule {
         _sm_create_default_set();
         _sm_query_sets();
 
-        return true;
+        return _handle_sginit.hook();
     }
 
     /* [fkelava 19/01/26 18:13]
@@ -63,8 +63,8 @@ public sealed class FhSaveManagerModule : FhModule {
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
-    private void h_sginit(nint arg1, nint arg2) {
-        _handle_sginit.orig_fptr(arg1, arg2);
+    private void h_sginit() {
+        _handle_sginit.orig_fptr();
         _sm_index_active_set();
     }
 
