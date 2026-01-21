@@ -3,6 +3,21 @@
 namespace Fahrenheit.Core;
 
 public unsafe static class FhUtil {
+
+    /// <summary>
+    ///     Selects between <typeparamref name="T"/>s based on the currently executing game.
+    ///     <para/>
+    ///     If no game is executing, returns <paramref name="defval"/> if non-null, else throws.
+    /// </summary>
+    internal static T select<T>(T ffx, T ffx2, T ffx2lm, T? defval = default) {
+        return FhGlobal.game_id switch {
+            FhGameId.FFX    => ffx,
+            FhGameId.FFX2   => ffx2,
+            FhGameId.FFX2LM => ffx2lm,
+            _               => defval ?? throw new NotImplementedException($"no game detectable and no fallback value in select({ffx},{ffx2},{ffx2lm})"),
+        };
+    }
+
     public static T* ptr_at<T>(nint address)          where T : unmanaged { return (T*)(FhEnvironment.BaseAddr + address); }
     public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                    }
     public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;            }

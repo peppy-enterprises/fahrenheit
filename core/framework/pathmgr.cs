@@ -6,8 +6,7 @@ namespace Fahrenheit.Core;
 ///     Provides access to a module's essential files and directories.
 /// </summary>
 internal sealed record FhModulePaths(
-    string        GlobalStatePath,
-    DirectoryInfo LocalStateDir);
+    string GlobalStatePath);
 
 /// <summary>
 ///     Provides access to a mod's essential files and directories.
@@ -98,8 +97,7 @@ internal sealed class FhFinder {
         Directory.CreateDirectory(global_state_dir);
 
         return new FhModulePaths(
-            GlobalStatePath: global_state_path,
-            LocalStateDir:   Directory.CreateDirectory(Path.Join(State.FullName, FhInternal.Saves.StateHash, FhSaveManager.get_save_subfolder(), mod_name, module_name))
+            GlobalStatePath: global_state_path
             );
     }
 }

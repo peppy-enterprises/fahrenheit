@@ -2,6 +2,10 @@
 
 namespace Fahrenheit.Core;
 
+/* [fkelava 23/9/25 18:56]
+ * Inline arrays for common powers of two are provided and preferred where usable.
+ */
+
 [InlineArray(0x20)]
 public struct InlineArray32<T> {
     private T _b;

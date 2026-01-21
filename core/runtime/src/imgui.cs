@@ -68,7 +68,7 @@ internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
-public unsafe sealed class FhImguiModule : FhModule {
+public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
     // WndProc support
     private          HWND                              _hWnd;
     private          nint                              _ptr_o_WndProc;
@@ -77,17 +77,17 @@ public unsafe sealed class FhImguiModule : FhModule {
     private readonly FhMethodHandle<graphicInitialize> _handle_wndproc_init;
     private readonly FhMethodHandle<PInputUpdate>      _handle_input_update;
 
-    private          IDXGISwapChain*                                       _p_swap_chain;         // https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nn-dxgi-idxgiswapchain
-    private          ID3D11Device*                                         _p_device;             // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
-    private          ID3D11DeviceContext*                                  _p_device_ctx;         // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11devicecontext
-    private          ID3D11Resource*                                       _p_surface;            // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11texture2d
-    private          ID3D11RenderTargetView*                               _p_render_target_view; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
-    private readonly FhMethodHandle<DirectX_D3D11CreateDeviceAndSwapChain> _handle_d3d11_init;
-    private          FhMethodHandle<DXGISwapChain_Present>?                _handle_present;
-    private          FhMethodHandle<DXGISwapChain_ResizeBuffers>?          _handle_resize_buffers;
+    private IDXGISwapChain*         _ptr_swapchain;  // https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nn-dxgi-idxgiswapchain
+    private ID3D11Device*           _ptr_device;     // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
+    private ID3D11DeviceContext*    _ptr_device_ctx; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11devicecontext
+    private ID3D11Resource*         _ptr_surface;    // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11texture2d
+    private ID3D11RenderTargetView* _ptr_rtv;        // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
 
-    private bool _present_init_complete; // has h_present finished one-time initialization?
-    private bool _present_ready;         // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
+    private FhMethodHandle<DXGISwapChain_Present>?       _handle_present;
+    private FhMethodHandle<DXGISwapChain_ResizeBuffers>? _handle_resize_buffers;
+
+    private bool _rtv_generated;
+    private bool _present_ready; // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
     public FhImguiModule() {
         FhMethodLocation location_wndproc_init = new(0x241B80, 0x0529A0);
@@ -95,13 +95,11 @@ public unsafe sealed class FhImguiModule : FhModule {
 
         _handle_wndproc_init = new(this, location_wndproc_init, h_init_wndproc);
         _handle_input_update = new(this, location_input_update, h_input_update);
-        _handle_d3d11_init   = new(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", h_init_d3d11);
         _h_WndProc           = h_wndproc;
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _handle_d3d11_init  .hook()
-            && _handle_wndproc_init.hook()
+        return _handle_wndproc_init.hook()
             && _handle_input_update.hook();
     }
 
@@ -110,8 +108,8 @@ public unsafe sealed class FhImguiModule : FhModule {
     }
 
     private void init_imgui() {
-        if (_hWnd     == 0    ||                        // h_init_wndproc hasn't run yet?
-            _p_device == null || _p_device_ctx == null) // h_init_d3d11 hasn't run yet?
+        if (_hWnd       == 0    ||                          // h_init_wndproc hasn't run yet?
+            _ptr_device == null || _ptr_device_ctx == null) // h_init_d3d11 hasn't run yet?
             return;
 
         ImGuiContextPtr ctx   = ImGui.CreateContext();
@@ -136,8 +134,8 @@ public unsafe sealed class FhImguiModule : FhModule {
 
         ImGui.StyleColorsDark();
 
-        HexaID3D11DevicePtr        hexa_p_device     = new((HexaID3D11Device*)       _p_device);
-        HexaID3D11DeviceContextPtr hexa_p_device_ctx = new((HexaID3D11DeviceContext*)_p_device_ctx);
+        HexaID3D11DevicePtr        hexa_p_device     = new((HexaID3D11Device*)       _ptr_device);
+        HexaID3D11DeviceContextPtr hexa_p_device_ctx = new((HexaID3D11DeviceContext*)_ptr_device_ctx);
 
         ImGuiImplWin32.SetCurrentContext(ctx);
         ImGuiImplD3D11.SetCurrentContext(ctx);
@@ -147,15 +145,31 @@ public unsafe sealed class FhImguiModule : FhModule {
         FhApi.ImGuiHelper.init();
     }
 
+    unsafe void IFhD3DUser.assign_devices(
+        ID3D11Device*        ptr_device,
+        ID3D11DeviceContext* ptr_device_context,
+        IDXGISwapChain*      ptr_swapchain) {
+
+        _ptr_swapchain  = ptr_swapchain;
+        _ptr_device     = ptr_device;
+        _ptr_device_ctx = ptr_device_context;
+
+        _handle_present        = new(this, new nint(_ptr_swapchain->lpVtbl[8]),  h_present);
+        _handle_resize_buffers = new(this, new nint(_ptr_swapchain->lpVtbl[13]), h_resize_buffers);
+
+        _handle_present       .hook();
+        _handle_resize_buffers.hook();
+
+        init_imgui();
+    }
+
     /// <summary>
     ///     Replaces the game's window procedure with <see cref="h_wndproc"/>.
     /// </summary>
     private nint h_init_wndproc() {
         nint result = _handle_wndproc_init.orig_fptr();
 
-        _hWnd = FhGlobal.game_id is FhGameId.FFX
-            ? FhUtil.get_at<HWND>(0x8C9CE8)
-            : FhUtil.get_at<HWND>(0x16641B8);
+        _hWnd = FhUtil.get_at<HWND>(FhUtil.select(0x8C9CE8, 0x16641B8, 0x16641B8));
 
         _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
         _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
@@ -163,62 +177,6 @@ public unsafe sealed class FhImguiModule : FhModule {
 
         init_imgui();
         return result;
-    }
-
-    /// <summary>
-    ///     Intercepts the game's D3D11 initialization to retrieve a handle to its
-    ///     <see cref="ID3D11Device"/>, <see cref="ID3D11DeviceContext"/>, and <see cref="IDXGISwapChain"/>.
-    /// </summary>
-    private HRESULT h_init_d3d11(
-        IDXGIAdapter*         pAdapter,
-        D3D_DRIVER_TYPE       DriverType,
-        HMODULE               Software,
-        uint                  Flags,
-        D3D_FEATURE_LEVEL*    pFeatureLevels,
-        uint                  FeatureLevels,
-        uint                  SDKVersion,
-        DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
-        IDXGISwapChain**      ppSwapChain,
-        ID3D11Device**        ppDevice,
-        D3D_FEATURE_LEVEL*    pFeatureLevel,
-        ID3D11DeviceContext** ppImmediateContext) {
-
-        HRESULT hr = _handle_d3d11_init.orig_fptr(
-            pAdapter,
-            DriverType,
-            Software,
-            Flags,
-            pFeatureLevels,
-            FeatureLevels,
-            SDKVersion,
-            pSwapChainDesc,
-            ppSwapChain,
-            ppDevice,
-            pFeatureLevel,
-            ppImmediateContext);
-
-        /* [fkelava 19/11/25 15:08]
-         * The game has strange behavior on multi-GPU systems. The method will be invoked several
-         * times, usually with garbage. For this reason we ignore a result that doesn't contain
-         * all three of a valid device, device context, and swap chain.
-         */
-
-        if (hr != S.S_OK || ppSwapChain == null || ppDevice == null || ppImmediateContext == null)
-            return hr;
-
-        _p_swap_chain = *ppSwapChain;
-        _p_device     = *ppDevice;
-        _p_device_ctx = *ppImmediateContext;
-
-        _handle_present        = new(this, new nint(_p_swap_chain->lpVtbl[8]),  h_present);
-        _handle_resize_buffers = new(this, new nint(_p_swap_chain->lpVtbl[13]), h_resize_buffers);
-
-        _handle_present       .hook();
-        _handle_resize_buffers.hook();
-
-        init_imgui();
-
-        return hr;
     }
 
     /// <summary>
@@ -239,9 +197,9 @@ public unsafe sealed class FhImguiModule : FhModule {
     ///     Allows interception of raw input from the game, redirecting it to ImGui if appropriate.
     /// </summary>
     private int h_input_update() {
-        if (_hWnd         == 0    // h_init_wndproc hasn't run yet?
-         || _p_device     == null // h_init_d3d11 hasn't run yet?
-         || _p_device_ctx == null)
+        if (_hWnd           == 0    // h_init_wndproc hasn't run yet?
+         || _ptr_device     == null // h_init_d3d11 hasn't run yet?
+         || _ptr_device_ctx == null)
             return _handle_input_update.orig_fptr();
 
         ImGuiIOPtr io = ImGui.GetIO();
@@ -254,15 +212,15 @@ public unsafe sealed class FhImguiModule : FhModule {
     ///     Intercepts attempts to resize the game window to allow ImGui to continue drawing.
     /// </summary>
     private nint h_resize_buffers(IDXGISwapChain* pSwapChain, uint BufferCount, uint Width, uint Height, DXGI_FORMAT NewFormat, uint SwapChainFlags) {
-        if (_p_device_ctx == null)
+        if (_ptr_device_ctx == null)
             return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
 
-        if (_p_render_target_view != null) {
-            _p_device_ctx        ->OMSetRenderTargets(0, null, null);
-            _p_render_target_view->Release();
+        if (_ptr_rtv != null) {
+            _ptr_device_ctx->OMSetRenderTargets(0, null, null);
+            _ptr_rtv       ->Release();
         }
 
-        _present_init_complete = false; // forces regeneration of ImGui surfaces/RTV in next `h_present`
+        _rtv_generated = false; // forces regeneration of ImGui surfaces/RTV in next `h_present`
         return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     }
 
@@ -270,22 +228,22 @@ public unsafe sealed class FhImguiModule : FhModule {
     ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, uint)"/> call to display mods' user interfaces.
     /// </summary>
     private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, uint Flags) {
-        if (_hWnd         == 0    // > h_init_wndproc hasn't run yet?
-         || _p_swap_chain == null // |
-         || _p_device     == null // |
-         || _p_device_ctx == null // | > h_init_d3d11 hasn't run yet?
-         || !_present_ready)      // > game main loop hasn't run yet?
+        if (_hWnd           == 0    // > h_init_wndproc hasn't run yet?
+         || _ptr_swapchain  == null // |
+         || _ptr_device     == null // |
+         || _ptr_device_ctx == null // | > h_init_d3d11 hasn't run yet?
+         || !_present_ready)        // > game main loop hasn't run yet?
             return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
 
-        if (!_present_init_complete) {
-            fixed (ID3D11Resource**         ppSurface          = &_p_surface)
-            fixed (ID3D11RenderTargetView** ppRenderTargetView = &_p_render_target_view) {
-                _p_swap_chain->GetBuffer(0, Windows.__uuidof<ID3D11Texture2D>(), (void**)ppSurface);
-                _p_device    ->CreateRenderTargetView(_p_surface, null, ppRenderTargetView);
-                _p_surface   ->Release();
+        if (!_rtv_generated) {
+            fixed (ID3D11Resource**         ppSurface = &_ptr_surface)
+            fixed (ID3D11RenderTargetView** ppRTView  = &_ptr_rtv) {
+                _ptr_swapchain->GetBuffer(0, Windows.__uuidof<ID3D11Texture2D>(), (void**)ppSurface);
+                _ptr_device   ->CreateRenderTargetView(_ptr_surface, null, ppRTView);
+                _ptr_surface  ->Release();
             }
 
-            _present_init_complete = true;
+            _rtv_generated = true;
         }
 
         ImGuiImplD3D11.NewFrame();
@@ -299,8 +257,8 @@ public unsafe sealed class FhImguiModule : FhModule {
 
         ImGui.Render();
 
-        fixed (ID3D11RenderTargetView** ppRenderTargetView = &_p_render_target_view) {
-            _p_device_ctx->OMSetRenderTargets(1, ppRenderTargetView, null);
+        fixed (ID3D11RenderTargetView** ppRenderTargetViews = &_ptr_rtv) {
+            _ptr_device_ctx->OMSetRenderTargets(1, ppRenderTargetViews, null);
         }
 
         ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
