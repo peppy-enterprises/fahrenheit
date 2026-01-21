@@ -83,6 +83,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         return _handle_autosave.hook()
             && _handle_tosave  .hook()
             && _handle_toload  .hook()
+            && _handle_oncopy  .hook()
             && (_handle_toalbd?.hook() ?? true)
             && _lsm_handle     .try_get_module(out _lsm)
             && _smm_handle     .try_get_module(out _smm);
