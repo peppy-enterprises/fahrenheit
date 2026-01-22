@@ -19,59 +19,72 @@ public sealed class FhSaveManagerModule : FhModule {
      * At runtime, you may swap between all sets for the hash.
      */
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate void Sg_MainInit();
-
-    private          int                 _sm_lock;
-    private readonly HashSet<string>     _sm_sets;
-    private          string              _sm_active_set;
-    private readonly int[]               _sm_active_set_slots;
-    private readonly int[]               _sm_active_set_saves;
-    private          int                 _sm_active_set_count;
-    private readonly string              _sm_path_base;
-    private readonly string              _sm_path_default_set;
-    private readonly FhSaveDisplayData[] _sm_display_data;
-
-    private readonly FhMethodHandle<Sg_MainInit> _handle_sginit;
+    private          int                            _sm_lock;
+    private readonly HashSet<string>                _sm_sets;
+    private readonly int                            _sm_set_size;
+    private          string                         _sm_active_set;
+    private readonly int[]                          _sm_active_set_slots;
+    private readonly int[]                          _sm_active_set_saves;
+    private          int                            _sm_active_set_count;
+    private readonly string                         _sm_path_base;
+    private readonly string                         _sm_path_default_set;
+    private readonly FhSaveDisplayData[]            _sm_display_data;
+    private readonly Dictionary<string, FileInfo[]> _sm_file_attributes;
 
     public FhSaveManagerModule() {
-        FhMethodLocation loc_ginit = new(0x420970, 0x204EE0);
-
         _sm_path_base        = Path.Join(FhEnvironment.Finder.Saves.FullName, FhEnvironment.StateHash);
         _sm_path_default_set = Path.Join(_sm_path_base, FhSavePal.DEFAULT_SET_NAME, FhSavePal.pal_get_save_subfolder());
         _sm_sets             = [];
-        _sm_active_set_slots = new int[FhSavePal.DEFAULT_SET_SIZE];
-        _sm_active_set_saves = new int[FhSavePal.DEFAULT_SET_SIZE];
+        _sm_set_size         = FhSavePal.DEFAULT_SET_SIZE;
         _sm_active_set       = FhSavePal.DEFAULT_SET_NAME;
-        _sm_display_data     = new FhSaveDisplayData[FhSavePal.DEFAULT_SET_SIZE];
-
-        _handle_sginit = new(this, loc_ginit, h_sginit);
+        _sm_active_set_slots = new int              [_sm_set_size];
+        _sm_active_set_saves = new int              [_sm_set_size];
+        _sm_display_data     = new FhSaveDisplayData[_sm_set_size];
+        _sm_file_attributes  = [];
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         _sm_create_default_set();
         _sm_query_sets();
 
-        return _handle_sginit.hook();
-    }
+        /* [fkelava 19/01/26 18:13]
+         * Save PAL is not ready to perform indexing operations at 'init' time because
+         * AtelGetSaveDicName & co. are not usable before game initialization has run.
+         *
+         * Set indexing is performed just in time when SEM transitions to save/load mode.
+         */
 
-    /* [fkelava 19/01/26 18:13]
-     * Save PAL is not ready to perform indexing operations at 'init' time because
-     * AtelGetSaveDicName & co. are not usable before game initialization has run.
-     *
-     * Thus we index the default set after the game has had the chance to initialize.
-     */
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
-    private void h_sginit() {
-        _handle_sginit.orig_fptr();
-        _sm_index_active_set();
+        return true;
     }
 
     /* [fkelava 19/01/26 12:03]
      * The save manager is considered essential, as is any part of the runtime. We throw
      * if we cannot do basic file I/O; there is no point trying to handle it gracefully.
      */
+
+    /// <summary>
+    ///     Updates the file attribute cache with any sets added since the last call.
+    /// </summary>
+    private void _sm_cache_file_attributes() {
+        foreach (string set in _sm_sets) {
+            if (_sm_file_attributes.TryGetValue(set, out _))
+                continue;
+
+            FileInfo[] set_file_attributes = new FileInfo[_sm_set_size];
+
+            for (int slot = 0; slot < _sm_set_size; slot++) {
+                string save_file_path = Path.Join(
+                    _sm_path_base,
+                    set,
+                    FhSavePal.pal_get_save_subfolder(),
+                    FhSavePal.pal_get_save_name_for_slot(slot));
+
+                set_file_attributes[slot] = new FileInfo(save_file_path);
+            }
+
+            _sm_file_attributes[set] = set_file_attributes;
+        }
+    }
 
     /// <summary>
     ///     Ensures the default set exists. A default set must exist for every state hash.
@@ -92,12 +105,12 @@ public sealed class FhSaveManagerModule : FhModule {
         _sm_active_set_count = 0;
         _sm_active_set_slots.AsSpan().Fill(-1);
 
-        for (int slot = 0; slot < FhSavePal.DEFAULT_SET_SIZE; slot++) {
+        for (int slot = 0; slot < _sm_set_size; slot++) {
             _sm_display_data[slot].valid = false;
 
-            string   save_file_path = get_save_path_for_slot(slot);
-            FileInfo save_file      = new FileInfo(save_file_path);
+            FileInfo save_file = _sm_file_attributes[_sm_active_set][slot];
 
+            save_file.Refresh();
             if (!save_file.Exists) continue;
 
             using (FileStream save_file_stream = save_file.OpenRead()) {
@@ -119,7 +132,7 @@ public sealed class FhSaveManagerModule : FhModule {
             _ = Encoding.UTF8.GetBytes($"{slot}\0", _sm_display_data[slot].slot);
             _ = Encoding.UTF8.GetBytes($"{save_file.LastWriteTimeUtc:yyyy/MM/dd HH:mm:ss}\0", _sm_display_data[slot].create_time);
 
-            _sm_active_set_slots[slot]          = 1;
+            _sm_active_set_slots[slot]                   = 1;
             _sm_active_set_saves[_sm_active_set_count++] = slot;
 
             _sm_display_data[slot].valid = true;
@@ -138,6 +151,8 @@ public sealed class FhSaveManagerModule : FhModule {
             string set_name = Path.GetFileName(dir);
             _sm_sets.Add(set_name);
         }
+
+        _sm_cache_file_attributes();
 
         /* [fkelava 19/01/26 14:50]
          * Sets can be modified on the disk under us. The user can create a new one, delete the
@@ -182,14 +197,22 @@ public sealed class FhSaveManagerModule : FhModule {
     }
 
     /// <summary>
+    ///     Reindexes the active save set.
+    /// </summary>
+    internal void index_active_set() {
+        if (Interlocked.CompareExchange(ref _sm_lock, 1, 0) != 0)
+            return;
+
+        _sm_index_active_set();
+
+        Interlocked.Decrement(ref _sm_lock);
+    }
+
+    /// <summary>
     ///     For a given <paramref name="slot"/>, gets the full path of the corresponding save file.
     /// </summary>
     internal string get_save_path_for_slot(int slot) {
-        string base_dir = string.Equals(FhEnvironment.StateHash, FhEnvironment.DEFAULT_STATE_HASH, StringComparison.OrdinalIgnoreCase)
-            ? FhSavePal.pal_get_save_default_folder()
-            : Path.Join(_sm_path_base, _sm_active_set);
-
-        return Path.Join(base_dir, FhSavePal.pal_get_save_subfolder(), FhSavePal.pal_get_save_name_for_slot(slot));
+        return Path.Join(_sm_path_base, _sm_active_set, FhSavePal.pal_get_save_subfolder(), FhSavePal.pal_get_save_name_for_slot(slot));
     }
 
     /// <summary>
@@ -203,7 +226,7 @@ public sealed class FhSaveManagerModule : FhModule {
     ///     Get the total number of slots in the current set.
     /// </summary>
     internal int get_slots_total() {
-        return _sm_active_set_slots.Length;
+        return _sm_set_size;
     }
 
     /// <summary>

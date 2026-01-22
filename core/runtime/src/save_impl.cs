@@ -89,6 +89,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
             && _smm_handle     .try_get_module(out _smm);
     }
 
+    internal FhSaveExtensionSystemState get_system_state() => _state;
+
     /* [fkelava 27/11/25 02:15]
      * These five functions are the transition points to and from the save system UI.
      *
@@ -101,13 +103,12 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
      * in Iggy state handlers 0x06, 0x11, and abort bits in HandleSaveDataScreen.
      */
 
-    internal FhSaveExtensionSystemState get_system_state() => _state;
-
     /// <summary>
     ///     Signals to both Fahrenheit and the game that the next save/load operation will be a save.
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ])]
     private void signal_enter_save() {
+        _smm!.index_active_set();
         _state = FhSaveExtensionSystemState.SAVE;
         FhSavePal.pal_set_system_state(FhSaveSystemState.SAVE);
     }
@@ -117,6 +118,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ])]
     private void signal_enter_load() {
+        _smm!.index_active_set();
         _state = FhSaveExtensionSystemState.LOAD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
     }
@@ -127,6 +129,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl )])]
     private void signal_enter_albd() {
+        _smm!.index_active_set();
         _state = FhSaveExtensionSystemState.ALBD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
     }

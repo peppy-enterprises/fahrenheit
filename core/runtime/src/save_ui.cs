@@ -43,7 +43,8 @@ public unsafe sealed class FhSaveUiModule : FhModule {
     private readonly FhModuleHandle<FhSaveManagerModule>   _smm_handle;
     private          FhSaveManagerModule?                  _smm;
 
-    private int _display_index;
+    private int                   _display_index;
+    private IReadOnlySet<string>? _sets;
 
     public FhSaveUiModule() {
         _sem_handle = new(this);
@@ -58,6 +59,10 @@ public unsafe sealed class FhSaveUiModule : FhModule {
     public override void render_imgui() {
         if (FhSavePal.pal_get_screen_state() is not FhSaveScreenState.OPEN)
             return;
+
+        /*
+         * TODO: Address the fact ImGui does not intercept input when unfocused.
+         */
 
         if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed(ImGuiKey.Backspace)) {
             _sem!.signal_exit_abort();
@@ -133,6 +138,12 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         FhApi.ImGuiHelper.set_next_align("Change Set"u8, 0.5F, style.FramePadding.X * 2.0F);
 
         if (ImGui.Button("Change Set"u8)) {
+            /* [fkelava 22/01/26 14:14]
+             * The save manager performs expensive disk I/O on many operations.
+             * It is important to only retrieve values from it once, not every frame.
+             */
+
+            _sets = _smm!.get_sets();
             ImGui.OpenPopup("Select Set"u8);
         }
 
@@ -140,7 +151,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowSize(new (width_modal, height_modal));
 
         if (ImGui.BeginPopupModal("Select Set")) {
-            foreach (string set in _smm!.get_sets()) {
+            foreach (string set in _sets!) {
                 bool is_selected = set == active_set;
 
                 if (ImGui.Selectable(set, is_selected)) {

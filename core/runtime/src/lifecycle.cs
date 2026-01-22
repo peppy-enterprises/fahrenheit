@@ -43,11 +43,7 @@ public unsafe class FhCoreModule : FhModule {
     }
 
     public override void render_imgui() {
-        int curr_event_id = FhGlobal.game_id switch {
-            FhGameId.FFX    => *FFX .Globals.event_id,
-            FhGameId.FFX2   or
-            FhGameId.FFX2LM => *FFX2.Globals.event_id
-        };
+        int curr_event_id = FhUtil.select(*FFX.Globals.event_id, *FFX2.Globals.event_id, *FFX2.Globals.event_id);
 
         if (curr_event_id != 0x17) return; // Deactivate the mod list outside the main menu.
 
