@@ -50,6 +50,15 @@ Once you have installed Visual Studio, enable the `vcpkg` package manager
 by issuing `vcpkg integrate install` at a Developer PowerShell prompt.
 Restart Visual Studio if it was open during this process.
 
+To build at a Developer PowerShell:
+```
+msbuild .\Fahrenheit.slnx /t:Restore /p:Configuration=Release
+msbuild .\Fahrenheit.slnx /p:Configuration=Release
+msbuild .\Fahrenheit.slnx /t:Publish /p:Configuration=Release
+```
+If using Visual Studio, `Build Solution` performs the first two steps for you.
+For a Debug build, change the `Configuration` parameter to `Debug`.
+
 To install/test your development build:
 - Create a subfolder in your game directory (where ``FFX.exe`` is) named ``fahrenheit``.
 - In the directory in which you cloned Fahrenheit, navigate to the ``artifacts\deploy`` subdirectory.
