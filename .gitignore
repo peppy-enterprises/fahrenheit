@@ -417,6 +417,7 @@ env/**/*
 # Do not exclude script response files, but exclude script results.
 scripts/**/*
 !scripts/**/*.rsp
+!scripts/**/*.ps1
 
 # Remove all `vcpkg` artifacts.
 **/vcpkg_installed/
