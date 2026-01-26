@@ -1,5 +1,5 @@
 <h1 align="center">Fahrenheit</h1>
-<h3 align="center">A Final Fantasy X reverse-engineering project and mod framework</h3>
+<h3 align="center">A Final Fantasy X/X-2 reverse-engineering project and mod framework</h3>
 
 <p align="center">
 <img alt="Logo Banner" src="https://github.com/peppy-enterprises/fahrenheit/blob/main/assets/fh_banner.png"/>
