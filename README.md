@@ -42,7 +42,7 @@ and ffgriever's [External File Loader for FFX/FFX-2](https://gitlab.com/ffgrieve
 > Fahrenheit supplies its own External File Loader, and you can use [Roelin's Asset Converter](https://www.nexusmods.com/finalfantasy12/mods/288)
 > for model and texture modding in conjunction with it.
 
-Building requires Visual Studio 2022 with the following workloads:
+Building requires Visual Studio 2026 (full IDE or Build Tools only) with the following workloads:
 - .NET desktop development (latest version)
 - C++ desktop development (latest version)
 
