@@ -20,10 +20,11 @@ public enum FhLangId {
  */
 
 public enum FhTextIndexType {
-    I32_X2 = 1,
-    I32_X1 = 2,
+    COM_X2 = 1, // composite: u16 offset, u8 option_count, u8 unknown
+    COM_X1 = 2,
     I16_X2 = 3,
     I16_X1 = 4,
+    I32_X1 = 5
 }
 
 /* [fkelava 16/10/25 20:13]
@@ -438,8 +439,8 @@ public static class FhEncoding {
 
         while ((offset += src[offset .. ].IndexOf(_op_end) + _op_end.Length) < src.Length) {
             size += index_type switch {
-                FhTextIndexType.I32_X2 => 8,
-                FhTextIndexType.I32_X1 => 4,
+                FhTextIndexType.COM_X2 => 8,
+                FhTextIndexType.COM_X1 => 4,
                 FhTextIndexType.I16_X2 => 4,
                 FhTextIndexType.I16_X1 => 2,
                 _                      => throw new NotImplementedException($"Unknown index type {index_type}"),
@@ -484,30 +485,35 @@ public static class FhEncoding {
     /// </summary>
     public static int read_index(in ReadOnlySpan<byte> src, FhTextIndexType index_type, out int consumed) {
         consumed = index_type switch {
-            FhTextIndexType.I32_X2 => 8,
+            FhTextIndexType.COM_X2 => 8,
+            FhTextIndexType.COM_X1 or
             FhTextIndexType.I32_X1 or
             FhTextIndexType.I16_X2 => 4,
             FhTextIndexType.I16_X1 => 2,
             _                      => throw new Exception("UNREACHABLE")
         };
 
-        short e0 = index_type switch {
-            FhTextIndexType.I32_X2 or
-            FhTextIndexType.I32_X1 => BinaryPrimitives.ReadInt16LittleEndian(src),
+        if (index_type is FhTextIndexType.I32_X1) {
+            return BinaryPrimitives.ReadInt32LittleEndian(src);
+        }
+
+        ushort e0 = index_type switch {
+            FhTextIndexType.COM_X2 or
+            FhTextIndexType.COM_X1 => BinaryPrimitives.ReadUInt16LittleEndian(src),
             FhTextIndexType.I16_X2 or
-            FhTextIndexType.I16_X1 => BinaryPrimitives.ReadInt16LittleEndian(src),
+            FhTextIndexType.I16_X1 => BinaryPrimitives.ReadUInt16LittleEndian(src),
             _                      => throw new Exception("UNREACHABLE")
         };
 
-        byte option_count = index_type is FhTextIndexType.I32_X2 or FhTextIndexType.I32_X1
+        byte option_count = index_type is FhTextIndexType.COM_X2 or FhTextIndexType.COM_X1
             ? src[3]
             : (byte)0;
 
-        short e1 = index_type switch {
-            FhTextIndexType.I32_X2 => BinaryPrimitives.ReadInt16LittleEndian(src[sizeof(int)   .. ]),
-            FhTextIndexType.I32_X1 => 0,
-            FhTextIndexType.I16_X2 => BinaryPrimitives.ReadInt16LittleEndian(src[sizeof(short) .. ]),
-            FhTextIndexType.I16_X1 => 0,
+        ushort e1 = index_type switch {
+            FhTextIndexType.COM_X2 => BinaryPrimitives.ReadUInt16LittleEndian(src[sizeof(int)   .. ]),
+            FhTextIndexType.COM_X1 => e0,
+            FhTextIndexType.I16_X2 => BinaryPrimitives.ReadUInt16LittleEndian(src[sizeof(short) .. ]),
+            FhTextIndexType.I16_X1 => e0,
             _                      => throw new Exception("UNREACHABLE")
         };
 
@@ -520,6 +526,11 @@ public static class FhEncoding {
     ///     offset <paramref name="value"/> and option count <paramref name="options"/>.
     /// </summary>
     private static int _write_index(Span<byte> dest, int value, int options, FhTextIndexType index_type) {
+        if (index_type is FhTextIndexType.I32_X1) {
+            BinaryPrimitives.WriteInt32LittleEndian(dest, value);
+            return 4;
+        }
+
         short index        = short.CreateChecked(value);
         byte  option_count = byte .CreateChecked(options);
 
@@ -533,11 +544,11 @@ public static class FhEncoding {
             return 4;
         }
 
-        if (index_type is FhTextIndexType.I32_X1 or FhTextIndexType.I32_X2) {
+        if (index_type is FhTextIndexType.COM_X1 or FhTextIndexType.COM_X2) {
             dest[2] = 0x00; // TODO: check actual purpose
             dest[3] = option_count;
 
-            if (index_type is FhTextIndexType.I32_X1) return 4;
+            if (index_type is FhTextIndexType.COM_X1) return 4;
 
             dest[0 .. 4].CopyTo(dest[4 .. 8]);
             return 8;

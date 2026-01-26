@@ -3,7 +3,7 @@
 namespace Fahrenheit.Core.Tests;
 
 [TestFixture]
-public class FhCharsetTests {
+public class FhEncodingTests {
 
     /* [fkelava 30/10/25 16:35]
      * This is to ensure that every encodable character 'survives' a round-trip such that no meaning is lost in the plaintext.
@@ -36,7 +36,7 @@ public class FhCharsetTests {
 
 }
 
-public class FhCharsetRegressionTests {
+public class FhEncodingRegressionTests {
 
     /* [fkelava 30/10/25 18:46]
      * Discovered during Archipelago testing.

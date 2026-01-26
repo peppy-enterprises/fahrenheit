@@ -414,6 +414,10 @@ env/**/*
 # Do not exclude sourcegen response files.
 !generation/**/*.rsp
 
+# Do not exclude script response files, but exclude script results.
+scripts/**/*
+!scripts/**/*.rsp
+
 # Remove all `vcpkg` artifacts.
 **/vcpkg_installed/
 
