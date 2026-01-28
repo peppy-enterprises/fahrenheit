@@ -58,7 +58,12 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         int    path_prefix_end = path_no_host0.IndexOf('f', StringComparison.OrdinalIgnoreCase);
         string path_prefixless = path_no_host0[ path_prefix_end .. ];
 
-        return path_prefixless;
+        /* [fkelava 28/01/26 01:05]
+         * This is not safe to replace. I tried twice and learned the hard way.
+         * On all platforms, we want to use forward slashes. On Unices this is a no-op.
+         */
+
+        return path_prefixless.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
     }
 
     /// <summary>
