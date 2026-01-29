@@ -1,0 +1,15 @@
+decompile
+-s
+4:811400
+-e
+UTF8
+-o
+.
+-l
+English
+-g
+FFX
+-it
+I32_X1
+-i
+"..\env\ffx_ps2\ffx\proj\battle\jp\cddata\cdrom.fnd"

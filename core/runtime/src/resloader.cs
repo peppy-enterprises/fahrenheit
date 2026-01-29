@@ -22,44 +22,20 @@ namespace Fahrenheit.Core.Runtime;
 ///     <para/>
 ///     Do not interface with this module directly. Instead, call <see cref="FhApi.Resources"/>.
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2)]
-public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader {
-    private          ID3D11Device*                                         _p_device; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
-    private readonly FhMethodHandle<DirectX_D3D11CreateDeviceAndSwapChain> _handle_d3d11_init;
-
-    public FhResourceLoaderModule() {
-        _handle_d3d11_init = new(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", h_init_d3d11);
-    }
+[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
+public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader, IFhD3DUser {
+    private ID3D11Device* _p_device; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         FhApi.Resources.loader.set_impl(this);
-        return _handle_d3d11_init.hook();
+        return true;
     }
 
-    /// <summary>
-    ///     Intercepts the game's D3D11 initialization to retrieve a handle to its <see cref="ID3D11Device"/>.
-    /// </summary>
-    private HRESULT h_init_d3d11(
-        IDXGIAdapter*         pAdapter,
-        D3D_DRIVER_TYPE       DriverType,
-        HMODULE               Software,
-        uint                  Flags,
-        D3D_FEATURE_LEVEL*    pFeatureLevels,
-        uint                  FeatureLevels,
-        uint                  SDKVersion,
-        DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
-        IDXGISwapChain**      ppSwapChain,
-        ID3D11Device**        ppDevice,
-        D3D_FEATURE_LEVEL*    pFeatureLevel,
-        ID3D11DeviceContext** ppImmediateContext) {
-
-        HRESULT result = _handle_d3d11_init.orig_fptr
-            (pAdapter, DriverType, Software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, pSwapChainDesc, ppSwapChain, ppDevice, pFeatureLevel, ppImmediateContext);
-
-        if (result != 0) return result; // S_FALSE is a possible return
-
-        _p_device = *ppDevice;
-        return result;
+    void IFhD3DUser.assign_devices(
+        ID3D11Device*        ptr_device,
+        ID3D11DeviceContext* ptr_device_context,
+        IDXGISwapChain*      ptr_swapchain) {
+        _p_device = ptr_device;
     }
 
     /// <summary>
@@ -101,7 +77,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader 
     ///     Attempts to load a texture of type <paramref name="texture_type"/> located in
     ///     a memory buffer of size <paramref name="size"/> pointed to by <paramref name="ptr"/>.
     /// </summary>
-    public bool load_texture_from_memory(nint ptr, nuint size, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
+    bool IFhResourceLoader.load_texture_from_memory(nint ptr, nuint size, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
         if (_p_device == null) {
             _logger.Info($"device not ready");
@@ -132,7 +108,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader 
     /// <summary>
     ///     Attempts to load a texture of type <paramref name="texture_type"/> located at <paramref name="file_path"/> on disk.
     /// </summary>
-    public bool load_texture_from_disk(string file_path, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
+    bool IFhResourceLoader.load_texture_from_disk(string file_path, FhTextureType texture_type, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
         if (_p_device == null) {
             _logger.Info($"{file_path} -> device not ready");

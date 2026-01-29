@@ -7,11 +7,14 @@ namespace Fahrenheit.Core;
 /// </summary>
 internal static class FhEnvironment {
 
+    public const string DEFAULT_STATE_HASH = "0";
+
     internal static readonly FhFinder     Finder;
     internal static readonly nint         BaseAddr;
     internal static readonly string[]     LoadOrder;
     internal static readonly FhModPaths[] ModPaths;
     internal static readonly FhManifest[] Manifests;
+    internal static readonly string       StateHash;
 
     static FhEnvironment() {
         Finder    = new();
@@ -19,6 +22,7 @@ internal static class FhEnvironment {
         LoadOrder = _init_load_order();
         ModPaths  = _init_mod_paths();
         Manifests = _init_manifests();
+        StateHash = _init_state_hash();
     }
 
     /* [fkelava 25/4/24 18:47]
@@ -31,6 +35,25 @@ internal static class FhEnvironment {
         FhApi.Mods.load_mods();
         FhApi.Localization.initialize();
         FhApi.Mods.initialize_mods();
+    }
+
+    /// <summary>
+    ///     Computes the hash of all mods which carry local state or request
+    ///     separate saves, such that they may be isolated from others.
+    /// </summary>
+    private static string _init_state_hash() {
+        StringBuilder stateful_mods = new();
+
+        foreach (FhManifest manifest in Manifests) {
+            if (manifest.Flags.HasFlag(FhManifestFlags.SEPARATE_SAVES))
+                stateful_mods.Append(manifest.Id);
+        }
+
+        if (stateful_mods.Length == 0)
+            return DEFAULT_STATE_HASH;
+
+        byte[] stateful_mods_utf8 = Encoding.UTF8.GetBytes(stateful_mods.ToString());
+        return Convert.ToHexString(SHA256.HashData(stateful_mods_utf8));
     }
 
     /// <summary>

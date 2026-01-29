@@ -91,7 +91,7 @@ public abstract class FhModule {
     /// <summary>
     ///     Your module should perform all Fahrenheit-related initialization here. When this is called, all mods are loaded, and:
     ///     <br/>
-    ///     <br/> - you may call <see cref="FhModuleHandle{T}.try_get(out FhModuleContext?)"/> to obtain references to other modules;
+    ///     <br/> - you may call <see cref="FhModuleHandle{T}.try_get_context(out FhModuleContext?)"/> to obtain references to other modules;
     ///     <br/> - you receive a copy of the containing mod's <see cref="FhModContext"/>;
     ///     <br/> - you receive a <see cref="FileStream"/> of the global state file for your module;
     /// </summary>

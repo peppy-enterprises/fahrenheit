@@ -1,5 +1,5 @@
 <h1 align="center">Fahrenheit</h1>
-<h3 align="center">A Final Fantasy X reverse-engineering project and mod framework</h3>
+<h3 align="center">A Final Fantasy X/X-2 reverse-engineering project and mod framework</h3>
 
 <p align="center">
 <img alt="Logo Banner" src="https://github.com/peppy-enterprises/fahrenheit/blob/main/assets/fh_banner.png"/>
@@ -42,13 +42,22 @@ and ffgriever's [External File Loader for FFX/FFX-2](https://gitlab.com/ffgrieve
 > Fahrenheit supplies its own External File Loader, and you can use [Roelin's Asset Converter](https://www.nexusmods.com/finalfantasy12/mods/288)
 > for model and texture modding in conjunction with it.
 
-Building requires Visual Studio 2022 with the following workloads:
+Building requires Visual Studio 2026 (full IDE or Build Tools only) with the following workloads:
 - .NET desktop development (latest version)
 - C++ desktop development (latest version)
 
 Once you have installed Visual Studio, enable the `vcpkg` package manager
 by issuing `vcpkg integrate install` at a Developer PowerShell prompt.
 Restart Visual Studio if it was open during this process.
+
+To build at a Developer PowerShell:
+```
+msbuild .\Fahrenheit.slnx /t:Restore /p:Configuration=Release
+msbuild .\Fahrenheit.slnx /p:Configuration=Release
+msbuild .\Fahrenheit.slnx /t:Publish /p:Configuration=Release
+```
+If using Visual Studio, `Build Solution` performs the first two steps for you.
+For a Debug build, change the `Configuration` parameter to `Debug`.
 
 To install/test your development build:
 - Create a subfolder in your game directory (where ``FFX.exe`` is) named ``fahrenheit``.

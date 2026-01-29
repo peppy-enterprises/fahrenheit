@@ -1,16 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 
-using System.Diagnostics;
-
 namespace Fahrenheit.Core.Runtime;
-
-internal struct PStreamFile {
-    public nint handle_os;
-    public nint handle_vbf;
-}
-
-[UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-internal unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5);
 
 /// <summary>
 ///     Provides the ability to replace files loaded by the game with files outside the VBF archives.
@@ -28,45 +18,59 @@ internal unsafe delegate nint PStreamFile_ctor(PStreamFile* this_ptr, nint path_
 [SupportedOSPlatform("windows")]
 public unsafe sealed class FhFileLoaderModule : FhModule {
 
-    private readonly Dictionary<string, string>       _index;
-    private readonly FhMethodHandle<PStreamFile_ctor> _handle_fopen;
+    /// <summary>
+    ///     A file as seen by the game. Can be backed by either a VBF or OS handle.
+    /// </summary>
+    private struct PStreamFile {
+        public nint handle_os;
+        public nint handle_vbf;
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    private delegate PStreamFile* _PStreamFile_ctor(
+        PStreamFile* ptr_this,
+        nint         ptr_path,
+        bool         read_only,
+        nint         p3,  // unused?
+        nint         p4,  // unused?
+        bool         p5); // unused?
+
+    private readonly Dictionary<string, string>        _index;
+    private readonly FhMethodHandle<_PStreamFile_ctor> _handle_fctor;
 
     public FhFileLoaderModule() {
         FhMethodLocation method_location = new FhMethodLocation(0x207D80, 0x490E40);
 
         _index        = [];
-        _handle_fopen = new(this, method_location, h_fopen);
+        _handle_fctor = new(this, method_location, h_fopen);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         construct_index();
-        return _handle_fopen.hook();
+        return _handle_fctor.hook();
     }
 
     /// <summary>
     ///     Normalizes the relative paths the game uses to address files in the VBF archives.
     /// </summary>
-    private static string normalize_path(string path) {
-        string host0_fixed_path  = path.Replace("host0:", "ffx_ps2");
-        int    stream_prefix_end = host0_fixed_path.IndexOf('f', StringComparison.OrdinalIgnoreCase);
-        string prefixless_path   = host0_fixed_path[ stream_prefix_end .. ];
+    private static string normalize_host0_path(string path) {
+        string path_no_host0   = path.Replace("host0:", "ffx_ps2");
+        int    path_prefix_end = path_no_host0.IndexOf('f', StringComparison.OrdinalIgnoreCase);
+        string path_prefixless = path_no_host0[ path_prefix_end .. ];
 
-        return OperatingSystem.IsWindows()
-            ? prefixless_path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
-            : prefixless_path;
+        /* [fkelava 28/01/26 01:05]
+         * This is not safe to replace. I tried twice and learned the hard way.
+         * On all platforms, we want to use forward slashes. On Unices this is a no-op.
+         */
+
+        return path_prefixless.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
     }
 
     /// <summary>
     ///     Creates the immutable map of EFL replacements for this game session.
     /// </summary>
     private void construct_index() {
-        Stopwatch index_timer     = Stopwatch.StartNew();
-        string    efl_subdir_name = FhGlobal.game_id switch {
-            FhGameId.FFX    => "x",
-            FhGameId.FFX2   or
-            FhGameId.FFX2LM => "x2",
-            _               => throw new Exception("FH_E_INVALID_GAME_TYPE"),
-        };
+        string efl_subdir_name = FhUtil.select("x", "x2", "x2");
 
         string         path_efl_dir;
         FhModContext[] mods = [ .. FhApi.Mods.get_mods() ];
@@ -76,34 +80,29 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
             if (!Directory.Exists(path_efl_dir)) continue;
 
             foreach (string path_efl_file in Directory.GetFiles(path_efl_dir, "*.*", SearchOption.AllDirectories)) {
-                string path_absolute_nt         = @$"\\?\{path_efl_file}";
-                string path_relative            = Path.GetRelativePath(path_efl_dir, path_efl_file);
-                string path_relative_normalized = normalize_path(path_relative);
-                string path_absolute = OperatingSystem.IsWindows()
-                    ? path_absolute_nt
-                    : path_efl_file;
+                string path_rel            = Path.GetRelativePath(path_efl_dir, path_efl_file);
+                string path_rel_normalized = normalize_host0_path(path_rel);
 
-                if (_index.ContainsKey(path_relative_normalized)) {
-                    _logger.Warning($"{path_relative_normalized} is being superseded by mod {mod.Manifest.Name}");
+                if (_index.ContainsKey(path_rel_normalized)) {
+                    _logger.Warning($"{path_rel_normalized} is being superseded by mod {mod.Manifest.Name}");
                 }
 
-                _index[path_relative_normalized] = path_absolute;
-                _logger.Info($"Mod {mod.Manifest.Name} replaces file {path_relative_normalized}");
+                _index[path_rel_normalized] = path_efl_file;
+                _logger.Info($"Mod {mod.Manifest.Name} replaces file {path_rel_normalized}");
             }
         }
-
-        _logger.Warning($"EFL indexing complete in {index_timer.ElapsedMilliseconds} ms.");
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private nint h_fopen(PStreamFile* this_ptr, nint path_ptr, bool read_only, nint param_3, nint param_4, bool param_5) {
-        string path            = Marshal.PtrToStringAnsi(path_ptr) ?? throw new Exception("FH_E_EFL_PSTREAM_CTOR_OPEN_PATH_NUL");
-        string normalized_path = normalize_path(path);
+    private PStreamFile* h_fopen(PStreamFile* ptr_this, nint ptr_path, bool read_only, nint p3, nint p4, bool p5) {
+        string path            = Marshal.PtrToStringAnsi(ptr_path)!;
+        string path_normalized = normalize_host0_path(path);
 
-        _logger.Info(normalized_path);
+        _logger.Info(path);
+        _logger.Info(path_normalized);
 
-        if (!_index.TryGetValue(normalized_path, out string? modded_path)) {
-            return _handle_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
+        if (!_index.TryGetValue(path_normalized, out string? path_modded)) {
+            return _handle_fctor.orig_fptr(ptr_this, ptr_path, read_only, p3, p4, p5);
         }
 
         /* [fkelava 01/10/24 16:49]
@@ -114,10 +113,10 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
          * No bookkeeping of the returned handle is necessary. The game closes it itself.
          */
 
-        fixed (char* modded_path_ptr = modded_path) {
-            this_ptr->handle_vbf = 0;
-            this_ptr->handle_os  = Windows.CreateFileW(
-                modded_path_ptr,
+        fixed (char* ptr_path_modded = path_modded) {
+            ptr_this->handle_vbf = 0;
+            ptr_this->handle_os  = Windows.CreateFileW(
+                ptr_path_modded,
                 (uint)(read_only ? FILE.FILE_READ_DATA  : FILE.FILE_WRITE_DATA),
                 (uint)(read_only ? FILE.FILE_SHARE_READ : 0),
                 null,
@@ -126,12 +125,11 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
                 HANDLE.NULL);
         }
 
-        if (this_ptr->handle_os == HANDLE.INVALID_VALUE) {
-            _logger.Error($"File open failed for {modded_path} - bailing out");
-            return _handle_fopen.orig_fptr(this_ptr, path_ptr, read_only, param_3, param_4, param_5);
+        if (ptr_this->handle_os == HANDLE.INVALID_VALUE) {
+            _logger.Error($"File open failed for {path_modded} - bailing out");
+            return _handle_fctor.orig_fptr(ptr_this, ptr_path, read_only, p3, p4, p5);
         }
 
-        _logger.Info($"{path} -> {modded_path}");
-        return new nint(this_ptr);
+        return ptr_this;
     }
 }

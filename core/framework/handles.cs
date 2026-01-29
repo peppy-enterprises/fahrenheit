@@ -4,7 +4,7 @@ namespace Fahrenheit.Core;
 
 /// <summary>
 ///     Provides runtime binding to a <see cref="FhModule"/> of type <typeparamref name="TTarget"/>.
-///     You may then access its <see cref="FhModuleContext"/>.
+///     You may then access the module or its <see cref="FhModuleContext"/>.
 /// </summary>
 public class FhModuleHandle<TTarget>(FhModule owner) where TTarget : FhModule {
     private readonly FhModule         _owner = owner;
@@ -14,9 +14,18 @@ public class FhModuleHandle<TTarget>(FhModule owner) where TTarget : FhModule {
     ///     Queries the <see cref="FhModController"/> for a module of type <typeparamref name="TTarget"/>,
     ///     caching the match if found, and returns its <see cref="FhModuleContext"/>.
     /// </summary>
-    public bool try_get([NotNullWhen(true)] out FhModuleContext? target_context) {
+    public bool try_get_context([NotNullWhen(true)] out FhModuleContext? target_context) {
         FhInternal.Log.Info($"{_owner.ModuleType} acquiring handle to {typeof(TTarget).FullName}");
         return (target_context = (_match ??= FhApi.Mods.get_module<TTarget>())) != null;
+    }
+
+    /// <summary>
+    ///     Queries the <see cref="FhModController"/> for a module of type <typeparamref name="TTarget"/>,
+    ///     caching the match if found, and returns its <see cref="FhModuleContext"/>.
+    /// </summary>
+    public bool try_get_module([NotNullWhen(true)] out TTarget? target) {
+        target = default;
+        return try_get_context(out FhModuleContext? target_context) && (target = target_context.Module as TTarget) != null;
     }
 }
 

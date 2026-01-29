@@ -54,7 +54,7 @@ internal interface IFhResourceLoader {
     ///     of size <paramref name="size"/> at <paramref name="ptr"/> and returns, if
     ///     successful, a <see cref="FhTexture"/>.
     /// </summary>
-    public bool load_texture_from_memory(
+    internal bool load_texture_from_memory(
                                 nint          ptr,
                                 nuint         size,
                                 FhTextureType file_type,
@@ -65,7 +65,7 @@ internal interface IFhResourceLoader {
     ///     file at <paramref name="file_path"/> and returns, if
     ///     successful, a <see cref="FhTexture"/>.
     /// </summary>
-    public bool load_texture_from_disk(
+    internal bool load_texture_from_disk(
                                 string        file_path,
                                 FhTextureType file_type,
         [NotNullWhen(true)] out FhTexture?    texture);
