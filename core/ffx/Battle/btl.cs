@@ -1,7 +1,5 @@
 ﻿// SPDX-License-Identifier: MIT
 
-using System.Text;
-
 namespace Fahrenheit.Core.FFX.Battle;
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x10)]
@@ -138,25 +136,28 @@ public unsafe struct Btl {
         private byte _b;
     }
 
-    [FieldOffset(0x10)]   public       byte   battle_state;
-    [FieldOffset(0x12)]   public       byte   battle_trigger;
+    [FieldOffset(0x10)]   public   byte          battle_state;
+    [FieldOffset(0x12)]   public   byte          battle_trigger;
 
-    [FieldOffset(0x28)]   public       BtlDebugFlags debug;
+    [FieldOffset(0x28)]   public   BtlDebugFlags debug;
 
-    [FieldOffset(0x5C)]   public       nint   ptr_command_bin;
-    [FieldOffset(0x60)]   public       nint   ptr_monmagic1_bin;
-    [FieldOffset(0x64)]   public       nint   ptr_monmagic2_bin;
-    [FieldOffset(0x68)]   public       nint   ptr_ply_rom_bin;
-    [FieldOffset(0x70)]   public       nint   ptr_item_bin;
-    [FieldOffset(0x74)]   public       nint   ptr_a_ability_bin;
-    [FieldOffset(0x78)]   public       nint   ptr_sum_assure_bin;
-    [FieldOffset(0x7C)]   public       nint   ptr_ctb_base_bin;
-    [FieldOffset(0x80)]   public       nint   ptr_magic_bin;
-    [FieldOffset(0x84)]   public       nint   ptr_mot_bin;
-    [FieldOffset(0x88)]   public       nint   ptr_st_number_bin;
-    [FieldOffset(0x90)]   public       nint   ptr_sum_grow_bin;
-    [FieldOffset(0x94)]   public       nint   ptr_kaizou_bin;
+    [FieldOffset(0x5C)]   internal ExcelFile<PCommand>*              ptr_command_bin;
+    [FieldOffset(0x60)]   internal ExcelFile<Command>*               ptr_monmagic1_bin;
+    [FieldOffset(0x64)]   internal ExcelFile<Command>*               ptr_monmagic2_bin;
+    [FieldOffset(0x68)]   internal ExcelFile<PlyRom>*                ptr_ply_rom_bin;
+    [FieldOffset(0x70)]   internal ExcelFile<PCommand>*              ptr_item_bin;
+    [FieldOffset(0x74)]   internal ExcelFile<AutoAbility>*           ptr_a_ability_bin;
+    [FieldOffset(0x78)]   internal ExcelFile<AeonStatBoostsMinimum>* ptr_sum_assure_bin;
+    [FieldOffset(0x7C)]   internal ExcelFile<CtbBaseData>*           ptr_ctb_base_bin;
 
+    [FieldOffset(0x80)]   internal nint ptr_magic_bin;
+    [FieldOffset(0x84)]   internal nint ptr_mot_bin;
+
+    [FieldOffset(0x88)]   internal ExcelFile<StNumber>*            ptr_st_number_bin;
+    [FieldOffset(0x90)]   internal ExcelFile<AeonAbilityRecipe>*   ptr_sum_grow_bin;
+    [FieldOffset(0x94)]   internal ExcelFile<CustomizationRecipe>* ptr_kaizou_bin;
+
+    // Fahrenheit overwrites these, and makes the game support nint-sized excel files instead.
     [FieldOffset(0x98)]   public       ushort size_command_bin;
     [FieldOffset(0x9A)]   public       ushort size_ply_rom_bin;
     [FieldOffset(0x9E)]   public       ushort size_item_bin;

@@ -75,7 +75,7 @@ public struct ChrRam {
     [FieldOffset(0x101)] public StatusMap             status_resist;
     [FieldOffset(0x11A)] public StatusExtraFlags      status_resist_extra;
     [FieldOffset(0x11C)] public byte                  ctb;
-    [FieldOffset(0x11D)] public byte                  max_ctb;
+    [FieldOffset(0x11D)] public byte                  default_turn_delay;
     [FieldOffset(0x11E)] public byte                  cheer_stacks;
     [FieldOffset(0x11F)] public byte                  aim_stacks;
     [FieldOffset(0x120)] public byte                  focus_stacks;
