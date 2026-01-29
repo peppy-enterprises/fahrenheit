@@ -141,14 +141,14 @@ public unsafe struct Btl {
 
     [FieldOffset(0x28)]   public   BtlDebugFlags debug;
 
-    [FieldOffset(0x5C)]   internal ExcelFile<PCommand>*                  ptr_command_bin;
-    [FieldOffset(0x60)]   internal ExcelFile<Command>*                   ptr_monmagic1_bin;
-    [FieldOffset(0x64)]   internal ExcelFile<Command>*                   ptr_monmagic2_bin;
-    [FieldOffset(0x68)]   internal ExcelFile<PlyRom>*                    ptr_ply_rom_bin;
-    [FieldOffset(0x70)]   internal ExcelFile<PCommand>*                  ptr_item_bin;
-    [FieldOffset(0x74)]   internal ExcelFile<AutoAbility>*               ptr_a_ability_bin;
-    [FieldOffset(0x78)]   internal ExcelFile<AeonStatBattleCountBoosts>* ptr_sum_assure_bin;
-    [FieldOffset(0x7C)]   internal ExcelFile<CtbBaseData>*               ptr_ctb_base_bin;
+    [FieldOffset(0x5C)]   internal ExcelFile<PCommand>*              ptr_command_bin;
+    [FieldOffset(0x60)]   internal ExcelFile<Command>*               ptr_monmagic1_bin;
+    [FieldOffset(0x64)]   internal ExcelFile<Command>*               ptr_monmagic2_bin;
+    [FieldOffset(0x68)]   internal ExcelFile<PlyRom>*                ptr_ply_rom_bin;
+    [FieldOffset(0x70)]   internal ExcelFile<PCommand>*              ptr_item_bin;
+    [FieldOffset(0x74)]   internal ExcelFile<AutoAbility>*           ptr_a_ability_bin;
+    [FieldOffset(0x78)]   internal ExcelFile<AeonStatBoostsMinimum>* ptr_sum_assure_bin;
+    [FieldOffset(0x7C)]   internal ExcelFile<CtbBaseData>*           ptr_ctb_base_bin;
 
     [FieldOffset(0x80)]   internal nint ptr_magic_bin;
     [FieldOffset(0x84)]   internal nint ptr_mot_bin;
