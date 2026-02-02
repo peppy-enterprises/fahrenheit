@@ -31,6 +31,7 @@ public unsafe struct AtelBasicWorker {
     [FieldOffset(0x98)]  public float                __0x98;
     //[FieldOffset(0x9C)]  public Chr*                 chr_handle;
     [FieldOffset(0xA8)]  public ushort               event_chr_id;
+    [FieldOffset(0xAB)]  public byte                 field_interaction_flags;
     [FieldOffset(0xC4)]  public AtelStack            stack;
     [FieldOffset(0x12C)] public WorkerThreadsArray   threads; // [9]
 

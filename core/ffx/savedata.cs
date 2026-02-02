@@ -173,7 +173,17 @@ public unsafe struct SaveData {
     [FieldOffset(0x4C)]   public fixed uint           affection_room_flags[20]; // bitfield
     [FieldOffset(0xB4)]   public       ushort         item_map_x; // meaning unknown
     [FieldOffset(0xB6)]   public       ushort         item_map_y; // meaning unknown
+    [FieldOffset(0xB8)]   public       ushort         saved_current_spawnpoint; // Used when loading save
+    [FieldOffset(0xBA)]   public       ushort         saved_current_room_id;    // Used when loading save
     [FieldOffset(0xBC)]   public       int            time;
+    [FieldOffset(0xC0)]   public       ushort         saved_current_room_id2; // Never read?
+    [FieldOffset(0xC2)]   public       ushort         saved_last_room_id; // Used when loading save
+    [FieldOffset(0xC4)]   public       ushort         saved_now_eventjump_map_no;
+    [FieldOffset(0xC6)]   public       ushort         saved_last_eventjump_map_no;
+    [FieldOffset(0xC8)]   public       ushort         saved_now_eventjump_map_id;
+    [FieldOffset(0xCA)]   public       ushort         saved_last_eventjump_map_id;
+    [FieldOffset(0xCC)]   public       byte           saved_current_spawnpoint2; // Never read?
+    [FieldOffset(0xCE)]   public       byte           saved_last_spawnpoint; // Used when loading save
     [FieldOffset(0xD1)]   public       byte           albhed_rikku;
     [FieldOffset(0xD2)]   public       byte           drop_shadow_mode;
     [FieldOffset(0xD4)]   public       ushort         atel_force_place_id_value;
@@ -185,7 +195,9 @@ public unsafe struct SaveData {
     [FieldOffset(0xE4)]   public       int            rand_encounter_modifiers;
     [FieldOffset(0xE8)]   public       ushort         btl_end_tag_always;
     [FieldOffset(0xEA)]   public       ushort         sphere_monitor;
+    [FieldOffset(0x5EC)]  public       bool           soundtrack_type;
     [FieldOffset(0xBEC)]  public       ushort         story_progress;
+    [FieldOffset(0xC60)]  public       uint           current_airship_location;
     [FieldOffset(0xC81)]  public       ushort         unlocked_airship_destinations;
     [FieldOffset(0x3D0C)] public       uint           config;
     [FieldOffset(0x3D10)] public       uint           unlocked_primers;
