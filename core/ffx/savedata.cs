@@ -195,6 +195,9 @@ public unsafe struct SaveData {
     [FieldOffset(0xE4)]   public       int            rand_encounter_modifiers;
     [FieldOffset(0xE8)]   public       ushort         btl_end_tag_always;
     [FieldOffset(0xEA)]   public       ushort         sphere_monitor;
+    [FieldOffset(0x3FC)]  public       ushort         lightning_dodging_total_bolts;
+    [FieldOffset(0x3FE)]  public       ushort         lightning_dodging_total_dodges;
+    [FieldOffset(0x400)]  public       ushort         lightning_dodging_highest_consecutive_dodges;
     [FieldOffset(0x5EC)]  public       bool           soundtrack_type;
     [FieldOffset(0xBEC)]  public       ushort         story_progress;
     [FieldOffset(0xC60)]  public       uint           current_airship_location;
