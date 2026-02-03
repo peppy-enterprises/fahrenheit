@@ -120,6 +120,7 @@ public unsafe struct Chr {
     [FieldOffset(0x0)]   public Actor*   actor;
     [FieldOffset(0x4)]   public uint     model_id;
     [FieldOffset(0xC)]   public ushort   id;
+    [FieldOffset(0xE)]   public ushort   chr_id;
     [FieldOffset(0x16)]  public byte     stat_visible;
     [FieldOffset(0x17)]  public byte     stat_hide;
     [FieldOffset(0x18)]  public sbyte    stat_visible_eff;
@@ -133,6 +134,7 @@ public unsafe struct Chr {
     [FieldOffset(0x26)]  public sbyte    stat_shadow;
     [FieldOffset(0x2D)]  public bool     stat_bodyhit_flag;
     [FieldOffset(0x3B)]  public bool     eternal_autolife;
+    [FieldOffset(0x48)]  public nint     ptr_mon_wep_bin;
     [FieldOffset(0x182)] public byte     grav_mode;
     [FieldOffset(0x185)] public byte     field_mode;
     [FieldOffset(0x186)] public byte     motion_type;
