@@ -104,6 +104,8 @@ public sealed class FhSaveManagerModule : FhModule {
 
         _sm_active_set_count = 0;
         _sm_active_set_slots.AsSpan().Fill(-1);
+        _sm_active_set_saves.AsSpan().Clear();
+        _sm_active_set_slots[0] = 1;
 
         for (int slot = 0; slot < _sm_set_size; slot++) {
             _sm_display_data[slot].valid = false;
@@ -212,7 +214,26 @@ public sealed class FhSaveManagerModule : FhModule {
     ///     For a given <paramref name="slot"/>, gets the full path of the corresponding save file.
     /// </summary>
     internal string get_save_path_for_slot(int slot) {
-        return Path.Join(_sm_path_base, _sm_active_set, FhSavePal.pal_get_save_subfolder(), FhSavePal.pal_get_save_name_for_slot(slot));
+        string save_dir = Path.Join(
+            _sm_path_base,
+            _sm_active_set,
+            FhSavePal.pal_get_save_subfolder());
+
+        /* [fkelava 08/02/26 15:00]
+         * Save sets mirror the base game save directory's structure, i.e. the subfolders
+         * 'FINAL FANTASY X', 'FINAL FANTASY X-2', 'FINAL FANTASY X-2 LAST MISSION' exist.
+         *
+         * When the user creates a set manually (not through the Fh API or mod manager),
+         * it is possible they forgot to create these subdirectories. When loading this fails
+         * safely because the saves will simply never be found. When saving this is lethal
+         * because SMM assumes the path it is writing to exists for simplicity.
+         *
+         * In this case we silently correct their error. I/O faults are still propagated
+         * because that is not something we can gracefully handle.
+         */
+
+        Directory.CreateDirectory(save_dir);
+        return Path.Join(save_dir, FhSavePal.pal_get_save_name_for_slot(slot));
     }
 
     /// <summary>

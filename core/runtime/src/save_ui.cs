@@ -87,7 +87,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        int slot = 0;
+        int slot = 0, index = 0;
         if (_sem!.get_system_state() is FhSaveExtensionSystemState.SAVE) {
             if (_smm!.get_slots_used() < _smm!.get_slots_total()) {
                 Vector2 size_new_save_btn = new(ImGui.GetContentRegionAvail().X, 0F);
@@ -103,7 +103,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
 
         for (; slot < _smm!.get_slots_total(); slot++) {
             if (display_data[slot].valid) {
-                ui_savefile(slot, display_data[slot]);
+                ui_savefile(index++, display_data[slot]);
             }
         }
 
@@ -168,17 +168,17 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         ImGui.End();
     }
 
-    private void ui_savefile(int slot, FhSaveDisplayData data) {
+    private void ui_savefile(int index, FhSaveDisplayData data) {
         ImGuiStylePtr style       = ImGui.GetStyle();
         Vector2       spacer_size = new(0F, style.FramePadding.Y);
         Vector2       window_size = new(ImGui.GetContentRegionAvail().X, 0F);
 
         // TODO: Change this to ItemSpacing instead of FramePadding
-        if (slot != 0) {
+        if (index != 0) {
             ImGui.Dummy(spacer_size);
         }
 
-        bool is_highlighted = slot == _display_index && ImGui.IsWindowFocused();
+        bool is_highlighted = index == _display_index && ImGui.IsWindowFocused();
         bool is_selected    = is_highlighted && ImGui.IsMouseDown(ImGuiMouseButton.Left);
 
         ImGui.PushStyleColor(ImGuiCol.ChildBg, is_highlighted switch {
@@ -187,13 +187,13 @@ public unsafe sealed class FhSaveUiModule : FhModule {
             _                     => ImGui.GetColorU32(ImGuiCol.FrameBg)
         });
 
-        ImGui.BeginChild($"###Slot{slot}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN);
+        ImGui.BeginChild($"###Slot{index}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN);
 
         ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetColorU32(ImGuiCol.TitleBg));
         ImGui.BeginChild("##Title", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN);
 
         ImGui.Indent();
-        ui_save_info_generic(data, slot);
+        ui_save_info_generic(data, index);
         ImGui.Unindent();
 
         ImGui.EndChild();
@@ -208,13 +208,13 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         ImGui.Unindent();
 
         if (ImGui.IsWindowHovered()) {
-            _display_index = slot;
+            _display_index = index;
 
             if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)) {
                 switch (_sem!.get_system_state()) {
-                    case FhSaveExtensionSystemState.SAVE: _sem!.save     (slot); break;
-                    case FhSaveExtensionSystemState.LOAD: _sem!.load     (slot); break;
-                    case FhSaveExtensionSystemState.ALBD: _sem!.load_albd(slot); break;
+                    case FhSaveExtensionSystemState.SAVE: _sem!.save     (index); break;
+                    case FhSaveExtensionSystemState.LOAD: _sem!.load     (index); break;
+                    case FhSaveExtensionSystemState.ALBD: _sem!.load_albd(index); break;
                 }
             }
         }
