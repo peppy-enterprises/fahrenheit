@@ -204,7 +204,7 @@ public unsafe struct SaveData {
     [FieldOffset(0xC8E)]  public       byte           dark_yojimbo_completion_flags;
     [FieldOffset(0xC8F)]  public       byte           dark_anima_completion_flags;
     [FieldOffset(0xC90)]  public       byte           dark_magus_sisters_completion_flags;
-    [FieldOffset(0xC91)]  public       byte           Penance_Unlock_State;
+    [FieldOffset(0xC91)]  public       byte           penance_unlock_state;
     [FieldOffset(0x3D0C)] public       uint           config;
     [FieldOffset(0x3D10)] public       uint           unlocked_primers;
     [FieldOffset(0x3D14)] public       uint           battle_count;
