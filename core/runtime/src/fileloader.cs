@@ -2,6 +2,17 @@
 
 namespace Fahrenheit.Core.Runtime;
 
+/* [fkelava 11/02/26 04:03]
+ * By default, the game only probes its VBF data archives for files and fails if it cannot find them.
+ * Repacking the archives is tiresome, so we want to permit direct loading of modded files from disk.
+ *
+ * While the game never uses it, it has full support for native file I/O. On Windows, this manifests as HANDLEs.
+ * Thus, at file load time, we can silently swap out what the game _intended_ to load for
+ * a HANDLE to a file on disk, and the game will perform all necessary book-keeping for us.
+ *
+ * There is a limited exception to this rule which must be handled. See `cd.cs`.
+ */
+
 /// <summary>
 ///     Provides the ability to replace files loaded by the game with files outside the VBF archives.
 ///     <para/>
@@ -50,17 +61,39 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         return _handle_fctor.hook();
     }
 
+    /* [fkelava 11/02/26 03:39]
+     * The game internally uses a number of file addressing schemes, including, but not limited to:
+     *
+     * - host0:/ffx/master/jppc/event/obj/sc/scene1/scene1.ebp
+     * - pfs0:sizetbl.bin
+     * - /FFX_Data/GameData/PS3Data/chr/mon/m220/fp/tex/GCM/16128_0_0_8_256_128.dds.phyre
+     * - /ffx_ps2/ffx/master/new_depc
+     * - /help/test_proj/test_proj_page.sps2
+     * - ../../../ffx_ps2/ffx/proj/map/masaki/
+     *
+     * Some are leftovers from the PS2, some properly relative to the root of the VBF,
+     * others rooted in subdirectories of the VBF. No universal standard exists.
+     *
+     * All of them pass through 'fiosUnifyFilename', which performs further absurdities
+     * like prepending '../../..' to every single path. EFL normalizes any and all paths to
+     * a path relative to the root of the VBF archive, with forward slashes as a separator.
+     *
+     * If you experience issues with files not being replaced, your best bet is to check
+     * the inputs and outputs to this function. While I tested by logging millions of file open
+     * calls, it is entirely possible some edge case was skipped or not encountered.
+     */
+
     /// <summary>
-    ///     Normalizes the relative paths the game uses to address files in the VBF archives.
+    ///     Normalizes the paths the game uses to address files.
     /// </summary>
-    private static string normalize_host0_path(string path) {
+    private static string normalize_path(string path) {
         string path_no_host0   = path.Replace("host0:", "ffx_ps2");
         int    path_prefix_end = path_no_host0.IndexOf('f', StringComparison.OrdinalIgnoreCase);
         string path_prefixless = path_no_host0[ path_prefix_end .. ];
 
         /* [fkelava 28/01/26 01:05]
-         * This is not safe to replace. I tried twice and learned the hard way.
-         * On all platforms, we want to use forward slashes. On Unices this is a no-op.
+         * A forward slash is universally recognized as a path separator, and the game internally prefers it.
+         * This is a no-op on Unix-like systems where the forward slash is the natural path separator.
          */
 
         return path_prefixless.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
@@ -81,7 +114,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
             foreach (string path_efl_file in Directory.GetFiles(path_efl_dir, "*.*", SearchOption.AllDirectories)) {
                 string path_rel            = Path.GetRelativePath(path_efl_dir, path_efl_file);
-                string path_rel_normalized = normalize_host0_path(path_rel);
+                string path_rel_normalized = normalize_path(path_rel);
 
                 if (_index.ContainsKey(path_rel_normalized)) {
                     _logger.Warning($"{path_rel_normalized} is being superseded by mod {mod.Manifest.Name}");
@@ -96,10 +129,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private PStreamFile* h_fopen(PStreamFile* ptr_this, nint ptr_path, bool read_only, nint p3, nint p4, bool p5) {
         string path            = Marshal.PtrToStringAnsi(ptr_path)!;
-        string path_normalized = normalize_host0_path(path);
-
-        _logger.Info(path);
-        _logger.Info(path_normalized);
+        string path_normalized = normalize_path(path);
 
         if (!_index.TryGetValue(path_normalized, out string? path_modded)) {
             return _handle_fctor.orig_fptr(ptr_this, ptr_path, read_only, p3, p4, p5);
@@ -109,8 +139,6 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
          * FFX.exe+208100 at +2081B9 onward:
          * if (readOnly) { pvVar4 = CreateFileW(path, 1, 1, 0, 3, 0x08000000, 0); }
          * else          { pvVar4 = CreateFileW(path, 2, 0, 0, 4, 0x08000000, 0); }
-         *
-         * No bookkeeping of the returned handle is necessary. The game closes it itself.
          */
 
         fixed (char* ptr_path_modded = path_modded) {

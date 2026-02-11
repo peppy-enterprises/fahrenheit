@@ -88,7 +88,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        int slot = 0;
+        int slot = 0, index = 0;
         if (_sem!.get_system_state() is FhSaveExtensionSystemState.SAVE) {
             if (_smm!.get_slots_used() < _smm!.get_slots_total()) {
                 Vector2 size_new_save_btn = new(ImGui.GetContentRegionAvail().X, 0F);
@@ -104,7 +104,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
 
         for (; slot < _smm!.get_slots_total(); slot++) {
             if (display_data[slot].valid) {
-                ui_savefile(slot, display_data[slot]);
+                ui_savefile(index++, display_data[slot]);
             }
         }
 
@@ -169,17 +169,17 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         ImGui.End();
     }
 
-    private void ui_savefile(int slot, FhSaveDisplayData data) {
+    private void ui_savefile(int index, FhSaveDisplayData data) {
         ImGuiStylePtr style       = ImGui.GetStyle();
         Vector2       spacer_size = new(0F, style.FramePadding.Y);
         Vector2       window_size = new(ImGui.GetContentRegionAvail().X, 0F);
 
         // TODO: Change this to ItemSpacing instead of FramePadding
-        if (slot != 0) {
+        if (index != 0) {
             ImGui.Dummy(spacer_size);
         }
         Vector2 start = ImGui.GetCursorScreenPos();
-        bool hovered = slot == _display_index;
+        bool hovered = index == _display_index;
         bool pressed = _pressed;
         if (hovered) _pressed = false; // I'm not sure this is visible since it's delayed by (at least) 1 frame
 
@@ -192,11 +192,11 @@ public unsafe sealed class FhSaveUiModule : FhModule {
             _                     => ImGui.GetColorU32(ImGuiCol.FrameBg)
         });
 
-        if (ImGui.BeginChild($"###Slot{slot}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
+        if (ImGui.BeginChild($"###Slot{index}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
             ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetColorU32(ImGuiCol.TitleBg));
             if (ImGui.BeginChild("##Title", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
                 ImGui.Indent();
-                ui_save_info_generic(data, slot);
+                ui_save_info_generic(data, index);
                 ImGui.Unindent();
             }
 
@@ -219,17 +219,17 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         Vector2 itemSize = ImGui.GetItemRectSize();
         ImGui.SetCursorScreenPos(start);
         ImGui.SetNextItemAllowOverlap();
-        pressed = ImGui.InvisibleButton($"###Slot{slot}.Button", itemSize, ImGuiButtonFlags.EnableNav | ImGuiButtonFlags.MouseButtonLeft);
+        pressed = ImGui.InvisibleButton($"###Slot{index}.Button", itemSize, ImGuiButtonFlags.EnableNav | ImGuiButtonFlags.MouseButtonLeft);
         if (pressed) {
             _pressed = true;
             switch (_sem!.get_system_state()) {
-                case FhSaveExtensionSystemState.SAVE: _sem!.save(slot); break;
-                case FhSaveExtensionSystemState.LOAD: _sem!.load(slot); break;
-                case FhSaveExtensionSystemState.ALBD: _sem!.load_albd(slot); break;
+                case FhSaveExtensionSystemState.SAVE: _sem!.save(index); break;
+                case FhSaveExtensionSystemState.LOAD: _sem!.load(index); break;
+                case FhSaveExtensionSystemState.ALBD: _sem!.load_albd(index); break;
             }
         }
         hovered = ImGui.IsItemHovered();
-        if (hovered) _display_index = slot;
+        if (hovered) _display_index = index;
     }
 
     private void ui_save_info_generic(FhSaveDisplayData data, int slot) {

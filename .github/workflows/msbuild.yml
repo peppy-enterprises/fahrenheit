@@ -40,7 +40,7 @@ jobs:
       matrix:
         architecture: [ x86 ]
         os: [ windows ]
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}-2025-vs2026
 
     steps:
     - name: Print runner environment
