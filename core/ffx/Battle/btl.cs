@@ -2,6 +2,63 @@
 
 namespace Fahrenheit.Core.FFX.Battle;
 
+
+public unsafe class PosAreaSomethingHelper(nint pBase, PosAreaSomeInfo someInfo) {
+    public Span<Vector4> something => new((Vector4*)(pBase + someInfo.offset_something), someInfo.count_something);
+
+    public int Length => something.Length;
+    public Vector4 this[int i] { get { return something[i]; } set { something[i] = value; } }
+}
+public unsafe class BtlAreaHelper(nint pBase, BtlArea* _btlArea) {
+    public ref BtlArea btlArea { get { return ref *_btlArea; } }
+
+    public Span<Vector4> party_pos => new((Vector4*)(pBase + btlArea.offset_party_pos), btlArea.count_party_pos);
+    public Span<Vector4> party_run_pos => new((Vector4*)(pBase + btlArea.offset_party_run_pos), btlArea.count_party_pos);
+    public Span<Vector4> aeon_pos => new((Vector4*)(pBase + btlArea.offset_aeon_pos), btlArea.count_aeon_pos);
+    public Span<Vector4> aeon_run_pos => new((Vector4*)(pBase + btlArea.offset_aeon_run_pos), btlArea.count_aeon_pos);
+    public Span<Vector4> enemy_pos => new((Vector4*)(pBase + btlArea.offset_enemy_pos), btlArea.count_enemy_pos);
+    public Span<Vector4> enemy_run_pos => new((Vector4*)(pBase + btlArea.offset_enemy_run_pos), btlArea.count_enemy_pos);
+    public Span<PosAreaSomeInfo> some_info => new((PosAreaSomeInfo*)(pBase + btlArea.offset_some_info), btlArea.count_some_info);
+
+    private PosAreaSomethingHelper[]? _something;
+    public PosAreaSomethingHelper[] something {
+        get {
+            if (_something != null && _something.Length == some_info.Length) return _something;
+            _something = new PosAreaSomethingHelper[some_info.Length];
+            for (int i = 0; i < some_info.Length; i++) {
+                something[i] = new PosAreaSomethingHelper(pBase, some_info[i]);
+            }
+            return _something;
+        }
+    }
+}
+
+public unsafe class BtlAreasHelper(BtlArea* pBase) {
+    public byte area_type {
+        get { return pBase->area_type; }
+        set { pBase->area_type = value; }
+    }
+    public byte area_count {
+        get { return pBase->area_count; }
+        set { pBase->area_count = value; }
+    }
+
+    private BtlAreaHelper[]? _areas;
+    public BtlAreaHelper[] areas {
+        get {
+            if (_areas != null && _areas.Length == pBase->area_count) return _areas;
+            _areas = new BtlAreaHelper[pBase->area_count];
+            for (int i = 0; i < pBase->area_count; i++) {
+                areas[i] = new BtlAreaHelper((nint)pBase, &(pBase)[i]);
+            }
+            return _areas;
+        }
+    }
+    public Vector4* chunk_end => (Vector4*)((nint)pBase + areas[0].btlArea.offset_chunk_end);
+}
+
+
+
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x10)]
 public unsafe struct PosAreaSomeInfo {
     [FieldOffset(0x00)] public   uint offset_something;
@@ -27,56 +84,6 @@ public unsafe struct BtlArea {
     [FieldOffset(0x30)] public   Vector4 a;
     [FieldOffset(0x40)] public   Vector4 b;
     [FieldOffset(0x50)] public   Vector4 c;
-}
-
-[StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x60)]
-public unsafe struct BtlAreas {
-    [FieldOffset(0x0)] private BtlArea areas;
-    [FieldOffset(0x0)] public  byte    area_type;
-    [FieldOffset(0x1)] public  byte    area_count;
-
-    public ref BtlArea this[int i] {
-        get { fixed (BtlArea* pAreas = &areas) { return ref *(pAreas + i); } }
-    }
-
-    public Span<Vector4> party_pos(int area) {
-        fixed (BtlArea* pBase = &areas)
-            return new((Vector4*)((nint)pBase + pBase[area].offset_party_pos), pBase[area].count_party_pos);
-    }
-    public Span<Vector4> party_run_pos(int area) {
-        fixed (BtlArea* pBase = &areas)
-            return new((Vector4*)((nint)pBase + pBase[area].offset_party_run_pos), pBase[area].count_party_pos);
-    }
-    public Span<Vector4> aeon_pos(int area) {
-        fixed (BtlArea* pBase = &areas)
-            return new((Vector4*)((nint)pBase + pBase[area].offset_aeon_pos), pBase[area].count_aeon_pos);
-    }
-    public Span<Vector4> aeon_run_pos(int area) {
-        fixed (BtlArea* pBase = &areas)
-            return new((Vector4*)((nint)pBase + pBase[area].offset_aeon_run_pos), pBase[area].count_aeon_pos);
-    }
-    public Span<Vector4> enemy_pos(int area) {
-        fixed (BtlArea* pBase = &areas)
-            return new((Vector4*)((nint)pBase + pBase[area].offset_enemy_pos), pBase[area].count_enemy_pos);
-    }
-    public Span<Vector4> enemy_run_pos(int area) {
-        fixed (BtlArea* pBase = &areas)
-            return new((Vector4*)((nint)pBase + pBase[area].offset_enemy_run_pos), pBase[area].count_enemy_pos);
-    }
-    public Span<PosAreaSomeInfo> some_info(int area) {
-        fixed (BtlArea* pBase = &areas)
-            return new((PosAreaSomeInfo*)((nint)pBase + pBase[area].offset_some_info), pBase[area].count_some_info);
-    }
-    public Span<Vector4> something(int area, int some_index) {
-        fixed (BtlArea* pBase = &areas) {
-            PosAreaSomeInfo info = some_info(area)[some_index];
-            return new((Vector4*)((nint)pBase + info.offset_something), info.count_something);
-        }
-    }
-
-    public Vector4* chunk_end {
-        get { fixed (BtlArea* pAreas = &areas) { return (Vector4*)((nint)pAreas + areas.offset_chunk_end); } }
-    }
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x28)]
@@ -170,7 +177,7 @@ public unsafe struct Btl {
     [FieldOffset(0xAE)]   public       ushort size_sum_grow_bin;
     [FieldOffset(0xB0)]   public       ushort size_kaizou_bin;
 
-    [FieldOffset(0xE0)]   public       BtlAreas* ptr_pos_def;
+    [FieldOffset(0xE0)]   public       BtlArea* ptr_pos_def;
 
     [FieldOffset(0xF4)]   public       uint   ptr_btl_bin;
     [FieldOffset(0xF8)]   public       uint   ptr_btl_bin_fields;

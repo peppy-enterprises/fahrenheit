@@ -45,6 +45,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
 
     private int                   _display_index;
     private IReadOnlySet<string>? _sets;
+    private bool                  _pressed;
 
     public FhSaveUiModule() {
         _sem_handle = new(this);
@@ -82,7 +83,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowPos (new (io.DisplaySize.X * 0.008F, io.DisplaySize.Y * 0.105F));
         ImGui.SetNextWindowSize(new (io.DisplaySize.X * 0.984F, io.DisplaySize.Y * 0.88F));
 
-        if (!ImGui.Begin("###Fh.Runtime.SaveSystem.SaveLoadUI", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoScrollbar))) {
+        if (!ImGui.Begin("Save/Load###Fh.Runtime.SaveSystem.SaveLoadUI", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoScrollbar) & (~ImGuiWindowFlags.NoNavFocus))) {
             ImGui.End();
             return;
         }
@@ -120,7 +121,7 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowPos (new ((io.DisplaySize.X - width_modal) / 2, io.DisplaySize.Y * 0.015F));
         ImGui.SetNextWindowSize(new (width_modal,                          io.DisplaySize.Y * 0.075F));
 
-        if (!ImGui.Begin("###Fh.Runtime.SaveSystem.SetSwap", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN)) {
+        if (!ImGui.Begin("Set Swap###Fh.Runtime.SaveSystem.SetSwap", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoNavFocus))) {
             ImGui.End();
             return;
         }
@@ -177,9 +178,13 @@ public unsafe sealed class FhSaveUiModule : FhModule {
         if (index != 0) {
             ImGui.Dummy(spacer_size);
         }
+        Vector2 start = ImGui.GetCursorScreenPos();
+        bool hovered = index == _display_index;
+        bool pressed = _pressed;
+        if (hovered) _pressed = false; // I'm not sure this is visible since it's delayed by (at least) 1 frame
 
-        bool is_highlighted = index == _display_index && ImGui.IsWindowFocused();
-        bool is_selected    = is_highlighted && ImGui.IsMouseDown(ImGuiMouseButton.Left);
+        bool is_highlighted = hovered && ImGui.IsWindowFocused();
+        bool is_selected    = is_highlighted && pressed;
 
         ImGui.PushStyleColor(ImGuiCol.ChildBg, is_highlighted switch {
             true when is_selected => ImGui.GetColorU32(ImGuiCol.FrameBgActive),
@@ -187,42 +192,44 @@ public unsafe sealed class FhSaveUiModule : FhModule {
             _                     => ImGui.GetColorU32(ImGuiCol.FrameBg)
         });
 
-        ImGui.BeginChild($"###Slot{index}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN);
+        if (ImGui.BeginChild($"###Slot{index}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
+            ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetColorU32(ImGuiCol.TitleBg));
+            if (ImGui.BeginChild("##Title", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
+                ImGui.Indent();
+                ui_save_info_generic(data, index);
+                ImGui.Unindent();
+            }
 
-        ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetColorU32(ImGuiCol.TitleBg));
-        ImGui.BeginChild("##Title", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN);
+            ImGui.EndChild();
+            ImGui.PopStyleColor();
 
-        ImGui.Indent();
-        ui_save_info_generic(data, index);
-        ImGui.Unindent();
+            ImGui.Indent();
+            switch (FhGlobal.game_id) {
+                case FhGameId.FFX:    ui_save_info_x   (data); break;
+                case FhGameId.FFX2:   ui_save_info_x2  (data); break;
+                case FhGameId.FFX2LM: ui_save_info_x2lm(data); break;
+            }
+            ImGui.Unindent();
 
+            ImGui.Dummy(spacer_size);
+        }
         ImGui.EndChild();
         ImGui.PopStyleColor();
 
-        ImGui.Indent();
-        switch (FhGlobal.game_id) {
-            case FhGameId.FFX:    ui_save_info_x   (data); break;
-            case FhGameId.FFX2:   ui_save_info_x2  (data); break;
-            case FhGameId.FFX2LM: ui_save_info_x2lm(data); break;
-        }
-        ImGui.Unindent();
-
-        if (ImGui.IsWindowHovered()) {
-            _display_index = index;
-
-            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)) {
-                switch (_sem!.get_system_state()) {
-                    case FhSaveExtensionSystemState.SAVE: _sem!.save     (index); break;
-                    case FhSaveExtensionSystemState.LOAD: _sem!.load     (index); break;
-                    case FhSaveExtensionSystemState.ALBD: _sem!.load_albd(index); break;
-                }
+        Vector2 itemSize = ImGui.GetItemRectSize();
+        ImGui.SetCursorScreenPos(start);
+        ImGui.SetNextItemAllowOverlap();
+        pressed = ImGui.InvisibleButton($"###Slot{index}.Button", itemSize, ImGuiButtonFlags.EnableNav | ImGuiButtonFlags.MouseButtonLeft);
+        if (pressed) {
+            _pressed = true;
+            switch (_sem!.get_system_state()) {
+                case FhSaveExtensionSystemState.SAVE: _sem!.save(index); break;
+                case FhSaveExtensionSystemState.LOAD: _sem!.load(index); break;
+                case FhSaveExtensionSystemState.ALBD: _sem!.load_albd(index); break;
             }
         }
-
-        ImGui.Dummy(spacer_size);
-
-        ImGui.EndChild();
-        ImGui.PopStyleColor();
+        hovered = ImGui.IsItemHovered();
+        if (hovered) _display_index = index;
     }
 
     private void ui_save_info_generic(FhSaveDisplayData data, int slot) {

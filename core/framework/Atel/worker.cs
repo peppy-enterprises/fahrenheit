@@ -31,6 +31,7 @@ public unsafe struct AtelBasicWorker {
     [FieldOffset(0x98)]  public float                __0x98;
     //[FieldOffset(0x9C)]  public Chr*                 chr_handle;
     [FieldOffset(0xA8)]  public ushort               event_chr_id;
+    [FieldOffset(0xAB)]  public byte                 field_interaction_flags;
     [FieldOffset(0xC4)]  public AtelStack            stack;
     [FieldOffset(0x12C)] public WorkerThreadsArray   threads; // [9]
 
@@ -41,8 +42,8 @@ public unsafe struct AtelBasicWorker {
     // Not too willing to make the others like this until I've confirmed their elements' sizes are constant
     public readonly ReadOnlySpan<int>   table_int          => new((int*)((nint)script_chunk + script_header->offset_int_table),           script_header->ref_int_count);
     public readonly ReadOnlySpan<float> table_float        => new((float*)((nint)script_chunk + script_header->offset_float_table),       script_header->ref_float_count);
-    public readonly ReadOnlySpan<uint>  table_entry_points => new((uint*)((nint)script_chunk + script_header->offset_entry_points_table), script_header->entry_point_count);
-    public readonly ReadOnlySpan<uint>  table_jump         => new((uint*)((nint)script_chunk + script_header->offset_jumps_table),        script_header->jump_count);
+    public readonly Span<uint>  table_entry_points => new((uint*)((nint)script_chunk + script_header->offset_entry_points_table), script_header->entry_point_count);
+    public readonly Span<uint>  table_jump         => new((uint*)((nint)script_chunk + script_header->offset_jumps_table),        script_header->jump_count);
 
     public readonly uint*              table_data         => (uint*)         ((nint)script_chunk + script_header->offset_data);
     public readonly uint*              table_priv_data    => (uint*)         ((nint)script_chunk + script_header->offset_priv_data);
