@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: MIT
 
-using static Fahrenheit.Core.Runtime.PInvoke;
-
 /* [fkelava 5/7/25 14:16]
  * Hexa bundles some definitions for D3D11 structures that we need to use when interfacing
  * with its API. They are defined this way because we prefer the TerraFX definitions in all other cases.
@@ -15,6 +13,9 @@ using ImGuiImplD3D11             = Hexa.NET.ImGui.Backends.D3D11.ImGuiImplD3D11;
 using ImGuiImplWin32             = Hexa.NET.ImGui.Backends.Win32.ImGuiImplWin32;
 
 namespace Fahrenheit.Core.Runtime;
+
+[UnmanagedFunctionPointer(CallingConvention.Winapi)]
+internal delegate nint WndProc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal delegate nint graphicInitialize();
@@ -68,14 +69,13 @@ internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
-public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
+public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
     // WndProc support
-    private          HWND                              _hWnd;
-    private          nint                              _ptr_o_WndProc;
-    private          nint                              _ptr_h_WndProc;
-    private readonly WndProcDelegate                   _h_WndProc;
-    private readonly FhMethodHandle<graphicInitialize> _handle_wndproc_init;
-    private readonly FhMethodHandle<PInputUpdate>      _handle_input_update;
+    private          HWND                         _hWnd;
+    private          nint                         _ptr_o_WndProc;
+    private          nint                         _ptr_h_WndProc;
+    private readonly WndProc                      _h_WndProc;
+    private readonly FhMethodHandle<PInputUpdate> _handle_pinput;
 
     private IDXGISwapChain*         _ptr_swapchain;  // https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nn-dxgi-idxgiswapchain
     private ID3D11Device*           _ptr_device;     // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
@@ -87,30 +87,32 @@ public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
     private FhMethodHandle<DXGISwapChain_ResizeBuffers>? _handle_resize_buffers;
 
     private bool _rtv_generated;
-    private bool _present_ready; // Phyre is not ready to render until the 'FINAL FANTASY X PROJECT' logo i.e. the main loop has run at least once.
 
     public FhImguiModule() {
-        FhMethodLocation location_wndproc_init = new(0x241B80, 0x0529A0);
-        FhMethodLocation location_input_update = new(0x225930, 0x6B51E0);
+        FhMethodLocation loc_pinput = new(0x225930, 0x6B51E0);
 
-        _handle_wndproc_init = new(this, location_wndproc_init, h_init_wndproc);
-        _handle_input_update = new(this, location_input_update, h_input_update);
-        _h_WndProc           = h_wndproc;
+        _handle_pinput = new(this, loc_pinput, h_pinput);
+        _h_WndProc     = h_wndproc;
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _handle_wndproc_init.hook()
-            && _handle_input_update.hook();
+        return _handle_pinput.hook();
     }
 
-    public override void post_update() {
-        _present_ready = true;
-    }
+    unsafe void IFhNativeGraphicsUser.assign_devices(
+        ID3D11Device*        ptr_device,
+        ID3D11DeviceContext* ptr_device_context,
+        IDXGISwapChain*      ptr_swapchain,
+        HWND                 hWnd) {
 
-    private void init_imgui() {
-        if (_hWnd       == 0    ||                          // h_init_wndproc hasn't run yet?
-            _ptr_device == null || _ptr_device_ctx == null) // h_init_d3d11 hasn't run yet?
-            return;
+        _hWnd          = hWnd;
+        _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
+        _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
+        _              = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
+
+        _ptr_swapchain  = ptr_swapchain;
+        _ptr_device     = ptr_device;
+        _ptr_device_ctx = ptr_device_context;
 
         ImGuiContextPtr ctx   = ImGui.CreateContext();
         ImGuiIOPtr      io    = ImGui.GetIO();
@@ -122,15 +124,9 @@ public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
 
         // Enable features
         io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
-        //io.ConfigFlags |= ImGuiConfigFlags.ViewportsEnable; //TODO: Figure out why dragging a viewport outside of the game window makes it crash
 
         io.ConfigDpiScaleFonts     = true;
         io.ConfigDpiScaleViewports = true;
-
-        // When viewports are enabled we tweak WindowRounding so platform windows can look identical to regular ones.
-        if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0) {
-            style.WindowRounding = 0f;
-        }
 
         ImGui.StyleColorsDark();
 
@@ -143,51 +139,18 @@ public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
 
         FhApi.ImGuiHelper.init();
-    }
-
-    unsafe void IFhD3DUser.assign_devices(
-        ID3D11Device*        ptr_device,
-        ID3D11DeviceContext* ptr_device_context,
-        IDXGISwapChain*      ptr_swapchain) {
-
-        _ptr_swapchain  = ptr_swapchain;
-        _ptr_device     = ptr_device;
-        _ptr_device_ctx = ptr_device_context;
 
         _handle_present        = new(this, new nint(_ptr_swapchain->lpVtbl[8]),  h_present);
         _handle_resize_buffers = new(this, new nint(_ptr_swapchain->lpVtbl[13]), h_resize_buffers);
-
         _handle_present       .hook();
         _handle_resize_buffers.hook();
-
-        init_imgui();
-    }
-
-    /// <summary>
-    ///     Replaces the game's window procedure with <see cref="h_wndproc"/>.
-    /// </summary>
-    private nint h_init_wndproc() {
-        nint result = _handle_wndproc_init.orig_fptr();
-
-        _hWnd = FhUtil.get_at<HWND>(FhUtil.select(0x8C9CE8, 0x16641B8, 0x16641B8));
-
-        _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
-        _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
-        _              = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
-
-        init_imgui();
-        return result;
     }
 
     /// <summary>
     ///     Allows ImGui to intercept window messages sent to the game, such as <see cref="WM.WM_KEYDOWN"/>,
     ///     enabling mouse and keyboard input to be directed to it.
     /// </summary>
-    private nint h_wndproc(
-        HWND   hWnd,
-        uint   msg,
-        WPARAM wParam,
-        LPARAM lParam) {
+    private nint h_wndproc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam) {
         return ImGuiImplWin32.WndProcHandler(hWnd, msg, wParam, lParam) == 1
              ? 1
              : Windows.CallWindowProcW((delegate* unmanaged<HWND, uint, WPARAM, LPARAM, LRESULT>)_ptr_o_WndProc, hWnd, msg, wParam, lParam);
@@ -196,16 +159,16 @@ public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
     /// <summary>
     ///     Allows interception of raw input from the game, redirecting it to ImGui if appropriate.
     /// </summary>
-    private int h_input_update() {
+    private int h_pinput() {
         if (_hWnd           == 0    // h_init_wndproc hasn't run yet?
          || _ptr_device     == null // h_init_d3d11 hasn't run yet?
          || _ptr_device_ctx == null)
-            return _handle_input_update.orig_fptr();
+            return _handle_pinput.orig_fptr();
 
         ImGuiIOPtr io = ImGui.GetIO();
-        return io.WantCaptureKeyboard
+        return io.WantCaptureKeyboard || io.WantCaptureMouse
             ? 0
-            : _handle_input_update.orig_fptr();
+            : _handle_pinput.orig_fptr();
     }
 
     /// <summary>
@@ -228,13 +191,6 @@ public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
     ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, uint)"/> call to display mods' user interfaces.
     /// </summary>
     private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, uint Flags) {
-        if (_hWnd           == 0    // > h_init_wndproc hasn't run yet?
-         || _ptr_swapchain  == null // |
-         || _ptr_device     == null // |
-         || _ptr_device_ctx == null // | > h_init_d3d11 hasn't run yet?
-         || !_present_ready)        // > game main loop hasn't run yet?
-            return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
-
         if (!_rtv_generated) {
             fixed (ID3D11Resource**         ppSurface = &_ptr_surface)
             fixed (ID3D11RenderTargetView** ppRTView  = &_ptr_rtv) {
@@ -262,10 +218,6 @@ public unsafe sealed class FhImguiModule : FhModule, IFhD3DUser {
         }
 
         ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
-
-        if ((ImGui.GetIO().ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0) {
-            ImGui.UpdatePlatformWindows();
-        }
 
         return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
     }

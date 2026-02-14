@@ -17,7 +17,7 @@ namespace Fahrenheit.Core.Runtime;
  *
  * When the game loads a PS2 asset, it will look up these fixed tables and allocate a buffer according
  * to the file's original size. The EFL will correctly intercept the file open call and provide the user's
- * modified file, but if it is larger or smaller than the original, the game will crash.
+ * modified file, but if it differs in size from the original, the game will crash.
  *
  * While users realized they can create a fixed-up size table, that won't work if mods want to coexist.
  * This module exists to bypass the lookup, so the game properly falls through to disk I/O to query size.
@@ -39,13 +39,7 @@ internal unsafe struct Cd {
 public unsafe sealed class FhCdInterfaceModule : FhModule {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate nint CDfileName_PC(int ordinal);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate nint check_ex_file_size(int arg1, int arg2);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate nint CDfileSize_CD_EX(int arg1);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate nint CDfileSize_PC(int arg1);

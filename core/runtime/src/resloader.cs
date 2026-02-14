@@ -23,7 +23,7 @@ namespace Fahrenheit.Core.Runtime;
 ///     Do not interface with this module directly. Instead, call <see cref="FhApi.Resources"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader, IFhD3DUser {
+public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader, IFhNativeGraphicsUser {
     private ID3D11Device* _p_device; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
@@ -31,10 +31,11 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
         return true;
     }
 
-    void IFhD3DUser.assign_devices(
+    void IFhNativeGraphicsUser.assign_devices(
         ID3D11Device*        ptr_device,
         ID3D11DeviceContext* ptr_device_context,
-        IDXGISwapChain*      ptr_swapchain) {
+        IDXGISwapChain*      ptr_swapchain,
+        HWND                 hWnd) {
         _p_device = ptr_device;
     }
 

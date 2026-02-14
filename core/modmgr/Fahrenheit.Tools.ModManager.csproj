@@ -39,10 +39,10 @@
 
     <!-- EXTERNAL PROJECT REFS -->
     <ItemGroup>
-        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.17.4">
+        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.18">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </PackageReference>
-        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.2">
+        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.6">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </PackageReference>
     </ItemGroup>
