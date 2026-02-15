@@ -45,8 +45,8 @@ public enum StatIncreaseFlags : ushort {
     HP                  = 1 <<  8,
     MP                  = 1 <<  9,
     STRENGTH_BONUS      = 1 << 10,
-    DEFENSE_BONUS       = 1 << 11,
-    MAGIC_BONUS         = 1 << 12,
+    MAGIC_BONUS         = 1 << 11,
+    DEFENSE_BONUS       = 1 << 12,
     MAGIC_DEFENSE_BONUS = 1 << 13,
 }
 
@@ -71,14 +71,14 @@ public static partial class FhEnumExt {
 
 [Flags]
 public enum GearType : byte {
-    NONE = 0,
+    NONE   = 0,
     WEAPON = 1,
-    ARMOR = 2,
+    ARMOR  = 2,
 }
 
 public static partial class FhEnumExt {
     public static bool is_weapon(this GearType gear_type) => gear_type.HasFlag(GearType.WEAPON);
-    public static bool is_armor(this GearType gear_type) => gear_type.HasFlag(GearType.ARMOR);
+    public static bool is_armor (this GearType gear_type) => gear_type.HasFlag(GearType.ARMOR);
 }
 
 /// <summary>
