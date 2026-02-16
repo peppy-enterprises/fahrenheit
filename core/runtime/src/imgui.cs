@@ -62,6 +62,12 @@ internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
     D3D_FEATURE_LEVEL*    pFeatureLevel,
     ID3D11DeviceContext** ppImmediateContext);
 
+/* [fkelava 16/2/26 15:28]
+ * See below comments at `assign_devices` and `h_implw32_setwindowfocus`.
+ */
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport);
+
 /// <summary>
 ///     Provides the ability to use the ImGui GUI toolkit within the game.
 ///     <para/>
@@ -70,6 +76,7 @@ internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
+
     // WndProc support
     private          HWND                         _hWnd;
     private          nint                         _ptr_o_WndProc;
@@ -114,9 +121,10 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
         _ptr_device     = ptr_device;
         _ptr_device_ctx = ptr_device_context;
 
-        ImGuiContextPtr ctx   = ImGui.CreateContext();
-        ImGuiIOPtr      io    = ImGui.GetIO();
-        ImGuiStylePtr   style = ImGui.GetStyle();
+        ImGuiContextPtr    ctx   = ImGui.CreateContext();
+        ImGuiIOPtr         io    = ImGui.GetIO();
+        ImGuiPlatformIOPtr pio   = ImGui.GetPlatformIO();
+        ImGuiStylePtr      style = ImGui.GetStyle();
 
         // Enable controls
         io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
@@ -138,12 +146,44 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
         ImGuiImplWin32.Init(_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
 
+        /* [fkelava 16/02/26 15:12]
+         * It would be best to use [UnmanagedCallersOnly] and &h_implw32_setwindowfocus,
+         * but this is not possible because PlatformSetWindowFocus is typed `void*` and CS8812 results.
+         */
+
+        pio.PlatformSetWindowFocus = (void*)Marshal.GetFunctionPointerForDelegate
+            <ImGui_ImplWin32_SetWindowFocus>(h_implw32_setwindowfocus);
+
         FhApi.ImGuiHelper.init();
 
         _handle_present        = new(this, new nint(_ptr_swapchain->lpVtbl[8]),  h_present);
         _handle_resize_buffers = new(this, new nint(_ptr_swapchain->lpVtbl[13]), h_resize_buffers);
         _handle_present       .hook();
         _handle_resize_buffers.hook();
+    }
+
+    /* [fkelava 16/02/26 14:59]
+     * https://github.com/ocornut/imgui/issues/9242
+     *
+     * The games utilize a separate rendering thread. In other words, the main message
+     * pump is on a different thread from the one we call ImGui functions on.
+     * This is not supported, but works mostly fine regardless.
+     *
+     * However, when Square on a gamepad is used to engage the window switcher, then released,
+     * a WM_LBUTTONUP event occurs which often results in a deadlock that freezes both ImGui
+     * and the game's message pump. Making ImGui's ImGui_ImplWin32_SetWindowFocus() function
+     * use SWP_ASYNCWINDOWPOS curtails it, but the true underlying reason is not known.
+     *
+     * https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos
+     */
+
+    private static void h_implw32_setwindowfocus(ImGuiViewportPtr viewport) {
+        if (viewport.PlatformHandleRaw == null)
+            return;
+
+        Windows.SetWindowPos       ((HWND)viewport.PlatformHandleRaw, HWND.HWND_TOP, 0, 0, 0, 0, SWP.SWP_ASYNCWINDOWPOS | SWP.SWP_NOSIZE | SWP.SWP_NOMOVE);
+        Windows.SetForegroundWindow((HWND)viewport.PlatformHandleRaw);
+        Windows.SetFocus           ((HWND)viewport.PlatformHandleRaw);
     }
 
     /// <summary>
