@@ -6,7 +6,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RuntimeIdentifiers>win-x86;linux-x86</RuntimeIdentifiers>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
         <EnableDynamicLoading>true</EnableDynamicLoading>
     </PropertyGroup>
 
