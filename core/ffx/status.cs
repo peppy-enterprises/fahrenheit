@@ -155,7 +155,7 @@ public static partial class FhEnumExt {
 }
 
 [Flags]
-public enum ChrPropFlags : ushort {
+public enum ChrResistFlags : ushort {
     NONE                       =       0,
     ARMORED                    = 1 <<  0,
     IMMUNITY_FRACTIONAL_DAMAGE = 1 <<  1,
@@ -164,22 +164,22 @@ public enum ChrPropFlags : ushort {
     IMMUNITY_SCAN              = 1 <<  4,
     IMMUNITY_PHYSICAL_DAMAGE   = 1 <<  5,
     IMMUNITY_MAGICAL_DAMAGE    = 1 <<  6,
-    IMMUNITY_ALL_DAMAGE        = 1 <<  7,
-    IMMUNITY_DELAY             = 1 <<  8,
+    IMMUNITY_HP_DAMAGE         = 1 <<  7,
+    IMMUNITY_CTB_DAMAGE        = 1 <<  8,
     IMMUNITY_ZANMATO           = 1 <<  9,
     IMMUNITY_BRIBE             = 1 << 10,
 }
 
 public static partial class FhEnumExt {
-    public static bool armored                   (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.ARMORED);
-    public static bool immunity_fractional_damage(this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_FRACTIONAL_DAMAGE);
-    public static bool immunity_life             (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_LIFE);
-    public static bool immunity_sensor           (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_SENSOR);
-    public static bool immunity_scan             (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_SCAN);
-    public static bool immunity_physical_damage  (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_PHYSICAL_DAMAGE);
-    public static bool immunity_magical_damage   (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_MAGICAL_DAMAGE);
-    public static bool immunity_all_damage       (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_ALL_DAMAGE);
-    public static bool immunity_delay            (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_DELAY);
-    public static bool immunity_zanmato          (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_ZANMATO);
-    public static bool immunity_bribe            (this ChrPropFlags flags) => flags.HasFlag(ChrPropFlags.IMMUNITY_BRIBE);
+    public static bool is_armored               (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.ARMORED);
+    public static bool resists_fractional_damage(this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_FRACTIONAL_DAMAGE);
+    public static bool resists_life             (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_LIFE);
+    public static bool resists_sensor           (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_SENSOR);
+    public static bool resists_scan             (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_SCAN);
+    public static bool resists_physical_damage  (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_PHYSICAL_DAMAGE);
+    public static bool resists_magical_damage   (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_MAGICAL_DAMAGE);
+    public static bool resists_hp_damage        (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_HP_DAMAGE);
+    public static bool resists_ctb_damage       (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_CTB_DAMAGE);
+    public static bool resists_zanmato          (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_ZANMATO);
+    public static bool resists_bribe            (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_BRIBE);
 }

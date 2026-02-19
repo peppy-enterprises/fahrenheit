@@ -34,7 +34,7 @@ public struct ChrRam {
     [FieldOffset(0x75)]  public byte                  luck_up;
     [FieldOffset(0x76)]  public byte                  evasion_up;
     [FieldOffset(0x77)]  public byte                  accuracy_up;
-    [FieldOffset(0x78)]  public ChrPropFlags          chr_props; //TODO: Figure out a better name for this
+    [FieldOffset(0x78)]  public ChrResistFlags        special_resistances;
     [FieldOffset(0x7A)]  public byte                  poison_dmg;
     [FieldOffset(0x7B)]  public byte                  limit_mode_selected;
     [FieldOffset(0x7C)]  public byte                  limit_charge;
