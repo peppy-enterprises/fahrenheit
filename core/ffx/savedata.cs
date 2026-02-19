@@ -255,7 +255,7 @@ public unsafe struct SaveData {
     }
 
     public uint get_item_count(int item_id) {
-        for (int i = 0; i < 70; i++) {
+        for (int i = 0; i < 256; i++) {
             if (inventory_ids[i] == item_id) return inventory_counts[i];
         }
         return 0;
