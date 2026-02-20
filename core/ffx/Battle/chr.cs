@@ -34,7 +34,7 @@ public struct ChrRam {
     [FieldOffset(0x75)]  public byte                  luck_up;
     [FieldOffset(0x76)]  public byte                  evasion_up;
     [FieldOffset(0x77)]  public byte                  accuracy_up;
-    [FieldOffset(0x78)]  public ushort                extra_resist; //TODO: Figure out a better name for this
+    [FieldOffset(0x78)]  public ChrResistFlags        special_resistances;
     [FieldOffset(0x7A)]  public byte                  poison_dmg;
     [FieldOffset(0x7B)]  public byte                  limit_mode_selected;
     [FieldOffset(0x7C)]  public byte                  limit_charge;
@@ -103,16 +103,6 @@ public struct ChrRam {
     public bool is_male   { readonly get { return gender.get_bit(0); } set { gender.set_bit(0, value); } }
     public bool is_female { readonly get { return gender.get_bit(1); } set { gender.set_bit(1, value); } }
     public bool is_aeon   { readonly get { return gender.get_bit(2); } set { gender.set_bit(2, value); } }
-
-    // Extra Resistances (Properties)
-    public bool is_armored           { readonly get { return extra_resist.get_bit(0); } set { extra_resist.set_bit(0, value); } }
-    public bool ignores_gravity_dmg  { readonly get { return extra_resist.get_bit(1); } set { extra_resist.set_bit(1, value); } }
-    public bool ignores_physical_dmg { readonly get { return extra_resist.get_bit(2); } set { extra_resist.set_bit(2, value); } }
-    public bool ignores_magical_dmg  { readonly get { return extra_resist.get_bit(3); } set { extra_resist.set_bit(3, value); } }
-    public bool is_invincible        { readonly get { return extra_resist.get_bit(4); } set { extra_resist.set_bit(4, value); } }
-    public bool ignores_ctb_dmg      { readonly get { return extra_resist.get_bit(5); } set { extra_resist.set_bit(5, value); } }
-    public bool ignores_zanmato      { readonly get { return extra_resist.get_bit(6); } set { extra_resist.set_bit(6, value); } }
-    public bool ignores_bribe        { readonly get { return extra_resist.get_bit(7); } set { extra_resist.set_bit(7, value); } }
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0xF90)]

@@ -153,3 +153,33 @@ public static partial class FhEnumExt {
     public static bool sentinel (this StatusExtraFlags flags) => flags.HasFlag(StatusExtraFlags.SENTINEL);
     public static bool doom     (this StatusExtraFlags flags) => flags.HasFlag(StatusExtraFlags.DOOM);
 }
+
+[Flags]
+public enum ChrResistFlags : ushort {
+    NONE                       =       0,
+    ARMORED                    = 1 <<  0,
+    IMMUNITY_FRACTIONAL_DAMAGE = 1 <<  1,
+    IMMUNITY_LIFE              = 1 <<  2,
+    IMMUNITY_SENSOR            = 1 <<  3,
+    IMMUNITY_SCAN              = 1 <<  4,
+    IMMUNITY_PHYSICAL_DAMAGE   = 1 <<  5,
+    IMMUNITY_MAGICAL_DAMAGE    = 1 <<  6,
+    IMMUNITY_HP_DAMAGE         = 1 <<  7,
+    IMMUNITY_CTB_DAMAGE        = 1 <<  8,
+    IMMUNITY_ZANMATO           = 1 <<  9,
+    IMMUNITY_BRIBE             = 1 << 10,
+}
+
+public static partial class FhEnumExt {
+    public static bool is_armored               (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.ARMORED);
+    public static bool resists_fractional_damage(this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_FRACTIONAL_DAMAGE);
+    public static bool resists_life             (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_LIFE);
+    public static bool resists_sensor           (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_SENSOR);
+    public static bool resists_scan             (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_SCAN);
+    public static bool resists_physical_damage  (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_PHYSICAL_DAMAGE);
+    public static bool resists_magical_damage   (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_MAGICAL_DAMAGE);
+    public static bool resists_hp_damage        (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_HP_DAMAGE);
+    public static bool resists_ctb_damage       (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_CTB_DAMAGE);
+    public static bool resists_zanmato          (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_ZANMATO);
+    public static bool resists_bribe            (this ChrResistFlags flags) => flags.HasFlag(ChrResistFlags.IMMUNITY_BRIBE);
+}
