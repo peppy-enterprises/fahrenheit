@@ -210,6 +210,7 @@ public unsafe struct SaveData {
     [FieldOffset(0xBEC)]  public       ushort         story_progress;
     [FieldOffset(0xC5C)]  public       byte           anima_seals_unlocked;
     [FieldOffset(0xC60)]  public       uint           current_airship_location;
+    [FieldOffset(0xC7F)]  public       byte           jecht_spheres_collected_count;
     [FieldOffset(0xC81)]  public       ushort         unlocked_airship_destinations;
     [FieldOffset(0xC89)]  public       byte           completion_flags_dark_valefor;
     [FieldOffset(0xC8A)]  public       byte           completion_flags_dark_ifrit;
