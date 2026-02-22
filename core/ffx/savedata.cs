@@ -149,6 +149,24 @@ public unsafe struct SaveData {
         public PlyComCheckField mindy   => this[PlySaveId.PC_MAGUS3];
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct JechtSpheresData {
+        public ushort flags_spheres_seen;
+        private byte __0x2;
+        public byte collected_amount;
+
+        public bool seen_besaid_village     { readonly get { return flags_spheres_seen.get_bit(0); } set { flags_spheres_seen.set_bit(0, value); } }
+        public bool seen_thunder_plains     { readonly get { return flags_spheres_seen.get_bit(1); } set { flags_spheres_seen.set_bit(1, value); } }
+        public bool seen_moonflow           { readonly get { return flags_spheres_seen.get_bit(2); } set { flags_spheres_seen.set_bit(2, value); } }
+        public bool seen_miihen             { readonly get { return flags_spheres_seen.get_bit(3); } set { flags_spheres_seen.set_bit(3, value); } }
+        public bool seen_luca_stadium       { readonly get { return flags_spheres_seen.get_bit(4); } set { flags_spheres_seen.set_bit(4, value); } }
+        public bool seen_ss_liki            { readonly get { return flags_spheres_seen.get_bit(5); } set { flags_spheres_seen.set_bit(5, value); } }
+        public bool seen_mt_gagazet         { readonly get { return flags_spheres_seen.get_bit(6); } set { flags_spheres_seen.set_bit(6, value); } }
+        public bool seen_macalania_woods    { readonly get { return flags_spheres_seen.get_bit(7); } set { flags_spheres_seen.set_bit(7, value); } }
+        public bool seen_mushroom_rock_road { readonly get { return flags_spheres_seen.get_bit(8); } set { flags_spheres_seen.set_bit(8, value); } }
+    }
+
+
     [FieldOffset(0x0)]    public       ushort         current_room_id;
     [FieldOffset(0x2)]    public       ushort         last_room_id;
     [FieldOffset(0x4)]    public       ushort         now_eventjump_map_no;
@@ -210,6 +228,7 @@ public unsafe struct SaveData {
     [FieldOffset(0xBEC)]  public       ushort         story_progress;
     [FieldOffset(0xC5C)]  public       byte           anima_seals_unlocked;
     [FieldOffset(0xC60)]  public       uint           current_airship_location;
+    [FieldOffset(0xC7C)]  public       JechtSpheresData     jecht_spheres;
     [FieldOffset(0xC81)]  public       ushort         unlocked_airship_destinations;
     [FieldOffset(0xC89)]  public       byte           completion_flags_dark_valefor;
     [FieldOffset(0xC8A)]  public       byte           completion_flags_dark_ifrit;
