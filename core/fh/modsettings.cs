@@ -34,7 +34,7 @@ public abstract class FhSetting(string id) {
 
 public abstract class FhSetting<T>(string id, T defval) : FhSetting(id) where T : notnull {
     protected T    _value    = defval;
-    protected bool _disabled = true;
+    protected bool _disabled = false;
 
     public T get() {
         return _value;
@@ -170,7 +170,7 @@ public sealed class FhSettingToggle(string id, bool def_value) : FhSetting<bool>
 
         ImGui.BeginDisabled(_disabled);
         if (_value ^ second_half) ImGui.PushStyleColor(ImGuiCol.Text, ImGui.GetStyle().Colors[(int)ImGuiCol.NavCursor]);
-        if (ImGui.Button(second_half ? "OFF" : "ON", button_region))
+        if (ImGui.Button(second_half ? $"OFF##setting.{id}" : $"ON##setting.{id}", button_region))
             _value = !second_half;
         ImGui.EndDisabled();
         if (_value ^ second_half) ImGui.PopStyleColor();
