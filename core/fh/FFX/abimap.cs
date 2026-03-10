@@ -109,7 +109,7 @@ public struct AbilityMap {
     public bool has_quick_pockets   { readonly get { return this[2].get_bit(31); } set { this[2].set_bit(31, value); } }
 }
 
-[InlineArray(14)]
+[InlineArray(16)]
 public struct LimitAbilityMap {
     private ushort _u;
 
