@@ -83,7 +83,7 @@ public struct ChrRam {
     [FieldOffset(0x122)] public byte                  luck_stacks;
     [FieldOffset(0x123)] public byte                  jinx_stacks;
     [FieldOffset(0x124)] public AbilityMap            abilities;
-    [FieldOffset(0x130)] public LimitAbilityMap       limit_abilities;
+    [FieldOffset(0x130)] public LimitAbilityMap       limits;
     [FieldOffset(0x17C)] public AutoAbilityEffectsMap auto_ability_effects;
     [FieldOffset(0x18E)] public byte                  stat_use_mp0;
     [FieldOffset(0x191)] public byte                  summoned_by_id;
