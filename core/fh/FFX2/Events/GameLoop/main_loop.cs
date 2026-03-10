@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-using Fahrenheit.Events.Common.GameLoop;
+using Fahrenheit.Events.GameLoop;
 
-namespace Fahrenheit.Events.FFX;
+namespace Fahrenheit.FFX2.Events;
 
 public partial class GameLoopEvents {
     /// <summary>Raised before the game's main update loop.</summary>

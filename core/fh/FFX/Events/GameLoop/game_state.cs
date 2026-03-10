@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Events.FFX;
+namespace Fahrenheit.FFX.Events;
 
 public partial class GameLoopEvents {
     /// <summary>Raised after the player starts a new game, after the Sphere Grid and music selection.</summary>

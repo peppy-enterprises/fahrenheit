@@ -3,6 +3,6 @@
 namespace Fahrenheit.Events;
 
 public class FhEvents {
-    public FFX.FhXEvents FFX = new();
-    public FFX2.FhX2Events FFX2 = new();
+    public Fahrenheit.FFX.Events.FhXEvents   FFX  = new();
+    public Fahrenheit.FFX2.Events.FhX2Events FFX2 = new();
 }

@@ -1,7 +1,5 @@
 ﻿// SPDX-License-Identifier: MIT
 
-using Fahrenheit.Events.FFX;
-
 namespace Fahrenheit.Runtime;
 
 /* [fkelava 21/6/25 01:52]

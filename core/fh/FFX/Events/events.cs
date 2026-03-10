@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Events.FFX;
+namespace Fahrenheit.FFX.Events;
 
 public class FhXEvents {
     public GameLoopEvents GameLoop = new();

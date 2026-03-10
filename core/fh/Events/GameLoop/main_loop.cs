@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.Events.Common.GameLoop;
+namespace Fahrenheit.Events.GameLoop;
 
 /// <summary>
 ///     Event arguments for<br/>
