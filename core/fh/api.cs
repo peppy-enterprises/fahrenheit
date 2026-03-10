@@ -5,6 +5,9 @@
  * in the Fahrenheit API. If you need access to something currently marked internal, open an issue
  * or contact the developers and explain the use case instead of extending IVT to your mod.
  */
+
+using Fahrenheit.Events;
+
 [assembly: InternalsVisibleTo("fhruntime")]
 
 namespace Fahrenheit;
@@ -18,6 +21,7 @@ public static class FhApi {
     public static readonly FhResourceLoader      Resources     = new FhResourceLoader();
     public static readonly FhImGuiHelper         ImGuiHelper   = new FhImGuiHelper();
     public static readonly FhInput               Input         = new FhInput();
+    public static readonly FhEvents              Events        = new FhEvents();
 }
 
 /// <summary>

@@ -1,5 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 
+using Fahrenheit.Events.FFX;
+
 namespace Fahrenheit.Runtime;
 
 /* [fkelava 21/6/25 01:52]
@@ -71,15 +73,19 @@ public unsafe class FhCoreModule : FhModule {
     ///     <see cref="FhModule.post_update"/> callbacks before and after every iteration, respectively.
     /// </summary>
     private void h_main_loop(float delta) {
-        foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
-            module_ctx.Module.pre_update();
-        }
+        FhUtil.select(
+            FhApi.Events.FFX.GameLoop.PreUpdate,
+            FhApi.Events.FFX2.GameLoop.PreUpdate,
+            FhApi.Events.FFX2.GameLoop.PreUpdate
+        ).invoke(new() { delta = delta });
 
         _main_loop.orig_fptr(delta);
 
-        foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
-            module_ctx.Module.post_update();
-        }
+        FhUtil.select(
+            FhApi.Events.FFX.GameLoop.PostUpdate,
+            FhApi.Events.FFX2.GameLoop.PostUpdate,
+            FhApi.Events.FFX2.GameLoop.PostUpdate
+        ).invoke(new() { delta = delta });
     }
 
     /// <summary>

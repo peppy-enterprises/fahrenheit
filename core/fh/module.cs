@@ -46,7 +46,7 @@ public sealed record FhLocalStateInfo(
 [Flags]
 public enum FhManifestFlags {
     NONE           = 0,
-    SEPARATE_SAVES = 1
+    SEPARATE_SAVES = 1,
 }
 
 /// <summary>
