@@ -115,16 +115,6 @@ public abstract class FhModule {
     public virtual void load_local_state(FileStream local_state_file, FhLocalStateInfo local_state_info) { }
 
     /// <summary>
-    ///     Called before every main loop execution.
-    /// </summary>
-    public virtual void pre_update() { }
-
-    /// <summary>
-    ///     Called after every main loop execution.
-    /// </summary>
-    public virtual void post_update() { }
-
-    /// <summary>
     ///     Called just before <see cref="TerraFX.Interop.DirectX.IDXGISwapChain.Present"/> time.
     ///     You may freely invoke ImGui methods here, and <i>only</i> here.
     /// </summary>

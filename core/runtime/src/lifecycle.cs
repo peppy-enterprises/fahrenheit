@@ -5,22 +5,18 @@ namespace Fahrenheit.Runtime;
 /* [fkelava 21/6/25 01:52]
  * Temporary until FhCall is restored to `ffx-v3` RE state.
  */
-[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate void Sg_MainLoop(float delta);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal delegate void AtelExecInternal_00871d10();
 
 /// <summary>
-///     Executes the lifecycle methods of <see cref="FhModule"/>.
+///     Executes the lifecycle methods of <see cref="FhModule"/>.<br/>
+///     Also renders the modlist on the main menu.
 ///     <para/>
-///     Do not interface with this module directly. Instead, implement:
-///     <br/> - <see cref="FhModule.pre_update"/>
-///     <br/> - <see cref="FhModule.post_update"/>
+///     Do not interface with this module directly. Instead, override <see cref="FhModule.handle_input">.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe class FhCoreModule : FhModule {
-    private readonly FhMethodHandle<Sg_MainLoop>               _main_loop;
     private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
 
     private static readonly FhSettingsCategory _settings = new("fhruntime", [
@@ -28,18 +24,15 @@ public unsafe class FhCoreModule : FhModule {
     ]);
 
     public FhCoreModule() {
-        FhMethodLocation location_main_loop    = new(0x420C00, 0x205150);
         FhMethodLocation location_update_input = new(0x471D10, 0x32CE90);
 
         settings = _settings;
 
-        _main_loop    = new(this, location_main_loop,    h_main_loop);
         _update_input = new(this, location_update_input, h_update_input);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _main_loop   .hook()
-            && _update_input.hook();
+        return _update_input.hook();
     }
 
     public override void render_imgui() {
@@ -64,26 +57,6 @@ public unsafe class FhCoreModule : FhModule {
         ImGui.End();
 
         //ImGui.ShowDemoWindow();
-    }
-
-    /// <summary>
-    ///     Overrides the game's main loop to execute the <see cref="FhModule.pre_update"/> and
-    ///     <see cref="FhModule.post_update"/> callbacks before and after every iteration, respectively.
-    /// </summary>
-    private void h_main_loop(float delta) {
-        FhUtil.select(
-            FhApi.Events.FFX.GameLoop.PreUpdate,
-            FhApi.Events.FFX2.GameLoop.PreUpdate,
-            FhApi.Events.FFX2.GameLoop.PreUpdate
-        ).invoke(new() { delta = delta });
-
-        _main_loop.orig_fptr(delta);
-
-        FhUtil.select(
-            FhApi.Events.FFX.GameLoop.PostUpdate,
-            FhApi.Events.FFX2.GameLoop.PostUpdate,
-            FhApi.Events.FFX2.GameLoop.PostUpdate
-        ).invoke(new() { delta = delta });
     }
 
     /// <summary>
