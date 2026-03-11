@@ -21,9 +21,9 @@ public class GameLoopEventsImplModule : FhModule {
     private readonly FhMethodHandle<AtelSetEventJump2>? _h_jump_to_event;
 
     public GameLoopEventsImplModule() {
-        _h_main_loop = new(this, _location_main_loop, main_loop);
+        _h_main_loop = new(this, _location_main_loop, raise_update_events);
 
-        //TODO: Support `PostReturnToTitle` in FFX-2, if it's a thing
+        //TODO: Support `PostReturnToTitle` in FFX-2
         if (FhGlobal.game_id == FhGameId.FFX) {
             _h_jump_to_event = new(this, "FFX.exe", __addr_AtelSetEventJump2, handle_warp);
         }
@@ -35,36 +35,33 @@ public class GameLoopEventsImplModule : FhModule {
     }
 
     /// <summary>
-    ///     Overrides the game's main loop to raise<br/>
-    ///     - <see cref="FFX.Events.GameLoopEvents.PreUpdate"/><br/>
-    ///     - <see cref="FFX2.Events.GameLoopEvents.PreUpdate"/><br/>
-    ///     and<br/>
-    ///     - <see cref="FFX.Events.GameLoopEvents.PostUpdate"/><br/>
-    ///     - <see cref="FFX2.Events.GameLoopEvents.PostUpdate"/><br/>
+    ///     Runs around the game's main loop to raise the
+    ///     <see cref="Fahrenheit.Events.GameLoopEvents.PreUpdate">PreUpdate</see>
+    ///     and <see cref="Fahrenheit.Events.GameLoopEvents.PostUpdate">PostUpdate</see>
     ///     events before and after every iteration, respectively.
     /// </summary>
-    private void main_loop(float delta) {
-        FhUtil.select(
-            FhApi.Events.FFX.GameLoop.PreUpdate,
-            FhApi.Events.FFX2.GameLoop.PreUpdate,
-            FhApi.Events.FFX2.GameLoop.PreUpdate
-        ).invoke(new() { delta = delta });
+    private void raise_update_events(float delta) {
+        FhApi.Events.Common.GameLoop.PreUpdate.invoke(new() { delta = delta });
 
         _h_main_loop.orig_fptr(delta);
 
-        FhUtil.select(
-            FhApi.Events.FFX.GameLoop.PostUpdate,
-            FhApi.Events.FFX2.GameLoop.PostUpdate,
-            FhApi.Events.FFX2.GameLoop.PostUpdate
-        ).invoke(new() { delta = delta });
+        FhApi.Events.Common.GameLoop.PostUpdate.invoke(new() { delta = delta });
     }
 
+    /// <summary>
+    ///     Runs after the player warps to a new room to raise the
+    ///     <see cref="Fahrenheit.Events.GameLoopEvents.PostReturnToTitle">PostReturnToTitle</see>
+    ///     event.
+    /// </summary>
+    /// <param name="room">The room we are warping to</param>
+    /// <param name="entrance">The entrance the main character will spawn at</param>
+    /// <param name="do_fade">Non-zero if we should fade, zero if not</param>
     private void handle_warp(int room, int entrance, int do_fade) {
         _h_jump_to_event!.orig_fptr(room, entrance, do_fade);
 
         if (room == 23 && entrance == 0) {
             // Warping to the title screen
-            FhApi.Events.FFX.GameLoop.PostReturnToTitle.invoke(EventArgs.Empty);
+            FhApi.Events.Common.GameLoop.PostReturnToTitle.invoke(EventArgs.Empty);
         }
     }
 }

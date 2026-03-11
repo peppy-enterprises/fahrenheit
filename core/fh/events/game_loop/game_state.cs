@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-namespace Fahrenheit.FFX.Events;
+namespace Fahrenheit.Events;
 
 public partial class GameLoopEvents {
-    /// <summary>Raised after the player starts a new game, after the Sphere Grid and music selection.</summary>
+    /// <summary>
+    ///     Raised after the player starts a new game.<br/>
+    ///     In FFX, this occurs after the Sphere Grid and music selection.
+    /// </summary>
     //TODO: Implement PostNewGame
     public FhEvent<EventArgs> PostNewGame = new();
 

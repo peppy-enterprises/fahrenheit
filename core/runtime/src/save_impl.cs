@@ -192,7 +192,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
             FhApi.Events.FFX.GameLoop.PostLoadGame,
             FhApi.Events.FFX2.GameLoop.PostLoadGame,
             FhApi.Events.FFX2.GameLoop.PostLoadGame
-        ).invoke(new(_load_pending_slot));
+        ).invoke(new() { save_slot_idx = _load_pending_slot });
     }
 
     /// <summary>
