@@ -6,8 +6,6 @@
  * or contact the developers and explain the use case instead of extending IVT to your mod.
  */
 
-using Fahrenheit.Events;
-
 [assembly: InternalsVisibleTo("fhruntime")]
 
 namespace Fahrenheit;
