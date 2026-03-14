@@ -180,7 +180,7 @@ public unsafe struct SaveData {
 
         [InlineArray(0xf0)]
         public struct UncoveredTechPage {
-            private ushort _data;
+            private uint _data;
         }
 
         public PlayerCostPerGame player_cost_per_game;
