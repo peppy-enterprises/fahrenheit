@@ -166,6 +166,32 @@ public unsafe struct SaveData {
         public bool seen_mushroom_rock_road { readonly get { return flags_spheres_seen.get_bit(8); } set { flags_spheres_seen.set_bit(8, value); } }
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct BlitzballData {
+        [InlineArray(60)]
+        public struct PlayerCostPerGame {
+            private ushort _data;
+        }
+
+        [InlineArray(3)]
+        public struct PrizePerGame {
+            private ushort _data;
+        }
+
+        [InlineArray(0xf0)]
+        public struct UncoveredTechPage {
+            private ushort _data;
+        }
+
+        public PlayerCostPerGame player_cost_per_game;
+        public PrizePerGame      leage_prize_index;
+        public PrizePerGame      tournament_prize_index;
+        public ushort            league_top_scorer_prize_index;
+        public ushort            tournament_top_scorer_prize_index;
+        public UncoveredTechPage player_uncovered_techs_page_1;
+        public UncoveredTechPage player_uncovered_techs_page_2;
+    }
+
 
     [FieldOffset(0x0)]    public       ushort          current_room_id;
     [FieldOffset(0x2)]    public       ushort          last_room_id;
@@ -246,6 +272,7 @@ public unsafe struct SaveData {
     [FieldOffset(0xC90)]  public       byte            completion_flags_dark_magus_sisters;
     [FieldOffset(0xC91)]  public       byte            penance_unlock_state;
     [FieldOffset(0xCD7)]  public fixed byte            battle_dialog_lines_seen[42];
+    [FieldOffset(0x1984)] public       BlitzballData   blitzball_data;
     [FieldOffset(0x3D0C)] public       uint            config;
     [FieldOffset(0x3D10)] public       uint            unlocked_primers;
     [FieldOffset(0x3D14)] public       uint            battle_count;
