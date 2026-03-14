@@ -178,13 +178,13 @@ public unsafe struct SaveData {
             private ushort _data;
         }
 
-        [InlineArray(0xf0)]
+        [InlineArray(240)]
         public struct UncoveredTechPage {
             private uint _data;
         }
 
         public PlayerCostPerGame player_cost_per_game;
-        public PrizePerGame      leage_prize_index;
+        public PrizePerGame      league_prize_index;
         public PrizePerGame      tournament_prize_index;
         public ushort            league_top_scorer_prize_index;
         public ushort            tournament_top_scorer_prize_index;
