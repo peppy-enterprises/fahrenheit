@@ -174,7 +174,7 @@ public unsafe struct SaveData {
         }
 
         [InlineArray(3)]
-        public struct PrizePerPlace {
+        public struct PrizeIds {
             private T_XBlitzPrizeId prize;
         }
 
@@ -184,8 +184,8 @@ public unsafe struct SaveData {
         }
 
         public PlayerCostPerGame player_cost_per_game;
-        public PrizePerPlace     league_prize_index;
-        public PrizePerPlace     tournament_prize_index;
+        public PrizeIds          league_prize_index;
+        public PrizeIds          tournament_prize_index;
         public T_XBlitzPrizeId   league_top_scorer_prize_index;
         public T_XBlitzPrizeId   tournament_top_scorer_prize_index;
         public UncoveredTechPage player_uncovered_techs_page_1;
