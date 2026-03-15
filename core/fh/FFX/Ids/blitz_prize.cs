@@ -3,204 +3,108 @@
 namespace Fahrenheit.FFX.Ids;
 
 public static class BlitzPrizeId {
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x00        = 0x0000;
-    public const T_XBlitzPrizeId BLTZ_DARK_MATTER_0x01      = 0x0001;
-    public const T_XBlitzPrizeId BLTZ_TELEPORT_SPHERE_0x02  = 0x0002;
-    public const T_XBlitzPrizeId BLTZ_THREE_STARS_0x03      = 0x0003;
-    public const T_XBlitzPrizeId BLTZ_LUCK_SPHERE_0x04      = 0x0004;
-    public const T_XBlitzPrizeId BLTZ_UNDERDOGS_SECRET_0x05 = 0x0005;
-    public const T_XBlitzPrizeId BLTZ_MEGALIXIR_0x06        = 0x0006;
-    public const T_XBlitzPrizeId BLTZ_RETURN_SPHERE_0x07    = 0x0007;
-    public const T_XBlitzPrizeId BLTZ_LV1_KEY_SPHERE_0x08   = 0x0008;
-    public const T_XBlitzPrizeId BLTZ_MEGA_PHOENIX_0x09     = 0x0009;
-    public const T_XBlitzPrizeId BLTZ_ELIXIR_0x0A           = 0x000A;
-    public const T_XBlitzPrizeId BLTZ_MEGA_POTION_0x0B      = 0x000B;
-    public const T_XBlitzPrizeId BLTZ_X_POTION_0x0C         = 0x000C;
-    public const T_XBlitzPrizeId BLTZ_ETHER_0x0D            = 0x000D;
-    public const T_XBlitzPrizeId BLTZ_REMEDY_0x0E           = 0x000E;
-    public const T_XBlitzPrizeId BLTZ_PHOENIX_DOWN_0x0F     = 0x000F;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x10        = 0x0010;
-    public const T_XBlitzPrizeId BLTZ_POWER_SPHERE_0x11     = 0x0011;
-    public const T_XBlitzPrizeId BLTZ_MANA_SPHERE_0x12      = 0x0012;
-    public const T_XBlitzPrizeId BLTZ_SPEED_SPHERE_0x13     = 0x0013;
-    public const T_XBlitzPrizeId BLTZ_ABILITY_SPHERE_0x14   = 0x0014;
-    public const T_XBlitzPrizeId BLTZ_ECHO_SCREEN_0x15      = 0x0015;
-    public const T_XBlitzPrizeId BLTZ_EYE_DROPS_0x16        = 0x0016;
-    public const T_XBlitzPrizeId BLTZ_ANTIDOTE_0x17         = 0x0017;
-    public const T_XBlitzPrizeId BLTZ_JUPITER_SIGIL_0x18    = 0x0018;
-    public const T_XBlitzPrizeId BLTZ_ELIXIR_0x19           = 0x0019;
-    public const T_XBlitzPrizeId BLTZ_X_POTION_0x1A         = 0x001A;
-    public const T_XBlitzPrizeId BLTZ_REMEDY_0x1B           = 0x001B;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x1C        = 0x001C;
-    public const T_XBlitzPrizeId BLTZ_ECHO_SCREEN_0x1D      = 0x001D;
-    public const T_XBlitzPrizeId BLTZ_EYE_DROPS_0x1E        = 0x001E;
-    public const T_XBlitzPrizeId BLTZ_ANTIDOTE_0x1F         = 0x001F;
-    public const T_XBlitzPrizeId BLTZ_SOFT_0x20             = 0x0020;
-    public const T_XBlitzPrizeId BLTZ_POTION_0x21           = 0x0021;
-    public const T_XBlitzPrizeId BLTZ_PHOENIX_DOWN_0x22     = 0x0022;
-    public const T_XBlitzPrizeId BLTZ_POTION_0x23           = 0x0023;
-    public const T_XBlitzPrizeId BLTZ_PHOENIX_DOWN_0x24     = 0x0024;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x25        = 0x0025;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x26        = 0x0026;
-    public const T_XBlitzPrizeId BLTZ_POTION_0x27           = 0x0027;
-    public const T_XBlitzPrizeId BLTZ_PHOENIX_DOWN_0x28     = 0x0028;
-    public const T_XBlitzPrizeId BLTZ_RETURN_SPHERE_0x29    = 0x0029;
-    public const T_XBlitzPrizeId BLTZ_RENAME_CARD_0x2A      = 0x002A;
-    public const T_XBlitzPrizeId BLTZ_ETHER_0x2B            = 0x002B;
-    public const T_XBlitzPrizeId BLTZ_X_POTION_0x2C         = 0x002C;
-    public const T_XBlitzPrizeId BLTZ_MEGA_POTION_0x2D      = 0x002D;
-    public const T_XBlitzPrizeId BLTZ_REMEDY_0x2E           = 0x002E;
-    public const T_XBlitzPrizeId BLTZ_SUN_CREST_0x2F        = 0x002F;
-    public const T_XBlitzPrizeId BLTZ_MOON_CREST_0x30       = 0x0030;
-    public const T_XBlitzPrizeId BLTZ_MARS_CREST_0x31       = 0x0031;
-    public const T_XBlitzPrizeId BLTZ_SATURN_CREST_0x32     = 0x0032;
-    public const T_XBlitzPrizeId BLTZ_JUPITER_CREST_0x33    = 0x0033;
-    public const T_XBlitzPrizeId BLTZ_VENUS_CREST_0x34      = 0x0034;
-    public const T_XBlitzPrizeId BLTZ_MERCURY_CREST_0x35    = 0x0035;
-    public const T_XBlitzPrizeId BLTZ_SUN_SIGIL_0x36        = 0x0036;
-    public const T_XBlitzPrizeId BLTZ_MOON_SIGIL_0x37       = 0x0037;
-    public const T_XBlitzPrizeId BLTZ_MARS_SIGIL_0x38       = 0x0038;
-    public const T_XBlitzPrizeId BLTZ_SATURN_SIGIL_0x39     = 0x0039;
-    public const T_XBlitzPrizeId BLTZ_VENUS_SIGIL_0x3A      = 0x003A;
-    public const T_XBlitzPrizeId BLTZ_MERCURY_SIGIL_0x3B    = 0x003B;
-    public const T_XBlitzPrizeId BLTZ_MEGALIXIR_0x3C        = 0x003C;
-    public const T_XBlitzPrizeId BLTZ_ELIXIR_0x3D           = 0x003D;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x3E        = 0x003E;
-    public const T_XBlitzPrizeId BLTZ_POTION_0x3F           = 0x003F;
-    public const T_XBlitzPrizeId BLTZ_POTION_0x40           = 0x0040;
-    public const T_XBlitzPrizeId BLTZ_EMPTY_0x41            = 0x0041;
-    public const T_XBlitzPrizeId BLTZ_REMEDY_0x42           = 0x0042;
-    public const T_XBlitzPrizeId BLTZ_SEEKERS_RING_0x43     = 0x0043;
-    public const T_XBlitzPrizeId BLTZ_PHOENIX_DOWN_0x44     = 0x0044;
-    public const T_XBlitzPrizeId BLTZ_EMPTY_0x45            = 0x0045;
-    public const T_XBlitzPrizeId BLTZ_ETHER_0x46            = 0x0046;
-    public const T_XBlitzPrizeId BLTZ_ELIXIR_0x47           = 0x0047;
-    public const T_XBlitzPrizeId BLTZ_ELIXIR_0x48           = 0x0048;
-    public const T_XBlitzPrizeId BLTZ_REMEDY_0x49           = 0x0049;
-    public const T_XBlitzPrizeId BLTZ_PHOENIX_DOWN_0x4A     = 0x004A;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x4B        = 0x004B;
-    public const T_XBlitzPrizeId BLTZ_POTION_0x4C           = 0x004C;
-    public const T_XBlitzPrizeId BLTZ_VARIABLE_STEEL_0x4D   = 0x004D;
-    public const T_XBlitzPrizeId BLTZ_SOFT_RING_0x4E        = 0x004E;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x4F        = 0x004F;
-    public const T_XBlitzPrizeId BLTZ_ETHER_0x50            = 0x0050;
-    public const T_XBlitzPrizeId BLTZ_MEGA_POTION_0x51      = 0x0051;
-    public const T_XBlitzPrizeId BLTZ_HALBERD_0x52          = 0x0052;
-    public const T_XBlitzPrizeId BLTZ_POTION_0x53           = 0x0053;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x54        = 0x0054;
-    public const T_XBlitzPrizeId BLTZ_EMPTY_0x55            = 0x0055;
-    public const T_XBlitzPrizeId BLTZ_ELIXIR_0x56           = 0x0056;
-    public const T_XBlitzPrizeId BLTZ_ETHER_0x57            = 0x0057;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x58        = 0x0058;
-    public const T_XBlitzPrizeId BLTZ_HUNTERS_SPEAR_0x59    = 0x0059;
-    public const T_XBlitzPrizeId BLTZ_ANTIDOTE_0x5A         = 0x005A;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x5B        = 0x005B;
-    public const T_XBlitzPrizeId BLTZ_SOFT_0x5C             = 0x005C;
-    public const T_XBlitzPrizeId BLTZ_ANTIDOTE_0x5D         = 0x005D;
-    public const T_XBlitzPrizeId BLTZ_HI_POTION_0x5E        = 0x005E;
-    public const T_XBlitzPrizeId BLTZ_SOFT_0x5F             = 0x005F;
-    public const T_XBlitzPrizeId BLTZ_EMPTY_0x60            = 0x0060;
-    public const T_XBlitzPrizeId BLTZ_LV1_KEY_SPHERE_0x61   = 0x0061;
-    public const T_XBlitzPrizeId BLTZ_ANTIDOTE_0x62         = 0x0062;
-    public const T_XBlitzPrizeId BLTZ_TOUGH_BANGLE_0x63     = 0x0063;
-    public const T_XBlitzPrizeId BLTZ_PHOENIX_DOWN_0x64     = 0x0064;
-    public const T_XBlitzPrizeId BLTZ_JECHT_SHOT_0x65       = 0x0065;
-    public const T_XBlitzPrizeId BLTZ_JECHT_SHOT_2_0x66     = 0x0066;
-    public const T_XBlitzPrizeId BLTZ_SPHERE_SHOT_0x67      = 0x0067;
-    public const T_XBlitzPrizeId BLTZ_INVISIBLE_SHOT_0x68   = 0x0068;
-    public const T_XBlitzPrizeId BLTZ_VENOM_SHOT_0x69       = 0x0069;
-    public const T_XBlitzPrizeId BLTZ_VENOM_SHOT_2_0x6A     = 0x006A;
-    public const T_XBlitzPrizeId BLTZ_VENOM_SHOT_3_0x6B     = 0x006B;
-    public const T_XBlitzPrizeId BLTZ_NAP_SHOT_0x6C         = 0x006C;
-    public const T_XBlitzPrizeId BLTZ_NAP_SHOT_2_0x6D       = 0x006D;
-    public const T_XBlitzPrizeId BLTZ_NAP_SHOT_3_0x6E       = 0x006E;
-    public const T_XBlitzPrizeId BLTZ_WITHER_SHOT_0x6F      = 0x006F;
-    public const T_XBlitzPrizeId BLTZ_WITHER_SHOT_2_0x70    = 0x0070;
-    public const T_XBlitzPrizeId BLTZ_WITHER_SHOT_3_0x71    = 0x0071;
-    public const T_XBlitzPrizeId BLTZ_VENOM_PASS_0x72       = 0x0072;
-    public const T_XBlitzPrizeId BLTZ_VENOM_PASS_2_0x73     = 0x0073;
-    public const T_XBlitzPrizeId BLTZ_VENOM_PASS_3_0x74     = 0x0074;
-    public const T_XBlitzPrizeId BLTZ_NAP_PASS_0x75         = 0x0075;
-    public const T_XBlitzPrizeId BLTZ_NAP_PASS_2_0x76       = 0x0076;
-    public const T_XBlitzPrizeId BLTZ_NAP_PASS_3_0x77       = 0x0077;
-    public const T_XBlitzPrizeId BLTZ_WITHER_PASS_0x78      = 0x0078;
-    public const T_XBlitzPrizeId BLTZ_WITHER_PASS_2_0x79    = 0x0079;
-    public const T_XBlitzPrizeId BLTZ_WITHER_PASS_3_0x7A    = 0x007A;
-    public const T_XBlitzPrizeId BLTZ_VOLLEY_SHOT_0x7B      = 0x007B;
-    public const T_XBlitzPrizeId BLTZ_VOLLEY_SHOT_2_0x7C    = 0x007C;
-    public const T_XBlitzPrizeId BLTZ_VOLLEY_SHOT_3_0x7D    = 0x007D;
-    public const T_XBlitzPrizeId BLTZ_VENOM_TACKLE_0x7E     = 0x007E;
-    public const T_XBlitzPrizeId BLTZ_VENOM_TACKLE_2_0x7F   = 0x007F;
-    public const T_XBlitzPrizeId BLTZ_VENOM_TACKLE_3_0x80   = 0x0080;
-    public const T_XBlitzPrizeId BLTZ_NAP_TACKLE_0x81       = 0x0081;
-    public const T_XBlitzPrizeId BLTZ_NAP_TACKLE_2_0x82     = 0x0082;
-    public const T_XBlitzPrizeId BLTZ_NAP_TACKLE_3_0x83     = 0x0083;
-    public const T_XBlitzPrizeId BLTZ_WITHER_TACKLE_0x84    = 0x0084;
-    public const T_XBlitzPrizeId BLTZ_WITHER_TACKLE_2_0x85  = 0x0085;
-    public const T_XBlitzPrizeId BLTZ_WITHER_TACKLE_3_0x86  = 0x0086;
-    public const T_XBlitzPrizeId BLTZ_DRAIN_TACKLE_0x87     = 0x0087;
-    public const T_XBlitzPrizeId BLTZ_DRAIN_TACKLE_2_0x88   = 0x0088;
-    public const T_XBlitzPrizeId BLTZ_DRAIN_TACKLE_3_0x89   = 0x0089;
-    public const T_XBlitzPrizeId BLTZ_TACKLE_SLIP_0x8A      = 0x008A;
-    public const T_XBlitzPrizeId BLTZ_TACKLE_SLIP_2_0x8B    = 0x008B;
-    public const T_XBlitzPrizeId BLTZ_ANTI_VENOM_0x8C       = 0x008C;
-    public const T_XBlitzPrizeId BLTZ_ANTI_VENOM_2_0x8D     = 0x008D;
-    public const T_XBlitzPrizeId BLTZ_ANTI_NAP_0x8E         = 0x008E;
-    public const T_XBlitzPrizeId BLTZ_ANTI_NAP_2_0x8F       = 0x008F;
-    public const T_XBlitzPrizeId BLTZ_ANTI_WITHER_0x90      = 0x0090;
-    public const T_XBlitzPrizeId BLTZ_ANTI_WITHER_0x91      = 0x0091;
-    public const T_XBlitzPrizeId BLTZ_ANTI_DRAIN_0x92       = 0x0092;
-    public const T_XBlitzPrizeId BLTZ_ANTI_DRAIN_2_0x93     = 0x0093;
-    public const T_XBlitzPrizeId BLTZ_SPIN_BALL_0x94        = 0x0094;
-    public const T_XBlitzPrizeId BLTZ_GRIP_GLOVES_0x95      = 0x0095;
-    public const T_XBlitzPrizeId BLTZ_ELITE_DEFENSE_0x96    = 0x0096;
-    public const T_XBlitzPrizeId BLTZ_BRAWLER_0x97          = 0x0097;
-    public const T_XBlitzPrizeId BLTZ_PILE_VENOM_0x98       = 0x0098;
-    public const T_XBlitzPrizeId BLTZ_PILE_WITHER_0x99      = 0x0099;
-    public const T_XBlitzPrizeId BLTZ_REGEN_0x9A            = 0x009A;
-    public const T_XBlitzPrizeId BLTZ_GOOD_MORNING_0x9B     = 0x009B;
-    public const T_XBlitzPrizeId BLTZ_HI_RISK_0x9C          = 0x009C;
-    public const T_XBlitzPrizeId BLTZ_GOLDEN_ARM_0x9D       = 0x009D;
-    public const T_XBlitzPrizeId BLTZ_GAMBLE_0x9E           = 0x009E;
-    public const T_XBlitzPrizeId BLTZ_SUPER_GOALIE_0x9F     = 0x009F;
-    public const T_XBlitzPrizeId BLTZ_AUROCHS_SPIRIT_0xA0   = 0x00A0;
-    public const T_XBlitzPrizeId BLTZ_NORMAL_0xA1           = 0x00A1;
-    public const T_XBlitzPrizeId BLTZ_COUNTER_0xA2          = 0x00A2;
-    public const T_XBlitzPrizeId BLTZ_CENTER_ATTACK_0xA3    = 0x00A3;
-    public const T_XBlitzPrizeId BLTZ_RIGHT_SIDE_0xA4       = 0x00A4;
-    public const T_XBlitzPrizeId BLTZ_LEFT_SIDE_0xA5        = 0x00A5;
-    public const T_XBlitzPrizeId BLTZ_FLAT_LINE_0xA6        = 0x00A6;
-    public const T_XBlitzPrizeId BLTZ_DOUBLE_SIDES_0xA7     = 0x00A7;
-    public const T_XBlitzPrizeId BLTZ_ALL_OUT_DEFENSE_0xA8  = 0x00A8;
-    public const T_XBlitzPrizeId BLTZ_MARK_MODE_0xA9        = 0x00A9;
-    public const T_XBlitzPrizeId BLTZ_LUCA_GOERS_0xAA       = 0x00AA;
-    public const T_XBlitzPrizeId BLTZ_KILIKA_BEASTS_0xAB    = 0x00AB;
-    public const T_XBlitzPrizeId BLTZ_AL_BHED_PSYCHES_0xAC  = 0x00AC;
-    public const T_XBlitzPrizeId BLTZ_RONSO_FANGS_0xAD      = 0x00AD;
-    public const T_XBlitzPrizeId BLTZ_GUADO_GLORIES_0xAE    = 0x00AE;
-    public const T_XBlitzPrizeId BLTZ_BESAID_AUROCHS_0xAF   = 0x00AF;
-    public const T_XBlitzPrizeId BLTZ_FREE_0xB0             = 0x00B0;
-    public const T_XBlitzPrizeId BLTZ_LINE_0xB1             = 0x00B1;
-    public const T_XBlitzPrizeId BLTZ_78_0xB2               = 0x00B2;
-    public const T_XBlitzPrizeId BLTZ_79_0xB3               = 0x00B3;
-    public const T_XBlitzPrizeId BLTZ_80_0xB4               = 0x00B4;
-    public const T_XBlitzPrizeId BLTZ_81_0xB5               = 0x00B5;
-    public const T_XBlitzPrizeId BLTZ_82_0xB6               = 0x00B6;
-    public const T_XBlitzPrizeId BLTZ_83_0xB7               = 0x00B7;
-    public const T_XBlitzPrizeId BLTZ_84_0xB8               = 0x00B8;
-    public const T_XBlitzPrizeId BLTZ_85_0xB9               = 0x00B9;
-    public const T_XBlitzPrizeId BLTZ_TECH_FIND_0xBA        = 0x00BA;
-    public const T_XBlitzPrizeId BLTZ_ATTACK_REELS_0xBB     = 0x00BB;
-    public const T_XBlitzPrizeId BLTZ_STATUS_REELS_0xBC     = 0x00BC;
-    public const T_XBlitzPrizeId BLTZ_AUROCHS_REELS_0xBD    = 0x00BD;
-    public const T_XBlitzPrizeId BLTZ_NORMAL_0xBE           = 0x00BE;
-    public const T_XBlitzPrizeId BLTZ_COUNTER_0xBF          = 0x00BF;
-    public const T_XBlitzPrizeId BLTZ_CENTER_ATTACK_0xC0    = 0x00C0;
-    public const T_XBlitzPrizeId BLTZ_RIGHT_SIDE_0xC1       = 0x00C1;
-    public const T_XBlitzPrizeId BLTZ_LEFT_SIDE_0xC2        = 0x00C2;
-    public const T_XBlitzPrizeId BLTZ_FLAT_LINE_0xC3        = 0x00C3;
-    public const T_XBlitzPrizeId BLTZ_DOUBLE_SIDES_0xC4     = 0x00C4;
-    public const T_XBlitzPrizeId BLTZ_ALL_OUT_DEFENSE_0xC5  = 0x00C5;
-    public const T_XBlitzPrizeId BLTZ_MARK_MODE_0xC6        = 0x00C6;
-    public const T_XBlitzPrizeId BLTZ_EMPTY_0xC7            = 0x00C7;
+    public const T_XBlitzPrizeId BLTZ_TREASURE_BASE = 0x0000;
+    public const T_XBlitzPrizeId BLTZ_TECH_BASE     = 0x0065;
+    public const T_XBlitzPrizeId BLTZ_LIMIT_BASE    = 0x00BB;
+
+    public enum BlitzTechs: T_XBlitzPrizeId {
+        JECHT_SHOT      = 0x0000,
+        JECHT_SHOT_2    = 0x0001,
+        SPHERE_SHOT     = 0x0002,
+        INVISIBLE_SHOT  = 0x0003,
+        VENOM_SHOT      = 0x0004,
+        VENOM_SHOT_2    = 0x0005,
+        VENOM_SHOT_3    = 0x0006,
+        NAP_SHOT        = 0x0007,
+        NAP_SHOT_2      = 0x0008,
+        NAP_SHOT_3      = 0x0009,
+        WITHER_SHOT     = 0x000A,
+        WITHER_SHOT_2   = 0x000B,
+        WITHER_SHOT_3   = 0x000C,
+        VENOM_PASS      = 0x000D,
+        VENOM_PASS_2    = 0x000E,
+        VENOM_PASS_3    = 0x000F,
+        NAP_PASS        = 0x0010,
+        NAP_PASS_2      = 0x0011,
+        NAP_PASS_3      = 0x0012,
+        WITHER_PASS     = 0x0013,
+        WITHER_PASS_2   = 0x0014,
+        WITHER_PASS_3   = 0x0015,
+        VOLLEY_SHOT     = 0x0016,
+        VOLLEY_SHOT_2   = 0x0017,
+        VOLLEY_SHOT_3   = 0x0018,
+        VENOM_TACKLE    = 0x0019,
+        VENOM_TACKLE_2  = 0x001A,
+        VENOM_TACKLE_3  = 0x001B,
+        NAP_TACKLE      = 0x001C,
+        NAP_TACKLE_2    = 0x001D,
+        NAP_TACKLE_3    = 0x001E,
+        WITHER_TACKLE   = 0x001F,
+        WITHER_TACKLE_2 = 0x0020,
+        WITHER_TACKLE_3 = 0x0021,
+        DRAIN_TACKLE    = 0x0022,
+        DRAIN_TACKLE_2  = 0x0023,
+        DRAIN_TACKLE_3  = 0x0024,
+        TACKLE_SLIP     = 0x0025,
+        TACKLE_SLIP_2   = 0x0026,
+        ANTI_VENOM      = 0x0027,
+        ANTI_VENOM_2    = 0x0028,
+        ANTI_NAP        = 0x0029,
+        ANTI_NAP_2      = 0x002A,
+        ANTI_WITHER     = 0x002B,
+        ANTI_WITHER_2   = 0x002C,
+        ANTI_DRAIN      = 0x002D,
+        ANTI_DRAIN_2    = 0x002E,
+        SPIN_BALL       = 0x002F,
+        GRIP_GLOVES     = 0x0030,
+        ELITE_DEFENSE   = 0x0031,
+        BRAWLER         = 0x0032,
+        PILE_VENOM      = 0x0033,
+        PILE_WITHER     = 0x0034,
+        REGEN           = 0x0035,
+        GOOD_MORNING    = 0x0036,
+        HI_RISK         = 0x0037,
+        GOLDEN_ARM      = 0x0038,
+        GAMBLE          = 0x0039,
+        SUPER_GOALIE    = 0x003A,
+        AUROCHS_SPIRIT  = 0x003B,
+    };
+
+    public enum BlitzLimits: T_XBlitzPrizeId {
+        ATTACK_REELS    = 0x0000,
+        STATUS_REELS    = 0x0001,
+        AUROCHS_REELS   = 0x0002,
+};
+
+    /// <summary>
+    /// Calculates the prize index corresponding to the specified treasure index for blitzball prizes.
+    /// Treasure indexes come from takara.bin
+    /// </summary>
+    /// <param name="treasure_idx">The treasure index to convert to a prize index. Must be between 220 and 320, inclusive.</param>
+    /// <returns>The prize index associated with the specified treasure index.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown when the value of treasure_idx is less than 220 or greater than 320.</exception>
+    public static T_XBlitzPrizeId prize_index_for(int treasure_idx) {
+        if (treasure_idx < 220 || treasure_idx > 320) {
+            throw new IndexOutOfRangeException("Out of bounds index for blitzball prizes");
+        }
+        return (ushort)(treasure_idx - 220);
+    }
+
+    /// <summary>
+    /// Calculates the prize index corresponding to the specified Blitz tech.
+    /// </summary>
+    /// <param name="tech">The Blitz tech for which to determine the associated prize index.</param>
+    /// <returns>The prize index that corresponds to the specified Blitz tech.</returns>
+    public static T_XBlitzPrizeId prize_index_for(BlitzTechs tech) {
+        return (ushort)(BLTZ_TECH_BASE + tech);
+    }
+
+    /// <summary>
+    /// Calculates the prize identifier corresponding to the specified Blitz limit.
+    /// </summary>
+    /// <param name="limit">The Blitz limit for which to retrieve the associated prize identifier.</param>
+    /// <returns>The prize identifier associated with the specified Blitz limit.</returns>
+    public static T_XBlitzPrizeId prize_index_for(BlitzLimits limit) {
+        return (ushort)(BLTZ_LIMIT_BASE + limit);
+    }
 }
