@@ -12,8 +12,8 @@ public class FhEvents {
         // FFX and FFX2 mirror some Common events in their structures to improve end-user experience,
         // so Common needs to be initialized first.
         Common = new();
-        FFX = new();
-        FFX2 = new();
+        FFX    = new();
+        FFX2   = new();
     }
 }
 
