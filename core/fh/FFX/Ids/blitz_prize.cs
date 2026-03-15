@@ -1,5 +1,17 @@
 ﻿// SPDX-License-Identifier: MIT
 
+/*
+ * [Andrewki44 16/03/26]
+ * BlitzPrizeID 0x00 -> 0x64 == Takara.bin 220 -> 320
+ * BlitzPrizeID 0x65 -> 0xA0 == Techs
+ * BlitzPrizeID 0xBB -> 0xBD == Wakka Overdrives
+ * 
+ * Tech & Limit ID's mapped manually in-game via cheat engine manipulation
+ * 
+ * Takara reference confirmed via 'blitzballOutput' script parse
+ * * call Common.obtainTreasure [015Bh](msgWindow=0 [00h], treasure=BlitzballLeaguePrizeIndex[priv10AAD4 - 1 [01h]] + 220 [DCh])
+ */
+
 namespace Fahrenheit.FFX.Ids;
 
 public static class BlitzPrizeId {
@@ -7,7 +19,7 @@ public static class BlitzPrizeId {
     public const T_XBlitzPrizeId BLTZ_TECH_BASE     = 0x0065;
     public const T_XBlitzPrizeId BLTZ_LIMIT_BASE    = 0x00BB;
 
-    public enum BlitzTechs: T_XBlitzPrizeId {
+    public enum BlitzTechs : T_XBlitzPrizeId {
         JECHT_SHOT      = 0x0000,
         JECHT_SHOT_2    = 0x0001,
         SPHERE_SHOT     = 0x0002,
@@ -70,11 +82,11 @@ public static class BlitzPrizeId {
         AUROCHS_SPIRIT  = 0x003B,
     };
 
-    public enum BlitzLimits: T_XBlitzPrizeId {
+    public enum BlitzLimits : T_XBlitzPrizeId {
         ATTACK_REELS    = 0x0000,
         STATUS_REELS    = 0x0001,
         AUROCHS_REELS   = 0x0002,
-};
+    };
 
     /// <summary>
     /// Calculates the prize index corresponding to the specified treasure index for blitzball prizes.
@@ -87,7 +99,7 @@ public static class BlitzPrizeId {
         if (treasure_idx < 220 || treasure_idx > 320) {
             throw new IndexOutOfRangeException("Out of bounds index for blitzball prizes");
         }
-        return (ushort)(treasure_idx - 220);
+        return T_XBlitzPrizeId.CreateChecked(treasure_idx - 220);
     }
 
     /// <summary>
@@ -96,7 +108,10 @@ public static class BlitzPrizeId {
     /// <param name="tech">The Blitz tech for which to determine the associated prize index.</param>
     /// <returns>The prize index that corresponds to the specified Blitz tech.</returns>
     public static T_XBlitzPrizeId prize_index_for(BlitzTechs tech) {
-        return (ushort)(BLTZ_TECH_BASE + tech);
+        if (tech < BlitzTechs.JECHT_SHOT || tech > BlitzTechs.AUROCHS_SPIRIT) {
+            throw new IndexOutOfRangeException("Out of bounds index for blitzball techs");
+        }
+        return T_XBlitzPrizeId.CreateChecked(BLTZ_TECH_BASE + (ushort)tech);
     }
 
     /// <summary>
@@ -105,6 +120,9 @@ public static class BlitzPrizeId {
     /// <param name="limit">The Blitz limit for which to retrieve the associated prize identifier.</param>
     /// <returns>The prize identifier associated with the specified Blitz limit.</returns>
     public static T_XBlitzPrizeId prize_index_for(BlitzLimits limit) {
-        return (ushort)(BLTZ_LIMIT_BASE + limit);
+        if (limit < BlitzLimits.ATTACK_REELS || limit > BlitzLimits.AUROCHS_REELS) {
+            throw new IndexOutOfRangeException("Out of bounds index for blitzball limits");
+        }
+        return T_XBlitzPrizeId.CreateChecked(BLTZ_LIMIT_BASE + (ushort)limit);
     }
 }
