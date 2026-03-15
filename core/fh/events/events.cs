@@ -3,12 +3,18 @@
 namespace Fahrenheit.Events;
 
 public class FhEvents {
-    // The initialization order here matters.
-    // FFX and FFX2 mirror some Common events in their structures to improve end-user experience,
-    // so Common needs to be initialized first.
-    public readonly Fahrenheit.Events.FhCommonEvents  Common = new();
-    public readonly Fahrenheit.FFX.Events.FhXEvents   FFX    = new();
-    public readonly Fahrenheit.FFX2.Events.FhX2Events FFX2   = new();
+    public readonly Fahrenheit.Events.FhCommonEvents  Common;
+    public readonly Fahrenheit.FFX.Events.FhXEvents   FFX;
+    public readonly Fahrenheit.FFX2.Events.FhX2Events FFX2;
+
+    internal FhEvents() {
+        // The initialization order here matters.
+        // FFX and FFX2 mirror some Common events in their structures to improve end-user experience,
+        // so Common needs to be initialized first.
+        Common = new();
+        FFX = new();
+        FFX2 = new();
+    }
 }
 
 // Events shared between the two games
