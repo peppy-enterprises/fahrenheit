@@ -68,4 +68,4 @@ public enum BlitzTechs : T_XBlitzPrizeId {
     GAMBLE          = 0x0039,
     SUPER_GOALIE    = 0x003A,
     AUROCHS_SPIRIT  = 0x003B,
-};
+}

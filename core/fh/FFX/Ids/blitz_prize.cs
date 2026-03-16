@@ -24,7 +24,7 @@ public static class BlitzPrizeId {
         ATTACK_REELS    = 0x0000,
         STATUS_REELS    = 0x0001,
         AUROCHS_REELS   = 0x0002,
-    };
+    }
 
     /// <summary>
     ///     Calculates the prize index corresponding to the specified treasure index for blitzball prizes.
