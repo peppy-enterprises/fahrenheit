@@ -69,6 +69,15 @@ internal interface IFhResourceLoader {
                                 string        file_path,
                                 FhTextureType file_type,
         [NotNullWhen(true)] out FhTexture?    texture);
+
+
+    /// <summary>
+    ///     Loads a game texture with the specified <paramref name="file_path"/>
+    ///     and returns, if successful, a <see cref="FhTexture"/>.
+    /// </summary>
+    internal bool load_game_texture(
+                                string     file_path,
+        [NotNullWhen(true)] out FhTexture? texture);
 }
 
 /// <summary>
@@ -130,5 +139,16 @@ public sealed class FhResourceLoader {
     public bool load_png_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
         return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.PNG, out texture);
+    }
+
+    /// <summary>
+    ///     Attempts to load a game texture from memory.
+    /// </summary>
+    /// <param name="file_path">The absolute file path to the image on disk.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
+    public bool load_game_texture(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
+        texture = null;
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture(file_path, out texture);
     }
 }

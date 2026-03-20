@@ -136,4 +136,9 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
         Hexa_Extensions.Release(image);
         return rv;
     }
+
+    bool IFhResourceLoader.load_game_texture(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
+        texture = null;
+        return false;
+    }
 }
