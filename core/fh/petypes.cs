@@ -1,18 +1,31 @@
 ﻿// SPDX-License-Identifier: MIT
 
+/* [fkelava 23/03/26 00:41]
+ * The game's remasters all utilize the cross-platform Phyre game engine. All assets have been processed
+ * in some way, resulting in ``*.phyre`` files which are not inspectable or loadable using standard tooling.
+ *
+ * Fahrenheit allows custom textures to be used in ImGui flows. It would be desirable to use game assets as well,
+ * but we can't directly load Phyre-processed assets. While tools such as Roelin's Asset Converter
+ * (https://www.nexusmods.com/finalfantasy12/mods/288) can 'un-Phyre' files, it is ABSOLUTELY PROHIBITED
+ * to distribute them with mods. However, we _can_ ask the game to load them for us at runtime! These types exist to enable this.
+ *
+ * Phyre types are generally self-describing. That is to say, Phyre classes have 'class descriptors', which
+ * contain information about the type such as its name and layout. Their constructors, destructors, and vftables
+ * all remain in the executable's RTTI metadata, and that information was used to construct these interop types.
+ */
+
 namespace Fahrenheit;
 
 /* [fkelava 19/03/26 03:01]
  * .ctor -> FFX.exe+3A170
  */
 
-/* [fkelava 20/03/26 03:12]
- * This structure currently suffers from a strange off-by-one
- * that can't be seen from Ghidra. Work is being done to rectify this.
- */
-
 /// <summary>
-///     Describes a unique member of a given Phyre class.
+///     Describes a unique member of a Phyre class.
+///     <para/>
+///     A <see cref="PClassMember"/> can be a field, function or method. Thus, it has no <see cref="PType"/>.
+///     <para/>
+///     For fields, derived types <see cref="PClassData"/> and/or <see cref="PClassDataMember"/> carry type information.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x14, Pack = 4)]
 internal unsafe struct PClassMember {
@@ -20,6 +33,10 @@ internal unsafe struct PClassMember {
     public PClassDescriptor*                      m_classDescriptor; // name: FFX.exe+70EA88 -> FFX.exe+3A362
     public nint                                   ptr_name;          // null-terminated ANSI/UTF-8 string
     public uint                                   m_flags;           // name: FFX.exe+70EA80 -> FFX.exe+3A316
+
+    public override string ToString() {
+        return $"{(*m_classDescriptor).base_PType}::{Marshal.PtrToStringAnsi(ptr_name)}";
+    }
 }
 
 /* [fkelava 17/03/26 04:13]
@@ -27,10 +44,17 @@ internal unsafe struct PClassMember {
  * FFX.exe+80B138 - Phyre::PClassData<>
  */
 
+/// <summary>
+///     Describes a unique member of a Phyre class which has a concrete <see cref="PType"/>.
+/// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x18, Pack = 4)]
 internal unsafe struct PClassData {
     public PClassMember base_PClassMember;
     public PType*       m_type; // name: FFX.exe+70F994 -> FFX.exe+465A6
+
+    public override string ToString() {
+        return $"{*m_type} {base_PClassMember}";
+    }
 }
 
 /* [fkelava 19/03/26 03:01]
@@ -55,28 +79,27 @@ internal unsafe struct PAnnotation {
  */
 
 /// <summary>
-///     Allows for the association of 'annotations', arbitrary tags, to Phyre types.
+///     Indicates that a Phyre type can have <see cref="PAnnotation"/>s, arbitrary tags, associated with it.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x8, Pack = 4)]
 internal struct PAnnotatable {
     public PSimpleDoubleListElement<PAnnotation> base_PSimpleDoubleListElement;
 }
 
-/* [fkelava 20/03/26 03:12]
- * This structure currently suffers from a strange off-by-one
- * that can't be seen from Ghidra. Work is being done to rectify this.
- */
-
 /// <summary>
-///     Describes a unique 'data' member of a given Phyre class.
+///     Describes a unique field of a Phyre class which has a concrete <see cref="PType"/>, offset, and may have <see cref="PAnnotation"/>s associated with it.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x2C, Pack = 4)]
 internal unsafe struct PClassDataMember {
-    private nint         vftable;
-    public  PClassData   base_PClassData;   // 0x4
-    public  PAnnotatable base_PAnnotatable; // 0x1C
-    public  nint         m_offset;          // name: FFX.exe+70F99C -> FFX.exe+465F2
-    public  nint         __0x28;
+    public nint         vftable;
+    public PClassData   base_PClassData;   // 0x4
+    public PAnnotatable base_PAnnotatable; // 0x1C
+    public nint         m_offset;          // name: FFX.exe+70F99C -> FFX.exe+465F2
+    public nint         __0x28;
+
+    public override string ToString() {
+        return $"{base_PClassData} at offset 0x{m_offset:X}";
+    }
 }
 
 /* [fkelava 13/03/26 21:49]
@@ -87,6 +110,11 @@ internal unsafe struct PClassDataMember {
  * RTTI metadata does not explain _which_, however.
  */
 
+/// <summary>
+///     Describes a unique type in the Phyre type system- its name, size, alignment, and more.
+///     <para/>
+///     Classes have a derived <see cref="PClassDescriptor"/> instead, providing information about their members, layout and inheritance chain.
+/// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x2C, Pack = 4)]
 internal struct PType {
     public nint vftable;
@@ -100,6 +128,10 @@ internal struct PType {
     public nint _0x20_type_alignment;
     public nint fnptr_fixup_get;
     public nint fnptr_fixup_resolve;
+
+    public override string ToString() {
+        return $"{Marshal.PtrToStringAnsi(_0x18_type_name)} (sz 0x{_0x1C_type_size:X}, align 0x{_0x20_type_alignment:X})";
+    }
 }
 
 [StructLayout(LayoutKind.Sequential, Size = 0x4C, Pack = 4)]
@@ -116,6 +148,10 @@ internal unsafe struct PInstanceList {
     public nint                                    _0x40;
     public nint                                    _0x44;
     public nint                                    _0x48;
+
+    public override string ToString() {
+        return $"{nameof(PInstanceList)}<{(*_0x2C_class_descriptor).base_PType}>";
+    }
 }
 
 /* [fkelava 17/03/26 04:13]
@@ -131,19 +167,21 @@ internal struct PAnnotationSemantic {
 }
 
 /// <summary>
-///     Concretely describes a Phyre class; its name, inheritance chain, and layout.
+///     Describes a Phyre class- its layout, members, and inheritance chain.
+///     <para/>
+///     Basic type information such as name, size and alignment is provided by the base class <see cref="PType"/>.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x94, Pack = 4)]
 internal unsafe struct PClassDescriptor {
     public PType                                      base_PType;
-    public PSimpleDoubleListElement<PUnknown>         _0x2C;
+    public PSimpleDoubleListElement<PClassDescriptor> base_PSimpleDoubleListElement;
     public PSimpleDoubleListElement<PUnknown>         _0x34;
     public PNamespace*                                _0x3C_namespace;
     public PClassDescriptor*                          m_parent;                      // 0x40 - name: FFX.exe+70FB5C, FFX.exe+47F02
-    public PSimpleDoubleListElement<PClassDataMember> _0x44;
-    public PSimpleDoubleListElement<PClassDataMember> _0x4C;
-    public PSimpleDoubleListElement<PClassDataMember> _0x54;
-    public PSimpleDoubleListElement<PClassDataMember> _0x5C;
+    public PSimpleDoubleListElement<PClassData>       _0x44;
+    public PSimpleDoubleListElement<PClassMember>     _0x4C;
+    public PSimpleDoubleListElement<PClassMember>     _0x54;
+    public PSimpleDoubleListElement<PClassData>       _0x5C;
     public nint                                       _0x64_buffer_default;
     public nint                                       _0x68_buffer_validation;
     public nint                                       _0x6C_buffer_write_mask;
@@ -156,6 +194,10 @@ internal unsafe struct PClassDescriptor {
     public nint                                       m_offsetToBase;                 // 0x88 - name: FFX.exe+70FB7C, FFX.exe+47F9F
     public nint                                       m_offsetToBaseInAllocatedBlock; // 0x8C - name: FFX.exe+70FB8C, FFX.exe+47FEE
     public nint                                       _0x90_flags;                    // 0x90
+
+    public override string ToString() {
+        return $"{nameof(PClassDescriptor)}<{base_PType}>";
+    }
 }
 
 /// <inheritdoc cref="PClassDescriptor"/>
@@ -217,7 +259,6 @@ internal unsafe readonly struct PSimpleDoubleListElement<T> where T : unmanaged 
     }
 }
 
-
 /* [fkelava 11/03/26 20:00]
  * .ctor -> FFX.exe+9C550
  * .dtor -> FFX.exe+9C680
@@ -234,12 +275,19 @@ internal unsafe struct PFreeList<T> where T : unmanaged {
     public nint _0x0C_alignment;
     public nint _0x10_name;       // null-terminated ANSI/UTF-8 string
     public nint _0x14;
+
+    public override string ToString() {
+        return $"{nameof(PFreeList<>)}<{Marshal.PtrToStringAnsi(_0x10_name)}>";
+    }
 }
 
 /* [fkelava 11/03/26 20:00]
  * .ctor -> FFX.exe+3DE70
  */
 
+/// <summary>
+///     A namespace is a group of <see cref="PClassDescriptor"/>s. It can contain nested namespaces as well.
+/// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x1C, Pack = 4)]
 internal struct PNamespace {
     public PSimpleDoubleListElement<PNamespace>       base_PSimpleDoubleListElement;
@@ -249,11 +297,11 @@ internal struct PNamespace {
 }
 
 /* [fkelava 19/03/26 16:20]
- * size: FFX.exe+40812
+ * .ctor -> FFX.exe+3F910
  */
 
 /// <summary>
-///     A 'cluster' is believed to be a Phyre asset group.
+///     A cluster is a
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x50, Pack = 4)]
 internal struct PCluster {
@@ -283,13 +331,60 @@ internal unsafe struct FhPDoubleListIterator<T>(PSimpleDoubleListElement<T>* hea
     private PSimpleDoubleListElement<T>* _m_head    = head;
     private T*                           _m_current = forward ? head->next(head) : head->prev(head);
 
+    /* [fkelava 23/03/26 15:29]
+     * Here we encounter an unfortunate C++ standard/implementation detail.
+     *
+     * https://en.cppreference.com/w/cpp/language/derived_class.html
+     * > Each direct and indirect base class is present, as base class subobject,
+     * > within the object representation of the derived class at an ABI-dependent offset.
+     *
+     * Phyre types have complex inheritance graphs, and often inherit multiple base
+     * classes. The problem is that the compiler is free to order such base classes as it
+     * desires from struct to struct within the same compilation unit.
+     *
+     * Many structs inherit from PSimpleDoubleListElement. Pointers in such doubly-linked lists
+     * are offset by where PSimpleDoubleListElement is laid out in a given type. Successfully iterating such a
+     * list requires us to manually correct, which is exactly what the compiler does under the hood.
+     *
+     * An example of a class that suffers from this is PClassDescriptor, where PType goes first.
+     * e.g. in Phyre::PNamespace::InitializeGlobalClassDescriptors (FFX.exe+3E530)
+     *
+     * 0043e54e 83 c6 d4        ADD        ESI,-0x2c // subtract size of PType to get to beginning of struct
+     * 0043e551 74 17           JZ         LAB_0043e56a
+     *                      LAB_0043e553                                    XREF[1]:     0043e568(j)
+     * 0043e553 8b ce           MOV        ECX,ESI
+     * 0043e555 e8 76 f2        CALL       Phyre::PClassDescriptor::updateBaseOffsets
+     *          ff ff
+     */
+
+    private static T* abi_fixup(T* ptr_object) {
+        return ptr_object switch {
+            _ when typeof(T) == typeof(PClassDescriptor) => (T*)((nint)ptr_object - sizeof(PType)),
+            _                                            => ptr_object,
+        };
+    }
+
+    public bool next(out T* item) {
+        item = default;
+
+        if (_m_current == null)
+            return false;
+
+        item = FhPDoubleListIterator<T>.abi_fixup(_m_current);
+        _m_current = forward
+            ? ((PSimpleDoubleListElement<T>*)_m_current)->next(_m_head)
+            : ((PSimpleDoubleListElement<T>*)_m_current)->prev(_m_head);
+
+        return true;
+    }
+
     public bool next(out T item) {
         item = default;
 
         if (_m_current == null)
             return false;
 
-        item = *_m_current;
+        item = *FhPDoubleListIterator<T>.abi_fixup(_m_current);
         _m_current = forward
             ? ((PSimpleDoubleListElement<T>*)_m_current)->next(_m_head)
             : ((PSimpleDoubleListElement<T>*)_m_current)->prev(_m_head);
