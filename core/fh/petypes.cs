@@ -187,13 +187,17 @@ internal struct PType {
     }
 }
 
+/* [fkelava 25/03/26 22:29]
+ * .ctor -> +1763A0
+ */
+
 [StructLayout(LayoutKind.Sequential, Size = 0x4C, Pack = 4)]
 internal unsafe struct PInstanceList {
     public PSimpleDoubleListElement<PInstanceList> base_PSimpleDoubleListElement;
     public PFreeList<PUnknown>                     _0x08_free_list;
     public PSimpleDoubleListElement<PUnknown>      _0x20;
-    public PCluster*                               _0x28_cluster;
-    public PClassDescriptor*                       _0x2C_class_descriptor;
+    public PCluster*                               ptr_cluster;          // 0x28
+    public PClassDescriptor*                       ptr_class_descriptor; // 0x2C
     public nint                                    _0x30;
     public nint                                    _0x34;
     public nint                                    _0x38;
@@ -203,7 +207,7 @@ internal unsafe struct PInstanceList {
     public nint                                    _0x48;
 
     public override string ToString() {
-        return $"{nameof(PInstanceList)}<{(*_0x2C_class_descriptor).base_PType}>";
+        return $"{nameof(PInstanceList)}<{(*ptr_class_descriptor).base_PType}>";
     }
 }
 
@@ -354,12 +358,12 @@ internal struct PNamespace {
 ///     assets that must be simultaneously loaded, and more.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x50, Pack = 4)]
-internal struct PCluster {
+internal unsafe struct PCluster {
     public PNamespace                              _0x00_namespace;
     public PSimpleDoubleListElement<PInstanceList> _0x1C_instance_lists;
     public nint                                    _0x24;
     public PFreeList<PInstanceList>                _0x28_free_list_PInstanceList;
-    public nint                                    _0x40;
+    public PWorld*                                 ptr_world; // deduced from Phyre::PWorld::addInstanceList (+433F0)
     public nint                                    _0x44;
     public PSimpleDoubleListElement<PUnknown>      _0x48;
 }
@@ -563,4 +567,110 @@ internal struct PClusterHeaderBase {
     public uint m_headerClassInstanceCount; // 0x3C - name: +712FD4 -> +68DE3
     public uint m_headerClassChildCount;    // 0x40 - name: +712FF0 -> +68E34
     public uint m_physicsEngineID;          // 0x44 - name: +713018 -> +68ED6
+}
+
+/* [fkelava 25/03/26 21:00]
+ * Derived from appearance in the PClassDescriptor of PTextureCommonBase.
+ *
+ * Neither the constructor nor class descriptor are known at this time.
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x14, Pack = 0x4)]
+internal struct PTextureFormatBase {
+    public uint _0x00;
+    public uint _0x04;
+    public uint _0x08;
+    public uint _0x0C;
+    public uint _0x10;
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * Phyre::PRendering::PTextureCommonBase::Bind() -> +C20C0
+ * PClassDescriptor<PTextureCommonBase>          -> +8A3530
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x1C, Pack = 0x4)]
+internal unsafe struct PTextureCommonBase {
+    public PTextureFormatBase* m_format;       // 0x0
+    public byte                m_memoryType;   // 0x5
+    public byte                _0x06;
+    public byte                _0x07;
+    public uint                _0x08;
+    public uint                m_mipmapCount;  // 0xC
+    public uint                m_maxMipLevel;  // 0x10
+    public int                 m_textureFlags; // 0x14
+    public uint                _0x18;
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * Phyre::PRendering::PTexture2DBase::Bind() -> +C3510
+ * PClassDescriptor<PTexture2DBase>          -> +8A3738
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x24, Pack = 0x4)]
+internal struct PTexture2DBase {
+    public PTextureCommonBase base_PTextureCommonBase;
+    public uint               m_width;  // 0x1C
+    public uint               m_height; // 0x20
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PTexture2DD3D11> -> +8B39A0
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x74, Pack = 0x4)]
+internal struct PTexture2DD3D11 {
+    public PTexture2DBase base_PTexture2DBase;
+    public uint           _0x28;
+    public uint           _0x2C;
+    public uint           _0x30;
+    public uint           _0x34;
+    public uint           _0x38;
+    public uint           _0x3C;
+    public uint           _0x40;
+    public uint           _0x44;
+    public uint           _0x48;
+    public uint           _0x4C;
+    public uint           _0x50;
+    public uint           _0x54;
+    public uint           _0x58;
+    public uint           _0x5C;
+    public uint           _0x60;
+    public uint           _0x64;
+    public uint           _0x68;
+    public uint           _0x6C;
+    public uint           _0x70;
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * Phyre::PRendering::PTexture2D::Bind() -> +C34F0
+ * PClassDescriptor<PTexture2D>          -> +8A37D0
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x74, Pack = 0x4)]
+internal struct PTexture2D {
+    public PTexture2DD3D11 base_PTexture2DD3D11;
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * Phyre::PWorld::Bind()    -> +42F00
+ * PClassDescriptor<PWorld> -> +890E30
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x10, Pack = 0x4)]
+internal struct PWorld {
+    public uint _0x00;
+    public uint _0x04;
+    public uint _0x08;
+    public uint _0x0C;
 }
