@@ -484,6 +484,154 @@ internal struct PUnknown {
  * Call Phyre::PNamespace::GetGlobalNamespace (+3E3E0), iterate over its class descriptors, then recurse over all sub-namespaces.
  */
 
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PShaderParameterCaptureBufferLocation> -> +89B720
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x2, Pack = 0x2)]
+internal struct PShaderParameterCaptureBufferLocation {
+    public ushort m_offset;
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PShaderParameterCaptureBufferLocationSize> -> +89B788
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x4, Pack = 0x4)]
+internal struct PShaderParameterCaptureBufferLocationSize {
+    public PShaderParameterCaptureBufferLocation base_PShaderParameterCaptureBufferLocation;
+    public ushort                                m_size;
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PShaderParameterDefinition> -> +89B980
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x10, Pack = 0x4)]
+internal struct PShaderParameterDefinition {
+    public ushort                                    m_arrayElementCount;      // 0x0 - name: + -> +
+    public byte                                      m_parameterType;          // 0x2 - name: + -> +
+    public byte                                      m_dataType;               // 0x3 - name: + -> +
+    public PString                                   m_name;                   // 0x4 - name: + -> +
+    public PShaderParameterCaptureBufferLocationSize m_bufferLoc;              // 0x8 - name: + -> +
+    public nint                                      m_constantBufferLocation; // 0xC - name: + -> +
+}
+
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PString> -> +891048
+ */
+
+/// <summary>
+///     A simple null-terminated string.
+/// </summary>
+[StructLayout(LayoutKind.Sequential, Size = 0x4, Pack = 0x4)]
+internal unsafe struct PString {
+
+    /* [fkelava 26/03/26 13:45]
+     * For future reference, I know that _assuming_ sizeof(nint) == 4 is silly,
+     * but we currently only support the Steam Windows release, which is 32-bit.
+     *
+     * If they ever recompile it, we're going to have to remap every address anyway,
+     * so we may as well adjust structures that abuse 'nint' then.
+     */
+
+    public nint m_buffer;
+
+    public override string ToString() {
+        return Marshal.PtrToStringAnsi(m_buffer) ?? string.Empty;
+    }
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PEffect> -> +8A66E8
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x40, Pack = 0x4)]
+internal struct PEffect {
+    public uint             m_supportedLightMask;          // 0x0
+    public uint             m_supportedShadowCasterMask;   // 0x4
+    public PString          m_effectFile;                  // 0x8
+
+    public PArray<PUnknown> m_contextVariantSwitches;      // 0x2C
+    public PString          m_effectSource;                // 0x34
+    public uint             m_maxLightCount;               // 0x38
+    public uint             m_numSupportedShaderLODLevels; // 0x3C
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PEffectVariant> -> +8A5FF0
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x34, Pack = 0x4)]
+internal unsafe struct PEffectVariant {
+    public PEffect*         m_effect;                                 // 0x0  - name: + -> +
+    public PArray<PUnknown> m_switches;                               // 0x4  - name: + -> +
+    public PArray<PUnknown> m_sceneRenderPasses;                      // 0xC  - name: + -> +
+    public PArray<PUnknown> m_sceneRenderPassLookup;                  // 0x14 - name: + -> +
+    public ushort           m_largestShaderPassCount;                 // 0x1C - name: + -> +
+    public ushort           _0x1E;                                    // padding
+    public PArray<PUnknown> m_tweakableShaderParameterDefinitions;    // 0x20 - name: + -> +
+    public PArray<PUnknown> m_untweakableShaderParameterDefinitions;  // 0x28 - name: + -> +
+    public ushort           m_tweakableParameterBufferSize;           // 0x30 - name: + -> +
+    public ushort           m_untweakableParameterBufferSize;         // 0x32 - name: + -> +
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PParameterBufferBase> -> +8A4FA8
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x4, Pack = 0x4)]
+internal struct PParameterBufferBase {
+    public uint m_parameterBufferSize;
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from:
+ *
+ * PClassDescriptor<PParameterBuffer> -> +8A5040
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x10, Pack = 0x4)]
+internal struct PParameterBuffer {
+    public PParameterBufferBase               base_PParameterBufferBase;             // 0x0
+    public PEffectVariant                     m_effectVariant;                       // 0x4
+    public PArray<PShaderParameterDefinition> m_tweakableShaderParameterDefinitions; // 0x8
+}
+
+/* [fkelava 25/03/26 18:30]
+ * Derived from all class descriptors which are template instantiations of PArray, e.g.
+ *
+ * +1545010 (PArray<PPostEffectBase*>)
+ * +15448A0 (PArray<PPostEffectManager>)
+ * +8A9AB0  (PArray<float>) etc.
+ *
+ * In Ghidra each specialization must be presented explicitly.
+ */
+
+[StructLayout(LayoutKind.Sequential, Size = 0x8, Pack = 0x4)]
+internal unsafe struct PArray<T> where T : unmanaged {
+    public uint m_count; // name: +70FD3C -> +90AE0 (and many others)
+    public T*   m_els;   // name: +70FD80 -> +90BC1 (and many others)
+
+    [UnscopedRef]
+    public readonly Span<T> as_span() => new Span<T>(m_els, int.CreateChecked(m_count));
+}
+
 [StructLayout(LayoutKind.Sequential, Size = 0x14, Pack = 0x4)]
 internal struct PDataBlockBufferD3D11 { }
 
