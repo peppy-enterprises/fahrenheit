@@ -424,6 +424,16 @@ internal unsafe struct FhPDoubleListIterator<T>(PSimpleDoubleListElement<T>* hea
         };
     }
 
+    /* [fkelava 02/04/26 01:30]
+     * The signature must be `out T*` instead of `out T` because Phyre objects necessarily belong in unmanaged memory
+     * (either having been constructed by the game, or having been placed there explicitly by us).
+     *
+     * Consider iterating over a doubly-linked list of a Phyre object that has a PSimpleDoubleListElement<T> field.
+     * If you 'materialize' the object by `out T` then attempt to construct an iterator for said field, the head pointer
+     * will be to whatever storage C# gave the materialized object, and iteration will crash the process; as the
+     * head pointer is used to identify the end of the list, you will quickly begin reading garbage from managed memory.
+     */
+
     public bool next(out T* item) {
         item = default;
 
@@ -431,20 +441,6 @@ internal unsafe struct FhPDoubleListIterator<T>(PSimpleDoubleListElement<T>* hea
             return false;
 
         item = FhPDoubleListIterator<T>.abi_fixup(_m_current);
-        _m_current = forward
-            ? ((PSimpleDoubleListElement<T>*)_m_current)->next(_m_head)
-            : ((PSimpleDoubleListElement<T>*)_m_current)->prev(_m_head);
-
-        return true;
-    }
-
-    public bool next(out T item) {
-        item = default;
-
-        if (_m_current == null)
-            return false;
-
-        item = *FhPDoubleListIterator<T>.abi_fixup(_m_current);
         _m_current = forward
             ? ((PSimpleDoubleListElement<T>*)_m_current)->next(_m_head)
             : ((PSimpleDoubleListElement<T>*)_m_current)->prev(_m_head);
