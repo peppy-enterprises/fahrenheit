@@ -18,8 +18,7 @@ namespace Fahrenheit.Runtime;
 /// <summary>
 ///     Implements the 'local state' mechanism of Fahrenheit.
 ///     <para/>
-///     Do not interface with this module directly. Instead, implement
-///     <see cref="FhModule.load_local_state(FileStream, FhLocalStateInfo)"/>
+///     In your module, implement <see cref="FhModule.load_local_state(FileStream, FhLocalStateInfo)"/>
 ///     and <see cref="FhModule.save_local_state(FileStream)"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]

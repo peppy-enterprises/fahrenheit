@@ -5,7 +5,7 @@ namespace Fahrenheit.Runtime;
 /// <summary>
 ///     Loads textures and other resources at runtime.
 ///     <para/>
-///     Do not interface with this module directly. Instead, call <see cref="FhApi.Resources"/>.
+///     In your module, call <see cref="FhApi.Resources"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader, IFhNativeGraphicsUser {

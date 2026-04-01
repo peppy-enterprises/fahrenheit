@@ -6,8 +6,6 @@ namespace Fahrenheit.Runtime;
 
 /// <summary>
 ///     Allows multiple sets of saves to exist.
-///     <para/>
-///     Do not interface with this module. It has no public API.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveManagerModule : FhModule {

@@ -59,7 +59,7 @@ internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport)
 /// <summary>
 ///     Provides the ability to use the ImGui GUI toolkit within the game.
 ///     <para/>
-///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_imgui"/>.
+///     In your module, implement <see cref="FhModule.render_imgui"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
