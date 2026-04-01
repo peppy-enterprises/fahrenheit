@@ -25,8 +25,6 @@ internal unsafe interface IFhNativeGraphicsUser {
 
 /// <summary>
 ///     Intercepts the game's initialization to obtain the appropriate native API handles.
-///     <para/>
-///     Do not interface with this module directly.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.

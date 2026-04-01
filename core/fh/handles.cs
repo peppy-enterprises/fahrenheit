@@ -167,8 +167,15 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
 
         FhInternal.Log.Info($"{hook_fptr.Method.Name}; 0x{addr_target:X8} -> 0x{addr_hook:X8}.");
 
-        if (FhPInvoke.MH_CreateHook(addr_target, addr_hook, &addr_original) != 0) throw new Exception("FH_E_NATIVE_HOOK_CREATE_FAILED");
-        if (FhPInvoke.MH_EnableHook(addr_target)                            != 0) throw new Exception("FH_E_NATIVE_HOOK_ENABLE_FAILED");
+        if (FhPInvoke.MH_CreateHook(addr_target, addr_hook, &addr_original) != 0) {
+            FhInternal.Log.Error($"MH_CreateHook() failed for {hook_fptr.Method.Name}");
+            return false;
+        }
+
+        if (FhPInvoke.MH_EnableHook(addr_target) != 0) {
+            FhInternal.Log.Error($"MH_EnableHook() failed for {hook_fptr.Method.Name}");
+            return false;
+        }
 
         orig_fptr = Marshal.GetDelegateForFunctionPointer<T>(addr_original);
         FhInternal.MethodAddressMap.set(fn_addr, addr_original);

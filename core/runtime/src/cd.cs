@@ -32,8 +32,6 @@ internal unsafe struct Cd {
 /// <summary>
 ///     Performs certain overrides on the game's 'CD' reading emulation
 ///     to allow for modified files to be properly loaded.
-///     <para/>
-///     Do not interface with this module. It has no public API.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhCdInterfaceModule : FhModule {

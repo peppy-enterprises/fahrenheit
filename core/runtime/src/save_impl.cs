@@ -24,8 +24,6 @@ internal enum FhSaveExtensionSystemState {
 
 /// <summary>
 ///     Implements Fahrenheit's extended save system.
-///     <para/>
-///     Do not interface with this module. It has no public API.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhSaveExtensionModule : FhModule {

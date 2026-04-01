@@ -1,17 +1,5 @@
 // SPDX-License-Identifier: MIT
 
-/* [fkelava 5/7/25 14:16]
- * Hexa bundles some definitions for D3D11 structures that we need to use when interfacing
- * with its API. They are defined this way because we prefer the TerraFX definitions in all other cases.
- */
-using HexaID3D11Device           = Hexa.NET.ImGui.Backends.D3D11.ID3D11Device;
-using HexaID3D11DeviceContext    = Hexa.NET.ImGui.Backends.D3D11.ID3D11DeviceContext;
-using HexaID3D11DeviceContextPtr = Hexa.NET.ImGui.Backends.D3D11.ID3D11DeviceContextPtr;
-using HexaID3D11DevicePtr        = Hexa.NET.ImGui.Backends.D3D11.ID3D11DevicePtr;
-
-using ImGuiImplD3D11             = Hexa.NET.ImGui.Backends.D3D11.ImGuiImplD3D11;
-using ImGuiImplWin32             = Hexa.NET.ImGui.Backends.Win32.ImGuiImplWin32;
-
 namespace Fahrenheit.Runtime;
 
 [UnmanagedFunctionPointer(CallingConvention.Winapi)]
@@ -71,7 +59,7 @@ internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport)
 /// <summary>
 ///     Provides the ability to use the ImGui GUI toolkit within the game.
 ///     <para/>
-///     Do not interface with this module directly. Instead, implement <see cref="FhModule.render_imgui"/>.
+///     In your module, implement <see cref="FhModule.render_imgui"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
