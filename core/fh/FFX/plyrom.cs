@@ -5,7 +5,7 @@ public enum PlyGender {
     NONE  = 0,
     MAN   = 1,
     WOMAN = 2,
-    AEON  = 3,
+    AEON  = 4,
 }
 
 /// <summary>
