@@ -68,8 +68,10 @@ namespace {
         size_t buffer_size = sizeof(buffer) / sizeof(char_t);
 
         int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
-        if (rc != 0)
+        if (rc != 0) {
+            std::wcerr << "get_hostfxr_path() failed, error code: " << rc << std::endl;
             return false;
+        }
 
         // Load hostfxr and get desired exports
         void* lib         = load_library(buffer);
@@ -86,13 +88,17 @@ static int DetourMain(void) {
     // STEP 1:
     // Attach to the Stage0 console and forward stdout/stderr to it.
     //
-    AttachConsole(ATTACH_PARENT_PROCESS);
+    if (!AttachConsole(ATTACH_PARENT_PROCESS)) {
+        std::wcerr << "Failed to attach to the Stage0 console." << std::endl;
+        exit(GetLastError());
+    }
 
     FILE* parent_stdout;
     FILE* parent_stderr;
 
     if (freopen_s(&parent_stdout, "CONOUT$", "w", stdout) != 0 ||
         freopen_s(&parent_stderr, "CONOUT$", "w", stderr) != 0) {
+        std::wcerr << "Failed to redirect standard output and error pipes to Stage0 console." << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -108,14 +114,14 @@ static int DetourMain(void) {
     auto size     = ::GetModuleFileName  (NULL, host_path_buf, sizeof(host_path_buf) / sizeof(char_t));
     auto cwd_size = ::GetCurrentDirectory(sizeof(cwd_path_buf) / sizeof(char_t), cwd_path_buf);
 
-    if (size == 0 || cwd_size == 0) {
-        std::wcout << "Cannot determine game directory.\n";
-        exit(EXIT_FAILURE);
+    if (size == 0) {
+        std::wcerr << "GetModuleFileName() failed." << std::endl;
+        exit(GetLastError());
     }
 
     if (cwd_size == 0) {
-        std::wcout << "Cannot determine working directory.\n";
-        exit(EXIT_FAILURE);
+        std::wcerr << "GetCurrentDirectory() failed." << std::endl;
+        exit(GetLastError());
     }
 
     string_t host_path = host_path_buf;
@@ -133,7 +139,7 @@ static int DetourMain(void) {
     auto host_dirsep_pos = host_path.find_last_of(DIR_SEPARATOR);
 
     if (host_dirsep_pos == string_t::npos) {
-        std::wcout << "Cannot normalize game directory path.\n";
+        std::wcerr << "The path to the target binary is invalid." << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -143,16 +149,17 @@ static int DetourMain(void) {
 
     //
     // STEP 4:
-    // Load HostFxr.
+    // Load HostFxr. This library will locate the .NET runtime for us.
     //
     if (!load_hostfxr()) {
-        std::cout << "load_hostfxr() failed\n";
+        std::wcerr << "hostfxr: failed to load" << std::endl;
+        std::wcerr << "Fahrenheit failed to load the .NET Runtime. Ensure it is installed as per the setup guide." << std::endl;
         exit(EXIT_FAILURE);
     }
 
     //
     // STEP 5:
-    // Initialize and start the .NET Core runtime.
+    // Initialize and start the .NET runtime.
     //
     void*          load_assembly_fptr        = nullptr;
     void*          get_function_pointer_fptr = nullptr;
@@ -160,9 +167,11 @@ static int DetourMain(void) {
 
     int rc = init_fptr(clrhost_config_path.c_str(), nullptr, &cxt);
     if (rc != 0 || cxt == nullptr) {
-        std::wcerr << "Init failed: " << std::hex << std::showbase << rc << std::endl;
+        std::wcerr << "hostfxr: initialize_for_runtime_config() failed" << std::endl;
+        std::wcerr << "This is an uncommon error. Please contact the Fahrenheit developers at https://github.com/fahrenheit-crew/fahrenheit." << std::endl;
+
         close_fptr(cxt);
-        exit(EXIT_FAILURE);
+        exit(rc);
     }
 
     //
@@ -174,26 +183,27 @@ static int DetourMain(void) {
         hdt_load_assembly,
         &load_assembly_fptr);
 
-    if (rc != 0 || load_assembly_fptr == nullptr)
-        std::wcerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
+    if (rc != 0 || load_assembly_fptr == nullptr) {
+        std::wcerr << "hostfxr: failed to obtain fnptr (hdt_load_assembly)" << std::endl;
+        std::wcerr << "This is an uncommon error. Please contact the Fahrenheit developers at https://github.com/fahrenheit-crew/fahrenheit." << std::endl;
+        exit(rc);
+    }
 
     rc = get_delegate_fptr(
         cxt,
         hdt_get_function_pointer,
         &get_function_pointer_fptr);
 
-    if (rc != 0 || get_function_pointer_fptr == nullptr)
-        std::wcerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
+    if (rc != 0 || get_function_pointer_fptr == nullptr) {
+        std::wcerr << "hostfxr: failed to obtain fnptr (hdt_get_function_pointer)"  << std::endl;
+        std::wcerr << "This is an uncommon error. Please contact the Fahrenheit developers at https://github.com/fahrenheit-crew/fahrenheit." << std::endl;
+        exit(rc);
+    }
 
     close_fptr(cxt);
 
     load_assembly_fn        load_assembly        = (load_assembly_fn)       load_assembly_fptr;
     get_function_pointer_fn get_function_pointer = (get_function_pointer_fn)get_function_pointer_fptr;
-
-    if (load_assembly == nullptr) {
-        std::wcout << "get_dotnet_load_assembly() failed\n";
-        exit(EXIT_FAILURE);
-    }
 
     //
     // STEP 7:
@@ -207,8 +217,9 @@ static int DetourMain(void) {
         nullptr);
 
     if (rc != 0) {
-        std::wcout << "Failed to load managed assembly.\n";
-        exit(EXIT_FAILURE);
+        std::wcerr << "hostfxr: load_assembly() failed" << std::endl;
+        std::wcerr << "Could not load the Fahrenheit DLL. It is in an unexpected place, or does not exist. Double-check your install." << std::endl;
+        exit(rc);
     }
 
     rc = get_function_pointer(
@@ -220,26 +231,32 @@ static int DetourMain(void) {
         (void**)&fh_init);
 
     if (rc != 0 || fh_init == nullptr) {
-        std::wcout << "Failed to get pointer to bootstrap function.\n";
-        exit(EXIT_FAILURE);
+        std::wcerr << "hostfxr: get_function_pointer() failed" << std::endl;
+        std::wcerr << "Failed to locate the Fahrenheit boot function. You made a change to the bootloader, but forgot to update Stage1." << std::endl;
+        exit(rc);
     }
+
+    //
+    // STEP 8:
+    // Boot Fahrenheit by invoking the boot function in `fh.dll`.
+    //
 
     // TRANSITION: NATIVE -> MANAGED
     fh_init();
     // TRANSITION: MANAGED -> NATIVE
 
     //
-    // STEP 8:
+    // STEP 9:
     // Change the working directory to the targeted executable's location,
     // now that we have finished initialization.
     //
-    int chrc = _wchdir(host_path.c_str());
-    if (chrc != 0) {
-        std::wcout << "_wchdir failed, rc:" << chrc << std::endl;
-        exit(EXIT_FAILURE);
+    rc = _wchdir(host_path.c_str());
+    if (rc != 0) {
+        std::wcerr << "Failed to switch to the game's working directory." << std::endl;
+        exit(rc);
     }
 
-    std::wcout << "Stage 1 Loader complete: execution will now resume.\n";
+    std::wcout << "Stage 1 Loader complete. The game is now executing." << std::endl;
     return pMainOriginal();
 }
 

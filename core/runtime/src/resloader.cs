@@ -1,26 +1,11 @@
 ﻿// SPDX-License-Identifier: MIT
 
-/* [fkelava 5/7/25 14:16]
- * Hexa bundles some definitions for D3D11 structures that we need to use when interfacing
- * with its API. They are defined this way because we prefer the TerraFX definitions in all other cases.
- */
-using DirectXTex        = Hexa.NET.DirectXTex.DirectXTex;
-using Hexa_DDSFlags     = Hexa.NET.DirectXTex.DDSFlags;
-using Hexa_Extensions   = Hexa.NET.DirectXTex.Extensions;
-using Hexa_HRESULT      = HexaGen.Runtime.HResult;
-using Hexa_ID3D11Device = Hexa.NET.DirectXTex.ID3D11Device;
-using Hexa_ID3D11SRV    = Hexa.NET.DirectXTex.ID3D11ShaderResourceView;
-using Hexa_ScratchImage = Hexa.NET.DirectXTex.ScratchImage;
-using Hexa_TexMetadata  = Hexa.NET.DirectXTex.TexMetadata;
-using Hexa_TGAFlags     = Hexa.NET.DirectXTex.TGAFlags;
-using Hexa_WICFlags     = Hexa.NET.DirectXTex.WICFlags;
-
 namespace Fahrenheit.Runtime;
 
 /// <summary>
 ///     Loads textures and other resources at runtime.
 ///     <para/>
-///     Do not interface with this module directly. Instead, call <see cref="FhApi.Resources"/>.
+///     In your module, call <see cref="FhApi.Resources"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader, IFhNativeGraphicsUser {

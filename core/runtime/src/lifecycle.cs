@@ -13,7 +13,7 @@ internal delegate void AtelExecInternal_00871d10();
 ///     Executes the lifecycle methods of <see cref="FhModule"/>.<br/>
 ///     Also renders the modlist on the main menu.
 ///     <para/>
-///     Do not interface with this module directly. Instead, override <see cref="FhModule.handle_input">.
+///     In your module, override <see cref="FhModule.handle_input">.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe class FhCoreModule : FhModule {

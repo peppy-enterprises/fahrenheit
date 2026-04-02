@@ -86,8 +86,14 @@ internal static class FhEnvironment {
         for (int i = 0; i < ModPaths.Length; i++) {
             using FileStream manifest_file = File.OpenRead(ModPaths[i].ManifestPath);
 
-            result[i] = JsonSerializer.Deserialize<FhManifest>(manifest_file, FhUtil.InternalJsonOpts)
-                ?? throw new Exception($"Failed to load manifest at {ModPaths[i].ManifestPath}");
+            try {
+                result[i] = JsonSerializer.Deserialize<FhManifest>(manifest_file, FhUtil.InternalJsonOpts)
+                    ?? throw new Exception($"Manifest at {ModPaths[i].ManifestPath} was empty or uninterpretable.");
+            }
+            catch {
+                FhInternal.Log.Error($"While attempting to read manifest at {ModPaths[i].ManifestPath}:");
+                throw;
+            }
         }
 
         return result;
@@ -158,7 +164,15 @@ internal sealed class FhLoader {
     ///     Performs DLL loading for a mod, returning the <see cref="FhModuleContext"/>s of the instantiated mods.
     /// </summary>
     internal IEnumerable<FhModuleContext> load_mod(FhManifest manifest) {
-        string        dll_path     = FhEnvironment.Finder.get_for_dll(manifest.Id);
+        string dll_path = FhEnvironment.Finder.get_for_dll(manifest.Id);
+
+        /* [fkelava 02/04/26 00:44]
+         * Fahrenheit supports file-only mods. Such mods contain no DLL, ergo there are no modules in their mod context.
+         */
+
+        if (!File.Exists(dll_path))
+            yield break;
+
         FhLoadContext load_context = new FhLoadContext(manifest.Id, dll_path);
         Assembly      assembly     = load_context.LoadFromAssemblyPath(dll_path);
 
@@ -179,8 +193,26 @@ internal sealed class FhLoader {
                 continue;
             }
 
-            FhModule      module       = Activator.CreateInstance(type) as FhModule ?? throw new Exception($"Constructor of module {type.FullName} threw or faulted.");
-            FhModulePaths module_paths = FhEnvironment.Finder.get_for_module(manifest.Id, module.ModuleType);
+            FhModule      module;
+            FhModulePaths module_paths;
+
+            try {
+                /* [fkelava 02/04/26 01:00]
+                 * https://learn.microsoft.com/en-us/dotnet/api/system.activator.createinstance?view=net-10.0#system-activator-createinstance(system-type)
+                 *
+                 * > Returns {...} a reference to the newly created object, or null for Nullable<T> instances.
+                 * > Nullable<T> represents a value type that can be assigned 'null'.
+                 *
+                 * FhModule is a class, thus value types cannot inherit from it, so the return value must be non-null.
+                 */
+
+                module       = (Activator.CreateInstance(type) as FhModule)!;
+                module_paths = FhEnvironment.Finder.get_for_module(manifest.Id, module.ModuleType);
+            }
+            catch {
+                FhInternal.Log.Error($"Constructor of module {type.FullName} threw or faulted.");
+                throw;
+            }
 
             yield return new FhModuleContext(module, module_paths);
         }
