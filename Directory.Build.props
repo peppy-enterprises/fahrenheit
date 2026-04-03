@@ -43,7 +43,7 @@
         
         <Company>https://github.com/fahrenheit-crew/fahrenheit</Company>
         <Copyright>Copyright © The Fahrenheit contributors</Copyright>
-        <Version>1.0.0-alpha08</Version>
+        <Version>1.0.0-alpha09</Version>
 	</PropertyGroup>
     
     <PropertyGroup>

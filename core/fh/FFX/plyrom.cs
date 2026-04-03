@@ -1,5 +1,13 @@
 namespace Fahrenheit.FFX;
 
+[Flags]
+public enum PlyGender {
+    NONE  = 0,
+    MAN   = 1,
+    WOMAN = 2,
+    AEON  = 4,
+}
+
 /// <summary>
 ///     As the name <c>PlyRom</c> (Player Read-Only Memory) indicates,<br/>
 ///     this struct contains a few constants player characters use.
@@ -14,6 +22,11 @@ public struct PlyRom {
     ///     The text displayed when scanning a character.
     /// </summary>
     public ExcelSimplifiableTextOffset scan_text;
+
+    /// <summary>
+    ///     The gender of the player: man, woman, or aeon.
+    /// </summary>
+    public PlyGender gender;
 
     /// <summary>
     ///     The cubic multiplier in the formula for the next level requirement.<br/>
@@ -53,5 +66,5 @@ public struct PlyRom {
     public byte doom_duration;
 
     // chr.ram.__0x199 is set to this
-    private byte __0x2B;
+    public byte __0x2B;
 }
