@@ -3,41 +3,35 @@
 *.o
 *.obj
 *.out
-token_example
-build/
-cmake-build-*/
+*.exe
+*.dll
+*.so
+*.a
+
+# Executable files
+portal_demo
 
 # Dependencies
-*.a
-*.so
-*.dylib
-*.dll
+build/
+dist/
+*.egg-info/
 
 # Logs and temp files
 *.log
 *.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
+
+# Coverage reports
+coverage/
+htmlcov/
+*.coverage
 
 # Environment
 .env
 .env.local
 *.env.*
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Coverage and testing
-coverage/
-htmlcov/
-.coverage
-*.gcda
-*.gcno
-
-# CMake
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
 ```
