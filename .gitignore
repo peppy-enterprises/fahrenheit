@@ -1,39 +1,43 @@
 ```
-# Build artifacts
+# Compiled and build artifacts
+*.o
 *.obj
-*.def
-*.ilk
-*.pdb
-*.exp
-*.lib
-*.dll
-*.so
-*.dylib
-*.a
+*.out
+token_example
+build/
+cmake-build-*/
 
 # Dependencies
-vcpkg_installed/
-.vcpkg-root
-*.cmake
+*.a
+*.so
+*.dylib
+*.dll
 
 # Logs and temp files
 *.log
 *.tmp
-*.swp
+
+# Environment
+.env
+.env.local
+*.env.*
 
 # Editors
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Coverage reports
+# Coverage and testing
 coverage/
 htmlcov/
-*.coverage
+.coverage
+*.gcda
+*.gcno
 
-# Distribution artifacts
-dist/
-build/
-target/
-bin/
-obj/
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
 ```
