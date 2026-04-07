@@ -1,0 +1,45 @@
+; Crystal Echoes High-Performance Rendering Module
+; Module Definition File
+
+LIBRARY "CrystalEchoes.Render.HighPerf"
+DESCRIPTION "Crystal Echoes High-Performance Rendering Module for 4K/8K and 60-120 FPS"
+EXPORTS
+    ; Core Rendering Functions
+    CE_Render_Initialize @1
+    CE_Render_Shutdown @2
+    CE_Render_IsInitialized @3
+    CE_Render_SetTargetResolution @4
+    CE_Render_SetUpscaleTechnology @5
+    CE_Render_SetTargetFrameRate @6
+    CE_Render_GetCurrentFPS @7
+    CE_Render_InstallHooks @8
+    CE_Render_RemoveHooks @9
+    
+    ; Frame Rate Unlocker Functions
+    CE_FR_Initialize @10
+    CE_FR_Shutdown @11
+    CE_FR_SetTargetFPS @12
+    CE_FR_GetCurrentFPS @13
+    CE_FR_SetVSync @14
+    CE_FR_IsActive @15
+    CE_FR_ApplyFrameLimit @16
+    
+    ; Texture Manager Functions
+    CE_Tex_Initialize @17
+    CE_Tex_Shutdown @18
+    CE_Tex_LoadTexture @19
+    CE_Tex_GetCachedTexture @20
+    CE_Tex_IsCached @21
+    CE_Tex_Remove @22
+    CE_Tex_ClearCache @23
+    CE_Tex_GetCacheSize @24
+    CE_Tex_GetCacheCount @25
+    CE_Tex_SetLODBias @26
+    
+    ; Upscaling Functions
+    CE_Upscale_Initialize @27
+    CE_Upscale_Shutdown @28
+    CE_Upscale_Execute @29
+    CE_Upscale_SetSharpening @30
+    CE_Upscale_GetActiveTech @31
+    CE_Upscale_IsActive @32

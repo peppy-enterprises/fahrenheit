@@ -6,15 +6,15 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <AssemblyName>fhmodmgr</AssemblyName>
-        <AssemblyTitle>Fahrenheit Mod Manager</AssemblyTitle>
-        <Product>Fahrenheit Mod Manager</Product>
+        <AssemblyName>fhatelier</AssemblyName>
+        <AssemblyTitle>CrystalEchoes ATEL Compiler</AssemblyTitle>
+        <Product>CrystalEchoes ATEL Compiler</Product>
     </PropertyGroup>
 
     <!-- PUBLISH SETTINGS -->
@@ -23,24 +23,21 @@
         <SelfContained>false</SelfContained>
     </PropertyGroup>
 
-    <!-- APPLICATION ASSETS -->
-    <PropertyGroup>
-        <ApplicationIcon>..\..\assets\fh_base_256.ico</ApplicationIcon>
-    </PropertyGroup>
-
     <!-- SHARED FILE LINKS -->
     <ItemGroup>
         <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
-    <!-- EXTERNAL PROJECT REFS -->
+    <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.18">
+        <ProjectReference Include="..\..\core\fh\CrystalEchoes.csproj">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </PackageReference>
-        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.6">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </PackageReference>
+        </ProjectReference>
+    </ItemGroup>
+
+    <!-- PACKAGE REFERENCES -->
+    <ItemGroup>
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta5.25306.1" />
     </ItemGroup>
 
 </Project>

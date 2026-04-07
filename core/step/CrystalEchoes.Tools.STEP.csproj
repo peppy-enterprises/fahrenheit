@@ -12,8 +12,8 @@
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
         <AssemblyName>fhstep</AssemblyName>
-        <AssemblyTitle>Fahrenheit Symbol Table Parser</AssemblyTitle>
-        <Product>Fahrenheit Symbol Table Parser</Product>
+        <AssemblyTitle>CrystalEchoes Symbol Table Parser</AssemblyTitle>
+        <Product>CrystalEchoes Symbol Table Parser</Product>
     </PropertyGroup>
 
     <!-- PUBLISH SETTINGS -->

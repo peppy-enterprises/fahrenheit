@@ -14,8 +14,8 @@
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
         <AssemblyName>fhtest</AssemblyName>
-        <AssemblyTitle>Fahrenheit Test Suite</AssemblyTitle>
-        <Product>Fahrenheit Test Suite</Product>
+        <AssemblyTitle>CrystalEchoes Test Suite</AssemblyTitle>
+        <Product>CrystalEchoes Test Suite</Product>
     </PropertyGroup>
 
     <!-- SDK REFERENCES -->
@@ -29,7 +29,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\core\fh\Fahrenheit.csproj" />
+        <ProjectReference Include="..\core\fh\CrystalEchoes.csproj" />
     </ItemGroup>
 
     <!-- EXTERNAL PROJECT REFS -->

@@ -13,8 +13,8 @@
     <!-- ASSEMBLY IDENTIFICATION -->
     <PropertyGroup>
         <AssemblyName>fhruntime</AssemblyName>
-        <AssemblyTitle>Fahrenheit Runtime Library</AssemblyTitle>
-        <Product>Fahrenheit Runtime Library</Product>
+        <AssemblyTitle>CrystalEchoes Runtime Library</AssemblyTitle>
+        <Product>CrystalEchoes Runtime Library</Product>
     </PropertyGroup>
 
     <!-- SHARED FILE LINKS -->
@@ -24,7 +24,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\..\core\fh\Fahrenheit.csproj">
+        <ProjectReference Include="..\..\core\fh\CrystalEchoes.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime;native</ExcludeAssets>
         </ProjectReference>

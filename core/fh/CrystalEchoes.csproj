@@ -6,8 +6,8 @@
 
     <!-- NUGET PACKAGE PROPERTIES -->
     <PropertyGroup>
-        <PackageId>Fahrenheit</PackageId>
-        <Authors>The Fahrenheit contributors</Authors>
+        <PackageId>CrystalEchoes</PackageId>
+        <Authors>The CrystalEchoes contributors</Authors>
         <Description>The mod framework for the Final Fantasy X/X-2 HD Remasters.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageIcon>fh_base_256.png</PackageIcon>
@@ -41,8 +41,8 @@
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
         <AssemblyName>fh</AssemblyName>
-        <AssemblyTitle>Fahrenheit Mod Framework</AssemblyTitle>
-        <Product>Fahrenheit Mod Framework</Product>
+        <AssemblyTitle>CrystalEchoes Mod Framework</AssemblyTitle>
+        <Product>CrystalEchoes Mod Framework</Product>
     </PropertyGroup>
 
     <!-- SHARED FILE LINKS -->

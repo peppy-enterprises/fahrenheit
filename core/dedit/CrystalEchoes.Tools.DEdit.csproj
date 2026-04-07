@@ -13,8 +13,8 @@
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
         <AssemblyName>fhdedit</AssemblyName>
-        <AssemblyTitle>Fahrenheit Dialogue Editor</AssemblyTitle>
-        <Product>Fahrenheit Dialogue Editor</Product>
+        <AssemblyTitle>CrystalEchoes Dialogue Editor</AssemblyTitle>
+        <Product>CrystalEchoes Dialogue Editor</Product>
     </PropertyGroup>
 
     <!-- PUBLISH SETTINGS -->
@@ -30,7 +30,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\..\core\fh\Fahrenheit.csproj">
+        <ProjectReference Include="..\..\core\fh\CrystalEchoes.csproj">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
     </ItemGroup>

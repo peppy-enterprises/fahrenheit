@@ -1,0 +1,49 @@
+{
+  "name": "crystal-echoes-render-highperf",
+  "version": "1.0.0",
+  "description": "Crystal Echoes High-Performance Rendering Module dependencies",
+  "dependencies": {
+    "microsoft.detours": {
+      "version": "4.0.1"
+    },
+    "directx12": {
+      "version": "1.611.1"
+    },
+    "vulkan": {
+      "version": "1.3.275.0"
+    },
+    "amd-fsr": {
+      "version": "2.2.1",
+      "platform": "!windows & !arm64"
+    }
+  },
+  "overrides": [
+    {
+      "name": "microsoft.detours",
+      "version": "4.0.1#5"
+    }
+  ],
+  "features": {
+    "dlss": {
+      "description": "Enable NVIDIA DLSS support",
+      "dependencies": [
+        "nvngx-dlss"
+      ]
+    },
+    "xess": {
+      "description": "Enable Intel XeSS support",
+      "dependencies": [
+        "intel-xess"
+      ]
+    },
+    "all": {
+      "description": "Enable all upscaling technologies",
+      "dependencies": [
+        {
+          "name": "amd-fsr",
+          "features": ["fsr2"]
+        }
+      ]
+    }
+  }
+}

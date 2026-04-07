@@ -12,9 +12,9 @@
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <AssemblyName>fheedit</AssemblyName>
-        <AssemblyTitle>Fahrenheit Excel File Editor</AssemblyTitle>
-        <Product>Fahrenheit Excel File Editor</Product>
+        <AssemblyName>fhmodmgr</AssemblyName>
+        <AssemblyTitle>CrystalEchoes Mod Manager</AssemblyTitle>
+        <Product>CrystalEchoes Mod Manager</Product>
     </PropertyGroup>
 
     <!-- PUBLISH SETTINGS -->
@@ -23,21 +23,24 @@
         <SelfContained>false</SelfContained>
     </PropertyGroup>
 
+    <!-- APPLICATION ASSETS -->
+    <PropertyGroup>
+        <ApplicationIcon>..\..\assets\fh_base_256.ico</ApplicationIcon>
+    </PropertyGroup>
+
     <!-- SHARED FILE LINKS -->
     <ItemGroup>
         <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
-    <!-- PROJECT REFERENCES -->
+    <!-- EXTERNAL PROJECT REFS -->
     <ItemGroup>
-        <ProjectReference Include="..\..\core\fh\Fahrenheit.csproj">
+        <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.18">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        </ProjectReference>
-    </ItemGroup>
-
-    <!-- PACKAGE REFERENCES -->
-    <ItemGroup>
-        <PackageReference Include="NativeFileDialogCore" Version="1.0.3" />
+        </PackageReference>
+        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.6">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

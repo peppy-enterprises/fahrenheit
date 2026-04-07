@@ -1,0 +1,34 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="README.md" />
+    <File Path="THIRD-PARTY-NOTICES" />
+  </Folder>
+  <Project Path="core/atelier/CrystalEchoes.Tools.Atelier.csproj" />
+  <Project Path="core/dedit/CrystalEchoes.Tools.DEdit.csproj" />
+  <Project Path="core/eedit/CrystalEchoes.Tools.EEdit.csproj" />
+  <Project Path="core/fh/CrystalEchoes.csproj" />
+  <Project Path="core/modmgr/CrystalEchoes.Tools.ModManager.csproj" />
+  <Project Path="core/runtime/CrystalEchoes.Runtime.csproj" />
+  <Project Path="core/sdk/CrystalEchoes.Sdk.csproj" />
+  <Project Path="core/stage0/CrystalEchoes.Loader.Stage0.vcxproj" >
+    <Platform Solution="*|Any CPU" Project="Win32" />
+    <Platform Solution="*|ARM64" Project="x64" />
+  </Project>
+  <Project Path="core/stage1/CrystalEchoes.Loader.Stage1.vcxproj" >
+    <Platform Solution="*|Any CPU" Project="Win32" />
+    <Platform Solution="*|ARM64" Project="x64" />
+  </Project>
+  <Project Path="core/render/CrystalEchoes.Render.HighPerf/CrystalEchoes.Render.HighPerf.vcxproj" >
+    <Platform Solution="*|Any CPU" Project="x64" />
+    <Platform Solution="*|ARM64" Project="x64" />
+  </Project>
+  <Project Path="core/step/CrystalEchoes.Tools.STEP.csproj" />
+  <Project Path="test/CrystalEchoes.Tests.csproj" />
+</Solution>
