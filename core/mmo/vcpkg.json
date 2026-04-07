@@ -1,0 +1,31 @@
+{
+  "name": "CrystalEchoes.MMO",
+  "version": "1.0.0",
+  "description": "MMORPG module for Crystal Echoes with networking, marketplace, and world management",
+  "dependencies": {
+    "openssl": {
+      "version": "3.1.4",
+      "features": ["ssl", "crypto"]
+    },
+    "curl": {
+      "version": "8.5.0",
+      "features": ["ssl", "http2"]
+    },
+    "sqlite3": {
+      "version": "3.44.2"
+    },
+    "nlohmann-json": {
+      "version": "3.11.3"
+    },
+    "boost-asio": {
+      "version": "1.84.0"
+    }
+  },
+  "overrides": [
+    {
+      "name": "openssl",
+      "version": "3.1.4"
+    }
+  ],
+  "builtin-baseline": "latest"
+}

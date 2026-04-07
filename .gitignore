@@ -1,56 +1,39 @@
 ```
 # Build artifacts
-*.o
 *.obj
 *.def
-build/
-dist/
+*.ilk
+*.pdb
+*.exp
+*.lib
+*.dll
+*.so
+*.dylib
+*.a
 
 # Dependencies
 vcpkg_installed/
-.vcpkg/
-node_modules/
+.vcpkg-root
+*.cmake
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
 
-# Environment
-.env
-.env.local
-*.env.*
-
 # Editors
 .vscode/
 .idea/
 
-# Coverage
+# Coverage reports
 coverage/
 htmlcov/
-.coverage
+*.coverage
 
-# Compression
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
+# Distribution artifacts
+dist/
+build/
+target/
+bin/
+obj/
 ```
