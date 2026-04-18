@@ -24,7 +24,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\..\core\fh\Fahrenheit.csproj">
+        <ProjectReference Include="..\core\Fahrenheit.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime;native</ExcludeAssets>
         </ProjectReference>

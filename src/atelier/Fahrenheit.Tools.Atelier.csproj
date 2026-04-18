@@ -6,15 +6,15 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <!-- ASSEMBLY ADDITIONAL PROPERTIES -->
     <PropertyGroup>
-        <AssemblyName>fhdedit</AssemblyName>
-        <AssemblyTitle>Fahrenheit Dialogue Editor</AssemblyTitle>
-        <Product>Fahrenheit Dialogue Editor</Product>
+        <AssemblyName>fhatelier</AssemblyName>
+        <AssemblyTitle>Fahrenheit ATEL Compiler</AssemblyTitle>
+        <Product>Fahrenheit ATEL Compiler</Product>
     </PropertyGroup>
 
     <!-- PUBLISH SETTINGS -->
@@ -30,7 +30,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\..\core\fh\Fahrenheit.csproj">
+        <ProjectReference Include="..\core\Fahrenheit.csproj">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
     </ItemGroup>

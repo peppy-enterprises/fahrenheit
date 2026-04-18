@@ -30,7 +30,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\..\core\fh\Fahrenheit.csproj">
+        <ProjectReference Include="..\core\Fahrenheit.csproj">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </ProjectReference>
     </ItemGroup>

@@ -29,7 +29,7 @@
 
     <!-- PROJECT REFERENCES -->
     <ItemGroup>
-        <ProjectReference Include="..\core\fh\Fahrenheit.csproj" />
+        <ProjectReference Include="..\src\core\Fahrenheit.csproj" />
     </ItemGroup>
 
     <!-- EXTERNAL PROJECT REFS -->
