@@ -3,6 +3,10 @@
 # guidelines
 guidelines = 100
 
+# indentation style
+indent_style = space
+indent_size = 4
+
 # copyright notice
 file_header_template = SPDX-License-Identifier: MIT
 
