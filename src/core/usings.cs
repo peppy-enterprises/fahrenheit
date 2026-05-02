@@ -18,3 +18,5 @@ global using System.Text.Json.Serialization;
 global using System.Threading;                // Lock
 
 global using Fahrenheit.Events;
+
+global using TerraFX.Interop.DirectX;         // D3D types for Phyre interop

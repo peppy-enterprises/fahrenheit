@@ -65,22 +65,27 @@ internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport)
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
 
-    // WndProc support
-    private          HWND                         _hWnd;
-    private          nint                         _ptr_o_WndProc;
-    private          nint                         _ptr_h_WndProc;
-    private readonly WndProc                      _h_WndProc;
-    private readonly FhMethodHandle<PInputUpdate> _handle_pinput;
+    // Win32 internals
+    private          HWND    _hWnd;
+    private          nint    _ptr_o_WndProc;
+    private          nint    _ptr_h_WndProc;
+    private readonly WndProc _h_WndProc;
 
+    // D3D11 internals
     private IDXGISwapChain*         _ptr_swapchain;  // https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nn-dxgi-idxgiswapchain
     private ID3D11Device*           _ptr_device;     // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
     private ID3D11DeviceContext*    _ptr_device_ctx; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11devicecontext
     private ID3D11RenderTargetView* _ptr_rtv;        // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
 
-    private FhMethodHandle<DXGISwapChain_Present>?       _handle_present;
-    private FhMethodHandle<DXGISwapChain_ResizeBuffers>? _handle_resize_buffers;
+    private readonly FhMethodHandle<PInputUpdate>                 _handle_pinput;
+    private          FhMethodHandle<DXGISwapChain_Present>?       _handle_present;
+    private          FhMethodHandle<DXGISwapChain_ResizeBuffers>? _handle_resize_buffers;
 
+    // Interlocked var for RTV regen on WM_SIZE
     private int _rtv_generated;
+
+    // Signal that resources can be freed because the frame was rendered
+    private FhResourceLoaderModule? _rlm;
 
     public FhImguiModule() {
         FhMethodLocation loc_pinput = new(0x225930, 0x6B51E0);
@@ -90,10 +95,13 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _handle_pinput.hook();
+        FhModuleHandle<FhResourceLoaderModule> rlm_handle = new(this);
+
+        return rlm_handle.try_get_module(out _rlm)
+           && _handle_pinput.hook();
     }
 
-    unsafe void IFhNativeGraphicsUser.assign_devices(
+    void IFhNativeGraphicsUser.assign_devices(
         ID3D11Device*        ptr_device,
         ID3D11DeviceContext* ptr_device_context,
         IDXGISwapChain*      ptr_swapchain,
@@ -243,6 +251,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
 
         ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
 
+        _rlm!.release_pending_resources();
         return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
     }
 }

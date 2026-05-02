@@ -2,8 +2,6 @@
 
 using Hexa.NET.ImGui;
 
-using TerraFX.Interop.DirectX;
-
 namespace Fahrenheit;
 
 /// <summary>
@@ -70,14 +68,34 @@ internal interface IFhResourceLoader {
                                 FhTextureType file_type,
         [NotNullWhen(true)] out FhTexture?    texture);
 
-
     /// <summary>
-    ///     Loads a game texture with the specified <paramref name="file_path"/>
+    ///     Loads a Phyre 2D game texture with the specified <paramref name="file_path"/>
     ///     and returns, if successful, a <see cref="FhTexture"/>.
     /// </summary>
-    internal bool load_game_texture(
+    internal bool load_game_texture_2d(
                                 string     file_path,
         [NotNullWhen(true)] out FhTexture? texture);
+
+    /// <summary>
+    ///     Loads a Phyre 3D game texture with the specified <paramref name="file_path"/>
+    ///     and returns, if successful, a <see cref="FhTexture"/>.
+    /// </summary>
+    internal bool load_game_texture_3d(
+                                string     file_path,
+        [NotNullWhen(true)] out FhTexture? texture);
+
+    /// <summary>
+    ///     Loads a Phyre cubemap game texture with the specified <paramref name="file_path"/>
+    ///     and returns, if successful, a <see cref="FhTexture"/>.
+    /// </summary>
+    internal bool load_game_texture_cubemap(
+                                string     file_path,
+        [NotNullWhen(true)] out FhTexture? texture);
+
+    /// <summary>
+    ///     Releases a texture attained through any previous load call.
+    /// </summary>
+    internal bool release_texture(FhTexture texture);
 }
 
 /// <summary>
@@ -120,7 +138,7 @@ public sealed class FhResourceLoader {
     }
 
     /// <summary>
-    ///     Attempts to load a TGA-format image from disk.
+    ///     Attempts to load a JPEG-format image from disk.
     /// </summary>
     /// <param name="file_path">The absolute file path to the image on disk.</param>
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
@@ -131,7 +149,7 @@ public sealed class FhResourceLoader {
     }
 
     /// <summary>
-    ///     Attempts to load a TGA-format image from disk.
+    ///     Attempts to load a PNG-format image from disk.
     /// </summary>
     /// <param name="file_path">The absolute file path to the image on disk.</param>
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
@@ -142,13 +160,44 @@ public sealed class FhResourceLoader {
     }
 
     /// <summary>
-    ///     Attempts to load a game texture from memory.
+    ///     Attempts to load a 2D Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
     /// </summary>
-    /// <param name="file_path">The absolute file path to the image on disk.</param>
+    /// <param name="file_path">The relative file path to the image in the VBF.</param>
     /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_game_texture(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
+    public bool load_game_texture_2d(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture(file_path, out texture);
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_2d(file_path, out texture);
+    }
+
+    /// <summary>
+    ///     Attempts to load a 3D Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
+    /// </summary>
+    /// <param name="file_path">The relative file path to the image in the VBF.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
+    public bool load_game_texture_3d(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
+        texture = null;
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_3d(file_path, out texture);
+    }
+
+    /// <summary>
+    ///     Attempts to load a cubemap Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
+    /// </summary>
+    /// <param name="file_path">The relative file path to the image in the VBF.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
+    public bool load_game_texture_cubemap(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
+        texture = null;
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_cubemap(file_path, out texture);
+    }
+
+    /// <summary>
+    ///     Releases a texture attained through any previous load call.
+    ///     <para/>
+    ///     You may not call this method twice for the same texture, nor with an already otherwise released texture.
+    /// </summary>
+    public bool release_texture(FhTexture texture) {
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.release_texture(texture);
     }
 }
