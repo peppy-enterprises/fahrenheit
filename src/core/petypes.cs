@@ -317,14 +317,14 @@ internal unsafe readonly struct PSimpleDoubleListElement<T> where T : unmanaged 
     public readonly PSimpleDoubleListElement<T>* ptr_next;
     public readonly PSimpleDoubleListElement<T>* ptr_prev;
 
-    public readonly T* next(PSimpleDoubleListElement<T>* head) {
+    public readonly PSimpleDoubleListElement<T>* next(PSimpleDoubleListElement<T>* head) {
         if (ptr_next == head) return null;
-        return (T*)ptr_next;
+        return ptr_next;
     }
 
-    public readonly T* prev(PSimpleDoubleListElement<T>* head) {
+    public readonly PSimpleDoubleListElement<T>* prev(PSimpleDoubleListElement<T>* head) {
         if (ptr_prev == head) return null;
-        return (T*)ptr_prev;
+        return ptr_prev;
     }
 }
 

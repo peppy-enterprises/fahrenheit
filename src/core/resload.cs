@@ -141,7 +141,7 @@ public sealed class FhResourceLoader {
     ///     Attempts to load a JPEG-format image from disk.
     /// </summary>
     /// <param name="file_path">The absolute file path to the image on disk.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_jpeg_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
@@ -152,7 +152,7 @@ public sealed class FhResourceLoader {
     ///     Attempts to load a PNG-format image from disk.
     /// </summary>
     /// <param name="file_path">The absolute file path to the image on disk.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_png_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
@@ -163,7 +163,7 @@ public sealed class FhResourceLoader {
     ///     Attempts to load a 2D Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
     /// </summary>
     /// <param name="file_path">The relative file path to the image in the VBF.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_game_texture_2d(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
@@ -174,7 +174,7 @@ public sealed class FhResourceLoader {
     ///     Attempts to load a 3D Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
     /// </summary>
     /// <param name="file_path">The relative file path to the image in the VBF.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_game_texture_3d(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;
@@ -185,7 +185,7 @@ public sealed class FhResourceLoader {
     ///     Attempts to load a cubemap Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
     /// </summary>
     /// <param name="file_path">The relative file path to the image in the VBF.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
+    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
     public bool load_game_texture_cubemap(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
         texture = null;

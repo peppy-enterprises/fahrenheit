@@ -13,8 +13,8 @@ namespace Fahrenheit;
 ///     Allows iteration over a Phyre doubly-linked list of <typeparamref name="T"/>.
 /// </summary>
 internal unsafe ref struct FhPDoubleListIterator<T>(PSimpleDoubleListElement<T>* head, bool forward = true) where T : unmanaged {
-    private PSimpleDoubleListElement<T>* _m_head    = head;
-    private T*                           _m_current = forward ? head->next(head) : head->prev(head);
+    private readonly PSimpleDoubleListElement<T>* _m_head    = head;
+    private          PSimpleDoubleListElement<T>* _m_current = forward ? head->next(head) : head->prev(head);
 
     /* [fkelava 23/03/26 15:29]
      * Here we encounter an unfortunate C++ standard/implementation detail.
@@ -44,12 +44,13 @@ internal unsafe ref struct FhPDoubleListIterator<T>(PSimpleDoubleListElement<T>*
      * See also https://devblogs.microsoft.com/oldnewthing/20040209-00/?p=40713.
      */
 
-    private static T* abi_adjust_ptr(T* ptr_object) {
+    private static T* abi_adjust_ptr(PSimpleDoubleListElement<T>* ptr_object) {
         // Ugly because we cannot switch on the generic type parameter/System.Type properly.
-        if (typeof(T) == typeof(PClassDescriptor)) return (T*)((nint)ptr_object - sizeof(PType));
-        if (typeof(T) == typeof(PClassDataMember)) return (T*)((nint)ptr_object - sizeof(nint ));
-
-        return ptr_object;
+        return 0 switch {
+            _ when typeof(T) == typeof(PClassDescriptor) => (T*)((nint)ptr_object - sizeof(PType)),
+            _ when typeof(T) == typeof(PClassDataMember) => (T*)((nint)ptr_object - sizeof(nint )),
+            _                                            => (T*)ptr_object
+        };
     }
 
     /* [fkelava 02/04/26 01:30]
@@ -70,8 +71,8 @@ internal unsafe ref struct FhPDoubleListIterator<T>(PSimpleDoubleListElement<T>*
 
         item = FhPDoubleListIterator<T>.abi_adjust_ptr(_m_current);
         _m_current = forward
-            ? ((PSimpleDoubleListElement<T>*)_m_current)->next(_m_head)
-            : ((PSimpleDoubleListElement<T>*)_m_current)->prev(_m_head);
+            ? _m_current->next(_m_head)
+            : _m_current->prev(_m_head);
 
         return true;
     }

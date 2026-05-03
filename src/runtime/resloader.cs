@@ -311,9 +311,12 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
 
     /// <summary>
     ///     Flushes the queue of pending resource releases.
-    ///     <para/>
-    ///     ONLY INVOKE THIS METHOD ON THE PHYRE RENDER THREAD.
     /// </summary>
+    /// <remarks>
+    ///     It is only valid to call this method on the Phyre render thread, and only
+    ///     after draw data for the frame has been rendered. Failing to observe this
+    ///     will result in access violations at rendering time or exceptions at release time.
+    /// </remarks>
     internal void release_pending_resources() {
         lock (_release_lock) {
             foreach (FhTexture texture in _release_queue) {
