@@ -4,6 +4,9 @@ using static Fahrenheit.FFX.Globals.Battle;
 
 namespace Fahrenheit.Runtime.Battle;
 
+/// <summary>
+/// Fahrenheit module used to implement custom text in message cues.
+/// </summary>
 [FhLoad(FhGameId.FFX)]
 public unsafe class CustomMessageCueModule : FhModule {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
