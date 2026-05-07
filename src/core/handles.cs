@@ -167,13 +167,17 @@ public unsafe class FhMethodHandle<T> where T : Delegate {
 
         FhInternal.Log.Info($"{hook_fptr.Method.Name}; 0x{addr_target:X8} -> 0x{addr_hook:X8}.");
 
-        if (FhPInvoke.MH_CreateHook(addr_target, addr_hook, &addr_original) != 0) {
-            FhInternal.Log.Error($"MH_CreateHook() failed for {hook_fptr.Method.Name}");
+        FhPInvoke.MH_STATUS rv_create = FhPInvoke.MH_CreateHook(addr_target, addr_hook, &addr_original);
+
+        if (rv_create != FhPInvoke.MH_STATUS.MH_OK) {
+            FhInternal.Log.Error($"MH_CreateHook() failed for {hook_fptr.Method.Name} - {rv_create}");
             return false;
         }
 
-        if (FhPInvoke.MH_EnableHook(addr_target) != 0) {
-            FhInternal.Log.Error($"MH_EnableHook() failed for {hook_fptr.Method.Name}");
+        FhPInvoke.MH_STATUS rv_enable = FhPInvoke.MH_EnableHook(addr_target);
+
+        if (rv_enable != FhPInvoke.MH_STATUS.MH_OK) {
+            FhInternal.Log.Error($"MH_EnableHook() failed for {hook_fptr.Method.Name} - {rv_enable}");
             return false;
         }
 
