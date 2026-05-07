@@ -8,7 +8,7 @@ public enum MessageCueType : byte {
     PLY_NAME = 1,
 
     /// <summary>Displays the text "Preemptive strike!"</summary>
-    PRE_EMPTIVE = 2,
+    PREEMPTIVE = 2,
 
     /// <summary>Displays the text "Ambushed!"</summary>
     AMBUSH = 3,
@@ -23,7 +23,7 @@ public enum MessageCueType : byte {
     ///         <li>When <c>amount > 1</c>, displays "Stole {item_name} x{amount}!"</li>
     ///     </ul>
     /// </summary>
-    GET_ITEM = 4,
+    STEAL_ITEM = 4,
 
     /// <summary>
     ///     Displays text informing the player of the results of capturing.<br/>
@@ -40,7 +40,7 @@ public enum MessageCueType : byte {
     LEARN_COMMAND = 6,
 
     /// <summary>Display the text "{player_name} has learned Overdrive mode {limit_mode_name}!"</summary>
-    GET_LIMIT_TYPE = 7,
+    LEARN_LIMIT_TYPE = 7,
 
     /// <summary>
     ///     Displays text informing the player of the results of stealing gil.<br/>
@@ -51,7 +51,7 @@ public enum MessageCueType : byte {
     ///        <li>When <c>amount > 0</c>, displays "Stole {amount} gil!"</li>
     ///     </ul>
     /// </summary>
-    GET_MONEY = 8,
+    STEAL_MONEY = 8,
 
     /// <summary>Displays custom text.</summary>
 	FH_CUSTOM = 9,
