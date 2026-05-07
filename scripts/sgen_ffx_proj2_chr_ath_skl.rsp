@@ -1,10 +1,12 @@
-@../../../../../settings.rsp
-@../../../../../remap.rsp
+@sgen_settings.rsp
+@sgen_remap.rsp
+--headerFile
+sgen_ffx_proj2_chr_ath_skl.txt
 --file
-skl.ath
+../env/ffx_ps2/ffx/proj2/chr/ath/skl.ath
 --methodClassName
 SkeletonId
 --namespace
-Fahrenheit.Core.FFX.Ids
+Fahrenheit.FFX.Ids
 --output
-../../../../../../core/ffx/ids
+../src/core/ffx/ids
