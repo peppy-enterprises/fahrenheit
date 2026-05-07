@@ -10,52 +10,52 @@ namespace Fahrenheit.Runtime.Battle;
 [FhLoad(FhGameId.FFX)]
 public unsafe class CustomMessageCueModule : FhModule {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte MsMessageCueProcess();
-    public const nint __addr_MsMessageCueProcess = 0x39ce10;
+    private delegate byte MsMessageCueProcess();
+    private const nint __addr_MsMessageCueProcess = 0x39ce10;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TOBtlCloseSimpleHelpMes();
-    public const nint __addr_TOBtlCloseSimpleHelpMes = 0x490e60;
+    private delegate void TOBtlCloseSimpleHelpMes();
+    private const nint __addr_TOBtlCloseSimpleHelpMes = 0x490e60;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawStdChrNameMessageWindow(int chr_id, int text_id);
-    public const nint __addr_TOBtlDrawStdChrNameMessageWindow = 0x497170;
+    private delegate int TOBtlDrawStdChrNameMessageWindow(int chr_id, int text_id);
+    private const nint __addr_TOBtlDrawStdChrNameMessageWindow = 0x497170;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawFirstStrikePlayerMessageWindow();
-    public const nint __addr_TOBtlDrawFirstStrikePlayerMessageWindow = 0x493460;
+    private delegate int TOBtlDrawFirstStrikePlayerMessageWindow();
+    private const nint __addr_TOBtlDrawFirstStrikePlayerMessageWindow = 0x493460;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawFirstStrikeEnemyMessageWindow();
-    public const nint __addr_TOBtlDrawFirstStrikeEnemyMessageWindow = 0x493440;
+    private delegate int TOBtlDrawFirstStrikeEnemyMessageWindow();
+    private const nint __addr_TOBtlDrawFirstStrikeEnemyMessageWindow = 0x493440;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawGetItemMessageWindow(byte* item_name, int amount);
-    public const nint __addr_TOBtlDrawGetItemMessageWindow = 0x493480;
+    private delegate int TOBtlDrawGetItemMessageWindow(byte* item_name, int amount);
+    private const nint __addr_TOBtlDrawGetItemMessageWindow = 0x493480;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawCaptureMonsterMessageWindow(int mon_id, int text_id);
-    public const nint __addr_TOBtlDrawCaptureMonsterMessageWindow = 0x4927e0;
+    private delegate int TOBtlDrawCaptureMonsterMessageWindow(int mon_id, int text_id);
+    private const nint __addr_TOBtlDrawCaptureMonsterMessageWindow = 0x4927e0;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawLearningMessageWindow(int ply_id, int com_id);
-    public const nint __addr_TOBtlDrawLearningMessageWindow = 0x495290;
+    private delegate int TOBtlDrawLearningMessageWindow(int ply_id, int com_id);
+    private const nint __addr_TOBtlDrawLearningMessageWindow = 0x495290;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawGetLimitTypeMessageWindow(int ply_id, int limit_mode);
-    public const nint __addr_TOBtlDrawGetLimitTypeMessageWindow = 0x493560;
+    private delegate int TOBtlDrawGetLimitTypeMessageWindow(int ply_id, int limit_mode);
+    private const nint __addr_TOBtlDrawGetLimitTypeMessageWindow = 0x493560;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawGetMoneyMessageWindow(int amount);
-    public const nint __addr_TOBtlDrawGetMoneyMessageWindow = 0x4935d0;
+    private delegate int TOBtlDrawGetMoneyMessageWindow(int amount);
+    private const nint __addr_TOBtlDrawGetMoneyMessageWindow = 0x4935d0;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint MsRegSEplay(byte p1, int p2);
-    public const nint __addr_MsRegSEplay = 0x7a0120;
+    private delegate uint MsRegSEplay(byte p1, int p2);
+    private const nint __addr_MsRegSEplay = 0x7a0120;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int FUN_0089db10(int p1, byte* text);
-    public const nint __addr_FUN_0089db10 = 0x49db10;
+    private delegate int FUN_0089db10(int p1, byte* text);
+    private const nint __addr_FUN_0089db10 = 0x49db10;
 
     private FhMethodHandle<MsMessageCueProcess> _MsMessageCueProcess;
 
