@@ -172,7 +172,5 @@ public unsafe class CustomMessageCueModule : FhModule {
             btl->__0x2076 = bVar2;
             btl->__0x2077 = bVar3;
         }
-
-        return 0;
     }
 }
