@@ -58,7 +58,7 @@ public enum MessageCueType : byte {
 }
 
 /// <summary>A cue for the game to show a message at the top of the screen in battle.</summary>
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Sequential, Pack = 4)]
 public struct MessageCue {
 	/// <summary>The type of the message.</summary>
     public MessageCueType type;
