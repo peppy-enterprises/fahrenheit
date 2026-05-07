@@ -18,7 +18,7 @@ namespace Fahrenheit.Runtime;
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
-public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
+public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
     /* [fkelava 6/10/24 01:54]
      * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L93
@@ -92,7 +92,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
            && _handle_pinput.hook();
     }
 
-    void IFhNativeGraphicsUser.assign_devices(
+    void IFhPlatformUser.platform_bind(
         ID3D11Device*        ptr_device,
         ID3D11DeviceContext* ptr_device_context,
         IDXGISwapChain*      ptr_swapchain,

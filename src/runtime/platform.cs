@@ -5,8 +5,6 @@ namespace Fahrenheit.Runtime;
 /* [fkelava 11/02/26 04:19]
  * For various parts of Fahrenheit's API- such as overlay display and texture loading to name two- we require certain
  * platform-specific objects or runtime constants. In the case of FF X/X-2 HD on Steam, the 'platform' is Win32+D3D11.
- *
- * This module obtains D3D device pointers and the main window HWND the rest of the runtime requires to implement the API.
  */
 
 /* [fkelava 20/01/26 00:24]
@@ -18,12 +16,12 @@ namespace Fahrenheit.Runtime;
 /// <summary>
 ///     Implemented by modules that require raw handles to native windowing/graphics APIs.
 /// </summary>
-internal unsafe interface IFhNativeGraphicsUser {
+internal unsafe interface IFhPlatformUser {
     /// <summary>
     ///     Called when a valid <see cref="ID3D11Device"/>, <see cref="ID3D11DeviceContext"/>,
     ///     <see cref="IDXGISwapChain"/> and <see cref="HWND"/> are obtained.
     /// </summary>
-    internal void assign_devices(
+    internal void platform_bind(
         ID3D11Device*        ptr_device,         // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
         ID3D11DeviceContext* ptr_device_context, // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11devicecontext
         IDXGISwapChain*      ptr_swapchain,      // https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nn-dxgi-idxgiswapchain
@@ -31,11 +29,11 @@ internal unsafe interface IFhNativeGraphicsUser {
 }
 
 /// <summary>
-///     Intercepts the game's initialization to obtain the appropriate native API handles.
+///     Intercepts the game's initialization to obtain platform-specific handles and runtime constants.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
-public unsafe sealed class FhNativeGraphicsModule : FhModule {
+public unsafe sealed class FhPlatformBindingModule : FhModule {
 
     /* [fkelava 25/4/24 17:51]
      * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/um/d3d11/DirectX.cs#L25
@@ -71,9 +69,9 @@ public unsafe sealed class FhNativeGraphicsModule : FhModule {
      */
 
     private readonly FhMethodHandle<DirectX_D3D11CreateDeviceAndSwapChain> _h_d3d_init;
-    private readonly HashSet<IFhNativeGraphicsUser>                        _users;
+    private readonly HashSet<IFhPlatformUser>                              _users;
 
-    public FhNativeGraphicsModule() {
+    public FhPlatformBindingModule() {
         _users      = [];
         _h_d3d_init = new(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", h_init_d3d);
     }
@@ -148,8 +146,8 @@ public unsafe sealed class FhNativeGraphicsModule : FhModule {
          * https://github.com/Kaldaien/UnX/blob/master/UnX/window.cpp#L60
          */
 
-        foreach (IFhNativeGraphicsUser user in _users) {
-            user.assign_devices(
+        foreach (IFhPlatformUser user in _users) {
+            user.platform_bind(
                 *ppDevice,
                 *ppImmediateContext,
                 *ppSwapChain,

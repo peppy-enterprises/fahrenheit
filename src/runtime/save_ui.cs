@@ -2,12 +2,20 @@
 
 namespace Fahrenheit.Runtime;
 
-/* [fkelava 26/11/25 17:25]
- * This structure contains all the fields the game would show as part of the standard Iggy
- * save menu display. These inline arrays are in reality UTF-8 strings, since both Iggy
- * and ImGui accept them as input. The sizes are taken from the base game.
+/* [fkelava 07/05/26 17:39]
+ * Fahrenheit completely overrides the game's base save system to allow set functionality
+ * and lifting the limit of 200 saves per set. For performance reasons, this requires
+ * the game's base Flash-based Iggy UI to be bypassed. This module implements its ImGui replacement.
+ *
+ * Specifically, the actual save UI is implemented in ActionScript, which the game calls through to.
+ * This is extremely inefficient, and computationally scales almost quadratically with the number of saves;
+ * raising the set limit from 200 to 500 caused set listing times in excess of ~10s. It is almost certain
+ * that the limit of 200 was chosen because it was the largest number that still performed acceptably.
  */
 
+/// <summary>
+///     Contains the fields the game shows as part of its standard save game display.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct FhSaveDisplayData {
 
@@ -15,6 +23,9 @@ internal struct FhSaveDisplayData {
      * An array of these of size DEFAULT_SET_SIZE is allocated by the save UI module on boot.
      * These instances are continually reused. To prevent garbage from being displayed when a slot
      * occupied in the previous set becomes empty, the save manager module (un)sets 'valid'.
+     *
+     * These inline arrays are in reality UTF-8 strings, since both Iggy
+     * and ImGui accept them as input. The sizes are taken from the base game.
      */
 
     internal bool valid;
@@ -35,6 +46,9 @@ internal struct FhSaveDisplayData {
     public InlineArray64 <byte> lm_job;
 }
 
+/// <summary>
+///     Implements Fahrenheit's replacement save/load user interface.
+/// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
 
