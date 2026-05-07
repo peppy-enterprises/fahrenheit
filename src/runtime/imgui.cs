@@ -2,59 +2,14 @@
 
 namespace Fahrenheit.Runtime;
 
-[UnmanagedFunctionPointer(CallingConvention.Winapi)]
-internal delegate nint WndProc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
-
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal delegate nint graphicInitialize();
-
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal delegate int PInputUpdate();
-
-/* [fkelava 6/10/24 01:54]
- * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L93
+/* [fkelava 11/02/26 04:19]
+ * One of the essential features of any mod framework is the ability to display custom UI
+ * to the user. For this, we offer the Dear ImGui toolkit (https://github.com/ocornut/imgui),
+ * exposed through the Hexa.NET.ImGui bindings (https://github.com/HexaEngine/Hexa.NET.ImGui).
+ *
+ * On every frame presentation, a callback is invoked in every module that adds ImGui primitives
+ * to the draw list for the frame, and those additions are rendered over the game.
  */
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal unsafe delegate nint DXGISwapChain_Present(
-    IDXGISwapChain* pSwapChain,
-    uint            SyncInterval,
-    uint            Flags);
-
-/* [fkelava 25/4/24 17:51]
- * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L133
- */
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal unsafe delegate nint DXGISwapChain_ResizeBuffers(
-    IDXGISwapChain* pSwapChain,
-    uint            BufferCount,
-    uint            Width,
-    uint            Height,
-    DXGI_FORMAT     NewFormat,
-    uint            SwapChainFlags);
-
-/* [fkelava 25/4/24 17:51]
- * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/um/d3d11/DirectX.cs#L25
- */
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal unsafe delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
-    IDXGIAdapter*         pAdapter,
-    D3D_DRIVER_TYPE       DriverType,
-    HMODULE               Software,
-    uint                  Flags,
-    D3D_FEATURE_LEVEL*    pFeatureLevels,
-    uint                  FeatureLevels,
-    uint                  SDKVersion,
-    DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
-    IDXGISwapChain**      ppSwapChain,
-    ID3D11Device**        ppDevice,
-    D3D_FEATURE_LEVEL*    pFeatureLevel,
-    ID3D11DeviceContext** ppImmediateContext);
-
-/* [fkelava 16/2/26 15:28]
- * See below comments at `assign_devices` and `h_implw32_setwindowfocus`.
- */
-[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport);
 
 /// <summary>
 ///     Provides the ability to use the ImGui GUI toolkit within the game.
@@ -64,6 +19,42 @@ internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport)
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
+
+    /* [fkelava 6/10/24 01:54]
+     * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L93
+     */
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal delegate nint DXGISwapChain_Present(
+        IDXGISwapChain* pSwapChain,
+        uint            SyncInterval,
+        uint            Flags);
+
+    /* [fkelava 25/4/24 17:51]
+     * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L133
+     */
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal delegate nint DXGISwapChain_ResizeBuffers(
+        IDXGISwapChain* pSwapChain,
+        uint            BufferCount,
+        uint            Width,
+        uint            Height,
+        DXGI_FORMAT     NewFormat,
+        uint            SwapChainFlags);
+
+    /* [fkelava 16/2/26 15:28]
+     * See below comments at `assign_devices` and `h_implw32_setwindowfocus`.
+     */
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport);
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal delegate LRESULT WndProc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal delegate nint graphicInitialize();
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal delegate int PInputUpdate();
 
     // WndProc support
     private          HWND                         _hWnd;
@@ -177,7 +168,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
     ///     Allows ImGui to intercept window messages sent to the game, such as <see cref="WM.WM_KEYDOWN"/>,
     ///     enabling mouse and keyboard input to be directed to it.
     /// </summary>
-    private nint h_wndproc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam) {
+    [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
+    private LRESULT h_wndproc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam) {
         return ImGuiImplWin32.WndProcHandler(hWnd, msg, wParam, lParam) == 1
              ? 1
              : Windows.CallWindowProcW((delegate* unmanaged<HWND, uint, WPARAM, LPARAM, LRESULT>)_ptr_o_WndProc, hWnd, msg, wParam, lParam);
@@ -201,6 +193,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
     /// <summary>
     ///     Intercepts attempts to resize the game window to allow ImGui to continue drawing.
     /// </summary>
+    [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
     private nint h_resize_buffers(IDXGISwapChain* pSwapChain, uint BufferCount, uint Width, uint Height, DXGI_FORMAT NewFormat, uint SwapChainFlags) {
         if (_ptr_rtv != null) {
             _ptr_device_ctx->OMSetRenderTargets(0, null, null);
@@ -215,6 +208,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhNativeGraphicsUser {
     /// <summary>
     ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, uint)"/> call to display mods' user interfaces.
     /// </summary>
+    [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
     private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, uint Flags) {
         if (Interlocked.CompareExchange(ref _rtv_generated, 1, 0) == 0) {
             ID3D11Resource* ptr_backbuffer;

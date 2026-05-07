@@ -2,6 +2,13 @@
 
 namespace Fahrenheit.Runtime;
 
+/* [fkelava 11/02/26 04:19]
+ * For various parts of Fahrenheit's API- such as overlay display and texture loading to name two- we require certain
+ * platform-specific objects or runtime constants. In the case of FF X/X-2 HD on Steam, the 'platform' is Win32+D3D11.
+ *
+ * This module obtains D3D device pointers and the main window HWND the rest of the runtime requires to implement the API.
+ */
+
 /* [fkelava 20/01/26 00:24]
  * This interface is internal and thus meant to be implemented explicitly, not implicitly.
  * https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/interfaces#working-with-internal-interfaces
@@ -29,6 +36,24 @@ internal unsafe interface IFhNativeGraphicsUser {
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhNativeGraphicsModule : FhModule {
+
+    /* [fkelava 25/4/24 17:51]
+     * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/um/d3d11/DirectX.cs#L25
+     */
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    private delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
+        IDXGIAdapter*         pAdapter,
+        D3D_DRIVER_TYPE       DriverType,
+        HMODULE               Software,
+        uint                  Flags,
+        D3D_FEATURE_LEVEL*    pFeatureLevels,
+        uint                  FeatureLevels,
+        uint                  SDKVersion,
+        DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
+        IDXGISwapChain**      ppSwapChain,
+        ID3D11Device**        ppDevice,
+        D3D_FEATURE_LEVEL*    pFeatureLevel,
+        ID3D11DeviceContext** ppImmediateContext);
 
     /* [fkelava 14/02/26 20:12]
      * A number of ImGui overlays seem to use a dummy window on which a dummy swapchain, device and context are initialized.
@@ -68,6 +93,7 @@ public unsafe sealed class FhNativeGraphicsModule : FhModule {
     ///     Intercepts the game's D3D11 initialization to retrieve a handle to its
     ///     <see cref="ID3D11Device"/>, <see cref="ID3D11DeviceContext"/>, and <see cref="IDXGISwapChain"/>.
     /// </summary>
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private HRESULT h_init_d3d(
         IDXGIAdapter*         pAdapter,
         D3D_DRIVER_TYPE       DriverType,
