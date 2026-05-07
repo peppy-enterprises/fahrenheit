@@ -36,7 +36,7 @@ internal struct FhSaveDisplayData {
 }
 
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public unsafe sealed class FhSaveUiModule : FhModule {
+public sealed class FhSaveUiModule : FhModule {
 
     private readonly FhModuleHandle<FhSaveExtensionModule> _sem_handle;
     private          FhSaveExtensionModule?                _sem;

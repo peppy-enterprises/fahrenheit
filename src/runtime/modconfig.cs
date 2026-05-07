@@ -3,7 +3,7 @@
 namespace Fahrenheit.Runtime;
 
 [FhLoad(FhGameId.FFX | FhGameId.FFX2)]
-public unsafe sealed class FhModConfigModule : FhModule {
+public sealed class FhModConfigModule : FhModule {
     private FhModContext? _context;
     private FileStream?   _global_state;
 

@@ -2,10 +2,6 @@
 
 namespace Fahrenheit;
 
-/* [fkelava 6/6/23 21:29]
- * Vararg P/Invokes must be declared assembly-local due to https://github.com/dotnet/runtime/issues/87188.
- */
-
 /// <summary>
 ///     Contains non-game, i.e. OS or library native invocations used by Fahrenheit.
 /// </summary>

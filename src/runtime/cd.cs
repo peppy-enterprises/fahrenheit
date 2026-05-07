@@ -24,7 +24,7 @@ namespace Fahrenheit.Runtime;
  */
 
 [StructLayout(LayoutKind.Explicit, Size = 0x94)]
-internal unsafe struct Cd {
+internal struct Cd {
     [FieldOffset(0x20)] public int mdg_index;
     [FieldOffset(0x24)] public int module;
 }

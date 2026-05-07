@@ -109,7 +109,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// <summary>
     ///     Signals to both Fahrenheit and the game that the next save/load operation will be a save.
     /// </summary>
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ])]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_save() {
         _smm!.index_active_set();
         _state = FhSaveExtensionSystemState.SAVE;
@@ -119,7 +119,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// <summary>
     ///     Signals to both Fahrenheit and the game that the next save/load operation will be a load.
     /// </summary>
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ])]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_load() {
         _smm!.index_active_set();
         _state = FhSaveExtensionSystemState.LOAD;
@@ -130,7 +130,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     ///     Signals to both Fahrenheit and the game that the next save/load operation will be
     ///     an Al Bhed Compilation Sphere load. Only valid in FF-X.
     /// </summary>
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl )])]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl ) ] )]
     private void signal_enter_albd() {
         _smm!.index_active_set();
         _state = FhSaveExtensionSystemState.ALBD;
@@ -181,7 +181,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
      * we hook its parent function, TkMenuJumpToLoadedScene.
      */
 
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ])]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void impl_copy() {
         _handle_copy.orig_fptr();
         _lsm!.state_load_slot(_load_pending_slot);
@@ -192,7 +192,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// <summary>
     ///     Creates the autosave, the save game in the reserved slot 0.
     /// </summary>
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ])]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void impl_autosave(int size, byte* ptr) {
         _fnptr_SaveDataWriteCrc(ptr);
         _fnptr_SetUpDefaultSaveFolder();

@@ -22,7 +22,7 @@ namespace Fahrenheit.Runtime;
 ///     and <see cref="FhModule.save_local_state(FileStream)"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public unsafe sealed class FhLocalStateModule : FhModule {
+public sealed class FhLocalStateModule : FhModule {
 
     private readonly FhModuleHandle<FhSaveManagerModule> _handle_smm;
     private          FhSaveManagerModule?                _smm;

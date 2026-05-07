@@ -76,7 +76,7 @@ public abstract class FhModule {
 
     protected FhModule() {
         _module_type_name = GetType().FullName ?? throw new Exception("FH_E_MODULE_TYPE_UNIDENTIFIABLE");
-        _logger           = new FhLogger($"{FhUtil.get_timestamp_string()}_{_module_type_name}.log");
+        _logger           = new FhLogger($"{_module_type_name}.log");
     }
 
     internal string ModuleType {

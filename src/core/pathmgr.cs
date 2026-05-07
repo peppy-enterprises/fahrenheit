@@ -44,7 +44,7 @@ internal sealed class FhFinder {
 
         Binaries = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_bin));
         Mods     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_mods));
-        Logs     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_logs));
+        Logs     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_logs, FhUtil.get_timestamp_string()));
         State    = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_state));
         Saves    = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_saves));
     }

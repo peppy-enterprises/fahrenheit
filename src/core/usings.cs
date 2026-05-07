@@ -11,6 +11,7 @@ global using System.Reflection;               // Assembly
 global using System.Runtime.CompilerServices; // [InlineArray]
 global using System.Runtime.InteropServices;  // [DllImport], [LibraryImport], et al.
 global using System.Runtime.Loader;           // AssemblyLoadContext, AssemblyDependencyResolver
+global using System.Runtime.Versioning;       // [SupportedOSPlatform]
 global using System.Security.Cryptography;    // SHA-256 for state hashing
 global using System.Text;                     // Encoding
 global using System.Text.Json;                // For JSON (de)serialization, we use STJ.
@@ -18,3 +19,5 @@ global using System.Text.Json.Serialization;
 global using System.Threading;                // Lock
 
 global using Fahrenheit.Events;
+
+global using TerraFX.Interop.DirectX;         // D3D types for Phyre interop
