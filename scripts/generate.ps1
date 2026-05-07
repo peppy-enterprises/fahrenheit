@@ -6,8 +6,7 @@
 # ---
 
 function Generate() {
-  $generationDir = Join-Path -Path $RepoRoot -ChildPath "generation"
-  $generateRspFiles = Get-ChildItem -Path "$generationDir" -Recurse -Filter "generate*.rsp"
+  $generateRspFiles = Get-ChildItem -Path $PSScriptRoot -Recurse -Filter "sgen_f*.rsp"
 
   $generateRspFiles | ForEach-Object {
     Push-Location -Path $_.DirectoryName
@@ -17,7 +16,6 @@ function Generate() {
 }
 
 try {
-  $RepoRoot = Join-Path -Path $PSScriptRoot -ChildPath ".."
   Generate
 }
 catch {

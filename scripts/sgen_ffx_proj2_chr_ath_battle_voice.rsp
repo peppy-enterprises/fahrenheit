@@ -1,0 +1,16 @@
+@sgen_settings.rsp
+@sgen_remap.rsp
+--headerFile
+sgen_ffx_proj2_chr_ath_battle_voice.txt
+--file
+../env/ffx_ps2/ffx/proj2/chr/ath/battle/voice/voice_battle_ab.ath
+../env/ffx_ps2/ffx/proj2/chr/ath/battle/voice/voice_battle_btev.ath
+../env/ffx_ps2/ffx/proj2/chr/ath/battle/voice/voice_battle_iop.ath
+../env/ffx_ps2/ffx/proj2/chr/ath/battle/voice/voice_battle_sce.ath
+../env/ffx_ps2/ffx/proj2/chr/ath/battle/voice/voice_battle_tuto.ath
+--methodClassName
+BattleVoiceId
+--namespace
+Fahrenheit.FFX.Ids
+--output
+../src/core/ffx/ids
