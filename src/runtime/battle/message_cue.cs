@@ -154,15 +154,15 @@ public unsafe class CustomMessageCueModule : FhModule {
             }
 
             int draw_ret = cue.type switch {
-                MessageCueType.PLY_NAME        => _TOBtlDrawStdChrNameMessageWindow(cue.arg1, cue.arg2),
-                MessageCueType.PREEMPTIVE     => _TOBtlDrawFirstStrikePlayerMessageWindow(),
-                MessageCueType.AMBUSH          => _TOBtlDrawFirstStrikeEnemyMessageWindow(),
-                MessageCueType.STEAL_ITEM        => _TOBtlDrawGetItemMessageWindow((byte*)cue.arg1, cue.arg2),
-                MessageCueType.CAPTURE_MONSTER => _TOBtlDrawCaptureMonsterMessageWindow(cue.arg1, cue.arg2),
-                MessageCueType.LEARN_COMMAND   => _TOBtlDrawLearningMessageWindow(cue.arg1, cue.arg2),
-                MessageCueType.LEARN_LIMIT_TYPE  => _TOBtlDrawGetLimitTypeMessageWindow(cue.arg1, cue.arg2),
-                MessageCueType.STEAL_MONEY       => _TOBtlDrawGetMoneyMessageWindow(cue.arg1),
-                MessageCueType.FH_CUSTOM       => _draw_custom_message_window((byte*)cue.arg1),
+                MessageCueType.PLY_NAME         => _TOBtlDrawStdChrNameMessageWindow(cue.arg1, cue.arg2),
+                MessageCueType.PREEMPTIVE       => _TOBtlDrawFirstStrikePlayerMessageWindow(),
+                MessageCueType.AMBUSH           => _TOBtlDrawFirstStrikeEnemyMessageWindow(),
+                MessageCueType.STEAL_ITEM       => _TOBtlDrawGetItemMessageWindow((byte*)cue.arg1, cue.arg2),
+                MessageCueType.CAPTURE_MONSTER  => _TOBtlDrawCaptureMonsterMessageWindow(cue.arg1, cue.arg2),
+                MessageCueType.LEARN_COMMAND    => _TOBtlDrawLearningMessageWindow(cue.arg1, cue.arg2),
+                MessageCueType.LEARN_LIMIT_TYPE => _TOBtlDrawGetLimitTypeMessageWindow(cue.arg1, cue.arg2),
+                MessageCueType.STEAL_MONEY      => _TOBtlDrawGetMoneyMessageWindow(cue.arg1),
+                MessageCueType.FH_CUSTOM        => _draw_custom_message_window((byte*)cue.arg1),
                 _ => -1,
             };
 
