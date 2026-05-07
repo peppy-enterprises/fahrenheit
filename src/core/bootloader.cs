@@ -218,7 +218,7 @@ internal sealed class FhLoader {
         }
 
         FhInternal.Log.Info($"--- load context dump for {manifest.Id} ---");
-        FhInternal.Log.Info(string.Join(',', load_context.Assemblies));
+        FhInternal.Log.Info($"  {string.Join('\n', load_context.Assemblies)}");
         FhInternal.Log.Info($"---");
     }
 }
