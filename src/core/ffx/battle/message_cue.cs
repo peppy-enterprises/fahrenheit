@@ -5,12 +5,6 @@ namespace Fahrenheit.FFX.Battle;
 /// <summary>The type of the message cued for by a MessageCue.</summary>
 public enum MessageCueType : byte {
 	/// <summary>Displays a battle text formatted with a character name.</summary>
-	/// <param name="arg1">The id of the character whose name should be used. Must be within 0 and 20.</param>
-	/// <param name="arg2">The id of the <c>btl_txt.bin</c> text to be displayed.</param>
-	/// <example>
-	///	    This registers a cue for the message "Auron cannot be captured." to be displayed.
-	///	    <code>MsMessageCueRegist(MessageCueType.PLY_NAME, 2, 0x300C, 1, 1);</code>
-	/// </example>
     PLY_NAME = 1,
 
     /// <summary>Displays the text "Preemptive strike!"</summary>
@@ -77,17 +71,11 @@ public struct MessageCue {
 	///     The first argument for the message.<br/>
 	/// 	If this argument is not needed, it should be 0.
 	/// </summary>
-	/// <remarks>
-	///     Individual types in <see cref="MessageCueType"/> explain what arguments they require.
-	/// </remarks>
 	public int arg1;
 
 	/// <summary>
 	///     The second argument for the message.<br/>
     /// 	If this argument is not needed, it should be 0.
     /// </summary>
-    /// <remarks>
-    ///     Individual types in <see cref="MessageCueType"/> explain what arguments they require.
-    /// </remarks>
 	public int arg2;
 }
