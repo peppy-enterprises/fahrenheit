@@ -2,7 +2,6 @@
 
 namespace Fahrenheit.FFX.Battle;
 
-
 public unsafe class PosAreaSomethingHelper(nint pBase, PosAreaSomeInfo someInfo) {
     public Span<Vector4> something => new((Vector4*)(pBase + someInfo.offset_something), someInfo.count_something);
 
@@ -56,8 +55,6 @@ public unsafe class BtlAreasHelper(BtlArea* pBase) {
     }
     public Vector4* chunk_end => (Vector4*)((nint)pBase + areas[0].btlArea.offset_chunk_end);
 }
-
-
 
 [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x10)]
 public unsafe struct PosAreaSomeInfo {
@@ -136,6 +133,11 @@ public unsafe struct Btl {
     [InlineArray(32)]
     public struct ReadCueList {
         private ReadCue _data;
+    }
+
+    [InlineArray(4)]
+    public struct MessageCueList {
+        private MessageCue _data;
     }
 
     [InlineArray(14)]
@@ -231,6 +233,14 @@ public unsafe struct Btl {
     [FieldOffset(0x1FE4)] public fixed byte __0x1FE4[17];
 
     [FieldOffset(0x2008)] public       uint   last_com;
+
+    [FieldOffset(0x2040)] public int            __0x2040;
+    [FieldOffset(0x2044)] public MessageCueList message_cues;
+    [FieldOffset(0x2074)] public byte           message_cue_count;
+    [FieldOffset(0x2075)] public byte           __0x2075;
+    [FieldOffset(0x2076)] public byte           __0x2076;
+    [FieldOffset(0x2077)] public byte           __0x2077;
+
     [FieldOffset(0x210C)] public       byte   ambush_state;
 
     // In vanilla:
@@ -238,7 +248,7 @@ public unsafe struct Btl {
     // - save_data->tidus_limit_uses only increases if not 2.
     // - Cannot steal if 2?
     // - PlySave battle_count and enemies_defeated fields only increment if not 2.
-    [FieldOffset(0x2115)] public       byte   battle_type; 
+    [FieldOffset(0x2115)] public       byte   battle_type;
 
     [FieldOffset(0x2121)] public       byte   battle_end_type;
 }

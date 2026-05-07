@@ -1,0 +1,93 @@
+// SPDX-License-Identifier: MIT
+
+namespace Fahrenheit.FFX.Battle;
+
+/// <summary>The type of the message cued for by a MessageCue.</summary>
+public enum MessageCueType : byte {
+	/// <summary>Displays a battle text formatted with a character name.</summary>
+	/// <param name="arg1">The id of the character whose name should be used. Must be within 0 and 20.</param>
+	/// <param name="arg2">The id of the <c>btl_txt.bin</c> text to be displayed.</param>
+	/// <example>
+	///	    This registers a cue for the message "Auron cannot be captured." to be displayed.
+	///	    <code>MsMessageCueRegist(MessageCueType.PLY_NAME, 2, 0x300C, 1, 1);</code>
+	/// </example>
+    PLY_NAME = 1,
+
+    /// <summary>Displays the text "Preemptive strike!"</summary>
+    PRE_EMPTIVE = 2,
+
+    /// <summary>Displays the text "Ambushed!"</summary>
+    AMBUSH = 3,
+
+    /// <summary>
+    ///     Displays text informing the player of the results of stealing items.<br/>
+    ///     The specific text depends on the amount provided:
+    ///     <ul>
+    ///         <li>When <c>amount == -1</c>, displays "Couldn't steal anything."</li>
+    ///         <li>When <c>amount == 0</c>, displays "Nothing to steal."</li>
+    ///         <li>When <c>amount == 1</c>, displays "Stole {item_name}!"</li>
+    ///         <li>When <c>amount > 1</c>, displays "Stole {item_name} x{amount}!"</li>
+    ///     </ul>
+    /// </summary>
+    GET_ITEM = 4,
+
+    /// <summary>
+    ///     Displays text informing the player of the results of capturing.<br/>
+    ///	    The specific text depends on the text id provided:
+	///	    <ul>
+	///         <li>When <c>text_id == 0x300A</c>, displays "{monster_name} captured!"</li>
+	///         <li>When <c>text_id == 0x300B</c>, displays "{monster_name} capture limit already reached."</li>
+	///         <li>When <c>text_id == 0x300C</c>, displays "{monster_name} cannot be captured."</li>
+	///     </ul>
+    /// </summary>
+    CAPTURE_MONSTER = 5,
+
+    /// <summary>Displays the text "{player_name} has learned {command_name}!"</summary>
+    LEARN_COMMAND = 6,
+
+    /// <summary>Display the text "{player_name} has learned Overdrive mode {limit_mode_name}!"</summary>
+    GET_LIMIT_TYPE = 7,
+
+    /// <summary>
+    ///     Displays text informing the player of the results of stealing gil.<br/>
+    ///     The specific text depends on the amount provided:
+    ///     <ul>
+    ///        <li>When <c>amount == -1</c>, displays "Couldn't steal any gil!"</li>
+    ///        <li>When <c>amount == 0</c>, displays "Out of gil!"</li>
+    ///        <li>When <c>amount > 0</c>, displays "Stole {amount} gil!"</li>
+    ///     </ul>
+    /// </summary>
+    GET_MONEY = 8,
+
+    /// <summary>Displays custom text.</summary>
+	FH_CUSTOM = 9,
+}
+
+/// <summary>A cue for the game to show a message at the top of the screen in battle.</summary>
+[StructLayout(LayoutKind.Sequential)]
+public struct MessageCue {
+	/// <summary>The type of the message.</summary>
+    public MessageCueType type;
+
+    public byte __0x1;
+	public byte __0x2;
+	private byte __0x3;
+
+	/// <summary>
+	///     The first argument for the message.<br/>
+	/// 	If this argument is not needed, it should be 0.
+	/// </summary>
+	/// <remarks>
+	///     Individual types in <see cref="MessageCueType"/> explain what arguments they require.
+	/// </remarks>
+	public int arg1;
+
+	/// <summary>
+	///     The second argument for the message.<br/>
+    /// 	If this argument is not needed, it should be 0.
+    /// </summary>
+    /// <remarks>
+    ///     Individual types in <see cref="MessageCueType"/> explain what arguments they require.
+    /// </remarks>
+	public int arg2;
+}
