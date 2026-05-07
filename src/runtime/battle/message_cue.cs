@@ -163,7 +163,7 @@ public unsafe class CustomMessageCueModule : FhModule {
                 MessageCueType.LEARN_LIMIT_TYPE => _TOBtlDrawGetLimitTypeMessageWindow(cue.arg1, cue.arg2),
                 MessageCueType.STEAL_MONEY      => _TOBtlDrawGetMoneyMessageWindow(cue.arg1),
                 MessageCueType.FH_CUSTOM        => _draw_custom_message_window((byte*)cue.arg1),
-                _ => -1,
+                _                               => -1,
             };
 
             bVar2 = cue.__0x2;
