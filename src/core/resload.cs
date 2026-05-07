@@ -8,12 +8,13 @@ namespace Fahrenheit;
 ///     Indicates the type of texture the input to <see cref="IFhResourceLoader"/> should be interpreted as.
 /// </summary>
 public enum FhTextureType {
-    NULL = 0,
-    DDS  = 1,
-    TGA  = 2,
-    JPEG = 3,
-    PNG  = 4,
-    WIC  = 5
+    NULL  = 0,
+    DDS   = 1,
+    TGA   = 2,
+    JPEG  = 3,
+    PNG   = 4,
+    WIC   = 5,
+    PHYRE = 6  // Game texture
 }
 
 /* [fkelava 9/8/25 01:19]
@@ -36,11 +37,99 @@ public sealed record FhTextureMetadata(
     D3D11_RESOURCE_DIMENSION dimension);
 
 /// <summary>
-///     A handle to an image on disk that can be used in ImGui flows.
+///     A handle to an image on disk that can be passed to ImGui for rendering.
 /// </summary>
-public sealed record FhTexture(
-    ImTextureRef      TextureRef,
-    FhTextureMetadata Metadata);
+public sealed record FhTexture(string path, FhTextureType type) {
+    private ImTextureRef       _tex_ref;
+    private FhTextureMetadata? _tex_metadata;
+    private int                _tex_lock;
+    private int                _tex_loaded;
+
+    internal bool is_loaded() {
+        return Interlocked.CompareExchange(ref _tex_loaded, 0, 0) == 1;
+    }
+
+    /* [fkelava 05/05/26 22:22]
+     * For the end user's safety, no two actions may be performed simultaneously on a texture.
+     *
+     * Locking is purely co-operative (advisory?). The resource loader which operates it
+     * is actually responsible for enforcing mutual exclusion based on the lock state.
+     */
+
+    /// <summary>
+    ///     Attempts to lock the texture. If successful, operations on the texture
+    ///     may proceed- otherwise, they must immediately abort.
+    /// </summary>
+    internal bool try_lock() {
+        if (Interlocked.CompareExchange(ref _tex_lock, 1, 0) != 0) {
+            FhInternal.Log.Warning($"texture already locked - {path}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    ///     Unlocks the texture, enabling other operations on it to proceed.
+    /// </summary>
+    /// <remarks>
+    ///     Only valid if <see cref="try_lock"/> has succeeded.
+    ///     A spurious unlock will throw.
+    /// </remarks>
+    internal void unlock() {
+        if (Interlocked.CompareExchange(ref _tex_lock, 0, 1) != 1) {
+            throw new Exception($"unbalanced unlock call - {path}");
+        }
+    }
+
+    /// <summary>
+    ///     Writes platform-specific data and metadata into the texture,
+    ///     which can then be passed to ImGui for rendering.
+    /// </summary>
+    /// <remarks>
+    ///     Only valid if the texture is not already loaded.
+    ///     A spurious load will throw.
+    /// </remarks>
+    internal void load(ImTextureRef texture_ref, FhTextureMetadata texture_metadata) {
+        _tex_ref      = texture_ref;
+        _tex_metadata = texture_metadata;
+
+        if (Interlocked.Exchange(ref _tex_loaded, 1) != 0) throw new Exception($"unbalanced load call - {path}");
+    }
+
+    /// <summary>
+    ///     Releases platform-specific data and metadata from the texture,
+    ///     disabling its use in ImGui rendering.
+    /// </summary>
+    /// <remarks>
+    ///     Only valid if the texture is not already unloaded.
+    ///     A spurious unload will throw.
+    /// </remarks>
+    [SupportedOSPlatform("windows")]
+    internal unsafe void unload() {
+        /* [fkelava 01/05/26 18:51]
+         * Testing the return value is meaningless because it is not guaranteed to be precise.
+         *
+         * If you believe you're leaking textures, turn on the D3D debug layer instead.
+         */
+        ((ID3D11ShaderResourceView*)(void*)_tex_ref.GetTexID())->Release();
+
+        _tex_ref      = default;
+        _tex_metadata = default;
+
+        if (Interlocked.Exchange(ref _tex_loaded, 0) != 1) throw new Exception($"unbalanced unload call - {path}");
+    }
+
+    /// <summary>
+    ///     Obtains platform-specific data and metadata which can be passed to ImGui for rendering.
+    /// </summary>
+    public bool try_use([NotNullWhen(true)] out ImTextureRef texture_ref, [NotNullWhen(true)] out FhTextureMetadata? texture_metadata) {
+        texture_ref      = _tex_ref;
+        texture_metadata = _tex_metadata;
+
+        return is_loaded();
+    }
+}
 
 /* [fkelava 9/8/25 01:52]
  * The internal contract between Core and RT is abstracted here to allow us to arrange it
@@ -48,156 +137,85 @@ public sealed record FhTexture(
  */
 internal interface IFhResourceLoader {
     /// <summary>
-    ///     Loads a texture of type <paramref name="file_type"/> from a memory buffer
-    ///     of size <paramref name="size"/> at <paramref name="ptr"/> and returns, if
-    ///     successful, a <see cref="FhTexture"/>.
+    ///     Attempts to load the user-requested <paramref name="texture"/> from disk.
+    ///     If successful, it can be passed to ImGui for rendering.
     /// </summary>
-    internal bool load_texture_from_memory(
-                                nint          ptr,
-                                nuint         size,
-                                FhTextureType file_type,
-        [NotNullWhen(true)] out FhTexture?    texture);
+    internal bool load_texture_from_disk(FhTexture texture);
 
     /// <summary>
-    ///     Loads a texture of type <paramref name="file_type"/> from a
-    ///     file at <paramref name="file_path"/> and returns, if
-    ///     successful, a <see cref="FhTexture"/>.
+    ///     Attempts to load the user-requested Phyre 2D <paramref name="texture"/>.
+    ///     If successful, it can be passed to ImGui for rendering.
     /// </summary>
-    internal bool load_texture_from_disk(
-                                string        file_path,
-                                FhTextureType file_type,
-        [NotNullWhen(true)] out FhTexture?    texture);
+    internal bool load_game_texture_2d(FhTexture texture);
 
     /// <summary>
-    ///     Loads a Phyre 2D game texture with the specified <paramref name="file_path"/>
-    ///     and returns, if successful, a <see cref="FhTexture"/>.
+    ///     Attempts to load the user-requested Phyre 3D <paramref name="texture"/>.
+    ///     If successful, it can be passed to ImGui for rendering.
     /// </summary>
-    internal bool load_game_texture_2d(
-                                string     file_path,
-        [NotNullWhen(true)] out FhTexture? texture);
+    internal bool load_game_texture_3d(FhTexture texture);
 
     /// <summary>
-    ///     Loads a Phyre 3D game texture with the specified <paramref name="file_path"/>
-    ///     and returns, if successful, a <see cref="FhTexture"/>.
+    ///     Attempts to load the user-requested Phyre cubemap <paramref name="texture"/>.
+    ///     If successful, it can be passed to ImGui for rendering.
     /// </summary>
-    internal bool load_game_texture_3d(
-                                string     file_path,
-        [NotNullWhen(true)] out FhTexture? texture);
+    internal bool load_game_texture_cubemap(FhTexture texture);
 
     /// <summary>
-    ///     Loads a Phyre cubemap game texture with the specified <paramref name="file_path"/>
-    ///     and returns, if successful, a <see cref="FhTexture"/>.
+    ///     Unloads a texture attained through any previous load call.
     /// </summary>
-    internal bool load_game_texture_cubemap(
-                                string     file_path,
-        [NotNullWhen(true)] out FhTexture? texture);
-
-    /// <summary>
-    ///     Releases a texture attained through any previous load call.
-    /// </summary>
-    internal bool release_texture(FhTexture texture);
+    internal bool unload_texture(FhTexture texture);
 }
 
 /// <summary>
 ///     Allows for loading of resources such as images for use in ImGui code.
 /// </summary>
 public sealed class FhResourceLoader {
+
     internal readonly FhRuntimeHandle<IFhResourceLoader> loader = new(); // RT connects here.
 
     /// <summary>
-    ///     Attempts to load a DDS-format image from disk.
+    ///     Attempts to load the given <paramref name="texture"/> from disk.
     /// </summary>
-    /// <param name="file_path">The absolute file path to the image on disk.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_dds_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.DDS, out texture);
+    /// <remarks>
+    ///     Supported formats are JPEG, DDS, TGA, WIC, and PNG.
+    ///     The <paramref name="texture"/> must have the correct <see cref="FhTextureType"/> selected.
+    /// </remarks>
+    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
+    public bool load_texture_from_disk(FhTexture texture) {
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(texture);
     }
 
     /// <summary>
-    ///     Attempts to load a WIC-format image from disk.
+    ///     Attempts to load the given 2D Phyre game <paramref name="texture"/>.
     /// </summary>
-    /// <param name="file_path">The absolute file path to the image on disk.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_wic_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.WIC, out texture);
+    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
+    public bool load_game_texture_2d(FhTexture texture) {
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_2d(texture);
     }
 
     /// <summary>
-    ///     Attempts to load a TGA-format image from disk.
+    ///     Attempts to load the given 3D Phyre game <paramref name="texture"/>.
     /// </summary>
-    /// <param name="file_path">The absolute file path to the image on disk.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be used in ImGui flows.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_tga_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.TGA, out texture);
+    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
+    public bool load_game_texture_3d(FhTexture texture) {
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_3d(texture);
     }
 
     /// <summary>
-    ///     Attempts to load a JPEG-format image from disk.
+    ///     Attempts to load the given cubemap Phyre game <paramref name="texture"/>.
     /// </summary>
-    /// <param name="file_path">The absolute file path to the image on disk.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_jpeg_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.JPEG, out texture);
+    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
+    public bool load_game_texture_cubemap(FhTexture texture) {
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_cubemap(texture);
     }
 
     /// <summary>
-    ///     Attempts to load a PNG-format image from disk.
+    ///     Unloads a texture attained through any previous load call.
     /// </summary>
-    /// <param name="file_path">The absolute file path to the image on disk.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_png_from_disk(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(file_path, FhTextureType.PNG, out texture);
-    }
-
-    /// <summary>
-    ///     Attempts to load a 2D Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
-    /// </summary>
-    /// <param name="file_path">The relative file path to the image in the VBF.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_game_texture_2d(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_2d(file_path, out texture);
-    }
-
-    /// <summary>
-    ///     Attempts to load a 3D Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
-    /// </summary>
-    /// <param name="file_path">The relative file path to the image in the VBF.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_game_texture_3d(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_3d(file_path, out texture);
-    }
-
-    /// <summary>
-    ///     Attempts to load a cubemap Phyre game texture at the given <paramref name="file_path"/> in the game's archives.
-    /// </summary>
-    /// <param name="file_path">The relative file path to the image in the VBF.</param>
-    /// <param name="texture">A <see cref="FhTexture"/> that can be provided to ImGui for rendering.</param>
-    /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be used.</returns>
-    public bool load_game_texture_cubemap(string file_path, [NotNullWhen(true)] out FhTexture? texture) {
-        texture = null;
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_cubemap(file_path, out texture);
-    }
-
-    /// <summary>
-    ///     Releases a texture attained through any previous load call.
-    ///     <para/>
-    ///     You may not call this method twice for the same texture, nor with an already otherwise released texture.
-    /// </summary>
-    public bool release_texture(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.release_texture(texture);
+    /// <returns>
+    ///     <c>false</c> if the texture is locked or pending unload, otherwise <c>true</c>.
+    /// </returns>
+    public bool unload_texture(FhTexture texture) {
+        return loader.get_impl(out IFhResourceLoader? impl) && impl.unload_texture(texture);
     }
 }
