@@ -82,6 +82,7 @@ public unsafe class CustomMessageCueModule : FhModule {
         return 7;
     }
 
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ])]
     public byte _h_MsMessageCueProcess() {
         if (btl->__0x2076 > 0) {
             btl->__0x2076 -= 1;
