@@ -65,7 +65,6 @@ public struct MessageCue {
 
     public byte __0x1;
 	public byte __0x2;
-	private byte __0x3;
 
 	/// <summary>
 	///     The first argument for the message.<br/>
