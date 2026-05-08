@@ -416,6 +416,7 @@ env/**/*
 
 # Do not exclude script response files, but exclude script results.
 scripts/**/*
+!scripts/**/sgen*.txt
 !scripts/**/*.rsp
 !scripts/**/*.ps1
 
