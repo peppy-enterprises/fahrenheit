@@ -1,10 +1,12 @@
-@../../../../../../settings.rsp
-@../../../../../../remap.rsp
+@sgen_settings.rsp
+@sgen_remap.rsp
+--headerFile
+sgen_ffx2_master_jppc_battle_kernel_important.txt
 --file
-important.h
+../env/ffx_ps2/ffx2/master/jppc/battle/kernel/important.h
 --methodClassName
 ImportantId
 --namespace
-Fahrenheit.Core.FFX2
+Fahrenheit.FFX2
 --output
-../../../../../../../core/ffx2/
+../src/core/ffx2/

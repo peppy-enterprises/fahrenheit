@@ -3,6 +3,8 @@
 // ffx_ps2/ffx2/master/jppc/battle/kernel/a_ability.h
 // Switch release of FFX/X-2 HD
 
+using System.Runtime.CompilerServices;
+
 namespace Fahrenheit.FFX2;
 
 public partial struct AutoAbility
