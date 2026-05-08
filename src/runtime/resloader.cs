@@ -146,8 +146,9 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
             }
 
             /* [fkelava 08/05/26 23:41]
-             * TerraFX had a variant that returned HRESULT. For 'reasons' which I genuinely can't fathom, the only
-             * public overload CsWin32 gives is one that returns `void` but throws if the HRESULT is an error.
+             * https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-id3d11device-createshaderresourceview
+             * CreateShaderResourceView is meant to return HRESULT. However, the only public overload CsWin32 provides
+             * is one which returns `void` and throws if the HRESULT indicates error, necessitating this ugly workaround.
              */
 
             ID3D11ShaderResourceView* srv;
