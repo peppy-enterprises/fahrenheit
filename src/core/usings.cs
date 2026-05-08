@@ -20,4 +20,13 @@ global using System.Threading;                // Lock
 
 global using Fahrenheit.Events;
 
-global using TerraFX.Interop.DirectX;         // D3D types for Phyre interop
+// Win32/D3D11 typedefs
+global using Windows.Win32;
+global using Windows.Win32.Foundation;
+global using Windows.Win32.Storage.FileSystem;
+global using Windows.Win32.Graphics.Direct3D11;
+global using Windows.Win32.Graphics.Direct3D;
+global using Windows.Win32.Graphics.Dxgi;
+global using Windows.Win32.Graphics.Dxgi.Common;
+global using Windows.Win32.Graphics.Gdi;
+global using Windows.Win32.UI.WindowsAndMessaging;

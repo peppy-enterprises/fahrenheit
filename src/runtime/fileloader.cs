@@ -26,7 +26,7 @@ namespace Fahrenheit.Runtime;
 ///     the full path is <c>{...}\efl\x\FFX_Data\ffx_ps2\ffx\master\jppc\battle\kernel\takara.bin</c>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-[SupportedOSPlatform("windows")]
+[SupportedOSPlatform("windows6.1")]
 public unsafe sealed class FhFileLoaderModule : FhModule {
 
     /// <summary>
@@ -142,18 +142,30 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
          */
 
         fixed (char* ptr_path_modded = path_modded) {
+            FILE_ACCESS_RIGHTS        access      = read_only
+                ? FILE_ACCESS_RIGHTS.FILE_READ_DATA
+                : FILE_ACCESS_RIGHTS.FILE_WRITE_DATA;
+            FILE_SHARE_MODE           sharing     = read_only
+                ? FILE_SHARE_MODE.FILE_SHARE_READ
+                : FILE_SHARE_MODE.FILE_SHARE_NONE;
+            FILE_CREATION_DISPOSITION disposition = read_only
+                ? FILE_CREATION_DISPOSITION.OPEN_EXISTING
+                : FILE_CREATION_DISPOSITION.OPEN_ALWAYS;
+
+            FILE_FLAGS_AND_ATTRIBUTES flags = FILE_FLAGS_AND_ATTRIBUTES.FILE_FLAG_SEQUENTIAL_SCAN;
+
             ptr_this->handle_vbf = 0;
-            ptr_this->handle_os  = Windows.CreateFileW(
+            ptr_this->handle_os  = PInvoke.CreateFileW(
                 ptr_path_modded,
-                (uint)(read_only ? FILE.FILE_READ_DATA  : FILE.FILE_WRITE_DATA),
-                (uint)(read_only ? FILE.FILE_SHARE_READ : 0),
+                (uint)access,
+                sharing,
                 null,
-                (uint)(read_only ? OPEN.OPEN_EXISTING   : OPEN.OPEN_ALWAYS),
-                FILE.FILE_FLAG_SEQUENTIAL_SCAN,
-                HANDLE.NULL);
+                disposition,
+                flags,
+                HANDLE.Null);
         }
 
-        if (ptr_this->handle_os == HANDLE.INVALID_VALUE) {
+        if (ptr_this->handle_os == HANDLE.INVALID_HANDLE_VALUE) {
             _logger.Error($"File open failed for {path_modded} - bailing out");
             return _handle_fctor.orig_fptr(ptr_this, ptr_path, read_only, p3, p4, p5);
         }

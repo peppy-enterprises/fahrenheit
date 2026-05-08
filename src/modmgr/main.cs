@@ -19,7 +19,7 @@ namespace Fahrenheit.Tools.ModManager;
  * To edit the mod manager UI, please open `ui.cs`.
  */
 
-[SupportedOSPlatform("windows")]
+[SupportedOSPlatform("windows6.1")]
 internal sealed unsafe class Program {
 
     // Win32

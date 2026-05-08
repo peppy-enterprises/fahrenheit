@@ -17,7 +17,7 @@ namespace Fahrenheit.Runtime;
 ///     In your module, implement <see cref="FhModule.render_imgui"/>.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-[SupportedOSPlatform("windows")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
+[SupportedOSPlatform("windows6.1")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
     /* [fkelava 6/10/24 01:54]
@@ -100,8 +100,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
         _hWnd          = hWnd;
         _ptr_h_WndProc = Marshal.GetFunctionPointerForDelegate(_h_WndProc);
-        _ptr_o_WndProc = Windows.GetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC);
-        _              = Windows.SetWindowLongPtrW(_hWnd, GWLP.GWLP_WNDPROC, _ptr_h_WndProc);
+        _ptr_o_WndProc = PInvoke.GetWindowLongW(_hWnd, WINDOW_LONG_PTR_INDEX.GWLP_WNDPROC);
+        _              = PInvoke.SetWindowLongW(_hWnd, WINDOW_LONG_PTR_INDEX.GWLP_WNDPROC, (int)_ptr_h_WndProc);
 
         _ptr_swapchain  = ptr_swapchain;
         _ptr_device     = ptr_device;
@@ -167,9 +167,9 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         if (viewport.PlatformHandleRaw == null)
             return;
 
-        Windows.SetWindowPos       ((HWND)viewport.PlatformHandleRaw, HWND.HWND_TOP, 0, 0, 0, 0, SWP.SWP_ASYNCWINDOWPOS | SWP.SWP_NOSIZE | SWP.SWP_NOMOVE);
-        Windows.SetForegroundWindow((HWND)viewport.PlatformHandleRaw);
-        Windows.SetFocus           ((HWND)viewport.PlatformHandleRaw);
+        PInvoke.SetWindowPos       ((HWND)viewport.PlatformHandleRaw, HWND.HWND_TOP, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_ASYNCWINDOWPOS | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
+        PInvoke.SetForegroundWindow((HWND)viewport.PlatformHandleRaw);
+        PInvoke.SetFocus           ((HWND)viewport.PlatformHandleRaw);
     }
 
     /// <summary>
@@ -179,8 +179,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
     private LRESULT h_wndproc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam) {
         return ImGuiImplWin32.WndProcHandler(hWnd, msg, wParam, lParam) == 1
-             ? 1
-             : Windows.CallWindowProcW((delegate* unmanaged<HWND, uint, WPARAM, LPARAM, LRESULT>)_ptr_o_WndProc, hWnd, msg, wParam, lParam);
+             ? new LRESULT(1)
+             : PInvoke.CallWindowProcW((delegate* unmanaged[Stdcall] <HWND, uint, WPARAM, LPARAM, LRESULT>)_ptr_o_WndProc, hWnd, msg, wParam, lParam);
     }
 
     /// <summary>
@@ -222,7 +222,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
             ID3D11Resource* ptr_backbuffer;
 
             fixed (ID3D11RenderTargetView** ppRTView = &_ptr_rtv) {
-                _ptr_swapchain->GetBuffer(0, Windows.__uuidof<ID3D11Texture2D>(), (void**)&ptr_backbuffer);
+            fixed (Guid*                    pIID     = &ID3D11Texture2D.IID_Guid)
+                _ptr_swapchain->GetBuffer(0, pIID, (void**)&ptr_backbuffer);
                 _ptr_device   ->CreateRenderTargetView(ptr_backbuffer, null, ppRTView);
                 ptr_backbuffer->Release();
             }

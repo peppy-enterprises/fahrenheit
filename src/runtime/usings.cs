@@ -1,6 +1,6 @@
 ﻿/* [fkelava 5/7/25 14:16]
  * Hexa bundles some definitions for D3D11 structures that we need to use when interfacing
- * with its API. They are defined this way because we prefer the TerraFX definitions in all other cases.
+ * with its API. They are defined this way because we prefer the CsWin32 definitions in all other cases.
  */
 global using HexaID3D11Device           = Hexa.NET.ImGui.Backends.D3D11.ID3D11Device;
 global using HexaID3D11DeviceContext    = Hexa.NET.ImGui.Backends.D3D11.ID3D11DeviceContext;
@@ -36,5 +36,13 @@ global using System.Threading;                // Interlocked, Lock, et al.
 
 global using Hexa.NET.ImGui;                  // ImGui is required to render large parts of the runtime UI.
 
-global using TerraFX.Interop.DirectX;         // D3D/DXGI bindings
-global using TerraFX.Interop.Windows;         // Win32 bindings
+// Win32/D3D11 typedefs
+global using Windows.Win32;
+global using Windows.Win32.Foundation;
+global using Windows.Win32.Storage.FileSystem;
+global using Windows.Win32.Graphics.Direct3D11;
+global using Windows.Win32.Graphics.Direct3D;
+global using Windows.Win32.Graphics.Dxgi;
+global using Windows.Win32.Graphics.Dxgi.Common;
+global using Windows.Win32.Graphics.Gdi;
+global using Windows.Win32.UI.WindowsAndMessaging;

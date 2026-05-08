@@ -23,8 +23,8 @@ internal class EEditEditorData {
     public FileStream? active_file;
 }
 
-[SupportedOSPlatform("windows")]
-internal static unsafe partial class UI {
+[SupportedOSPlatform("windows6.1")]
+internal static partial class UI {
 
     /// <summary>
     ///     Edits the static display data in response to keypresses.

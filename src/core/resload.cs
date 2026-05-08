@@ -105,7 +105,7 @@ public sealed record FhTexture(string path, FhTextureType type) {
     ///     Only valid if the texture is not already unloaded.
     ///     A spurious unload will throw.
     /// </remarks>
-    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("windows6.1")]
     internal unsafe void unload() {
         /* [fkelava 01/05/26 18:51]
          * Testing the return value is meaningless because it is not guaranteed to be precise.
