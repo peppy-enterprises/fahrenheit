@@ -3,7 +3,7 @@
 // ffx2/master/jppc/battle/kernel/accessory.h
 // Switch release of FFX/X-2 HD
 
-namespace Fahrenheit.FFX2;
+namespace Fahrenheit.FFX2.Ids;
 
 public static partial class AccessoryId
 {
