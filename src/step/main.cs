@@ -111,11 +111,7 @@ internal static class Program {
     /// <param name="data_label">The global declaration to be checked.</param>
     /// <returns>Whether the provided global declaration should be interpreted.</returns>
     private static bool _should_interpret(FhDataLabelDecl data_label) {
-        return data_label is {
-                   Source:    "User Defined",
-                   Namespace: "Global", // Exclude potentially proprietary symbols
-               } &&
-               !data_label.Name.Contains('+'); // ignore descriptively labeled but not authoritatively named globals
+        return !data_label.Name.Contains('+'); // ignore descriptively labeled but not authoritatively named globals
     }
 
     /// <summary>
