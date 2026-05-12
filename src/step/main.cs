@@ -93,14 +93,29 @@ internal static class Program {
     private static bool _should_interpret(FhFuncDecl function) {
         return function is {
                    Type:      "Function",
-                   Source:    "USER_DEFINED" or "IMPORTED",
                    Namespace: "Global", // Exclude potentially proprietary symbols
                } &&
                !function.Name.Contains("operator") && // ignore operator.new, operator.delete
-               !function.Name.Contains("Unwind@")  && // ignore Unwind@{ADDR} thunks
+               !function.Name.Contains('@')        && // ignore Unwind@{ADDR}, Catch_All@{ADDR} thunks
                !function.Signature.Contains('.')   && // ignore vararg functions
                !function.Signature.Contains(':')   && // ignore anything that even vaguely resembles a C++ namespace
-               !function.Signature.Contains('-');
+               !function.Signature.Contains('`')   && // ignore vector ctors/dtors
+               !function.Signature.Contains('<')   && // ignore template specializations
+               !function.Signature.Contains('-')   &&
+               !function.Signature.Contains('+');     // ignore descriptively labeled but not authoritatively named functions
+    }
+
+    /// <summary>
+    ///     Determines whether a specific global declaration provided by Ghidra should be interpreted.
+    /// </summary>
+    /// <param name="data_label">The global declaration to be checked.</param>
+    /// <returns>Whether the provided global declaration should be interpreted.</returns>
+    private static bool _should_interpret(FhDataLabelDecl data_label) {
+        return data_label is {
+                   Source:    "User Defined",
+                   Namespace: "Global", // Exclude potentially proprietary symbols
+               } &&
+               !data_label.Name.Contains('+'); // ignore descriptively labeled but not authoritatively named globals
     }
 
     /// <summary>
@@ -341,8 +356,13 @@ internal static class Program {
         }
 
         foreach (FhDataLabelDecl global in globals) {
-            //TODO: Add some kind of rejection mechanism to globals so we don't naively list proprietary things
-            //      Like `_should_interpret(FhDataLabelDecl)`
+            if (!_should_interpret(global)) {
+                sb.AppendLine($"    // Global skipped (deemed uninterpretable or explicitly rejected):");
+                sb.AppendLine($"    // {global.DataType} {global.Name} at {global.Location}");
+                sb.AppendLine();
+                continue;
+            }
+
             sb.AppendLine(_emit_global(global));
         }
 
