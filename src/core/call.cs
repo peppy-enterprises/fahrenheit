@@ -10,4 +10,6 @@
 
 namespace Fahrenheit;
 
-public static unsafe partial class FhCall { }
+public static unsafe partial class FhCall {
+
+}
