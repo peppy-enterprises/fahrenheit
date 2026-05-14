@@ -1,3 +1,4 @@
+using Fahrenheit.FFX;
 using Fahrenheit.FFX.Battle;
 
 using static Fahrenheit.FFX.Globals.Battle;
@@ -9,92 +10,44 @@ namespace Fahrenheit.Runtime.Battle;
 /// </summary>
 [FhLoad(FhGameId.FFX)]
 public unsafe class CustomMessageCueModule : FhModule {
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate byte MsMessageCueProcess();
-    private const nint __addr_MsMessageCueProcess = 0x39ce10;
+    private FhMethodHandle<FFX.FhCall.MsMessageCueProcess> _MsMessageCueProcess;
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate void TOBtlCloseSimpleHelpMes();
-    private const nint __addr_TOBtlCloseSimpleHelpMes = 0x490e60;
+    private FFX.FhCall.TOBtlCloseSimpleHelpMes _TOBtlCloseSimpleHelpMes =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlCloseSimpleHelpMes>(FFX.FhCall.__addr_TOBtlCloseSimpleHelpMes);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawStdChrNameMessageWindow(int chr_id, int text_id);
-    private const nint __addr_TOBtlDrawStdChrNameMessageWindow = 0x497170;
+    private FFX.FhCall.TOBtlDrawStdChrNameMessageWindow _TOBtlDrawStdChrNameMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawStdChrNameMessageWindow>(FFX.FhCall.__addr_TOBtlDrawStdChrNameMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawFirstStrikePlayerMessageWindow();
-    private const nint __addr_TOBtlDrawFirstStrikePlayerMessageWindow = 0x493460;
+    private FFX.FhCall.TOBtlDrawFirstStrikePlayerMessageWindow _TOBtlDrawFirstStrikePlayerMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawFirstStrikePlayerMessageWindow>(FFX.FhCall.__addr_TOBtlDrawFirstStrikePlayerMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawFirstStrikeEnemyMessageWindow();
-    private const nint __addr_TOBtlDrawFirstStrikeEnemyMessageWindow = 0x493440;
+    private FFX.FhCall.TOBtlDrawFirstStrikeEnemyMessageWindow _TOBtlDrawFirstStrikeEnemyMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawFirstStrikeEnemyMessageWindow>(FFX.FhCall.__addr_TOBtlDrawFirstStrikeEnemyMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawGetItemMessageWindow(byte* item_name, int amount);
-    private const nint __addr_TOBtlDrawGetItemMessageWindow = 0x493480;
+    private FFX.FhCall.TOBtlDrawGetItemMessageWindow _TOBtlDrawGetItemMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawGetItemMessageWindow>(FFX.FhCall.__addr_TOBtlDrawGetItemMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawCaptureMonsterMessageWindow(int mon_id, int text_id);
-    private const nint __addr_TOBtlDrawCaptureMonsterMessageWindow = 0x4927e0;
+    private FFX.FhCall.TOBtlDrawCaptureMonsterMessageWindow _TOBtlDrawCaptureMonsterMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawCaptureMonsterMessageWindow>(FFX.FhCall.__addr_TOBtlDrawCaptureMonsterMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawLearningMessageWindow(int ply_id, int com_id);
-    private const nint __addr_TOBtlDrawLearningMessageWindow = 0x495290;
+    private FFX.FhCall.TOBtlDrawLearningMessageWindow _TOBtlDrawLearningMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawLearningMessageWindow>(FFX.FhCall.__addr_TOBtlDrawLearningMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawGetLimitTypeMessageWindow(int ply_id, int limit_mode);
-    private const nint __addr_TOBtlDrawGetLimitTypeMessageWindow = 0x493560;
+    private FFX.FhCall.TOBtlDrawGetLimitTypeMessageWindow _TOBtlDrawGetLimitTypeMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawGetLimitTypeMessageWindow>(FFX.FhCall.__addr_TOBtlDrawGetLimitTypeMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int TOBtlDrawGetMoneyMessageWindow(int amount);
-    private const nint __addr_TOBtlDrawGetMoneyMessageWindow = 0x4935d0;
+    private FFX.FhCall.TOBtlDrawGetMoneyMessageWindow _TOBtlDrawGetMoneyMessageWindow =
+            FhUtil.get_fptr<FFX.FhCall.TOBtlDrawGetMoneyMessageWindow>(FFX.FhCall.__addr_TOBtlDrawGetMoneyMessageWindow);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate uint MsRegSEplay(byte p1, int p2);
-    private const nint __addr_MsRegSEplay = 0x7a0120;
+    private FFX.FhCall.MsRegSEplay _MsRegSEplay =
+            FhUtil.get_fptr<FFX.FhCall.MsRegSEplay>(FFX.FhCall.__addr_MsRegSEplay);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int FUN_0089db10(int p1, byte* text);
-    private const nint __addr_FUN_0089db10 = 0x49db10;
-
-    private FhMethodHandle<MsMessageCueProcess> _MsMessageCueProcess;
-
-    private TOBtlCloseSimpleHelpMes _TOBtlCloseSimpleHelpMes =
-            FhUtil.get_fptr<TOBtlCloseSimpleHelpMes>(__addr_TOBtlCloseSimpleHelpMes);
-
-    private TOBtlDrawStdChrNameMessageWindow _TOBtlDrawStdChrNameMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawStdChrNameMessageWindow>(__addr_TOBtlDrawStdChrNameMessageWindow);
-
-    private TOBtlDrawFirstStrikePlayerMessageWindow _TOBtlDrawFirstStrikePlayerMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawFirstStrikePlayerMessageWindow>(__addr_TOBtlDrawFirstStrikePlayerMessageWindow);
-
-    private TOBtlDrawFirstStrikeEnemyMessageWindow _TOBtlDrawFirstStrikeEnemyMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawFirstStrikeEnemyMessageWindow>(__addr_TOBtlDrawFirstStrikeEnemyMessageWindow);
-
-    private TOBtlDrawGetItemMessageWindow _TOBtlDrawGetItemMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawGetItemMessageWindow>(__addr_TOBtlDrawGetItemMessageWindow);
-
-    private TOBtlDrawCaptureMonsterMessageWindow _TOBtlDrawCaptureMonsterMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawCaptureMonsterMessageWindow>(__addr_TOBtlDrawCaptureMonsterMessageWindow);
-
-    private TOBtlDrawLearningMessageWindow _TOBtlDrawLearningMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawLearningMessageWindow>(__addr_TOBtlDrawLearningMessageWindow);
-
-    private TOBtlDrawGetLimitTypeMessageWindow _TOBtlDrawGetLimitTypeMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawGetLimitTypeMessageWindow>(__addr_TOBtlDrawGetLimitTypeMessageWindow);
-
-    private TOBtlDrawGetMoneyMessageWindow _TOBtlDrawGetMoneyMessageWindow =
-            FhUtil.get_fptr<TOBtlDrawGetMoneyMessageWindow>(__addr_TOBtlDrawGetMoneyMessageWindow);
-
-    private MsRegSEplay _MsRegSEplay =
-            FhUtil.get_fptr<MsRegSEplay>(__addr_MsRegSEplay);
-
-    private FUN_0089db10 _FUN_0089db10 =
-            FhUtil.get_fptr<FUN_0089db10>(__addr_FUN_0089db10);
+    private FFX.FhCall.FUN_0089db10 _FUN_0089db10 =
+            FhUtil.get_fptr<FFX.FhCall.FUN_0089db10>(FFX.FhCall.__addr_FUN_0089db10);
 
     public CustomMessageCueModule() {
         const string GAME = "FFX.exe";
-        _MsMessageCueProcess = new(this, GAME, __addr_MsMessageCueProcess, _h_MsMessageCueProcess);
+        _MsMessageCueProcess = new(this, GAME, FFX.FhCall.__addr_MsMessageCueProcess, _h_MsMessageCueProcess);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {

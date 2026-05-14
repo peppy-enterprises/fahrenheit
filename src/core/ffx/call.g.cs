@@ -89904,13 +89904,6 @@ public static unsafe partial class FhCall {
     public const nint __addr_FUN_0089c740 = 0x49C740;
 
     // Original after pruning:
-    // __cdecl int FUN_0089db10(int param_1, undefined4 param_2) at 0089db10
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate nint FUN_0089db10(nint param_1, nint param_2);
-    public const nint __addr_FUN_0089db10 = 0x49DB10;
-
-    // Original after pruning:
     // unknown undefined FUN_0089df10() at 0089df10
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -347111,13 +347104,6 @@ public static unsafe partial class FhCall {
     public const nint __addr_MsMessageCueInit = 0x39CDF0;
 
     // Original after pruning:
-    // unknown undefined MsMessageCueProcess() at 0079ce10
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsMessageCueProcess();
-    public const nint __addr_MsMessageCueProcess = 0x39CE10;
-
-    // Original after pruning:
     // __stdcall int MsMessageCueRegist(MessageCueType_1 type, int param_2, int param_3, byte param_4, byte param_5) at 0079cff0
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -347368,13 +347354,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsRegSEfade();
     public const nint __addr_MsRegSEfade = 0x3A00F0;
-
-    // Original after pruning:
-    // unknown undefined MsRegSEplay() at 007a0120
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsRegSEplay();
-    public const nint __addr_MsRegSEplay = 0x3A0120;
 
     // Original after pruning:
     // __stdcall undefined MsRegSEplay2(int param_1, undefined4 param_2) at 007a0160
@@ -353509,13 +353488,6 @@ public static unsafe partial class FhCall {
     public const nint __addr_TOBtlCloseHelpWin = 0x490E20;
 
     // Original after pruning:
-    // unknown undefined TOBtlCloseSimpleHelpMes() at 00890e60
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOBtlCloseSimpleHelpMes();
-    public const nint __addr_TOBtlCloseSimpleHelpMes = 0x490E60;
-
-    // Original after pruning:
     // unknown undefined TOBtlCtrlAuronLimitWindow() at 00890ee0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -357896,62 +357868,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void TkGetBattleMusicBuffer();
     public const nint __addr_TkGetBattleMusicBuffer = 0x48D4F0;
-
-    // Original after pruning:
-    // unknown undefined TOBtlDrawCaptureMonsterMessageWindow() at 008927e0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOBtlDrawCaptureMonsterMessageWindow();
-    public const nint __addr_TOBtlDrawCaptureMonsterMessageWindow = 0x4927E0;
-
-    // Original after pruning:
-    // unknown undefined TOBtlDrawFirstStrikeEnemyMessageWindow() at 00893440
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOBtlDrawFirstStrikeEnemyMessageWindow();
-    public const nint __addr_TOBtlDrawFirstStrikeEnemyMessageWindow = 0x493440;
-
-    // Original after pruning:
-    // __cdecl int TOBtlDrawFirstStrikePlayerMessageWindow(void) at 00893460
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate nint TOBtlDrawFirstStrikePlayerMessageWindow();
-    public const nint __addr_TOBtlDrawFirstStrikePlayerMessageWindow = 0x493460;
-
-    // Original after pruning:
-    // __stdcall undefined TOBtlDrawGetItemMessageWindow(byte* item_name, undefined4 amount) at 00893480
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void TOBtlDrawGetItemMessageWindow(nint item_name, nint amount);
-    public const nint __addr_TOBtlDrawGetItemMessageWindow = 0x493480;
-
-    // Original after pruning:
-    // unknown undefined TOBtlDrawGetLimitTypeMessageWindow() at 00893560
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOBtlDrawGetLimitTypeMessageWindow();
-    public const nint __addr_TOBtlDrawGetLimitTypeMessageWindow = 0x493560;
-
-    // Original after pruning:
-    // unknown undefined TOBtlDrawGetMoneyMessageWindow() at 008935d0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOBtlDrawGetMoneyMessageWindow();
-    public const nint __addr_TOBtlDrawGetMoneyMessageWindow = 0x4935D0;
-
-    // Original after pruning:
-    // __stdcall int TOBtlDrawLearningMessageWindow(int chr_id, int com_id) at 00895290
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint TOBtlDrawLearningMessageWindow(nint chr_id, nint com_id);
-    public const nint __addr_TOBtlDrawLearningMessageWindow = 0x495290;
-
-    // Original after pruning:
-    // __stdcall undefined TOBtlDrawStdChrNameMessageWindow(int chr_id, undefined4 param_2) at 00897170
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void TOBtlDrawStdChrNameMessageWindow(nint chr_id, nint param_2);
-    public const nint __addr_TOBtlDrawStdChrNameMessageWindow = 0x497170;
 
     // Original after pruning:
     // __stdcall undefined TkMenuExchangePlayerPos(undefined4 ply1_id, undefined4 ply2_id) at 008a96d0
