@@ -72,6 +72,7 @@ public unsafe sealed class FhGameUiModule : FhModule {
             _draw_delegate_x?.Invoke(0, text_ptr, x, y, color, 0, 0x80, 0x80, 0x80, 0x80, scale, 0);
     }
 
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void h_render_game() {
         _render_game.orig_fptr();
 

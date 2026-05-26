@@ -63,6 +63,7 @@ public unsafe class FhCoreModule : FhModule {
     ///     Overrides the game's input handler to execute the
     ///     <see cref="FhModule.handle_input"/> callback with the latest input state.
     /// </summary>
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void h_update_input() {
         FhApi.Input.update();
 

@@ -1,4 +1,4 @@
-using System.Text;
+// SPDX-License-Identifier: MIT
 
 namespace Fahrenheit.FFX;
 

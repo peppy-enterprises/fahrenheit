@@ -11,7 +11,6 @@ public class GameLoopEventsImplModule : FhModule {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void AtelSetEventJump2(int room, int entrance, int do_fade);
-    private const nint __addr_AtelSetEventJump2 = 0x46FED0;
 
     // Method locations
     private readonly FhMethodLocation _location_main_loop = new(0x420C00, 0x205150);
@@ -25,7 +24,7 @@ public class GameLoopEventsImplModule : FhModule {
 
         //TODO: Support `PostReturnToTitle` in FFX-2
         if (FhGlobal.game_id == FhGameId.FFX) {
-            _h_jump_to_event = new(this, "FFX.exe", __addr_AtelSetEventJump2, handle_warp);
+            _h_jump_to_event = new(this, "FFX.exe", FFX.FhCall.__addr_AtelSetEventJump2, handle_warp);
         }
     }
 
@@ -40,6 +39,7 @@ public class GameLoopEventsImplModule : FhModule {
     ///     and <see cref="Fahrenheit.Events.GameLoopEvents.PostUpdate">PostUpdate</see>
     ///     events before and after every iteration, respectively.
     /// </summary>
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void raise_update_events(float delta) {
         FhApi.Events.Common.GameLoop.PreUpdate.invoke(new() { delta = delta });
 
@@ -56,6 +56,7 @@ public class GameLoopEventsImplModule : FhModule {
     /// <param name="room">The room we are warping to</param>
     /// <param name="entrance">The entrance the main character will spawn at</param>
     /// <param name="do_fade">Non-zero if we should fade, zero if not</param>
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void handle_warp(int room, int entrance, int do_fade) {
         _h_jump_to_event!.orig_fptr(room, entrance, do_fade);
 

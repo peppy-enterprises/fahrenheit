@@ -1,4 +1,5 @@
-using Fahrenheit.FFX;
+// SPDX-License-Identifier: MIT
+
 using Fahrenheit.FFX.Battle;
 
 using static Fahrenheit.FFX.Globals.Battle;

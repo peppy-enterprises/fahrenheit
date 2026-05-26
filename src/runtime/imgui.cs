@@ -51,9 +51,6 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     internal delegate LRESULT WndProc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate nint graphicInitialize();
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     internal delegate int PInputUpdate();
 
     // Win32 internals
@@ -151,29 +148,38 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     /* [fkelava 16/02/26 14:59]
      * https://github.com/ocornut/imgui/issues/9242
      *
-     * The games utilize a separate rendering thread. In other words, the main message
+     * The games have a separate render thread. In other words, the main message
      * pump is on a different thread from the one we call ImGui functions on.
-     * This is not supported, but works mostly fine regardless.
+     * (i.e. `render_imgui` and `h_present` occur on the render thread)
      *
-     * However, when Square on a gamepad is used to engage the window switcher, then released,
-     * a WM_LBUTTONUP event occurs which often results in a deadlock that freezes both ImGui
-     * and the game's message pump. Making ImGui's ImGui_ImplWin32_SetWindowFocus() function
-     * use SWP_ASYNCWINDOWPOS curtails it, but the true underlying reason is not known.
+     * When setting up the frame in ImGui, SetWindowPos will fire.
+     * This may cause a message to be sent, making the render thread wait on the message pump thread.
+     * If either is blocked, in a critical section, or otherwise impeded from pumping, both deadlock.
      *
-     * https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos
+     * As a workaround, we override ImGui to pass SWP_ASYNCWINDOWPOS. This is not a true fix,
+     * but suffices to prevent the deadlock in this specific case.
+     *
+     * See https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos,
+     * https://learn.microsoft.com/en-us/windows/win32/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#multithread-considerations.
      */
 
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private static void h_implw32_setwindowfocus(ImGuiViewportPtr viewport) {
         if (viewport.PlatformHandleRaw == null)
             return;
 
-        PInvoke.SetWindowPos       ((HWND)viewport.PlatformHandleRaw, HWND.HWND_TOP, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_ASYNCWINDOWPOS | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
+        SET_WINDOW_POS_FLAGS flags =
+            SET_WINDOW_POS_FLAGS.SWP_ASYNCWINDOWPOS |
+            SET_WINDOW_POS_FLAGS.SWP_NOSIZE         |
+            SET_WINDOW_POS_FLAGS.SWP_NOMOVE;
+
+        PInvoke.SetWindowPos       ((HWND)viewport.PlatformHandleRaw, HWND.HWND_TOP, 0, 0, 0, 0, flags);
         PInvoke.SetForegroundWindow((HWND)viewport.PlatformHandleRaw);
         PInvoke.SetFocus           ((HWND)viewport.PlatformHandleRaw);
     }
 
     /// <summary>
-    ///     Allows ImGui to intercept window messages sent to the game, such as <see cref="WM.WM_KEYDOWN"/>,
+    ///     Allows ImGui to intercept window messages sent to the game,
     ///     enabling mouse and keyboard input to be directed to it.
     /// </summary>
     [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
@@ -186,6 +192,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     /// <summary>
     ///     Allows interception of raw input from the game, redirecting it to ImGui if appropriate.
     /// </summary>
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private int h_pinput() {
         if (_hWnd           == 0    // if assign_devices has not yet run, bail
          || _ptr_device     == null
@@ -214,7 +221,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     }
 
     /// <summary>
-    ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, uint)"/> call to display mods' user interfaces.
+    ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, DXGI_PRESENT)"/> call to display mods' user interfaces.
     /// </summary>
     [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
     private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, uint Flags) {

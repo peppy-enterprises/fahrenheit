@@ -56,60 +56,28 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     private delegate PCluster* ClusterManager_loadPCluster(nint ptr_this, byte* ptr_file_name);
 
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    private delegate void ClusterManager_releasePCluster(nint ptr_this, PCluster* ptr_cluster);
+    private readonly FhMethodHandle<ClusterManager_loadPCluster> _h_pcluster_ld;
 
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    private delegate void ClusterManager_forceReleasePCluster(nint ptr_this, byte* ptr_file_name);
-
-    private readonly FhMethodHandle<ClusterManager_loadPCluster>          _h_pcluster_ld;
-    private readonly FhMethodHandle<ClusterManager_releasePCluster>       _h_pcluster_rel;
-    private readonly FhMethodHandle<ClusterManager_forceReleasePCluster>? _h_pcluster_frel; // FFX only?
-
-    private readonly delegate* unmanaged[Cdecl]<PCluster**, int, int> _fnptr_PApplication_FixupClusters;
+    private readonly delegate* unmanaged[Cdecl]   <PCluster**, int,       int>  _fnptr_PApplication_FixupClusters;
+    private readonly delegate* unmanaged[Thiscall]<nint,       PCluster*, void> _fnptr_ClusterManager_releasePCluster;
 
     public FhPhyreLoaderModule() {
-        _fnptr_PApplication_FixupClusters = (delegate* unmanaged[Cdecl]<PCluster**, int, int>)
+        _fnptr_PApplication_FixupClusters     = (delegate* unmanaged[Cdecl]<PCluster**, int, int>)
             (FhEnvironment.BaseAddr + FhUtil.select(0x223740, 0x6B3020, 0x6B3020));
+        _fnptr_ClusterManager_releasePCluster = (delegate* unmanaged[Thiscall]<nint, PCluster*, void>)
+            (FhEnvironment.BaseAddr + FhUtil.select(0x29BEF0, 0x9ED00, 0x9ED00));
 
-        _h_pcluster_ld  = new(this, new FhMethodLocation(0x29BA80, 0x9E880), h_pcluster_ld);
-        _h_pcluster_rel = new(this, new FhMethodLocation(0x29BEF0, 0x9ED00), h_pcluster_rel);
-
-        if (FhGlobal.game_id is FhGameId.FFX) {
-            _h_pcluster_frel = new(this, "FFX.exe", 0x29B450, h_pcluster_frel);
-        }
+        _h_pcluster_ld = new(this, new FhMethodLocation(0x29BA80, 0x9E880), h_pcluster_ld);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return  _h_pcluster_ld   .hook()
-            &&  _h_pcluster_rel  .hook()
-            && (_h_pcluster_frel?.hook() ?? true);
+        return _h_pcluster_ld.hook();
     }
-
-    /* [fkelava 02/05/26 02:35]
-     * The logging here can be removed after a full game run test.
-     *
-     * In fact, the method handles can be folded into fnptrs, since we do not alter
-     * the behavior of these methods in any way.
-     */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private PCluster* h_pcluster_ld(nint ptr_this, byte* ptr_file_name) {
         PCluster* rv = _h_pcluster_ld.orig_fptr(ptr_this, ptr_file_name);
-        _logger.Info($"{Marshal.PtrToStringAnsi((nint)ptr_file_name)!} -> 0x{(nint)rv:X}");
         return rv;
-    }
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private void h_pcluster_rel(nint ptr_this, PCluster* ptr_cluster) {
-        _logger.Info($"0x{(nint)ptr_cluster:X}");
-        _h_pcluster_rel.orig_fptr(ptr_this, ptr_cluster);
-    }
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private void h_pcluster_frel(nint ptr_this, byte* ptr_file_name) {
-        _logger.Info(Marshal.PtrToStringAnsi((nint)ptr_file_name)!);
-        _h_pcluster_frel!.orig_fptr(ptr_this, ptr_file_name);
     }
 
     /// <summary>
@@ -150,6 +118,6 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
     /// </summary>
     internal void cluster_release(PCluster* ptr_cluster) {
         nint ptr_cluster_mgr = FhUtil.get_at<nint>(FhUtil.select(0x8CCA44, 0x9CFE48, 0x9CFE48));
-        _h_pcluster_rel.orig_fptr(ptr_cluster_mgr, ptr_cluster);
+        _fnptr_ClusterManager_releasePCluster(ptr_cluster_mgr, ptr_cluster);
     }
 }
