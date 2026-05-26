@@ -16,7 +16,7 @@
 
     <!-- FAHRENHEIT PACKAGE IMPORT -->
     <ItemGroup>
-        <PackageReference Include="Fahrenheit" Version="1.0.0-alpha08" >
+        <PackageReference Include="Fahrenheit" Version="1.0.0-alpha10" >
             <Private>false</Private>
             <ExcludeAssets>runtime;native</ExcludeAssets>
         </PackageReference>
