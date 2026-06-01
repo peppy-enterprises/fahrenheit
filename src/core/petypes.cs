@@ -598,3 +598,16 @@ internal struct PTexture2D {
 
 [StructLayout(LayoutKind.Sequential, Size = 0x10, Pack = 0x4)]
 internal struct PWorld { }
+
+/* [fkelava 26/04/26 14:52]
+ * Phyre::PSerialization::PStreamFile::PStreamFile() -> +207D80
+ */
+
+/// <summary>
+///     A file as seen by the game. Can be backed by either a VBF or OS handle.
+/// </summary>
+internal struct PStreamFile {
+    public nint handle_os;
+    public nint handle_vbf;
+}
+

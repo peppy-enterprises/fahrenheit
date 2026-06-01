@@ -24,15 +24,14 @@ namespace Fahrenheit.Runtime;
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhLocalStateModule : FhModule {
 
-    private readonly FhModuleHandle<FhSaveManagerModule> _handle_smm;
-    private          FhSaveManagerModule?                _smm;
+    private FhSaveManagerModule? _smm;
 
-    public FhLocalStateModule() {
-        _handle_smm = new(this);
-    }
+    public FhLocalStateModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _handle_smm.try_get_module(out _smm);
+        FhModuleHandle<FhSaveManagerModule> handle_smm = new(this);
+
+        return handle_smm.try_get_module(out _smm);
     }
 
     /// <summary>

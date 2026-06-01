@@ -9,6 +9,14 @@
 
 namespace Fahrenheit.FFX2;
 
+/// <summary>
+///     An accessor for game function calls exclusive to FF X-2/LM.
+/// </summary>
 public static unsafe partial class FhCall {
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate byte* GetLastMissionJobName(byte arg1, byte arg2);
+    internal static FhMethodHandle<GetLastMissionJobName> h_GetLastMissionJobName
+        => new( new FhMethodLocation("FFX-2.exe", 0x368570) );
 
 }

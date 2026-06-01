@@ -17,22 +17,17 @@ internal delegate void AtelExecInternal_00871d10();
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe class FhCoreModule : FhModule {
-    private readonly FhMethodHandle<AtelExecInternal_00871d10> _update_input;
 
     private static readonly FhSettingsCategory _settings = new("fhruntime", [
         new FhSettingToggle("display_mod_count", true),
     ]);
 
     public FhCoreModule() {
-        FhMethodLocation location_update_input = new(0x471D10, 0x32CE90);
-
         settings = _settings;
-
-        _update_input = new(this, location_update_input, h_update_input);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _update_input.hook();
+        return FhCall.h_AtelExec_Internal_871D10.hook(this, handle_input);
     }
 
     public override void render_imgui() {
@@ -67,7 +62,7 @@ public unsafe class FhCoreModule : FhModule {
     private void h_update_input() {
         FhApi.Input.update();
 
-        _update_input.orig_fptr();
+        FhCall.h_AtelExec_Internal_871D10.chain_from(h_update_input)!();
 
         foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             module_ctx.Module.handle_input();

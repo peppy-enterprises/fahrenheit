@@ -27,9 +27,6 @@ internal unsafe delegate nint TOAdpMesFontLXYZClutTypeRGBAChangeFontType(
     nint  tint_r, nint tint_g, nint tint_b, nint tint_a,
     bool  p13);
 
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal delegate void TODrawMessageWindow();
-
 /// <summary>
 ///     Provides the ability to use FF X/X-2's native game UI toolkit.
 ///     <para/>
@@ -38,19 +35,13 @@ internal delegate void TODrawMessageWindow();
 [FhLoad(FhGameId.FFX | FhGameId.FFX2)]
 public unsafe sealed class FhGameUiModule : FhModule {
 
-    private readonly FhMethodHandle<TODrawMessageWindow>         _render_game;
-
     private readonly TOMkpCrossExtMesFontLClutTypeRGBA?          _draw_delegate_x;
     private readonly TOAdpMesFontLXYZClutTypeRGBAChangeFontType? _draw_delegate_x2;
 
     public FhGameUiModule() {
-        FhMethodLocation location_render_game = new(0x4ABCE0, 0x391D00);
-
-        _render_game = new(this, location_render_game, h_render_game);
-
         switch (FhGlobal.game_id) {
             case FhGameId.FFX:
-                _draw_delegate_x = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
+                _draw_delegate_x  = FhUtil.get_fptr<TOMkpCrossExtMesFontLClutTypeRGBA>(0x501700);
                 break;
             case FhGameId.FFX2:
                 _draw_delegate_x2 = FhUtil.get_fptr<TOAdpMesFontLXYZClutTypeRGBAChangeFontType>(0x3A7600);
@@ -59,7 +50,7 @@ public unsafe sealed class FhGameUiModule : FhModule {
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _render_game.hook();
+        return FhCall.h_TODrawMessageWindow.hook(this, h_render_game);
     }
 
     private void draw_text_rgba(
@@ -74,29 +65,12 @@ public unsafe sealed class FhGameUiModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void h_render_game() {
-        _render_game.orig_fptr();
+        FhCall.h_TODrawMessageWindow.chain_from(h_render_game)!();
 
         foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             module_ctx.Module.render_game();
         }
 
-        string text = $"Fahrenheit v{typeof(FhGlobal).Assembly.GetName().Version}";
-        switch (FhGlobal.game_id) {
-            case FhGameId.FFX:
-                // In the main menu...
-                if (*FFX.Globals.event_id == 0x17) {
-                    // render some text so that people can't easily hide their use of Fahrenheit
-                    //draw_text_rgba(FFX.FhCharsetSelector.Us.to_bytes(text), 5f, 400f, 0x00, 0.65f);
-                }
-                break;
-            case FhGameId.FFX2:
-                // Main menu draws over this
-                //if (*FFX2.Globals.event_id == 0x17) {
-                //    fixed (byte* s = FhCharset.Us.to_bytes(text)) {
-                //        _TOAdpMesFontLXYZClutTypeRGBAChangeFontType(0, 0xffffffff, s, 5f, 400f, 0x10, 0, 0, 0x00, 0x80, 0x80, 0x80, false);
-                //    }
-                //}
-                break;
-        }
+        // TODO: Render some text so that people can't easily hide their use of Fahrenheit
     }
 }

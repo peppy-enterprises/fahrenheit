@@ -36,29 +36,15 @@ internal struct Cd {
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhCdInterfaceModule : FhModule {
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate nint check_ex_file_size(int arg1, int arg2);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate nint CDfileSize_PC(int arg1);
-
-    private readonly Cd*                                _ptr_cd;
-    private readonly FhMethodHandle<check_ex_file_size> _handle_fsize_chk;
-    private readonly FhMethodHandle<CDfileSize_PC>      _handle_fsize_pc;
+    private readonly Cd* _ptr_cd;
 
     public FhCdInterfaceModule() {
-        FhMethodLocation loc_fsize_pc  = new(0x6428A0, 0x74E9A0);
-        FhMethodLocation loc_fsize_chk = new(0x36D770, 0x1396A0);
-
-        _handle_fsize_pc  = new(this, loc_fsize_pc,  h_fsize_pc);
-        _handle_fsize_chk = new(this, loc_fsize_chk, h_fsize_chk);
-
         _ptr_cd = (Cd*)(FhEnvironment.BaseAddr + FhUtil.select(0x1F10C40, 0x16CA080, 0x16CA080));
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _handle_fsize_pc .hook()
-            && _handle_fsize_chk.hook();
+        return FhCall.h_CDfileSize_PC     .hook(this, h_fsize_pc)
+            && FhCall.h_check_ex_file_size.hook(this, h_fsize_chk);
     }
 
     /* [fkelava 27/01/26 17:14]
@@ -113,7 +99,7 @@ public unsafe sealed class FhCdInterfaceModule : FhModule {
         int original_module = _ptr_cd->module;
 
         _ptr_cd->module = 0;
-        nint rv = _handle_fsize_pc.orig_fptr(arg1);
+        nint rv = FhCall.h_CDfileSize_PC.chain_from(h_fsize_pc)!(arg1);
 
         _ptr_cd->module = original_module;
         return rv;

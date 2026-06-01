@@ -27,7 +27,7 @@ public static class FhApi {
 /// </summary>
 internal static class FhInternal {
     // The initialization order here is not incidental. Objects higher in the list may not rely on objects below them in their constructor.
-    public static readonly FhLogger           Log              = new FhLogger("core.log");
-    public static readonly FhLoader           Loader           = new FhLoader();
-    public static readonly FhMethodAddressMap MethodAddressMap = new FhMethodAddressMap();
+    public static readonly FhLogger      Log         = new FhLogger("core.log");
+    public static readonly FhLoader      Loader      = new FhLoader();
+    public static readonly FhMethodTable MethodTable = new FhMethodTable();
 }

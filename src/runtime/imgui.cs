@@ -21,19 +21,16 @@ namespace Fahrenheit.Runtime;
 public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
     /* [fkelava 6/10/24 01:54]
-     * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L93
+     * See src/core/native/Windows.Win32.IDXGISwapChain.g.cs for swapchain method signatures.
      */
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate nint DXGISwapChain_Present(
+    private delegate nint DXGISwapChain_Present(
         IDXGISwapChain* pSwapChain,
         uint            SyncInterval,
-        uint            Flags);
+        DXGI_PRESENT    Flags);
 
-    /* [fkelava 25/4/24 17:51]
-     * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/shared/dxgi/IDXGISwapChain.cs#L133
-     */
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate nint DXGISwapChain_ResizeBuffers(
+    private delegate nint DXGISwapChain_ResizeBuffers(
         IDXGISwapChain* pSwapChain,
         uint            BufferCount,
         uint            Width,
@@ -41,17 +38,21 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         DXGI_FORMAT     NewFormat,
         uint            SwapChainFlags);
 
-    /* [fkelava 16/2/26 15:28]
-     * See below comments at `assign_devices` and `h_implw32_setwindowfocus`.
-     */
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void ImGui_ImplWin32_SetWindowFocus(ImGuiViewportPtr viewport);
+    private delegate void ImGui_ImplWin32_SetWindowFocus(
+        ImGuiViewportPtr viewport);
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate LRESULT WndProc(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);
+    private delegate LRESULT WndProc(
+        HWND   hWnd,
+        uint   msg,
+        WPARAM wParam,
+        LPARAM lParam);
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate int PInputUpdate();
+    private FhMethodHandle<DXGISwapChain_Present>       _handle_present =>
+        new( new FhMethodLocation(_ptr_swapchain->lpVtbl[8]) );
+    private FhMethodHandle<DXGISwapChain_ResizeBuffers> _handle_resize_buffers =>
+        new( new FhMethodLocation(_ptr_swapchain->lpVtbl[13]) );
 
     // Win32 internals
     private          HWND    _hWnd;
@@ -65,10 +66,6 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     private ID3D11DeviceContext*    _ptr_device_ctx; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11devicecontext
     private ID3D11RenderTargetView* _ptr_rtv;        // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11rendertargetview
 
-    private readonly FhMethodHandle<PInputUpdate>                 _handle_pinput;
-    private          FhMethodHandle<DXGISwapChain_Present>?       _handle_present;
-    private          FhMethodHandle<DXGISwapChain_ResizeBuffers>? _handle_resize_buffers;
-
     // Interlocked var for RTV regen on WM_SIZE
     private int _rtv_generated;
 
@@ -76,17 +73,14 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     private FhResourceLoaderModule? _rlm;
 
     public FhImguiModule() {
-        FhMethodLocation loc_pinput = new(0x225930, 0x6B51E0);
-
-        _handle_pinput = new(this, loc_pinput, h_pinput);
-        _h_WndProc     = h_wndproc;
+        _h_WndProc = h_wndproc;
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         FhModuleHandle<FhResourceLoaderModule> rlm_handle = new(this);
 
         return rlm_handle.try_get_module(out _rlm)
-           && _handle_pinput.hook();
+            && FhCall.h_Phyre_PFramework_PInput_Update.hook(this, h_pinput);
     }
 
     void IFhPlatformUser.platform_bind(
@@ -139,10 +133,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
         FhApi.ImGuiHelper.init();
 
-        _handle_present        = new(this, new nint(_ptr_swapchain->lpVtbl[8]),  h_present);
-        _handle_resize_buffers = new(this, new nint(_ptr_swapchain->lpVtbl[13]), h_resize_buffers);
-        _handle_present       .hook();
-        _handle_resize_buffers.hook();
+        _handle_present       .hook(this, h_present);
+        _handle_resize_buffers.hook(this, h_resize_buffers);
     }
 
     /* [fkelava 16/02/26 14:59]
@@ -197,12 +189,12 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         if (_hWnd           == 0    // if assign_devices has not yet run, bail
          || _ptr_device     == null
          || _ptr_device_ctx == null)
-            return _handle_pinput.orig_fptr();
+            return FhCall.h_Phyre_PFramework_PInput_Update.chain_from(h_pinput)!();
 
         ImGuiIOPtr io = ImGui.GetIO();
         return io.WantCaptureKeyboard || io.WantCaptureMouse
             ? 0
-            : _handle_pinput.orig_fptr();
+            : FhCall.h_Phyre_PFramework_PInput_Update.chain_from(h_pinput)!();
     }
 
     /// <summary>
@@ -217,14 +209,14 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         }
 
         Interlocked.CompareExchange(ref _rtv_generated, 0, 1);
-        return _handle_resize_buffers!.orig_fptr(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
+        return _handle_resize_buffers.chain_from(h_resize_buffers)!(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     }
 
     /// <summary>
     ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, DXGI_PRESENT)"/> call to display mods' user interfaces.
     /// </summary>
     [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
-    private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, uint Flags) {
+    private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, DXGI_PRESENT Flags) {
         if (Interlocked.CompareExchange(ref _rtv_generated, 1, 0) == 0) {
             ID3D11Resource* ptr_backbuffer;
 
@@ -254,6 +246,6 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
 
         _rlm!.release_pending_resources();
-        return _handle_present!.orig_fptr(pSwapChain, SyncInterval, Flags);
+        return _handle_present.chain_from(h_present)!(pSwapChain, SyncInterval, Flags);
     }
 }

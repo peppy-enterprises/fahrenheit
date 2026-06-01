@@ -35,24 +35,6 @@ internal unsafe interface IFhPlatformUser {
 [SupportedOSPlatform("windows6.1")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhPlatformBindingModule : FhModule {
 
-    /* [fkelava 25/4/24 17:51]
-     * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/um/d3d11/DirectX.cs#L25
-     */
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate HRESULT DirectX_D3D11CreateDeviceAndSwapChain(
-        IDXGIAdapter*         pAdapter,
-        D3D_DRIVER_TYPE       DriverType,
-        HMODULE               Software,
-        uint                  Flags,
-        D3D_FEATURE_LEVEL*    pFeatureLevels,
-        uint                  FeatureLevels,
-        uint                  SDKVersion,
-        DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
-        IDXGISwapChain**      ppSwapChain,
-        ID3D11Device**        ppDevice,
-        D3D_FEATURE_LEVEL*    pFeatureLevel,
-        ID3D11DeviceContext** ppImmediateContext);
-
     /* [fkelava 14/02/26 20:12]
      * A number of ImGui overlays seem to use a dummy window on which a dummy swapchain, device and context are initialized.
      * (ex. https://github.com/rdbo/DX11-BaseHook/blob/main/src/hooks/hooks.cpp)
@@ -68,12 +50,10 @@ public unsafe sealed class FhPlatformBindingModule : FhModule {
      * But in Fahrenheit, we can, and so we do.
      */
 
-    private readonly FhMethodHandle<DirectX_D3D11CreateDeviceAndSwapChain> _h_d3d_init;
-    private readonly HashSet<IFhPlatformUser>                              _users;
+    private readonly HashSet<IFhPlatformUser> _users;
 
     public FhPlatformBindingModule() {
-        _users      = [];
-        _h_d3d_init = new(this, "D3D11.dll", "D3D11CreateDeviceAndSwapChain", h_init_d3d);
+        _users = [];
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
@@ -84,7 +64,7 @@ public unsafe sealed class FhPlatformBindingModule : FhModule {
             && h_resload.try_get_module(out FhResourceLoaderModule? m_resload)
             && _users.Add(m_imgui)
             && _users.Add(m_resload)
-            && _h_d3d_init.hook();
+            && FhCall.h_D3D11_D3D11CreateDeviceAndSwapChain.hook(this, h_init_d3d);
     }
 
     /// <summary>
@@ -111,7 +91,7 @@ public unsafe sealed class FhPlatformBindingModule : FhModule {
          * > Flags | (uint)D3D11_CREATE_DEVICE_FLAG.D3D11_CREATE_DEVICE_DEBUG.
          */
 
-        HRESULT hr = _h_d3d_init.orig_fptr(
+        HRESULT hr = FhCall.h_D3D11_D3D11CreateDeviceAndSwapChain.chain_from(h_init_d3d)!(
             pAdapter,
             DriverType,
             Software,

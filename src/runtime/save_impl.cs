@@ -28,68 +28,24 @@ internal enum FhSaveExtensionSystemState {
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhSaveExtensionModule : FhModule {
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate void __autosave(int size, byte* ptr);
+    private FhLocalStateModule?        _lsm;
+    private FhSaveManagerModule?       _smm;
+    private int                        _load_pending_slot;
+    private FhSaveExtensionSystemState _state;
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate void __save_state_transition();
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate void TkMenuJumpToLoadedScene();
-
-    // Game functions required by the implementation
-    private readonly delegate* unmanaged[Cdecl] <void>
-        _fnptr_SetUpDefaultSaveFolder  = FhSavePal.pal_fnaddr__SetUpDefaultSaveFolder();
-    private readonly delegate* unmanaged[Cdecl] <byte, bool>
-        _fnptr_isNeedRenamePlayer      = FhSavePal.pal_fnaddr_isNeedRenamePlayer();
-    private readonly delegate* unmanaged[Cdecl] <byte*, nint>
-        _fnptr_SaveDataWriteCrc        = FhSavePal.pal_fnaddr_SaveDataWriteCrc();
-    private readonly delegate* unmanaged[Cdecl] <int>
-        _fnptr_SaveDataCheckCrc        = FhSavePal.pal_fnaddr_SaveDataCheckCrc();
-    private readonly delegate* unmanaged[Cdecl] <FhSaveSystemState, void>
-        _fnptr_SaveDataSaveLoadSucceed = FhSavePal.pal_fnaddr_SaveDataSaveLoadSucceed();
-
-    private readonly FhMethodHandle<__autosave>               _handle_autosave;
-    private readonly FhMethodHandle<TkMenuJumpToLoadedScene>  _handle_copy;
-    private readonly FhMethodHandle<__save_state_transition>  _handle_tosave;
-    private readonly FhMethodHandle<__save_state_transition>  _handle_toload;
-    private readonly FhMethodHandle<__save_state_transition>? _handle_toalbd; // FFX only
-
-    private readonly FhModuleHandle<FhLocalStateModule>  _lsm_handle;
-    private          FhLocalStateModule?                 _lsm;
-    private readonly FhModuleHandle<FhSaveManagerModule> _smm_handle;
-    private          FhSaveManagerModule?                _smm;
-
-    private          int                        _load_pending_slot;
-    private          FhSaveExtensionSystemState _state;
-
-    public FhSaveExtensionModule() {
-        FhMethodLocation loc_autosave = new(0x2F0650, 0x11D510);
-        FhMethodLocation loc_copy     = new(0x4B4E70, 0x36AD50);
-        FhMethodLocation loc_tosave   = new(0x248950, 0x884D0);
-        FhMethodLocation loc_toload   = new(0x248910, 0x884A0);
-
-        _handle_autosave = new(this, loc_autosave, impl_autosave);
-        _handle_copy     = new(this, loc_copy,     impl_copy);
-        _handle_tosave   = new(this, loc_tosave,   signal_enter_save);
-        _handle_toload   = new(this, loc_toload,   signal_enter_load);
-
-        if (FhGlobal.game_id is FhGameId.FFX) {
-            _handle_toalbd = new(this, "FFX.exe", 0x2EFFF0, signal_enter_albd);
-        }
-
-        _lsm_handle = new(this);
-        _smm_handle = new(this);
-    }
+    public FhSaveExtensionModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _handle_autosave.hook()
-            && _handle_copy    .hook()
-            && _handle_tosave  .hook()
-            && _handle_toload  .hook()
-            && (_handle_toalbd?.hook() ?? true)
-            && _lsm_handle     .try_get_module(out _lsm)
-            && _smm_handle     .try_get_module(out _smm);
+        FhModuleHandle<FhLocalStateModule>  lsm_handle = new(this);
+        FhModuleHandle<FhSaveManagerModule> smm_handle = new(this);
+
+        return FhCall.h_SaveDataManager_debugSave_Internal_6F0650.hook(this, impl_autosave)
+            && FhCall.h_TkMenuJumpToLoadedScene                  .hook(this, impl_copy)
+            && FhCall.h_SaveDataToSave                           .hook(this, signal_enter_save)
+            && FhCall.h_SaveDataToLoad                           .hook(this, signal_enter_load)
+            && (FhGlobal.game_id is not FhGameId.FFX || FFX.FhCall.h_FUN_2EFFF0.hook(this, signal_enter_albd))
+            && lsm_handle                      .try_get_module(out _lsm)
+            && smm_handle                      .try_get_module(out _smm);
     }
 
     internal FhSaveExtensionSystemState get_system_state() => _state;
@@ -142,7 +98,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     internal void signal_exit_abort() {
         FhSavePal.pal_set_cancel_state(1);
-        _fnptr_SaveDataSaveLoadSucceed(_state is FhSaveExtensionSystemState.SAVE
+        FhCall.h_SaveDataSaveLoadSucceed.fnptr!(_state is FhSaveExtensionSystemState.SAVE
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
@@ -153,7 +109,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     internal void signal_exit_success() {
         FhSavePal.pal_set_cancel_state(0);
-        _fnptr_SaveDataSaveLoadSucceed(_state is FhSaveExtensionSystemState.SAVE
+        FhCall.h_SaveDataSaveLoadSucceed.fnptr!(_state is FhSaveExtensionSystemState.SAVE
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
@@ -183,7 +139,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void impl_copy() {
-        _handle_copy.orig_fptr();
+        FhCall.h_TkMenuJumpToLoadedScene.chain_from(impl_copy)!();
         _lsm!.state_load_slot(_load_pending_slot);
 
         FhApi.Events.Common.GameLoop.PostLoadGame.invoke(new() { save_slot_idx = _load_pending_slot });
@@ -194,8 +150,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void impl_autosave(int size, byte* ptr) {
-        _fnptr_SaveDataWriteCrc(ptr);
-        _fnptr_SetUpDefaultSaveFolder();
+        FhCall.h_SaveDataWriteCrc       .fnptr!(ptr);
+        FhCall.h__SetUpDefaultSaveFolder.fnptr!();
 
         string             save_path = _smm!.get_save_path_for_slot(0);
         ReadOnlySpan<byte> save      = new(ptr, size);
@@ -224,7 +180,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         string save_path = _smm!.get_save_path_for_slot(slot);
 
         ReadOnlySpan<byte> save = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
-        _fnptr_SaveDataWriteCrc(FhSavePal.pal_addr_buf_save());
+        FhCall.h_SaveDataWriteCrc.fnptr!(FhSavePal.pal_addr_buf_save());
 
         // TODO: add popups on success/failure
 
@@ -252,14 +208,14 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         }
 
         // From Iggy state handler 0xF
-        if (_fnptr_SaveDataCheckCrc() == 0) {
+        if (FhCall.h_SaveDataCheckCrc.fnptr!() == 0) {
             save.Clear();
 
             signal_exit_abort();
             return;
         }
 
-        bool player_needs_rename = _fnptr_isNeedRenamePlayer(
+        bool player_needs_rename = FhCall.h_isNeedRenamePlayer.fnptr!(
             save[ FhSavePal.pal_header_offset_playerrename() ]);
 
         FhUtil.set_at(FhSavePal.pal_addr_force_player_rename(), player_needs_rename);

@@ -52,31 +52,15 @@ internal readonly unsafe ref struct FhPClusterScope(PCluster* ptr_cluster, FhPhy
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhPhyreLoaderModule : FhModule {
 
-    // Game functions through which we load Phyre assets
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    private delegate PCluster* ClusterManager_loadPCluster(nint ptr_this, byte* ptr_file_name);
-
-    private readonly FhMethodHandle<ClusterManager_loadPCluster> _h_pcluster_ld;
-
-    private readonly delegate* unmanaged[Cdecl]   <PCluster**, int,       int>  _fnptr_PApplication_FixupClusters;
-    private readonly delegate* unmanaged[Thiscall]<nint,       PCluster*, void> _fnptr_ClusterManager_releasePCluster;
-
-    public FhPhyreLoaderModule() {
-        _fnptr_PApplication_FixupClusters     = (delegate* unmanaged[Cdecl]<PCluster**, int, int>)
-            (FhEnvironment.BaseAddr + FhUtil.select(0x223740, 0x6B3020, 0x6B3020));
-        _fnptr_ClusterManager_releasePCluster = (delegate* unmanaged[Thiscall]<nint, PCluster*, void>)
-            (FhEnvironment.BaseAddr + FhUtil.select(0x29BEF0, 0x9ED00, 0x9ED00));
-
-        _h_pcluster_ld = new(this, new FhMethodLocation(0x29BA80, 0x9E880), h_pcluster_ld);
-    }
+    public FhPhyreLoaderModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _h_pcluster_ld.hook();
+        return FhCall.h_ClusterManager_loadPCluster.hook(this, h_pcluster_ld);
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private PCluster* h_pcluster_ld(nint ptr_this, byte* ptr_file_name) {
-        PCluster* rv = _h_pcluster_ld.orig_fptr(ptr_this, ptr_file_name);
+        PCluster* rv = FhCall.h_ClusterManager_loadPCluster.chain_from(h_pcluster_ld)!(ptr_this, ptr_file_name);
         return rv;
     }
 
@@ -95,7 +79,7 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
 
         PCluster* ptr_cluster;
         fixed (byte* ptr_path_u8 = file_path_u8) {
-            ptr_cluster = _h_pcluster_ld.orig_fptr(ptr_cluster_mgr, ptr_path_u8);
+            ptr_cluster = FhCall.h_ClusterManager_loadPCluster.fnptr!(ptr_cluster_mgr, ptr_path_u8);
         }
 
         if (ptr_cluster == null) {
@@ -103,7 +87,7 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
             return new FhPClusterScope(null, this);
         }
 
-        int rv_fixup = _fnptr_PApplication_FixupClusters(&ptr_cluster, 1);
+        int rv_fixup = FhCall.h_PApplication_FixupClusters.fnptr!(&ptr_cluster, 1);
 
         if (rv_fixup != 0) {
             _logger.Warning($"PApplication::FixupClusters returned {rv_fixup} for {file_path}");
@@ -118,6 +102,6 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
     /// </summary>
     internal void cluster_release(PCluster* ptr_cluster) {
         nint ptr_cluster_mgr = FhUtil.get_at<nint>(FhUtil.select(0x8CCA44, 0x9CFE48, 0x9CFE48));
-        _fnptr_ClusterManager_releasePCluster(ptr_cluster_mgr, ptr_cluster);
+        FhCall.h_ClusterManager_releasePCluster.fnptr!(ptr_cluster_mgr, ptr_cluster);
     }
 }

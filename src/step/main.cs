@@ -58,35 +58,40 @@ internal static class Program {
     private static Dictionary<string, string> _type_map = [];
 
     private static void Main(string[] args) {
-        Option<string> opt_src_path     = new Option<string>("--src")
+        Option<string>   opt_src_path     = new Option<string>("--src")
             { Description = "Set the path to the directory containing the exported symbol files." };
-        Option<string> opt_dest_path    = new Option<string>("--dest")
+        Option<string>   opt_dest_path    = new Option<string>("--dest")
             { Description = "Set the folder where the C# file should be written." };
-        Option<string> opt_typemap_path = new Option<string>("--map")
+        Option<string>   opt_typemap_path = new Option<string>("--map")
             { Description = "Set the path to a Ghidra -> Fh type map." };
+        Option<FhGameId> opt_game         = new Option<FhGameId>("--game")
+            { Description = "Declare which game STEP is generating for." };
 
         opt_src_path    .Required = true;
         opt_dest_path   .Required = true;
+        opt_game        .Required = true;
         opt_typemap_path.Required = false;
 
-        RootCommand root_cmd = new RootCommand("Process a Ghidra symbol table and create a C# code file.") {
-            opt_src_path,
-            opt_dest_path,
-            opt_typemap_path
-        };
+        RootCommand cmd_root = new RootCommand("Process a Ghidra symbol table and create a C# code file.");
 
-        ParseResult argparse_result = root_cmd.Parse(args);
+        cmd_root.Options.Add(opt_src_path);
+        cmd_root.Options.Add(opt_dest_path);
+        cmd_root.Options.Add(opt_typemap_path);
+        cmd_root.Options.Add(opt_game);
 
-        string src_path      = argparse_result.GetValue(opt_src_path)!;
-        string dest_path     = argparse_result.GetValue(opt_dest_path)!;
-        string typemap_path  = argparse_result.GetValue(opt_typemap_path) ?? "";
+        cmd_root.SetAction(parse_result => _emit_symtable(
+            parse_result.GetRequiredValue(opt_src_path),
+            parse_result.GetRequiredValue(opt_dest_path),
+            parse_result.GetValue        (opt_typemap_path) ?? "",
+            parse_result.GetRequiredValue(opt_game)
+            ));
 
-        string dest_file_path = Path.Join(dest_path, $"call-{Guid.NewGuid()}.g.cs");
-        _emit_symtable(src_path, dest_file_path, typemap_path);
+        ParseResult parse_result = cmd_root.Parse(args);
+        parse_result.Invoke();
     }
 
     /// <summary>
-    /// Determines whether a specific function declaration provided by Ghidra should be interpreted.
+    ///     Determines whether a specific function declaration provided by Ghidra should be interpreted.
     /// </summary>
     /// <param name="function">The function declaration to be checked.</param>
     /// <returns>Whether the provided function declaration should be interpreted.</returns>
@@ -115,7 +120,7 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Modifies provided functions, fixing formatting and undoing Ghidra's CSV escapes.
+    ///     Modifies provided functions, fixing formatting and undoing Ghidra's CSV escapes.
     /// </summary>
     /// <param name="functions">Ghidra-provided function declarations to format and unescape.</param>
     private static void _format_functions(Span<FhFuncDecl> functions) {
@@ -128,7 +133,7 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Convert from a C++/Ghidra calling convention specifier to the equivalent C# attribute for delegates.
+    ///     Convert from a C++/Ghidra calling convention specifier to the equivalent C# attribute for delegates.
     /// </summary>
     /// <param name="call_conv">The C++/Ghidra-style calling convention specifier.</param>
     /// <returns>An equivalent C# attribute applicable to delegates.</returns>
@@ -145,7 +150,7 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Maps a Ghidra-provided type using the user-defined typemap.
+    ///     Maps a Ghidra-provided type using the user-defined typemap.
     /// </summary>
     /// <example>
     /// Assuming Ghidra's <c>undefined4</c> type is mapped to C#'s <c>uint</c>,
@@ -158,7 +163,7 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Applies the user-defined type map to a parameter type provided by Ghidra.<br/>
+    ///     Applies the user-defined type map to a parameter type provided by Ghidra.<br/>
     /// Unlike <see cref="_map_type"/>, accounts for <c>void</c>.
     /// </summary>
     /// <param name="return_type">The string representation of a Ghidra return type.</param>
@@ -172,7 +177,7 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Modifies a parameter name to not conflict with C# keywords.
+    ///     Modifies a parameter name to not conflict with C# keywords.
     /// </summary>
     /// <param name="param_name">A parameter name to modify.</param>
     /// <returns>The modified parameter name.</returns>
@@ -186,7 +191,7 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Translates a function's parameter list to a string with types and names mapped.
+    ///     Translates a function's parameter list to a string with types and names mapped.
     /// </summary>
     /// <param name="parameters">The list of parameters</param>
     /// <returns>A string representation of the parameter list, valid as C# code.</returns>
@@ -201,13 +206,19 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Converts a Ghidra function declaration and the associated signature data into valid C# code.
+    ///     Converts a Ghidra function declaration and the associated signature data into valid C# code.
     /// </summary>
     /// <param name="function">A Ghidra-provided function declaration.</param>
     /// <param name="signature_data">The signature data associated with the function.</param>
     /// <returns>A valid C# delegate declaration and associated function address constant.</returns>
-    private static string _emit_function(FhFuncDecl function, FhFuncSignatureData signature_data) {
-        int addr = int.Parse(function.Location, NumberStyles.HexNumber, CultureInfo.InvariantCulture) - 0x400000;
+    private static string _emit_function(FhFuncDecl function, FhFuncSignatureData signature_data, FhGameId game) {
+        int    addr   = int.Parse(function.Location, NumberStyles.HexNumber, CultureInfo.InvariantCulture) - 0x400000;
+        string module = game switch {
+            FhGameId.FFX    => "FFX.exe",
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => "FFX-2.exe",
+            _               => throw new NotImplementedException($"invalid game id {game} - cannot generate function"),
+        };
 
         return $"""
                 // Original after pruning:
@@ -215,13 +226,13 @@ internal static class Program {
 
                 {_emit_callconv_attr(function.CallConv)}
                 public unsafe delegate {signature_data.ReturnType} {function.FuncName}{_build_params_string(signature_data.Parameters)};
-                public const nint __addr_{function.Name} = 0x{addr:X};
+                public static FhMethodHandle<{function.FuncName}> h_{function.Name} => new( new FhMethodLocation("{module}", 0x{addr:X}) );
 
             """;
     }
 
     /// <summary>
-    /// Converts a global symbol provided by Ghidra into valid C# code.
+    ///     Converts a global symbol provided by Ghidra into valid C# code.
     /// </summary>
     /// <param name="global">A global symbol provided by Ghidra</param>
     /// <returns>A valid C# const declaration for the given global</returns>
@@ -241,13 +252,20 @@ internal static class Program {
     }
 
     /// <summary>
-    /// Return FhCall's introductory comment.
+    ///     Return FhCall's introductory comment.
     /// </summary>
     /// <returns>An introductory comment.</returns>
-    private static string _emit_prologue() {
-        return $"""
-            /* [STEP {DateTime.UtcNow:dd/M/yy HH:mm}]
-             * This file was generated by Fahrenheit.Tools.STEP (https://github.com/fahrenheit-crew/fh-tools-step/).
+    private static string _emit_prologue(FhGameId game) {
+        string ns = game switch {
+            FhGameId.FFX    => "namespace Fahrenheit.FFX;",
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => "namespace Fahrenheit.FFX2;",
+            _               => "namespace Fahrenheit;",
+        };
+
+        return $$"""
+            /* [STEP {{DateTime.UtcNow:dd/M/yy HH:mm}}]
+             * This file was generated by Fahrenheit's STEP tool (https://github.com/fahrenheit-crew/fh-tools-step/).
              *
              * Its purpose is to provide auto-generated delegates to allow you to call or hook game functions without having
              * to go through an extensive reverse-engineering process. These are, for the time being, quite rudimentary;
@@ -258,11 +276,26 @@ internal static class Program {
              * To improve the call map quality, add new entries to `typemap.json` in the STEP source code or annotate further
              * functions in Ghidra. Every so often, STEP generation will be rerun and Fahrenheit updated with the result.
              */
+
+            {{ns}}
+
+            public static unsafe partial class FhCall {
+
             """;
     }
 
     /// <summary>
-    /// Emits a C# code file to a specified path using exported Ghidra symbols and a user-defined typemap.
+    ///     Flushes a written out symbol table to disk.
+    /// </summary>
+    private static void _dump_symtable(string dest_path, StringBuilder sb) {
+        sb.AppendLine("}");
+        File.WriteAllText(dest_path, sb.ToString());
+
+        Console.WriteLine($"{dest_path}");
+    }
+
+    /// <summary>
+    ///     Emits a C# code file to a specified path using exported Ghidra symbols and a user-defined typemap.
     /// </summary>
     /// <param name="src_path">
     ///     The path to the directory containing the Ghidra symbol exports.<br/>
@@ -270,8 +303,24 @@ internal static class Program {
     /// </param>
     /// <param name="dest_path">The path to write the C# code file to.</param>
     /// <param name="typemap_path">The path to the user-defined typemap. Typemap must be a valid JSON.</param>
-    private static void _emit_symtable(string src_path, string dest_path, string typemap_path) {
+    private static void _emit_symtable(string src_path, string dest_path, string typemap_path, FhGameId game) {
+
+        /* [fkelava 01/06/26 13:47]
+         * Generating all functions for either game results in about a 400,000 line file.
+         * IDEs and IntelliSense absolutely cannot handle files that large, not even on
+         * top-end machines. We thus split the file at roughly the 50,000 line mark.
+         */
+
+        const int LINES_PER_FILE = 50_000;
+        const int LINES_PER_DECL = 7; // Guesstimate for file-wraparound
+        const int LINES_PER_SKIP = 4; // Guesstimate for file-wraparound
+
         Stopwatch perf = Stopwatch.StartNew();
+
+        int file_count = 1;
+        int line_count = 0;
+
+        string file_path = Path.Join(dest_path, $"call_{file_count++}.g.cs");
 
         try {
             string type_map_str = File.ReadAllText(typemap_path);
@@ -305,18 +354,23 @@ internal static class Program {
         };
 
         // Actual file contents.
-        StringBuilder sb = new(_emit_prologue());
-
-        sb.AppendLine();
-        sb.AppendLine("namespace Fahrenheit.Core;");
-        sb.AppendLine();
-        sb.AppendLine("public static unsafe class FhCall {");
+        StringBuilder sb = new(_emit_prologue(game));
 
         foreach (FhFuncDecl function in functions) {
+            if (line_count >= LINES_PER_FILE) {
+                _dump_symtable(file_path, sb);
+
+                file_path  = Path.Join(dest_path, $"call_{file_count++}.g.cs");
+                line_count = 0;
+                sb         = new(_emit_prologue(game));
+            }
+
             if (!_should_interpret(function)) {
                 sb.AppendLine($"    // Symbol skipped (deemed uninterpretable or explicitly rejected):");
                 sb.AppendLine($"    // {function.CallConv} {function.Signature} at {function.Location}");
                 sb.AppendLine();
+
+                line_count += LINES_PER_SKIP;
                 continue;
             }
 
@@ -347,24 +401,35 @@ internal static class Program {
                 signature_data.Parameters.Add(new(type, name));
             }
 
-            sb.AppendLine(_emit_function(function, signature_data));
+            sb.AppendLine(_emit_function(function, signature_data, game));
+            line_count += LINES_PER_DECL; // Guesstimate for file-wraparound
+
             signature_data.Parameters.Clear();
         }
 
         foreach (FhDataLabelDecl global in globals) {
+            if (line_count >= LINES_PER_FILE) {
+                _dump_symtable(file_path, sb);
+
+                file_path  = Path.Join(dest_path, $"call_{file_count++}.g.cs");
+                line_count = 0;
+                sb         = new(_emit_prologue(game));
+            }
+
             if (!_should_interpret(global)) {
                 sb.AppendLine($"    // Global skipped (deemed uninterpretable or explicitly rejected):");
                 sb.AppendLine($"    // {global.DataType} {global.Name} at {global.Location}");
                 sb.AppendLine();
+
+                line_count += LINES_PER_SKIP;
                 continue;
             }
 
             sb.AppendLine(_emit_global(global));
+            line_count += LINES_PER_DECL;
         }
 
-        sb.AppendLine("}");
-
-        File.WriteAllText(dest_path, sb.ToString());
-        Console.WriteLine($"Call map emitted to {dest_path} in {perf.Elapsed}.");
+        _dump_symtable(file_path, sb);
+        Console.WriteLine($"Done in {perf.Elapsed}.");
     }
 }

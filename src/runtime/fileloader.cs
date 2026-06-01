@@ -29,36 +29,15 @@ namespace Fahrenheit.Runtime;
 [SupportedOSPlatform("windows6.1")]
 public unsafe sealed class FhFileLoaderModule : FhModule {
 
-    /// <summary>
-    ///     A file as seen by the game. Can be backed by either a VBF or OS handle.
-    /// </summary>
-    private struct PStreamFile {
-        public nint handle_os;
-        public nint handle_vbf;
-    }
-
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    private delegate PStreamFile* _PStreamFile_ctor(
-        PStreamFile* ptr_this,
-        nint         ptr_path,
-        bool         read_only,
-        nint         p3,  // unused?
-        nint         p4,  // unused?
-        bool         p5); // unused?
-
-    private readonly Dictionary<string, string>        _index;
-    private readonly FhMethodHandle<_PStreamFile_ctor> _handle_fctor;
+    private readonly Dictionary<string, string> _index;
 
     public FhFileLoaderModule() {
-        FhMethodLocation method_location = new FhMethodLocation(0x207D80, 0x490E40);
-
-        _index        = [];
-        _handle_fctor = new(this, method_location, h_fopen);
+        _index = [];
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         construct_index();
-        return _handle_fctor.hook();
+        return FhCall.h_Phyre_PSerialization_PStreamFile_ctor.hook(this, h_fopen);
     }
 
     /* [fkelava 11/02/26 03:39]
@@ -132,7 +111,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         string path_normalized = normalize_path(path);
 
         if (!_index.TryGetValue(path_normalized, out string? path_modded)) {
-            return _handle_fctor.orig_fptr(ptr_this, ptr_path, read_only, p3, p4, p5);
+            return FhCall.h_Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen)!(ptr_this, ptr_path, read_only, p3, p4, p5);
         }
 
         /* [fkelava 01/10/24 16:49]
@@ -167,7 +146,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
         if (ptr_this->handle_os == HANDLE.INVALID_HANDLE_VALUE) {
             _logger.Error($"File open failed for {path_modded} - bailing out");
-            return _handle_fctor.orig_fptr(ptr_this, ptr_path, read_only, p3, p4, p5);
+            return FhCall.h_Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen)!(ptr_this, ptr_path, read_only, p3, p4, p5);
         }
 
         return ptr_this;

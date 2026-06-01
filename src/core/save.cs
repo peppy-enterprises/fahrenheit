@@ -8,7 +8,7 @@ namespace Fahrenheit;
  */
 
 /// <summary>
-///     Represents the possible states of the game's save data manager.
+///     Represents the possible states of the game's default save data manager.
 /// </summary>
 public enum FhSaveSystemState : int {
     IDLE           = 0x00,
@@ -219,14 +219,6 @@ internal static unsafe class FhSavePal {
     internal const string DEFAULT_SET_NAME = "default";
     internal const int    DEFAULT_SET_SIZE = 500;
 
-    // Game functions required by the PAL
-    private static readonly delegate* unmanaged[Cdecl] <ushort, uint, byte*> _fnptr_AtelGetSaveDicName    = pal_fnaddr_AtelGetSaveDicName();
-    private static readonly delegate* unmanaged[Cdecl] <ushort, int>         _fnptr_fix_mappic            = pal_fnaddr_fix_mappic();
-    private static readonly delegate* unmanaged[Cdecl] <int>                 _fnptr_isNeedShowJapanLogo   = pal_fnaddr_isNeedShowJapanLogo();
-    private static readonly delegate* unmanaged[Cdecl] <int, byte*, void>    _fnptr_SaveDataGetLoc        = pal_fnaddr_SaveDataGetLoc();
-    private static readonly delegate* unmanaged[Cdecl] <byte, byte, byte*>   _fnptr_GetLastMissionJobName =
-        (delegate* unmanaged[Cdecl] <byte, byte, byte*>)(FhEnvironment.BaseAddr + 0x368570); // X-2 LM exclusive; address abstraction not required
-
     internal static FhSaveDialogState pal_get_dialog_state()                        => FhUtil.get_at<FhSaveDialogState>(pal_addr_dialog_state());
     internal static void              pal_set_dialog_state(FhSaveDialogState value) => FhUtil.set_at(pal_addr_dialog_state(), value);
 
@@ -308,10 +300,10 @@ internal static unsafe class FhSavePal {
     internal static void pal_get_icon_map(in ReadOnlySpan<byte> header, in Span<byte> dest) {
         bool not_lm      = FhGlobal.game_id is not FhGameId.FFX2LM;
         int  id_icon_map = not_lm
-            ? _fnptr_fix_mappic(BinaryPrimitives.ReadUInt16LittleEndian(header[ pal_header_offset_locationid() .. ]))
+            ? FhCall.h_fix_mappic.fnptr!(BinaryPrimitives.ReadUInt16LittleEndian(header[ pal_header_offset_locationid() .. ]))
             : ((int.Clamp(header[0x25] >> 1, 0, 0x50) - 1) / 0x14) + 1;
 
-        if (not_lm && id_icon_map == pal_id_map_icon_clear() && _fnptr_isNeedShowJapanLogo() != 0) {
+        if (not_lm && id_icon_map == pal_id_map_icon_clear() && FhCall.h_isNeedShowJapanLogo.fnptr!() != 0) {
             id_icon_map = 999;
         }
 
@@ -340,7 +332,7 @@ internal static unsafe class FhSavePal {
         byte*      ptr_chapter_encoded = FhUtil.ptr_at<byte>(0x9ED648);
         Span<byte> chapter_encoded     = new(ptr_chapter_encoded, 0x80);
 
-        _fnptr_SaveDataGetLoc(0x4D8, ptr_chapter_encoded);
+        FhCall.h_SaveDataGetLoc.fnptr!(0x4D8, ptr_chapter_encoded);
         pal_fill_template(chapter_encoded, header[0x0B]);
 
         int len_chapter = FhEncoding.decode(chapter_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
@@ -364,7 +356,7 @@ internal static unsafe class FhSavePal {
         byte*      ptr_completion_encoded = FhUtil.ptr_at<byte>(0x9ED7C8);
         Span<byte> completion_encoded     = new(ptr_completion_encoded, 0x80);
 
-        _fnptr_SaveDataGetLoc(0x39A, ptr_completion_encoded);
+        FhCall.h_SaveDataGetLoc.fnptr!(0x39A, ptr_completion_encoded);
         pal_fill_template(completion_encoded, header[0x0C]);
 
         int len_completion = FhEncoding.decode(completion_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
@@ -388,7 +380,7 @@ internal static unsafe class FhSavePal {
         byte*              ptr_playtime_prefix_encoded = FhUtil.ptr_at<byte>(pal_addr_buf_playtime_prefix_encoded());
         ReadOnlySpan<byte> playtime_prefix_encoded     = new(ptr_playtime_prefix_encoded, int.MaxValue);
 
-        _fnptr_SaveDataGetLoc(pal_id_playtime_prefix_SaveDataGetLoc(), ptr_playtime_prefix_encoded);
+        FhCall.h_SaveDataGetLoc.fnptr!(pal_id_playtime_prefix_SaveDataGetLoc(), ptr_playtime_prefix_encoded);
 
         int len_playtime_prefix = FhEncoding.decode(playtime_prefix_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
         int len_playtime        = len_playtime_prefix + Encoding.UTF8.GetBytes($"  {playtime_mins / 60:D3}:{playtime_mins % 60:D2}:{playtime_secs % 60:D2}", dest[ len_playtime_prefix .. ]);
@@ -418,7 +410,7 @@ internal static unsafe class FhSavePal {
         byte*              ptr_player_name_encoded = FhUtil.ptr_at<byte>(pal_addr_buf_player_name_encoded());
         ReadOnlySpan<byte> player_name_encoded     = new(ptr_player_name_encoded, int.MaxValue);
 
-        _fnptr_SaveDataGetLoc(0xDD + header[0x21], ptr_player_name_encoded);
+        FhCall.h_SaveDataGetLoc.fnptr!(0xDD + header[0x21], ptr_player_name_encoded);
 
         len_player_name = FhEncoding.decode(player_name_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
         dest [ len_player_name ] = 0x00;
@@ -438,7 +430,7 @@ internal static unsafe class FhSavePal {
             return;
         }
 
-        byte*              ptr_lm_job_encoded = _fnptr_GetLastMissionJobName(header[0x21], header[0x23]);
+        byte*              ptr_lm_job_encoded = FFX2.FhCall.h_GetLastMissionJobName.fnptr!(header[0x21], header[0x23]);
         ReadOnlySpan<byte> lm_job_encoded     = new(ptr_lm_job_encoded, int.MaxValue);
 
         int len_lm_job = FhEncoding.decode(lm_job_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
@@ -462,7 +454,7 @@ internal static unsafe class FhSavePal {
         byte*              ptr_player_level_prefix_encoded = FhUtil.ptr_at<byte>(0x9ED378);
         ReadOnlySpan<byte> player_level_prefix_encoded     = new(ptr_player_level_prefix_encoded, int.MaxValue);
 
-        _fnptr_SaveDataGetLoc(0x36B, ptr_player_level_prefix_encoded);
+        FhCall.h_SaveDataGetLoc.fnptr!(0x36B, ptr_player_level_prefix_encoded);
 
         int len_player_level_prefix = FhEncoding.decode(player_level_prefix_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
         int len_player_level        = len_player_level_prefix + Encoding.UTF8.GetBytes($" {header[0x22]}", dest[ len_player_level_prefix .. ]);
@@ -485,7 +477,7 @@ internal static unsafe class FhSavePal {
         if (FhGlobal.game_id is not FhGameId.FFX2LM) {
             ushort location_id = BinaryPrimitives.ReadUInt16LittleEndian(header[ 0x18 .. ]);
 
-            byte*              ptr_location_name_encoded = _fnptr_AtelGetSaveDicName(location_id, 0);
+            byte*              ptr_location_name_encoded = FhCall.h_AtelGetSaveDicName.fnptr!(location_id, 0);
             ReadOnlySpan<byte> location_name_encoded     = new(ptr_location_name_encoded, int.MaxValue);
 
             int len_location = FhEncoding.decode(location_name_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
@@ -498,8 +490,8 @@ internal static unsafe class FhSavePal {
         Span<byte> lm_location_prefix_encoded     = new(ptr_lm_location_prefix_encoded, int.MaxValue);
         Span<byte> lm_location_suffix_encoded     = new(ptr_lm_location_suffix_encoded, 0x40);
 
-        _fnptr_SaveDataGetLoc(0x4C1, ptr_lm_location_prefix_encoded);
-        _fnptr_SaveDataGetLoc(0x4C2, ptr_lm_location_suffix_encoded);
+        FhCall.h_SaveDataGetLoc.fnptr!(0x4C1, ptr_lm_location_prefix_encoded);
+        FhCall.h_SaveDataGetLoc.fnptr!(0x4C2, ptr_lm_location_suffix_encoded);
 
         pal_fill_template(lm_location_suffix_encoded, (byte)(header[0x25] >> 1));
 
@@ -578,51 +570,6 @@ internal static unsafe class FhSavePal {
         return FhEnvironment.BaseAddr + FhUtil.select(0x8E81E4, 0x9EDABC, 0x9EDABC);
     }
 
-    internal static delegate* unmanaged[Cdecl]<ushort, int> pal_fnaddr_fix_mappic() {
-        return (delegate* unmanaged[Cdecl]<ushort, int>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x2EF830, 0x11C9B0, 0x11C9B0));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<int> pal_fnaddr_isNeedShowJapanLogo() {
-        return (delegate* unmanaged[Cdecl]<int>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x387450, 0x20F500, 0x20F500));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<ushort, uint, byte*> pal_fnaddr_AtelGetSaveDicName() {
-        return (delegate* unmanaged[Cdecl]<ushort, uint, byte*>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x46C3C0, 0x326B80, 0x326B80));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<int, byte*, void> pal_fnaddr_SaveDataGetLoc() {
-        return (delegate* unmanaged[Cdecl]<int, byte*, void>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x2480E0, 0x87CB0, 0x87CB0));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<byte*, nint> pal_fnaddr_SaveDataWriteCrc() {
-        return (delegate* unmanaged[Cdecl]<byte*, nint>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x2490D0, 0x889C0, 0x889C0));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<int> pal_fnaddr_SaveDataCheckCrc() {
-        return (delegate* unmanaged[Cdecl]<int>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x247F20, 0x87B10, 0x87B10));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<void> pal_fnaddr__SetUpDefaultSaveFolder() {
-        return (delegate* unmanaged[Cdecl]<void>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x2F0470, 0x11D310, 0x11D310));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<byte, bool> pal_fnaddr_isNeedRenamePlayer() {
-        return (delegate* unmanaged[Cdecl]<byte, bool>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x387430, 0x20F4E0, 0x20F4E0));
-    }
-
-    internal static delegate* unmanaged[Cdecl]<FhSaveSystemState, void> pal_fnaddr_SaveDataSaveLoadSucceed() {
-        return (delegate* unmanaged[Cdecl]<FhSaveSystemState, void>)
-        (FhEnvironment.BaseAddr + FhUtil.select(0x2486F0, 0x88290, 0x88290));
-    }
-
     internal static nint pal_addr_buf_player_name_encoded() {
         return FhGlobal.game_id switch {
             FhGameId.FFX2   => 0x9ED628,
@@ -643,7 +590,7 @@ internal static unsafe class FhSavePal {
         return FhUtil.select(0x8CB998, 0x9CEA54, 0x9CEA54);
     }
 
-    internal static unsafe byte* pal_addr_buf_save() {
+    internal static byte* pal_addr_buf_save() {
         return FhUtil.ptr_at<byte>(FhUtil.select(0x1197F30, 0xF9E500, 0xF9E500));
     }
 
