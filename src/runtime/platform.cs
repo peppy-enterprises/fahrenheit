@@ -91,7 +91,7 @@ public unsafe sealed class FhPlatformBindingModule : FhModule {
          * > Flags | (uint)D3D11_CREATE_DEVICE_FLAG.D3D11_CREATE_DEVICE_DEBUG.
          */
 
-        HRESULT hr = FhCall.h_D3D11_D3D11CreateDeviceAndSwapChain.chain_from(h_init_d3d)!(
+        HRESULT hr = FhCall.h_D3D11_D3D11CreateDeviceAndSwapChain.chain_from(h_init_d3d).fnptr!(
             pAdapter,
             DriverType,
             Software,

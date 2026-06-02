@@ -140,15 +140,12 @@ public ref struct FhMethodHandle<T> where T : Delegate {
     private readonly nint _ptr_target;
 
     /// <summary>
-    ///     The function at the target address, including any hooks.
+    ///     A pointer to the target function.
+    ///     <para/>
+    ///     Normally, all hooks execute.
+    ///     If <see cref="chain_from(T)"/> is invoked, only the subsequent hooks in the chain run instead.
     /// </summary>
-    public readonly T? fnptr;
-
-    /// <summary>
-    ///     The next function in the current hook chain.
-    ///     Only valid from within a hook, and only after <see cref="chain_from(T)"/>.
-    /// </summary>
-    public T? fnptr_chain { get; private set; }
+    public T? fnptr;
 
     public FhMethodHandle(FhMethodLocation location) {
         if (location.try_resolve(out _ptr_target)) {
@@ -157,16 +154,17 @@ public ref struct FhMethodHandle<T> where T : Delegate {
     }
 
     /// <summary>
-    ///     Returns the next function in the chain of the given <paramref name="hook"/>, if any exists.
+    ///     Retargets the handle to only execute hooks subsequent to the given <paramref name="hook"/>.
     /// </summary>
-    public T? chain_from(T hook) {
-        return fnptr_chain = FhInternal.MethodTable.get_fnptr_chain(hook);
+    public FhMethodHandle<T> chain_from(T hook) {
+        fnptr = FhInternal.MethodTable.get_fnptr_chain(hook);
+        return this;
     }
 
     /// <summary>
     ///     Attempts to insert the given <paramref name="hook"/> into the hook chain of the target method.
     /// </summary>
-    public bool hook(FhModule owner, T hook) {
+    public readonly bool hook(FhModule owner, T hook) {
         FhHookContext hook_info = new(owner, hook);
 
         return _ptr_target != 0 && FhInternal.MethodTable.set_fnptr_chain<T>(_ptr_target, hook_info);

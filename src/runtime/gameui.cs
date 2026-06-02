@@ -65,7 +65,7 @@ public unsafe sealed class FhGameUiModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void h_render_game() {
-        FhCall.h_TODrawMessageWindow.chain_from(h_render_game)!();
+        FhCall.h_TODrawMessageWindow.chain_from(h_render_game).fnptr!();
 
         foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             module_ctx.Module.render_game();

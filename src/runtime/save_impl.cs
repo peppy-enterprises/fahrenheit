@@ -139,7 +139,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void impl_copy() {
-        FhCall.h_TkMenuJumpToLoadedScene.chain_from(impl_copy)!();
+        FhCall.h_TkMenuJumpToLoadedScene.chain_from(impl_copy).fnptr!();
         _lsm!.state_load_slot(_load_pending_slot);
 
         FhApi.Events.Common.GameLoop.PostLoadGame.invoke(new() { save_slot_idx = _load_pending_slot });

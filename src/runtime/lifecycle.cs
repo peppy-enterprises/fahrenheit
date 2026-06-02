@@ -62,7 +62,7 @@ public unsafe class FhCoreModule : FhModule {
     private void h_update_input() {
         FhApi.Input.update();
 
-        FhCall.h_AtelExec_Internal_871D10.chain_from(h_update_input)!();
+        FhCall.h_AtelExec_Internal_871D10.chain_from(h_update_input).fnptr!();
 
         foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             module_ctx.Module.handle_input();

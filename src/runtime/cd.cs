@@ -99,7 +99,7 @@ public unsafe sealed class FhCdInterfaceModule : FhModule {
         int original_module = _ptr_cd->module;
 
         _ptr_cd->module = 0;
-        nint rv = FhCall.h_CDfileSize_PC.chain_from(h_fsize_pc)!(arg1);
+        nint rv = FhCall.h_CDfileSize_PC.chain_from(h_fsize_pc).fnptr!(arg1);
 
         _ptr_cd->module = original_module;
         return rv;

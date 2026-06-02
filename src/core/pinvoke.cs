@@ -50,15 +50,33 @@ internal static unsafe partial class FhPInvoke {
     /// <param name="pDetour">A pointer to the detour function, which will override the target function.</param>
     /// <param name="ppOriginal">A pointer to the trampoline function, which will be used to call the original target function. This parameter can be NULL.</param>
     [LibraryImport(hook_lib_name)]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     internal static partial MH_STATUS MH_CreateHook(
         nint  pTarget,
         nint  pDetour,
         nint* ppOriginal);
 
     /// <summary>
+    ///     Removes an already created hook.
+    /// </summary>
+    /// <param name="pTarget">A pointer to the target function.</param>
+    [LibraryImport(hook_lib_name)]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
+    internal static partial MH_STATUS MH_RemoveHook(nint pTarget);
+
+    /// <summary>
     ///     Enables an already created hook.
     /// </summary>
     /// <param name="pTarget">A pointer to the target function. If this parameter is MH_ALL_HOOKS, all created hooks are enabled in one go.</param>
     [LibraryImport(hook_lib_name)]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     internal static partial MH_STATUS MH_EnableHook(nint pTarget);
+
+    /// <summary>
+    ///     Disables an already created hook.
+    /// </summary>
+    /// <param name="pTarget">A pointer to the target function. If this parameter is MH_ALL_HOOKS, all created hooks are disabled in one go.</param>
+    [LibraryImport(hook_lib_name)]
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
+    internal static partial MH_STATUS MH_DisableHook(nint pTarget);
 }

@@ -60,7 +60,7 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private PCluster* h_pcluster_ld(nint ptr_this, byte* ptr_file_name) {
-        PCluster* rv = FhCall.h_ClusterManager_loadPCluster.chain_from(h_pcluster_ld)!(ptr_this, ptr_file_name);
+        PCluster* rv = FhCall.h_ClusterManager_loadPCluster.chain_from(h_pcluster_ld).fnptr!(ptr_this, ptr_file_name);
         return rv;
     }
 
