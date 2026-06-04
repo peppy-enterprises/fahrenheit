@@ -15,7 +15,7 @@ public sealed class FhModuleHandle<T>(FhModule owner) where T : FhModule {
     ///     caching the match if found, and returns its <see cref="FhModuleContext"/>.
     /// </summary>
     public bool try_get_context([NotNullWhen(true)] out FhModuleContext? target_context) {
-        FhInternal.Log.Info($"{_owner.ModuleType} acquiring handle to {typeof(T).FullName}");
+        FhInternal.Log.Info($"{_owner.ModuleType} -> {typeof(T).FullName}");
         return (target_context = (_match ??= FhApi.Mods.get_module<T>())) != null;
     }
 
@@ -128,22 +128,16 @@ public readonly ref struct FhMethodLocation {
 }
 
 /// <summary>
-///     Pairs a hook with its owner. A stack of these constitutes the complete hook chain of a method.
-/// </summary>
-internal sealed record FhHookContext(FhModule owner, Delegate hook);
-
-/// <summary>
-///     Represents a method with signature <typeparamref name="T"/>. You may then invoke or hook it.
+///     Represents a method with signature <typeparamref name="T"/>. It may then be invoked or hooked.
 /// </summary>
 public ref struct FhMethodHandle<T> where T : Delegate {
 
     private readonly nint _ptr_target;
 
     /// <summary>
-    ///     A pointer to the target function.
+    ///     A pointer to the target function. By default, this includes all hooks.
     ///     <para/>
-    ///     Normally, all hooks execute.
-    ///     If <see cref="chain_from(T)"/> is invoked, only the subsequent hooks in the chain run instead.
+    ///     To execute only part of the function's call chain, use <see cref="chain_from(T)"/>.
     /// </summary>
     public T? fnptr;
 
@@ -167,8 +161,23 @@ public ref struct FhMethodHandle<T> where T : Delegate {
     public readonly bool hook(FhModule owner, T hook) {
         FhHookContext hook_info = new(owner, hook);
 
-        return _ptr_target != 0 && FhInternal.MethodTable.set_fnptr_chain<T>(_ptr_target, hook_info);
+        return _ptr_target != 0 && FhInternal.MethodTable.fnptr_chain_add<T>(_ptr_target, hook_info);
     }
+}
+
+/// <summary>
+///     Pairs a hook with its owner. A stack of these constitutes the complete hook chain of a method.
+/// </summary>
+internal sealed record FhHookContext(
+    FhModule owner,
+    Delegate fnptr);
+
+/// <summary>
+///     Pairs an original game method with its hook stack and auxiliary data required to track hook insertion.
+/// </summary>
+internal sealed class FhMethodContext {
+    internal readonly Stack<FhHookContext> stack   = [];
+    internal          bool                 tainted = false; // The target is locked for further modification.
 }
 
 /// <summary>
@@ -176,16 +185,17 @@ public ref struct FhMethodHandle<T> where T : Delegate {
 /// </summary>
 internal sealed class FhMethodTable {
 
-    private readonly Dictionary<nint,     Delegate>             _fnptrs     = []; // Original or hook -> cached delegate
-    private readonly Dictionary<nint,     Stack<FhHookContext>> _hooks      = []; // Original         -> all hooks (for debug/keep-alive)
-    private readonly Dictionary<nint,     nint>                 _chain_next = []; // Original         -> next chain insertion address
-    private readonly Dictionary<Delegate, nint>                 _chain      = []; // Hook             -> next function in chain
+    private readonly Dictionary<nint,     Delegate>        _fnptrs     = []; // Any function -> cached delegate
+    private readonly Dictionary<nint,     FhMethodContext> _methods    = []; // Original     -> all hooks (for debug/keep-alive)
+    private readonly Dictionary<nint,     nint>            _chain_next = []; // Original     -> next chain insertion address
+    private readonly Dictionary<Delegate, nint>            _chain      = []; // Hook         -> next function in chain
 
+    private          int  _lock_commit = 0;
     private readonly Lock _lock_chains = new Lock();
 
     /// <summary>
-    ///     Caches a delegate for the function of type <typeparamref name="T"/> at <paramref name="ptr_target"/>,
-    ///     or returns the cached delegate if one already exists.
+    ///     Caches a delegate for the function of type <typeparamref name="T"/>
+    ///     at <paramref name="ptr_target"/>, or returns the cached one if it already exists.
     /// </summary>
     public T get_fnptr<T>(nint ptr_target) where T : Delegate {
         if (_fnptrs.TryGetValue(ptr_target, out Delegate? fnptr) && fnptr is T t_fnptr)
@@ -196,83 +206,137 @@ internal sealed class FhMethodTable {
         return t_fnptr;
     }
 
+    /* [fkelava 04/06/26 23:28]
+     * Locking should not be required because _chain_next is only manipulated
+     * in a function under lock, and chain_from() which reads _chain is only
+     * valid in contexts where no further hooks may be inserted.
+     */
+
     /// <summary>
     ///     For the function at <paramref name="ptr_target"/>, obtains the address at which
     ///     the next function in the chain must be inserted.
     /// </summary>
-    public nint get_fnptr_chain_insert(nint ptr_target) {
-        lock (_lock_chains) {
-            return _chain_next.TryGetValue(ptr_target, out nint addr_current)
-                ? addr_current
-                : ptr_target;
-        }
+    public nint get_fnptr_chain_next(nint ptr_target) {
+        return _chain_next.TryGetValue(ptr_target, out nint ptr_next)
+            ? ptr_next
+            : ptr_target;
     }
 
     /// <summary>
     ///     For a given <paramref name="hook"/>, obtains the next link in its hook chain (if any exists).
     /// </summary>
     public T? get_fnptr_chain<T>(T hook) where T : Delegate {
+        return _chain.TryGetValue(hook, out nint chain_fnptr)
+            ? get_fnptr<T>(chain_fnptr)
+            : null;
+    }
+
+    /* [fkelava 02/06/26 18:55]
+     * MinHook creates a problem for us here; it will not install two hooks for the same function.
+     *
+     * Given MH_CreateHook(pTarget, pDetour, &ppOriginal), we can sequence `h1`, `h2` and `h3` over a function `f` as such:
+     * > MH_CreateHook(&f,             &h1, &trampoline_f);
+     * > MH_CreateHook(&trampoline_f,  &h2, &trampoline_h1);
+     * > MH_CreateHook(&trampoline_h1, &h3, &trampoline_h2);
+     *
+     * Execution follows insertion order. Earlier hooks can pre-empt later ones.
+     * This goes directly against _our_ LIFO load order where we want subsequent hooks to take priority.
+     *
+     * One way of proceeding would be to unwind and reapply the entire hook chain, but I could not get it to work.
+     * I assume this is due to https://github.com/TsudaKageyu/minhook/issues/78#issuecomment-485101354.
+     *
+     * Thus we impose the following rules:
+     * - Hooks inserted at `init` time are queued for application.
+     * - Hooks are inserted in the proper order after all modules have initialized.
+     * - Hook insertion after `init` is prohibited over a function that already has any.
+     * - Hooks inserted after `init` revert to executing in insertion order.
+     */
+
+    /// <summary>
+    ///     Attempts to insert a given <paramref name="hook"/>
+    ///     into the chain of the function at <paramref name="ptr_target"/>.
+    /// </summary>
+    /// <remarks><see cref="_lock_chains" /> must be held by the caller.</remarks>
+    private bool fnptr_chain_insert<T>(nint ptr_target, T hook) where T : Delegate {
+        // _lock_chains must be held by this method's caller.
+        nint pDetour;
+        nint pTarget    = get_fnptr_chain_next(ptr_target);
+        nint ppOriginal = 0;
+
+        try {
+            pDetour = Marshal.GetFunctionPointerForDelegate(hook);
+        }
+        catch (Exception e) {
+            FhInternal.Log.Error(e.ToString());
+            return false;
+        }
+
+        unsafe {
+            FhPInvoke.MH_STATUS rv_create = FhPInvoke.MH_CreateHook(pTarget, pDetour, &ppOriginal);
+
+            if (rv_create != FhPInvoke.MH_STATUS.MH_OK) {
+                FhInternal.Log.Error($"MH_CreateHook() failed for {hook.Method.Name} - {rv_create}");
+                return false;
+            }
+        }
+
+        FhPInvoke.MH_STATUS rv_enable = FhPInvoke.MH_EnableHook(pTarget);
+
+        if (rv_enable != FhPInvoke.MH_STATUS.MH_OK) {
+            FhInternal.Log.Error($"MH_EnableHook() failed for {hook.Method.Name} - {rv_enable}");
+            return false;
+        }
+
+        _chain_next[ptr_target] = ppOriginal;
+        _chain     [hook]       = ppOriginal;
+
+        FhInternal.Log.Info($"(0x{ptr_target:X}) -> {hook.Method.Name}");
+        return true;
+    }
+
+    /// <inheritdoc cref="fnptr_chain_insert{T}(nint, T)" />
+    public bool fnptr_chain_add<T>(nint ptr_target, FhHookContext hook) where T : Delegate {
         lock (_lock_chains) {
-            return _chain.TryGetValue(hook, out nint chain_fnptr)
-                ? get_fnptr<T>(chain_fnptr)
-                : null;
+            if (_methods.TryGetValue(ptr_target, out FhMethodContext? target)) {
+                if (target.tainted) {
+                    FhInternal.Log.Error($"(0x{ptr_target:X}) - rejected late insertion of {hook.fnptr.Method.Name}");
+                    return false;
+                }
+
+                target.stack.Push(hook);
+                return Interlocked.CompareExchange(ref _lock_commit, 0, 0) == 0 || fnptr_chain_insert(ptr_target, hook.fnptr);
+            }
+
+            target = new();
+            target.stack.Push(hook);
+
+            _methods[ptr_target] = target;
+            return Interlocked.CompareExchange(ref _lock_commit, 0, 0) == 0 || fnptr_chain_insert(ptr_target, hook.fnptr);
         }
     }
 
     /// <summary>
-    ///     Inserts the hook located at <paramref name="ptr_chain_link"/> and described by
-    ///     <paramref name="context"/> into the chain of the function at <paramref name="ptr_target"/>.
+    ///     Applies all hooks registered at the time of calling and
+    ///     prohibits further insertion over functions with any hooks registered.
     /// </summary>
-    public bool set_fnptr_chain<T>(nint ptr_target, FhHookContext context) where T : Delegate {
+    public bool commit() {
         lock (_lock_chains) {
-            Delegate hook = context.hook;
+            if (Interlocked.CompareExchange(ref _lock_commit, 1, 0) == 1)
+                return true; // reject repeat calls
 
-            // Where do we have to insert the next hook for this chain?
-            nint pTarget = get_fnptr_chain_insert(ptr_target);
-            nint pDetour;
+            foreach ((nint target_ptr, FhMethodContext target) in _methods) {
+                Stack<FhHookContext> target_stack = target.stack;
 
-            try {
-                pDetour = Marshal.GetFunctionPointerForDelegate(hook);
-            }
-            catch (Exception e) {
-                FhInternal.Log.Error(e.ToString());
-                return false;
-            }
-
-            nint ppOriginal = 0;
-
-            unsafe {
-                FhPInvoke.MH_STATUS rv_create = FhPInvoke.MH_CreateHook(pTarget, pDetour, &ppOriginal);
-
-                if (rv_create != FhPInvoke.MH_STATUS.MH_OK) {
-                    FhInternal.Log.Error($"MH_CreateHook() failed for {hook.Method.Name} - {rv_create}");
-                    return false;
+                foreach (FhHookContext hook in target_stack) {
+                    if (!fnptr_chain_insert(target_ptr, hook.fnptr))
+                        return false;
                 }
+
+                target.tainted = true;
             }
-
-            FhPInvoke.MH_STATUS rv_enable = FhPInvoke.MH_EnableHook(pTarget);
-
-            if (rv_enable != FhPInvoke.MH_STATUS.MH_OK) {
-                FhInternal.Log.Error($"MH_EnableHook() failed for {hook.Method.Name} - {rv_enable}");
-                return false;
-            }
-
-            _chain_next[ptr_target] = ppOriginal;
-            _chain     [hook]       = ppOriginal;
-
-            FhInternal.Log.Info($"(0x{ptr_target:X}) - inserted {hook.Method.Name}");
-
-            if (_hooks.TryGetValue(ptr_target, out Stack<FhHookContext>? hooks)) {
-                hooks.Push(context);
-                return true;
-            }
-
-            hooks = [];
-            hooks.Push(context);
-
-            _hooks[ptr_target] = hooks;
-            return true;
         }
+
+        return true;
     }
 
 }

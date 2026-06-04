@@ -9,9 +9,10 @@ public class GameLoopEventsImplModule : FhModule {
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         // TODO: Support `PostReturnToTitle` in FFX-2
+        bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
 
         return FhCall.h_Sg_MainLoop.hook(this, raise_update_events)
-            && (FhGlobal.game_id is not FhGameId.FFX || FFX.FhCall.h_AtelSetEventJump2.hook(this, handle_warp));
+            && (!is_ffx || FFX.FhCall.h_AtelSetEventJump2.hook(this, handle_warp));
     }
 
     /// <summary>

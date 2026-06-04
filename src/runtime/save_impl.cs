@@ -39,13 +39,15 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         FhModuleHandle<FhLocalStateModule>  lsm_handle = new(this);
         FhModuleHandle<FhSaveManagerModule> smm_handle = new(this);
 
+        bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
+
         return FhCall.h_SaveDataManager_debugSave_Internal_6F0650.hook(this, impl_autosave)
             && FhCall.h_TkMenuJumpToLoadedScene                  .hook(this, impl_copy)
             && FhCall.h_SaveDataToSave                           .hook(this, signal_enter_save)
             && FhCall.h_SaveDataToLoad                           .hook(this, signal_enter_load)
-            && (FhGlobal.game_id is not FhGameId.FFX || FFX.FhCall.h_FUN_2EFFF0.hook(this, signal_enter_albd))
-            && lsm_handle                      .try_get_module(out _lsm)
-            && smm_handle                      .try_get_module(out _smm);
+            && (!is_ffx || FFX.FhCall.h_FUN_2EFFF0.hook(this, signal_enter_albd))
+            && lsm_handle.try_get_module(out _lsm)
+            && smm_handle.try_get_module(out _smm);
     }
 
     internal FhSaveExtensionSystemState get_system_state() => _state;

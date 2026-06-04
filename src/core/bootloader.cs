@@ -35,6 +35,9 @@ internal static class FhEnvironment {
         FhApi.Mods.load_mods();
         FhApi.Localization.initialize();
         FhApi.Mods.initialize_mods();
+
+        // post-init - may require later editing
+        FhInternal.MethodTable.commit();
     }
 
     /// <summary>
