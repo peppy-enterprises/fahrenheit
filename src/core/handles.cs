@@ -271,6 +271,7 @@ internal sealed class FhMethodTable {
             return false;
         }
 
+        // SAFETY: &ppOriginal is used as an out parameter and stack allocated
         unsafe {
             FhPInvoke.MH_STATUS rv_create = FhPInvoke.MH_CreateHook(pTarget, pDetour, &ppOriginal);
 
