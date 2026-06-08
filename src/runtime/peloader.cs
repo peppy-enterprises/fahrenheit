@@ -52,16 +52,14 @@ internal readonly unsafe ref struct FhPClusterScope(PCluster* ptr_cluster, FhPhy
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhPhyreLoaderModule : FhModule {
 
-    public FhPhyreLoaderModule() { }
+    private readonly nint* _pp_cluster_mgr;
 
-    public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return FhCall.h_ClusterManager_loadPCluster.hook(this, h_pcluster_ld);
+    public FhPhyreLoaderModule() {
+        _pp_cluster_mgr = FhUtil.ptr_at<nint>(FhUtil.select(0x8CCA44, 0x9CFE48, 0x9CFE48));
     }
 
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private PCluster* h_pcluster_ld(nint ptr_this, byte* ptr_file_name) {
-        PCluster* rv = FhCall.h_ClusterManager_loadPCluster.chain_from(h_pcluster_ld).fnptr!(ptr_this, ptr_file_name);
-        return rv;
+    public override bool init(FhModContext mod_context, FileStream global_state_file) {
+        return true;
     }
 
     /// <summary>
@@ -70,7 +68,7 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
     /// </summary>
     internal FhPClusterScope cluster_load(string file_path) {
         byte[] file_path_u8    = Encoding.UTF8.GetBytes(file_path);
-        nint   ptr_cluster_mgr = FhUtil.get_at<nint>(FhUtil.select(0x8CCA44, 0x9CFE48, 0x9CFE48));
+        nint   ptr_cluster_mgr = *_pp_cluster_mgr;
 
         if (ptr_cluster_mgr == 0) {
             _logger.Warning($"ClusterManager not ready - {file_path}");
@@ -101,7 +99,7 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
     ///     Releases a cluster attained by a previous call to <see cref="cluster_load"/>.
     /// </summary>
     internal void cluster_release(PCluster* ptr_cluster) {
-        nint ptr_cluster_mgr = FhUtil.get_at<nint>(FhUtil.select(0x8CCA44, 0x9CFE48, 0x9CFE48));
+        nint ptr_cluster_mgr = *_pp_cluster_mgr;
         FhCall.h_ClusterManager_releasePCluster.fnptr!(ptr_cluster_mgr, ptr_cluster);
     }
 }
