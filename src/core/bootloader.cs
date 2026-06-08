@@ -140,8 +140,10 @@ internal sealed class FhLoader {
     private readonly Dictionary<string, FhLoadContext> _load_contexts = [];
 
     internal FhLoader() {
-        // Loading the core libraries into ALC.Default ensures they do not 'leak' into plugins' load contexts, causing type identity mismatches.
-        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhEnvironment.Finder.Binaries.FullName, "fh.dll"));
+        // Loading the core library into ALC.Default ensures it does not 'leak' into plugins' load contexts, causing type identity mismatches.
+        Assembly self = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhEnvironment.Finder.Binaries.FullName, "fh.dll"));
+        FhInternal.Log.Info($"Fahrenheit {FileVersionInfo.GetVersionInfo(self.Location).ProductVersion}");
+
         // required for Hexa.NET.ImGui's assembly-probing logic
         HexaGen.Runtime.LibraryLoader.CustomLoadFolders.Add(FhEnvironment.Finder.Binaries.FullName);
     }
