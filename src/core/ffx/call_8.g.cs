@@ -1576,20 +1576,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<SaveDataSetScreenState> h_SaveDataSetScreenState => new( new FhMethodLocation("FFX.exe", 0x248890) );
 
     // Original after pruning:
-    // unknown undefined SaveDataToLoad() at 00648910
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void SaveDataToLoad();
-    public static FhMethodHandle<SaveDataToLoad> h_SaveDataToLoad => new( new FhMethodLocation("FFX.exe", 0x248910) );
-
-    // Original after pruning:
-    // unknown undefined SaveDataToSave() at 00648950
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void SaveDataToSave();
-    public static FhMethodHandle<SaveDataToSave> h_SaveDataToSave => new( new FhMethodLocation("FFX.exe", 0x248950) );
-
-    // Original after pruning:
     // unknown undefined SaveDataUpdateIcon() at 00648ad0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -10354,13 +10340,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<AtelGetSaveDic> h_AtelGetSaveDic => new( new FhMethodLocation("FFX.exe", 0x46C3A0) );
 
     // Original after pruning:
-    // unknown undefined AtelGetSaveDicName() at 0086c3c0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void AtelGetSaveDicName();
-    public static FhMethodHandle<AtelGetSaveDicName> h_AtelGetSaveDicName => new( new FhMethodLocation("FFX.exe", 0x46C3C0) );
-
-    // Original after pruning:
     // unknown undefined AtelGetScenarioFlag() at 0086c400
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -12396,13 +12375,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void TOControlMessageWindowForMenu();
     public static FhMethodHandle<TOControlMessageWindowForMenu> h_TOControlMessageWindowForMenu => new( new FhMethodLocation("FFX.exe", 0x4AB950) );
-
-    // Original after pruning:
-    // unknown undefined TODrawMessageWindow() at 008abce0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TODrawMessageWindow();
-    public static FhMethodHandle<TODrawMessageWindow> h_TODrawMessageWindow => new( new FhMethodLocation("FFX.exe", 0x4ABCE0) );
 
     // Original after pruning:
     // unknown undefined TODrawMessageWindowForMenu() at 008abdf0

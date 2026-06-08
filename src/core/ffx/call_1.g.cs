@@ -21356,9 +21356,6 @@ public static unsafe partial class FhCall {
     // unknown undefined GetSingleton() at 005cd190
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // unknown undefined PStreamFile() at 00607d80
-
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown undefined PStream() at 0060f210
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
@@ -21804,9 +21801,6 @@ public static unsafe partial class FhCall {
     // unknown undefined Bind() at 00622d20
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // __stdcall int FixupClusters(PCluster** clusters, int count) at 00623740
-
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown undefined GetApplication() at 00623d50
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
@@ -22102,13 +22096,7 @@ public static unsafe partial class FhCall {
     // unknown undefined isChrDelayedRelease() at 0069b8f0
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // __thiscall PCluster* loadPCluster(ClusterManager* this, char* name) at 0069ba80
-
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown undefined onLoadPCluster() at 0069bcc0
-
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // __thiscall void releasePCluster(ClusterManager* this, int param_1) at 0069bef0
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown undefined releasePCluster() at 0069bfd0
@@ -32047,13 +32035,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_00625840();
     public static FhMethodHandle<FUN_00625840> h_FUN_00625840 => new( new FhMethodLocation("FFX.exe", 0x225840) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00625930() at 00625930
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void FUN_00625930();
-    public static FhMethodHandle<FUN_00625930> h_FUN_00625930 => new( new FhMethodLocation("FFX.exe", 0x225930) );
 
     // Original after pruning:
     // unknown undefined FUN_00626c50() at 00626c50

@@ -39427,13 +39427,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<inputClear> h_inputClear => new( new FhMethodLocation("FFX-2.exe", 0x3AE30) );
 
     // Original after pruning:
-    // unknown undefined SaveDataToSave() at 004884d0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void SaveDataToSave();
-    public static FhMethodHandle<SaveDataToSave> h_SaveDataToSave => new( new FhMethodLocation("FFX-2.exe", 0x884D0) );
-
-    // Original after pruning:
     // unknown undefined graphicLockScreenFadeColor() at 00452f80
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -39665,13 +39658,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<SaveDataSetScreenState> h_SaveDataSetScreenState => new( new FhMethodLocation("FFX-2.exe", 0x88420) );
 
     // Original after pruning:
-    // unknown undefined SaveDataToLoad() at 004884a0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void SaveDataToLoad();
-    public static FhMethodHandle<SaveDataToLoad> h_SaveDataToLoad => new( new FhMethodLocation("FFX-2.exe", 0x884A0) );
-
-    // Original after pruning:
     // unknown undefined CloudSetMenuState() at 0051c5b0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -39740,13 +39726,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void TkMenuCloseSaveLoadScreen();
     public static FhMethodHandle<TkMenuCloseSaveLoadScreen> h_TkMenuCloseSaveLoadScreen => new( new FhMethodLocation("FFX-2.exe", 0x3693B0) );
-
-    // Original after pruning:
-    // unknown undefined TkMenuJumpToLoadedScene() at 0076ad50
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TkMenuJumpToLoadedScene();
-    public static FhMethodHandle<TkMenuJumpToLoadedScene> h_TkMenuJumpToLoadedScene => new( new FhMethodLocation("FFX-2.exe", 0x36AD50) );
 
     // Original after pruning:
     // unknown undefined TkMenuPreSave() at 0076b010
