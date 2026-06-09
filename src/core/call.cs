@@ -11,6 +11,8 @@
  * functions included here are expected to also provide a 'select' helper for automatic .
  */
 
+using Fahrenheit.Atel;
+
 namespace Fahrenheit;
 
 /// <summary>
@@ -80,7 +82,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void Sg_MainLoop(float delta);
     internal static FhMethodHandle<Sg_MainLoop> h_Sg_MainLoop
-        => new ( new FhMethodLocation(0x420C00, 0x205150) );
+        => new( new FhMethodLocation(0x420C00, 0x205150) );
 
     // RT - EFL
 
@@ -93,7 +95,7 @@ public static unsafe partial class FhCall {
         nint         p4,  // unused?
         bool         p5); // unused?
     internal static FhMethodHandle<Phyre_PSerialization_PStreamFile_ctor> h_Phyre_PSerialization_PStreamFile_ctor
-        => new ( new FhMethodLocation(0x207D80, 0x490E40) );
+        => new( new FhMethodLocation(0x207D80, 0x490E40) );
 
     // RT - Phyre loader
 
@@ -130,12 +132,12 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void SaveDataManager_debugSave_Internal_6F0650(int size, byte* ptr);
     internal static FhMethodHandle<SaveDataManager_debugSave_Internal_6F0650> h_SaveDataManager_debugSave_Internal_6F0650
-        => new ( new FhMethodLocation(0x2F0650, 0x11D510) );
+        => new( new FhMethodLocation(0x2F0650, 0x11D510) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void SaveDataToSave();
     internal static FhMethodHandle<SaveDataToSave> h_SaveDataToSave
-        => new ( new FhMethodLocation(0x248950, 0x884D0) );
+        => new( new FhMethodLocation(0x248950, 0x884D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void SaveDataToLoad();
@@ -145,7 +147,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     internal delegate void TkMenuJumpToLoadedScene();
     internal static FhMethodHandle<TkMenuJumpToLoadedScene> h_TkMenuJumpToLoadedScene
-        => new ( new FhMethodLocation(0x4B4E70, 0x36AD50 ) );
+        => new( new FhMethodLocation(0x4B4E70, 0x36AD50 ) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate int fix_mappic(ushort arg1);
@@ -195,6 +197,15 @@ public static unsafe partial class FhCall {
     // INTERNAL/RESTRICTED - END
 
     // PUBLIC/UNRESTRICTED - BEGIN
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int CT_Exec(AtelBasicWorker* work, AtelStack* atelStack);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int CT_RetInt(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate float CT_RetFloat(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
 
     // PUBLIC/UNRESTRICTED - END
 

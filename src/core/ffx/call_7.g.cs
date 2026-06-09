@@ -48907,13 +48907,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<MsGetSaveChrName> h_MsGetSaveChrName => new( new FhMethodLocation("FFX.exe", 0x385070) );
 
     // Original after pruning:
-    // __stdcall int MsSetSaveCommand(int chr_id, int com_id, int param_3) at 00785d10
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsSetSaveCommand(nint chr_id, nint com_id, nint param_3);
-    public static FhMethodHandle<MsSetSaveCommand> h_MsSetSaveCommand => new( new FhMethodLocation("FFX.exe", 0x385D10) );
-
-    // Original after pruning:
     // unknown undefined sceWrite() at 0062ff70
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -49019,13 +49012,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<MsGetRamChrMP> h_MsGetRamChrMP => new( new FhMethodLocation("FFX.exe", 0x39AE60) );
 
     // Original after pruning:
-    // __stdcall byte* TOGetSaveChrName(undefined4 chr_id) at 008ac800
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint TOGetSaveChrName(nint chr_id);
-    public static FhMethodHandle<TOGetSaveChrName> h_TOGetSaveChrName => new( new FhMethodLocation("FFX.exe", 0x4AC800) );
-
-    // Original after pruning:
     // unknown undefined SndPlayClick() at 00886b00
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -49073,13 +49059,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsGetSaveWeaponName();
     public static FhMethodHandle<MsGetSaveWeaponName> h_MsGetSaveWeaponName => new( new FhMethodLocation("FFX.exe", 0x3ABE10) );
-
-    // Original after pruning:
-    // __stdcall int MsPayGIL(int param_1) at 00785a60
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsPayGIL(nint param_1);
-    public static FhMethodHandle<MsPayGIL> h_MsPayGIL => new( new FhMethodLocation("FFX.exe", 0x385A60) );
 
     // Original after pruning:
     // __stdcall undefined MsGetNextAP(undefined4 chr_id) at 00784f50
@@ -49136,13 +49115,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void graphicResetButtonIconScale();
     public static FhMethodHandle<graphicResetButtonIconScale> h_graphicResetButtonIconScale => new( new FhMethodLocation("FFX.exe", 0x242E10) );
-
-    // Original after pruning:
-    // __cdecl void achievementUnlockAchievement(AchievementId_4 ach_id) at 00822410
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void achievementUnlockAchievement(nint ach_id);
-    public static FhMethodHandle<achievementUnlockAchievement> h_achievementUnlockAchievement => new( new FhMethodLocation("FFX.exe", 0x422410) );
 
     // Original after pruning:
     // unknown undefined GetCDFileName_PC() at 00a429d0
