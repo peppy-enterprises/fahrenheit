@@ -44,7 +44,7 @@ public sealed class FhLocalStateModule : FhModule {
     private string _get_state_dir_path(FhModContext mod_context, FhModuleContext module_context, int slot) {
         string local_state_dir = Path.Join(
             FhEnvironment.Finder.State.FullName,
-            FhEnvironment.StateHash,
+            FhInternal.Hasher.SaveSetHash,
             _smm!.get_active_set(),
             FhSavePal.pal_get_save_subfolder(),
             FhSavePal.pal_get_save_name_for_slot(slot),

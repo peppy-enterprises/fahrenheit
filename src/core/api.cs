@@ -33,4 +33,5 @@ internal static class FhInternal {
     public static readonly FhLogger      Log         = new FhLogger("core.log");
     public static readonly FhLoader      Loader      = new FhLoader();
     public static readonly FhMethodTable MethodTable = new FhMethodTable();
+    public static readonly FhHasher      Hasher      = new FhHasher();
 }

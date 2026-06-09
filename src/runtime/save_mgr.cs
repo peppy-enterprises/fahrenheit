@@ -32,7 +32,7 @@ public sealed class FhSaveManagerModule : FhModule {
     private readonly Dictionary<string, FileInfo[]> _sm_file_attributes;
 
     public FhSaveManagerModule() {
-        _sm_path_base        = Path.Join(FhEnvironment.Finder.Saves.FullName, FhEnvironment.StateHash);
+        _sm_path_base        = Path.Join(FhEnvironment.Finder.Saves.FullName, FhInternal.Hasher.SaveSetHash);
         _sm_path_default_set = Path.Join(_sm_path_base, FhSavePal.DEFAULT_SET_NAME, FhSavePal.pal_get_save_subfolder());
         _sm_sets             = [];
         _sm_set_size         = FhSavePal.DEFAULT_SET_SIZE;

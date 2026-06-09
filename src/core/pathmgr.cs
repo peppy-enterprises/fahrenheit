@@ -9,14 +9,15 @@ namespace Fahrenheit;
 ///     Provides access to a module's essential files and directories.
 /// </summary>
 internal sealed record FhModulePaths(
-    string GlobalStatePath);
+    string GlobalStatePath,
+    string GlobalConfigPath,
+    string LocalConfigPath);
 
 /// <summary>
 ///     Provides access to a mod's essential files and directories.
 /// </summary>
 public sealed record FhModPaths(
     string        ManifestPath,
-    string        SettingsPath,
     DirectoryInfo ModDir,
     DirectoryInfo ResourcesDir,
     DirectoryInfo EflDir,
@@ -27,6 +28,7 @@ public sealed record FhModPaths(
 /// </summary>
 internal sealed class FhFinder {
     private const string _dirname_bin   = "bin";
+    private const string _dirname_cfg   = "cfg";
     private const string _dirname_mods  = "mods";
     private const string _dirname_logs  = "logs";
     private const string _dirname_state = "state";
@@ -36,16 +38,18 @@ internal sealed class FhFinder {
     private const string _dirname_efl   = "efl";
 
     internal readonly DirectoryInfo Binaries;
+    internal readonly DirectoryInfo Config;
     internal readonly DirectoryInfo Mods;
     internal readonly DirectoryInfo Logs;
     internal readonly DirectoryInfo State;
     internal readonly DirectoryInfo Saves;
 
     internal FhFinder() {
-        string cwd_parent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ??
-                            throw new Exception("E_CWD_PARENT_DIR_UNIDENTIFIABLE");
+        // If this somehow throws, we really have no business executing at all.
+        string cwd_parent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName!;
 
         Binaries = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_bin));
+        Config   = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_cfg));
         Mods     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_mods));
         Logs     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_logs, FhUtil.get_timestamp_string()));
         State    = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_state));
@@ -82,7 +86,6 @@ internal sealed class FhFinder {
 
         return new FhModPaths(
             ManifestPath: Path.Join(mod_dir, $"{mod_name}.manifest.json"),
-            SettingsPath: Path.Join(mod_dir, $"{mod_name}.config.json"),
             ModDir:       Directory.CreateDirectory(mod_dir),
             ResourcesDir: Directory.CreateDirectory(Path.Join(mod_dir, _dirname_rsrc)),
             EflDir:       Directory.CreateDirectory(Path.Join(mod_dir, _dirname_efl)),
@@ -94,13 +97,23 @@ internal sealed class FhFinder {
     ///     Returns path information for module <paramref name="module_name"/> of mod <paramref name="mod_name"/>.
     /// </summary>
     public FhModulePaths get_for_module(string mod_name, string module_name) {
-        string global_state_dir  = Path.Join(State.FullName, "global", mod_name);
-        string global_state_path = Path.Join(global_state_dir, module_name);
+        string dir_state_global  = Path.Join(State.FullName, "global", mod_name);
+        string path_state_global = Path.Join(dir_state_global, module_name);
 
-        Directory.CreateDirectory(global_state_dir);
+        string dir_cfg_global  = Path.Join(Config.FullName, "global", mod_name);
+        string path_cfg_global = Path.Join(dir_cfg_global, $"{module_name}.json");
+
+        string dir_cfg_local  = Path.Join(Config.FullName, "local", "default", mod_name);
+        string path_cfg_local = Path.Join(dir_cfg_local, $"{module_name}.json");
+
+        Directory.CreateDirectory(dir_state_global);
+        Directory.CreateDirectory(dir_cfg_global);
+        Directory.CreateDirectory(dir_cfg_local);
 
         return new FhModulePaths(
-            GlobalStatePath: global_state_path
+            GlobalStatePath:  path_state_global,
+            GlobalConfigPath: path_cfg_global,
+            LocalConfigPath:  path_cfg_local
             );
     }
 }
