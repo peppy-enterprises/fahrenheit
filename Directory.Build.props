@@ -9,9 +9,7 @@
         -->
 
         <IsPackable>false</IsPackable>
-    </PropertyGroup>
 
-    <PropertyGroup>
         <!--
         Artifact path handling.
         -->
@@ -29,9 +27,7 @@
         <PublishDir>$(_FhOutDirBin)</PublishDir>
         <BaseOutputPath>$(_FhBaseOutputPath)</BaseOutputPath>
         <BaseIntermediateOutputPath>$(_FhBaseIntermediateOutputPath)</BaseIntermediateOutputPath>
-    </PropertyGroup>
 
-    <PropertyGroup>
         <!--
         We previously used 'embedded' portable PDBs.
         However, it does not seem as though debuggers can retrieve such symbols
@@ -40,9 +36,7 @@
         -->
 
         <DebugType>portable</DebugType>
-    </PropertyGroup>
 
-    <PropertyGroup>
         <!--
         Custom display attributes.
         -->
@@ -50,9 +44,7 @@
         <Company>https://github.com/fahrenheit-crew/fahrenheit</Company>
         <Copyright>Copyright © The Fahrenheit contributors</Copyright>
         <Version>1.0.0-alpha11</Version>
-    </PropertyGroup>
 
-    <PropertyGroup>
         <!--
         NuGet Package Explorer complains if a package is not built 'deterministically'.
 
