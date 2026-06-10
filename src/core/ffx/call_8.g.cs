@@ -35,12 +35,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void sceMount();
     public static FhMethodHandle<sceMount> h_sceMount => new( new FhMethodLocation("FFX.exe", 0x22FBD0) );
 
-    // Original after pruning:
-    // unknown undefined sceOpen() at 0062fbe0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void sceOpen();
-    public static FhMethodHandle<sceOpen> h_sceOpen => new( new FhMethodLocation("FFX.exe", 0x22FBE0) );
 
     // Original after pruning:
     // unknown undefined scePadGetState() at 0062fce0
@@ -84,12 +78,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void scePrintf();
     public static FhMethodHandle<scePrintf> h_scePrintf => new( new FhMethodLocation("FFX.exe", 0x22FDA0) );
 
-    // Original after pruning:
-    // unknown undefined sceRead() at 0062fdb0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void sceRead();
-    public static FhMethodHandle<sceRead> h_sceRead => new( new FhMethodLocation("FFX.exe", 0x22FDB0) );
 
     // Original after pruning:
     // unknown undefined sceRemove() at 0062fdd0
@@ -1624,12 +1612,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void fiosRead();
     public static FhMethodHandle<fiosRead> h_fiosRead => new( new FhMethodLocation("FFX.exe", 0x2799B0) );
 
-    // Original after pruning:
-    // unknown undefined fiosUnifyFilename() at 006799d0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void fiosUnifyFilename();
-    public static FhMethodHandle<fiosUnifyFilename> h_fiosUnifyFilename => new( new FhMethodLocation("FFX.exe", 0x2799D0) );
 
     // Original after pruning:
     // unknown undefined createVsyncEmuThread() at 0067a010
@@ -3220,12 +3202,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsBattleDraw();
     public static FhMethodHandle<MsBattleDraw> h_MsBattleDraw => new( new FhMethodLocation("FFX.exe", 0x380DD0) );
 
-    // Original after pruning:
-    // __stdcall void MsBattleExe(int param_1, int field_idx, int group_idx, int formation_idx) at 007810f0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void MsBattleExe(nint param_1, nint field_idx, nint group_idx, nint formation_idx);
-    public static FhMethodHandle<MsBattleExe> h_MsBattleExe => new( new FhMethodLocation("FFX.exe", 0x3810F0) );
 
     // Original after pruning:
     // unknown undefined MsBattleExeClear() at 00781600
@@ -3290,12 +3266,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsBattleInitAtEvent();
     public static FhMethodHandle<MsBattleInitAtEvent> h_MsBattleInitAtEvent => new( new FhMethodLocation("FFX.exe", 0x381D20) );
 
-    // Original after pruning:
-    // __stdcall int MsBattleLabelExe(undefined4 param_1, byte encounter_type, byte screen_transition) at 00781d60
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsBattleLabelExe(nint param_1, nint encounter_type, nint screen_transition);
-    public static FhMethodHandle<MsBattleLabelExe> h_MsBattleLabelExe => new( new FhMethodLocation("FFX.exe", 0x381D60) );
 
     // Original after pruning:
     // unknown undefined MsBattleReadData() at 00782110
@@ -3388,12 +3358,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsBtlReadSceneFree();
     public static FhMethodHandle<MsBtlReadSceneFree> h_MsBtlReadSceneFree => new( new FhMethodLocation("FFX.exe", 0x383EB0) );
 
-    // Original after pruning:
-    // unknown undefined MsBtlReadSetScene() at 00783ed0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsBtlReadSetScene();
-    public static FhMethodHandle<MsBtlReadSetScene> h_MsBtlReadSetScene => new( new FhMethodLocation("FFX.exe", 0x383ED0) );
 
     // Original after pruning:
     // unknown undefined MsCDreadWeapon() at 007841d0
@@ -3472,12 +3436,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsGetSaveMenu();
     public static FhMethodHandle<MsGetSaveMenu> h_MsGetSaveMenu => new( new FhMethodLocation("FFX.exe", 0x385350) );
 
-    // Original after pruning:
-    // unknown undefined MsGetSavePartyMember() at 007853b0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsGetSavePartyMember();
-    public static FhMethodHandle<MsGetSavePartyMember> h_MsGetSavePartyMember => new( new FhMethodLocation("FFX.exe", 0x3853B0) );
 
     // Original after pruning:
     // __stdcall PlySave* MsGetSavePlayerPtr(uint param_1) at 007853f0
@@ -3542,12 +3500,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsSetSaveData();
     public static FhMethodHandle<MsSetSaveData> h_MsSetSaveData => new( new FhMethodLocation("FFX.exe", 0x386080) );
 
-    // Original after pruning:
-    // __stdcall undefined MsSetSaveParam(undefined4 chr_id) at 007861b0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void MsSetSaveParam(nint chr_id);
-    public static FhMethodHandle<MsSetSaveParam> h_MsSetSaveParam => new( new FhMethodLocation("FFX.exe", 0x3861B0) );
 
     // Original after pruning:
     // unknown undefined forceAutoBattleOff() at 007872b0
@@ -3759,12 +3711,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsResetBindEffect();
     public static FhMethodHandle<MsResetBindEffect> h_MsResetBindEffect => new( new FhMethodLocation("FFX.exe", 0x388F20) );
 
-    // Original after pruning:
-    // __cdecl undefined MsCalcCommand() at 007893a0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsCalcCommand();
-    public static FhMethodHandle<MsCalcCommand> h_MsCalcCommand => new( new FhMethodLocation("FFX.exe", 0x3893A0) );
 
     // Original after pruning:
     // __stdcall byte MsCalcCostCTB(AttackCue* atk_info) at 00789670
@@ -3829,12 +3775,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsCheckUseCommand();
     public static FhMethodHandle<MsCheckUseCommand> h_MsCheckUseCommand => new( new FhMethodLocation("FFX.exe", 0x38C750) );
 
-    // Original after pruning:
-    // __stdcall Command* MsGetCommand(undefined4 param_1, undefined4 param_2, int param_3, undefined4 param_4, undefined4 param_5) at 0078cf10
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsGetCommand(nint param_1, nint param_2, nint param_3, nint param_4, nint param_5);
-    public static FhMethodHandle<MsGetCommand> h_MsGetCommand => new( new FhMethodLocation("FFX.exe", 0x38CF10) );
 
     // Original after pruning:
     // __stdcall undefined MsGetCommandMP(undefined4 user_id, undefined4 command) at 0078d030
@@ -4088,12 +4028,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate nint MsSaveItemTypeBuffer(nint out_buffer_size);
     public static FhMethodHandle<MsSaveItemTypeBuffer> h_MsSaveItemTypeBuffer => new( new FhMethodLocation("FFX.exe", 0x390580) );
 
-    // Original after pruning:
-    // __stdcall undefined MsSaveItemUse(undefined4 item_id, undefined4 param_2) at 007905a0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void MsSaveItemUse(nint item_id, nint param_2);
-    public static FhMethodHandle<MsSaveItemUse> h_MsSaveItemUse => new( new FhMethodLocation("FFX.exe", 0x3905A0) );
 
     // Original after pruning:
     // unknown undefined MsSetItemWindow() at 007906f0
@@ -4109,12 +4043,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsSetUseItem();
     public static FhMethodHandle<MsSetUseItem> h_MsSetUseItem => new( new FhMethodLocation("FFX.exe", 0x3907E0) );
 
-    // Original after pruning:
-    // unknown undefined MsImportantName() at 007908b0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsImportantName();
-    public static FhMethodHandle<MsImportantName> h_MsImportantName => new( new FhMethodLocation("FFX.exe", 0x3908B0) );
 
     // Original after pruning:
     // unknown undefined MsImportantRead() at 00790910
@@ -4130,12 +4058,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsImportantSet();
     public static FhMethodHandle<MsImportantSet> h_MsImportantSet => new( new FhMethodLocation("FFX.exe", 0x390980) );
 
-    // Original after pruning:
-    // __stdcall AutoAbility* MsGetRomAbility(uint param_1, undefined4 param_2) at 007909c0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsGetRomAbility(nint param_1, nint param_2);
-    public static FhMethodHandle<MsGetRomAbility> h_MsGetRomAbility => new( new FhMethodLocation("FFX.exe", 0x3909C0) );
 
     // Original after pruning:
     // __stdcall ExcelElement_ctb_base* MsGetRomCTBbase(int agility) at 007909e0
@@ -4179,12 +4101,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate nint MsGetSaveMonsterMeet();
     public static FhMethodHandle<MsGetSaveMonsterMeet> h_MsGetSaveMonsterMeet => new( new FhMethodLocation("FFX.exe", 0x390B70) );
 
-    // Original after pruning:
-    // __stdcall undefined MsMonsterCapture(int target_id, int arena_idx) at 00790b80
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void MsMonsterCapture(nint target_id, nint arena_idx);
-    public static FhMethodHandle<MsMonsterCapture> h_MsMonsterCapture => new( new FhMethodLocation("FFX.exe", 0x390B80) );
 
     // Original after pruning:
     // __stdcall undefined MsSetMonsterCheck(undefined4 mon_id, ushort* check_field) at 00790c30
@@ -4550,12 +4466,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsGetChrWidth();
     public static FhMethodHandle<MsGetChrWidth> h_MsGetChrWidth => new( new FhMethodLocation("FFX.exe", 0x395A30) );
 
-    // Original after pruning:
-    // __stdcall Chr* MsGetMon(byte mon_idx) at 00795ab0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsGetMon(nint mon_idx);
-    public static FhMethodHandle<MsGetMon> h_MsGetMon => new( new FhMethodLocation("FFX.exe", 0x395AB0) );
 
     // Original after pruning:
     // unknown undefined MsGetWeapon() at 00795b20
@@ -4823,12 +4733,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void rnd();
     public static FhMethodHandle<rnd> h_rnd => new( new FhMethodLocation("FFX.exe", 0x3989B0) );
 
-    // Original after pruning:
-    // unknown undefined MsApUp() at 00798a10
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsApUp();
-    public static FhMethodHandle<MsApUp> h_MsApUp => new( new FhMethodLocation("FFX.exe", 0x398A10) );
 
     // Original after pruning:
     // unknown undefined MsBtlGetInit() at 00798b70
@@ -5082,12 +4986,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsSetRamChrData();
     public static FhMethodHandle<MsSetRamChrData> h_MsSetRamChrData => new( new FhMethodLocation("FFX.exe", 0x39C130) );
 
-    // Original after pruning:
-    // unknown undefined MsSetRamChrParam() at 0079c610
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsSetRamChrParam();
-    public static FhMethodHandle<MsSetRamChrParam> h_MsSetRamChrParam => new( new FhMethodLocation("FFX.exe", 0x39C610) );
 
     // Original after pruning:
     // unknown undefined MsSetRamMonData() at 0079cb30
@@ -5131,33 +5029,9 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsBtlListCDpos();
     public static FhMethodHandle<MsBtlListCDpos> h_MsBtlListCDpos => new( new FhMethodLocation("FFX.exe", 0x39D100) );
 
-    // Original after pruning:
-    // __stdcall BtlBinEncounter* MsBtlListEncount(int field_idx) at 0079d190
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsBtlListEncount(nint field_idx);
-    public static FhMethodHandle<MsBtlListEncount> h_MsBtlListEncount => new( new FhMethodLocation("FFX.exe", 0x39D190) );
 
-    // Original after pruning:
-    // __stdcall BtlBinField* MsBtlListField(int field_idx) at 0079d1b0
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsBtlListField(nint field_idx);
-    public static FhMethodHandle<MsBtlListField> h_MsBtlListField => new( new FhMethodLocation("FFX.exe", 0x39D1B0) );
-
-    // Original after pruning:
-    // __stdcall undefined MsBtlListFieldNum(undefined4 field_id) at 0079d1e0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void MsBtlListFieldNum(nint field_id);
-    public static FhMethodHandle<MsBtlListFieldNum> h_MsBtlListFieldNum => new( new FhMethodLocation("FFX.exe", 0x39D1E0) );
-
-    // Original after pruning:
-    // __stdcall BtlBinGroup* MsBtlListGroup(int field_idx, int group_idx) at 0079d230
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsBtlListGroup(nint field_idx, nint group_idx);
-    public static FhMethodHandle<MsBtlListGroup> h_MsBtlListGroup => new( new FhMethodLocation("FFX.exe", 0x39D230) );
 
     // Original after pruning:
     // unknown undefined MsComBufInit() at 0079d2b0
@@ -5579,12 +5453,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsTerminateMotion();
     public static FhMethodHandle<MsTerminateMotion> h_MsTerminateMotion => new( new FhMethodLocation("FFX.exe", 0x3AB6E0) );
 
-    // Original after pruning:
-    // __stdcall undefined MsGetExcelData(undefined4 idx, ExcelFile* excel, undefined4 out_data_end) at 007ab890
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void MsGetExcelData(nint idx, nint excel, nint out_data_end);
-    public static FhMethodHandle<MsGetExcelData> h_MsGetExcelData => new( new FhMethodLocation("FFX.exe", 0x3AB890) );
 
     // Original after pruning:
     // __stdcall undefined MsEquipSaveWeapon(undefined1 param_1, undefined4 param_2, undefined4 idx) at 007ab990
@@ -5593,12 +5461,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsEquipSaveWeapon(nint param_1, nint param_2, nint idx);
     public static FhMethodHandle<MsEquipSaveWeapon> h_MsEquipSaveWeapon => new( new FhMethodLocation("FFX.exe", 0x3AB990) );
 
-    // Original after pruning:
-    // __stdcall Equipment* MsGetSaveWeapon(uint param_1, undefined4* param_2) at 007abbf0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsGetSaveWeapon(nint param_1, nint param_2);
-    public static FhMethodHandle<MsGetSaveWeapon> h_MsGetSaveWeapon => new( new FhMethodLocation("FFX.exe", 0x3ABBF0) );
 
     // Original after pruning:
     // __stdcall undefined MsGetSaveWeaponAmount(undefined4 out_space_left) at 007abc80
@@ -5621,12 +5483,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsGetSaveWeaponModel();
     public static FhMethodHandle<MsGetSaveWeaponModel> h_MsGetSaveWeaponModel => new( new FhMethodLocation("FFX.exe", 0x3ABDE0) );
 
-    // Original after pruning:
-    // unknown undefined MsBtlGetPos() at 007ac000
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsBtlGetPos();
-    public static FhMethodHandle<MsBtlGetPos> h_MsBtlGetPos => new( new FhMethodLocation("FFX.exe", 0x3AC000) );
 
     // Original after pruning:
     // unknown undefined MsPushBtlPos() at 007ac670
@@ -10500,12 +10356,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void AtelEventRemove();
     public static FhMethodHandle<AtelEventRemove> h_AtelEventRemove => new( new FhMethodLocation("FFX.exe", 0x472CC0) );
 
-    // Original after pruning:
-    // unknown undefined AtelEventSetUp() at 00872e90
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void AtelEventSetUp();
-    public static FhMethodHandle<AtelEventSetUp> h_AtelEventSetUp => new( new FhMethodLocation("FFX.exe", 0x472E90) );
 
     // Original after pruning:
     // unknown undefined AtelGetBattleEndTagAlways() at 00873a30
@@ -10668,12 +10518,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void AtelEventGetFilePath2();
     public static FhMethodHandle<AtelEventGetFilePath2> h_AtelEventGetFilePath2 => new( new FhMethodLocation("FFX.exe", 0x479530) );
 
-    // Original after pruning:
-    // unknown undefined AtelGetEventName() at 008796e0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void AtelGetEventName();
-    public static FhMethodHandle<AtelGetEventName> h_AtelGetEventName => new( new FhMethodLocation("FFX.exe", 0x4796E0) );
 
     // Original after pruning:
     // unknown undefined AtelLoadDebugData() at 00879930
@@ -11347,12 +11191,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void TkMemUnlock();
     public static FhMethodHandle<TkMemUnlock> h_TkMemUnlock => new( new FhMethodLocation("FFX.exe", 0x48E620) );
 
-    // Original after pruning:
-    // unknown undefined TkMsImportantSet() at 0088e700
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TkMsImportantSet();
-    public static FhMethodHandle<TkMsImportantSet> h_TkMsImportantSet => new( new FhMethodLocation("FFX.exe", 0x48E700) );
 
     // Original after pruning:
     // unknown undefined TkSetEvSaveStatus() at 0088e9c0
@@ -12103,12 +11941,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void TkMn2GetMenuMode();
     public static FhMethodHandle<TkMn2GetMenuMode> h_TkMn2GetMenuMode => new( new FhMethodLocation("FFX.exe", 0x4AB1F0) );
 
-    // Original after pruning:
-    // __stdcall Command* TkMsGetRomItem(undefined4 param_1, byte* out_name_ptr) at 008ab230
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint TkMsGetRomItem(nint param_1, nint out_name_ptr);
-    public static FhMethodHandle<TkMsGetRomItem> h_TkMsGetRomItem => new( new FhMethodLocation("FFX.exe", 0x4AB230) );
 
     // Original after pruning:
     // unknown undefined EventFontTextureArrayReset() at 008ab500
@@ -12628,12 +12460,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void TOMenuOpenPktBuffTmp();
     public static FhMethodHandle<TOMenuOpenPktBuffTmp> h_TOMenuOpenPktBuffTmp => new( new FhMethodLocation("FFX.exe", 0x4BEF00) );
 
-    // Original after pruning:
-    // unknown undefined TkMn2DrawCrossCursor() at 008c0640
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TkMn2DrawCrossCursor();
-    public static FhMethodHandle<TkMn2DrawCrossCursor> h_TkMn2DrawCrossCursor => new( new FhMethodLocation("FFX.exe", 0x4C0640) );
 
     // Original after pruning:
     // unknown undefined TOAmapGetItemType() at 008c66e0
@@ -12754,12 +12580,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void DrawCrossMenuIconXYWHRGBA();
     public static FhMethodHandle<DrawCrossMenuIconXYWHRGBA> h_DrawCrossMenuIconXYWHRGBA => new( new FhMethodLocation("FFX.exe", 0x4E6AF0) );
 
-    // Original after pruning:
-    // unknown undefined DrawCrossMenuScrollParts() at 008e6cc0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void DrawCrossMenuScrollParts();
-    public static FhMethodHandle<DrawCrossMenuScrollParts> h_DrawCrossMenuScrollParts => new( new FhMethodLocation("FFX.exe", 0x4E6CC0) );
 
     // Original after pruning:
     // unknown undefined DrawScaleButtonIconRGBA() at 008e7a90
@@ -13055,19 +12875,7 @@ public static unsafe partial class FhCall {
     public unsafe delegate void TOMkpCrossEasyStrFontSClut();
     public static FhMethodHandle<TOMkpCrossEasyStrFontSClut> h_TOMkpCrossEasyStrFontSClut => new( new FhMethodLocation("FFX.exe", 0x501660) );
 
-    // Original after pruning:
-    // unknown undefined TOMkpCrossExtMesFontLClut() at 009016b0
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOMkpCrossExtMesFontLClut();
-    public static FhMethodHandle<TOMkpCrossExtMesFontLClut> h_TOMkpCrossExtMesFontLClut => new( new FhMethodLocation("FFX.exe", 0x5016B0) );
-
-    // Original after pruning:
-    // unknown undefined TOMkpCrossExtMesFontLClutTypeRGBA() at 00901700
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOMkpCrossExtMesFontLClutTypeRGBA();
-    public static FhMethodHandle<TOMkpCrossExtMesFontLClutTypeRGBA> h_TOMkpCrossExtMesFontLClutTypeRGBA => new( new FhMethodLocation("FFX.exe", 0x501700) );
 
     // Original after pruning:
     // unknown undefined TOMkpEasyStrFontS() at 00902040
@@ -13111,12 +12919,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void TOMkpShapeXY();
     public static FhMethodHandle<TOMkpShapeXY> h_TOMkpShapeXY => new( new FhMethodLocation("FFX.exe", 0x503A10) );
 
-    // Original after pruning:
-    // unknown undefined TOMkpShapeXYWHUV() at 00903bb0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void TOMkpShapeXYWHUV();
-    public static FhMethodHandle<TOMkpShapeXYWHUV> h_TOMkpShapeXYWHUV => new( new FhMethodLocation("FFX.exe", 0x503BB0) );
 
     // Original after pruning:
     // unknown undefined TOMkpShapeXYWHUVC2() at 00903ee0
@@ -13181,12 +12983,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void ToGetBtlEasyFontWidth();
     public static FhMethodHandle<ToGetBtlEasyFontWidth> h_ToGetBtlEasyFontWidth => new( new FhMethodLocation("FFX.exe", 0x505290) );
 
-    // Original after pruning:
-    // unknown undefined ToGetCrossExtMesFontWidth() at 00905320
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void ToGetCrossExtMesFontWidth();
-    public static FhMethodHandle<ToGetCrossExtMesFontWidth> h_ToGetCrossExtMesFontWidth => new( new FhMethodLocation("FFX.exe", 0x505320) );
 
     // Original after pruning:
     // unknown undefined ToMakeBtlEasyDigit() at 00905440
@@ -13230,12 +13026,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void ToMakeBtlEasyEdgeFontA();
     public static FhMethodHandle<ToMakeBtlEasyEdgeFontA> h_ToMakeBtlEasyEdgeFontA => new( new FhMethodLocation("FFX.exe", 0x505970) );
 
-    // Original after pruning:
-    // unknown undefined ToMakeBtlEasyFont() at 00905ab0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void ToMakeBtlEasyFont();
-    public static FhMethodHandle<ToMakeBtlEasyFont> h_ToMakeBtlEasyFont => new( new FhMethodLocation("FFX.exe", 0x505AB0) );
 
     // Original after pruning:
     // unknown undefined getScaleButtonIconWidth() at 009062b0
@@ -18062,12 +17852,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void MsBattleAllFree();
     public static FhMethodHandle<MsBattleAllFree> h_MsBattleAllFree => new( new FhMethodLocation("FFX.exe", 0x380C10) );
 
-    // Original after pruning:
-    // __stdcall int MsBattleEncountExe(int field_id, int group_idx, float walked_delta) at 00780de0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsBattleEncountExe(nint field_id, nint group_idx, nint walked_delta);
-    public static FhMethodHandle<MsBattleEncountExe> h_MsBattleEncountExe => new( new FhMethodLocation("FFX.exe", 0x380DE0) );
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown undefined +ResetEncountExe() at 007810c0
@@ -18336,12 +18120,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate nint MsImportantPtr(nint idx, nint out_text);
     public static FhMethodHandle<MsImportantPtr> h_MsImportantPtr => new( new FhMethodLocation("FFX.exe", 0x3908F0) );
 
-    // Original after pruning:
-    // __stdcall ExcelElement_sum_grow* MsGetRomSummonGrow(int* out_length) at 00790b00
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint MsGetRomSummonGrow(nint out_length);
-    public static FhMethodHandle<MsGetRomSummonGrow> h_MsGetRomSummonGrow => new( new FhMethodLocation("FFX.exe", 0x390B00) );
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // __stdcall int +AddMonsterCapture(uint arena_id, int amount) at 00790be0
@@ -18376,13 +18154,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsFieldItemFree();
     public static FhMethodHandle<MsFieldItemFree> h_MsFieldItemFree => new( new FhMethodLocation("FFX.exe", 0x398FA0) );
-
-    // Original after pruning:
-    // unknown undefined MsFieldItemGet() at 00798fe0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsFieldItemGet();
-    public static FhMethodHandle<MsFieldItemGet> h_MsFieldItemGet => new( new FhMethodLocation("FFX.exe", 0x398FE0) );
 
     // Original after pruning:
     // unknown undefined MsFieldItemRead() at 00799030
@@ -18632,12 +18403,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void Sg_SetPause();
     public static FhMethodHandle<Sg_SetPause> h_Sg_SetPause => new( new FhMethodLocation("FFX.exe", 0x421DD0) );
 
-    // Original after pruning:
-    // unknown undefined Sg_FadeInW() at 0082cc20
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void Sg_FadeInW();
-    public static FhMethodHandle<Sg_FadeInW> h_Sg_FadeInW => new( new FhMethodLocation("FFX.exe", 0x42CC20) );
 
     // Original after pruning:
     // unknown undefined Sg_GetLRButtonMode() at 0082d8c0
@@ -19282,12 +19047,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate nint TkMn2GetSummonGrow();
     public static FhMethodHandle<TkMn2GetSummonGrow> h_TkMn2GetSummonGrow => new( new FhMethodLocation("FFX.exe", 0x4C1C00) );
 
-    // Original after pruning:
-    // __cdecl int TkMn2GetSummonGrowMax(void) at 008c1c20
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate nint TkMn2GetSummonGrowMax();
-    public static FhMethodHandle<TkMn2GetSummonGrowMax> h_TkMn2GetSummonGrowMax => new( new FhMethodLocation("FFX.exe", 0x4C1C20) );
 
     // Original after pruning:
     // unknown undefined TkCalcImportantListMax() at 008c6760
@@ -19992,13 +19751,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<sasa_menu> h_sasa_menu => new( new FhMethodLocation("FFX.exe", 0x542110) );
 
     // Original after pruning:
-    // __cdecl undefined abmap_get_panel() at 00a458a0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void abmap_get_panel();
-    public static FhMethodHandle<abmap_get_panel> h_abmap_get_panel => new( new FhMethodLocation("FFX.exe", 0x6458A0) );
-
-    // Original after pruning:
     // unknown undefined abmap_snd_chg_panel0() at 00a45910
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -20311,16 +20063,7 @@ public static unsafe partial class FhCall {
     // unknown undefined +AbmapAllLinksLimitFlag() at 00a473d0
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // unknown undefined +AbmapState_ChangingNode() at 00a47d50
-
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // unknown undefined +AbmapState_Warping() at 00a47f00
-
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // __stdcall undefined +AbmapSelectMoveTarget(undefined4 chr_id, undefined2 node_idx) at 00a48c80
-
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // unknown undefined +AbmapState_MovingToTarget() at 00a59990
 
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown undefined +AbmapState_HomeOnNode() at 00a59e80
