@@ -53,7 +53,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x22FDB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool graphicInitFMVPlayer(int movie_id, int param_2);
+    public unsafe delegate bool graphicInitFMVPlayer(int movie_id, int param_2);
     public static FhMethodHandle<graphicInitFMVPlayer> h_graphicInitFMVPlayer
         => new( new FhMethodLocation(GAME, 0x241840) );
 
@@ -68,12 +68,12 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x2799D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public delegate void LocalizationManager_Initialize(LocalizationManager* localizationManager);
+    public unsafe delegate void LocalizationManager_Initialize(LocalizationManager* localizationManager);
     public static FhMethodHandle<LocalizationManager_Initialize> h_LocalizationManager_Initialize
         => new( new FhMethodLocation(GAME, 0x2DB1C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void FUN_2EFFF0();
+    internal unsafe delegate void FUN_2EFFF0();
     internal static FhMethodHandle<FUN_2EFFF0> h_FUN_2EFFF0
         => new( new FhMethodLocation(GAME, 0x2EFFF0) );
 
@@ -83,7 +83,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x307170) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public delegate int FmodVoice_dataChange(nint FmodVoice, int event_id, nint param_2);
+    public unsafe delegate int FmodVoice_dataChange(nint FmodVoice, int event_id, nint param_2);
     public static FhMethodHandle<FmodVoice_dataChange> h_FmodVoice_dataChange
         => new( new FhMethodLocation(GAME, 0x30A720) );
 
@@ -93,27 +93,27 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x30AC80) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public delegate uint FUN_0070aec0(nint _this, uint voice_id, uint param_2);
+    public unsafe delegate uint FUN_0070aec0(nint _this, uint voice_id, uint param_2);
     public static FhMethodHandle<FUN_0070aec0> h_FUN_0070aec0
         => new( new FhMethodLocation(GAME, 0x30AEC0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public delegate void FfxFmod_soundInit_setLang(nint ffxFmod, int lang);
+    public unsafe delegate void FfxFmod_soundInit_setLang(nint ffxFmod, int lang);
     public static FhMethodHandle<FfxFmod_soundInit_setLang> h_FfxFmod_soundInit_setLang
         => new( new FhMethodLocation(GAME, 0x30B4E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int MsBattleEncountExe(int field_id, int group_idx, float walked_delta);
+    public unsafe delegate int MsBattleEncountExe(int field_id, int group_idx, float walked_delta);
     public static FhMethodHandle<MsBattleEncountExe> h_MsBattleEncountExe
         => new( new FhMethodLocation(GAME, 0x380DE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void ResetEncountExe(int p1);
+    public unsafe delegate void ResetEncountExe(int p1);
     public static FhMethodHandle<ResetEncountExe> h_ResetEncountExe
         => new( new FhMethodLocation(GAME, 0x3810C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void MsBattleExe(uint param_1, int field_idx, int group_idx, int formation_idx);
+    public unsafe delegate void MsBattleExe(uint param_1, int field_idx, int group_idx, int formation_idx);
     public static FhMethodHandle<MsBattleExe> h_MsBattleExe
         => new( new FhMethodLocation(GAME, 0x3810F0) );
 
@@ -123,24 +123,24 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x381D60) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void MsBtlReadManage();
+    public unsafe delegate void MsBtlReadManage();
     public static FhMethodHandle<MsBtlReadManage> h_MsBtlReadManage
         => new( new FhMethodLocation(GAME, 0x3830D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void FUN_00783bb0(byte mon_idx);
+    public unsafe delegate void FUN_00783bb0(byte mon_idx);
     public static FhMethodHandle<FUN_00783bb0> h_FUN_00783bb0
         => new( new FhMethodLocation(GAME, 0x383BB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate byte MsBtlReadSetScene();
+    public unsafe delegate byte MsBtlReadSetScene();
     public static FhMethodHandle<MsBtlReadSetScene> h_MsBtlReadSetScene
         => new( new FhMethodLocation(GAME, 0x383ED0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int MsGetSaveCommand(int chr_id, uint com_id);
     public static FhMethodHandle<MsGetSaveCommand> h_MsGetSaveCommand
-        => new( new FhMethodLocation(GAME, 0x3850E0));
+        => new( new FhMethodLocation(GAME, 0x3850E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsGetSavePartyMember(uint* param_1, uint* param_2, uint* param_3);
@@ -149,8 +149,8 @@ public static unsafe partial class FhCall {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int MsPayGIL(int param_1);
-    public static FhMethodHandle<MsPayGIL> h_MsPayGIL 
-        => new( new FhMethodLocation(GAME, 0x385A60));
+    public static FhMethodHandle<MsPayGIL> h_MsPayGIL
+        => new( new FhMethodLocation(GAME, 0x385A60) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int MsSetSaveCommand(int chr_id, uint param_2, int param_3);
@@ -158,7 +158,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x385D10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void MsSetSaveParam(uint chr_id);
+    public unsafe delegate void MsSetSaveParam(uint chr_id);
     public static FhMethodHandle<MsSetSaveParam> h_MsSetSaveParam
         => new( new FhMethodLocation(GAME, 0x3861B0) );
 
@@ -250,7 +250,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate uint MsAfterDamageProcess(int attacker_id, uint param_2, int target_id, uint* param_4, uint param_5);
     public static FhMethodHandle<MsAfterDamageProcess> h_MsAfterDamageProcess
-        => new( new FhMethodLocation(GAME, 0x38F0B0));
+        => new( new FhMethodLocation(GAME, 0x38F0B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate byte* MsGetRomBtlText(int param_1, int param_2);
@@ -260,12 +260,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsMenuCloseTitleWindow(int param_1);
     public static FhMethodHandle<MsMenuCloseTitleWindow> h_MsMenuCloseTitleWindow
-        => new( new FhMethodLocation(GAME, 0x38FA80));
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint FUN_007905a0(uint param_1, int param_2);
-    public static FhMethodHandle<FUN_007905a0> h_FUN_007905a0
-        => new( new FhMethodLocation(GAME, 0x3905A0) );
+        => new( new FhMethodLocation(GAME, 0x38FA80) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsSaveItemUse(uint item_id, int amount);
@@ -293,24 +288,24 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x390B00) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool MsMonsterCapture(int target_id, int arena_idx);
+    public unsafe delegate bool MsMonsterCapture(int target_id, int arena_idx);
     public static FhMethodHandle<MsMonsterCapture> h_MsMonsterCapture
         => new( new FhMethodLocation(GAME, 0x390B80) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate void FUN_00791820();
+    public unsafe delegate void FUN_00791820();
     public static FhMethodHandle<FUN_00791820> h_FUN_00791820
         => new( new FhMethodLocation(GAME, 0x391820) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint MsGetBattleEndStatus();
+    public unsafe delegate uint MsGetBattleEndStatus();
     public static FhMethodHandle<MsGetBattleEndStatus> h_MsGetBattleEndStatus
         => new( new FhMethodLocation(GAME, 0x3928F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate Chr* MsGetChr(int chr_id);
     public static FhMethodHandle<MsGetChr> h_MsGetChr
-        => new( new FhMethodLocation(GAME, 0x394030));
+        => new( new FhMethodLocation(GAME, 0x394030) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate Chr* MsGetMon(byte mon_idx);
@@ -330,7 +325,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate uint MsFieldItemGet(int treasure_id);
     public static FhMethodHandle<MsFieldItemGet> h_MsFieldItemGet
-        => new(new FhMethodLocation(GAME, 0x398FE0));
+        => new( new FhMethodLocation(GAME, 0x398FE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsSetWeaponName(Equipment* gear);
@@ -353,54 +348,54 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x39A4C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void FUN_0079b480(int chr_id, int com_id, int is_disabled);
+    public unsafe delegate void FUN_0079b480(int chr_id, int com_id, int is_disabled);
     public static FhMethodHandle<FUN_0079b480> h_FUN_0079b480
         => new( new FhMethodLocation(GAME, 0x39B480) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsSetRamChrAbility(int chr_id, Chr* chr);
     public static FhMethodHandle<MsSetRamChrAbility> h_MsSetRamChrAbility
-        => new( new FhMethodLocation(GAME, 0x39BB70));
+        => new( new FhMethodLocation(GAME, 0x39BB70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void MsSetRamChrParam(uint chr_id);
+    public unsafe delegate void MsSetRamChrParam(uint chr_id);
     public static FhMethodHandle<MsSetRamChrParam> h_MsSetRamChrParam
         => new( new FhMethodLocation(GAME, 0x39C610) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte MsMessageCueProcess();
+    public unsafe delegate byte MsMessageCueProcess();
     public static FhMethodHandle<MsMessageCueProcess> h_MsMessageCueProcess
         => new( new FhMethodLocation(GAME, 0x39CE10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int MsMessageCueRegist(uint type, int param_2, int param_3, byte param_4, byte param_5);
     public static FhMethodHandle<MsMessageCueRegist> h_MsMessageCueRegist
-        => new( new FhMethodLocation(GAME, 0x39CFF0));
+        => new( new FhMethodLocation(GAME, 0x39CFF0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate BtlBinEncounter* MsBtlListEncount(int field_idx);
+    public unsafe delegate BtlBinEncounter* MsBtlListEncount(int field_idx);
     public static FhMethodHandle<MsBtlListEncount> h_MsBtlListEncount
         => new( new FhMethodLocation(GAME, 0x39D190) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate BtlBinField* MsBtlListField(int field_idx);
+    public unsafe delegate BtlBinField* MsBtlListField(int field_idx);
     public static FhMethodHandle<MsBtlListField> h_MsBtlListField
         => new( new FhMethodLocation(GAME, 0x39D1B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int MsBtlListFieldNum(int field_id);
+    public unsafe delegate int MsBtlListFieldNum(int field_id);
     public static FhMethodHandle<MsBtlListFieldNum> h_MsBtlListFieldNum
         => new( new FhMethodLocation(GAME, 0x39D1E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate BtlBinGroup* MsBtlListGroup(int field_idx, int group_idx);
+    public unsafe delegate BtlBinGroup* MsBtlListGroup(int field_idx, int group_idx);
     public static FhMethodHandle<MsBtlListGroup> h_MsBtlListGroup
         => new( new FhMethodLocation(GAME, 0x39D230) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsSetStealEffect(int param_1, int param_2);
-    public static FhMethodHandle<MsSetStealEffect> h_MsSetStealEffect 
-        => new( new FhMethodLocation(GAME, 0x39ED20));
+    public static FhMethodHandle<MsSetStealEffect> h_MsSetStealEffect
+        => new( new FhMethodLocation(GAME, 0x39ED20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsSetStealGillEffect(int param_1, int param_2);
@@ -423,14 +418,14 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x39FA20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint MsRegSEplay(byte p1, int p2);
+    public unsafe delegate uint MsRegSEplay(byte p1, int p2);
     public static FhMethodHandle<MsRegSEplay> h_MsRegSEplay
         => new( new FhMethodLocation(GAME, 0x3A0120) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate uint MsRegSEplay2(int param_1, uint param_2);
-    public static FhMethodHandle<MsRegSEplay2> h_MsRegSEplay2 
-        => new( new FhMethodLocation(GAME, 0x3A0160));
+    public static FhMethodHandle<MsRegSEplay2> h_MsRegSEplay2
+        => new( new FhMethodLocation(GAME, 0x3A0160) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_007a0c70(ushort name_id, byte owner, int unknown, ushort* model_id_pointer);
@@ -479,8 +474,8 @@ public static unsafe partial class FhCall {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int MsLimitTidusLearn(int chr_id);
-    public static FhMethodHandle<MsLimitTidusLearn> h_MsLimitTidusLearn 
-        => new( new FhMethodLocation(GAME, 0x3B0CE0));
+    public static FhMethodHandle<MsLimitTidusLearn> h_MsLimitTidusLearn
+        => new( new FhMethodLocation(GAME, 0x3B0CE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int MsLimitTypeDamageCheck(int attacker_id, Chr* attacker, int target_id, Chr* target, int param_5, int param_6, int param_7);
@@ -508,7 +503,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x422410) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void Sg_FadeInW(int p1);
+    public unsafe delegate void Sg_FadeInW(int p1);
     public static FhMethodHandle<Sg_FadeInW> h_Sg_FadeInW
         => new( new FhMethodLocation(GAME, 0x42CC20) );
 
@@ -525,7 +520,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int CT_RetInt_0065(nint work, int* storage, nint atelStack);
     public static FhMethodHandle<CT_RetInt_0065> h_CT_RetInt_0065
-        => new(new FhMethodLocation(GAME, 0x457F60));
+        => new( new FhMethodLocation(GAME, 0x457F60) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int Common_transitionToMap(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
@@ -540,7 +535,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int CT_RetInt_006A(nint work, int* storage, nint atelStack);
     public static FhMethodHandle<CT_RetInt_006A> h_CT_RetInt_006A
-        => new(new FhMethodLocation(GAME, 0x4589F0));
+        => new( new FhMethodLocation(GAME, 0x4589F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int CT_RetInt_01B6(nint work, int* storage, nint atelStack);
@@ -683,7 +678,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x46BEC0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void AtelInitTotal();
+    public unsafe delegate void AtelInitTotal();
     public static FhMethodHandle<AtelInitTotal> h_AtelInitTotal
         => new( new FhMethodLocation(GAME, 0x46D660) );
 
@@ -693,12 +688,12 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x46DE90) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void AtelSetEventJump2(int room, int entrance, int do_fade);
+    public unsafe delegate void AtelSetEventJump2(int room, int entrance, int do_fade);
     public static FhMethodHandle<AtelSetEventJump2> h_AtelSetEventJump2
         => new( new FhMethodLocation(GAME, 0x46FED0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void AtelEventSetUp(int event_id);
+    public unsafe delegate void AtelEventSetUp(int event_id);
     public static FhMethodHandle<AtelEventSetUp> h_AtelEventSetUp
         => new( new FhMethodLocation(GAME, 0x472E90) );
 
@@ -723,7 +718,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x486DE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TkMsImportantSet(uint param_1);
+    public unsafe delegate void TkMsImportantSet(uint param_1);
     public static FhMethodHandle<TkMsImportantSet> h_TkMsImportantSet
         => new( new FhMethodLocation(GAME, 0x48E700) );
 
@@ -733,52 +728,52 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x48EBD0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TOBtlCloseSimpleHelpMes();
+    public unsafe delegate void TOBtlCloseSimpleHelpMes();
     public static FhMethodHandle<TOBtlCloseSimpleHelpMes> h_TOBtlCloseSimpleHelpMes
         => new( new FhMethodLocation(GAME, 0x490E60) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawCaptureMonsterMessageWindow(int mon_id, int text_id);
+    public unsafe delegate int TOBtlDrawCaptureMonsterMessageWindow(int mon_id, int text_id);
     public static FhMethodHandle<TOBtlDrawCaptureMonsterMessageWindow> h_TOBtlDrawCaptureMonsterMessageWindow
         => new( new FhMethodLocation(GAME, 0x4927E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawFirstStrikeEnemyMessageWindow();
+    public unsafe delegate int TOBtlDrawFirstStrikeEnemyMessageWindow();
     public static FhMethodHandle<TOBtlDrawFirstStrikeEnemyMessageWindow> h_TOBtlDrawFirstStrikeEnemyMessageWindow
         => new( new FhMethodLocation(GAME, 0x493440) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawFirstStrikePlayerMessageWindow();
+    public unsafe delegate int TOBtlDrawFirstStrikePlayerMessageWindow();
     public static FhMethodHandle<TOBtlDrawFirstStrikePlayerMessageWindow> h_TOBtlDrawFirstStrikePlayerMessageWindow
         => new( new FhMethodLocation(GAME, 0x493460) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawGetItemMessageWindow(byte* item_name, int amount);
+    public unsafe delegate int TOBtlDrawGetItemMessageWindow(byte* item_name, int amount);
     public static FhMethodHandle<TOBtlDrawGetItemMessageWindow> h_TOBtlDrawGetItemMessageWindow
         => new( new FhMethodLocation(GAME, 0x493480) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawGetLimitTypeMessageWindow(int ply_id, int limit_mode);
+    public unsafe delegate int TOBtlDrawGetLimitTypeMessageWindow(int ply_id, int limit_mode);
     public static FhMethodHandle<TOBtlDrawGetLimitTypeMessageWindow> h_TOBtlDrawGetLimitTypeMessageWindow
         => new( new FhMethodLocation(GAME, 0x493560) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawGetMoneyMessageWindow(int amount);
+    public unsafe delegate int TOBtlDrawGetMoneyMessageWindow(int amount);
     public static FhMethodHandle<TOBtlDrawGetMoneyMessageWindow> h_TOBtlDrawGetMoneyMessageWindow
         => new( new FhMethodLocation(GAME, 0x4935D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawLearningMessageWindow(int ply_id, int com_id);
+    public unsafe delegate int TOBtlDrawLearningMessageWindow(int ply_id, int com_id);
     public static FhMethodHandle<TOBtlDrawLearningMessageWindow> h_TOBtlDrawLearningMessageWindow
         => new( new FhMethodLocation(GAME, 0x495290) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TOBtlDrawStdChrNameMessageWindow(int chr_id, int text_id);
+    public unsafe delegate int TOBtlDrawStdChrNameMessageWindow(int chr_id, int text_id);
     public static FhMethodHandle<TOBtlDrawStdChrNameMessageWindow> h_TOBtlDrawStdChrNameMessageWindow
         => new( new FhMethodLocation(GAME, 0x497170) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int FUN_0089db10(int p1, byte* text);
+    public unsafe delegate int FUN_0089db10(int p1, byte* text);
     public static FhMethodHandle<FUN_0089db10> h_FUN_0089db10
         => new( new FhMethodLocation(GAME, 0x49DB10) );
 
@@ -825,27 +820,27 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_008b8910(int window_idx, int variable_idx, int type); // setMessageWindowVariableType (0: text*, 1: int)
     public static FhMethodHandle<FUN_008b8910> h_FUN_008b8910
-        => new(new FhMethodLocation(GAME, 0x4B8910));
+        => new( new FhMethodLocation(GAME, 0x4B8910) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate byte* FUN_008bda20(uint window_idx); // getMenuText
     public static FhMethodHandle<FUN_008bda20> h_FUN_008bda20
-        => new(new FhMethodLocation(GAME, 0x4BDA20));
+        => new( new FhMethodLocation(GAME, 0x4BDA20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_008b8930(int window_idx, int variable_idx, int value); // setMessageWindowVariable
     public static FhMethodHandle<FUN_008b8930> h_FUN_008b8930
-        => new(new FhMethodLocation(GAME, 0x4B8930));
+        => new( new FhMethodLocation(GAME, 0x4B8930) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_0086a0c0();
     public static FhMethodHandle<FUN_0086a0c0> h_FUN_0086a0c0
-        => new(new FhMethodLocation(GAME, 0x46A0C0));
+        => new( new FhMethodLocation(GAME, 0x46A0C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate TOMesWinWork* AtelGetMesWinWork(int idx);
     public static FhMethodHandle<AtelGetMesWinWork> h_AtelGetMesWinWork
-        => new(new FhMethodLocation(GAME, 0x46BE20));
+        => new( new FhMethodLocation(GAME, 0x46BE20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate byte* FUN_008bee80(uint param_1);
@@ -893,7 +888,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x4C2C40) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int TkSetLegendAbility(int chr_id, int level);
+    public unsafe delegate int TkSetLegendAbility(int chr_id, int level);
     public static FhMethodHandle<TkSetLegendAbility> h_TkSetLegendAbility
         => new( new FhMethodLocation(GAME, 0x4C3150) );
 
@@ -903,7 +898,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x4CC120) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void UpdateAeonCustomizationMenuState(uint param_1, uint param_2);
+    public unsafe delegate void UpdateAeonCustomizationMenuState(uint param_1, uint param_2);
     public static FhMethodHandle<UpdateAeonCustomizationMenuState> h_UpdateAeonCustomizationMenuState
         => new( new FhMethodLocation(GAME, 0x4CC300) );
 
@@ -933,7 +928,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x4D48E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool FUN_008d5720(uint gear_id, int param_2);
+    public unsafe delegate bool FUN_008d5720(uint gear_id, int param_2);
     public static FhMethodHandle<FUN_008d5720> h_FUN_008d5720
         => new( new FhMethodLocation(GAME, 0x4D5720) );
 
@@ -963,7 +958,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x4D6630) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TkMenuAppearMainCmdWindow(int param_1, int param_2);
+    public unsafe delegate void TkMenuAppearMainCmdWindow(int param_1, int param_2);
     public static FhMethodHandle<TkMenuAppearMainCmdWindow> h_TkMenuAppearMainCmdWindow
         => new( new FhMethodLocation(GAME, 0x4E1C60) );
 
@@ -1048,13 +1043,13 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x51B1E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void abmap_get_panel(int ply_id, int node_idx);
+    public unsafe delegate void abmap_get_panel(int ply_id, int node_idx);
     public static FhMethodHandle<abmap_get_panel> h_abmap_get_panel
         => new( new FhMethodLocation(GAME, 0x6458A0) );
 
     // Sphere-grid state-machine entry points; one delegate type reused at three addresses.
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void abmap_ctrl();
+    public unsafe delegate void abmap_ctrl();
     public static FhMethodHandle<abmap_ctrl> h_AbmapState_ChangingNode
         => new( new FhMethodLocation(GAME, 0x647D50) );
     public static FhMethodHandle<abmap_ctrl> h_AbmapState_Warping
@@ -1063,17 +1058,17 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x659990) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void FUN_00a48910(uint chr_id, int node_idx);
+    public unsafe delegate void FUN_00a48910(uint chr_id, int node_idx);
     public static FhMethodHandle<FUN_00a48910> h_FUN_00a48910
         => new( new FhMethodLocation(GAME, 0x648910) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate void eiAbmParaGet();
+    public unsafe delegate void eiAbmParaGet();
     public static FhMethodHandle<eiAbmParaGet> h_eiAbmParaGet
         => new( new FhMethodLocation(GAME, 0x654860) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void abmap_confirm_move(int p1, int p2, int p3);
+    public unsafe delegate void abmap_confirm_move(int p1, int p2, int p3);
     public static FhMethodHandle<abmap_confirm_move> h_abmap_confirm_move
         => new( new FhMethodLocation(GAME, 0x656160) );
 
