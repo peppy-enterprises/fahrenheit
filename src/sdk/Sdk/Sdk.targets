@@ -1,4 +1,5 @@
 <Project>
+
     <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
     <!-- fkelava 30/09/25 23:05
@@ -16,7 +17,7 @@
     respect the chain of ExcludeAssets tags and emit Fahrenheit libraries alongside
     the mod, which is invalid and will cause issues. This target solves that problem.
     -->
-    <Target Name="_FhMakeTransitiveProjectRefsNonPrivate" AfterTargets="IncludeTransitiveProjectReferences">
+    <Target Name="__FhMakeTransitiveProjectRefsNonPrivate" AfterTargets="IncludeTransitiveProjectReferences">
         <ItemGroup>
             <!-- remove the transitive project references and re-add them as non-private project references -->
             <ProjectReference Remove="@(_TransitiveProjectReferences)" />
@@ -28,6 +29,6 @@
     A placeholder target to force publishing to occur after a build.
     Publishing places build output in its proper place.
     -->
-    <Target Name="_FhPublishAfterBuild" AfterTargets="Build" DependsOnTargets="Publish" />
+    <Target Name="__FhPublishAfterBuild" AfterTargets="Build" DependsOnTargets="Publish" />
 
 </Project>
