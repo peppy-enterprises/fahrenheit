@@ -14,6 +14,8 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/fahrenheit-crew/fahrenheit.git</RepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <!-- PACKAGING EXTRA FILES -->
@@ -59,7 +61,6 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
-
 
     <!-- NATIVE SOURCE GENERATION FILES -->
     <ItemGroup>

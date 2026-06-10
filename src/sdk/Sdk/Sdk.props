@@ -11,7 +11,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RuntimeIdentifier>win-x86</RuntimeIdentifier>
         <EnableDynamicLoading>true</EnableDynamicLoading>
-        <DebugType>embedded</DebugType>
+        <DebugType>portable</DebugType>
     </PropertyGroup>
 
     <!-- FAHRENHEIT PACKAGE IMPORT -->

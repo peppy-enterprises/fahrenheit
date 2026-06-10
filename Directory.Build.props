@@ -1,18 +1,21 @@
-<Project>	
-    
+<Project>
+
     <PropertyGroup>
         <!--
         Makes it such that projects must be explicitly marked packable.
+        This is because only the SDK and base Fahrenheit require packing.
+
+        We want packing to be silently skipped for all other projects as a result.
         -->
-    
+
         <IsPackable>false</IsPackable>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <!--
         Artifact path handling.
         -->
-    
+
         <_FhOutDir Condition="'$(Configuration)'=='Release'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'deploy', 'rel'))</_FhOutDir>
         <_FhOutDir Condition="'$(Configuration)'=='Debug'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'deploy', 'dbg'))</_FhOutDir>
         <_FhBaseIntermediateOutputPath>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'obj', '$(MSBuildProjectName)'))</_FhBaseIntermediateOutputPath>
@@ -21,31 +24,34 @@
         <_FhOutDirMods>$([MSBuild]::NormalizeDirectory('$(_FhOutDir)', 'mods', '$(AssemblyName)'))</_FhOutDirMods>
         <_FhOutDirPkg Condition="'$(Configuration)'=='Release'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'pkg', 'rel'))</_FhOutDirPkg>
         <_FhOutDirPkg Condition="'$(Configuration)'=='Debug'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'artifacts', 'pkg', 'dbg'))</_FhOutDirPkg>
-      
+
         <PackageOutputPath>$(_FhOutDirPkg)</PackageOutputPath>
         <PublishDir>$(_FhOutDirBin)</PublishDir>
         <BaseOutputPath>$(_FhBaseOutputPath)</BaseOutputPath>
         <BaseIntermediateOutputPath>$(_FhBaseIntermediateOutputPath)</BaseIntermediateOutputPath>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <!--
-        For ease of enabling Source Link, we embed PDBs.
+        We previously used 'embedded' portable PDBs.
+        However, it does not seem as though debuggers can retrieve such symbols
+        automatically, and sometimes not even manually. Instead, we provide portable
+        PDBs, and publish separate symbol packages to NuGet.
         -->
-        
-        <DebugType>embedded</DebugType>
+
+        <DebugType>portable</DebugType>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <!--
         Custom display attributes.
         -->
-        
+
         <Company>https://github.com/fahrenheit-crew/fahrenheit</Company>
         <Copyright>Copyright © The Fahrenheit contributors</Copyright>
         <Version>1.0.0-alpha11</Version>
-	</PropertyGroup>
-    
+    </PropertyGroup>
+
     <PropertyGroup>
         <!--
         NuGet Package Explorer complains if a package is not built 'deterministically'.
@@ -53,9 +59,9 @@
         See https://docs.github.com/en/actions/reference/workflows-and-actions/variables,
         https://github.com/terrafx/terrafx.interop.windows/blob/7d3e679e74be9da3584b4d4c4689e10422cc485f/Directory.Build.props#L44.
         -->
-    
+
         <ContinuousIntegrationBuild Condition="'$(GITHUB_RUN_ID)' != ''">true</ContinuousIntegrationBuild>
-    
+
     </PropertyGroup>
-    
+
 </Project>
