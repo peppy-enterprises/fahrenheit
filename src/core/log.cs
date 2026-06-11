@@ -32,60 +32,65 @@ public class FhLogger {
         _file    = new TextWriterTraceListener(File.Open(log_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite));
     }
 
-    internal void Log(FhLogLevel level,
-                      string     msg) {
-        if (level < MinLevel) return;
-
-        _console.WriteLine(msg);
-        _file   .WriteLine(msg);
+    /// <summary>
+    ///     Logs a given <paramref name="message"/> unconditionally,
+    ///     without timestamp or caller information.
+    /// </summary>
+    internal void Log(string message) {
+        _console.WriteLine(message);
+        _file   .WriteLine(message);
         _file   .Flush();
     }
 
+    /// <summary>
+    ///     Logs a given <paramref name="message"/> at a given <paramref name="level"/>,
+    ///     prepending a timestamp and caller information.
+    /// </summary>
     public void Log(                   FhLogLevel level,
-                                       string     msg,
-                    [CallerMemberName] string     mname = "",
-                    [CallerFilePath]   string     fpath = "",
-                    [CallerLineNumber] int        lnb   = 0) {
+                                       string     message,
+                    [CallerMemberName] string     member = "",
+                    [CallerFilePath]   string     file   = "",
+                    [CallerLineNumber] int        line   = 0) {
         if (level < MinLevel) return;
-        string lstr = $"{TimeProvider.System.GetUtcNow():u} | [{level}] {Path.GetFileName(fpath)}:{lnb} ({mname}): {msg}";
+        string lstr = $"{TimeProvider.System.GetUtcNow():u} | [{level}] {Path.GetFileName(file)}:{line} ({member}): {message}";
 
         _console.WriteLine(lstr);
         _file   .WriteLine(lstr);
         _file   .Flush();
     }
 
-    public void Debug(                   string msg,
-                      [CallerMemberName] string mname = "",
-                      [CallerFilePath]   string fpath = "",
-                      [CallerLineNumber] int    lnb   = 0) {
-        Log(FhLogLevel.Debug, msg, mname, fpath, lnb);
+    public void Debug(                   string message,
+                      [CallerMemberName] string member = "",
+                      [CallerFilePath]   string file   = "",
+                      [CallerLineNumber] int    line   = 0) {
+        Log(FhLogLevel.Debug, message, member, file, line);
     }
 
-    public void Info(                   string msg,
-                     [CallerMemberName] string mname = "",
-                     [CallerFilePath]   string fpath = "",
-                     [CallerLineNumber] int    lnb   = 0) {
-        Log(FhLogLevel.Info, msg, mname, fpath, lnb);
+    public void Info(                   string message,
+                     [CallerMemberName] string member = "",
+                     [CallerFilePath]   string file   = "",
+                     [CallerLineNumber] int    line   = 0) {
+        Log(FhLogLevel.Info, message, member, file, line);
     }
 
-    public void Warning(                   string msg,
-                        [CallerMemberName] string mname = "",
-                        [CallerFilePath]   string fpath = "",
-                        [CallerLineNumber] int    lnb   = 0) {
-        Log(FhLogLevel.Warning, msg, mname, fpath, lnb);
+    public void Warning(                   string message,
+                        [CallerMemberName] string member = "",
+                        [CallerFilePath]   string file   = "",
+                        [CallerLineNumber] int    line   = 0) {
+        Log(FhLogLevel.Warning, message, member, file, line);
     }
 
-    public void Error(                   string msg,
-                      [CallerMemberName] string mname = "",
-                      [CallerFilePath]   string fpath = "",
-                      [CallerLineNumber] int    lnb   = 0) {
-        Log(FhLogLevel.Error, msg, mname, fpath, lnb);
+    public void Error(                   string message,
+                      [CallerMemberName] string member = "",
+                      [CallerFilePath]   string file   = "",
+                      [CallerLineNumber] int    line   = 0) {
+        Log(FhLogLevel.Error, message, member, file, line);
     }
 
-    public void Fatal(                   string msg,
-                      [CallerMemberName] string mname = "",
-                      [CallerFilePath]   string fpath = "",
-                      [CallerLineNumber] int    lnb   = 0) {
-        Log(FhLogLevel.Fatal, msg, mname, fpath, lnb);
+    public void Fatal(                   string message,
+                      [CallerMemberName] string member = "",
+                      [CallerFilePath]   string file   = "",
+                      [CallerLineNumber] int    line   = 0) {
+        Log(FhLogLevel.Fatal, message, member, file, line);
     }
 }
