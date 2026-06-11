@@ -22,11 +22,6 @@
         </PackageReference>
     </ItemGroup>
 
-    <!-- ASSETS: MANIFEST -->
-    <ItemGroup>
-        <None Include="$(AssemblyName).manifest.json" CopyToOutputDirectory="Always" />
-    </ItemGroup>
-
     <!-- ASSETS: LOCALIZATION -->
     <ItemGroup>
         <None Remove="lang/**" />

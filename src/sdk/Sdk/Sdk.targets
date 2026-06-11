@@ -31,4 +31,37 @@
     -->
     <Target Name="__FhPublishAfterBuild" AfterTargets="Build" DependsOnTargets="Publish" />
 
+    <!-- fkelava 11/06/26
+    The manifest uniquely identifies and describes a Fahrenheit mod and specifies some runtime behavioral flags.
+    It used to be written out manually, but now it is generated based on various well-known assembly properties.
+    -->
+    <Target Name="__FhEmitManifest" AfterTargets="Publish" >
+        <PropertyGroup>
+            <!--
+            We unconditionally prefer RepositoryUrl where available.
+            -->
+            <FhManifestHomePage Condition=" '$(RepositoryUrl)' != '' ">$(RepositoryUrl)</FhManifestHomePage>
+
+            <__FhManifestFile>$(PublishDir)/$(AssemblyName).manifest.json</__FhManifestFile>
+            <__FhManifestLines>
+{
+    "Id":"$(AssemblyName)",
+    "Name":"$(AssemblyTitle)",
+    "Desc":"$(Description)",
+    "Authors":"$(Authors)",
+    "Version":"$(InformationalVersion)",
+    "Link":"$(FhManifestHomePage)",
+    "Dependencies":[],
+    "LoadAfter":[],
+    "Flags":"$(FhManifestFlags)"
+}
+            </__FhManifestLines>
+        </PropertyGroup>
+
+        <WriteLinesToFile
+            File="$(__FhManifestFile)"
+            Lines="$(__FhManifestLines)"
+            Overwrite="true" />
+    </Target>
+
 </Project>
