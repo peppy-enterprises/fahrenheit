@@ -17,9 +17,6 @@ The knowledge gathered by the project underpins many tools and mods for the game
 Fahrenheit, like all of these tools, is free for you to analyze, improve, learn from and use- now and forever.
 
 ## Cloning, building from source and testing
-Fahrenheit includes submodules. To clone them all, use
-``git clone --recurse-submodules https://github.com/fahrenheit-crew/fahrenheit``.
-
 Ensure the folder you cloned to does not contain special characters. This can cause build errors.
 
 Building **requires** Visual Studio 2026 (full IDE or Build Tools only) with the following workloads:
@@ -34,9 +31,8 @@ To build at a Developer PowerShell:
 ```
 msbuild .\Fahrenheit.slnx /t:Restore /p:Configuration=Release
 msbuild .\Fahrenheit.slnx /p:Configuration=Release
-msbuild .\Fahrenheit.slnx /t:Publish /p:Configuration=Release
 ```
-If using Visual Studio, `Build Solution` performs the first two steps for you.
+If using Visual Studio, `Build Solution` performs everything for you.
 For a Debug build, change the `Configuration` parameter to `Debug`.
 
 To install/test your development build:
