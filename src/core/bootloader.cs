@@ -17,6 +17,16 @@ internal static class FhEnvironment {
     internal static readonly string       StateHash;
 
     static FhEnvironment() {
+        /* [fkelava 10/06/26 18:53]
+         * https://learn.microsoft.com/en-us/dotnet/api/system.appdomain?view=net-10.0#remarks
+         * > On .NET Core and .NET 5+ {...} These versions have exactly one AppDomain.
+         *
+         * This should suffice to catch any normal (non-AV) managed exception. In theory.
+         */
+
+        AppDomain.CurrentDomain.FirstChanceException += FhExceptionHandler.eh_first_chance;
+        AppDomain.CurrentDomain.UnhandledException   += FhExceptionHandler.eh_unhandled;
+
         Finder    = new();
         BaseAddr  = NativeLibrary.GetMainProgramHandle();
         LoadOrder = _init_load_order();
@@ -137,6 +147,7 @@ internal sealed class FhLoadContext(string context_name, string fh_dll_path) : A
 ///     and instantiates any <see cref="FhModule"/> with a valid <see cref="FhLoadAttribute"/> on them.
 /// </summary>
 internal sealed class FhLoader {
+
     private readonly Dictionary<string, FhLoadContext> _load_contexts = [];
 
     internal FhLoader() {

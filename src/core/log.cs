@@ -32,13 +32,22 @@ public class FhLogger {
         _file    = new TextWriterTraceListener(File.Open(log_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite));
     }
 
+    internal void Log(FhLogLevel level,
+                      string     msg) {
+        if (level < MinLevel) return;
+
+        _console.WriteLine(msg);
+        _file   .WriteLine(msg);
+        _file   .Flush();
+    }
+
     public void Log(                   FhLogLevel level,
                                        string     msg,
                     [CallerMemberName] string     mname = "",
                     [CallerFilePath]   string     fpath = "",
                     [CallerLineNumber] int        lnb   = 0) {
         if (level < MinLevel) return;
-        string lstr = $"{DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)} | [{level}] {Path.GetFileName(fpath)}:{lnb.ToString()} ({mname}): {msg}";
+        string lstr = $"{TimeProvider.System.GetUtcNow():u} | [{level}] {Path.GetFileName(fpath)}:{lnb} ({mname}): {msg}";
 
         _console.WriteLine(lstr);
         _file   .WriteLine(lstr);
