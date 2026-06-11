@@ -8,7 +8,7 @@
     Mods must not include any Fahrenheit core or mod libraries in their build output.
     The SDK ensures this- and so must the user- by structuring <ProjectReference>s as such:
 
-    <ProjectReference Include="...">
+    <ProjectReference Include="PATH_TO_PROJECT_HERE">
         <Private>false</Private>
         <ExcludeAssets>runtime;native</ExcludeAssets>
     </ProjectReference>
