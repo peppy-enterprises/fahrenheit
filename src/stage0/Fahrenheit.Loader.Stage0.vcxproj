@@ -93,7 +93,7 @@
     <IntDir>$(_FhBaseIntermediateOutputPath)</IntDir>
     <OutDir>$(_FhOutDirBin)</OutDir>
     <TargetName>fhstage0</TargetName>
-  </PropertyGroup>  
+  </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />

@@ -26,10 +26,10 @@ internal static class FhExceptionHandler {
         if (Interlocked.CompareExchange(ref _lock_eh_first_chance, 1, 0) == 1) return;
 
         try {
-            FhInternal.Log.Log(FhLogLevel.Fatal, "================================");
-            FhInternal.Log.Log(FhLogLevel.Fatal, $"First-chance exception at: {TimeProvider.System.GetUtcNow():u}");
-            FhInternal.Log.Log(FhLogLevel.Fatal, e.Exception.ToString());
-            FhInternal.Log.Log(FhLogLevel.Fatal, "================================");
+            FhInternal.Log.Log("================================");
+            FhInternal.Log.Log($"First-chance exception at: {TimeProvider.System.GetUtcNow():u}");
+            FhInternal.Log.Log(e.Exception.ToString());
+            FhInternal.Log.Log("================================");
         }
         catch   { }
         finally { Interlocked.CompareExchange(ref _lock_eh_first_chance, 0, 1); }
@@ -39,10 +39,10 @@ internal static class FhExceptionHandler {
         try {
             Exception ex = (Exception) e.ExceptionObject;
 
-            FhInternal.Log.Log(FhLogLevel.Fatal, "================================");
-            FhInternal.Log.Log(FhLogLevel.Fatal, $"Unhandled exception at: {TimeProvider.System.GetUtcNow():u}");
-            FhInternal.Log.Log(FhLogLevel.Fatal, ex.ToString());
-            FhInternal.Log.Log(FhLogLevel.Fatal, "=============================");
+            FhInternal.Log.Log("================================");
+            FhInternal.Log.Log($"Unhandled exception at: {TimeProvider.System.GetUtcNow():u}");
+            FhInternal.Log.Log(ex.ToString());
+            FhInternal.Log.Log("=============================");
         }
         catch { }
     }

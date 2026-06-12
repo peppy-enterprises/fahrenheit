@@ -5,8 +5,9 @@
  */
 
 #pragma once
+#pragma comment(lib, "dbghelp.lib")
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
 #include <stdio.h>
 #include <stdint.h>
@@ -17,24 +18,13 @@
 #include <fstream>
 #include <direct.h>
 
-#ifdef _WIN32
 #include <windows.h>
 #include <winternl.h>
+#include <DbgHelp.h>
 
 #define STR(s) L ## s
 #define CH(c)  L ## c
 #define DIR_SEPARATOR L'\\'
-
-#else
-#include <dlfcn.h>
-#include <limits.h>
-
-#define STR(s) s
-#define CH(c) c
-#define DIR_SEPARATOR '/'
-#define MAX_PATH PATH_MAX
-
-#endif
 
  // .NET hosting headers
 #include <nethost.h>
