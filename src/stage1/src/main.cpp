@@ -96,7 +96,7 @@ static BOOL CALLBACK stage1_eh_filter_dump(
 // Writes a customized core dump.
 static DWORD CALLBACK stage1_eh_create_dump(LPVOID lpThreadParameter) {
     HANDLE hFile = CreateFileW(
-        L"fahrenheit.dmp",
+        L"crash_dump.dmp",
         GENERIC_READ | GENERIC_WRITE,
         0,
         nullptr,
