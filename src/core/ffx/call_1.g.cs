@@ -34516,13 +34516,6 @@ public static unsafe partial class FhCall {
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown thunk undefined TkVU1SyncPath() at 008c1770
 
-    // Original after pruning:
-    // unknown undefined FUN_008c2370() at 008c2370
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void FUN_008c2370();
-    public static FhMethodHandle<FUN_008c2370> h_FUN_008c2370 => new( new FhMethodLocation("FFX.exe", 0x4C2370) );
-
     // Symbol skipped (deemed uninterpretable or explicitly rejected):
     // unknown thunk undefined thunk_FUN_008c2370() at 008c2360
 

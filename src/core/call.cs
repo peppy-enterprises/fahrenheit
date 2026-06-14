@@ -12,7 +12,6 @@
  */
 
 using Fahrenheit.Atel;
-using Fahrenheit.FFX;
 
 namespace Fahrenheit;
 
@@ -200,7 +199,7 @@ public static unsafe partial class FhCall {
     // PUBLIC/UNRESTRICTED - BEGIN
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate AeonAbilityRecipe CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public delegate void CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int CT_Exec(AtelBasicWorker* work, AtelStack* stack);

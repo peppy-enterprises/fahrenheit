@@ -18793,13 +18793,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<AtelPopStackFloat> h_AtelPopStackFloat => new( new FhMethodLocation("FFX.exe", 0x46DDE0) );
 
     // Original after pruning:
-    // __stdcall int AtelPopStackInteger(AtelBasicWorker* work, AtelStack* stack) at 0086de90
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate nint AtelPopStackInteger(nint work, nint stack);
-    public static FhMethodHandle<AtelPopStackInteger> h_AtelPopStackInteger => new( new FhMethodLocation("FFX.exe", 0x46DE90) );
-
-    // Original after pruning:
     // unknown undefined AtelSetBattleEndKeepRecoverType() at 0086f330
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -19961,13 +19954,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void TkMenuCtrlConfig();
     public static FhMethodHandle<TkMenuCtrlConfig> h_TkMenuCtrlConfig => new( new FhMethodLocation("FFX.exe", 0x4CB0B0) );
-
-    // Original after pruning:
-    // __stdcall undefined TkMenuCtrlSummon(TkMenu* menu) at 008cc300
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void TkMenuCtrlSummon(nint menu);
-    public static FhMethodHandle<TkMenuCtrlSummon> h_TkMenuCtrlSummon => new( new FhMethodLocation("FFX.exe", 0x4CC300) );
 
     // Original after pruning:
     // unknown undefined TkMenuCtrlEquip() at 008ceff0
