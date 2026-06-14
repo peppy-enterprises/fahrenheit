@@ -132,7 +132,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<FUN_00783bb0> h_FUN_00783bb0
         => new( new FhMethodLocation(GAME, 0x383BB0) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate byte MsBtlReadSetScene();
     public static FhMethodHandle<MsBtlReadSetScene> h_MsBtlReadSetScene
         => new( new FhMethodLocation(GAME, 0x383ED0) );
@@ -162,7 +162,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<MsSetSaveParam> h_MsSetSaveParam
         => new( new FhMethodLocation(GAME, 0x3861B0) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsSetSaveParamAll();
     public static FhMethodHandle<MsSetSaveParamAll> h_MsSetSaveParamAll
         => new( new FhMethodLocation(GAME, 0x3869C0) );
@@ -247,9 +247,10 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<MsThreatProcess> h_MsThreatProcess
         => new( new FhMethodLocation(GAME, 0x38E4B0) );
 
+    // Unofficial naming
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate uint MsAfterDamageProcess(int attacker_id, uint param_2, int target_id, uint* param_4, uint param_5);
-    public static FhMethodHandle<MsAfterDamageProcess> h_MsAfterDamageProcess
+    public unsafe delegate uint AfterDamageProcess(int attacker_id, uint param_2, int target_id, uint* param_4, uint param_5);
+    public static FhMethodHandle<AfterDamageProcess> h_AfterDamageProcess
         => new( new FhMethodLocation(GAME, 0x38F0B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -283,7 +284,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x390A60) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate CustomizationRecipe* MsGetRomSummonGrow(int* size);
+    public unsafe delegate AeonAbilityRecipe* MsGetRomSummonGrow(int* size);
     public static FhMethodHandle<MsGetRomSummonGrow> h_MsGetRomSummonGrow
         => new( new FhMethodLocation(GAME, 0x390B00) );
 
@@ -292,7 +293,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<MsMonsterCapture> h_MsMonsterCapture
         => new( new FhMethodLocation(GAME, 0x390B80) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_00791820();
     public static FhMethodHandle<FUN_00791820> h_FUN_00791820
         => new( new FhMethodLocation(GAME, 0x391820) );
@@ -508,149 +509,9 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x42CC20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_setWeaponInvisible(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_setWeaponInvisible> h_Common_setWeaponInvisible
-        => new( new FhMethodLocation(GAME, 0x456770) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void Common_obtainTreasureSilentlyInit(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_obtainTreasureSilentlyInit> h_Common_obtainTreasureSilentlyInit
-        => new( new FhMethodLocation(GAME, 0x4579E0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int CT_RetInt_0065(nint work, int* storage, nint atelStack);
-    public static FhMethodHandle<CT_RetInt_0065> h_CT_RetInt_0065
-        => new( new FhMethodLocation(GAME, 0x457F60) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_transitionToMap(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_transitionToMap> h_Common_transitionToMap
-        => new( new FhMethodLocation(GAME, 0x4580C0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_warpToMap(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_warpToMap> h_Common_warpToMap
-        => new( new FhMethodLocation(GAME, 0x458370) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int CT_RetInt_006A(nint work, int* storage, nint atelStack);
-    public static FhMethodHandle<CT_RetInt_006A> h_CT_RetInt_006A
-        => new( new FhMethodLocation(GAME, 0x4589F0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int CT_RetInt_01B6(nint work, int* storage, nint atelStack);
-    public static FhMethodHandle<CT_RetInt_01B6> h_CT_RetInt_01B6
-        => new( new FhMethodLocation(GAME, 0x4594D0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_upgradeBrotherhoodRetInt(nint work, int* storage, nint atelStack);
-    public static FhMethodHandle<Common_upgradeBrotherhoodRetInt> h_Common_upgradeBrotherhoodRetInt
-        => new( new FhMethodLocation(GAME, 0x4596A0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int UpgradeBrotherhood(int level);
     public static FhMethodHandle<UpgradeBrotherhood> h_UpgradeBrotherhood
         => new( new FhMethodLocation(GAME, 0x4596A0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_obtainBrotherhoodRetInt(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_obtainBrotherhoodRetInt> h_Common_obtainBrotherhoodRetInt
-        => new( new FhMethodLocation(GAME, 0x459A40) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void Common_obtainTreasureInit(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_obtainTreasureInit> h_Common_obtainTreasureInit
-        => new( new FhMethodLocation(GAME, 0x45A740) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_removePartyMemberLongTerm(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_removePartyMemberLongTerm> h_Common_removePartyMemberLongTerm
-        => new( new FhMethodLocation(GAME, 0x45AAF0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_setPrimerCollected(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_setPrimerCollected> h_Common_setPrimerCollected
-        => new( new FhMethodLocation(GAME, 0x45AB30) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_pushParty(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_pushParty> h_Common_pushParty
-        => new( new FhMethodLocation(GAME, 0x45B350) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_popParty(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_popParty> h_Common_popParty
-        => new( new FhMethodLocation(GAME, 0x45B3C0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_addPartyMember(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_addPartyMember> h_Common_addPartyMember
-        => new( new FhMethodLocation(GAME, 0x45B5A0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_removePartyMember(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_removePartyMember> h_Common_removePartyMember
-        => new( new FhMethodLocation(GAME, 0x45B6C0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_putPartyMemberInSlot(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_putPartyMemberInSlot> h_Common_putPartyMemberInSlot
-        => new( new FhMethodLocation(GAME, 0x45BC90) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_0043(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_0043> h_Common_0043
-        => new( new FhMethodLocation(GAME, 0x45C810) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_linkFieldToBattleActor(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_linkFieldToBattleActor> h_Common_linkFieldToBattleActor
-        => new( new FhMethodLocation(GAME, 0x45CA00) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_playFieldVoiceLineInit(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_playFieldVoiceLineInit> h_Common_playFieldVoiceLineInit
-        => new( new FhMethodLocation(GAME, 0x45CB70) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_playFieldVoiceLineExec(AtelBasicWorker* param_1, AtelStack* param_2);
-    public static FhMethodHandle<Common_playFieldVoiceLineExec> h_Common_playFieldVoiceLineExec
-        => new( new FhMethodLocation(GAME, 0x45CD30) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_loadModel(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_loadModel> h_Common_loadModel
-        => new( new FhMethodLocation(GAME, 0x45CE70) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_playFieldVoiceLineResultInt(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_playFieldVoiceLineResultInt> h_Common_playFieldVoiceLineResultInt
-        => new( new FhMethodLocation(GAME, 0x45D150) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_00D6Init(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_00D6Init> h_Common_00D6Init
-        => new( new FhMethodLocation(GAME, 0x45D520) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_00D6Exec(AtelBasicWorker* param_1, AtelStack* param_2);
-    public static FhMethodHandle<Common_00D6Exec> h_Common_00D6Exec
-        => new( new FhMethodLocation(GAME, 0x45D820) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_00D6ResultInt(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_00D6ResultInt> h_Common_00D6ResultInt
-        => new( new FhMethodLocation(GAME, 0x45DCF0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Common_01D1Init(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Common_01D1Init> h_Common_01D1Init
-        => new( new FhMethodLocation(GAME, 0x45FB60) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate bool Common_01D1Exec(AtelBasicWorker* param_1, AtelStack* param_2);
-    public static FhMethodHandle<Common_01D1Exec> h_Common_01D1Exec
-        => new( new FhMethodLocation(GAME, 0x45FDB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_008671d0(byte opcode, AtelWorkThread* thread, AtelBasicWorker* work, AtelStack* stack);
@@ -683,8 +544,8 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x46D660) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int AtelStackPop(int* param_1, AtelStack* atelStack);
-    public static FhMethodHandle<AtelStackPop> h_AtelStackPop
+    public unsafe delegate int AtelPopStackInteger(int* param_1, AtelStack* atelStack);
+    public static FhMethodHandle<AtelPopStackInteger> h_AtelPopStackInteger
         => new( new FhMethodLocation(GAME, 0x46DE90) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -722,7 +583,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<TkMsImportantSet> h_TkMsImportantSet
         => new( new FhMethodLocation(GAME, 0x48E700) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void TkVU1SyncPath();
     public static FhMethodHandle<TkVU1SyncPath> h_TkVU1SyncPath
         => new( new FhMethodLocation(GAME, 0x48EBD0) );
@@ -862,12 +723,12 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<FUN_008c0f40> h_FUN_008c0f40
         => new( new FhMethodLocation(GAME, 0x4C0F40) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_008c1350_DrawScissor512x416();
     public static FhMethodHandle<FUN_008c1350_DrawScissor512x416> h_FUN_008c1350_DrawScissor512x416
         => new( new FhMethodLocation(GAME, 0x4C1350) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int TkMn2GetSummonGrowMax();
     public static FhMethodHandle<TkMn2GetSummonGrowMax> h_TkMn2GetSummonGrowMax
         => new( new FhMethodLocation(GAME, 0x4C1C20) );
@@ -877,9 +738,10 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<FUN_008c1c70> h_FUN_008c1c70
         => new( new FhMethodLocation(GAME, 0x4C1C70) );
 
+    // PrepareMenuList
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void PrepareMenuList(MenuList menu_list_id, Equipment* gear);
-    public static FhMethodHandle<PrepareMenuList> h_PrepareMenuList
+    public unsafe delegate void FUN_008c2370(MenuList menu_list_id, Equipment* gear);
+    public static FhMethodHandle<FUN_008c2370> h_FUN_008c2370
         => new( new FhMethodLocation(GAME, 0x4C2370) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -897,9 +759,10 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<FUN_008cc120> h_FUN_008cc120
         => new( new FhMethodLocation(GAME, 0x4CC120) );
 
+    // UpdateAeonCustomizationMenuState
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void UpdateAeonCustomizationMenuState(uint param_1, uint param_2);
-    public static FhMethodHandle<UpdateAeonCustomizationMenuState> h_UpdateAeonCustomizationMenuState
+    public unsafe delegate void TkMenuCtrlSummon(TkMenu* menu, int arg);
+    public static FhMethodHandle<TkMenuCtrlSummon> h_TkMenuCtrlSummon
         => new( new FhMethodLocation(GAME, 0x4CC300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -912,9 +775,10 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<FUN_008cd9f0> h_FUN_008cd9f0
         => new( new FhMethodLocation(GAME, 0x4CD9F0) );
 
+    // DrawAeonCustomizationMenu
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void DrawAeonCustomizationMenu(TkWindow* window);
-    public static FhMethodHandle<DrawAeonCustomizationMenu> h_DrawAeonCustomizationMenu
+    public unsafe delegate void FUN_008cdb70(TkWindow* window);
+    public static FhMethodHandle<FUN_008cdb70> h_FUN_008cdb70
         => new( new FhMethodLocation(GAME, 0x4CDB70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -922,7 +786,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<FUN_008d4140> h_FUN_008d4140
         => new( new FhMethodLocation(GAME, 0x4D4140) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate uint FUN_008d48e0();
     public static FhMethodHandle<FUN_008d48e0> h_FUN_008d48e0
         => new( new FhMethodLocation(GAME, 0x4D48E0) );
@@ -962,7 +826,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<TkMenuAppearMainCmdWindow> h_TkMenuAppearMainCmdWindow
         => new( new FhMethodLocation(GAME, 0x4E1C60) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void FUN_008e2de0();
     public static FhMethodHandle<FUN_008e2de0> h_FUN_008e2de0
         => new( new FhMethodLocation(GAME, 0x4E2DE0) );
@@ -1028,26 +892,11 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(GAME, 0x505AB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Map_800F(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Map_800F> h_Map_800F
-        => new( new FhMethodLocation(GAME, 0x51B1A0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Map_show2DLayerResultInt(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Map_show2DLayerResultInt> h_Map_show2DLayerResultInt
-        => new( new FhMethodLocation(GAME, 0x51B1A0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int Map_hide2DLayerResultInt(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<Map_hide2DLayerResultInt> h_Map_hide2DLayerResultInt
-        => new( new FhMethodLocation(GAME, 0x51B1E0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void abmap_get_panel(int ply_id, int node_idx);
     public static FhMethodHandle<abmap_get_panel> h_abmap_get_panel
         => new( new FhMethodLocation(GAME, 0x6458A0) );
 
-    // Sphere-grid state-machine entry points; one delegate type reused at three addresses.
+    // Sphere-grid state-machine entry points
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void abmap_ctrl();
     public static FhMethodHandle<abmap_ctrl> h_AbmapState_ChangingNode
@@ -1062,20 +911,15 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<FUN_00a48910> h_FUN_00a48910
         => new( new FhMethodLocation(GAME, 0x648910) );
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void eiAbmParaGet();
     public static FhMethodHandle<eiAbmParaGet> h_eiAbmParaGet
         => new( new FhMethodLocation(GAME, 0x654860) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void abmap_confirm_move(int p1, int p2, int p3);
-    public static FhMethodHandle<abmap_confirm_move> h_abmap_confirm_move
+    public unsafe delegate void FUN_00a56160(int p1, int p2, int p3);
+    public static FhMethodHandle<FUN_00a56160> h_FUN_00a56160
         => new( new FhMethodLocation(GAME, 0x656160) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void SgEvent_showModularMenuInit(AtelBasicWorker* work, int* storage, AtelStack* atelStack);
-    public static FhMethodHandle<SgEvent_showModularMenuInit> h_SgEvent_showModularMenuInit
-        => new( new FhMethodLocation(GAME, 0x678210) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public unsafe delegate nint FMOD_EventSystem_load(nint param_1, nint file_path, nint param_3, nint bank);

@@ -2,7 +2,7 @@
 
 namespace Fahrenheit.FFX;
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x2c)]
+[StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x2c)]
 public unsafe struct TOMesWinWork {
     [FieldOffset(0x08)] public byte* text;
     [FieldOffset(0x0c)] public byte* _0xc;
