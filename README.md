@@ -66,7 +66,7 @@ Time permitting, the goals (in no specific order) of the project are:
 Yes. Feel free to join us in [Cid's Salvage Ship](https://discord.gg/AGx2grw9nD), a Discord server that supports Fahrenheit and related efforts.
 
 ## License
-Fahrenheit source code is licensed under the [MIT](https://github.com/fahrenheit-crew/fahrenheit/blob/main/LICENSE.txt) license.
+Fahrenheit source code is licensed under the [LGPL 3.0 or later](https://github.com/fahrenheit-crew/fahrenheit/blob/main/COPYING.LESSER) license.
 
 Assets (the contents of the ``assets`` folder) may be used in forks of Fahrenheit, but _not_ for any other purpose!
 

@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: LGPL-3.0-or-later
 //
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
-// It is licensed to you under the GNU Lesser Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
+// It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
 /* [fkelava 23/03/26 00:41]
  * The game's remasters all utilize the cross-platform Phyre game engine. All assets have been processed
