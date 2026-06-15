@@ -21,11 +21,13 @@ internal static class FhEnvironment {
          * https://learn.microsoft.com/en-us/dotnet/api/system.appdomain?view=net-10.0#remarks
          * > On .NET Core and .NET 5+ {...} These versions have exactly one AppDomain.
          *
-         * This should suffice to catch any normal (non-AV) managed exception. In theory.
+         * In other words, AppDomain.CurrentDomain is the _only_ domain in existence.
+         * See the comments on FhExceptionHandler for the peculiar nature of events here.
          */
+        ExceptionHandling.SetUnhandledExceptionHandler(FhExceptionHandler.eh_unhandled);
+        // ExceptionHandling.SetFatalErrorHandler(FhExceptionHandler.eh_fatal); // Uncomment when added in .NET 11/12.
 
         AppDomain.CurrentDomain.FirstChanceException += FhExceptionHandler.eh_first_chance;
-        AppDomain.CurrentDomain.UnhandledException   += FhExceptionHandler.eh_unhandled;
 
         Finder    = new();
         BaseAddr  = NativeLibrary.GetMainProgramHandle();

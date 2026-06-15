@@ -7,6 +7,9 @@
  * For the exception handling, see:
  * - http://code.aaronballman.com/minidumper/MiniDump.cpp
  * - https://github.com/folgerwang/UnrealEngine/blob/release/Engine/Source/Runtime/Core/Private/Windows/WindowsPlatformCrashContext.cpp
+ * - https://github.com/goatcorp/Dalamud/blob/master/Dalamud.Boot/veh.cpp
+ *
+ * Portions of VEH handling (C) Dalamud, under the terms of the AGPL.
  */
 
 #include "fhstage1.h"
@@ -22,7 +25,6 @@ using eh_fn    = LONG(*)(EXCEPTION_POINTERS*);
 main_fn g_fnptr_main_original = nullptr;
 main_fn g_fnptr_main_target   = nullptr;
 eh_fn   g_fnptr_eh_original   = nullptr;
-eh_fn   g_fnptr_eh_target     = nullptr;
 
 // Globals for EH override
 DWORD               g_eh_thread_faulting_id;
@@ -36,7 +38,8 @@ hostfxr_get_runtime_delegate_fn          g_fnptr_hostfxr_get_delegate;
 hostfxr_close_fn                         g_fnptr_hostfxr_close;
 
 // Using the nethost library, discover the location of hostfxr and get exports
-static bool load_hostfxr() {
+static bool
+load_hostfxr() {
     // Pre-allocate a large buffer for the path to hostfxr
     char_t buffer[MAX_PATH];
     size_t buffer_size = sizeof(buffer) / sizeof(char_t);
@@ -64,8 +67,6 @@ static bool load_hostfxr() {
  * An exception handler which behaves the same as the game's,
  * except that it _unconditionally_ emits a customized core dump.
  *
- * We catch managed exceptions in C#, and this filter catches native or fatal exceptions for logging.
- *
  * See:
  * - https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/nf-minidumpapiset-minidumpwritedump
  * - https://learn.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-unhandledexceptionfilter
@@ -73,8 +74,55 @@ static bool load_hostfxr() {
  * - https://www.debuginfo.com/examples/src/effminidumps/MiniDump.cpp
  */
 
+// Adapted from Dalamud under the terms of the AGPL
+// https://github.com/goatcorp/Dalamud/blob/7e980a0a5e312c65d22f724703715e0679d2ef8a/Dalamud.Boot/veh.cpp#L40-L80
+static bool
+stage1_eh_whitelist_exception(const DWORD code)
+{
+    switch (code)
+    {
+        case STATUS_ACCESS_VIOLATION:
+        case STATUS_IN_PAGE_ERROR:
+        case STATUS_INVALID_HANDLE:
+        case STATUS_INVALID_PARAMETER:
+        case STATUS_NO_MEMORY:
+        case STATUS_ILLEGAL_INSTRUCTION:
+        case STATUS_NONCONTINUABLE_EXCEPTION:
+        case STATUS_INVALID_DISPOSITION:
+        case STATUS_ARRAY_BOUNDS_EXCEEDED:
+        case STATUS_FLOAT_DENORMAL_OPERAND:
+        case STATUS_FLOAT_DIVIDE_BY_ZERO:
+        case STATUS_FLOAT_INEXACT_RESULT:
+        case STATUS_FLOAT_INVALID_OPERATION:
+        case STATUS_FLOAT_OVERFLOW:
+        case STATUS_FLOAT_STACK_CHECK:
+        case STATUS_FLOAT_UNDERFLOW:
+        case STATUS_INTEGER_DIVIDE_BY_ZERO:
+        case STATUS_INTEGER_OVERFLOW:
+        case STATUS_PRIVILEGED_INSTRUCTION:
+        case STATUS_STACK_OVERFLOW:
+        case STATUS_DLL_NOT_FOUND:
+        case STATUS_ORDINAL_NOT_FOUND:
+        case STATUS_ENTRYPOINT_NOT_FOUND:
+        case STATUS_DLL_INIT_FAILED:
+        case STATUS_CONTROL_STACK_VIOLATION:
+        case STATUS_FLOAT_MULTIPLE_FAULTS:
+        case STATUS_FLOAT_MULTIPLE_TRAPS:
+        case STATUS_HEAP_CORRUPTION:
+        case STATUS_STACK_BUFFER_OVERRUN:
+        case STATUS_INVALID_CRUNTIME_PARAMETER:
+        case STATUS_THREAD_NOT_RUNNING:
+        case STATUS_ALREADY_REGISTERED:
+        case 0xE0434352: // CLR exception
+            return true;
+        default:
+            return false;
+    }
+}
+
 // Filters the core dump to exclude objects which we do not want to record.
-static BOOL CALLBACK stage1_eh_filter_dump(
+static BOOL CALLBACK
+stage1_eh_filter_dump(
           PVOID                     CallbackParam,
     const PMINIDUMP_CALLBACK_INPUT  CallbackInput,
           PMINIDUMP_CALLBACK_OUTPUT CallbackOutput) {
@@ -86,7 +134,7 @@ static BOOL CALLBACK stage1_eh_filter_dump(
 
         case IncludeThreadCallback: {
             // Exclude the thread which writes the minidump.
-            return CallbackInput->IncludeThread.ThreadId != g_eh_thread_handler_id;
+            return CallbackInput->Thread.ThreadId != g_eh_thread_handler_id;
         } break;
     }
 
@@ -94,7 +142,8 @@ static BOOL CALLBACK stage1_eh_filter_dump(
 }
 
 // Writes a customized core dump.
-static DWORD CALLBACK stage1_eh_create_dump(LPVOID lpThreadParameter) {
+static DWORD CALLBACK
+stage1_eh_create_dump(LPVOID lpThreadParameter) {
     HANDLE hFile = CreateFileW(
         L"crash_dump.dmp",
         GENERIC_READ | GENERIC_WRITE,
@@ -112,11 +161,13 @@ static DWORD CALLBACK stage1_eh_create_dump(LPVOID lpThreadParameter) {
     HANDLE        hProcess  = GetCurrentProcess();
     DWORD         ProcessId = GetProcessId(hProcess);
     MINIDUMP_TYPE DumpType  = (MINIDUMP_TYPE)(
-                              MiniDumpWithThreadInfo
-                            | MiniDumpWithFullMemoryInfo
-                            | MiniDumpWithProcessThreadData
+                              MiniDumpNormal
+                            | MiniDumpWithDataSegs
                             | MiniDumpWithHandleData
-                            | MiniDumpWithDataSegs);
+                            | MiniDumpWithFullMemoryInfo
+                            | MiniDumpWithThreadInfo
+                            | MiniDumpWithProcessThreadData
+                            | MiniDumpWithUnloadedModules);
 
     /* [fkelava 11/06/26 21:24]
      * For ClientPointers:
@@ -132,8 +183,10 @@ static DWORD CALLBACK stage1_eh_create_dump(LPVOID lpThreadParameter) {
     mci.CallbackRoutine = (MINIDUMP_CALLBACK_ROUTINE)stage1_eh_filter_dump;
     mci.CallbackParam   = nullptr;
 
-    PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam = g_eh_exception_ptr != 0 ? &mdei : nullptr;
+    PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam = g_eh_exception_ptr != nullptr ? &mdei : nullptr;
     PMINIDUMP_CALLBACK_INFORMATION  CallbackParam  = &mci;
+
+    std::wcerr << "Dumping process core. Please wait." << std::endl;
 
     BOOL rv = MiniDumpWriteDump(
         hProcess,
@@ -154,19 +207,45 @@ static DWORD CALLBACK stage1_eh_create_dump(LPVOID lpThreadParameter) {
 }
 
 // The Stage1 exception handler.
-static LONG WINAPI stage1_eh(EXCEPTION_POINTERS* ExceptionInfo) {
+static LONG WINAPI
+stage1_eh(EXCEPTION_POINTERS* ExceptionInfo) {
     g_eh_exception_ptr      = ExceptionInfo;
     g_eh_thread_faulting_id = GetCurrentThreadId();
 
-    ::ResumeThread(g_eh_thread_handler);
+    ::ResumeThread       (g_eh_thread_handler);
     ::WaitForSingleObject(g_eh_thread_handler, INFINITE);
-    ::CloseHandle(g_eh_thread_handler);
+    ::CloseHandle        (g_eh_thread_handler);
 
-    return EXCEPTION_EXECUTE_HANDLER;
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+// The Stage1 vectored exception handler.
+static LONG NTAPI
+stage1_veh(EXCEPTION_POINTERS* ExceptionInfo) {
+    // TODO: remove logging after testruns
+    auto ec = ExceptionInfo->ExceptionRecord->ExceptionCode;
+    std::wcout << "VEH: " << std::hex << ec << std::endl;
+
+    /* [fkelava 15/06/26 00:43]
+     * Per Passant (https://stackoverflow.com/a/12300563):
+     * > Exception codes with values less than 0x80000000 are
+     * > just informal and never an indicator of real trouble.
+     */
+    if (ec < 0x80000000 || !stage1_eh_whitelist_exception(ec))
+        return EXCEPTION_CONTINUE_SEARCH;
+
+    return stage1_eh(ExceptionInfo);
+}
+
+// Ignores the game's attempt to install its own exception handler.
+static LPTOP_LEVEL_EXCEPTION_FILTER WINAPI
+stage1_eh_set_filter(_In_opt_ LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelExceptionFilter) {
+    return &stage1_eh;
 }
 
 // If necessary, replaces the game's EH filter with a Stage1 custom one.
-static BOOL stage1_eh_install(LPBYTE pMainModule) {
+static BOOL
+stage1_eh_install(LPBYTE pMainModule) {
     char_t exe_full_name_buf[MAX_PATH];
     auto size = ::GetModuleFileNameW(NULL, exe_full_name_buf, sizeof(exe_full_name_buf) / sizeof(char_t));
 
@@ -181,43 +260,39 @@ static BOOL stage1_eh_install(LPBYTE pMainModule) {
     string_t exe_name = exe_full_name.substr(exe_name_dirsep_pos, exe_full_name.length());
 
     // This can be generalized for other games in the future.
-    bool is_ffx            = exe_name.compare(L"FFX.exe")   == 0;
-    bool is_ffx2           = exe_name.compare(L"FFX-2.exe") == 0;
-    bool should_install_eh = is_ffx || is_ffx2;
+    if (exe_name.compare(L"FFX.exe")   != 0
+    &&  exe_name.compare(L"FFX-2.exe") != 0)
+        return TRUE;
 
-    if (should_install_eh) {
-        std::wcout << "Installing EH hook for " << exe_name << std::endl;
+    g_eh_thread_handler = ::CreateThread(
+        nullptr,
+        0,
+        stage1_eh_create_dump,
+        nullptr,
+        CREATE_SUSPENDED,
+        &g_eh_thread_handler_id);
 
-        auto eh_offset = is_ffx ? 0x226A90 : 0x6B6340;
-        g_fnptr_eh_target = reinterpret_cast<eh_fn>(pMainModule + eh_offset);
-
-        if (MH_CreateHook(g_fnptr_eh_target, &stage1_eh, reinterpret_cast<void**>(&g_fnptr_eh_original)) != MH_OK
-        ||  MH_EnableHook(g_fnptr_eh_target)                                                             != MH_OK) {
-            std::wcerr << "Failed to insert EH hook for " << exe_name << std::endl;
-            return FALSE;
-        }
-
-        g_eh_thread_handler = ::CreateThread(
-            nullptr,
-            0,
-            stage1_eh_create_dump,
-            nullptr,
-            CREATE_SUSPENDED,
-            &g_eh_thread_handler_id);
-
-        if (g_eh_thread_handler == nullptr || g_eh_thread_handler == INVALID_HANDLE_VALUE) {
-            std::wcerr << "Failed to create EH thread for " << exe_name << std::endl;
-            return FALSE;
-        }
-
-        ::SetThreadDescription(g_eh_thread_handler, L"Fahrenheit EH");
+    if (g_eh_thread_handler == nullptr || g_eh_thread_handler == INVALID_HANDLE_VALUE) {
+        std::wcerr << "Failed to create EH thread for " << exe_name << std::endl;
+        return FALSE;
     }
 
+    ::SetThreadDescription(g_eh_thread_handler, L"Fahrenheit EH");
+    AddVectoredExceptionHandler(TRUE, &stage1_veh);
+
+    if (MH_CreateHookApi(L"kernel32.dll", "SetUnhandledExceptionFilter", &stage1_eh_set_filter, reinterpret_cast<void**>(&g_fnptr_eh_original)) != MH_OK
+    ||  MH_EnableHook   (&SetUnhandledExceptionFilter)                                                                                          != MH_OK) {
+        std::wcerr << "Failed to install EH hook for " << exe_name << std::endl;
+        return FALSE;
+    }
+
+    std::wcout << "Installed EH hook for " << exe_name << std::endl;
     return TRUE;
 }
 
 // Runs before the program's own entrypoint, setting up Fahrenheit.
-static int stage1_main(void) {
+static int
+stage1_main(void) {
     // STEP 1:
     // Attach to the Stage0 console and forward stdout/stderr to it.
     if (!AttachConsole(ATTACH_PARENT_PROCESS)) {
@@ -241,7 +316,7 @@ static int stage1_main(void) {
     LPBYTE  pMainModule = reinterpret_cast<LPBYTE>(hMainModule);
 
     if (!stage1_eh_install(pMainModule)) {
-        std::wcerr << "Failed to insert EH hook." << std::endl;
+        std::wcerr << "Failed to install EH hook." << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -389,10 +464,11 @@ static int stage1_main(void) {
     return g_fnptr_main_original();
 }
 
-BOOL APIENTRY DllMain( HMODULE hinstDLL,
-                       DWORD   fdwReason,
-                       LPVOID  lpvReserved
-                     ) {
+BOOL APIENTRY
+DllMain( HMODULE hinstDLL,
+         DWORD   fdwReason,
+         LPVOID  lpvReserved
+         ) {
     switch (fdwReason) {
         case DLL_PROCESS_ATTACH: {
             // Return the IAT to its original self.

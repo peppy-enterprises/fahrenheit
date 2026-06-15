@@ -36,7 +36,7 @@ public class FhLogger {
     ///     Logs a given <paramref name="message"/> unconditionally,
     ///     without timestamp or caller information.
     /// </summary>
-    internal void Log(string message) {
+    internal void LogDirect(string message) {
         _console.WriteLine(message);
         _file   .WriteLine(message);
         _file   .Flush();
