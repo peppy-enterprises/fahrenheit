@@ -1,4 +1,9 @@
-﻿/* [fkelava 11/5/25 08:11]
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+//
+// This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
+// It is licensed to you under the GNU Lesser Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
+
+/* [fkelava 11/5/25 08:11]
  * source: Switch ver.
  * header: __SE_TYPE_ATEL__
  *

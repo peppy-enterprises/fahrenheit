@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+//
+// This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
+// It is licensed to you under the GNU Lesser Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
+
 /* [fkelava 25/8/24 01:42]
  * Substantively copied from the .NET Hosting samples (https://github.com/dotnet/samples/), used under the MIT license.
  *
