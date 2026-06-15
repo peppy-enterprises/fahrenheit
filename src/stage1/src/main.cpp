@@ -134,7 +134,7 @@ stage1_eh_filter_dump(
 
         case IncludeThreadCallback: {
             // Exclude the thread which writes the minidump.
-            return CallbackInput->Thread.ThreadId != g_eh_thread_handler_id;
+            return CallbackInput->IncludeThread.ThreadId != g_eh_thread_handler_id;
         } break;
     }
 
