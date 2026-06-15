@@ -17,7 +17,7 @@ using Fahrenheit.FFX.Ids;
 namespace Fahrenheit.FFX;
 
 /// <summary>
-///     An accessor for "FFX.exe" function calls exclusive to FF X.
+///     An accessor for game function calls exclusive to FF X.
 /// </summary>
 public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
