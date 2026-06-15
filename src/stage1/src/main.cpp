@@ -38,8 +38,7 @@ hostfxr_get_runtime_delegate_fn          g_fnptr_hostfxr_get_delegate;
 hostfxr_close_fn                         g_fnptr_hostfxr_close;
 
 // Using the nethost library, discover the location of hostfxr and get exports
-static bool
-load_hostfxr() {
+static bool load_hostfxr() {
     // Pre-allocate a large buffer for the path to hostfxr
     char_t buffer[MAX_PATH];
     size_t buffer_size = sizeof(buffer) / sizeof(char_t);
@@ -74,10 +73,9 @@ load_hostfxr() {
  * - https://www.debuginfo.com/examples/src/effminidumps/MiniDump.cpp
  */
 
-// Adapted from Dalamud under the terms of the AGPL
+// Since there is no reasonable general list of exceptions to exempt from VEH, I used Dalamud's.
 // https://github.com/goatcorp/Dalamud/blob/7e980a0a5e312c65d22f724703715e0679d2ef8a/Dalamud.Boot/veh.cpp#L40-L80
-static bool
-stage1_eh_whitelist_exception(const DWORD code)
+static bool stage1_eh_whitelist_exception(const DWORD code)
 {
     switch (code)
     {
@@ -121,20 +119,19 @@ stage1_eh_whitelist_exception(const DWORD code)
 }
 
 // Filters the core dump to exclude objects which we do not want to record.
-static BOOL CALLBACK
-stage1_eh_filter_dump(
-          PVOID                     CallbackParam,
-    const PMINIDUMP_CALLBACK_INPUT  CallbackInput,
-          PMINIDUMP_CALLBACK_OUTPUT CallbackOutput) {
-    if (!CallbackInput || !CallbackOutput) return FALSE;
+static BOOL CALLBACK stage1_eh_filter_dump(
+          PVOID                     ptr_callback_param,
+    const PMINIDUMP_CALLBACK_INPUT  ptr_callback_input,
+          PMINIDUMP_CALLBACK_OUTPUT ptr_callback_output) {
+    if (!ptr_callback_input || !ptr_callback_output) return FALSE;
 
-    switch (CallbackInput->CallbackType) {
+    switch (ptr_callback_input->CallbackType) {
         case CancelCallback:
             return FALSE;
 
         case IncludeThreadCallback: {
             // Exclude the thread which writes the minidump.
-            return CallbackInput->IncludeThread.ThreadId != g_eh_thread_handler_id;
+            return ptr_callback_input->IncludeThread.ThreadId != g_eh_thread_handler_id;
         } break;
     }
 
@@ -142,8 +139,7 @@ stage1_eh_filter_dump(
 }
 
 // Writes a customized core dump.
-static DWORD CALLBACK
-stage1_eh_create_dump(LPVOID lpThreadParameter) {
+static DWORD CALLBACK stage1_eh_create_dump(LPVOID ptr_thread_parameter) {
     HANDLE hFile = CreateFileW(
         L"crash_dump.dmp",
         GENERIC_READ | GENERIC_WRITE,
@@ -207,9 +203,8 @@ stage1_eh_create_dump(LPVOID lpThreadParameter) {
 }
 
 // The Stage1 exception handler.
-static LONG WINAPI
-stage1_eh(EXCEPTION_POINTERS* ExceptionInfo) {
-    g_eh_exception_ptr      = ExceptionInfo;
+static LONG WINAPI stage1_eh(EXCEPTION_POINTERS* ptr_exception_info) {
+    g_eh_exception_ptr      = ptr_exception_info;
     g_eh_thread_faulting_id = GetCurrentThreadId();
 
     ::ResumeThread       (g_eh_thread_handler);
@@ -220,10 +215,9 @@ stage1_eh(EXCEPTION_POINTERS* ExceptionInfo) {
 }
 
 // The Stage1 vectored exception handler.
-static LONG NTAPI
-stage1_veh(EXCEPTION_POINTERS* ExceptionInfo) {
+static LONG NTAPI stage1_veh(EXCEPTION_POINTERS* ptr_exception_info) {
     // TODO: remove logging after testruns
-    auto ec = ExceptionInfo->ExceptionRecord->ExceptionCode;
+    auto ec = ptr_exception_info->ExceptionRecord->ExceptionCode;
     std::wcout << "VEH: " << std::hex << ec << std::endl;
 
     /* [fkelava 15/06/26 00:43]
@@ -234,18 +228,16 @@ stage1_veh(EXCEPTION_POINTERS* ExceptionInfo) {
     if (ec < 0x80000000 || !stage1_eh_whitelist_exception(ec))
         return EXCEPTION_CONTINUE_SEARCH;
 
-    return stage1_eh(ExceptionInfo);
+    return stage1_eh(ptr_exception_info);
 }
 
 // Ignores the game's attempt to install its own exception handler.
-static LPTOP_LEVEL_EXCEPTION_FILTER WINAPI
-stage1_eh_set_filter(_In_opt_ LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelExceptionFilter) {
+static LPTOP_LEVEL_EXCEPTION_FILTER WINAPI stage1_eh_set_filter(LPTOP_LEVEL_EXCEPTION_FILTER fnptr_exception_filter) {
     return &stage1_eh;
 }
 
 // If necessary, replaces the game's EH filter with a Stage1 custom one.
-static BOOL
-stage1_eh_install(LPBYTE pMainModule) {
+static BOOL stage1_eh_install(LPBYTE ptr_main_module) {
     char_t exe_full_name_buf[MAX_PATH];
     auto size = ::GetModuleFileNameW(NULL, exe_full_name_buf, sizeof(exe_full_name_buf) / sizeof(char_t));
 
@@ -291,8 +283,7 @@ stage1_eh_install(LPBYTE pMainModule) {
 }
 
 // Runs before the program's own entrypoint, setting up Fahrenheit.
-static int
-stage1_main(void) {
+static int stage1_main(void) {
     // STEP 1:
     // Attach to the Stage0 console and forward stdout/stderr to it.
     if (!AttachConsole(ATTACH_PARENT_PROCESS)) {
@@ -371,9 +362,9 @@ stage1_main(void) {
 
     // STEP 6:
     // Initialize and start the .NET runtime.
-    void*          load_assembly_fptr        = nullptr;
-    void*          get_function_pointer_fptr = nullptr;
-    hostfxr_handle cxt                       = nullptr;
+    void*          ptr_hostfxr_load_assembly        = nullptr;
+    void*          ptr_hostfxr_get_function_pointer = nullptr;
+    hostfxr_handle cxt                              = nullptr;
 
     int rc = g_fnptr_hostfxr_init(clrhost_config_path.c_str(), nullptr, &cxt);
     if (rc != 0 || cxt == nullptr) {
@@ -389,9 +380,9 @@ stage1_main(void) {
     rc = g_fnptr_hostfxr_get_delegate(
         cxt,
         hdt_load_assembly,
-        &load_assembly_fptr);
+        &ptr_hostfxr_load_assembly);
 
-    if (rc != 0 || load_assembly_fptr == nullptr) {
+    if (rc != 0 || ptr_hostfxr_load_assembly == nullptr) {
         std::wcerr << "hostfxr: failed to obtain fnptr (hdt_load_assembly)" << std::endl;
         std::wcerr << "This is an uncommon error. Please contact the Fahrenheit developers at https://github.com/fahrenheit-crew/fahrenheit." << std::endl;
         exit(rc);
@@ -400,9 +391,9 @@ stage1_main(void) {
     rc = g_fnptr_hostfxr_get_delegate(
         cxt,
         hdt_get_function_pointer,
-        &get_function_pointer_fptr);
+        &ptr_hostfxr_get_function_pointer);
 
-    if (rc != 0 || get_function_pointer_fptr == nullptr) {
+    if (rc != 0 || ptr_hostfxr_get_function_pointer == nullptr) {
         std::wcerr << "hostfxr: failed to obtain fnptr (hdt_get_function_pointer)"  << std::endl;
         std::wcerr << "This is an uncommon error. Please contact the Fahrenheit developers at https://github.com/fahrenheit-crew/fahrenheit." << std::endl;
         exit(rc);
@@ -410,14 +401,14 @@ stage1_main(void) {
 
     g_fnptr_hostfxr_close(cxt);
 
-    load_assembly_fn        load_assembly        = (load_assembly_fn)       load_assembly_fptr;
-    get_function_pointer_fn get_function_pointer = (get_function_pointer_fn)get_function_pointer_fptr;
+    load_assembly_fn        fnptr_hostfxr_load_assembly        = (load_assembly_fn)       ptr_hostfxr_load_assembly;
+    get_function_pointer_fn fnptr_hostfxr_get_function_pointer = (get_function_pointer_fn)ptr_hostfxr_get_function_pointer;
 
     // STEP 8:
     // Load managed assembly and get function pointer to bootstrap function.
     fh_init fnptr_fh_init = nullptr;
 
-    rc = load_assembly(
+    rc = fnptr_hostfxr_load_assembly(
         clrhost_lib_path.c_str(),
         nullptr,
         nullptr);
@@ -428,7 +419,7 @@ stage1_main(void) {
         exit(rc);
     }
 
-    rc = get_function_pointer(
+    rc = fnptr_hostfxr_get_function_pointer(
         clrhost_type,
         clrhost_init_method,
         UNMANAGEDCALLERSONLY_METHOD,
@@ -464,12 +455,12 @@ stage1_main(void) {
     return g_fnptr_main_original();
 }
 
-BOOL APIENTRY
-DllMain( HMODULE hinstDLL,
-         DWORD   fdwReason,
-         LPVOID  lpvReserved
-         ) {
-    switch (fdwReason) {
+BOOL APIENTRY DllMain(
+    HMODULE hdll,
+    DWORD   reason,
+    LPVOID  ptr_reserved
+) {
+    switch (reason) {
         case DLL_PROCESS_ATTACH: {
             // Return the IAT to its original self.
             if (!DetourRestoreAfterWith())
