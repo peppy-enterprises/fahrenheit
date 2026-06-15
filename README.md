@@ -71,4 +71,4 @@ Fahrenheit source code is licensed under the [LGPL 3.0 or later](https://github.
 Assets (the contents of the ``assets`` folder) may be used in forks of Fahrenheit, but _not_ for any other purpose!
 
 For third-party code license notices, please see
-[THIRD-PARTY-NOTICES](https://github.com/fahrenheit-crew/fahrenheit/blob/main/THIRD-PARTY-NOTICES.txt).
+[THIRD-PARTY-NOTICES](https://github.com/fahrenheit-crew/fahrenheit/blob/main/THIRD-PARTY-NOTICES).

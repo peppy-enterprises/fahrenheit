@@ -9,7 +9,7 @@
         <PackageId>Fahrenheit.Sdk</PackageId>
         <Authors>The Fahrenheit contributors</Authors>
         <Description>A MSBuild SDK for Fahrenheit, the mod framework for the Final Fantasy X/X-2 HD Remasters.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageIcon>fh_arrow_256.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
