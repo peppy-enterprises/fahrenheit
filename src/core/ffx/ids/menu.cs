@@ -7,7 +7,7 @@
 
 namespace Fahrenheit.FFX.Ids;
 
-public enum MenuList : T_XMenuListId {
+public enum TkMenuItemListId : T_XTkMenuItemListId {
     OVERDRIVES         = 0,
     OVERDRIVE_MODES    = 1,
     AEON_ABILITIES     = 3,
