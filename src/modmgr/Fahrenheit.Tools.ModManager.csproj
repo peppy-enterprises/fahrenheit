@@ -38,9 +38,16 @@
         <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.18">
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </PackageReference>
-        <PackageReference Include="TerraFX.Interop.Windows" Version="10.0.26100.6">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.275">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <!-- NATIVE SOURCE GENERATION FILES -->
+    <ItemGroup>
+        <AdditionalFiles Include="native/NativeMethods.json" />
+        <AdditionalFiles Include="native/NativeMethods.txt" />
     </ItemGroup>
 
 </Project>

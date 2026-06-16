@@ -3,18 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* [fkelava 5/7/25 14:16]
- * Hexa bundles some definitions for D3D11 structures that we need to use when interfacing
- * with its API. They are defined this way because we prefer the TerraFX definitions in all other cases.
- */
-using HexaID3D11Device           = Hexa.NET.ImGui.Backends.D3D11.ID3D11Device;
-using HexaID3D11DeviceContext    = Hexa.NET.ImGui.Backends.D3D11.ID3D11DeviceContext;
-using HexaID3D11DeviceContextPtr = Hexa.NET.ImGui.Backends.D3D11.ID3D11DeviceContextPtr;
-using HexaID3D11DevicePtr        = Hexa.NET.ImGui.Backends.D3D11.ID3D11DevicePtr;
-
-using ImGuiImplD3D11 = Hexa.NET.ImGui.Backends.D3D11.ImGuiImplD3D11;
-using ImGuiImplWin32 = Hexa.NET.ImGui.Backends.Win32.ImGuiImplWin32;
-
 namespace Fahrenheit.Tools.ModManager;
 
 /* [fkelava 15/8/25 17:41]
@@ -55,36 +43,36 @@ internal sealed unsafe class Program {
     /* [fkelava 15/8/25 17:13]
      * https://github.com/ocornut/imgui/blob/master/examples/example_win32_directx11/main.cpp#L260.
      */
-    [UnmanagedCallersOnly]
+    [UnmanagedCallersOnly(CallConvs = [ typeof(CallConvStdcall) ] )]
     private static LRESULT _wnd_proc(HWND window, uint message, WPARAM wParam, LPARAM lParam) {
         if (ImGuiImplWin32.WndProcHandler(window, message, wParam, lParam) == 1)
-            return 1;
+            return new LRESULT(1);
 
         switch (message) {
-            case WM.WM_SIZE:
-                if (wParam == Windows.SIZE_MINIMIZED)
-                    return 0;
+            case PInvoke.WM_SIZE:
+                if (wParam == PInvoke.SIZE_MINIMIZED)
+                    return new LRESULT(0);
 
-                _resize_w = Windows.LOWORD(lParam);
-                _resize_h = Windows.HIWORD(lParam);
-                return 0;
-            case WM.WM_SYSCOMMAND:
-                if ((wParam & 0xFFF0) == SC.SC_KEYMENU) // Disable ALT application menu
-                    return 0;
+                _resize_w = PInvoke.LOWORD(uint.CreateChecked(lParam.Value));
+                _resize_h = PInvoke.HIWORD(uint.CreateChecked(lParam.Value));
+                return new LRESULT(0);
+            case PInvoke.WM_SYSCOMMAND:
+                if ((wParam & 0xFFF0) == PInvoke.SC_KEYMENU) // Disable ALT application menu
+                    return new LRESULT(0);
                 break;
-            case WM.WM_DESTROY:
-                Windows.PostQuitMessage(0);
-                return 0;
+            case PInvoke.WM_DESTROY:
+                PInvoke.PostQuitMessage(0);
+                return new LRESULT(0);
         }
 
-        return Windows.DefWindowProcW(window, message, wParam, lParam);
+        return PInvoke.DefWindowProcW(window, message, wParam, lParam);
     }
 
     /* [fkelava 15/8/25 17:13]
      * https://github.com/ocornut/imgui/blob/master/examples/example_win32_directx11/main.cpp#L198
      */
     private static bool _create_d3d_device() {
-        DXGI_SWAP_CHAIN_DESC swap_chain_desc;
+        DXGI_SWAP_CHAIN_DESC swap_chain_desc = new();
 
         swap_chain_desc.BufferCount        = 2;
         swap_chain_desc.BufferDesc.Width   = 0;
@@ -92,8 +80,8 @@ internal sealed unsafe class Program {
         swap_chain_desc.BufferDesc.Format  = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
         swap_chain_desc.BufferDesc.RefreshRate.Numerator   = 60;
         swap_chain_desc.BufferDesc.RefreshRate.Denominator = 1;
-        swap_chain_desc.Flags              = (uint)DXGI_SWAP_CHAIN_FLAG.DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-        swap_chain_desc.BufferUsage        = DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        swap_chain_desc.Flags              = DXGI_SWAP_CHAIN_FLAG.DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+        swap_chain_desc.BufferUsage        = DXGI_USAGE.DXGI_USAGE_RENDER_TARGET_OUTPUT;
         swap_chain_desc.OutputWindow       = _hWnd;
         swap_chain_desc.SampleDesc.Count   = 1;
         swap_chain_desc.SampleDesc.Quality = 0;
@@ -111,29 +99,29 @@ internal sealed unsafe class Program {
         fixed (ID3D11DeviceContext** pp_device_ctx   = &_p_device_ctx)
         fixed (IDXGISwapChain**      pp_swap_chain   = &_p_swap_chain)
         fixed (D3D_FEATURE_LEVEL*    p_feature_level = d3d_feature_levels) {
-            HRESULT hr = DirectX.D3D11CreateDeviceAndSwapChain(
+            HRESULT hr = PInvoke.D3D11CreateDeviceAndSwapChain(
                 pAdapter:           null,
                 DriverType:         D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_HARDWARE,
-                Software:           HMODULE.NULL,
-                Flags:              (uint)create_device_flags,
+                Software:           HMODULE.Null,
+                Flags:              create_device_flags,
                 pFeatureLevels:     p_feature_level,
                 FeatureLevels:      (uint)d3d_feature_levels.Length,
-                SDKVersion:         D3D11.D3D11_SDK_VERSION,
+                SDKVersion:         PInvoke.D3D11_SDK_VERSION,
                 pSwapChainDesc:     &swap_chain_desc,
                 ppSwapChain:        pp_swap_chain,
                 ppDevice:           pp_device,
                 pFeatureLevel:      &actual_feature_level,
                 ppImmediateContext: pp_device_ctx);
 
-            if (hr == DXGI.DXGI_ERROR_UNSUPPORTED) {
-                hr = DirectX.D3D11CreateDeviceAndSwapChain(
+            if (hr == HRESULT.DXGI_ERROR_UNSUPPORTED) {
+                hr = PInvoke.D3D11CreateDeviceAndSwapChain(
                     pAdapter:           null,
                     DriverType:         D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_WARP,
-                    Software:           HMODULE.NULL,
-                    Flags:              (uint)create_device_flags,
+                    Software:           HMODULE.Null,
+                    Flags:              create_device_flags,
                     pFeatureLevels:     p_feature_level,
                     FeatureLevels:      (uint)d3d_feature_levels.Length,
-                    SDKVersion:         D3D11.D3D11_SDK_VERSION,
+                    SDKVersion:         PInvoke.D3D11_SDK_VERSION,
                     pSwapChainDesc:     &swap_chain_desc,
                     ppSwapChain:        pp_swap_chain,
                     ppDevice:           pp_device,
@@ -141,7 +129,7 @@ internal sealed unsafe class Program {
                     ppImmediateContext: pp_device_ctx);
             }
 
-            if (hr != S.S_OK) return false;
+            if (hr != HRESULT.S_OK) return false;
 
             _create_render_target();
             return true;
@@ -165,8 +153,9 @@ internal sealed unsafe class Program {
     private static void _create_render_target() {
         ID3D11Texture2D* pBackBuffer;
 
-        fixed (ID3D11RenderTargetView** pp_rtv = &_p_render_target_view) {
-            _p_swap_chain->GetBuffer(0, Windows.__uuidof<ID3D11Texture2D>(), (void**)&pBackBuffer);
+        fixed (ID3D11RenderTargetView** pp_rtv = &_p_render_target_view)
+        fixed (Guid*                    pIID   = &ID3D11Texture2D.IID_Guid) {
+            _p_swap_chain->GetBuffer(0, pIID, (void**)&pBackBuffer);
             _p_device    ->CreateRenderTargetView((ID3D11Resource*)pBackBuffer, null, pp_rtv);
             pBackBuffer  ->Release();
         }
@@ -190,10 +179,10 @@ internal sealed unsafe class Program {
          * Instead of only giving WS.WS_OVERLAPPEDWINDOW and doing Show/UpdateWindow later as the example does,
          * we can just set WS.WS_VISIBLE now and skip those calls.
          */
-        string class_name      = "FhModMgrWindowClass";
-        string window_name     = "Fahrenheit Mod Manager";
-        uint   window_style    = WS.WS_OVERLAPPEDWINDOW | WS.WS_VISIBLE;
-        uint   window_style_ex = 0;
+        string          class_name      = "FhModMgrWindowClass";
+        string          window_name     = "Fahrenheit Mod Manager";
+        WINDOW_STYLE    window_style    = WINDOW_STYLE.WS_OVERLAPPEDWINDOW | WINDOW_STYLE.WS_VISIBLE;
+        WINDOW_EX_STYLE window_style_ex = 0;
 
         fixed (char* window_name_ptr = window_name)
         fixed (char* class_name_ptr  = class_name) {
@@ -202,29 +191,29 @@ internal sealed unsafe class Program {
             _wndClass.lpfnWndProc   = &_wnd_proc;
             _wndClass.cbClsExtra    = 0;
             _wndClass.cbWndExtra    = 0;
-            _wndClass.hInstance     = Windows.GetModuleHandleW(null);
-            _wndClass.hIcon         = HICON.NULL;
-            _wndClass.hCursor       = HCURSOR.NULL;
-            _wndClass.hbrBackground = HBRUSH.NULL;
+            _wndClass.hInstance     = PInvoke.GetModuleHandleW(null);
+            _wndClass.hIcon         = HICON.Null;
+            _wndClass.hCursor       = HCURSOR.Null;
+            _wndClass.hbrBackground = HBRUSH.Null;
             _wndClass.lpszMenuName  = null;
             _wndClass.lpszClassName = class_name_ptr;
-            _wndClass.hIconSm       = HICON.NULL;
+            _wndClass.hIconSm       = HICON.Null;
 
             fixed (WNDCLASSEXW* wnd_class_ptr = &_wndClass) {
-                ushort class_id = Windows.RegisterClassExW(wnd_class_ptr);
+                ushort class_id = PInvoke.RegisterClassExW(wnd_class_ptr);
             }
 
-            return Windows.CreateWindowExW(
+            return PInvoke.CreateWindowExW(
                 dwExStyle:    window_style_ex,
                 lpClassName:  class_name_ptr,
                 lpWindowName: window_name_ptr,
                 dwStyle:      window_style,
-                X:            Windows.CW_USEDEFAULT, // let Windows infer a viable X, Y, width, height
-                Y:            Windows.CW_USEDEFAULT,
-                nWidth:       Windows.CW_USEDEFAULT,
-                nHeight:      Windows.CW_USEDEFAULT,
-                hWndParent:   HWND.NULL,
-                hMenu:        HMENU.NULL,
+                X:            PInvoke.CW_USEDEFAULT, // let Windows infer a viable X, Y, width, height
+                Y:            PInvoke.CW_USEDEFAULT,
+                nWidth:       PInvoke.CW_USEDEFAULT,
+                nHeight:      PInvoke.CW_USEDEFAULT,
+                hWndParent:   HWND.Null,
+                hMenu:        HMENU.Null,
                 hInstance:    _wndClass.hInstance,
                 lpParam:      null);
         }
@@ -239,11 +228,11 @@ internal sealed unsafe class Program {
         while (!should_quit) {
             // Pump message queue
             MSG msg;
-            while (Windows.PeekMessageW(&msg, HWND.NULL, 0, 0, PM.PM_REMOVE)) {
-                Windows.TranslateMessage(&msg);
-                Windows.DispatchMessageW(&msg);
+            while (PInvoke.PeekMessageW(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE)) {
+                PInvoke.TranslateMessage(&msg);
+                PInvoke.DispatchMessageW(&msg);
 
-                if (msg.message == WM.WM_QUIT) {
+                if (msg.message == PInvoke.WM_QUIT) {
                     should_quit = true;
                 }
             }
@@ -251,8 +240,8 @@ internal sealed unsafe class Program {
             if (should_quit) break;
 
             // Window is minimized, or screen is locked
-            if (_swap_chain_occluded && _p_swap_chain->Present(0, DXGI.DXGI_PRESENT_TEST) == DXGI.DXGI_STATUS_OCCLUDED) {
-                Windows.Sleep(10);
+            if (_swap_chain_occluded && _p_swap_chain->Present(0, DXGI_PRESENT.DXGI_PRESENT_TEST) == HRESULT.DXGI_STATUS_OCCLUDED) {
+                PInvoke.Sleep(10);
                 continue;
             }
             _swap_chain_occluded = false;
@@ -288,7 +277,7 @@ internal sealed unsafe class Program {
             }
 
             HRESULT hr = _p_swap_chain->Present(1, 0);
-            _swap_chain_occluded = hr == DXGI.DXGI_STATUS_OCCLUDED;
+            _swap_chain_occluded = hr == HRESULT.DXGI_STATUS_OCCLUDED;
         }
 
         // ImGui impl cleanup
@@ -299,14 +288,14 @@ internal sealed unsafe class Program {
         _destroy_d3d_device();
 
         // Win32 cleanup
-        Windows.DestroyWindow   (_hWnd);
-        Windows.UnregisterClassW(_wndClass.lpszClassName, _wndClass.hInstance);
+        PInvoke.DestroyWindow   (_hWnd);
+        PInvoke.UnregisterClassW(_wndClass.lpszClassName, _wndClass.hInstance);
     }
 
     private static void Main(string[] args) {
         // Make process DPI aware and obtain main monitor scale
-        POINT    nul_point = new POINT(0, 0);
-        HMONITOR monitor   = Windows.MonitorFromPoint(nul_point, MONITOR.MONITOR_DEFAULTTOPRIMARY);
+        Point    nul_point = new Point(0, 0);
+        HMONITOR monitor   = PInvoke.MonitorFromPoint(nul_point, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTOPRIMARY);
 
         ImGuiImplWin32.EnableDpiAwareness();
         float dpi_scale = ImGuiImplWin32.GetDpiScaleForMonitor(monitor);
@@ -317,7 +306,7 @@ internal sealed unsafe class Program {
         // D3D11 init
         if (!_create_d3d_device()) {
             _destroy_d3d_device();
-            Windows.UnregisterClassW(_wndClass.lpszClassName, _wndClass.hInstance);
+            PInvoke.UnregisterClassW(_wndClass.lpszClassName, _wndClass.hInstance);
 
             return;
         }
