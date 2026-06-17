@@ -25,7 +25,7 @@ public unsafe struct BtlBinEncounter {
     [FieldOffset(0x0)] public byte total_formation_count;
     [FieldOffset(0x1)] public byte group_count;
 
-    [FieldOffset(0x2)] public BtlBinGroup _first_group;
+    [FieldOffset(0x2)] public BtlBinGroup first_group;
 
     //TODO: Add a helper to access each group by index
 
@@ -41,7 +41,7 @@ public unsafe struct BtlBinGroup {
     [FieldOffset(0x3)] public byte grace;
     [FieldOffset(0x4)] public byte total_weight;
 
-    [FieldOffset(0x5)] public BtlBinFormation _first_formation;
+    [FieldOffset(0x5)] public BtlBinFormation first_formation;
 
     //TODO: Add a helper to access each formation by index
 
