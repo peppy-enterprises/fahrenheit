@@ -44,4 +44,4 @@ global using T_XMesWinPosId      = System.Byte;   // ids/meswin
 global using T_XDeathAnimationId = System.Byte;   // ids/anim_death
 global using T_XSubModelId       = System.Int32;  // ids/mdl_sub
 global using T_XBlitzPrizeId     = System.UInt16; // ids/blitz_prize
-global using T_XTkMenuItemListId = System.UInt16; // ids/menu_list
+global using T_XTkMenuItemListId = System.UInt16; // ids/tk_menu_item_list
