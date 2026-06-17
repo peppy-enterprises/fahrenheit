@@ -43,8 +43,10 @@ public unsafe struct BtlBinGroup {
 
     [FieldOffset(0x5)] private BtlBinFormation _first_formation;
 
-    [UnscopedRef]
-    public Span<BtlBinFormation> formations => MemoryMarshal.CreateSpan(ref _first_formation, formation_count);
+    //TODO: Add a helper to access each formation by index
+
+    //[UnscopedRef]
+    //public Span<BtlBinFormation> formations => MemoryMarshal.CreateSpan(ref _first_formation, formation_count);
 }
 
 [StructLayout(LayoutKind.Sequential)]
