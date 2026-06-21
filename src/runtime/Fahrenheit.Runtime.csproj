@@ -1,5 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <!-- [fkelava 21/06/26 12:11]
+    The runtime is rather specific. It's a Fahrenheit mod in every sense of the word,
+    but being in-tree and intrinsically tied to the core, it can't use the SDK without
+    quite a bit of pain. Hence we replicate a bunch of SDK props and targets manually.
+    This must be manually kept in sync with the SDK.
+
+    This does not mean you should do the same. Any other mod should use the SDK, no exceptions.
+    -->
+
     <!-- ASSEMBLY BASIC PROPERTIES -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -12,9 +21,17 @@
 
     <!-- ASSEMBLY IDENTIFICATION -->
     <PropertyGroup>
-        <AssemblyName>fhruntime</AssemblyName>
-        <AssemblyTitle>Fahrenheit Runtime Library</AssemblyTitle>
-        <Product>Fahrenheit Runtime Library</Product>
+        <AssemblyName>fhr</AssemblyName>
+        <AssemblyTitle>Fahrenheit Runtime</AssemblyTitle>
+        <Product>Fahrenheit Runtime</Product>
+    </PropertyGroup>
+
+    <!-- MANIFEST PROPERTIES -->
+    <PropertyGroup>
+        <Description>Implements Fahrenheit's API.</Description>
+        <Authors>The Fahrenheit contributors</Authors>
+        <RepositoryUrl>https://github.com/fahrenheit-crew/fahrenheit.git</RepositoryUrl>
+        <FhManifestFlags>NONE</FhManifestFlags>
     </PropertyGroup>
 
     <!-- SHARED FILE LINKS -->
@@ -28,11 +45,6 @@
             <Private>false</Private>
             <ExcludeAssets>runtime;native</ExcludeAssets>
         </ProjectReference>
-    </ItemGroup>
-
-    <!-- ASSETS: MANIFEST -->
-    <ItemGroup>
-        <None Include="$(AssemblyName).manifest.json" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
     <!-- ASSETS: LOCALIZATION -->
@@ -56,5 +68,34 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <Target Name="__FhEmitManifest" AfterTargets="Publish" >
+        <PropertyGroup>
+            <!--
+            We unconditionally prefer RepositoryUrl where available.
+            -->
+            <FhManifestHomePage Condition=" '$(RepositoryUrl)' != '' ">$(RepositoryUrl)</FhManifestHomePage>
+
+            <__FhManifestFile>$(PublishDir)/$(AssemblyName).manifest.json</__FhManifestFile>
+            <__FhManifestLines>
+{
+    "Id":"$(AssemblyName)",
+    "Name":"$(AssemblyTitle)",
+    "Desc":"$(Description)",
+    "Authors":"$(Authors)",
+    "Version":"$(InformationalVersion)",
+    "Link":"$(FhManifestHomePage)",
+    "Dependencies":[],
+    "LoadAfter":[],
+    "Flags":"$(FhManifestFlags)"
+}
+            </__FhManifestLines>
+        </PropertyGroup>
+
+        <WriteLinesToFile
+            File="$(__FhManifestFile)"
+            Lines="$(__FhManifestLines)"
+            Overwrite="true" />
+    </Target>
 
 </Project>

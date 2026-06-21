@@ -9,7 +9,7 @@
  * or contact the developers and explain the use case instead of extending IVT to your mod.
  */
 
-[assembly: InternalsVisibleTo("fhruntime")]
+[assembly: InternalsVisibleTo("fhr")]
 
 namespace Fahrenheit;
 

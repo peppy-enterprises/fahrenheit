@@ -79,7 +79,7 @@ internal static class FhEnvironment {
     /// </summary>
     private static string[] _init_load_order() {
         string load_order_path = Path.Join(Finder.Mods.FullName, "loadorder");
-        return [ "fhruntime", .. File.ReadAllLines(load_order_path) ];
+        return [ "fhr", .. File.ReadAllLines(load_order_path) ];
     }
 
     /// <summary>

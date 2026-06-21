@@ -67,7 +67,7 @@ internal sealed class FhFinder {
     ///     Returns path information for the DLL belonging to mod <paramref name="mod_name"/>.
     /// </summary>
     public string get_for_dll(string mod_name) {
-        bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.OrdinalIgnoreCase);
+        bool   is_runtime = mod_name.Equals("fhr", StringComparison.OrdinalIgnoreCase);
         string mod_dir    = is_runtime ? Binaries.FullName : Path.Join(Mods.FullName, mod_name);
 
         return Path.Join(mod_dir, $"{mod_name}.dll");
@@ -77,7 +77,7 @@ internal sealed class FhFinder {
     ///     Returns path information for mod <paramref name="mod_name"/>.
     /// </summary>
     public FhModPaths get_for_mod(string mod_name) {
-        bool   is_runtime = mod_name.Equals("fhruntime", StringComparison.OrdinalIgnoreCase);
+        bool   is_runtime = mod_name.Equals("fhr", StringComparison.OrdinalIgnoreCase);
         string mod_dir    = is_runtime ? Binaries.FullName : Path.Join(Mods.FullName, mod_name);
 
         return new FhModPaths(
