@@ -19,4 +19,4 @@ The Runtime is broadly subdivided into:
 - `save_ui.cs` - provides a ImGui user interface for the modified save system
 - `localstate.cs` - provides to each module a chance to persist data on save/load
 - `modconfig.cs` - provides a ImGui user interface for the mod configuration system
-- `lifecycle.cs` - fires callbacks to make modules aware of various occurrences in the game(s)
+- `events/*.cs`, `lifecycle.cs` - fires events to make modules aware of various occurrences in the game(s)

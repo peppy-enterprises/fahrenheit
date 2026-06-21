@@ -5,13 +5,6 @@
 
 namespace Fahrenheit.Runtime;
 
-/* [fkelava 21/6/25 01:52]
- * Temporary until FhCall is restored to `ffx-v3` RE state.
- */
-
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal delegate void AtelExecInternal_00871d10();
-
 /// <summary>
 ///     Executes the lifecycle methods of <see cref="FhModule"/>.<br/>
 ///     Also renders the modlist on the main menu.
