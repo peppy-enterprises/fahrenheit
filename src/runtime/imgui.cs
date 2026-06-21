@@ -126,6 +126,24 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         ImGuiImplWin32.Init(_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
 
+        /* [fkelava 20/06/26 17:38]
+         * We don't want to dump `imgui.ini` in the game's working/install directory.
+         *
+         * Why go through native allocation instead of just (fixed byte* = "PATH"u8)?
+         * Because the spec doesn't actually _mandate_ that u8 literals be emitted in `.data`.
+         * Consequently, the resulting pointer to it need not be constant.
+         *
+         * See https://github.com/dotnet/runtime/discussions/102949#discussioncomment-9628356.
+         */
+
+        string     path_ini        = Path.Join(FhEnvironment.Finder.State.FullName, "global", "imgui.ini");
+        Span<byte> path_ini_u8     = Encoding.UTF8.GetBytes(path_ini);
+        byte*      ptr_path_ini_u8 = (byte*)NativeMemory.AllocZeroed((nuint)path_ini_u8.Length);
+
+        path_ini_u8.CopyTo(new(ptr_path_ini_u8, path_ini_u8.Length));
+
+        io.IniFilename = ptr_path_ini_u8;
+
         /* [fkelava 16/02/26 15:12]
          * It would be best to use [UnmanagedCallersOnly] and &h_implw32_setwindowfocus,
          * but this is not possible because PlatformSetWindowFocus is typed `void*` and CS8812 results.
