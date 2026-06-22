@@ -4138,13 +4138,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<MsDebugCameraSleepInit> h_MsDebugCameraSleepInit => new( new FhMethodLocation("FFX.exe", 0x392250) );
 
     // Original after pruning:
-    // unknown undefined MsGetEndBattleStatus() at 007928f0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsGetEndBattleStatus();
-    public static FhMethodHandle<MsGetEndBattleStatus> h_MsGetEndBattleStatus => new( new FhMethodLocation("FFX.exe", 0x3928F0) );
-
-    // Original after pruning:
     // __stdcall int MsInsertBtlCommand(AttackCue* attack_cue, int param_2, int param_3, int chr_id) at 007929d0
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -5277,20 +5270,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void MsSEP3Dregist();
     public static FhMethodHandle<MsSEP3Dregist> h_MsSEP3Dregist => new( new FhMethodLocation("FFX.exe", 0x3A0A50) );
-
-    // Original after pruning:
-    // unknown undefined MsWeaponName() at 007a0c70
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsWeaponName();
-    public static FhMethodHandle<MsWeaponName> h_MsWeaponName => new( new FhMethodLocation("FFX.exe", 0x3A0C70) );
-
-    // Original after pruning:
-    // unknown undefined MsWeaponNameNum() at 007a0d10
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void MsWeaponNameNum();
-    public static FhMethodHandle<MsWeaponNameNum> h_MsWeaponNameNum => new( new FhMethodLocation("FFX.exe", 0x3A0D10) );
 
     // Original after pruning:
     // unknown undefined MsWeaponNameRead() at 007a2620
@@ -18994,13 +18973,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void TkMenuGetPlayerDamegedColor();
     public static FhMethodHandle<TkMenuGetPlayerDamegedColor> h_TkMenuGetPlayerDamegedColor => new( new FhMethodLocation("FFX.exe", 0x4B9E60) );
-
-    // Original after pruning:
-    // __stdcall undefined TkBtlEndGetText(int param_1) at 008bda20
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate void TkBtlEndGetText(nint param_1);
-    public static FhMethodHandle<TkBtlEndGetText> h_TkBtlEndGetText => new( new FhMethodLocation("FFX.exe", 0x4BDA20) );
 
     // Original after pruning:
     // unknown undefined TOMenuClearControlPadBuff() at 008be3a0

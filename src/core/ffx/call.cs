@@ -21,13 +21,13 @@ namespace Fahrenheit.FFX;
 /// </summary>
 public static partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public delegate bool Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint filename, bool readOnly, nint arg4, nint arg5, nint arg6);
-    public static FhMethodHandle<Phyre_PSerialization_PStreamFileWin32_openFile> h_Phyre_PSerialization_PStreamFileWin32_openFile
+    internal delegate bool Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint filename, bool readOnly, nint arg4, nint arg5, nint arg6);
+    internal static FhMethodHandle<Phyre_PSerialization_PStreamFileWin32_openFile> h_Phyre_PSerialization_PStreamFileWin32_openFile
         => new( new FhMethodLocation("FFX.exe", 0x208100) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public delegate uint Phyre_PSerialization_PStreamFileWin32_readFile(nint ptr_this, nint buffer, uint max_len);
-    public static FhMethodHandle<Phyre_PSerialization_PStreamFileWin32_readFile> h_Phyre_PSerialization_PStreamFileWin32_readFile
+    internal delegate uint Phyre_PSerialization_PStreamFileWin32_Read(nint ptr_this, nint buffer, uint max_len);
+    internal static FhMethodHandle<Phyre_PSerialization_PStreamFileWin32_Read> h_Phyre_PSerialization_PStreamFileWin32_Read
         => new( new FhMethodLocation("FFX.exe", 0x208250) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -427,19 +427,14 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x3A0160) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void FUN_007a0c70(ushort name_id, byte owner, int unknown, ushort* model_id_pointer);
-    public static FhMethodHandle<FUN_007a0c70> h_FUN_007a0c70
+    public unsafe delegate void MsWeaponName(ushort name_id, byte owner, int unknown, ushort* model_id_pointer);
+    public static FhMethodHandle<MsWeaponName> h_MsWeaponName
         => new( new FhMethodLocation("FFX.exe", 0x3A0C70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate ushort FUN_007a0d10(Equipment* arg1);
-    public static FhMethodHandle<FUN_007a0d10> h_FUN_007a0d10
+    public unsafe delegate ushort MsWeaponNameNum(Equipment* arg1);
+    public static FhMethodHandle<MsWeaponNameNum> h_MsWeaponNameNum
         => new( new FhMethodLocation("FFX.exe", 0x3A0D10) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate byte* FUN_007ab890(int arg1, short* arg2, int arg3);
-    public static FhMethodHandle<FUN_007ab890> h_FUN_007ab890
-        => new( new FhMethodLocation("FFX.exe", 0x3AB890) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate nint MsGetExcelData(int req_elem_idx, nint excel_data_ptr, int* ref_data_end);
@@ -682,8 +677,8 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x4B8910) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate byte* FUN_008bda20(uint window_idx); // getMenuText
-    public static FhMethodHandle<FUN_008bda20> h_FUN_008bda20
+    public unsafe delegate byte* TkBtlEndGetText(uint window_idx); // getMenuText
+    public static FhMethodHandle<TkBtlEndGetText> h_TkBtlEndGetText
         => new( new FhMethodLocation("FFX.exe", 0x4BDA20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
