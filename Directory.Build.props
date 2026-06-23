@@ -45,15 +45,6 @@
         <Copyright>Copyright © The Fahrenheit contributors</Copyright>
         <Version>1.0.0-alpha11</Version>
 
-        <!--
-        NuGet Package Explorer complains if a package is not built 'deterministically'.
-
-        See https://docs.github.com/en/actions/reference/workflows-and-actions/variables,
-        https://github.com/terrafx/terrafx.interop.windows/blob/7d3e679e74be9da3584b4d4c4689e10422cc485f/Directory.Build.props#L44.
-        -->
-
-        <ContinuousIntegrationBuild Condition="'$(GITHUB_RUN_ID)' != ''">true</ContinuousIntegrationBuild>
-
     </PropertyGroup>
 
 </Project>

@@ -28,6 +28,7 @@ THIS SCRIPT MUST BE RUN AT A DEVELOPER POWERSHELL TERMINAL.
 [CmdletBinding(PositionalBinding=$false)]
 Param(
     [switch]                                                                         $help,
+    [switch]                                                                         $dryRun,
     [Parameter(Mandatory)]                                                [string]   $certFingerprint,
     [Parameter(Mandatory)]                                                [string]   $nugetApiKey,
     [Parameter(Mandatory)]                                                [string]   $tag,
@@ -87,20 +88,18 @@ try {
     $DirArtifactsBin = Join-Path -Path $DirDeploy    -ChildPath "bin"
     
     # Actual artifact and package locations
-    $Artifacts    = Join-Path -Path $DirDeploy    -ChildPath "**"
-    $Packages     = Join-Path -Path $DirPkg       -ChildPath "*.nupkg"
+    $Artifacts    = Join-Path -Path $DirDeploy -ChildPath "**"
+    $Packages     = Join-Path -Path $DirPkg    -ChildPath "*.nupkg"
     
     Create-Directory -Path $DirArtifacts
     Create-Directory -Path $DirLog
     
     $LogFileRestore = Join-Path -Path $DirLog -ChildPath "$($configuration)\restore.binlog"
     $LogFileBuild   = Join-Path -Path $DirLog -ChildPath "$($configuration)\build.binlog"
-    $LogFilePublish = Join-Path -Path $DirLog -ChildPath "$($configuration)\publish.binlog"
     
     # Build everything.
-    msbuild /m /p:Configuration=$configuration /bl:$LogFileRestore /t:Restore $Solution
-    msbuild /m /p:Configuration=$configuration /bl:$LogFileBuild              $Solution
-    msbuild /m /p:Configuration=$configuration /bl:$LogFilePublish /t:Publish $Solution
+    msbuild /m /p:ContinuousIntegrationBuild=true /p:Configuration=$configuration /bl:$LogFileRestore /t:Restore $Solution
+    msbuild /m /p:ContinuousIntegrationBuild=true /p:Configuration=$configuration /bl:$LogFileBuild              $Solution
 
     <# [fkelava 06/03/26 14:09]
         The NuGet packages are generated implicitly on successful build.
@@ -112,6 +111,11 @@ try {
     
     # ZIP up the signed release artifacts.
     7z a -tzip "fahrenheit_windows_x86_$($configuration)_$($tag).zip" $Artifacts
+    
+    if ($dryRun) {
+        Write-Host "Dry run complete. Exiting."
+        exit 0
+    }
     
     # Attach the generated release ZIP to the appropriate GH tag.
     gh release upload $tag "fahrenheit_windows_x86_$($configuration)_$($tag).zip"
