@@ -28,7 +28,7 @@ public sealed record FhModPaths(
 /// </summary>
 internal sealed class FhFinder {
     private const string _dirname_bin   = "bin";
-    private const string _dirname_cfg   = "cfg";
+    private const string _dirname_cfg   = "config";
     private const string _dirname_mods  = "mods";
     private const string _dirname_logs  = "logs";
     private const string _dirname_state = "state";

@@ -103,8 +103,56 @@ public unsafe static class FhUtil {
         Converters = {
             new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseUpper)
         },
-        NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+        NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
+        IncludeFields  = true, // For serialization of objects such as System.Numerics.Vector{2|3|4}.
+        WriteIndented  = true, // Settings and state should, within reason, be user-inspectable and editable.
+        IndentSize     = 4
     };
+
+    /// <summary>
+    ///     Attempts to deserialize a <typeparamref name="T"/> at the specified <paramref name="key"/> in a JSON document.
+    ///     Only keys at the <paramref name="reader"/>'s current depth are searched.
+    /// </summary>
+    internal static bool try_find_key_and_deserialize<T>(this ref Utf8JsonReader reader, string key, [NotNullWhen(true)] out T? t) {
+        t = default;
+
+        bool key_found = false;
+        int  depth     = reader.CurrentDepth;
+
+        while (!key_found) {
+            key_found = reader.TokenType    == JsonTokenType.PropertyName
+                     && reader.CurrentDepth == depth
+                     && reader.GetString()  == key;
+
+            if (key_found || !reader.Read()) break;
+        }
+
+        if (!key_found)
+            return false;
+
+        try {
+            _ = reader.Read();
+            t = JsonSerializer.Deserialize<T>(ref reader, InternalJsonOpts) ?? throw new Exception($"Value at key {key} was null");
+            _ = reader.Read();
+
+            return true;
+        }
+        catch (Exception ex) {
+            FhInternal.Log.Error(ex.ToString());
+            return false;
+        }
+    }
+
+    internal static void load_settings(this FhModule module, Utf8JsonReader reader) {
+        reader.enter_json_object();
+        module.settings?.load(reader);
+    }
+
+    internal static void save_settings(this FhModule module, Utf8JsonWriter writer) {
+        writer.WriteStartObject();
+        module.settings?.save(writer);
+        writer.WriteEndObject();
+    }
 
     internal static void enter_json_object(this ref Utf8JsonReader reader) {
         while (reader.TokenType != JsonTokenType.StartObject) {

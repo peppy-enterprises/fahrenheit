@@ -29,8 +29,10 @@ public sealed class FhModConfigModule : FhModule {
     }
 
     internal void close() {
-        is_open = false;
+        is_open           = false;
         _selected_mod_idx = 0;
+
+        FhInternal.Settings.save();
     }
 
     public override void render_imgui() {

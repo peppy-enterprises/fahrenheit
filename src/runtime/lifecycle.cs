@@ -14,13 +14,7 @@ namespace Fahrenheit.Runtime;
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe class FhCoreModule : FhModule {
 
-    private static readonly FhSettingsCategory _settings = new("fhr", [
-        new FhSettingToggle("display_mod_count", true),
-    ]);
-
-    public FhCoreModule() {
-        settings = _settings;
-    }
+    public FhCoreModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         return FhCall.h_AtelExec_Internal_871D10.hook(this, handle_input);
