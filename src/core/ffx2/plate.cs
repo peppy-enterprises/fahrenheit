@@ -14,8 +14,7 @@ public struct PlateMessages {
 }
 
 [InlineArray(16)]
-public partial struct PlateBenefits
-{
+public struct PlateBenefits {
     public ushort e0;
 }
 
