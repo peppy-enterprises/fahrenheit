@@ -8,6 +8,11 @@
 
 namespace Fahrenheit.FFX2;
 
+[InlineArray(4)]
+public struct PlateMessages {
+    public uint e0;
+}
+
 [InlineArray(16)]
 public partial struct PlateBenefits
 {
@@ -23,10 +28,7 @@ public partial struct Abilities {
 public struct Plate {
     [FieldOffset(0x00)] public  uint          name_offset;
     [FieldOffset(0x04)] public  uint          help_offset;
-    [FieldOffset(0x08)] public  uint          message_1;
-    [FieldOffset(0x0C)] public  uint          message_2;
-    [FieldOffset(0x10)] public  uint          message_3;
-    [FieldOffset(0x14)] public  uint          message_4;
+    [FieldOffset(0x08)] public  PlateMessages messages;
     [FieldOffset(0x18)] public  ushort        bonus;
     [FieldOffset(0x1A)] public  byte          icon;
     [FieldOffset(0x1B)] public  byte          bonus_hp;
@@ -39,9 +41,7 @@ public struct Plate {
     [FieldOffset(0x22)] public  byte          bonus_accuracy;
     [FieldOffset(0x23)] public  byte          bonus_evasion;
     [FieldOffset(0x24)] public  byte          bonus_luck;
-    [FieldOffset(0x25)] private byte          reserve;
-    [FieldOffset(0x26)] private byte          reserve2;
-    [FieldOffset(0x27)] private byte          reserve3;
+    // 0x25 - 0x27 are seemingly unused, called "reserve1/2/3" in plate.h
     [FieldOffset(0x28)] public  PlateBenefits skill;
     [FieldOffset(0x48)] public  uint          creature_help_offset;
     [FieldOffset(0x4C)] public  Abilities     creature_abilities;
@@ -56,6 +56,5 @@ public struct Plate {
     [FieldOffset(0x7B)] public  byte          creature_bonus_accuracy;
     [FieldOffset(0x7C)] public  byte          creature_bonus_evasion;
     [FieldOffset(0x7D)] public  byte          creature_bonus_luck;
-    [FieldOffset(0x7E)] private byte          reserve4;
-    [FieldOffset(0x7F)] private byte          reserve5;
+    // 0x7E & 0x7F are also seemingly unused
 }
