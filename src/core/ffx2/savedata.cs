@@ -107,9 +107,31 @@ public unsafe struct SaveData {
     [FieldOffset(0x140)]   public       uint               voice_flag_2;  // meaning unknown
     [FieldOffset(0x148)]   public       uint               save_clear_counter;
     [FieldOffset(0x1EC)]   public       byte               scenario_list;
+    [FieldOffset(0x44D)]   public       byte               standard_cup_entry_count;
+    [FieldOffset(0x44E)]   public       byte               standard_cup_hard_entry_count;
+    [FieldOffset(0x44F)]   public       byte               grand_cup_entry_count;
+    [FieldOffset(0x450)]   public       byte               grand_cup_hard_entry_count;
+    [FieldOffset(0x451)]   public       byte               chocobo_cup_entry_count;
+    [FieldOffset(0x452)]   public       byte               cactuar_cup_entry_count;
+    [FieldOffset(0x453)]   public       byte               youth_league_tournament_entry_count;
+    [FieldOffset(0x454)]   public       byte               aeon_cup_entry_count;
+    [FieldOffset(0x455)]   public       byte               fiend_world_cup_entry_count;
+    [FieldOffset(0x456)]   public       byte               farplane_cup_entry_count;
+    [FieldOffset(0x53C)]   public       ushort             unlocked_cups_1; // Bitfield of which fiend arena cups are unlocked 
+    [FieldOffset(0x53F)]   public       bool               skip_fiend_arena_intro;
+    [FieldOffset(0x542)]   public       ushort             unlocked_cups_2;
+    [FieldOffset(0x549)]   public       bool               farplane_cup_unlocked; // For some reason its own field?
     [FieldOffset(0xBEC)]   public       ushort             story_progress;
-    [FieldOffset(0x10FC)]  public       double             capture_pod_1;
-    [FieldOffset(0x1104)]  public       byte               capture_pod_2;
+    [FieldOffset(0xD60)]   public       uint               experiment_attack_level; // Experiment Boss
+    [FieldOffset(0xD64)]   public       uint               experiment_defense_level;
+    [FieldOffset(0xD68)]   public       uint               experiment_special_level;
+    [FieldOffset(0x10FC)]  public       byte               trap_pod_count;
+    [FieldOffset(0x10FD)]  public fixed byte               trap_pods[8]; // Type of each trap pod currently owned (S/M/L/SP)
+    [FieldOffset(0x1105)]  public fixed byte               creature_tale_bonus[8];
+    [FieldOffset(0x110D)]  public fixed byte               creature_tale_progression[8];
+    [FieldOffset(0x114C)]  public       byte               current_chapter;
+    [FieldOffset(0x1188)]  public fixed uint               creature_id[8]; // IDs of current captured creatures
+    [FieldOffset(0x11B1)]  public       byte               recruited_creature_count;
     [FieldOffset(0x21EC)]  public fixed byte               voice_flags[0x4000]; // bitfield of heard voicelines?
     [FieldOffset(0x61F0)]  public       uint               result_card;
     [FieldOffset(0x6FD0)]  public       uint               walk_map;
@@ -258,4 +280,16 @@ public unsafe struct SaveData {
     public bool has_unlocked_primer_24 { readonly get { return unlocked_primers.get_bit(23); } set { unlocked_primers.set_bit(23, value); } }
     public bool has_unlocked_primer_25 { readonly get { return unlocked_primers.get_bit(24); } set { unlocked_primers.set_bit(24, value); } }
     public bool has_unlocked_primer_26 { readonly get { return unlocked_primers.get_bit(25); } set { unlocked_primers.set_bit(25, value); } }
+
+    public bool has_unlocked_standard_cup            { readonly get { return unlocked_cups_1.get_bit(0); } set { unlocked_cups_1.set_bit(0, value); } }
+    public bool has_unlocked_standard_cup_hard       { readonly get { return unlocked_cups_1.get_bit(1); } set { unlocked_cups_1.set_bit(1, value); } }
+    public bool has_unlocked_grand_cup               { readonly get { return unlocked_cups_1.get_bit(2); } set { unlocked_cups_1.set_bit(2, value); } }
+    public bool has_unlocked_grand_cup_hard          { readonly get { return unlocked_cups_1.get_bit(3); } set { unlocked_cups_1.set_bit(3, value); } }
+    public bool has_unlocked_chocobo_cup             { readonly get { return unlocked_cups_1.get_bit(4); } set { unlocked_cups_1.set_bit(4, value); } }
+    public bool has_unlocked_cactuar_cup             { readonly get { return unlocked_cups_1.get_bit(5); } set { unlocked_cups_1.set_bit(5, value); } }
+    public bool has_unlocked_youth_league_tournament { readonly get { return unlocked_cups_1.get_bit(6); } set { unlocked_cups_1.set_bit(6, value); } }
+    public bool has_unlocked_aeon_cup                { readonly get { return unlocked_cups_1.get_bit(7); } set { unlocked_cups_1.set_bit(7, value); } }
+    
+    public bool has_unlocked_fiend_world_cup { readonly get { return unlocked_cups_2.get_bit(0); } set { unlocked_cups_2.set_bit(0, value); } }
+    public bool has_unlocked_farplane_cup    { readonly get { return unlocked_cups_2.get_bit(1); } set { unlocked_cups_2.set_bit(1, value); } }
 }
