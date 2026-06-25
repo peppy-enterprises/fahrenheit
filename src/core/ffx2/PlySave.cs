@@ -54,7 +54,7 @@ public struct PlySave {
     [FieldOffset(0x56)] public ushort                before_job; // Last equipped Dressphere?
     // 0x58 onwards seems to be entirely creature related, YRP have no data here besides size.
     [FieldOffset(0x78)] public ushort                creature;
-    [FieldOffset(0x7A)] public uint                  size;
+    [FieldOffset(0x7A)] public byte                  size;
 
     public bool party_join   { readonly get { return ply_flags.get_bit(0); } set { ply_flags.set_bit(0, value); } }
     public bool party_out    { readonly get { return ply_flags.get_bit(1); } set { ply_flags.set_bit(1, value); } }
