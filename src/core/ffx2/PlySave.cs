@@ -8,127 +8,56 @@
 
 namespace Fahrenheit.FFX2;
 
-public partial struct PlySave
-{
-    [NativeTypeName("unsigned int")]
-    public uint name;
+[InlineArray(2)]
+public partial struct Accessories {
+    public ushort e0;
+}
 
-    [NativeTypeName("unsigned int")]
-    public uint hp_bonus;
+[StructLayout(LayoutKind.Explicit, Pack = 4, Size = 0x80)]
+public struct PlySave {
+    [FieldOffset(0x00)] public uint                  name_offset;
+    [FieldOffset(0x04)] public uint                  bonus_hp;
+    [FieldOffset(0x08)] public uint                  bonus_mp;
+    [FieldOffset(0x0C)] public byte                  bonus_strength;
+    [FieldOffset(0x0D)] public byte                  bonus_defense;
+    [FieldOffset(0x0E)] public byte                  bonus_magic;
+    [FieldOffset(0x0F)] public byte                  bonus_magic_defense;
+    [FieldOffset(0x10)] public byte                  bonus_agility;
+    [FieldOffset(0x11)] public byte                  bonus_luck;
+    [FieldOffset(0x12)] public byte                  bonus_evasion;
+    [FieldOffset(0x13)] public byte                  bonus_accuracy;
+    [FieldOffset(0x14)] public uint                  total_exp;
+    [FieldOffset(0x18)] public uint                  exp;
+    [FieldOffset(0x1C)] public uint                  hp;
+    [FieldOffset(0x20)] public uint                  mp;
+    [FieldOffset(0x24)] public uint                  max_hp;
+    [FieldOffset(0x28)] public uint                  max_mp;
+    [FieldOffset(0x2C)] public byte                  ply_flags;
+    [FieldOffset(0x2D)] public byte                  strength;
+    [FieldOffset(0x2E)] public byte                  defense;
+    [FieldOffset(0x2F)] public byte                  magic;
+    [FieldOffset(0x30)] public byte                  magic_defense;
+    [FieldOffset(0x31)] public byte                  agility;
+    [FieldOffset(0x32)] public byte                  accuracy;
+    [FieldOffset(0x33)] public byte                  evasion;
+    [FieldOffset(0x34)] public byte                  luck;
+    [FieldOffset(0x35)] public byte                  level;
+    [FieldOffset(0x36)] public ushort                equipped_job;
+    [FieldOffset(0x38)] public ushort                equipped_plate;
+    [FieldOffset(0x3A)] public Accessories           equipped_accessory;
+    [FieldOffset(0x3E)] public ushort                abi_map;
+    [FieldOffset(0x40)] public uint                  escape_count;
+    [FieldOffset(0x44)] public uint                  enemies_defeated;
+    [FieldOffset(0x48)] public uint                  deaths;
+    [FieldOffset(0x4C)] public uint                  status;
+    [FieldOffset(0x50)] public AutoAbilityEffectsMap auto_ability_effects;
+    [FieldOffset(0x56)] public ushort                before_job; // Last equipped Dressphere?
+    // 0x58 onwards seems to be entirely creature related, YRP have no data here besides size.
+    [FieldOffset(0x78)] public ushort                creature;
+    [FieldOffset(0x7A)] public uint                  size;
 
-    [NativeTypeName("unsigned int")]
-    public uint mp_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte str_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte vit_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte mag_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte spirit_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte dex_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte luck_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte avoid_bonus;
-
-    [NativeTypeName("unsigned char")]
-    public byte hit_bonus;
-
-    [NativeTypeName("unsigned int")]
-    public uint exp;
-
-    [NativeTypeName("unsigned int")]
-    public uint next_exp;
-
-    [NativeTypeName("unsigned int")]
-    public uint hp;
-
-    [NativeTypeName("unsigned int")]
-    public uint mp;
-
-    [NativeTypeName("unsigned int")]
-    public uint hp_max;
-
-    [NativeTypeName("unsigned int")]
-    public uint mp_max;
-
-    [NativeTypeName("unsigned char")]
-    public byte party;
-
-    [NativeTypeName("unsigned char")]
-    public byte str;
-
-    [NativeTypeName("unsigned char")]
-    public byte vit;
-
-    [NativeTypeName("unsigned char")]
-    public byte mag;
-
-    [NativeTypeName("unsigned char")]
-    public byte spirit;
-
-    [NativeTypeName("unsigned char")]
-    public byte dex;
-
-    [NativeTypeName("unsigned char")]
-    public byte hit;
-
-    [NativeTypeName("unsigned char")]
-    public byte avoid;
-
-    [NativeTypeName("unsigned char")]
-    public byte luck;
-
-    [NativeTypeName("unsigned char")]
-    public byte reserve;
-
-    [NativeTypeName("unsigned short")]
-    public ushort job;
-
-    [NativeTypeName("unsigned short")]
-    public ushort plate;
-
-    [NativeTypeName("unsigned short[2]")]
-    public _accessory_e__FixedBuffer accessory;
-
-    [NativeTypeName("unsigned short")]
-    public ushort command;
-
-    [NativeTypeName("unsigned int")]
-    public uint escape_count;
-
-    [NativeTypeName("unsigned int")]
-    public uint kill_count;
-
-    [NativeTypeName("unsigned int")]
-    public uint death_count;
-
-    public int status;
-
-    [NativeTypeName("unsigned short[3]")]
-    public _ability_type_e__FixedBuffer ability_type;
-
-    [NativeTypeName("unsigned short")]
-    public ushort before_job;
-
-    [InlineArray(2)]
-    public partial struct _accessory_e__FixedBuffer
-    {
-        public ushort e0;
-    }
-
-    [InlineArray(3)]
-    public partial struct _ability_type_e__FixedBuffer
-    {
-        public ushort e0;
-    }
+    public bool party_join   { readonly get { return ply_flags.get_bit(0); } set { ply_flags.set_bit(0, value); } }
+    public bool party_out    { readonly get { return ply_flags.get_bit(1); } set { ply_flags.set_bit(1, value); } }
+    public bool party_fixed  { readonly get { return ply_flags.get_bit(2); } set { ply_flags.set_bit(2, value); } }
+    public bool party_joined { readonly get { return ply_flags.get_bit(4); } set { ply_flags.set_bit(4, value); } }
 }
