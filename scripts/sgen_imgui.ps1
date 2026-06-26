@@ -70,7 +70,8 @@ try {
     
     python dear_bindings.py `
     -o (Join-Path $RootFhImGui "dcimgui_internal") `
-    --include $ImGuiH $InternalH
+    --include $ImGuiH `
+    $InternalH
     
     python dear_bindings.py `
     -o (Join-Path $RootFhImGui "dcimgui_impl_dx11") `

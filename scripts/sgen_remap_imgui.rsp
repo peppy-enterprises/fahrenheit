@@ -72,3 +72,5 @@ ImGuiTextFilter_t=@ImGuiTextFilter
 ImGuiViewport_t=@ImGuiViewport
 ImGuiWindowClass_t=@ImGuiWindowClass
 ImGui_ImplDX11_RenderState_t=@ImGui_ImplDX11_RenderState
+ImGuiAtlasRect_t=@ImGuiAtlasRect
+ImFontAtlasRect_t=@ImFontAtlasRect
