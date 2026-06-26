@@ -38,6 +38,36 @@ public unsafe struct SaveData {
         public ushort festivalist   { get { return jobs[29]; } set { jobs[29] = value; } }
     }
 
+    [StructLayout(LayoutKind.Explicit, Pack = 4)]
+    public struct CupData {
+        [FieldOffset(0x0)]  public byte   standard_cup_entry_count;
+        [FieldOffset(0x1)]  public byte   standard_cup_hard_entry_count;
+        [FieldOffset(0x2)]  public byte   grand_cup_entry_count;
+        [FieldOffset(0x3)]  public byte   grand_cup_hard_entry_count;
+        [FieldOffset(0x4)]  public byte   chocobo_cup_entry_count;
+        [FieldOffset(0x5)]  public byte   cactuar_cup_entry_count;
+        [FieldOffset(0x6)]  public byte   youth_league_tournament_entry_count;
+        [FieldOffset(0x7)]  public byte   aeon_cup_entry_count;
+        [FieldOffset(0x8)]  public byte   fiend_world_cup_entry_count;
+        [FieldOffset(0x9)]  public byte   farplane_cup_entry_count;
+        [FieldOffset(0xEF)] public ushort unlocked_cups_1; // Bitfield of which fiend arena cups are unlocked 
+        [FieldOffset(0xF2)] public bool   skip_fiend_arena_intro;
+        [FieldOffset(0xF5)] public ushort unlocked_cups_2;
+        [FieldOffset(0xFC)] public bool   farplane_cup_unlocked; // For some reason its own field?
+    
+        public bool has_unlocked_standard_cup            { readonly get { return unlocked_cups_1.get_bit(0); } set { unlocked_cups_1.set_bit(0, value); } }
+        public bool has_unlocked_standard_cup_hard       { readonly get { return unlocked_cups_1.get_bit(1); } set { unlocked_cups_1.set_bit(1, value); } }
+        public bool has_unlocked_grand_cup               { readonly get { return unlocked_cups_1.get_bit(2); } set { unlocked_cups_1.set_bit(2, value); } }
+        public bool has_unlocked_grand_cup_hard          { readonly get { return unlocked_cups_1.get_bit(3); } set { unlocked_cups_1.set_bit(3, value); } }
+        public bool has_unlocked_chocobo_cup             { readonly get { return unlocked_cups_1.get_bit(4); } set { unlocked_cups_1.set_bit(4, value); } }
+        public bool has_unlocked_cactuar_cup             { readonly get { return unlocked_cups_1.get_bit(5); } set { unlocked_cups_1.set_bit(5, value); } }
+        public bool has_unlocked_youth_league_tournament { readonly get { return unlocked_cups_1.get_bit(6); } set { unlocked_cups_1.set_bit(6, value); } }
+        public bool has_unlocked_aeon_cup                { readonly get { return unlocked_cups_1.get_bit(7); } set { unlocked_cups_1.set_bit(7, value); } }
+    
+        public bool has_unlocked_fiend_world_cup { readonly get { return unlocked_cups_2.get_bit(0); } set { unlocked_cups_2.set_bit(0, value); } }
+        public bool has_unlocked_farplane_cup    { readonly get { return unlocked_cups_2.get_bit(1); } set { unlocked_cups_2.set_bit(1, value); } }
+    }
+
     [InlineArray(0x17)]
     public struct PlySaveArray {
         private PlySave _data;
@@ -58,88 +88,121 @@ public unsafe struct SaveData {
         private LearnJobs _data;
     }
 
-    [FieldOffset(0x0)]     public       ushort             current_room_id;
-    [FieldOffset(0x2)]     public       ushort             last_room_id;
-    [FieldOffset(0x4)]     public       ushort             now_eventjump_map_no;
-    [FieldOffset(0x6)]     public       ushort             last_eventjump_map_no;
-    [FieldOffset(0x8)]     public       ushort             now_eventjump_map_id;
-    [FieldOffset(0xA)]     public       ushort             last_eventjump_map_id;
-    [FieldOffset(0xC)]     public       byte               current_spawnpoint;
-    [FieldOffset(0xD)]     public       byte               last_spawnpoint;
-    [FieldOffset(0xE)]     public       ushort             atel_save_dic_index;
-    [FieldOffset(0x10)]    public       byte               atel_battle_scene_group;
-    [FieldOffset(0x11)]    public       byte               fade_mode;
-    [FieldOffset(0x12)]    public       byte               fade_time;
-    [FieldOffset(0x13)]    public       byte               battle_status;
-    [FieldOffset(0x18)]    public fixed uint               flying_ship_pos[2]; // bitfield
-    [FieldOffset(0x20)]    public       byte               atel_is_push_member;
-    [FieldOffset(0x21)]    public fixed byte               atel_push_frontline[3];
-    [FieldOffset(0x24)]    public       byte               atel_push_party;
-    [FieldOffset(0x28)]    public       byte               is_cam_underwater;
-    [FieldOffset(0x29)]    public       byte               is_map_underwater;
-    [FieldOffset(0x2B)]    public       byte               tk_event_new_game;
-    [FieldOffset(0x2C)]    public fixed uint               affection[8];
-    [FieldOffset(0x4C)]    public fixed uint               affection_room_flags[20];
-    [FieldOffset(0xB4)]    public       ushort             item_map_x;
-    [FieldOffset(0xB6)]    public       ushort             item_map_y;
-    [FieldOffset(0xBC)]    public       int                time;
-    [FieldOffset(0xD1)]    public       bool               albhed_rikku;
-    [FieldOffset(0xD2)]    public       byte               drop_shadow_mode;
-    [FieldOffset(0xD4)]    public       ushort             atel_force_place_id_value;
-    [FieldOffset(0xD6)]    public       bool               atel_force_place_id;
-    [FieldOffset(0xD7)]    public       byte               atel_water_btl_effect;
-    [FieldOffset(0xD8)]    public       uint               on_memory_movie_file_no;
-    [FieldOffset(0xDC)]    public       uint               on_memory_movie_mode;
-    [FieldOffset(0xE0)]    public       uint               on_memory_movie;
-    [FieldOffset(0xE4)]    public       int                rand_encounter_modifiers;
-    [FieldOffset(0xE8)]    public       ushort             btl_end_tag_always;
-    [FieldOffset(0xEA)]    public       ushort             sphere_monitor;
-    [FieldOffset(0x11C)]   public       ushort             event_skip_room;
-    [FieldOffset(0x11E)]   public       ushort             event_skip_spawnpoint;
-    [FieldOffset(0x124)]   public       ushort             event_skip_flag;
-    [FieldOffset(0x126)]   public       ushort             event_skip_menu;
-    [FieldOffset(0x128)]   public       uint               light_id;
-    [FieldOffset(0x12C)]   public       uint               user_timer_upper;  // seconds
-    [FieldOffset(0x130)]   public       uint               user_timer_lower;  // milliseconds
-    [FieldOffset(0x134)]   public       uint               user_timer_status; // bit 1: count up, bit 2: count down, bit 3: stop?
-    [FieldOffset(0x138)]   public       uint               voice_flag_count_all;
-    [FieldOffset(0x13C)]   public       uint               voice_flag_crc;
-    [FieldOffset(0x140)]   public       uint               voice_flag_2;  // meaning unknown
-    [FieldOffset(0x148)]   public       uint               save_clear_counter;
-    [FieldOffset(0x1EC)]   public       byte               scenario_list;
-    [FieldOffset(0xBEC)]   public       ushort             story_progress;
-    [FieldOffset(0x10FC)]  public       double             capture_pod_1;
-    [FieldOffset(0x1104)]  public       byte               capture_pod_2;
-    [FieldOffset(0x21EC)]  public fixed byte               voice_flags[0x4000]; // bitfield of heard voicelines?
-    [FieldOffset(0x61F0)]  public       uint               result_card;
-    [FieldOffset(0x6FD0)]  public       uint               walk_map;
+    [InlineArray(8)]
+    public struct TrapPodTypes {
+        private byte _data;
+    }
+    
+    [InlineArray(8)]
+    public struct TaleBonus {
+        private byte _data;
+    }
+    
+    [InlineArray(8)]
+    public struct TaleProgression {
+        private byte _data;
+    }
+    
+    [InlineArray(8)]
+    public struct CapturedCreatureIds {
+        private uint _data;
+    }
+
+    [FieldOffset(0x0)]     public       ushort              current_room_id;
+    [FieldOffset(0x2)]     public       ushort              last_room_id;
+    [FieldOffset(0x4)]     public       ushort              now_eventjump_map_no;
+    [FieldOffset(0x6)]     public       ushort              last_eventjump_map_no;
+    [FieldOffset(0x8)]     public       ushort              now_eventjump_map_id;
+    [FieldOffset(0xA)]     public       ushort              last_eventjump_map_id;
+    [FieldOffset(0xC)]     public       byte                current_spawnpoint;
+    [FieldOffset(0xD)]     public       byte                last_spawnpoint;
+    [FieldOffset(0xE)]     public       ushort              atel_save_dic_index;
+    [FieldOffset(0x10)]    public       byte                atel_battle_scene_group;
+    [FieldOffset(0x11)]    public       byte                fade_mode;
+    [FieldOffset(0x12)]    public       byte                fade_time;
+    [FieldOffset(0x13)]    public       byte                battle_status;
+    [FieldOffset(0x18)]    public fixed uint                flying_ship_pos[2]; // bitfield
+    [FieldOffset(0x20)]    public       byte                atel_is_push_member;
+    [FieldOffset(0x21)]    public fixed byte                atel_push_frontline[3];
+    [FieldOffset(0x24)]    public       byte                atel_push_party;
+    [FieldOffset(0x28)]    public       byte                is_cam_underwater;
+    [FieldOffset(0x29)]    public       byte                is_map_underwater;
+    [FieldOffset(0x2B)]    public       byte                tk_event_new_game;
+    [FieldOffset(0x2C)]    public fixed uint                affection[8];
+    [FieldOffset(0x4C)]    public fixed uint                affection_room_flags[20];
+    [FieldOffset(0xB4)]    public       ushort              item_map_x;
+    [FieldOffset(0xB6)]    public       ushort              item_map_y;
+    [FieldOffset(0xBC)]    public       int                 time;
+    [FieldOffset(0xD1)]    public       bool                albhed_rikku;
+    [FieldOffset(0xD2)]    public       byte                drop_shadow_mode;
+    [FieldOffset(0xD4)]    public       ushort              atel_force_place_id_value;
+    [FieldOffset(0xD6)]    public       bool                atel_force_place_id;
+    [FieldOffset(0xD7)]    public       byte                atel_water_btl_effect;
+    [FieldOffset(0xD8)]    public       uint                on_memory_movie_file_no;
+    [FieldOffset(0xDC)]    public       uint                on_memory_movie_mode;
+    [FieldOffset(0xE0)]    public       uint                on_memory_movie;
+    [FieldOffset(0xE4)]    public       int                 rand_encounter_modifiers;
+    [FieldOffset(0xE8)]    public       ushort              btl_end_tag_always;
+    [FieldOffset(0xEA)]    public       ushort              sphere_monitor;
+    [FieldOffset(0x11C)]   public       ushort              event_skip_room;
+    [FieldOffset(0x11E)]   public       ushort              event_skip_spawnpoint;
+    [FieldOffset(0x124)]   public       ushort              event_skip_flag;
+    [FieldOffset(0x126)]   public       ushort              event_skip_menu;
+    [FieldOffset(0x128)]   public       uint                light_id;
+    [FieldOffset(0x12C)]   public       uint                user_timer_upper;  // seconds
+    [FieldOffset(0x130)]   public       uint                user_timer_lower;  // milliseconds
+    [FieldOffset(0x134)]   public       uint                user_timer_status; // bit 1: count up, bit 2: count down, bit 3: stop?
+    [FieldOffset(0x138)]   public       uint                voice_flag_count_all;
+    [FieldOffset(0x13C)]   public       uint                voice_flag_crc;
+    [FieldOffset(0x140)]   public       uint                voice_flag_2;  // meaning unknown
+    [FieldOffset(0x148)]   public       uint                save_clear_counter;
+    [FieldOffset(0x1EC)]   public       byte                scenario_list;
+    [FieldOffset(0x44D)]   public       CupData             fiend_arena_cup_data;
+    [FieldOffset(0xBEC)]   public       ushort              story_progress;
+    [FieldOffset(0xD60)]   public       uint                experiment_attack_level; // Experiment Boss
+    [FieldOffset(0xD64)]   public       uint                experiment_defense_level;
+    [FieldOffset(0xD68)]   public       uint                experiment_special_level;
+    [FieldOffset(0x10FC)]  public       byte                trap_pod_count;
+    [FieldOffset(0x10FD)]  public       TrapPodTypes        trap_pods; // Type of each trap pod currently owned (S/M/L/SP)
+    [FieldOffset(0x1105)]  public       TaleBonus           creature_tale_bonus;
+    [FieldOffset(0x110D)]  public       TaleProgression     creature_tale_progression;
+    [FieldOffset(0x114C)]  public       byte                current_chapter;
+    [FieldOffset(0x1188)]  public       CapturedCreatureIds creature_ids; // IDs of current captured creatures
+    [FieldOffset(0x11B1)]  public       byte                recruited_creature_count;
+    [FieldOffset(0x21EC)]  public fixed byte                voice_flags[0x4000]; // bitfield of heard voicelines?
+    [FieldOffset(0x61F0)]  public       uint                result_card;
+    [FieldOffset(0x6FD0)]  public       uint                walk_map;
     // start of btl_party (ffx_ps2\ffx2\master\jppc\battle\kernel\party.h)
-    [FieldOffset(0x77D0)]  public       uint               config;
-    [FieldOffset(0x77D4)]  public       uint               unlocked_primers;
-    [FieldOffset(0x77D8)]  public       uint               gil;
-    [FieldOffset(0x77DC)]  public       uint               play_time;   // from party.h, always 0?
-    [FieldOffset(0x77E0)]  public       uint               battle_time; // from party.h, always 0?
-    [FieldOffset(0x77E4)]  public       uint               battle_count;
-    [FieldOffset(0x77E8)]  public fixed byte               party[3];
-    [FieldOffset(0x77EB)]  public       byte               atb_speed; // 0: Slow, 1: Normal, 2: Fast
-    [FieldOffset(0x77EC)]  public fixed ushort             item_type[8];
-    [FieldOffset(0x77FC)]  public fixed byte               item_num[8];
-    [FieldOffset(0x7804)]  public fixed int                plate[2]; // bitfield
-    [FieldOffset(0x780C)]  public fixed byte               dre_sphere[30];
-    [FieldOffset(0x782C)]  public       int                reserve5;
+    [FieldOffset(0x77D0)]  public       uint                config;
+    [FieldOffset(0x77D4)]  public       uint                unlocked_primers;
+    [FieldOffset(0x77D8)]  public       uint                gil;
+    [FieldOffset(0x77DC)]  public       uint                play_time;   // from party.h, always 0?
+    [FieldOffset(0x77E0)]  public       uint                battle_time; // from party.h, always 0?
+    [FieldOffset(0x77E4)]  public       uint                battle_count;
+    [FieldOffset(0x77E8)]  public fixed byte                party[3];
+    [FieldOffset(0x77EB)]  public       byte                atb_speed; // 0: Slow, 1: Normal, 2: Fast
+    [FieldOffset(0x77EC)]  public fixed ushort              item_type[8];
+    [FieldOffset(0x77FC)]  public fixed byte                item_num[8];
+    [FieldOffset(0x7804)]  public fixed int                 plate[2]; // bitfield
+    [FieldOffset(0x780C)]  public fixed byte                dre_sphere[30];
+    [FieldOffset(0x782C)]  public       int                 reserve5;
     // end of btl_party
-    [FieldOffset(0x7840)]  public fixed byte               event_flag[0x80];
-    [FieldOffset(0x7940)]  public fixed ushort             inventory_ids[0x44];
-    [FieldOffset(0x7B40)]  public fixed byte               inventory_counts[0x44];
-    [FieldOffset(0x7C40)]  public       ushort             inventory_check; // bitfield of unknown size
-    [FieldOffset(0x7C60)]  public       byte               inventory_use;   // unused?
-    [FieldOffset(0x7C80)]  public fixed ushort             accessory_ids[0x80];
-    [FieldOffset(0x7D80)]  public fixed byte               accessory_counts[0x80];
-    [FieldOffset(0x7E00)]  public       byte               accessory_check; // unused?
-    [FieldOffset(0x7E10)]  public       byte               accessory_use;   // unused?
-    [FieldOffset(0x8020)]  public fixed ushort             monster_meet[0x20];   // bitfield
-    [FieldOffset(0x8060)]  public fixed ushort             monster_defeat[0x20]; // bitfield
-    [FieldOffset(0x80A0)]  public fixed ushort             monster_oversoul[0x20]; // bitfield
+    [FieldOffset(0x7840)]  public fixed byte event_flag[0x80];
+    
+    [FieldOffset(0x7940)]  public fixed ushort inventory_ids[0x44];
+    [FieldOffset(0x7B40)]  public fixed byte   inventory_counts[0x44];
+    [FieldOffset(0x7C40)]  public       ushort inventory_check; // bitfield of unknown size
+    [FieldOffset(0x7C60)]  public       byte   inventory_use;   // unused?
+    
+    [FieldOffset(0x7C80)]  public fixed ushort accessory_ids[0x80];
+    [FieldOffset(0x7D80)]  public fixed byte   accessory_counts[0x80];
+    [FieldOffset(0x7E00)]  public       byte   accessory_check; // unused?
+    [FieldOffset(0x7E10)]  public       byte   accessory_use;   // unused?
+    
+    [FieldOffset(0x8020)]  public fixed ushort monster_meet[0x20];   // bitfield
+    [FieldOffset(0x8060)]  public fixed ushort monster_defeat[0x20]; // bitfield
+    [FieldOffset(0x80A0)]  public fixed ushort monster_oversoul[0x20]; // bitfield
+    
     [FieldOffset(0x8120)]  public fixed ushort             important_items[8];
     [FieldOffset(0x81B0)]  public       PlySaveArray       ply_saves;
     [FieldOffset(0x8D30)]  public       byte               ap_0x3; // 2d array [chr_id][ply_command_id] (if ability_id is 0x3XXX and XXX < 0x250)
@@ -152,7 +215,7 @@ public unsafe struct SaveData {
     [FieldOffset(0xD548)]  public fixed byte               extend_party[0xE];
     [FieldOffset(0xD570)]  public       FriendMonsterArray friend_monster;
 
-    [FieldOffset(0x14730)] public       byte               dgn_save_data;
+    [FieldOffset(0x14730)] public       byte dgn_save_data;
 
     public bool get_met_monster(int monster_id) {
         return monster_id < 0x200 && monster_meet[monster_id / 16].get_bit(monster_id % 16);
