@@ -184,9 +184,8 @@ public sealed class FhSettingsCategory : FhSetting {
     }
 }
 
-/// <summary>
-///     A text input setting, with flags. Callbacks are not currently supported.
-/// </summary>
+/// <summary>A text input setting, with flags.</summary>
+/// <remarks>Callbacks are not currently supported.</remarks>
 public sealed class FhSettingText(string id, string def_value, ImGuiInputTextFlags flags = ImGuiInputTextFlags.None) : FhSetting<string>(id, def_value) {
     internal const int MAX_LENGTH = 1024;
 
@@ -197,9 +196,7 @@ public sealed class FhSettingText(string id, string def_value, ImGuiInputTextFla
     }
 }
 
-/// <summary>
-///     A numeric/spinbox input.
-/// </summary>
+/// <summary>A numeric/spinbox input.</summary>
 /// <param name="id">The setting's identifier.</param>
 /// <param name="def_value">The default value of the setting.</param>
 /// <param name="min">The smallest accepted number. Defaults to 0.</param>
