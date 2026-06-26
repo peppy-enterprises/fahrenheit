@@ -1,8 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: MSBuild
 
 on:
@@ -26,15 +21,11 @@ env:
   FEED_URL: https://nuget.pkg.github.com/fahrenheit-crew/index.json
   VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/fahrenheit-crew/index.json,readwrite"
 
-# packages permission is for NuGet caching of Detours/nethost build artifacts, https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages?pivots=windows-runner
-permissions:
-  contents: write
-  packages: write
+# The permissions block is no longer required as explicit PAT is used for NuGet auth;
+# and releases are no longer made on GitHub actions, but locally with ci-release.ps1
 
 jobs:
   build:
-    env:
-      GH_TOKEN: ${{ github.token }}
     strategy:
       matrix:
         architecture: [ x86 ]
@@ -46,12 +37,12 @@ jobs:
       run: env
     
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         submodules: 'recursive'
 
     - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     - name: Bootstrap vcpkg
       shell: pwsh
@@ -75,9 +66,9 @@ jobs:
           -StorePasswordInClearText `
           -Name GitHubPackages `
           -UserName "${{ env.USERNAME }}" `
-          -Password "${{ secrets.GITHUB_TOKEN }}"
+          -Password "${{ secrets.VCPKG_PAT }}"
         .$(vcpkg fetch nuget) `
-          setapikey "${{ secrets.GITHUB_TOKEN }}" `
+          setapikey "${{ secrets.VCPKG_PAT }}" `
           -Source "${{ env.FEED_URL }}"
 
       # Compensate for https://github.com/NuGet/Home/issues/14113
