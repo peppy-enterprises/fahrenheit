@@ -5,17 +5,13 @@
 
 namespace Fahrenheit;
 
-/// <summary>
-///     An internal class of setting-related utilities and constants.
-/// </summary>
+/// <summary>Internal setting-related utilities and constants.</summary>
 internal sealed class FhSettings {
 
     internal const float TOOLTIP_SIZE = 40;
     internal const float NAME_WIDTH   = 300;
 
-    /// <summary>
-    ///     Reads out all settings from disk.
-    /// </summary>
+    /// <summary>Reads out all settings from disk.</summary>
     public void load() {
         foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
             try {
@@ -28,9 +24,7 @@ internal sealed class FhSettings {
         }
     }
 
-    /// <summary>
-    ///     Persists all settings to disk.
-    /// </summary>
+    /// <summary>Persists all settings to disk.</summary>
     public void save() {
         JsonWriterOptions opts = new() {
             Indented   = true,
@@ -112,11 +106,10 @@ public abstract class FhSetting<T>(string id, T defval) : FhSetting(id) where T 
          * A `Utf8JsonReader` is forward-only. Since `try_find_key_and_deserialize` will read
          * as far ahead as necessary to find the key, we need to copy the reader.
          *
-         * The same is done by S.T.J when necessary. See dotnet/runtime,
+         * The same is done by System.Text.Json when necessary. See dotnet/runtime,
          * Read<TValue>(ref Utf8JsonReader, JsonTypeInfo<TValue>) in JsonSerializer.Read.Utf8JsonReader.cs.
          */
         Utf8JsonReader copy = reader;
-
         if (!copy.try_find_key_and_deserialize(id, out T? value)) {
             FhInternal.Log.Error($"failed to load setting {id}");
             return;
@@ -126,9 +119,7 @@ public abstract class FhSetting<T>(string id, T defval) : FhSetting(id) where T 
     }
 }
 
-/// <summary>
-///     An indented group of settings.
-/// </summary>
+/// <summary>An indented group of settings.</summary>
 public sealed class FhSettingsCategory : FhSetting {
 
     internal readonly FhSetting[] settings;
@@ -139,9 +130,7 @@ public sealed class FhSettingsCategory : FhSetting {
         update_ids();
     }
 
-    /// <summary>
-    ///     Prepends the category's ID to all subordinate settings.
-    /// </summary>
+    /// <summary>Prepends the category's ID to all subordinate settings.</summary>
     private void update_ids() {
         foreach (FhSetting setting in settings) {
             setting.id = $"{id}.{setting.id}";
@@ -161,6 +150,11 @@ public sealed class FhSettingsCategory : FhSetting {
 
     /// <inheritdoc cref="FhSetting.load" />
     internal override void load(Utf8JsonReader reader) {
+        Utf8JsonReader copy = reader;
+        if (copy.try_find_key_and_deserialize($"{id}.collapsed", out bool is_collapsed)) {
+            collapsed = is_collapsed;
+        }
+
         foreach (FhSetting setting in settings) {
             setting.load(reader);
         }
