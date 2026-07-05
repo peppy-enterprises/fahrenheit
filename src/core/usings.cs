@@ -21,6 +21,8 @@ global using System.Threading;                 // Lock
 
 global using Fahrenheit.Events;
 
+global using Hexa.NET.ImGui;
+
 // Win32/D3D11 typedefs
 global using Windows.Win32;
 global using Windows.Win32.Foundation;
