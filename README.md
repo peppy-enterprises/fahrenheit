@@ -5,10 +5,10 @@ A Final Fantasy X/X-2 reverse-engineering project and mod framework.
 ![banner](https://raw.githubusercontent.com/fahrenheit-crew/fahrenheit/refs/heads/main/assets/fh_banner.png)
 
 ## What is Fahrenheit?
-Fahrenheit is a reverse-engineering project for the [Final Fantasy X and X-2 HD Remasters](https://store.steampowered.com/app/359870/).
+A reverse-engineering project and mod framework for the [Final Fantasy X and X-2 HD Remasters](https://store.steampowered.com/app/359870/).
 
-It is also a mod framework for the games. It allows you to freely hook game functions and distribute mods
-in the form of loadable DLLs. Fahrenheit bootstraps and hosts the [.NET runtime](https://dotnet.microsoft.com/en-us/download)
+It allows you to freely hook game functions and distribute mods in the form of loadable DLLs.
+Fahrenheit hosts the [.NET runtime](https://dotnet.microsoft.com/en-us/download)
 within the games, allowing you to write mods in any compatible language.
 
 The knowledge gathered by the project underpins many tools and mods for the game, such as the
@@ -16,7 +16,7 @@ The knowledge gathered by the project underpins many tools and mods for the game
 [Karifean](https://github.com/Karifean)'s [FFXDataParser](https://github.com/Karifean/FFXDataParser), and more.
 Fahrenheit, like all of these tools, is free for you to analyze, improve, learn from and use- now and forever.
 
-## Cloning, building from source and testing
+## Build and deployment
 Ensure the folder you cloned to does not contain special characters. This can cause build errors.
 
 Building **requires** Visual Studio 2026 (full IDE or Build Tools only) with the following workloads:
@@ -46,7 +46,6 @@ To install/test your development build:
 and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
 
 ## Compatibility notes
-
 **Fahrenheit is incompatible** with [Untitled Project X](https://github.com/Kaldaien/UnX)
 and ffgriever's [External File Loader for FFX/FFX-2](https://gitlab.com/ffgriever/ffx-x-2-hd-external-file-loader).
 Fahrenheit supplies its own External File Loader, and you can use [Roelin's Asset Converter](https://www.nexusmods.com/finalfantasy12/mods/288)

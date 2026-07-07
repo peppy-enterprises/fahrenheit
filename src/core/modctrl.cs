@@ -10,32 +10,49 @@ namespace Fahrenheit;
 ///     and exposes facilities to find <see cref="FhModule"/>s at runtime.
 /// </summary>
 public sealed class FhModController {
-    private readonly FhModContext[] _mods;
+
+    /* [fkelava 23/06/26 14:27]
+     * While module contexts are always accessible through the mod contexts,
+     * they are also separately cached because users often care about only one or the other.
+     */
+    private readonly ImmutableArray<FhModContext>    _mods;
+    private readonly ImmutableArray<FhModuleContext> _modules;
 
     internal FhModController() {
-        _mods = new FhModContext[FhEnvironment.Manifests.Length];
-    }
+        FhModContext[]        mods    = new FhModContext[FhEnvironment.Manifests.Length];
+        List<FhModuleContext> modules = [];
 
-    internal void load_mods() {
         FhModPaths[] mod_paths = FhEnvironment.ModPaths;
         FhManifest[] manifests = FhEnvironment.Manifests;
 
         for (int i = 0; i < manifests.Length; i++) {
-            _mods[i] = new FhModContext(manifests[i], mod_paths[i], [ .. FhInternal.Loader.load_mod(manifests[i]) ]);
+            var mod_context = new FhModContext(
+                manifests[i],
+                mod_paths[i],
+                [ .. FhInternal.Loader.load_mod(manifests[i]) ]);
+
+            mods[i] = mod_context;
+            modules.AddRange(mod_context.Modules);
         }
+
+        _mods    = ImmutableArray.Create     (mods);
+        _modules = ImmutableArray.CreateRange(modules);
     }
 
     /// <summary>
     ///     Invokes the initializer callback for all loaded modules.
     /// </summary>
-    internal void initialize_mods() {
+    internal void initialize() {
         foreach (FhModContext mod_ctx in _mods) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 FhModule   fm       = module_ctx.Module;
-                FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath,
+                    FileMode  .OpenOrCreate,
+                    FileAccess.ReadWrite,
+                    FileShare .ReadWrite);
 
                 if (!fm.init(mod_ctx, fm_state)) {
-                    FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed. Suppressing.");
+                    FhInternal.Log.Warning($"Module {fm.ModuleType} initializer callback failed.");
                     continue;
                 }
 
@@ -47,29 +64,19 @@ public sealed class FhModController {
     /// <summary>
     ///     Returns the <see cref="FhModContext"/>s of all loaded mods for this session.
     /// </summary>
-    public IEnumerable<FhModContext> get_mods() {
-        foreach (FhModContext ctx in _mods) {
-            yield return ctx;
-        }
-    }
+    public IEnumerable<FhModContext> get_mods() => _mods;
 
     /// <summary>
     ///     Returns the <see cref="FhModuleContext"/>s of all loaded modules for this session.
     /// </summary>
-    public IEnumerable<FhModuleContext> get_modules() {
-        foreach (FhModContext mod_ctx in _mods) {
-            foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
-                yield return module_ctx;
-            }
-        }
-    }
+    public IEnumerable<FhModuleContext> get_modules() => _modules;
 
     /// <summary>
     ///     Searches all modules for one of type <typeparamref name="TModule"/>,
     ///     then returns its <see cref="FhModuleContext"/> if it was found.
     /// </summary>
     public FhModuleContext? get_module<TModule>() where TModule : FhModule {
-        foreach (FhModuleContext module_ctx in get_modules()) {
+        foreach (FhModuleContext module_ctx in _modules) {
             if (module_ctx.Module is TModule) return module_ctx;
         }
         return null;

@@ -58,6 +58,10 @@ internal sealed class FhRuntimeHandle<T> {
 /// </summary>
 public readonly ref struct FhMethodLocation {
 
+    // We cache module and export locations to avoid looking them up on every instantiation.
+    private readonly static Dictionary<string,         nint> _s_modules = [];
+    private readonly static Dictionary<(nint, string), nint> _s_exports = [];
+
     private readonly nint _ptr_target;
 
     /// <summary>
@@ -104,12 +108,43 @@ public readonly ref struct FhMethodLocation {
     }
 
     /// <summary>
-    ///     Obtains the absolute address of export <paramref name="fn_name"/>
+    ///     Gets the address of the module with the given <paramref name="module_name"/>.
+    ///     <para/>
+    ///     If the module is not loaded, the return value is zero.
+    /// </summary>
+    private static nint get_module_addr(string module_name) {
+        return _s_modules.TryGetValue(module_name, out nint ptr_module)
+            ? ptr_module
+            : (_s_modules[module_name] = FhPInvoke.GetModuleHandle(module_name));
+    }
+
+    /// <summary>
+    ///     Gets the address of a named <paramref name="export"/>
+    ///     in the module at address <paramref name="module_addr"/>.
+    ///     <para/>
+    ///     If it does not exist, the return value is zero.
+    /// </summary>
+    private static bool get_export(nint module_addr, string export, out nint ptr_fn) {
+        var key = (module_addr, export);
+
+        if (_s_exports.TryGetValue(key, out ptr_fn))
+            return ptr_fn != 0;
+
+        // out-parameter is 0 if no export was found
+        if (!NativeLibrary.TryGetExport(module_addr, export, out ptr_fn)) {
+            FhInternal.Log.Error($"no export {export} in module at 0x{module_addr:X}");
+        }
+
+        return (_s_exports[key] = ptr_fn) != 0;
+    }
+
+    /// <summary>
+    ///     Obtains the absolute address of a named <paramref name="export"/>
     ///     in module <paramref name="module_name"/>.
     /// </summary>
-    private static nint calc_addr(string module_name, string fn_name) {
-        nint module_addr = FhPInvoke.GetModuleHandle(module_name);
-        return module_addr != 0 && NativeLibrary.TryGetExport(module_addr, fn_name, out nint fn_addr)
+    private static nint calc_addr(string module_name, string export) {
+        nint module_addr = get_module_addr(module_name);
+        return module_addr != 0 && get_export(module_addr, export, out nint fn_addr)
             ? fn_addr
             : 0;
     }
@@ -119,9 +154,9 @@ public readonly ref struct FhMethodLocation {
     ///     in module <paramref name="module_name"/>.
     /// </summary>
     private static nint calc_addr(string module_name, nint offset) {
-        nint module_addr = FhPInvoke.GetModuleHandle(module_name);
+        nint module_addr = get_module_addr(module_name);
         return module_addr != 0
-            ? module_addr + offset
+            ? (module_addr + offset)
             : 0;
     }
 
@@ -188,10 +223,10 @@ internal sealed class FhMethodContext {
 /// </summary>
 internal sealed class FhMethodTable {
 
-    private readonly Dictionary<nint,     Delegate>        _fnptrs     = []; // Any function -> cached delegate
-    private readonly Dictionary<nint,     FhMethodContext> _methods    = []; // Original     -> all hooks (for debug/keep-alive)
-    private readonly Dictionary<nint,     nint>            _chain_next = []; // Original     -> next chain insertion address
-    private readonly Dictionary<Delegate, nint>            _chain      = []; // Hook         -> next function in chain
+    private readonly static Dictionary<nint,     Delegate>        _s_fnptrs  = []; // Any function -> Cached delegate
+    private readonly static Dictionary<nint,     FhMethodContext> _s_methods = []; // Original     -> All hooks (for keep-alive)
+    private readonly static Dictionary<nint,     nint>            _s_insert  = []; // Original     -> Insertion address for next hook
+    private readonly static Dictionary<Delegate, nint>            _s_chain   = []; // Hook         -> Next function in chain
 
     private          int  _lock_commit = 0;
     private readonly Lock _lock_chains = new Lock();
@@ -201,17 +236,17 @@ internal sealed class FhMethodTable {
     ///     at <paramref name="ptr_target"/>, or returns the cached one if it already exists.
     /// </summary>
     public T get_fnptr<T>(nint ptr_target) where T : Delegate {
-        if (_fnptrs.TryGetValue(ptr_target, out Delegate? fnptr) && fnptr is T t_fnptr)
+        if (_s_fnptrs.TryGetValue(ptr_target, out Delegate? fnptr) && fnptr is T t_fnptr)
             return t_fnptr;
 
         t_fnptr = Marshal.GetDelegateForFunctionPointer<T>(ptr_target);
-        _fnptrs[ptr_target] = t_fnptr;
+        _s_fnptrs[ptr_target] = t_fnptr;
         return t_fnptr;
     }
 
     /* [fkelava 04/06/26 23:28]
-     * Locking should not be required because _chain_next is only manipulated
-     * in a function under lock, and chain_from() which reads _chain is only
+     * Locking should not be required because _s_insert is only manipulated
+     * in a function under lock, and chain_from() which reads _s_chain is only
      * valid in contexts where no further hooks may be inserted.
      */
 
@@ -219,9 +254,9 @@ internal sealed class FhMethodTable {
     ///     For the function at <paramref name="ptr_target"/>, obtains the address at which
     ///     the next function in the chain must be inserted.
     /// </summary>
-    public nint get_fnptr_chain_next(nint ptr_target) {
-        return _chain_next.TryGetValue(ptr_target, out nint ptr_next)
-            ? ptr_next
+    public nint get_ptr_insert(nint ptr_target) {
+        return _s_insert.TryGetValue(ptr_target, out nint ptr_insert)
+            ? ptr_insert
             : ptr_target;
     }
 
@@ -229,8 +264,8 @@ internal sealed class FhMethodTable {
     ///     For a given <paramref name="hook"/>, obtains the next link in its hook chain (if any exists).
     /// </summary>
     public T? get_fnptr_chain<T>(T hook) where T : Delegate {
-        return _chain.TryGetValue(hook, out nint chain_fnptr)
-            ? get_fnptr<T>(chain_fnptr)
+        return _s_chain.TryGetValue(hook, out nint ptr_chain)
+            ? get_fnptr<T>(ptr_chain)
             : null;
     }
 
@@ -263,7 +298,7 @@ internal sealed class FhMethodTable {
     private bool fnptr_chain_insert<T>(nint ptr_target, T hook) where T : Delegate {
         // _lock_chains must be held by this method's caller.
         nint pDetour;
-        nint pTarget    = get_fnptr_chain_next(ptr_target);
+        nint pTarget    = get_ptr_insert(ptr_target);
         nint ppOriginal = 0;
 
         try {
@@ -291,8 +326,8 @@ internal sealed class FhMethodTable {
             return false;
         }
 
-        _chain_next[ptr_target] = ppOriginal;
-        _chain     [hook]       = ppOriginal;
+        _s_insert[ptr_target] = ppOriginal;
+        _s_chain     [hook]       = ppOriginal;
 
         FhInternal.Log.Info($"(0x{ptr_target:X}) -> {hook.Method.Name}");
         return true;
@@ -301,7 +336,7 @@ internal sealed class FhMethodTable {
     /// <inheritdoc cref="fnptr_chain_insert{T}(nint, T)" />
     public bool fnptr_chain_add<T>(nint ptr_target, FhHookContext hook) where T : Delegate {
         lock (_lock_chains) {
-            if (_methods.TryGetValue(ptr_target, out FhMethodContext? target)) {
+            if (_s_methods.TryGetValue(ptr_target, out FhMethodContext? target)) {
                 if (target.tainted) {
                     FhInternal.Log.Error($"(0x{ptr_target:X}) - rejected late insertion of {hook.fnptr.Method.Name}");
                     return false;
@@ -314,7 +349,7 @@ internal sealed class FhMethodTable {
             target = new();
             target.stack.Push(hook);
 
-            _methods[ptr_target] = target;
+            _s_methods[ptr_target] = target;
             return Interlocked.CompareExchange(ref _lock_commit, 0, 0) == 0 || fnptr_chain_insert(ptr_target, hook.fnptr);
         }
     }
@@ -328,11 +363,11 @@ internal sealed class FhMethodTable {
             if (Interlocked.CompareExchange(ref _lock_commit, 1, 0) == 1)
                 return true; // reject repeat calls
 
-            foreach ((nint target_ptr, FhMethodContext target) in _methods) {
+            foreach ((nint ptr_target, FhMethodContext target) in _s_methods) {
                 Stack<FhHookContext> target_stack = target.stack;
 
                 foreach (FhHookContext hook in target_stack) {
-                    if (!fnptr_chain_insert(target_ptr, hook.fnptr))
+                    if (!fnptr_chain_insert(ptr_target, hook.fnptr))
                         return false;
                 }
 
