@@ -5,7 +5,7 @@ A Final Fantasy X/X-2 reverse-engineering project and mod framework.
 ![banner](https://raw.githubusercontent.com/fahrenheit-crew/fahrenheit/refs/heads/main/assets/fh_banner.png)
 
 ## What is Fahrenheit?
-A reverse-engineering project and mod framework for the [Final Fantasy X and X-2 HD Remasters](https://store.steampowered.com/app/359870/).
+Fahrenheit is a reverse-engineering project and mod framework for the [Final Fantasy X and X-2 HD Remasters](https://store.steampowered.com/app/359870/).
 
 It allows you to freely hook game functions and distribute mods in the form of loadable DLLs.
 Fahrenheit hosts the [.NET runtime](https://dotnet.microsoft.com/en-us/download)
@@ -16,7 +16,7 @@ The knowledge gathered by the project underpins many tools and mods for the game
 [Karifean](https://github.com/Karifean)'s [FFXDataParser](https://github.com/Karifean/FFXDataParser), and more.
 Fahrenheit, like all of these tools, is free for you to analyze, improve, learn from and use- now and forever.
 
-## Build and deployment
+## Build and deploy
 Ensure the folder you cloned to does not contain special characters. This can cause build errors.
 
 Building **requires** Visual Studio 2026 (full IDE or Build Tools only) with the following workloads:

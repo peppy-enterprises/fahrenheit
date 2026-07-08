@@ -46,7 +46,8 @@ public sealed class FhModController {
         foreach (FhModContext mod_ctx in _mods) {
             foreach (FhModuleContext module_ctx in mod_ctx.Modules) {
                 FhModule   fm       = module_ctx.Module;
-                FileStream fm_state = File.Open(module_ctx.Paths.GlobalStatePath,
+                FileStream fm_state = File.Open(
+                    module_ctx.Paths.GlobalStatePath,
                     FileMode  .OpenOrCreate,
                     FileAccess.ReadWrite,
                     FileShare .ReadWrite);

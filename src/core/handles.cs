@@ -327,7 +327,7 @@ internal sealed class FhMethodTable {
         }
 
         _s_insert[ptr_target] = ppOriginal;
-        _s_chain     [hook]       = ppOriginal;
+        _s_chain [hook]       = ppOriginal;
 
         FhInternal.Log.Info($"(0x{ptr_target:X}) -> {hook.Method.Name}");
         return true;
