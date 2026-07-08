@@ -43,10 +43,9 @@ internal static class FhEnvironment {
 
     [UnmanagedCallersOnly]
     public static void boot() {
-        FhApi.Mods.load_mods();
         FhApi.Localization.initialize();
         FhInternal.Settings.load();
-        FhApi.Mods.initialize_mods();
+        FhApi.Mods.initialize();
 
         // post-init - may require later editing
         FhInternal.MethodTable.commit();

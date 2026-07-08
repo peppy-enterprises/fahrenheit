@@ -2,6 +2,7 @@
 global using System.Buffers;                   // OperationStatus for Rune decoding, et al.
 global using System.Buffers.Binary;            // BinaryPrimitives, et al.
 global using System.Collections.Generic;       // List<T>, Dictionary<T,U> and others
+global using System.Collections.Immutable;     // ImmutableArray<T>
 global using System.Diagnostics;               // [Conditional] et al.
 global using System.Diagnostics.CodeAnalysis;  // [NotNullWhen()] and other nullability static analysis attributes
 global using System.Globalization;             // CultureInfo.InvariantCulture et al.
