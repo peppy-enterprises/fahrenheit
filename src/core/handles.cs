@@ -58,6 +58,10 @@ internal sealed class FhRuntimeHandle<T> {
 /// </summary>
 public readonly ref struct FhMethodLocation {
 
+    // We cache module and export locations to avoid looking them up on every instantiation.
+    private readonly static Dictionary<string,         nint> _s_modules = [];
+    private readonly static Dictionary<(nint, string), nint> _s_exports = [];
+
     private readonly nint _ptr_target;
 
     /// <summary>
@@ -104,12 +108,43 @@ public readonly ref struct FhMethodLocation {
     }
 
     /// <summary>
-    ///     Obtains the absolute address of export <paramref name="fn_name"/>
+    ///     Gets the address of the module with the given <paramref name="module_name"/>.
+    ///     <para/>
+    ///     If the module is not loaded, the return value is zero.
+    /// </summary>
+    private static nint get_module_addr(string module_name) {
+        return _s_modules.TryGetValue(module_name, out nint ptr_module)
+            ? ptr_module
+            : (_s_modules[module_name] = FhPInvoke.GetModuleHandle(module_name));
+    }
+
+    /// <summary>
+    ///     Gets the address of a named <paramref name="export"/>
+    ///     in the module at address <paramref name="module_addr"/>.
+    ///     <para/>
+    ///     If it does not exist, the return value is zero.
+    /// </summary>
+    private static bool get_export(nint module_addr, string export, out nint ptr_fn) {
+        var key = (module_addr, export);
+
+        if (_s_exports.TryGetValue(key, out ptr_fn))
+            return ptr_fn != 0;
+
+        // out-parameter is 0 if no export was found
+        if (!NativeLibrary.TryGetExport(module_addr, export, out ptr_fn)) {
+            FhInternal.Log.Error($"no export {export} in module at 0x{module_addr:X}");
+        }
+
+        return (_s_exports[key] = ptr_fn) != 0;
+    }
+
+    /// <summary>
+    ///     Obtains the absolute address of a named <paramref name="export"/>
     ///     in module <paramref name="module_name"/>.
     /// </summary>
-    private static nint calc_addr(string module_name, string fn_name) {
-        nint module_addr = FhPInvoke.GetModuleHandle(module_name);
-        return module_addr != 0 && NativeLibrary.TryGetExport(module_addr, fn_name, out nint fn_addr)
+    private static nint calc_addr(string module_name, string export) {
+        nint module_addr = get_module_addr(module_name);
+        return module_addr != 0 && get_export(module_addr, export, out nint fn_addr)
             ? fn_addr
             : 0;
     }
@@ -119,9 +154,9 @@ public readonly ref struct FhMethodLocation {
     ///     in module <paramref name="module_name"/>.
     /// </summary>
     private static nint calc_addr(string module_name, nint offset) {
-        nint module_addr = FhPInvoke.GetModuleHandle(module_name);
+        nint module_addr = get_module_addr(module_name);
         return module_addr != 0
-            ? module_addr + offset
+            ? (module_addr + offset)
             : 0;
     }
 
