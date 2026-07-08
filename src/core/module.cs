@@ -123,7 +123,7 @@ public abstract class FhModule {
     public virtual void load_local_state(FileStream local_state_file, FhLocalStateInfo local_state_info) { }
 
     /// <summary>
-    ///     Called just before <see cref="TerraFX.Interop.DirectX.IDXGISwapChain.Present"/> time.
+    ///     Called just before <see cref="IDXGISwapChain.Present(IDXGISwapChain*, uint, DXGI_PRESENT)"/> time.
     ///     You may freely invoke ImGui methods here, and <i>only</i> here.
     /// </summary>
     public virtual void render_imgui() { }
