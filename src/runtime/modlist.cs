@@ -12,9 +12,9 @@ namespace Fahrenheit.Runtime;
 ///     In your module, override <see cref="FhModule.handle_input">.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public unsafe class FhCoreModule : FhModule {
+public unsafe class FhModListDisplayModule : FhModule {
 
-    public FhCoreModule() { }
+    public FhModListDisplayModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         return true;
