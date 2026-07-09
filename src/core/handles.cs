@@ -223,10 +223,10 @@ internal sealed class FhMethodContext {
 /// </summary>
 internal sealed class FhMethodTable {
 
-    private readonly Dictionary<nint,     Delegate>        _fnptrs     = []; // Any function -> cached delegate
-    private readonly Dictionary<nint,     FhMethodContext> _methods    = []; // Original     -> all hooks (for debug/keep-alive)
-    private readonly Dictionary<nint,     nint>            _chain_next = []; // Original     -> next chain insertion address
-    private readonly Dictionary<Delegate, nint>            _chain      = []; // Hook         -> next function in chain
+    private readonly static Dictionary<nint,     Delegate>        _fnptrs  = []; // Any function -> Cached delegate
+    private readonly static Dictionary<nint,     FhMethodContext> _methods = []; // Original     -> All hooks (for keep-alive)
+    private readonly static Dictionary<nint,     nint>            _insert  = []; // Original     -> Insertion address for next hook
+    private readonly static Dictionary<Delegate, nint>            _chain   = []; // Hook         -> Next function in chain
 
     private          int  _lock_commit = 0;
     private readonly Lock _lock_chains = new Lock();
@@ -245,7 +245,7 @@ internal sealed class FhMethodTable {
     }
 
     /* [fkelava 04/06/26 23:28]
-     * Locking should not be required because _chain_next is only manipulated
+     * Locking should not be required because _insert is only manipulated
      * in a function under lock, and chain_from() which reads _chain is only
      * valid in contexts where no further hooks may be inserted.
      */
@@ -254,9 +254,9 @@ internal sealed class FhMethodTable {
     ///     For the function at <paramref name="ptr_target"/>, obtains the address at which
     ///     the next function in the chain must be inserted.
     /// </summary>
-    public nint get_fnptr_chain_next(nint ptr_target) {
-        return _chain_next.TryGetValue(ptr_target, out nint ptr_next)
-            ? ptr_next
+    public nint get_ptr_insert(nint ptr_target) {
+        return _insert.TryGetValue(ptr_target, out nint ptr_insert)
+            ? ptr_insert
             : ptr_target;
     }
 
@@ -264,8 +264,8 @@ internal sealed class FhMethodTable {
     ///     For a given <paramref name="hook"/>, obtains the next link in its hook chain (if any exists).
     /// </summary>
     public T? get_fnptr_chain<T>(T hook) where T : Delegate {
-        return _chain.TryGetValue(hook, out nint chain_fnptr)
-            ? get_fnptr<T>(chain_fnptr)
+        return _chain.TryGetValue(hook, out nint ptr_chain)
+            ? get_fnptr<T>(ptr_chain)
             : null;
     }
 
@@ -298,7 +298,7 @@ internal sealed class FhMethodTable {
     private bool fnptr_chain_insert<T>(nint ptr_target, T hook) where T : Delegate {
         // _lock_chains must be held by this method's caller.
         nint pDetour;
-        nint pTarget    = get_fnptr_chain_next(ptr_target);
+        nint pTarget    = get_ptr_insert(ptr_target);
         nint ppOriginal = 0;
 
         try {
@@ -326,8 +326,8 @@ internal sealed class FhMethodTable {
             return false;
         }
 
-        _chain_next[ptr_target] = ppOriginal;
-        _chain     [hook]       = ppOriginal;
+        _insert[ptr_target] = ppOriginal;
+        _chain [hook]       = ppOriginal;
 
         FhInternal.Log.Info($"(0x{ptr_target:X}) -> {hook.Method.Name}");
         return true;
@@ -363,11 +363,11 @@ internal sealed class FhMethodTable {
             if (Interlocked.CompareExchange(ref _lock_commit, 1, 0) == 1)
                 return true; // reject repeat calls
 
-            foreach ((nint target_ptr, FhMethodContext target) in _methods) {
+            foreach ((nint ptr_target, FhMethodContext target) in _methods) {
                 Stack<FhHookContext> target_stack = target.stack;
 
                 foreach (FhHookContext hook in target_stack) {
-                    if (!fnptr_chain_insert(target_ptr, hook.fnptr))
+                    if (!fnptr_chain_insert(ptr_target, hook.fnptr))
                         return false;
                 }
 

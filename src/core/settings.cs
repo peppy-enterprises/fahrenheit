@@ -32,7 +32,8 @@ internal sealed class FhSettings {
         };
 
         foreach (FhModuleContext module_ctx in FhApi.Mods.get_modules()) {
-            using FileStream file = File.Open(module_ctx.Paths.GlobalConfigPath,
+            using FileStream file = File.Open(
+                module_ctx.Paths.GlobalConfigPath,
                 FileMode  .OpenOrCreate,
                 FileAccess.ReadWrite,
                 FileShare .None);

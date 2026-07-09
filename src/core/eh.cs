@@ -55,11 +55,6 @@ internal static class FhExceptionHandler {
     ///     Runs in response to <see cref="AppDomain.FirstChanceException"/>.
     /// </summary>
     internal static void eh_first_chance(object? sender, FirstChanceExceptionEventArgs e) {
-        /* [fkelava 11/06/26 11:28]
-         * See https://learn.microsoft.com/en-us/dotnet/api/system.appdomain.firstchanceexception?view=net-10.0#remarks.
-         * > You must handle all exceptions that occur in the event handler
-         * > for the FirstChanceException event. Otherwise, FirstChanceException is raised recursively.
-         */
         try {
             _eh_log.LogDirect($"First-chance exception at: {TimeProvider.System.GetUtcNow():u}");
             _eh_log.LogDirect(e.Exception.ToString());
