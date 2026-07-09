@@ -27,8 +27,8 @@ public sealed partial class FhLocalizationManager {
     /// </summary>
     internal void initialize() {
         /* [fkelava 07/07/26 23:44]
-         * The expected directory structure is mods/{MOD_ID}/lang/{MODULE_TYPE_NAME}/{LANG_ID}.lang.json,
-         * ex. `mods/fhtemplate/lang/Fahrenheit.Modules.TemplateModule/en_US.lang.json`
+         * The expected directory structure is mods/{MOD_ID}/lang/{MODULE_TYPE_NAME}/{LANG_ID}.json,
+         * ex. `mods/fhtemplate/lang/Fahrenheit.Modules.TemplateModule/en_US.json`
          *
          * Since this results in quite a bit of nesting, loading is broken up into multiple methods
          * to avoid three levels of `foreach` in a single method.
@@ -99,8 +99,8 @@ public sealed partial class FhLocalizationManager {
     ///     for the locale with ID <paramref name="lang_id"/>,
     ///     falling back to <paramref name="id"/> if unavailable.
     /// </summary>
-    public string localize(string id, FhModule? caller = default, string lang_id = "en-US") {
-        string composite_id = caller == default
+    public string localize(string id, FhModule? caller = null, string lang_id = "en-US") {
+        string composite_id = (caller == null)
             ? id
             : $"{caller.ModuleType}.{id}";
 
