@@ -49,8 +49,7 @@
 
     <!-- ASSETS: LOCALIZATION -->
     <ItemGroup>
-        <None Remove="lang/**" />
-        <None Include="lang/*.json" CopyToOutputDirectory="Always" />
+        <None Include="lang/**/*.json" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
     <!-- ASSETS: EXTERNAL FILE LOADER -->
