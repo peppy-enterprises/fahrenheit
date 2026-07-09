@@ -127,5 +127,4 @@ public abstract class FhModule {
     ///     You may freely invoke ImGui methods here, and <i>only</i> here.
     /// </summary>
     public virtual void render_imgui() { }
-    public virtual void render_game()  { }
 }
