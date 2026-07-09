@@ -5,9 +5,12 @@
 
 namespace Fahrenheit;
 
+/// <summary>
+///     Allows querying of input state.
+/// </summary>
 public unsafe class FhInput {
 
-    private static readonly nint _address = FhGlobal.game_id == FhGameId.FFX ? 0xF27080 : 0xD94A8C;
+    private static readonly nint _ptr_input_raw = FhUtil.select(0xF27080, 0xD94A8C, 0xD94A8C);
 
     public readonly InputAction l2       = new(0x1);
     public readonly InputAction r2       = new(0x2);
@@ -24,33 +27,13 @@ public unsafe class FhInput {
     public readonly InputAction down     = new(0x4000);
     public readonly InputAction left     = new(0x8000);
 
-    public static ushort* raw { get { return FhUtil.ptr_at<ushort>(_address); } }
-
-    private static ushort previous;
-
-    public void update() {
-        previous = *raw;
-    }
+    public static ushort* raw { get { return FhUtil.ptr_at<ushort>(_ptr_input_raw); } }
 
     public void consume_all() {
-        previous = *raw = 0;
+        *raw = 0;
     }
 
-    public class InputAction {
-        private ushort mask;
-
-        public InputAction(ushort mask) {
-            this.mask = mask;
-        }
-
-        public (bool held, bool just_pressed, bool just_released) consume() {
-            (bool, bool, bool) ret = (held, just_pressed, just_released);
-            *raw &= (ushort)~mask;
-            return ret;
-        }
-
-        public bool held { get { return (*raw & mask) != 0; } }
-        public bool just_pressed { get { return (*raw & mask) != 0 && (previous & mask) == 0; } }
-        public bool just_released { get { return (*raw & mask) == 0 && (previous & mask) != 0; } }
+    public class InputAction(ushort mask) {
+        public bool is_pressed { get { return (*raw & mask) != 0; } }
     }
 }

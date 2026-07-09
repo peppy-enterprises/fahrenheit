@@ -128,5 +128,4 @@ public abstract class FhModule {
     /// </summary>
     public virtual void render_imgui() { }
     public virtual void render_game()  { }
-    public virtual void handle_input() { }
 }
