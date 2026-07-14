@@ -23,24 +23,6 @@ namespace Fahrenheit.Runtime;
 [SupportedOSPlatform("windows6.1")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
-    /* [fkelava 6/10/24 01:54]
-     * See src/core/native/Windows.Win32.IDXGISwapChain.g.cs for swapchain method signatures.
-     */
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate nint DXGISwapChain_Present(
-        IDXGISwapChain* pSwapChain,
-        uint            SyncInterval,
-        DXGI_PRESENT    Flags);
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate nint DXGISwapChain_ResizeBuffers(
-        IDXGISwapChain* pSwapChain,
-        uint            BufferCount,
-        uint            Width,
-        uint            Height,
-        DXGI_FORMAT     NewFormat,
-        uint            SwapChainFlags);
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate void ImGui_ImplWin32_SetWindowFocus(
         ImGuiViewportPtr viewport);
@@ -51,11 +33,6 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         uint   msg,
         WPARAM wParam,
         LPARAM lParam);
-
-    private FhMethodHandle<DXGISwapChain_Present>       _handle_present =>
-        new( new FhMethodLocation(_ptr_swapchain->lpVtbl[8]) );
-    private FhMethodHandle<DXGISwapChain_ResizeBuffers> _handle_resize_buffers =>
-        new( new FhMethodLocation(_ptr_swapchain->lpVtbl[13]) );
 
     // Win32 internals
     private          HWND    _hWnd;
@@ -154,8 +131,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
         FhApi.ImGuiHelper.init();
 
-        _handle_present       .hook(this, h_present);
-        _handle_resize_buffers.hook(this, h_resize_buffers);
+        FhCall.h_DXGI_IDXGISwapChain_Present      (_ptr_swapchain).hook(this, h_present);
+        FhCall.h_DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).hook(this, h_resize_buffers);
     }
 
     /* [fkelava 16/02/26 14:59]
@@ -222,7 +199,13 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
     ///     Intercepts attempts to resize the game window to allow ImGui to continue drawing.
     /// </summary>
     [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
-    private nint h_resize_buffers(IDXGISwapChain* pSwapChain, uint BufferCount, uint Width, uint Height, DXGI_FORMAT NewFormat, uint SwapChainFlags) {
+    private nint h_resize_buffers(
+        IDXGISwapChain* pSwapChain,
+        uint            BufferCount,
+        uint            Width,
+        uint            Height,
+        DXGI_FORMAT     NewFormat,
+        uint            SwapChainFlags) {
         if (_ptr_rtv != null) {
             _ptr_device_ctx->OMSetRenderTargets(0, null, null);
             _ptr_rtv       ->Release();
@@ -230,14 +213,18 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         }
 
         Interlocked.CompareExchange(ref _rtv_generated, 0, 1);
-        return _handle_resize_buffers.chain_from(h_resize_buffers).fnptr!(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
+        return FhCall.h_DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).
+            chain_from(h_resize_buffers).fnptr!(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     }
 
     /// <summary>
     ///     Overrides the game's <see cref="IDXGISwapChain.Present(uint, DXGI_PRESENT)"/> call to display mods' user interfaces.
     /// </summary>
     [UnmanagedCallConv( CallConvs = [ typeof(CallConvStdcall) ] )]
-    private nint h_present(IDXGISwapChain* pSwapChain, uint SyncInterval, DXGI_PRESENT Flags) {
+    private nint h_present(
+        IDXGISwapChain* pSwapChain,
+        uint            SyncInterval,
+        DXGI_PRESENT    Flags) {
         if (Interlocked.CompareExchange(ref _rtv_generated, 1, 0) == 0) {
             ID3D11Resource* ptr_backbuffer;
 
@@ -267,6 +254,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
 
         _rlm!.release_pending_resources();
-        return _handle_present.chain_from(h_present).fnptr!(pSwapChain, SyncInterval, Flags);
+        return FhCall.h_DXGI_IDXGISwapChain_Present(_ptr_swapchain).
+            chain_from(h_present).fnptr!(pSwapChain, SyncInterval, Flags);
     }
 }
