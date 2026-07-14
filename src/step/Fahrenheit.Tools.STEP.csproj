@@ -18,8 +18,8 @@
 
     <!-- PUBLISH SETTINGS -->
     <PropertyGroup>
-        <PublishSingleFile>true</PublishSingleFile>
-        <SelfContained>false</SelfContained>
+        <!-- STEP should not be part of 'deploy', hence unpublishable -->
+        <IsPublishable>false</IsPublishable>
     </PropertyGroup>
 
     <!-- SHARED FILE LINKS -->
