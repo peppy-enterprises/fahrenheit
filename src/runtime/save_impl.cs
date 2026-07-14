@@ -31,26 +31,19 @@ internal enum FhSaveExtensionSystemState {
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhSaveExtensionModule : FhModule {
 
-    private FhLocalStateModule?        _lsm;
-    private FhSaveManagerModule?       _smm;
     private int                        _load_pending_slot;
     private FhSaveExtensionSystemState _state;
 
     public FhSaveExtensionModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        FhModuleHandle<FhLocalStateModule>  lsm_handle = new(this);
-        FhModuleHandle<FhSaveManagerModule> smm_handle = new(this);
-
         bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
 
         return FhCall.h_SaveDataManager_debugSave_Internal_6F0650.hook(this, impl_autosave)
             && FhCall.h_TkMenuJumpToLoadedScene                  .hook(this, impl_copy)
             && FhCall.h_SaveDataToSave                           .hook(this, signal_enter_save)
             && FhCall.h_SaveDataToLoad                           .hook(this, signal_enter_load)
-            && (!is_ffx || FFX.FhCall.h_FUN_2EFFF0.hook(this, signal_enter_albd))
-            && lsm_handle.try_get_module(out _lsm)
-            && smm_handle.try_get_module(out _smm);
+            && (!is_ffx || FFX.FhCall.h_FUN_2EFFF0.hook(this, signal_enter_albd));
     }
 
     internal FhSaveExtensionSystemState get_system_state() => _state;
@@ -72,7 +65,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_save() {
-        _smm!.index_active_set();
+        FhInternal.Saves.index_active_set();
         _state = FhSaveExtensionSystemState.SAVE;
         FhSavePal.pal_set_system_state(FhSaveSystemState.SAVE);
     }
@@ -82,7 +75,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_load() {
-        _smm!.index_active_set();
+        FhInternal.Saves.index_active_set();
         _state = FhSaveExtensionSystemState.LOAD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
     }
@@ -93,7 +86,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl ) ] )]
     private void signal_enter_albd() {
-        _smm!.index_active_set();
+        FhInternal.Saves.index_active_set();
         _state = FhSaveExtensionSystemState.ALBD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
     }
@@ -145,7 +138,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvStdcall) ] )]
     private void impl_copy() {
         FhCall.h_TkMenuJumpToLoadedScene.chain_from(impl_copy).fnptr!();
-        _lsm!.state_load_slot(_load_pending_slot);
+        FhInternal.State.state_load_slot(_load_pending_slot);
 
         FhApi.Events.Common.GameLoop.PostLoadGame.invoke(new() { save_slot_idx = _load_pending_slot });
     }
@@ -158,14 +151,14 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         FhCall.h_SaveDataWriteCrc       .fnptr!(ptr);
         FhCall.h__SetUpDefaultSaveFolder.fnptr!();
 
-        string             save_path = _smm!.get_save_path_for_slot(0);
+        string             save_path = FhInternal.Saves.get_save_path_for_slot(0);
         ReadOnlySpan<byte> save      = new(ptr, size);
 
         using (FileStream save_stream = File.OpenWrite(save_path)) {
             save_stream.Write(save);
         }
 
-        _lsm!.state_save_slot(0);
+        FhInternal.State.state_save_slot(0);
     }
 
     /* [fkelava 19/01/26 16:12]
@@ -181,8 +174,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     ///     selected <paramref name="index"/> in the save/load menu.
     /// </summary>
     internal void save(int index) {
-        int    slot      = _smm!.get_slot_save(index);
-        string save_path = _smm!.get_save_path_for_slot(slot);
+        int    slot      = FhInternal.Saves.get_slot_save(index);
+        string save_path = FhInternal.Saves.get_save_path_for_slot(slot);
 
         ReadOnlySpan<byte> save = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
         FhCall.h_SaveDataWriteCrc.fnptr!(FhSavePal.pal_addr_buf_save());
@@ -193,7 +186,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
             save_stream.Write(save);
         }
 
-        _lsm!.state_save_slot(slot);
+        FhInternal.State.state_save_slot(slot);
         signal_exit_success();
     }
 
@@ -202,8 +195,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     ///     selected <paramref name="index"/> in the save/load menu.
     /// </summary>
     internal void load(int index) {
-        int    slot      = _smm!.get_slot_load(index);
-        string save_name = _smm!.get_save_path_for_slot(slot);
+        int    slot      = FhInternal.Saves.get_slot_load(index);
+        string save_name = FhInternal.Saves.get_save_path_for_slot(slot);
 
         Span<byte> save = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
 
@@ -234,8 +227,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     ///     at the given <paramref name="index"/> in the save/load menu.
     /// </summary>
     internal void load_albd(int index) {
-        int    slot      = _smm!.get_slot_load(index);
-        string save_name = _smm!.get_save_path_for_slot(slot);
+        int    slot      = FhInternal.Saves.get_slot_load(index);
+        string save_name = FhInternal.Saves.get_save_path_for_slot(slot);
 
         //Span<byte> save = new(
         //    FhUtil.ptr_at<byte>(pal_addr_buf_save()),

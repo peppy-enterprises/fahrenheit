@@ -17,39 +17,6 @@ namespace Fahrenheit.Runtime;
  */
 
 /// <summary>
-///     Contains the fields the game shows as part of its standard save game display.
-/// </summary>
-[StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveDisplayData {
-
-    /* [fkelava 19/01/26 13:14]
-     * An array of these of size DEFAULT_SET_SIZE is allocated by the save UI module on boot.
-     * These instances are continually reused. To prevent garbage from being displayed when a slot
-     * occupied in the previous set becomes empty, the save manager module (un)sets 'valid'.
-     *
-     * These inline arrays are in reality UTF-8 strings, since both Iggy
-     * and ImGui accept them as input. The sizes are taken from the base game.
-     */
-
-    internal bool valid;
-
-    public InlineArray64 <byte> header;
-    public InlineArray16 <byte> slot;
-    public InlineArray64 <byte> create_time;
-    public InlineArray128<byte> location;
-    public InlineArray128<byte> play_time;
-    public InlineArray32 <byte> player_name;
-    public InlineArray16 <byte> icon_chr1;
-    public InlineArray16 <byte> icon_chr2;
-    public InlineArray16 <byte> icon_chr3;
-    public InlineArray16 <byte> icon_map;
-    public InlineArray128<byte> chapter;
-    public InlineArray128<byte> completion;
-    public InlineArray64 <byte> lm_level;
-    public InlineArray64 <byte> lm_job;
-}
-
-/// <summary>
 ///     Implements Fahrenheit's replacement save/load user interface.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
@@ -57,8 +24,6 @@ public sealed class FhSaveUiModule : FhModule {
 
     private readonly FhModuleHandle<FhSaveExtensionModule> _sem_handle;
     private          FhSaveExtensionModule?                _sem;
-    private readonly FhModuleHandle<FhSaveManagerModule>   _smm_handle;
-    private          FhSaveManagerModule?                  _smm;
 
     private int                   _display_index;
     private IReadOnlySet<string>? _sets;
@@ -66,12 +31,10 @@ public sealed class FhSaveUiModule : FhModule {
 
     public FhSaveUiModule() {
         _sem_handle = new(this);
-        _smm_handle = new(this);
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _sem_handle.try_get_module(out _sem)
-            && _smm_handle.try_get_module(out _smm);
+        return _sem_handle.try_get_module(out _sem);
     }
 
     public override void render_imgui() {
@@ -107,7 +70,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         int slot = 0;
         if (_sem!.get_system_state() is FhSaveExtensionSystemState.SAVE) {
-            if (_smm!.get_slots_used() < _smm!.get_slots_total()) {
+            if (FhInternal.Saves.get_slots_used() < FhInternal.Saves.get_slots_total()) {
                 Vector2 size_new_save_btn = new(ImGui.GetContentRegionAvail().X, 0F);
 
                 if (ImGui.Button("New Save Data", size_new_save_btn)) {
@@ -118,9 +81,9 @@ public sealed class FhSaveUiModule : FhModule {
             slot = 1;
         }
 
-        ReadOnlySpan<FhSaveDisplayData> display_data = _smm!.get_display_data();
+        ReadOnlySpan<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
 
-        for (; slot < _smm!.get_slots_total(); slot++) {
+        for (; slot < FhInternal.Saves.get_slots_total(); slot++) {
             if (display_data[slot].valid) {
                 ui_savefile(slot, display_data[slot]);
             }
@@ -144,8 +107,8 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        string active_set      = _smm!.get_active_set();
-        string slots_text      = $"({_smm!.get_slots_used()}/{_smm!.get_slots_total()})";
+        string active_set      = FhInternal.Saves.get_active_set();
+        string slots_text      = $"({FhInternal.Saves.get_slots_used()}/{FhInternal.Saves.get_slots_total()})";
         string active_set_text = $"{active_set} {slots_text}";
 
         float width_window = ImGui.GetWindowSize().X;
@@ -162,7 +125,7 @@ public sealed class FhSaveUiModule : FhModule {
              * It is important to only retrieve values from it once, not every frame.
              */
 
-            _sets = _smm!.get_sets();
+            _sets = FhInternal.Saves.get_sets();
             ImGui.OpenPopup("Select Set"u8);
         }
 
@@ -174,7 +137,7 @@ public sealed class FhSaveUiModule : FhModule {
                 bool is_selected = set == active_set;
 
                 if (ImGui.Selectable(set, is_selected)) {
-                    _smm!.switch_active_set(set);
+                    FhInternal.Saves.switch_active_set(set);
                     ImGui.CloseCurrentPopup();
                 }
 

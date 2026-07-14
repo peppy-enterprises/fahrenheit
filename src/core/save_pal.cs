@@ -201,6 +201,39 @@ internal struct FhSaveHeader2 {
     public byte   _0x2C;
 }
 
+/// <summary>
+///     Contains the fields the game shows as part of its standard save game display.
+/// </summary>
+[StructLayout(LayoutKind.Sequential)]
+internal struct FhSaveDisplayData {
+
+    /* [fkelava 19/01/26 13:14]
+     * An array of these of size DEFAULT_SET_SIZE is allocated by the save UI module on boot.
+     * These instances are continually reused. To prevent garbage from being displayed when a slot
+     * occupied in the previous set becomes empty, the save manager module (un)sets 'valid'.
+     *
+     * These inline arrays are in reality UTF-8 strings, since both Iggy
+     * and ImGui accept them as input. The sizes are taken from the base game.
+     */
+
+    internal bool valid;
+
+    public InlineArray64 <byte> header;
+    public InlineArray16 <byte> slot;
+    public InlineArray64 <byte> create_time;
+    public InlineArray128<byte> location;
+    public InlineArray128<byte> play_time;
+    public InlineArray32 <byte> player_name;
+    public InlineArray16 <byte> icon_chr1;
+    public InlineArray16 <byte> icon_chr2;
+    public InlineArray16 <byte> icon_chr3;
+    public InlineArray16 <byte> icon_map;
+    public InlineArray128<byte> chapter;
+    public InlineArray128<byte> completion;
+    public InlineArray64 <byte> lm_level;
+    public InlineArray64 <byte> lm_job;
+}
+
 /* [fkelava 10/01/26 16:53]
  * The save PAL, being a binding to implementation details of each game,
  * is virtually illegible without consulting the original method bodies.

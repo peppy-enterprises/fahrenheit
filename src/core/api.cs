@@ -34,5 +34,7 @@ internal static class FhInternal {
     public static readonly FhLoader      Loader      = new FhLoader();
     public static readonly FhMethodTable MethodTable = new FhMethodTable();
     public static readonly FhHasher      Hasher      = new FhHasher();
+    public static readonly FhState       State       = new();
+    public static readonly FhSaves       Saves       = new();
     public static readonly FhSettings    Settings    = new();
 }
