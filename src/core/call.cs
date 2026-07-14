@@ -72,6 +72,30 @@ public static unsafe partial class FhCall {
 
     // RT - ImGui
 
+    /* [fkelava 6/10/24 01:54]
+     * See src/core/native/Windows.Win32.IDXGISwapChain.g.cs for swapchain method signatures.
+     */
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal delegate nint DXGI_IDXGISwapChain_Present(
+        IDXGISwapChain* pSwapChain,
+        uint            SyncInterval,
+        DXGI_PRESENT    Flags);
+    internal static FhMethodHandle<DXGI_IDXGISwapChain_Present> h_DXGI_IDXGISwapChain_Present
+        (IDXGISwapChain* ptr_swapchain)
+        => new( new FhMethodLocation(ptr_swapchain->lpVtbl[8]) );
+
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal delegate nint DXGI_IDXGISwapChain_ResizeBuffers(
+        IDXGISwapChain* pSwapChain,
+        uint            BufferCount,
+        uint            Width,
+        uint            Height,
+        DXGI_FORMAT     NewFormat,
+        uint            SwapChainFlags);
+    internal static FhMethodHandle<DXGI_IDXGISwapChain_ResizeBuffers> h_DXGI_IDXGISwapChain_ResizeBuffers
+        (IDXGISwapChain* ptr_swapchain)
+        => new( new FhMethodLocation(ptr_swapchain->lpVtbl[13]) );
+
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     internal delegate int Phyre_PFramework_PInput_Update();
     internal static FhMethodHandle<Phyre_PFramework_PInput_Update> h_Phyre_PFramework_PInput_Update
