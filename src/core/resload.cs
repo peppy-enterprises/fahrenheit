@@ -109,14 +109,15 @@ public sealed record FhTexture(string path, FhTextureType type) {
     [SupportedOSPlatform("windows6.1")]
     internal void unload() {
         /* [fkelava 01/05/26 18:51]
-         * Testing the return value of Release is meaningless because it is not guaranteed to be precise.
-         * If you believe you're leaking textures, turn on the D3D debug layer instead.
-         *
          * SAFETY: cast of opaque 'ImTextureID' to true underlying type 'ID3D11ShaderResourceView' is well defined
          * see: https://github.com/ocornut/imgui/blob/da137cbbb066e57f4b44f3f331c36e1e30e1cbe2/backends/imgui_impl_dx11.cpp#L5
          * > {...} Use 'ID3D11ShaderResourceView*' as texture identifier. {...}
          */
         unsafe {
+            /* [fkelava 14/07/26 18:42]
+             * Testing the return value of Release is meaningless because it is not guaranteed to be precise.
+             * If you believe you're leaking textures, turn on the D3D debug layer instead.
+             */
             ((ID3D11ShaderResourceView*)(void*)_tex_ref.GetTexID())->Release();
         }
 
