@@ -8,7 +8,6 @@ namespace Fahrenheit;
 /// <summary>
 ///     Allows multiple sets of saves to exist.
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 internal sealed class FhSaves {
 
     /* [fkelava 07/11/25 15:01]
