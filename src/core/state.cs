@@ -3,7 +3,7 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-namespace Fahrenheit.Runtime;
+namespace Fahrenheit;
 
 /* [fkelava 23/02/26 16:59]
  * Mods must be able to persist some information between saves or game sessions.
@@ -24,18 +24,7 @@ namespace Fahrenheit.Runtime;
 ///     In your module, implement <see cref="FhModule.load_local_state(FileStream, FhLocalStateInfo)"/>
 ///     and <see cref="FhModule.save_local_state(FileStream)"/>.
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public sealed class FhLocalStateModule : FhModule {
-
-    private FhSaveManagerModule? _smm;
-
-    public FhLocalStateModule() { }
-
-    public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        FhModuleHandle<FhSaveManagerModule> handle_smm = new(this);
-
-        return handle_smm.try_get_module(out _smm);
-    }
+internal sealed class FhState {
 
     /// <summary>
     ///     For the given save <paramref name="slot"/> and given module's <paramref name="module_context"/>,
@@ -45,7 +34,7 @@ public sealed class FhLocalStateModule : FhModule {
         string local_state_dir = Path.Join(
             FhEnvironment.Finder.State.FullName,
             FhInternal.Hasher.SaveSetHash,
-            _smm!.get_active_set(),
+            FhInternal.Saves.get_active_set(),
             FhSavePal.pal_get_save_subfolder(),
             FhSavePal.pal_get_save_name_for_slot(slot),
             mod_context.Manifest.Id,
@@ -72,11 +61,11 @@ public sealed class FhLocalStateModule : FhModule {
                 using FileStream state_meta_fs = File.Open(state_meta_fn, FileMode.Open,         FileAccess.Read, FileShare.None);
                 using FileStream state_fs      = File.Open(state_fn,      FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read);
 
-                _logger.Debug($"Reading metadata for module {module_type}.");
+                FhInternal.Log.Debug($"Reading metadata for module {module_type}.");
                 FhLocalStateInfo state_meta = JsonSerializer.Deserialize<FhLocalStateInfo>(state_meta_fs, FhUtil.InternalJsonOpts)
                     ?? throw new Exception("FH_E_LOCAL_STATE_META_BLOCK_NULL");
 
-                _logger.Debug($"{state_fn} -> {module_type}.");
+                FhInternal.Log.Debug($"{state_fn} -> {module_type}.");
                 module_context.Module.load_local_state(state_fs, state_meta);
             }
         }
@@ -99,10 +88,10 @@ public sealed class FhLocalStateModule : FhModule {
                 using FileStream state_meta_fs = File.Open(state_meta_fn, FileMode.Create,       FileAccess.Write, FileShare.None);
                 using FileStream state_fs      = File.Open(state_fn,      FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
 
-                _logger.Debug($"Writing metadata for module {module_type}.");
+                FhInternal.Log.Debug($"Writing metadata for module {module_type}.");
                 state_meta_fs.Write(JsonSerializer.SerializeToUtf8Bytes(state_meta, FhUtil.InternalJsonOpts));
 
-                _logger.Debug($"{module_type} -> {state_fn}.");
+                FhInternal.Log.Debug($"{module_type} -> {state_fn}.");
                 module_context.Module.save_local_state(state_fs);
             }
         }

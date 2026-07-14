@@ -3,15 +3,12 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-using System.Diagnostics;
-
-namespace Fahrenheit.Runtime;
+namespace Fahrenheit;
 
 /// <summary>
 ///     Allows multiple sets of saves to exist.
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public sealed class FhSaveManagerModule : FhModule {
+internal sealed class FhSaves {
 
     /* [fkelava 07/11/25 15:01]
      * Fh computes a load-order sensitive hash over all mods that declare 'separate saves'.
@@ -31,7 +28,7 @@ public sealed class FhSaveManagerModule : FhModule {
     private readonly FhSaveDisplayData[]            _sm_display_data;
     private readonly Dictionary<string, FileInfo[]> _sm_file_attributes;
 
-    public FhSaveManagerModule() {
+    public FhSaves() {
         _sm_path_base        = Path.Join(FhEnvironment.Finder.Saves.FullName, FhInternal.Hasher.SaveSetHash);
         _sm_path_default_set = Path.Join(_sm_path_base, FhSavePal.DEFAULT_SET_NAME, FhSavePal.pal_get_save_subfolder());
         _sm_sets             = [];
@@ -41,11 +38,6 @@ public sealed class FhSaveManagerModule : FhModule {
         _sm_active_set_saves = new int              [_sm_set_size];
         _sm_display_data     = new FhSaveDisplayData[_sm_set_size];
         _sm_file_attributes  = [];
-    }
-
-    public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        _sm_create_default_set();
-        _sm_query_sets();
 
         /* [fkelava 19/01/26 18:13]
          * Save PAL is not ready to perform indexing operations at 'init' time because
@@ -54,7 +46,8 @@ public sealed class FhSaveManagerModule : FhModule {
          * Set indexing is performed just in time when SEM transitions to save/load mode.
          */
 
-        return true;
+        _sm_create_default_set();
+        _sm_query_sets();
     }
 
     /* [fkelava 19/01/26 12:03]
@@ -165,12 +158,12 @@ public sealed class FhSaveManagerModule : FhModule {
          */
 
         if (!_sm_sets.Contains(_sm_active_set)) {
-            _logger.Warning($"Active set {_sm_active_set} was deleted; falling back to default.");
+            FhInternal.Log.Warning($"Active set {_sm_active_set} was deleted; falling back to default.");
             _sm_active_set = FhSavePal.DEFAULT_SET_NAME;
         }
 
         if (!_sm_sets.Contains(FhSavePal.DEFAULT_SET_NAME)) {
-            _logger.Error("Default set was deleted; forcibly re-generating.");
+            FhInternal.Log.Error("Default set was deleted; forcibly re-generating.");
 
             _sm_create_default_set();
             _sm_query_sets();
