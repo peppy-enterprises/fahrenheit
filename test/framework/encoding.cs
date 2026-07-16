@@ -63,6 +63,34 @@ public class FhEncodingRegressionTests {
         Assert.That(expected_result.SequenceEqual(encoded));
     }
 
+    [TestCase("Amulet x 90", FhLangId.Chinese,  FhGameId.FFX)]
+    [TestCase("Amulet x 90", FhLangId.Japanese, FhGameId.FFX)]
+    [TestCase("Amulet x 90", FhLangId.Korean,   FhGameId.FFX)]
+    [TestCase("Amulet x 90", FhLangId.Chinese,  FhGameId.FFX2, Ignore = "CJK encodings for FF X-2 are not yet supported.")]
+    [TestCase("Amulet x 90", FhLangId.Japanese, FhGameId.FFX2, Ignore = "CJK encodings for FF X-2 are not yet supported.")]
+    [TestCase("Amulet x 90", FhLangId.Korean,   FhGameId.FFX2, Ignore = "CJK encodings for FF X-2 are not yet supported.")]
+    public void ffx_cjk_extension(string input, FhLangId lang, FhGameId game) {
+        ReadOnlySpan<byte> utf8_bytes_input = Encoding.UTF8.GetBytes(input);
+        FhEncodingFlags    flags            = FhEncodingFlags.IMPLICIT_C0_EXTENSION;
+
+        byte[] encoded = new byte[ FhEncoding.compute_encode_buffer_size(
+            utf8_bytes_input,
+            lang,
+            game,
+            flags) ];
+
+        FhEncoding.encode(utf8_bytes_input, encoded, lang, game, flags);
+
+        ReadOnlySpan<byte> expected_result = lang switch {
+            FhLangId.Chinese  or
+            FhLangId.Korean   => [ 0x5A, 0x80, 0x88, 0x7F, 0x78, 0x87, 0x3A, 0x8B, 0x3A, 0x39, 0x30 ],
+            FhLangId.Japanese => [ 0x2C, 0x30, 0x2C, 0x56, 0x2C, 0x5E, 0x2C, 0x55, 0x2C, 0x4E, 0x2C, 0x5D, 0x3A, 0x2C, 0x61, 0x3A, 0x39, 0x30 ],
+            _                 => [ ]
+        };
+
+        Assert.That(expected_result.SequenceEqual(encoded));
+    }
+
     [TestCase("{COLOR:88}Party Member: Magus Sisters{COLOR:41}")]
     public void ffx_we_curly_brackets_in_ignore_expr(string input) {
         ReadOnlySpan<byte> utf8_bytes_input = Encoding.UTF8.GetBytes(input);
