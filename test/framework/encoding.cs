@@ -71,7 +71,7 @@ public class FhEncodingRegressionTests {
     [TestCase("Amulet x 90", FhLangId.Korean,   FhGameId.FFX2, Ignore = "CJK encodings for FF X-2 are not yet supported.")]
     public void ffx_cjk_extension(string input, FhLangId lang, FhGameId game) {
         ReadOnlySpan<byte> utf8_bytes_input = Encoding.UTF8.GetBytes(input);
-        FhEncodingFlags    flags            = FhEncodingFlags.IMPLICIT_C0_EXTENSION;
+        FhEncodingFlags    flags            = FhEncodingFlags.IMPLICIT_CJK_EXTENSION;
 
         byte[] encoded = new byte[ FhEncoding.compute_encode_buffer_size(
             utf8_bytes_input,
