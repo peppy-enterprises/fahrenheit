@@ -167,7 +167,10 @@ public static class FhEncoding {
     /// <returns>Whether the character was rewritten.</returns>
     private static bool _extend_cjk(ref Rune code_point) {
         /* [fkelava 14/07/26 17:23]
-         * See issue #200, https://www.unicode.org/charts/PDF/UFF00.pdf, https://www.unicode.org/charts/PDF/U0000.pdf.
+         * See issue #200, https://www.unicode.org/charts/PDF/UFF00.pdf, https://www.unicode.org/charts/PDF/U0000.pdf,
+         * https://www.compart.com/en/unicode/decomposition/%3Cwide%3E.
+         *
+         * We only permit extension if the extended character strictly decomposes into its non-extended form.
          */
         int unicode_scalar  = code_point.Value;
         int extended_scalar = unicode_scalar switch {
