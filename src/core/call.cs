@@ -37,8 +37,8 @@ public static unsafe partial class FhCall {
     // RT - Input tracking
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate void AtelExec_Internal_871D10();
-    internal static FhMethodHandle<AtelExec_Internal_871D10> h_AtelExec_Internal_871D10 =>
+    internal delegate void d_AtelExec_Internal_871D10();
+    internal static FhMethodHandle<d_AtelExec_Internal_871D10> AtelExec_Internal_871D10 =>
         new( new FhMethodLocation(0x471D10, 0x32CE90) );
 
     // RT - Platform bind
@@ -47,7 +47,7 @@ public static unsafe partial class FhCall {
      * https://github.com/terrafx/terrafx.interop.windows/blob/55590efae0f77f4c8db465a80d18b4f5b679696c/sources/Interop/Windows/DirectX/um/d3d11/DirectX.cs#L25
      */
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate HRESULT D3D11_D3D11CreateDeviceAndSwapChain(
+    internal delegate HRESULT d_D3D11_D3D11CreateDeviceAndSwapChain(
         IDXGIAdapter*         pAdapter,
         D3D_DRIVER_TYPE       DriverType,
         HMODULE               Software,
@@ -60,14 +60,14 @@ public static unsafe partial class FhCall {
         ID3D11Device**        ppDevice,
         D3D_FEATURE_LEVEL*    pFeatureLevel,
         ID3D11DeviceContext** ppImmediateContext);
-    internal static FhMethodHandle<D3D11_D3D11CreateDeviceAndSwapChain> h_D3D11_D3D11CreateDeviceAndSwapChain =>
+    internal static FhMethodHandle<d_D3D11_D3D11CreateDeviceAndSwapChain> D3D11_D3D11CreateDeviceAndSwapChain =>
         new( new FhMethodLocation("D3D11.dll", "D3D11CreateDeviceAndSwapChain") );
 
     // RT - Game UI
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate void TODrawMessageWindow();
-    internal static FhMethodHandle<TODrawMessageWindow> h_TODrawMessageWindow
+    internal delegate void d_TODrawMessageWindow();
+    internal static FhMethodHandle<d_TODrawMessageWindow> TODrawMessageWindow
         => new( new FhMethodLocation(0x4ABCE0, 0x391D00) );
 
     // RT - ImGui
@@ -76,146 +76,146 @@ public static unsafe partial class FhCall {
      * See src/core/native/Windows.Win32.IDXGISwapChain.g.cs for swapchain method signatures.
      */
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate nint DXGI_IDXGISwapChain_Present(
+    internal delegate nint d_DXGI_IDXGISwapChain_Present(
         IDXGISwapChain* pSwapChain,
         uint            SyncInterval,
         DXGI_PRESENT    Flags);
-    internal static FhMethodHandle<DXGI_IDXGISwapChain_Present> h_DXGI_IDXGISwapChain_Present
+    internal static FhMethodHandle<d_DXGI_IDXGISwapChain_Present> DXGI_IDXGISwapChain_Present
         (IDXGISwapChain* ptr_swapchain)
         => new( new FhMethodLocation(ptr_swapchain->lpVtbl[8]) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate nint DXGI_IDXGISwapChain_ResizeBuffers(
+    internal delegate nint d_DXGI_IDXGISwapChain_ResizeBuffers(
         IDXGISwapChain* pSwapChain,
         uint            BufferCount,
         uint            Width,
         uint            Height,
         DXGI_FORMAT     NewFormat,
         uint            SwapChainFlags);
-    internal static FhMethodHandle<DXGI_IDXGISwapChain_ResizeBuffers> h_DXGI_IDXGISwapChain_ResizeBuffers
+    internal static FhMethodHandle<d_DXGI_IDXGISwapChain_ResizeBuffers> DXGI_IDXGISwapChain_ResizeBuffers
         (IDXGISwapChain* ptr_swapchain)
         => new( new FhMethodLocation(ptr_swapchain->lpVtbl[13]) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate int Phyre_PFramework_PInput_Update();
-    internal static FhMethodHandle<Phyre_PFramework_PInput_Update> h_Phyre_PFramework_PInput_Update
+    internal delegate int d_Phyre_PFramework_PInput_Update();
+    internal static FhMethodHandle<d_Phyre_PFramework_PInput_Update> Phyre_PFramework_PInput_Update
         => new( new FhMethodLocation(0x225930, 0x6B51E0) );
 
     // RT - Game loop
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void Sg_MainLoop(float delta);
-    internal static FhMethodHandle<Sg_MainLoop> h_Sg_MainLoop
+    internal delegate void d_Sg_MainLoop(float delta);
+    internal static FhMethodHandle<d_Sg_MainLoop> Sg_MainLoop
         => new( new FhMethodLocation(0x420C00, 0x205150) );
 
     // RT - EFL
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate PStreamFile* Phyre_PSerialization_PStreamFile_ctor(
+    internal delegate PStreamFile* d_Phyre_PSerialization_PStreamFile_ctor(
         PStreamFile* ptr_this,
         nint         ptr_path,
         bool         read_only,
         nint         p3,  // unused?
         nint         p4,  // unused?
         bool         p5); // unused?
-    internal static FhMethodHandle<Phyre_PSerialization_PStreamFile_ctor> h_Phyre_PSerialization_PStreamFile_ctor
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_ctor> Phyre_PSerialization_PStreamFile_ctor
         => new( new FhMethodLocation(0x207D80, 0x490E40) );
 
     // RT - Phyre loader
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate PCluster* ClusterManager_loadPCluster(nint ptr_this, byte* ptr_file_name);
-    internal static FhMethodHandle<ClusterManager_loadPCluster> h_ClusterManager_loadPCluster
+    internal delegate PCluster* d_ClusterManager_loadPCluster(nint ptr_this, byte* ptr_file_name);
+    internal static FhMethodHandle<d_ClusterManager_loadPCluster> ClusterManager_loadPCluster
         => new( new FhMethodLocation(0x29BA80, 0x9E880) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate int PApplication_FixupClusters(PCluster** ptr_clusters, int nb_clusters);
-    internal static FhMethodHandle<PApplication_FixupClusters> h_PApplication_FixupClusters
+    internal delegate int d_PApplication_FixupClusters(PCluster** ptr_clusters, int nb_clusters);
+    internal static FhMethodHandle<d_PApplication_FixupClusters> PApplication_FixupClusters
         => new( new FhMethodLocation(0x223740, 0x6B3020) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate void ClusterManager_releasePCluster(nint ptr_this, PCluster* ptr_cluster);
-    internal static FhMethodHandle<ClusterManager_releasePCluster> h_ClusterManager_releasePCluster
+    internal delegate void d_ClusterManager_releasePCluster(nint ptr_this, PCluster* ptr_cluster);
+    internal static FhMethodHandle<d_ClusterManager_releasePCluster> ClusterManager_releasePCluster
         => new( new FhMethodLocation(0x29BEF0, 0x9ED00) );
 
     // RT - CD
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate nint CDfileSize_PC(int arg1);
-    internal static FhMethodHandle<CDfileSize_PC> h_CDfileSize_PC
+    internal delegate nint d_CDfileSize_PC(int arg1);
+    internal static FhMethodHandle<d_CDfileSize_PC> CDfileSize_PC
         => new( new FhMethodLocation(0x6428A0, 0x74E9A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate nint check_ex_file_size(int arg1, int arg2);
-    internal static FhMethodHandle<check_ex_file_size> h_check_ex_file_size
+    internal delegate nint d_check_ex_file_size(int arg1, int arg2);
+    internal static FhMethodHandle<d_check_ex_file_size> check_ex_file_size
         => new( new FhMethodLocation(0x36D770, 0x1396A0) );
 
     // Save PAL
     // RT - Save impl
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void SaveDataManager_debugSave_Internal_6F0650(int size, byte* ptr);
-    internal static FhMethodHandle<SaveDataManager_debugSave_Internal_6F0650> h_SaveDataManager_debugSave_Internal_6F0650
+    internal delegate void d_SaveDataManager_debugSave_Internal_6F0650(int size, byte* ptr);
+    internal static FhMethodHandle<d_SaveDataManager_debugSave_Internal_6F0650> SaveDataManager_debugSave_Internal_6F0650
         => new( new FhMethodLocation(0x2F0650, 0x11D510) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void SaveDataToSave();
-    internal static FhMethodHandle<SaveDataToSave> h_SaveDataToSave
+    internal delegate void d_SaveDataToSave();
+    internal static FhMethodHandle<d_SaveDataToSave> SaveDataToSave
         => new( new FhMethodLocation(0x248950, 0x884D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void SaveDataToLoad();
-    internal static FhMethodHandle<SaveDataToLoad> h_SaveDataToLoad
+    internal delegate void d_SaveDataToLoad();
+    internal static FhMethodHandle<d_SaveDataToLoad> SaveDataToLoad
         => new( new FhMethodLocation(0x248910, 0x884A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate void TkMenuJumpToLoadedScene();
-    internal static FhMethodHandle<TkMenuJumpToLoadedScene> h_TkMenuJumpToLoadedScene
+    internal delegate void d_TkMenuJumpToLoadedScene();
+    internal static FhMethodHandle<d_TkMenuJumpToLoadedScene> TkMenuJumpToLoadedScene
         => new( new FhMethodLocation(0x4B4E70, 0x36AD50 ) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate int fix_mappic(ushort arg1);
-    internal static FhMethodHandle<fix_mappic> h_fix_mappic
+    internal delegate int d_fix_mappic(ushort arg1);
+    internal static FhMethodHandle<d_fix_mappic> fix_mappic
         => new( new FhMethodLocation(0x2EF830, 0x11C9B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate int isNeedShowJapanLogo();
-    internal static FhMethodHandle<isNeedShowJapanLogo> h_isNeedShowJapanLogo
+    internal delegate int d_isNeedShowJapanLogo();
+    internal static FhMethodHandle<d_isNeedShowJapanLogo> isNeedShowJapanLogo
         => new( new FhMethodLocation(0x387450, 0x20F500) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate byte* AtelGetSaveDicName(ushort arg1, uint arg2);
-    internal static FhMethodHandle<AtelGetSaveDicName> h_AtelGetSaveDicName
+    internal delegate byte* d_AtelGetSaveDicName(ushort arg1, uint arg2);
+    internal static FhMethodHandle<d_AtelGetSaveDicName> AtelGetSaveDicName
         => new( new FhMethodLocation(0x46C3C0, 0x326B80) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void SaveDataGetLoc(int arg1, byte* arg2);
-    internal static FhMethodHandle<SaveDataGetLoc> h_SaveDataGetLoc
+    internal delegate void d_SaveDataGetLoc(int arg1, byte* arg2);
+    internal static FhMethodHandle<d_SaveDataGetLoc> SaveDataGetLoc
         => new( new FhMethodLocation(0x2480E0, 0x87CB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate nint SaveDataWriteCrc(byte* arg1);
-    internal static FhMethodHandle<SaveDataWriteCrc> h_SaveDataWriteCrc
+    internal delegate nint d_SaveDataWriteCrc(byte* arg1);
+    internal static FhMethodHandle<d_SaveDataWriteCrc> SaveDataWriteCrc
         => new( new FhMethodLocation(0x2490D0, 0x889C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate int SaveDataCheckCrc();
-    internal static FhMethodHandle<SaveDataCheckCrc> h_SaveDataCheckCrc
+    internal delegate int d_SaveDataCheckCrc();
+    internal static FhMethodHandle<d_SaveDataCheckCrc> SaveDataCheckCrc
         => new( new FhMethodLocation(0x247F20, 0x87B10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void _SetUpDefaultSaveFolder();
-    internal static FhMethodHandle<_SetUpDefaultSaveFolder> h__SetUpDefaultSaveFolder
+    internal delegate void d__SetUpDefaultSaveFolder();
+    internal static FhMethodHandle<d__SetUpDefaultSaveFolder> _SetUpDefaultSaveFolder
         => new( new FhMethodLocation(0x2F0470, 0x11D310) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate bool isNeedRenamePlayer(byte arg1);
-    internal static FhMethodHandle<isNeedRenamePlayer> h_isNeedRenamePlayer
+    internal delegate bool d_isNeedRenamePlayer(byte arg1);
+    internal static FhMethodHandle<d_isNeedRenamePlayer> isNeedRenamePlayer
         => new( new FhMethodLocation(0x387430, 0x20F4E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void SaveDataSaveLoadSucceed(FhSaveSystemState arg1);
-    internal static FhMethodHandle<SaveDataSaveLoadSucceed> h_SaveDataSaveLoadSucceed
+    internal delegate void d_SaveDataSaveLoadSucceed(FhSaveSystemState arg1);
+    internal static FhMethodHandle<d_SaveDataSaveLoadSucceed> SaveDataSaveLoadSucceed
         => new( new FhMethodLocation(0x2486F0, 0x88290) );
 
     // INTERNAL/RESTRICTED - END
@@ -223,16 +223,16 @@ public static unsafe partial class FhCall {
     // PUBLIC/UNRESTRICTED - BEGIN
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public delegate void d_CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int CT_Exec(AtelBasicWorker* work, AtelStack* stack);
+    public delegate int d_CT_Exec(AtelBasicWorker* work, AtelStack* stack);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int CT_RetInt(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public delegate int d_CT_RetInt(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate float CT_RetFloat(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public delegate float d_CT_RetFloat(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
     // PUBLIC/UNRESTRICTED - END
 

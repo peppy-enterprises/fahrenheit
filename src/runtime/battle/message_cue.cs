@@ -18,11 +18,11 @@ public unsafe class CustomMessageCueModule : FhModule {
     public CustomMessageCueModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return FFX.FhCall.h_MsMessageCueProcess.hook(this, _h_MsMessageCueProcess);
+        return FFX.FhCall.MsMessageCueProcess.hook(this, _h_MsMessageCueProcess);
     }
 
     private int _draw_custom_message_window(byte* message) {
-        FFX.FhCall.h_FUN_0089db10.fnptr!(0, message);
+        FFX.FhCall.FUN_0089db10.fnptr!(0, message);
         return 7;
     }
 
@@ -48,7 +48,7 @@ public unsafe class CustomMessageCueModule : FhModule {
                        ||  bVar3 <= bVar2)) {
                         return btl->message_cue_count;
                     }
-                    FFX.FhCall.h_TOBtlCloseSimpleHelpMes.fnptr!();
+                    FFX.FhCall.TOBtlCloseSimpleHelpMes.fnptr!();
                 }
 
                 bVar2 = 0;
@@ -70,18 +70,18 @@ public unsafe class CustomMessageCueModule : FhModule {
             MessageCue cue = btl->message_cues[cue_idx];
 
             if (cue.type is MessageCueType.LEARN_COMMAND or MessageCueType.LEARN_LIMIT_TYPE) {
-                FFX.FhCall.h_MsRegSEplay.fnptr!(0xFF, 0x39);
+                FFX.FhCall.MsRegSEplay.fnptr!(0xFF, 0x39);
             }
 
             int draw_ret = cue.type switch {
-                MessageCueType.PLY_NAME         => FFX.FhCall.h_TOBtlDrawStdChrNameMessageWindow       .fnptr!(cue.arg1, cue.arg2),
-                MessageCueType.PREEMPTIVE       => FFX.FhCall.h_TOBtlDrawFirstStrikePlayerMessageWindow.fnptr!(),
-                MessageCueType.AMBUSH           => FFX.FhCall.h_TOBtlDrawFirstStrikeEnemyMessageWindow .fnptr!(),
-                MessageCueType.STEAL_ITEM       => FFX.FhCall.h_TOBtlDrawGetItemMessageWindow          .fnptr!((byte*)cue.arg1, cue.arg2),
-                MessageCueType.CAPTURE_MONSTER  => FFX.FhCall.h_TOBtlDrawCaptureMonsterMessageWindow   .fnptr!(cue.arg1, cue.arg2),
-                MessageCueType.LEARN_COMMAND    => FFX.FhCall.h_TOBtlDrawLearningMessageWindow         .fnptr!(cue.arg1, cue.arg2),
-                MessageCueType.LEARN_LIMIT_TYPE => FFX.FhCall.h_TOBtlDrawGetLimitTypeMessageWindow     .fnptr!(cue.arg1, cue.arg2),
-                MessageCueType.STEAL_MONEY      => FFX.FhCall.h_TOBtlDrawGetMoneyMessageWindow         .fnptr!(cue.arg1),
+                MessageCueType.PLY_NAME         => FFX.FhCall.TOBtlDrawStdChrNameMessageWindow       .fnptr!(cue.arg1, cue.arg2),
+                MessageCueType.PREEMPTIVE       => FFX.FhCall.TOBtlDrawFirstStrikePlayerMessageWindow.fnptr!(),
+                MessageCueType.AMBUSH           => FFX.FhCall.TOBtlDrawFirstStrikeEnemyMessageWindow .fnptr!(),
+                MessageCueType.STEAL_ITEM       => FFX.FhCall.TOBtlDrawGetItemMessageWindow          .fnptr!((byte*)cue.arg1, cue.arg2),
+                MessageCueType.CAPTURE_MONSTER  => FFX.FhCall.TOBtlDrawCaptureMonsterMessageWindow   .fnptr!(cue.arg1, cue.arg2),
+                MessageCueType.LEARN_COMMAND    => FFX.FhCall.TOBtlDrawLearningMessageWindow         .fnptr!(cue.arg1, cue.arg2),
+                MessageCueType.LEARN_LIMIT_TYPE => FFX.FhCall.TOBtlDrawGetLimitTypeMessageWindow     .fnptr!(cue.arg1, cue.arg2),
+                MessageCueType.STEAL_MONEY      => FFX.FhCall.TOBtlDrawGetMoneyMessageWindow         .fnptr!(cue.arg1),
                 MessageCueType.FH_CUSTOM        => _draw_custom_message_window((byte*)cue.arg1),
                 _                               => -1,
             };

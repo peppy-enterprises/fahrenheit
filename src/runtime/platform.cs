@@ -67,7 +67,7 @@ public unsafe sealed class FhPlatformBindingModule : FhModule {
             && h_resload.try_get_module(out FhResourceLoaderModule? m_resload)
             && _users.Add(m_imgui)
             && _users.Add(m_resload)
-            && FhCall.h_D3D11_D3D11CreateDeviceAndSwapChain.hook(this, h_init_d3d);
+            && FhCall.D3D11_D3D11CreateDeviceAndSwapChain.hook(this, h_init_d3d);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public unsafe sealed class FhPlatformBindingModule : FhModule {
          * > Flags | (uint)D3D11_CREATE_DEVICE_FLAG.D3D11_CREATE_DEVICE_DEBUG.
          */
 
-        HRESULT hr = FhCall.h_D3D11_D3D11CreateDeviceAndSwapChain.chain_from(h_init_d3d).fnptr!(
+        HRESULT hr = FhCall.D3D11_D3D11CreateDeviceAndSwapChain.chain_from(h_init_d3d).fnptr!(
             pAdapter,
             DriverType,
             Software,

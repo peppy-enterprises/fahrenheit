@@ -37,13 +37,15 @@
     <!-- PACKAGE REFERENCES -->
     <ItemGroup>
         <PackageReference Include="CsvHelper" Version="33.1.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.6.0" />
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta5.25306.1" />
     </ItemGroup>
 
+    <!-- ASSET PACKAGING -->
     <ItemGroup>
-        <None Update="fhstep.typemap.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+        <None Include="data/*.ffx*.csv"  CopyToOutputDirectory="Always" />
+        <None Include="data/*.ffx*.json" CopyToOutputDirectory="Always" />
+        <None Include="data/*.ffx*.rsp"  CopyToOutputDirectory="Always" />
     </ItemGroup>
 
 </Project>

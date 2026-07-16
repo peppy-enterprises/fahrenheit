@@ -14,8 +14,8 @@ public class GameLoopEventsImplModule : FhModule {
         // TODO: Support `PostReturnToTitle` in FFX-2
         bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
 
-        return FhCall.h_Sg_MainLoop.hook(this, raise_update_events)
-            && (!is_ffx || FFX.FhCall.h_AtelSetEventJump2.hook(this, handle_warp));
+        return FhCall.Sg_MainLoop.hook(this, raise_update_events)
+            && (!is_ffx || FFX.FhCall.AtelSetEventJump2.hook(this, handle_warp));
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ public class GameLoopEventsImplModule : FhModule {
     private void raise_update_events(float delta) {
         FhApi.Events.Common.GameLoop.PreUpdate.invoke(new() { delta = delta });
 
-        FhCall.h_Sg_MainLoop.chain_from(raise_update_events).fnptr!(delta);
+        FhCall.Sg_MainLoop.chain_from(raise_update_events).fnptr!(delta);
 
         FhApi.Events.Common.GameLoop.PostUpdate.invoke(new() { delta = delta });
     }
@@ -43,7 +43,7 @@ public class GameLoopEventsImplModule : FhModule {
     /// <param name="do_fade">Non-zero if we should fade, zero if not</param>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void handle_warp(int room, int entrance, int do_fade) {
-        FFX.FhCall.h_AtelSetEventJump2.chain_from(handle_warp).fnptr!(room, entrance, do_fade);
+        FFX.FhCall.AtelSetEventJump2.chain_from(handle_warp).fnptr!(room, entrance, do_fade);
 
         if (room == 23 && entrance == 0) {
             // Warping to the title screen
