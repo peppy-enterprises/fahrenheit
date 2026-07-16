@@ -163,6 +163,8 @@ public static class FhEncoding {
 
     /// <summary>
     ///     Attempts to extend an eligible character in the Shift-JIS table to its fullwidth form.
+    ///     <para/>
+    ///     Only valid for Chinese, Japanese, and Korean game languages.
     /// </summary>
     /// <returns>Whether the character was rewritten.</returns>
     private static bool _extend_cjk(ref Rune code_point) {
