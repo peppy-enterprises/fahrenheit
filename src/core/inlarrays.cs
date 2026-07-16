@@ -10,6 +10,8 @@ namespace Fahrenheit;
  * We use those where possible. For larger sizes, we define our own here.
  */
 
+// TODO: Create customized types for the uses of non-power-of-two InlineArrays, and replace all uses thereof.
+
 [InlineArray(17)]
 public struct InlineArray17<T> {
     private T _t;
