@@ -80,7 +80,7 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
 
         PCluster* ptr_cluster;
         fixed (byte* ptr_path_u8 = file_path_u8) {
-            ptr_cluster = FhCall.h_ClusterManager_loadPCluster.fnptr!(ptr_cluster_mgr, ptr_path_u8);
+            ptr_cluster = FhCall.ClusterManager_loadPCluster.fnptr!(ptr_cluster_mgr, ptr_path_u8);
         }
 
         if (ptr_cluster == null) {
@@ -88,7 +88,7 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
             return new FhPClusterScope(null, this);
         }
 
-        int rv_fixup = FhCall.h_PApplication_FixupClusters.fnptr!(&ptr_cluster, 1);
+        int rv_fixup = FhCall.PApplication_FixupClusters.fnptr!(&ptr_cluster, 1);
 
         if (rv_fixup != 0) {
             _logger.Warning($"PApplication::FixupClusters returned {rv_fixup} for {file_path}");
@@ -103,6 +103,6 @@ public unsafe sealed class FhPhyreLoaderModule : FhModule {
     /// </summary>
     internal void cluster_release(PCluster* ptr_cluster) {
         nint ptr_cluster_mgr = *_pp_cluster_mgr;
-        FhCall.h_ClusterManager_releasePCluster.fnptr!(ptr_cluster_mgr, ptr_cluster);
+        FhCall.ClusterManager_releasePCluster.fnptr!(ptr_cluster_mgr, ptr_cluster);
     }
 }

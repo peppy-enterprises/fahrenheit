@@ -40,7 +40,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         construct_index();
-        return FhCall.h_Phyre_PSerialization_PStreamFile_ctor.hook(this, h_fopen);
+        return FhCall.Phyre_PSerialization_PStreamFile_ctor.hook(this, h_fopen);
     }
 
     /* [fkelava 11/02/26 03:39]
@@ -114,7 +114,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         string path_normalized = normalize_path(path);
 
         if (!_index.TryGetValue(path_normalized, out string? path_modded)) {
-            return FhCall.h_Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path, read_only, p3, p4, p5);
+            return FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path, read_only, p3, p4, p5);
         }
 
         /* [fkelava 01/10/24 16:49]
@@ -149,7 +149,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
         if (ptr_this->handle_os == HANDLE.INVALID_HANDLE_VALUE) {
             _logger.Error($"File open failed for {path_modded} - bailing out");
-            return FhCall.h_Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path, read_only, p3, p4, p5);
+            return FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path, read_only, p3, p4, p5);
         }
 
         return ptr_this;

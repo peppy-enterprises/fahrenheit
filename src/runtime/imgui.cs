@@ -60,7 +60,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         FhModuleHandle<FhResourceLoaderModule> rlm_handle = new(this);
 
         return rlm_handle.try_get_module(out _rlm)
-            && FhCall.h_Phyre_PFramework_PInput_Update.hook(this, h_pinput);
+            && FhCall.Phyre_PFramework_PInput_Update.hook(this, h_pinput);
     }
 
     void IFhPlatformUser.platform_bind(
@@ -131,8 +131,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
         FhApi.ImGuiHelper.init();
 
-        FhCall.h_DXGI_IDXGISwapChain_Present      (_ptr_swapchain).hook(this, h_present);
-        FhCall.h_DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).hook(this, h_resize_buffers);
+        FhCall.DXGI_IDXGISwapChain_Present      (_ptr_swapchain).hook(this, h_present);
+        FhCall.DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).hook(this, h_resize_buffers);
     }
 
     /* [fkelava 16/02/26 14:59]
@@ -187,12 +187,12 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         if (_hWnd           == 0    // if assign_devices has not yet run, bail
          || _ptr_device     == null
          || _ptr_device_ctx == null)
-            return FhCall.h_Phyre_PFramework_PInput_Update.chain_from(h_pinput).fnptr!();
+            return FhCall.Phyre_PFramework_PInput_Update.chain_from(h_pinput).fnptr!();
 
         ImGuiIOPtr io = ImGui.GetIO();
         return io.WantCaptureKeyboard || io.WantCaptureMouse
             ? 0
-            : FhCall.h_Phyre_PFramework_PInput_Update.chain_from(h_pinput).fnptr!();
+            : FhCall.Phyre_PFramework_PInput_Update.chain_from(h_pinput).fnptr!();
     }
 
     /// <summary>
@@ -213,7 +213,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         }
 
         Interlocked.CompareExchange(ref _rtv_generated, 0, 1);
-        return FhCall.h_DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).
+        return FhCall.DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).
             chain_from(h_resize_buffers).fnptr!(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
     }
 
@@ -254,7 +254,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         ImGuiImplD3D11.RenderDrawData(ImGui.GetDrawData());
 
         _rlm!.release_pending_resources();
-        return FhCall.h_DXGI_IDXGISwapChain_Present(_ptr_swapchain).
+        return FhCall.DXGI_IDXGISwapChain_Present(_ptr_swapchain).
             chain_from(h_present).fnptr!(pSwapChain, SyncInterval, Flags);
     }
 }

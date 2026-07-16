@@ -7,43 +7,38 @@
  * A small tool to emit (hopefully) valid C# code from Ghidra symbol JSONs.
  */
 
-using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Text.Json;
-
-using CsvHelper;
-using CsvHelper.Configuration.Attributes;
-
 namespace Fahrenheit.Tools.STEP;
 
-// In Ghidra, select fields:
-// Name, Location, Function Signature, Symbol Source,
-// Symbol Type, Function Name, Call Conv, Namespace
+/// <summary>
+///     Represents a function declaration exported from Ghidra.
+/// </summary>
 internal struct FhFuncDecl {
-    [Index(0)] public string Name      { get; set; }
-    [Index(1)] public string Location  { get; set; }
-    [Index(2)] public string Signature { get; set; }
-    [Index(3)] public string Source    { get; set; }
-    [Index(4)] public string Type      { get; set; }
-    [Index(5)] public string FuncName  { get; set; }
-    [Index(6)] public string CallConv  { get; set; }
-    [Index(7)] public string Namespace { get; set; }
+    public string Name      { get; set; }
+    public string Location  { get; set; }
+    [Name("Function Signature")]
+    public string Signature { get; set; }
+    [Name("Symbol Source")]
+    public string Source    { get; set; }
+    [Name("Symbol Type")]
+    public string Type      { get; set; }
+    [Name("Function Name")]
+    public string FuncName  { get; set; }
+    [Name("Function Calling Convention")]
+    public string CallConv  { get; set; }
+    public string Namespace { get; set; }
 }
 
-// In Ghidra, select fields: Name, Location, Type, Data Type, Namespace, Source
-// Filter by: Source - User Defined, Type - Data Label
+/// <summary>
+///     Represents a global/data symbol exported from Ghidra.
+/// </summary>
 internal struct FhDataLabelDecl {
-    [Index(0)] public string Name      { get; set; }
-    [Index(1)] public string Location  { get; set; }
-    [Index(2)] public string Type      { get; set; }
-    [Index(3)] public string DataType  { get; set; }
-    [Index(4)] public string Namespace { get; set; }
-    [Index(5)] public string Source    { get; set; }
+    public string Name      { get; set; }
+    public string Location  { get; set; }
+    public string Type      { get; set; }
+    [Name("Data Type")]
+    public string DataType  { get; set; }
+    public string Namespace { get; set; }
+    public string Source    { get; set; }
 }
 
 internal ref struct FhFuncSignatureData {
@@ -52,45 +47,79 @@ internal ref struct FhFuncSignatureData {
     public List<FhFuncParameter> Parameters;
 }
 
-internal struct FhFuncParameter(ReadOnlySpan<char> type, ReadOnlySpan<char> name) {
-    public string ParameterType = new string(type);
-    public string ParameterName = new string(name);
-}
+internal record FhFuncParameter(string ParameterType, string ParameterName);
 
 internal static class Program {
-    private static Dictionary<string, string> _type_map = [];
+
+    private static int[]                      _s_noemit  = [];
+    private static Dictionary<string, string> _s_typemap = [];
+    private static FhFuncDecl[]               _s_funcs   = [];
+    private static FhDataLabelDecl[]          _s_data    = [];
 
     private static void Main(string[] args) {
-        Option<string>   opt_src_path     = new Option<string>("--src")
-            { Description = "Set the path to the directory containing the exported symbol files." };
-        Option<string>   opt_dest_path    = new Option<string>("--dest")
-            { Description = "Set the folder where the C# file should be written." };
-        Option<string>   opt_typemap_path = new Option<string>("--map")
-            { Description = "Set the path to a Ghidra -> Fh type map." };
-        Option<FhGameId> opt_game         = new Option<FhGameId>("--game")
-            { Description = "Declare which game STEP is generating for." };
-
-        opt_src_path    .Required = true;
-        opt_dest_path   .Required = true;
-        opt_game        .Required = true;
-        opt_typemap_path.Required = false;
+        Option<string>   opt_globals   = new ("-d", "--data") {
+            Description = "Set the path to the file containing data definitions.",
+            Required    = true
+        };
+        Option<string>   opt_functions = new ("-f", "--functions") {
+            Description = "Set the path to the file containing function definitions.",
+            Required    = true
+        };
+        Option<string>   opt_output    = new ("-o", "--output") {
+            Description = "Set the folder where the C# file should be written.",
+            Required    = true
+        };
+        Option<string>   opt_typemap   = new ("-m", "--map") {
+            Description = "Set the path to a Ghidra -> Fh type map.",
+            Required    = false
+        };
+        Option<int[]>    opt_noemit    = new ("-ne", "--no-emit") {
+            Description  = "Specify a set of addresses for which calls shall not be emitted.",
+            Required     = false,
+            CustomParser = _parse_arg_noemit
+        };
+        Option<FhGameId> opt_game      = new ("-g", "--game-id") {
+            Description = "Declare which game STEP is generating for.",
+            Required    = true
+        };
 
         RootCommand cmd_root = new RootCommand("Process a Ghidra symbol table and create a C# code file.");
 
-        cmd_root.Options.Add(opt_src_path);
-        cmd_root.Options.Add(opt_dest_path);
-        cmd_root.Options.Add(opt_typemap_path);
+        // To permit no-emit addresses to be listed consecutively after a single -ne specifier.
+        opt_noemit.AllowMultipleArgumentsPerToken = true;
+
+        cmd_root.Options.Add(opt_globals);
+        cmd_root.Options.Add(opt_functions);
+        cmd_root.Options.Add(opt_output);
+        cmd_root.Options.Add(opt_typemap);
+        cmd_root.Options.Add(opt_noemit);
         cmd_root.Options.Add(opt_game);
 
         cmd_root.SetAction(parse_result => _emit_symtable(
-            parse_result.GetRequiredValue(opt_src_path),
-            parse_result.GetRequiredValue(opt_dest_path),
-            parse_result.GetValue        (opt_typemap_path) ?? "",
+            parse_result.GetRequiredValue(opt_globals),
+            parse_result.GetRequiredValue(opt_functions),
+            parse_result.GetRequiredValue(opt_output),
+            parse_result.GetValue        (opt_typemap) ?? "",
+            parse_result.GetRequiredValue(opt_noemit),
             parse_result.GetRequiredValue(opt_game)
             ));
 
         ParseResult parse_result = cmd_root.Parse(args);
         parse_result.Invoke();
+    }
+
+    /// <summary>
+    ///     Parses a set of no-emit addresses in hex form on the command line.
+    /// </summary>
+    private static int[] _parse_arg_noemit(ArgumentResult arg) {
+        int[] rv = new int[arg.Tokens.Count];
+
+        // -ne args are only accepted in form: 0x{ADDR:X}, ex. -ne 0x207DB0
+        for (int i = 0; i < arg.Tokens.Count; i++) {
+            rv[i] = int.Parse(arg.Tokens[i].Value[ 2 .. ], NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        }
+
+        return rv;
     }
 
     /// <summary>
@@ -123,19 +152,6 @@ internal static class Program {
     }
 
     /// <summary>
-    ///     Modifies provided functions, fixing formatting and undoing Ghidra's CSV escapes.
-    /// </summary>
-    /// <param name="functions">Ghidra-provided function declarations to format and unescape.</param>
-    private static void _format_functions(Span<FhFuncDecl> functions) {
-        for (int i = 0; i < functions.Length; i++) {
-            functions[i].Signature = functions[i].Signature
-                .Replace(" *"   , "*") // Ghidra "float * param_1" -> "float* param_1"
-                .Replace("\\,"  , ",") // Ghidra CSV unescape
-                .Replace("\"\\" , "" );
-        }
-    }
-
-    /// <summary>
     ///     Convert from a C++/Ghidra calling convention specifier to the equivalent C# attribute for delegates.
     /// </summary>
     /// <param name="call_conv">The C++/Ghidra-style calling convention specifier.</param>
@@ -148,7 +164,7 @@ internal static class Program {
             "__stdcall"  => "[UnmanagedFunctionPointer(CallingConvention.StdCall)]",
             "__fastcall" => "[UnmanagedFunctionPointer(CallingConvention.FastCall)]",
             "unknown"    => "[UnmanagedFunctionPointer(CallingConvention.Cdecl)]",
-            _ => throw new ArgumentException($"Encountered an unknown calling convention `{call_conv}` while parsing functions."),
+            _            => throw new ArgumentException($"Encountered an unknown calling convention `{call_conv}` while parsing functions."),
         };
     }
 
@@ -156,18 +172,18 @@ internal static class Program {
     ///     Maps a Ghidra-provided type using the user-defined typemap.
     /// </summary>
     /// <example>
-    /// Assuming Ghidra's <c>undefined4</c> type is mapped to C#'s <c>uint</c>,
-    /// calling this function with <c>"undefined4"</c> will return <c>"uint"</c>.
+    ///     Assuming Ghidra's <c>undefined4</c> type is mapped to C#'s <c>uint</c>,
+    ///     calling this function with <c>"undefined4"</c> will return <c>"uint"</c>.
     /// </example>
     /// <param name="type">The string representation of a Ghidra parameter type.</param>
     /// <returns>The mapped parameter type.<br/>Returns <c>"nint"</c> if the given Ghidra type isn't mapped.</returns>
     private static ReadOnlySpan<char> _map_type(string type) {
-        return _type_map.GetValueOrDefault(type, "nint");
+        return _s_typemap.GetValueOrDefault(type, "nint");
     }
 
     /// <summary>
     ///     Applies the user-defined type map to a parameter type provided by Ghidra.<br/>
-    /// Unlike <see cref="_map_type"/>, accounts for <c>void</c>.
+    ///     Unlike <see cref="_map_type"/>, accounts for <c>void</c>.
     /// </summary>
     /// <param name="return_type">The string representation of a Ghidra return type.</param>
     /// <returns>The mapped return type.</returns>
@@ -180,17 +196,15 @@ internal static class Program {
     }
 
     /// <summary>
-    ///     Modifies a parameter name to not conflict with C# keywords.
+    ///     Modifies a <paramref name="param_name"/> to not conflict with C# keywords.
     /// </summary>
-    /// <param name="param_name">A parameter name to modify.</param>
     /// <returns>The modified parameter name.</returns>
-    private static ReadOnlySpan<char> _escape_param_name(ReadOnlySpan<char> param_name) {
-        /*TODO: Consider https://stackoverflow.com/a/44728184 or https://stackoverflow.com/a/44728208
-                Something akin to `return cs.IsValidIdentifier(param_name) ? param_name : $"_{param_name}";`*/
-        return param_name switch {
-            "this" => "_this",
-            _      => param_name,
-        };
+    private static ReadOnlySpan<char> _escape_param_name(string param_name) {
+        bool is_language_reserved =
+            SyntaxFacts.GetKeywordKind          (param_name) != SyntaxKind.None
+         || SyntaxFacts.GetContextualKeywordKind(param_name) != SyntaxKind.None;
+
+        return is_language_reserved ? $"_{param_name}" : param_name;
     }
 
     /// <summary>
@@ -223,13 +237,21 @@ internal static class Program {
             _               => throw new NotImplementedException($"invalid game id {game} - cannot generate function"),
         };
 
+        if (_s_noemit.Contains(addr)) {
+            return $"""
+                // Symbol on explicit no-emit list:
+                // {function.CallConv} {function.Signature} at {function.Location}
+
+            """;
+        }
+
         return $"""
                 // Original after pruning:
                 // {function.CallConv} {function.Signature} at {function.Location}
 
                 {_emit_callconv_attr(function.CallConv)}
-                public unsafe delegate {signature_data.ReturnType} {function.FuncName}{_build_params_string(signature_data.Parameters)};
-                public static FhMethodHandle<{function.FuncName}> h_{function.Name} => new( new FhMethodLocation("{module}", 0x{addr:X}) );
+                public unsafe delegate {signature_data.ReturnType} d_{function.FuncName}{_build_params_string(signature_data.Parameters)};
+                public static FhMethodHandle<d_{function.FuncName}> {function.Name} => new( new FhMethodLocation("{module}", 0x{addr:X}) );
 
             """;
     }
@@ -243,13 +265,21 @@ internal static class Program {
         int                addr        = int.Parse(global.Location, NumberStyles.HexNumber, CultureInfo.InvariantCulture) - 0x400000;
         ReadOnlySpan<char> mapped_type = _map_type(global.DataType);
 
+        if (_s_noemit.Contains(addr)) {
+            return $"""
+                // Symbol on explicit no-emit list:
+                // {global.DataType} {global.Name} at {global.Location}
+
+            """;
+        }
+
         //TODO: Make sure C# doesn't have issues with the pointer when the global is an array.
         return $"""
                 // Original after pruning:
                 // {global.DataType} {global.Name} at {global.Location}
 
-                public static {mapped_type}* {global.Name} => FhUtil.ptr_at<{mapped_type}>(0x{addr:X});
                 public const nint __addr_{global.Name} = 0x{addr:X};
+                public static {mapped_type}* {global.Name} => FhUtil.ptr_at<{mapped_type}>(__addr_{global.Name});
 
             """;
     }
@@ -257,7 +287,6 @@ internal static class Program {
     /// <summary>
     ///     Return FhCall's introductory comment.
     /// </summary>
-    /// <returns>An introductory comment.</returns>
     private static string _emit_prologue(FhGameId game) {
         string ns = game switch {
             FhGameId.FFX    => "namespace Fahrenheit.FFX;",
@@ -298,15 +327,59 @@ internal static class Program {
     }
 
     /// <summary>
+    ///    Loads the JSON file containing type remappings.
+    /// </summary>
+    private static void _load_typemap(string path_typemap) {
+        try {
+            string type_map_str = File.ReadAllText(path_typemap);
+            _s_typemap = JsonSerializer.Deserialize<Dictionary<string, string>>(type_map_str) ?? [];
+        }
+        catch {
+            Console.WriteLine("Type map load failed or type map path not specified.");
+        }
+    }
+
+    /// <summary>
+    ///     Loads and fixes up the CSV file containing function definitions.
+    /// </summary>
+    private static void _load_functions(string path_functions) {
+        using (StreamReader function_reader = new StreamReader(path_functions))
+        using (CsvReader    function_csv    = new CsvReader   (function_reader, CultureInfo.InvariantCulture)) {
+            _s_funcs = [ .. function_csv.GetRecords<FhFuncDecl>() ];
+        }
+
+        for (int i = 0; i < _s_funcs.Length; i++) {
+            _s_funcs[i].Signature = _s_funcs[i].Signature
+                .Replace(" *"   , "*") // Ghidra "float * param_1" -> "float* param_1"
+                .Replace("\\,"  , ",") // Ghidra CSV unescape
+                .Replace("\"\\" , "" );
+        }
+    }
+
+    /// <summary>
+    ///     Loads the CSV file containing globals and other data labels.
+    /// </summary>
+    private static void _load_data(string path_data) {
+        using (StreamReader data_reader = new StreamReader(path_data))
+        using (CsvReader    data_csv    = new CsvReader   (data_reader, CultureInfo.InvariantCulture)) {
+            _s_data = [ .. data_csv.GetRecords<FhDataLabelDecl>() ];
+        }
+    }
+
+    /// <summary>
     ///     Emits a C# code file to a specified path using exported Ghidra symbols and a user-defined typemap.
     /// </summary>
-    /// <param name="src_path">
-    ///     The path to the directory containing the Ghidra symbol exports.<br/>
-    ///     The directory must contain appropriately exported <c>functions.csv</c> and <c>globals.csv</c>.
-    /// </param>
-    /// <param name="dest_path">The path to write the C# code file to.</param>
-    /// <param name="typemap_path">The path to the user-defined typemap. Typemap must be a valid JSON.</param>
-    private static void _emit_symtable(string src_path, string dest_path, string typemap_path, FhGameId game) {
+    /// <param name="path_data">A path to a CSV file containing Ghidra global exports.</param>
+    /// <param name="path_functions">A path to a CSV file containing Ghidra function exports.</param>
+    private static void _emit_symtable(
+        string   path_data,
+        string   path_functions,
+        string   path_dest,
+        string   path_typemap,
+        int[]    no_emit_addresses,
+        FhGameId game) {
+
+        _s_noemit = no_emit_addresses;
 
         /* [fkelava 01/06/26 13:47]
          * Generating all functions for either game results in about a 400,000 line file.
@@ -323,33 +396,11 @@ internal static class Program {
         int file_count = 1;
         int line_count = 0;
 
-        string file_path = Path.Join(dest_path, $"call_{file_count++}.g.cs");
+        string output_file_path = Path.Join(path_dest, $"call_{file_count++}.g.cs");
 
-        try {
-            string type_map_str = File.ReadAllText(typemap_path);
-            _type_map = JsonSerializer.Deserialize<Dictionary<string, string>>(type_map_str) ?? [];
-        }
-        catch {
-            Console.WriteLine("Type map load failed or type map path not specified.");
-        }
-
-        string global_file_path   = Path.Join(src_path, "globals.csv");
-        string function_file_path = Path.Join(src_path, "functions.csv");
-
-        FhFuncDecl[]      functions;
-        FhDataLabelDecl[] globals;
-
-        using (StreamReader function_reader = new StreamReader(function_file_path))
-        using (CsvReader    function_csv    = new CsvReader(function_reader, CultureInfo.InvariantCulture)) {
-            functions = [ .. function_csv.GetRecords<FhFuncDecl>() ];
-        }
-
-        using (StreamReader global_reader = new StreamReader(global_file_path))
-        using (CsvReader    global_csv    = new CsvReader   (global_reader, CultureInfo.InvariantCulture)) {
-            globals = [ .. global_csv.GetRecords<FhDataLabelDecl>() ];
-        }
-
-        _format_functions(functions);
+        _load_typemap  (path_typemap);
+        _load_functions(path_functions);
+        _load_data     (path_data);
 
         // This local is reused in the loop
         FhFuncSignatureData signature_data = new FhFuncSignatureData {
@@ -359,13 +410,13 @@ internal static class Program {
         // Actual file contents.
         StringBuilder sb = new(_emit_prologue(game));
 
-        foreach (FhFuncDecl function in functions) {
+        foreach (FhFuncDecl function in _s_funcs) {
             if (line_count >= LINES_PER_FILE) {
-                _dump_symtable(file_path, sb);
+                _dump_symtable(output_file_path, sb);
 
-                file_path  = Path.Join(dest_path, $"call_{file_count++}.g.cs");
-                line_count = 0;
-                sb         = new(_emit_prologue(game));
+                output_file_path = Path.Join(path_dest, $"call_{file_count++}.g.cs");
+                line_count       = 0;
+                sb               = new(_emit_prologue(game));
             }
 
             if (!_should_interpret(function)) {
@@ -398,10 +449,10 @@ internal static class Program {
 
             // Parse parameters
             for (int i = 2; i < tokens.Length - 1; i += 2) {
-                ReadOnlySpan<char> type = tokens[i];
-                ReadOnlySpan<char> name = tokens[i + 1];
+                string type = tokens[i];
+                string name = tokens[i + 1];
 
-                signature_data.Parameters.Add(new(type, name));
+                signature_data.Parameters.Add(new (type, name));
             }
 
             sb.AppendLine(_emit_function(function, signature_data, game));
@@ -410,13 +461,13 @@ internal static class Program {
             signature_data.Parameters.Clear();
         }
 
-        foreach (FhDataLabelDecl global in globals) {
+        foreach (FhDataLabelDecl global in _s_data) {
             if (line_count >= LINES_PER_FILE) {
-                _dump_symtable(file_path, sb);
+                _dump_symtable(output_file_path, sb);
 
-                file_path  = Path.Join(dest_path, $"call_{file_count++}.g.cs");
-                line_count = 0;
-                sb         = new(_emit_prologue(game));
+                output_file_path = Path.Join(path_dest, $"call_{file_count++}.g.cs");
+                line_count       = 0;
+                sb               = new(_emit_prologue(game));
             }
 
             if (!_should_interpret(global)) {
@@ -432,7 +483,7 @@ internal static class Program {
             line_count += LINES_PER_DECL;
         }
 
-        _dump_symtable(file_path, sb);
+        _dump_symtable(output_file_path, sb);
         Console.WriteLine($"Done in {perf.Elapsed}.");
     }
 }

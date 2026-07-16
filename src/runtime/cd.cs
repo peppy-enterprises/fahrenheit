@@ -46,8 +46,8 @@ public unsafe sealed class FhCdInterfaceModule : FhModule {
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return FhCall.h_CDfileSize_PC     .hook(this, h_fsize_pc)
-            && FhCall.h_check_ex_file_size.hook(this, h_fsize_chk);
+        return FhCall.CDfileSize_PC     .hook(this, h_fsize_pc)
+            && FhCall.check_ex_file_size.hook(this, h_fsize_chk);
     }
 
     /* [fkelava 27/01/26 17:14]
@@ -102,7 +102,7 @@ public unsafe sealed class FhCdInterfaceModule : FhModule {
         int original_module = _ptr_cd->module;
 
         _ptr_cd->module = 0;
-        nint rv = FhCall.h_CDfileSize_PC.chain_from(h_fsize_pc).fnptr!(arg1);
+        nint rv = FhCall.CDfileSize_PC.chain_from(h_fsize_pc).fnptr!(arg1);
 
         _ptr_cd->module = original_module;
         return rv;

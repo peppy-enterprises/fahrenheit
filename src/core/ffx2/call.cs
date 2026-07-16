@@ -18,8 +18,8 @@ namespace Fahrenheit.FFX2;
 public static unsafe partial class FhCall {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate byte* GetLastMissionJobName(byte arg1, byte arg2);
-    internal static FhMethodHandle<GetLastMissionJobName> h_GetLastMissionJobName
+    internal delegate byte* d_GetLastMissionJobName(byte arg1, byte arg2);
+    internal static FhMethodHandle<d_GetLastMissionJobName> GetLastMissionJobName
         => new( new FhMethodLocation("FFX-2.exe", 0x368570) );
 
 }

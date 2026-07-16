@@ -420,6 +420,9 @@ scripts/**/*
 !scripts/**/*.rsp
 !scripts/**/*.ps1
 
+# Do not exclude STEP response files.
+!src/step/data/*.rsp
+
 # Remove all `vcpkg` artifacts.
 **/vcpkg_installed/
 
