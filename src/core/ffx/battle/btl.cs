@@ -100,7 +100,6 @@ public struct BtlDebugFlags {
     [FieldOffset(0x10)] public bool no_variance;
     [FieldOffset(0x11)] public bool never_crit;
     [FieldOffset(0x12)] public bool always_hit;
-
     [FieldOffset(0x14)] public bool always_available_overdrive;
     [FieldOffset(0x15)] public bool always_crit;
     [FieldOffset(0x16)] public bool always_1_dmg;
@@ -112,7 +111,6 @@ public struct BtlDebugFlags {
     [FieldOffset(0x1C)] public bool never_overkill;
     [FieldOffset(0x1D)] public bool permanent_sensor;
     [FieldOffset(0x1E)] public bool never_charge_overdrive;
-
     [FieldOffset(0x27)] public bool never_hit;
 }
 
@@ -229,11 +227,11 @@ public unsafe struct Btl {
     // [FieldOffset(0x1DE6)] public short __0x1DE6[112];  // Something related to items
     // [FieldOffset(0x1EC6)] public short __0x1EC6[112];  // Something related to items
 
-    [FieldOffset(0x1FA6)] public fixed byte __0x1FA6[31];
-    [FieldOffset(0x1FC5)] public fixed byte __0x1FC5[7];
-    [FieldOffset(0x1FCC)] public fixed byte __0x1FCC[7];
-    [FieldOffset(0x1FD3)] public fixed byte __0x1FD3[17];
-    [FieldOffset(0x1FE4)] public fixed byte __0x1FE4[17];
+    [FieldOffset(0x1FA6)] public InlineArray31<byte> __0x1FA6;
+    [FieldOffset(0x1FC5)] public InlineArray7<byte>  __0x1FC5;
+    [FieldOffset(0x1FCC)] public InlineArray7<byte>  __0x1FCC;
+    [FieldOffset(0x1FD3)] public InlineArray17<byte> __0x1FD3;
+    [FieldOffset(0x1FE4)] public InlineArray17<byte> __0x1FE4;
 
     [FieldOffset(0x2008)] public       uint   last_com;
 

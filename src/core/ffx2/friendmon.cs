@@ -7,12 +7,9 @@ namespace Fahrenheit.FFX2;
 
 [StructLayout(LayoutKind.Explicit, Size = 0x180)]
 public unsafe struct FriendMonsterCommand {
-    [FieldOffset(0x0)]   public       ushort command_id;
-
-
-    [FieldOffset(0xC6)]  public fixed byte   _0xC6[11];
-
-    [FieldOffset(0x17F)] public       byte   properties;
+    [FieldOffset(0x0)]   public ushort              command_id;
+    [FieldOffset(0xC6)]  public InlineArray11<byte> _0xC6;
+    [FieldOffset(0x17F)] public byte                properties;
 
     public byte get_double => (byte)(((properties >> 1) & 7) | 8); // Unsure about the | 8
     public byte get_reflect => (byte)((properties >> 5) | 8);      // Unsure about the | 8
@@ -25,13 +22,13 @@ public struct FriendMonsterCommandArray {
 
 [StructLayout(LayoutKind.Explicit, Size = 0xE38)]
 public unsafe struct FriendMonster {
-    [FieldOffset(0x0)]   public fixed ushort                    commands_0x3[4];
-    [FieldOffset(0x8)]   public fixed ushort                    commands_0x8[4];
-    [FieldOffset(0x10)]  public fixed ushort                    learn_0x3[37];
-    [FieldOffset(0x5A)]  public fixed ushort                    learn_0x4[37];
-    [FieldOffset(0xA4)]  public fixed ushort                    learn_0x8[16];
-    [FieldOffset(0xC4)]  public       FriendMonsterCommandArray _0xC4;
-    [FieldOffset(0xCC4)] public fixed byte                      _0xCC4[0x172]; // max hp?
+    [FieldOffset(0x0)]   public InlineArray4<ushort>      commands_0x3;
+    [FieldOffset(0x8)]   public InlineArray4<ushort>      commands_0x8;
+    [FieldOffset(0x10)]  public InlineArray37<ushort>     learn_0x3;
+    [FieldOffset(0x5A)]  public InlineArray37<ushort>     learn_0x4;
+    [FieldOffset(0xA4)]  public InlineArray16<ushort>     learn_0x8;
+    [FieldOffset(0xC4)]  public FriendMonsterCommandArray _0xC4;
+    [FieldOffset(0xCC4)] public InlineArray370<byte>      _0xCC4; // max hp?
 
     public bool get_command_learned(ushort command_id) {
         int command_type = command_id >> 0xC;

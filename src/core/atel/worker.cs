@@ -23,11 +23,11 @@ public unsafe struct AtelBasicWorker {
     [FieldOffset(0x34)] public ushort __0x34;
     [FieldOffset(0x36)] public ushort __0x36;
 
-    [FieldOffset(0x44)] public       ushort*     request_table;
-    [FieldOffset(0x48)] public fixed int         reg_int[4];
-    [FieldOffset(0x58)] public fixed float       reg_float[10];
-    [FieldOffset(0x80)] public       AtelSignal* pending_signal_queue;
-    [FieldOffset(0x88)] public       AtelSignal* free_signals;
+    [FieldOffset(0x44)] public ushort*              request_table;
+    [FieldOffset(0x48)] public InlineArray4<int>    reg_int;
+    [FieldOffset(0x58)] public InlineArray10<float> reg_float;
+    [FieldOffset(0x80)] public AtelSignal*          pending_signal_queue;
+    [FieldOffset(0x88)] public AtelSignal*          free_signals;
 
     [FieldOffset(0x90)]  public AtelSignal*          current_signal;
     [FieldOffset(0x94)]  public float                __0x94;
