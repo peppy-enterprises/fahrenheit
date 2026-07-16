@@ -62,9 +62,9 @@ public unsafe struct AtelScriptVar {
     [FieldOffset(0x0)] public uint lo;
     [FieldOffset(0x4)] public uint hi;
 
-    [FieldOffset(0x0)] public fixed byte val[3];
-    [FieldOffset(0x3)] public       byte properties;
-    [FieldOffset(0x4)] public       uint element_count;
+    [FieldOffset(0x0)] public InlineArray3<byte> val;
+    [FieldOffset(0x3)] public byte               properties;
+    [FieldOffset(0x4)] public uint               element_count;
 
     public AtelScriptVarType     type     { get { return (AtelScriptVarType)   ((properties & 0xF0) >> 4); } }
     public AtelScriptVarLocation location { get { return (AtelScriptVarLocation)(properties & 0x0F);       } }

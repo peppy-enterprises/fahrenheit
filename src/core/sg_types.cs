@@ -6,30 +6,6 @@
 namespace Fahrenheit;
 
 /* [fkelava 23/9/25 18:56]
- * Inline arrays for common powers of two are provided and preferred where usable.
- */
-
-[InlineArray(0x20)]
-public struct InlineArray32<T> {
-    private T _b;
-}
-
-[InlineArray(0x40)]
-public struct InlineArray64<T> {
-    private T _b;
-}
-
-[InlineArray(0x80)]
-public struct InlineArray128<T> {
-    private T _b;
-}
-
-[InlineArray(0x200)]
-public struct InlineArray512<T> {
-    private T _b;
-}
-
-/* [fkelava 23/9/25 18:56]
  * These types are copied verbatim from ClangSharp `generate-helper-types` source.
  * They are used to preserve information about the source native type ClangSharp projected to C#.
  */

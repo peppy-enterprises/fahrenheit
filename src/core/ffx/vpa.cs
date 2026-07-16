@@ -12,11 +12,11 @@ public enum VpaTriCollisionGroup {
     BlockPlayer = 14,
 }
 
-[StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x10)]
+[StructLayout(LayoutKind.Sequential)]
 public unsafe struct VpaTri {
-    [FieldOffset(0x0)] public  fixed short vertex_indices   [3];
-    [FieldOffset(0x6)] public  fixed short neighbour_indices[3];
-    [FieldOffset(0xC)] private       int   data;
+    public  InlineArray3<short> vertex_indices;
+    public  InlineArray3<short> neighbour_indices;
+    private int                 data;
 
     public readonly VpaVertex* vertex_by_index   (int idx) => Globals.Map.vertices + vertex_indices   [idx];
     public readonly VpaTri*    neighbour_by_index(int idx) => Globals.Map.tris     + neighbour_indices[idx];

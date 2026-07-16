@@ -105,6 +105,9 @@ public enum FhSaveUiState {
     ALBHED_TERMINATING_B = 0x1B,
 }
 
+/// <summary>
+///     The game's default save data manager structure for FF X.
+/// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x488)]
 public unsafe struct FhSaveDataManager {
     public int                    save_enabled;
@@ -121,6 +124,9 @@ public unsafe struct FhSaveDataManager {
     public int                    operation_canceled;
 }
 
+/// <summary>
+///     The game's default save data manager structure for FF X-2.
+/// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x4B0)]
 public unsafe struct FhSaveDataManager2 {
     public FhSaveSystemState      state;
@@ -136,6 +142,9 @@ public unsafe struct FhSaveDataManager2 {
     public int                    operation_canceled;
 }
 
+/// <summary>
+///     The game's default representation of an entry in the save manager's list.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct FhSaveListEntry(int slot_nb) {
     public int slot          = slot_nb;
@@ -148,6 +157,9 @@ internal struct FhSavePlayerName {
     private byte _b;
 }
 
+/// <summary>
+///     The save game header for FF X.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct FhSaveHeader {
     public uint             _0x00;
@@ -166,6 +178,9 @@ internal struct FhSaveHeader {
     public FhSavePlayerName player_name;
 };
 
+/// <summary>
+///     The save game header for FF X-2.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct FhSaveHeader2 {
     public uint   _0x00;
