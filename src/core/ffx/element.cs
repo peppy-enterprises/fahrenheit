@@ -16,9 +16,30 @@ public enum ElementFlags : byte {
 }
 
 public static partial class FhEnumExt {
-    public static bool fire   (this ElementFlags flags) => flags.HasFlag(ElementFlags.FIRE);
-    public static bool ice    (this ElementFlags flags) => flags.HasFlag(ElementFlags.ICE);
-    public static bool thunder(this ElementFlags flags) => flags.HasFlag(ElementFlags.THUNDER);
-    public static bool water  (this ElementFlags flags) => flags.HasFlag(ElementFlags.WATER);
-    public static bool holy   (this ElementFlags flags) => flags.HasFlag(ElementFlags.HOLY);
+    extension(ElementFlags flags) {
+        public bool fire {
+            get { return flags.HasFlag(ElementFlags.FIRE); }
+            set { if (value) flags |= (ElementFlags.FIRE); else flags &= ~(ElementFlags.FIRE); }
+        }
+
+        public bool ice {
+            get { return flags.HasFlag(ElementFlags.ICE); }
+            set { if (value) flags |= (ElementFlags.ICE); else flags &= ~(ElementFlags.ICE); }
+        }
+
+        public bool thunder {
+            get { return flags.HasFlag(ElementFlags.THUNDER); }
+            set { if (value) flags |= (ElementFlags.THUNDER); else flags &= ~(ElementFlags.THUNDER); }
+        }
+
+        public bool water {
+            get { return flags.HasFlag(ElementFlags.WATER); }
+            set { if (value) flags |= (ElementFlags.WATER); else flags &= ~(ElementFlags.WATER); }
+        }
+
+        public bool holy {
+            get { return flags.HasFlag(ElementFlags.HOLY); }
+            set { if (value) flags |= (ElementFlags.HOLY); else flags &= ~(ElementFlags.HOLY); }
+        }
+    }
 }

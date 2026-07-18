@@ -109,24 +109,105 @@ public enum OverdriveModeFlags : uint {
 }
 
 public static partial class FhEnumExt {
-    public static bool warrior  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.WARRIOR);
-    public static bool comrade  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.COMRADE);
-    public static bool stoic    (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.STOIC);
-    public static bool healer   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.HEALER);
-    public static bool tactician(this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.TACTICIAN);
-    public static bool victim   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.VICTIM);
-    public static bool dancer   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.DANCER);
-    public static bool avenger  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.AVENGER);
-    public static bool slayer   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.SLAYER);
-    public static bool hero     (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.HERO);
-    public static bool rook     (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.ROOK);
-    public static bool victor   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.VICTOR);
-    public static bool coward   (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.COWARD);
-    public static bool ally     (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.ALLY);
-    public static bool sufferer (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.SUFFERER);
-    public static bool daredevil(this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.DAREDEVIL);
-    public static bool loner    (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.LONER);
-    public static bool unused1  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.UNUSED1);
-    public static bool unused2  (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.UNUSED2);
-    public static bool aeons    (this OverdriveModeFlags flags) => flags.HasFlag(OverdriveModeFlags.AEONS);
+    extension(OverdriveModeFlags flags) {
+        public bool warrior {
+            get { return flags.HasFlag(OverdriveModeFlags.WARRIOR); }
+            set { if (value) flags |= (OverdriveModeFlags.WARRIOR); else flags &= ~(OverdriveModeFlags.WARRIOR); }
+        }
+
+        public bool comrade {
+            get { return flags.HasFlag(OverdriveModeFlags.COMRADE); }
+            set { if (value) flags |= (OverdriveModeFlags.COMRADE); else flags &= ~(OverdriveModeFlags.COMRADE); }
+        }
+
+        public bool stoic {
+            get { return flags.HasFlag(OverdriveModeFlags.STOIC); }
+            set { if (value) flags |= (OverdriveModeFlags.STOIC); else flags &= ~(OverdriveModeFlags.STOIC); }
+        }
+
+        public bool healer {
+            get { return flags.HasFlag(OverdriveModeFlags.HEALER); }
+            set { if (value) flags |= (OverdriveModeFlags.HEALER); else flags &= ~(OverdriveModeFlags.HEALER); }
+        }
+
+        public bool tactician {
+            get { return flags.HasFlag(OverdriveModeFlags.TACTICIAN); }
+            set { if (value) flags |= (OverdriveModeFlags.TACTICIAN); else flags &= ~(OverdriveModeFlags.TACTICIAN); }
+        }
+
+        public bool victim {
+            get { return flags.HasFlag(OverdriveModeFlags.VICTIM); }
+            set { if (value) flags |= (OverdriveModeFlags.VICTIM); else flags &= ~(OverdriveModeFlags.VICTIM); }
+        }
+
+        public bool dancer {
+            get { return flags.HasFlag(OverdriveModeFlags.DANCER); }
+            set { if (value) flags |= (OverdriveModeFlags.DANCER); else flags &= ~(OverdriveModeFlags.DANCER); }
+        }
+
+        public bool avenger {
+            get { return flags.HasFlag(OverdriveModeFlags.AVENGER); }
+            set { if (value) flags |= (OverdriveModeFlags.AVENGER); else flags &= ~(OverdriveModeFlags.AVENGER); }
+        }
+
+        public bool slayer {
+            get { return flags.HasFlag(OverdriveModeFlags.SLAYER); }
+            set { if (value) flags |= (OverdriveModeFlags.SLAYER); else flags &= ~(OverdriveModeFlags.SLAYER); }
+        }
+
+        public bool hero {
+            get { return flags.HasFlag(OverdriveModeFlags.HERO); }
+            set { if (value) flags |= (OverdriveModeFlags.HERO); else flags &= ~(OverdriveModeFlags.HERO); }
+        }
+
+        public bool rook {
+            get { return flags.HasFlag(OverdriveModeFlags.ROOK); }
+            set { if (value) flags |= (OverdriveModeFlags.ROOK); else flags &= ~(OverdriveModeFlags.ROOK); }
+        }
+
+        public bool victor {
+            get { return flags.HasFlag(OverdriveModeFlags.VICTOR); }
+            set { if (value) flags |= (OverdriveModeFlags.VICTOR); else flags &= ~(OverdriveModeFlags.VICTOR); }
+        }
+
+        public bool coward {
+            get { return flags.HasFlag(OverdriveModeFlags.COWARD); }
+            set { if (value) flags |= (OverdriveModeFlags.COWARD); else flags &= ~(OverdriveModeFlags.COWARD); }
+        }
+
+        public bool ally {
+            get { return flags.HasFlag(OverdriveModeFlags.ALLY); }
+            set { if (value) flags |= (OverdriveModeFlags.ALLY); else flags &= ~(OverdriveModeFlags.ALLY); }
+        }
+
+        public bool sufferer {
+            get { return flags.HasFlag(OverdriveModeFlags.SUFFERER); }
+            set { if (value) flags |= (OverdriveModeFlags.SUFFERER); else flags &= ~(OverdriveModeFlags.SUFFERER); }
+        }
+
+        public bool daredevil {
+            get { return flags.HasFlag(OverdriveModeFlags.DAREDEVIL); }
+            set { if (value) flags |= (OverdriveModeFlags.DAREDEVIL); else flags &= ~(OverdriveModeFlags.DAREDEVIL); }
+        }
+
+        public bool loner {
+            get { return flags.HasFlag(OverdriveModeFlags.LONER); }
+            set { if (value) flags |= (OverdriveModeFlags.LONER); else flags &= ~(OverdriveModeFlags.LONER); }
+        }
+
+        public bool unused1 {
+            get { return flags.HasFlag(OverdriveModeFlags.UNUSED1); }
+            set { if (value) flags |= (OverdriveModeFlags.UNUSED1); else flags &= ~(OverdriveModeFlags.UNUSED1); }
+        }
+
+        public bool unused2 {
+            get { return flags.HasFlag(OverdriveModeFlags.UNUSED2); }
+            set { if (value) flags |= (OverdriveModeFlags.UNUSED2); else flags &= ~(OverdriveModeFlags.UNUSED2); }
+        }
+
+        public bool aeons {
+            get { return flags.HasFlag(OverdriveModeFlags.AEONS); }
+            set { if (value) flags |= (OverdriveModeFlags.AEONS); else flags &= ~(OverdriveModeFlags.AEONS); }
+        }
+    }
 }
