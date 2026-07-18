@@ -68,19 +68,66 @@ public enum StatusPermanentFlags : ushort {
 
 public static partial class FhEnumExt {
     extension(StatusPermanentFlags flags) {
-        public bool death         => flags.HasFlag(StatusPermanentFlags.DEATH);
-        public bool zombie        => flags.HasFlag(StatusPermanentFlags.ZOMBIE);
-        public bool petrification => flags.HasFlag(StatusPermanentFlags.PETRIFICATION);
-        public bool poison        => flags.HasFlag(StatusPermanentFlags.POISON);
-        public bool confuse       => flags.HasFlag(StatusPermanentFlags.CONFUSE);
-        public bool berserk       => flags.HasFlag(StatusPermanentFlags.BERSERK);
-        public bool provoke       => flags.HasFlag(StatusPermanentFlags.PROVOKE);
-        public bool threaten      => flags.HasFlag(StatusPermanentFlags.THREATEN);
+        public bool death {
+            get { return flags.HasFlag(StatusPermanentFlags.DEATH); }
+            set { if (value) flags |= (StatusPermanentFlags.DEATH); else flags &= ~(StatusPermanentFlags.DEATH); }
+        }
 
-        public bool power_break  => flags.HasFlag(StatusPermanentFlags.POWER_BREAK);
-        public bool magic_break  => flags.HasFlag(StatusPermanentFlags.MAGIC_BREAK);
-        public bool armor_break  => flags.HasFlag(StatusPermanentFlags.ARMOR_BREAK);
-        public bool mental_break => flags.HasFlag(StatusPermanentFlags.MENTAL_BREAK);
+        public bool zombie {
+            get { return flags.HasFlag(StatusPermanentFlags.ZOMBIE); }
+            set { if (value) flags |= (StatusPermanentFlags.ZOMBIE); else flags &= ~(StatusPermanentFlags.ZOMBIE); }
+        }
+
+        public bool petrification {
+            get { return flags.HasFlag(StatusPermanentFlags.PETRIFICATION); }
+            set { if (value) flags |= (StatusPermanentFlags.PETRIFICATION); else flags &= ~(StatusPermanentFlags.PETRIFICATION); }
+        }
+
+        public bool poison {
+            get { return flags.HasFlag(StatusPermanentFlags.POISON); }
+            set { if (value) flags |= (StatusPermanentFlags.POISON); else flags &= ~(StatusPermanentFlags.POISON); }
+        }
+
+        public bool confuse {
+            get { return flags.HasFlag(StatusPermanentFlags.CONFUSE); }
+            set { if (value) flags |= (StatusPermanentFlags.CONFUSE); else flags &= ~(StatusPermanentFlags.CONFUSE); }
+        }
+
+        public bool berserk {
+            get { return flags.HasFlag(StatusPermanentFlags.BERSERK); }
+            set { if (value) flags |= (StatusPermanentFlags.BERSERK); else flags &= ~(StatusPermanentFlags.BERSERK); }
+        }
+
+        public bool provoke {
+            get { return flags.HasFlag(StatusPermanentFlags.PROVOKE); }
+            set { if (value) flags |= (StatusPermanentFlags.PROVOKE); else flags &= ~(StatusPermanentFlags.PROVOKE); }
+        }
+
+        public bool threaten {
+            get { return flags.HasFlag(StatusPermanentFlags.THREATEN); }
+            set { if (value) flags |= (StatusPermanentFlags.THREATEN); else flags &= ~(StatusPermanentFlags.THREATEN); }
+        }
+
+
+        public bool power_break {
+            get { return flags.HasFlag(StatusPermanentFlags.POWER_BREAK); }
+            set { if (value) flags |= (StatusPermanentFlags.POWER_BREAK); else flags &= ~(StatusPermanentFlags.POWER_BREAK); }
+        }
+
+        public bool magic_break {
+            get { return flags.HasFlag(StatusPermanentFlags.MAGIC_BREAK); }
+            set { if (value) flags |= (StatusPermanentFlags.MAGIC_BREAK); else flags &= ~(StatusPermanentFlags.MAGIC_BREAK); }
+        }
+
+        public bool armor_break {
+            get { return flags.HasFlag(StatusPermanentFlags.ARMOR_BREAK); }
+            set { if (value) flags |= (StatusPermanentFlags.ARMOR_BREAK); else flags &= ~(StatusPermanentFlags.ARMOR_BREAK); }
+        }
+
+        public bool mental_break {
+            get { return flags.HasFlag(StatusPermanentFlags.MENTAL_BREAK); }
+            set { if (value) flags |= (StatusPermanentFlags.MENTAL_BREAK); else flags &= ~(StatusPermanentFlags.MENTAL_BREAK); }
+        }
     }
 }
 
@@ -104,21 +151,72 @@ public enum StatusTemporalFlags : ushort {
 
 public static partial class FhEnumExt {
     extension(StatusTemporalFlags flags) {
-        public bool sleep    => flags.HasFlag(StatusTemporalFlags.SLEEP);
-        public bool silence  => flags.HasFlag(StatusTemporalFlags.SILENCE);
-        public bool darkness => flags.HasFlag(StatusTemporalFlags.DARKNESS);
+        public bool sleep {
+            get { return flags.HasFlag(StatusTemporalFlags.SLEEP); }
+            set { if (value) flags |= (StatusTemporalFlags.SLEEP); else flags &= ~(StatusTemporalFlags.SLEEP); }
+        }
 
-        public bool shell   => flags.HasFlag(StatusTemporalFlags.SHELL);
-        public bool protect => flags.HasFlag(StatusTemporalFlags.PROTECT);
-        public bool reflect => flags.HasFlag(StatusTemporalFlags.REFLECT);
-        public bool regen   => flags.HasFlag(StatusTemporalFlags.REGEN);
-        public bool haste   => flags.HasFlag(StatusTemporalFlags.HASTE);
-        public bool slow    => flags.HasFlag(StatusTemporalFlags.SLOW);
+        public bool silence {
+            get { return flags.HasFlag(StatusTemporalFlags.SILENCE); }
+            set { if (value) flags |= (StatusTemporalFlags.SILENCE); else flags &= ~(StatusTemporalFlags.SILENCE); }
+        }
 
-        public bool nul_water   => flags.HasFlag(StatusTemporalFlags.NUL_WATER);
-        public bool nul_fire    => flags.HasFlag(StatusTemporalFlags.NUL_FIRE);
-        public bool nul_thunder => flags.HasFlag(StatusTemporalFlags.NUL_THUNDER);
-        public bool nul_ice     => flags.HasFlag(StatusTemporalFlags.NUL_ICE);
+        public bool darkness {
+            get { return flags.HasFlag(StatusTemporalFlags.DARKNESS); }
+            set { if (value) flags |= (StatusTemporalFlags.DARKNESS); else flags &= ~(StatusTemporalFlags.DARKNESS); }
+        }
+
+
+        public bool shell {
+            get { return flags.HasFlag(StatusTemporalFlags.SHELL); }
+            set { if (value) flags |= (StatusTemporalFlags.SHELL); else flags &= ~(StatusTemporalFlags.SHELL); }
+        }
+
+        public bool protect {
+            get { return flags.HasFlag(StatusTemporalFlags.PROTECT); }
+            set { if (value) flags |= (StatusTemporalFlags.PROTECT); else flags &= ~(StatusTemporalFlags.PROTECT); }
+        }
+
+        public bool reflect {
+            get { return flags.HasFlag(StatusTemporalFlags.REFLECT); }
+            set { if (value) flags |= (StatusTemporalFlags.REFLECT); else flags &= ~(StatusTemporalFlags.REFLECT); }
+        }
+
+        public bool regen {
+            get { return flags.HasFlag(StatusTemporalFlags.REGEN); }
+            set { if (value) flags |= (StatusTemporalFlags.REGEN); else flags &= ~(StatusTemporalFlags.REGEN); }
+        }
+
+        public bool haste {
+            get { return flags.HasFlag(StatusTemporalFlags.HASTE); }
+            set { if (value) flags |= (StatusTemporalFlags.HASTE); else flags &= ~(StatusTemporalFlags.HASTE); }
+        }
+
+        public bool slow {
+            get { return flags.HasFlag(StatusTemporalFlags.SLOW); }
+            set { if (value) flags |= (StatusTemporalFlags.SLOW); else flags &= ~(StatusTemporalFlags.SLOW); }
+        }
+
+
+        public bool nul_water {
+            get { return flags.HasFlag(StatusTemporalFlags.NUL_WATER); }
+            set { if (value) flags |= (StatusTemporalFlags.NUL_WATER); else flags &= ~(StatusTemporalFlags.NUL_WATER); }
+        }
+
+        public bool nul_fire {
+            get { return flags.HasFlag(StatusTemporalFlags.NUL_FIRE); }
+            set { if (value) flags |= (StatusTemporalFlags.NUL_FIRE); else flags &= ~(StatusTemporalFlags.NUL_FIRE); }
+        }
+
+        public bool nul_thunder {
+            get { return flags.HasFlag(StatusTemporalFlags.NUL_THUNDER); }
+            set { if (value) flags |= (StatusTemporalFlags.NUL_THUNDER); else flags &= ~(StatusTemporalFlags.NUL_THUNDER); }
+        }
+
+        public bool nul_ice {
+            get { return flags.HasFlag(StatusTemporalFlags.NUL_ICE); }
+            set { if (value) flags |= (StatusTemporalFlags.NUL_ICE); else flags &= ~(StatusTemporalFlags.NUL_ICE); }
+        }
     }
 }
 
@@ -144,22 +242,81 @@ public enum StatusExtraFlags : ushort {
 
 public static partial class FhEnumExt {
     extension(StatusExtraFlags flags) {
-        public bool distill_power   => flags.HasFlag(StatusExtraFlags.DISTILL_POWER);
-        public bool distill_mana    => flags.HasFlag(StatusExtraFlags.DISTILL_MANA);
-        public bool distill_speed   => flags.HasFlag(StatusExtraFlags.DISTILL_SPEED);
-        public bool distill_move    => flags.HasFlag(StatusExtraFlags.DISTILL_MOVE);
-        public bool distill_ability => flags.HasFlag(StatusExtraFlags.DISTILL_ABILITY);
+        public bool distill_power {
+            get { return flags.HasFlag(StatusExtraFlags.DISTILL_POWER); }
+            set { if (value) flags |= (StatusExtraFlags.DISTILL_POWER); else flags &= ~(StatusExtraFlags.DISTILL_POWER); }
+        }
 
-        public bool shield    => flags.HasFlag(StatusExtraFlags.SHIELD);
-        public bool boost     => flags.HasFlag(StatusExtraFlags.BOOST);
-        public bool scan      => flags.HasFlag(StatusExtraFlags.SCAN);
-        public bool eject     => flags.HasFlag(StatusExtraFlags.EJECT);
-        public bool auto_life => flags.HasFlag(StatusExtraFlags.AUTO_LIFE);
-        public bool curse     => flags.HasFlag(StatusExtraFlags.CURSE);
-        public bool defend    => flags.HasFlag(StatusExtraFlags.DEFEND);
-        public bool guard     => flags.HasFlag(StatusExtraFlags.GUARD);
-        public bool sentinel  => flags.HasFlag(StatusExtraFlags.SENTINEL);
-        public bool doom      => flags.HasFlag(StatusExtraFlags.DOOM);
+        public bool distill_mana {
+            get { return flags.HasFlag(StatusExtraFlags.DISTILL_MANA); }
+            set { if (value) flags |= (StatusExtraFlags.DISTILL_MANA); else flags &= ~(StatusExtraFlags.DISTILL_MANA); }
+        }
+
+        public bool distill_speed {
+            get { return flags.HasFlag(StatusExtraFlags.DISTILL_SPEED); }
+            set { if (value) flags |= (StatusExtraFlags.DISTILL_SPEED); else flags &= ~(StatusExtraFlags.DISTILL_SPEED); }
+        }
+
+        public bool distill_move {
+            get { return flags.HasFlag(StatusExtraFlags.DISTILL_MOVE); }
+            set { if (value) flags |= (StatusExtraFlags.DISTILL_MOVE); else flags &= ~(StatusExtraFlags.DISTILL_MOVE); }
+        }
+
+        public bool distill_ability {
+            get { return flags.HasFlag(StatusExtraFlags.DISTILL_ABILITY); }
+            set { if (value) flags |= (StatusExtraFlags.DISTILL_ABILITY); else flags &= ~(StatusExtraFlags.DISTILL_ABILITY); }
+        }
+
+
+        public bool shield {
+            get { return flags.HasFlag(StatusExtraFlags.SHIELD); }
+            set { if (value) flags |= (StatusExtraFlags.SHIELD); else flags &= ~(StatusExtraFlags.SHIELD); }
+        }
+
+        public bool boost {
+            get { return flags.HasFlag(StatusExtraFlags.BOOST); }
+            set { if (value) flags |= (StatusExtraFlags.BOOST); else flags &= ~(StatusExtraFlags.BOOST); }
+        }
+
+        public bool scan {
+            get { return flags.HasFlag(StatusExtraFlags.SCAN); }
+            set { if (value) flags |= (StatusExtraFlags.SCAN); else flags &= ~(StatusExtraFlags.SCAN); }
+        }
+
+        public bool eject {
+            get { return flags.HasFlag(StatusExtraFlags.EJECT); }
+            set { if (value) flags |= (StatusExtraFlags.EJECT); else flags &= ~(StatusExtraFlags.EJECT); }
+        }
+
+        public bool auto_life {
+            get { return flags.HasFlag(StatusExtraFlags.AUTO_LIFE); }
+            set { if (value) flags |= (StatusExtraFlags.AUTO_LIFE); else flags &= ~(StatusExtraFlags.AUTO_LIFE); }
+        }
+
+        public bool curse {
+            get { return flags.HasFlag(StatusExtraFlags.CURSE); }
+            set { if (value) flags |= (StatusExtraFlags.CURSE); else flags &= ~(StatusExtraFlags.CURSE); }
+        }
+
+        public bool defend {
+            get { return flags.HasFlag(StatusExtraFlags.DEFEND); }
+            set { if (value) flags |= (StatusExtraFlags.DEFEND); else flags &= ~(StatusExtraFlags.DEFEND); }
+        }
+
+        public bool guard {
+            get { return flags.HasFlag(StatusExtraFlags.GUARD); }
+            set { if (value) flags |= (StatusExtraFlags.GUARD); else flags &= ~(StatusExtraFlags.GUARD); }
+        }
+
+        public bool sentinel {
+            get { return flags.HasFlag(StatusExtraFlags.SENTINEL); }
+            set { if (value) flags |= (StatusExtraFlags.SENTINEL); else flags &= ~(StatusExtraFlags.SENTINEL); }
+        }
+
+        public bool doom {
+            get { return flags.HasFlag(StatusExtraFlags.DOOM); }
+            set { if (value) flags |= (StatusExtraFlags.DOOM); else flags &= ~(StatusExtraFlags.DOOM); }
+        }
     }
 }
 
@@ -181,16 +338,59 @@ public enum ChrResistFlags : ushort {
 
 public static partial class FhEnumExt {
     extension(ChrResistFlags flags) {
-        public bool is_armored                => flags.HasFlag(ChrResistFlags.ARMORED);
-        public bool resists_fractional_damage => flags.HasFlag(ChrResistFlags.IMMUNITY_FRACTIONAL_DAMAGE);
-        public bool resists_life              => flags.HasFlag(ChrResistFlags.IMMUNITY_LIFE);
-        public bool resists_sensor            => flags.HasFlag(ChrResistFlags.IMMUNITY_SENSOR);
-        public bool resists_scan              => flags.HasFlag(ChrResistFlags.IMMUNITY_SCAN);
-        public bool resists_physical_damage   => flags.HasFlag(ChrResistFlags.IMMUNITY_PHYSICAL_DAMAGE);
-        public bool resists_magical_damage    => flags.HasFlag(ChrResistFlags.IMMUNITY_MAGICAL_DAMAGE);
-        public bool resists_hp_damage         => flags.HasFlag(ChrResistFlags.IMMUNITY_HP_DAMAGE);
-        public bool resists_ctb_damage        => flags.HasFlag(ChrResistFlags.IMMUNITY_CTB_DAMAGE);
-        public bool resists_zanmato           => flags.HasFlag(ChrResistFlags.IMMUNITY_ZANMATO);
-        public bool resists_bribe             => flags.HasFlag(ChrResistFlags.IMMUNITY_BRIBE);
+        public bool is_armored {
+            get { return flags.HasFlag(ChrResistFlags.ARMORED); }
+            set { if (value) flags |= (ChrResistFlags.ARMORED); else flags &= ~(ChrResistFlags.ARMORED); }
+        }
+
+        public bool resists_fractional_damage {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_FRACTIONAL_DAMAGE); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_FRACTIONAL_DAMAGE); else flags &= ~(ChrResistFlags.IMMUNITY_FRACTIONAL_DAMAGE); }
+        }
+
+        public bool resists_life {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_LIFE); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_LIFE); else flags &= ~(ChrResistFlags.IMMUNITY_LIFE); }
+        }
+
+        public bool resists_sensor {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_SENSOR); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_SENSOR); else flags &= ~(ChrResistFlags.IMMUNITY_SENSOR); }
+        }
+
+        public bool resists_scan {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_SCAN); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_SCAN); else flags &= ~(ChrResistFlags.IMMUNITY_SCAN); }
+        }
+
+        public bool resists_physical_damage {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_PHYSICAL_DAMAGE); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_PHYSICAL_DAMAGE); else flags &= ~(ChrResistFlags.IMMUNITY_PHYSICAL_DAMAGE); }
+        }
+
+        public bool resists_magical_damage {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_MAGICAL_DAMAGE); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_MAGICAL_DAMAGE); else flags &= ~(ChrResistFlags.IMMUNITY_MAGICAL_DAMAGE); }
+        }
+
+        public bool resists_hp_damage {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_HP_DAMAGE); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_HP_DAMAGE); else flags &= ~(ChrResistFlags.IMMUNITY_HP_DAMAGE); }
+        }
+
+        public bool resists_ctb_damage {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_CTB_DAMAGE); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_CTB_DAMAGE); else flags &= ~(ChrResistFlags.IMMUNITY_CTB_DAMAGE); }
+        }
+
+        public bool resists_zanmato {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_ZANMATO); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_ZANMATO); else flags &= ~(ChrResistFlags.IMMUNITY_ZANMATO); }
+        }
+
+        public bool resists_bribe {
+            get { return flags.HasFlag(ChrResistFlags.IMMUNITY_BRIBE); }
+            set { if (value) flags |= (ChrResistFlags.IMMUNITY_BRIBE); else flags &= ~(ChrResistFlags.IMMUNITY_BRIBE); }
+        }
     }
 }

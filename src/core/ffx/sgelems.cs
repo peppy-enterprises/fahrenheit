@@ -91,8 +91,15 @@ public enum SphereGridNodeProperties : byte {
 
 public static partial class FhEnumExt {
     extension(SphereGridNodeProperties flags) {
-        public bool can_target     => flags.HasFlag(SphereGridNodeProperties.CAN_TARGET);
-        public bool is_highlighted => flags.HasFlag(SphereGridNodeProperties.HIGHLIGHTED);
+        public bool can_target {
+            get { return flags.HasFlag(SphereGridNodeProperties.CAN_TARGET); }
+            set { if (value) flags |= (SphereGridNodeProperties.CAN_TARGET); else flags &= ~(SphereGridNodeProperties.CAN_TARGET); }
+        }
+
+        public bool is_highlighted {
+            get { return flags.HasFlag(SphereGridNodeProperties.HIGHLIGHTED); }
+            set { if (value) flags |= (SphereGridNodeProperties.HIGHLIGHTED); else flags &= ~(SphereGridNodeProperties.HIGHLIGHTED); }
+        }
     }
 }
 

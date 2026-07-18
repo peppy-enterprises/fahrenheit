@@ -55,22 +55,77 @@ public enum StatIncreaseFlags : ushort {
 
 public static partial class FhEnumExt {
     extension(StatIncreaseFlags flags) {
-        public bool strength      => flags.HasFlag(StatIncreaseFlags.STRENGTH);
-        public bool defense       => flags.HasFlag(StatIncreaseFlags.DEFENSE);
-        public bool magic         => flags.HasFlag(StatIncreaseFlags.MAGIC);
-        public bool magic_defense => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE);
-        public bool agility       => flags.HasFlag(StatIncreaseFlags.AGILITY);
-        public bool luck          => flags.HasFlag(StatIncreaseFlags.LUCK);
-        public bool evasion       => flags.HasFlag(StatIncreaseFlags.EVASION);
-        public bool accuracy      => flags.HasFlag(StatIncreaseFlags.ACCURACY);
+        public bool strength {
+            get { return flags.HasFlag(StatIncreaseFlags.STRENGTH); }
+            set { if (value) flags |= (StatIncreaseFlags.STRENGTH); else flags &= ~(StatIncreaseFlags.STRENGTH); }
+        }
 
-        public bool hp => flags.HasFlag(StatIncreaseFlags.HP);
-        public bool mp => flags.HasFlag(StatIncreaseFlags.MP);
+        public bool defense {
+            get { return flags.HasFlag(StatIncreaseFlags.DEFENSE); }
+            set { if (value) flags |= (StatIncreaseFlags.DEFENSE); else flags &= ~(StatIncreaseFlags.DEFENSE); }
+        }
 
-        public bool strength_bonus      => flags.HasFlag(StatIncreaseFlags.STRENGTH_BONUS);
-        public bool defense_bonus       => flags.HasFlag(StatIncreaseFlags.DEFENSE_BONUS);
-        public bool magic_bonus         => flags.HasFlag(StatIncreaseFlags.MAGIC_BONUS);
-        public bool magic_defense_bonus => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE_BONUS);
+        public bool magic {
+            get { return flags.HasFlag(StatIncreaseFlags.MAGIC); }
+            set { if (value) flags |= (StatIncreaseFlags.MAGIC); else flags &= ~(StatIncreaseFlags.MAGIC); }
+        }
+
+        public bool magic_defense {
+            get { return flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE); }
+            set { if (value) flags |= (StatIncreaseFlags.MAGIC_DEFENSE); else flags &= ~(StatIncreaseFlags.MAGIC_DEFENSE); }
+        }
+
+        public bool agility {
+            get { return flags.HasFlag(StatIncreaseFlags.AGILITY); }
+            set { if (value) flags |= (StatIncreaseFlags.AGILITY); else flags &= ~(StatIncreaseFlags.AGILITY); }
+        }
+
+        public bool luck {
+            get { return flags.HasFlag(StatIncreaseFlags.LUCK); }
+            set { if (value) flags |= (StatIncreaseFlags.LUCK); else flags &= ~(StatIncreaseFlags.LUCK); }
+        }
+
+        public bool evasion {
+            get { return flags.HasFlag(StatIncreaseFlags.EVASION); }
+            set { if (value) flags |= (StatIncreaseFlags.EVASION); else flags &= ~(StatIncreaseFlags.EVASION); }
+        }
+
+        public bool accuracy {
+            get { return flags.HasFlag(StatIncreaseFlags.ACCURACY); }
+            set { if (value) flags |= (StatIncreaseFlags.ACCURACY); else flags &= ~(StatIncreaseFlags.ACCURACY); }
+        }
+
+
+        public bool hp {
+            get { return flags.HasFlag(StatIncreaseFlags.HP); }
+            set { if (value) flags |= (StatIncreaseFlags.HP); else flags &= ~(StatIncreaseFlags.HP); }
+        }
+
+        public bool mp {
+            get { return flags.HasFlag(StatIncreaseFlags.MP); }
+            set { if (value) flags |= (StatIncreaseFlags.MP); else flags &= ~(StatIncreaseFlags.MP); }
+        }
+
+
+        public bool strength_bonus {
+            get { return flags.HasFlag(StatIncreaseFlags.STRENGTH_BONUS); }
+            set { if (value) flags |= (StatIncreaseFlags.STRENGTH_BONUS); else flags &= ~(StatIncreaseFlags.STRENGTH_BONUS); }
+        }
+
+        public bool defense_bonus {
+            get { return flags.HasFlag(StatIncreaseFlags.DEFENSE_BONUS); }
+            set { if (value) flags |= (StatIncreaseFlags.DEFENSE_BONUS); else flags &= ~(StatIncreaseFlags.DEFENSE_BONUS); }
+        }
+
+        public bool magic_bonus {
+            get { return flags.HasFlag(StatIncreaseFlags.MAGIC_BONUS); }
+            set { if (value) flags |= (StatIncreaseFlags.MAGIC_BONUS); else flags &= ~(StatIncreaseFlags.MAGIC_BONUS); }
+        }
+
+        public bool magic_defense_bonus {
+            get { return flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE_BONUS); }
+            set { if (value) flags |= (StatIncreaseFlags.MAGIC_DEFENSE_BONUS); else flags &= ~(StatIncreaseFlags.MAGIC_DEFENSE_BONUS); }
+        }
     }
 }
 
