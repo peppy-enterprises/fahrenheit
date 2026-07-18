@@ -54,22 +54,24 @@ public enum StatIncreaseFlags : ushort {
 }
 
 public static partial class FhEnumExt {
-    public static bool strength     (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.STRENGTH);
-    public static bool defense      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.DEFENSE);
-    public static bool magic        (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC);
-    public static bool magic_defense(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE);
-    public static bool agility      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.AGILITY);
-    public static bool luck         (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.LUCK);
-    public static bool evasion      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.EVASION);
-    public static bool accuracy     (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.ACCURACY);
+    extension(StatIncreaseFlags flags) {
+        public bool strength      => flags.HasFlag(StatIncreaseFlags.STRENGTH);
+        public bool defense       => flags.HasFlag(StatIncreaseFlags.DEFENSE);
+        public bool magic         => flags.HasFlag(StatIncreaseFlags.MAGIC);
+        public bool magic_defense => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE);
+        public bool agility       => flags.HasFlag(StatIncreaseFlags.AGILITY);
+        public bool luck          => flags.HasFlag(StatIncreaseFlags.LUCK);
+        public bool evasion       => flags.HasFlag(StatIncreaseFlags.EVASION);
+        public bool accuracy      => flags.HasFlag(StatIncreaseFlags.ACCURACY);
 
-    public static bool hp(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.HP);
-    public static bool mp(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MP);
+        public bool hp => flags.HasFlag(StatIncreaseFlags.HP);
+        public bool mp => flags.HasFlag(StatIncreaseFlags.MP);
 
-    public static bool strength_bonus     (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.STRENGTH_BONUS);
-    public static bool defense_bonus      (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.DEFENSE_BONUS);
-    public static bool magic_bonus        (this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_BONUS);
-    public static bool magic_defense_bonus(this StatIncreaseFlags flags) => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE_BONUS);
+        public bool strength_bonus      => flags.HasFlag(StatIncreaseFlags.STRENGTH_BONUS);
+        public bool defense_bonus       => flags.HasFlag(StatIncreaseFlags.DEFENSE_BONUS);
+        public bool magic_bonus         => flags.HasFlag(StatIncreaseFlags.MAGIC_BONUS);
+        public bool magic_defense_bonus => flags.HasFlag(StatIncreaseFlags.MAGIC_DEFENSE_BONUS);
+    }
 }
 
 [Flags]
@@ -80,8 +82,10 @@ public enum GearType : byte {
 }
 
 public static partial class FhEnumExt {
-    public static bool is_weapon(this GearType gear_type) => gear_type.HasFlag(GearType.WEAPON);
-    public static bool is_armor (this GearType gear_type) => gear_type.HasFlag(GearType.ARMOR);
+    extension(GearType gear_type) {
+        public bool is_weapon => gear_type.HasFlag(GearType.WEAPON);
+        public bool is_armor  => gear_type.HasFlag(GearType.ARMOR);
+    }
 }
 
 /// <summary>

@@ -42,7 +42,7 @@ public unsafe struct SphereGridLink {
     [FieldOffset(0xC)]  public byte  activated_by;
     [FieldOffset(0xD)]  public byte  point_count;
     [FieldOffset(0xE)]  public byte  __0xE;
-    
+
     [FieldOffset(0x10)] public SphereGridLinkPoint* points;
 
     public readonly SphereGridNode node_a => Globals.SphereGrid.lpamng->nodes[node_a_idx];
@@ -90,8 +90,10 @@ public enum SphereGridNodeProperties : byte {
 }
 
 public static partial class FhEnumExt {
-    public static bool can_target    (this SphereGridNodeProperties flags) => flags.HasFlag(SphereGridNodeProperties.CAN_TARGET);
-    public static bool is_highlighted(this SphereGridNodeProperties flags) => flags.HasFlag(SphereGridNodeProperties.HIGHLIGHTED);
+    extension(SphereGridNodeProperties flags) {
+        public bool can_target     => flags.HasFlag(SphereGridNodeProperties.CAN_TARGET);
+        public bool is_highlighted => flags.HasFlag(SphereGridNodeProperties.HIGHLIGHTED);
+    }
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1, Size = 0x28)]
@@ -152,7 +154,7 @@ public unsafe struct SphereGridNode {
 
         foreach (uint ptr in link_ptrs) {
             if (ptr == 0) continue;
-        
+
             SphereGridLink* link = (SphereGridLink*)ptr;
 
             short other_idx = link->node_a_idx != self_idx ? link->node_a_idx : link->node_b_idx;
@@ -355,46 +357,48 @@ public enum NodeType : byte {
 }
 
 public static partial class FhEnumExt {
-    public static bool is_lock_node(this NodeType node_type) {
-        return node_type is NodeType.LOCK_1
-                         or NodeType.LOCK_2
-                         or NodeType.LOCK_3
-                         or NodeType.LOCK_4;
-    }
+    extension(NodeType node_type) {
+        public bool is_lock_node() {
+            return node_type is NodeType.LOCK_1
+                             or NodeType.LOCK_2
+                             or NodeType.LOCK_3
+                             or NodeType.LOCK_4;
+        }
 
-    public static bool is_attribute_node(this NodeType node_type) {
-        return node_type is >= NodeType.STRENGTH_1 and <= NodeType.MP_10;
-    }
+        public bool is_attribute_node() {
+            return node_type is >= NodeType.STRENGTH_1 and <= NodeType.MP_10;
+        }
 
-    public static bool is_skill_node(this NodeType node_type) {
-        return node_type is >= NodeType.DELAY_ATTACK and <= NodeType.QUICK_HIT
-                         or >= NodeType.FULL_BREAK   and <= NodeType.NAB_GIL;
-    }
+        public bool is_skill_node() {
+            return node_type is >= NodeType.DELAY_ATTACK and <= NodeType.QUICK_HIT
+                             or >= NodeType.FULL_BREAK   and <= NodeType.NAB_GIL;
+        }
 
-    public static bool is_special_node(this NodeType node_type) {
-        return node_type is >= NodeType.STEAL and <= NodeType.BRIBE
-                         or NodeType.PILFER_GIL
-                         or NodeType.QUICK_POCKETS;
-    }
+        public bool is_special_node() {
+            return node_type is >= NodeType.STEAL and <= NodeType.BRIBE
+                             or NodeType.PILFER_GIL
+                             or NodeType.QUICK_POCKETS;
+        }
 
-    public static bool is_white_magic(this NodeType node_type) {
-        return node_type is >= NodeType.CURE and <= NodeType.AUTO_LIFE;
-    }
+        public bool is_white_magic() {
+            return node_type is >= NodeType.CURE and <= NodeType.AUTO_LIFE;
+        }
 
-    public static bool is_black_magic(this NodeType node_type) {
-        return node_type is >= NodeType.BLIZZARD and <= NodeType.ULTIMA;
-    }
+        public bool is_black_magic() {
+            return node_type is >= NodeType.BLIZZARD and <= NodeType.ULTIMA;
+        }
 
-    public static bool is_ability_node(this NodeType node_type) {
-        return node_type.is_skill_node()
-            || node_type.is_special_node()
-            || node_type.is_white_magic()
-            || node_type.is_black_magic();
-    }
+        public bool is_ability_node() {
+            return node_type.is_skill_node()
+                || node_type.is_special_node()
+                || node_type.is_white_magic()
+                || node_type.is_black_magic();
+        }
 
-    public static int normalize(this NodeType node_type) {
-        if (node_type == NodeType.NULL) return -1;
-        if ((int)node_type > (int)NodeType.QUICK_POCKETS) return 0;
-        return (int)node_type;
+        public int normalize() {
+            if (node_type == NodeType.NULL) return -1;
+            if ((int)node_type > (int)NodeType.QUICK_POCKETS) return 0;
+            return (int)node_type;
+        }
     }
 }

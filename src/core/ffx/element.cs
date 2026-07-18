@@ -16,9 +16,11 @@ public enum ElementFlags : byte {
 }
 
 public static partial class FhEnumExt {
-    public static bool fire   (this ElementFlags flags) => flags.HasFlag(ElementFlags.FIRE);
-    public static bool ice    (this ElementFlags flags) => flags.HasFlag(ElementFlags.ICE);
-    public static bool thunder(this ElementFlags flags) => flags.HasFlag(ElementFlags.THUNDER);
-    public static bool water  (this ElementFlags flags) => flags.HasFlag(ElementFlags.WATER);
-    public static bool holy   (this ElementFlags flags) => flags.HasFlag(ElementFlags.HOLY);
+    extension(ElementFlags flags) {
+        public bool fire    => flags.HasFlag(ElementFlags.FIRE);
+        public bool ice     => flags.HasFlag(ElementFlags.ICE);
+        public bool thunder => flags.HasFlag(ElementFlags.THUNDER);
+        public bool water   => flags.HasFlag(ElementFlags.WATER);
+        public bool holy    => flags.HasFlag(ElementFlags.HOLY);
+    }
 }
