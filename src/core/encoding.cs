@@ -69,7 +69,7 @@ public static class FhEncoding {
 
     private static ReadOnlySpan<byte> _newline    => "\r\n"u8;
     private static ReadOnlySpan<byte> _op_end     => "{END}"u8;     // 0x00
-    private static ReadOnlySpan<byte> _op_pause   => "{PAUSE}"u8;   // 0x01
+    private static ReadOnlySpan<byte> _op_break   => "{BREAK}"u8;   // 0x01
     private static ReadOnlySpan<byte> _op_newline => "{LF}"u8;      // 0x03
     private static ReadOnlySpan<byte> _op_space   => "{SPACE:"u8;   // 0x07
     private static ReadOnlySpan<byte> _op_time    => "{TIME:"u8;    // 0x09
@@ -80,6 +80,46 @@ public static class FhEncoding {
     private static ReadOnlySpan<byte> _op_macro   => "{MACRO:"u8;   // 0x13-0x22
     private static ReadOnlySpan<byte> _op_key     => "{KEY:"u8;     // 0x23
     private static ReadOnlySpan<byte> _op_unknown => "{UNKNOWN:"u8; // any other
+
+    /// <summary>
+    ///     Returns the UTF-8 plaintext literal corresponding to a given text <paramref name="op_code"/>.
+    /// </summary>
+    private static ReadOnlySpan<byte> _select_op_literal(byte op_code) {
+        return op_code switch {
+            0x00                => _op_end,
+            0x01                => _op_break,
+            0x03                => _op_newline,
+            0x07                => _op_space,
+            0x09                => _op_time,
+            0x0A                => _op_color,
+            0x0B                => _op_btn,
+            0x10                => _op_choice,
+            0x12                => _op_var,
+            >= 0x13 and <= 0x22 => _op_macro,
+            0x23                => _op_key,
+            _                   => _op_unknown,
+        };
+    }
+
+    /// <summary>
+    ///     Returns the op code corresponding to a UTF-8 text op <paramref name="expression"/>.
+    /// </summary>
+    private static byte _select_op_code(ReadOnlySpan<byte> expression) {
+        return 0 switch {
+            _ when expression.IndexOf(_op_end    ) != -1 => 0x00,
+            _ when expression.IndexOf(_op_break  ) != -1 => 0x01,
+            _ when expression.IndexOf(_op_newline) != -1 => 0x03,
+            _ when expression.IndexOf(_op_space  ) != -1 => 0x07,
+            _ when expression.IndexOf(_op_time   ) != -1 => 0x09,
+            _ when expression.IndexOf(_op_color  ) != -1 => 0x0A,
+            _ when expression.IndexOf(_op_btn    ) != -1 => 0x0B,
+            _ when expression.IndexOf(_op_choice ) != -1 => 0x10,
+            _ when expression.IndexOf(_op_var    ) != -1 => 0x12,
+            _ when expression.IndexOf(_op_macro  ) != -1 => byte.CreateChecked(0x13 + _get_op_arg1(expression, _op_macro)),
+            _ when expression.IndexOf(_op_key    ) != -1 => 0x23,
+            _                                            => _get_op_arg1(expression, _op_unknown),
+        };
+    }
 
     /// <summary>
     ///     Gets the first argument of a text <paramref name="op"/> from an UTF-8 plaintext <paramref name="expression"/>.
@@ -114,7 +154,7 @@ public static class FhEncoding {
         ReadOnlySpan<byte> op = _select_op_literal(op_code);
         op.CopyTo(dest);
 
-        return op.Length + Encoding.UTF8.GetBytes($"{op_arg1:X2}}}", dest[op.Length .. ]);
+        return op.Length + Encoding.UTF8.GetBytes($"{op_arg1:X2}}}", dest[ op.Length .. ]);
     }
 
     /// <summary>
@@ -125,7 +165,7 @@ public static class FhEncoding {
         ReadOnlySpan<byte> op = _select_op_literal(op_code);
         op.CopyTo(dest);
 
-        return op.Length + Encoding.UTF8.GetBytes($"{op_arg1:X2}:{op_arg2:X2}}}", dest[op.Length .. ]);
+        return op.Length + Encoding.UTF8.GetBytes($"{op_arg1:X2}:{op_arg2:X2}}}", dest[ op.Length .. ]);
     }
 
     /// <summary>
@@ -201,46 +241,6 @@ public static class FhEncoding {
         return language is FhLangId.Chinese
                         or FhLangId.Japanese
                         or FhLangId.Korean;
-    }
-
-    /// <summary>
-    ///     Returns the UTF-8 plaintext literal corresponding to a given text <paramref name="op_code"/>.
-    /// </summary>
-    private static ReadOnlySpan<byte> _select_op_literal(byte op_code) {
-        return op_code switch {
-            0x00                => _op_end,
-            0x01                => _op_pause,
-            0x03                => _op_newline,
-            0x07                => _op_space,
-            0x09                => _op_time,
-            0x0A                => _op_color,
-            0x0B                => _op_btn,
-            0x10                => _op_choice,
-            0x12                => _op_var,
-            >= 0x13 and <= 0x22 => _op_macro,
-            0x23                => _op_key,
-            _                   => _op_unknown,
-        };
-    }
-
-    /// <summary>
-    ///     Returns the op code corresponding to a UTF-8 text op <paramref name="expression"/>.
-    /// </summary>
-    private static byte _select_op_code(ReadOnlySpan<byte> expression) {
-        return expression switch {
-            _ when expression.IndexOf(_op_end    ) != -1 => 0x00,
-            _ when expression.IndexOf(_op_pause  ) != -1 => 0x01,
-            _ when expression.IndexOf(_op_newline) != -1 => 0x03,
-            _ when expression.IndexOf(_op_space  ) != -1 => 0x07,
-            _ when expression.IndexOf(_op_time   ) != -1 => 0x09,
-            _ when expression.IndexOf(_op_color  ) != -1 => 0x0A,
-            _ when expression.IndexOf(_op_btn    ) != -1 => 0x0B,
-            _ when expression.IndexOf(_op_choice ) != -1 => 0x10,
-            _ when expression.IndexOf(_op_var    ) != -1 => 0x12,
-            _ when expression.IndexOf(_op_macro  ) != -1 => byte.CreateChecked(0x13 + _get_op_arg1(expression, _op_macro)),
-            _ when expression.IndexOf(_op_key    ) != -1 => 0x23,
-            _                                            => _get_op_arg1(expression, _op_unknown),
-        };
     }
 
     /// <summary>
