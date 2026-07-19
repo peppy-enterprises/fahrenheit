@@ -1,0 +1,9 @@
+decompile-macro
+-o
+.
+-l
+Korean
+-g
+FFX
+-i
+"..\env\ffx_ps2\ffx\master\new_krpc\menu\macrodic.dcp"
