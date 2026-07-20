@@ -92,8 +92,8 @@ internal sealed unsafe class Program {
         SDL.GLMakeCurrent    (_sdl_window, _sdl_context);
         SDL.GLSetSwapInterval(1); // Enable VSync
         SDL.SetWindowPosition(_sdl_window,
-            int.CreateChecked( SDL.SDL_WINDOWPOS_CENTERED_MASK | 0 ),
-            int.CreateChecked( SDL.SDL_WINDOWPOS_CENTERED_MASK | 0 ));
+            (int)SDL.SDL_WINDOWPOS_CENTERED_MASK,
+            (int)SDL.SDL_WINDOWPOS_CENTERED_MASK);
         SDL.ShowWindow       (_sdl_window);
 
         // Setup Dear ImGui context
@@ -193,7 +193,8 @@ internal sealed unsafe class Program {
         // Cleanup
         ImGuiImplOpenGL3.Shutdown();
         ImGuiImplSDL3   .Shutdown();
-        ImGui           .DestroyContext();
+
+        ImGui.DestroyContext();
 
         SDL.GLDestroyContext(_sdl_context);
         SDL.DestroyWindow   (_sdl_window);
