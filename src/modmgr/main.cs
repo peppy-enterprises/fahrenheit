@@ -6,8 +6,8 @@
 namespace Fahrenheit.Tools.ModManager;
 
 /* [fkelava 15/8/25 17:41]
- * This is the mod manager program stub. Do not edit this unless you encounter a bug.
- * To edit the mod manager UI, please open `ui.cs`.
+ * This is the generic tool program stub. Do not edit this unless you encounter a bug.
+ * To edit the tool's UI, please open `ui_*.cs`.
  */
 
 /* [fkelava 19/07/26 23:30]
