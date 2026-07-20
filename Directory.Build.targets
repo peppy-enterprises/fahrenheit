@@ -54,7 +54,7 @@
         <ItemGroup>
             <FilesToBundle Remove="@(FilesToBundle)" Condition="
             $([System.Text.RegularExpressions.Regex]::IsMatch('%(Filename)',
-            '\A(?:TerraFX\.Interop\.Windows|Hexa\.NET\.(?:DirectXTex|ImGui|ImGui\.Backends)|HexaGen\.(?:Runtime|Runtime\.COM)|ImGuiImpl|cimgui|DirectXTex)\z'))" />
+            '\A(?:Hexa\.NET\.(?:.+)|HexaGen\.(?:.+)|ImGuiImpl|cimgui|DirectXTex|SDL3|Blake3)\z'))" />
         </ItemGroup>
 
         <Message Text="List of bundle objects after purging: '@(FilesToBundle)'" Importance="High" />

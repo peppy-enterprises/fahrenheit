@@ -1,14 +1,13 @@
 ﻿/* [fkelava 5/7/25 14:16]
- * Hexa bundles some definitions for D3D11 structures that we need to use when interfacing
- * with its API. They are defined this way because we prefer the TerraFX definitions in all other cases.
+ * Hexa duplicates some definitions for SDL3 structures. We must disambiguate and cast between them
+ * because they for some reason aren't one and the same. Heaven only knows why that is so.
  */
-global using HexaID3D11Device           = Hexa.NET.ImGui.Backends.D3D11.ID3D11Device;
-global using HexaID3D11DeviceContext    = Hexa.NET.ImGui.Backends.D3D11.ID3D11DeviceContext;
-global using HexaID3D11DeviceContextPtr = Hexa.NET.ImGui.Backends.D3D11.ID3D11DeviceContextPtr;
-global using HexaID3D11DevicePtr        = Hexa.NET.ImGui.Backends.D3D11.ID3D11DevicePtr;
-
-global using ImGuiImplD3D11 = Hexa.NET.ImGui.Backends.D3D11.ImGuiImplD3D11;
-global using ImGuiImplWin32 = Hexa.NET.ImGui.Backends.Win32.ImGuiImplWin32;
+global using SDLWindow     = Hexa.NET.SDL3.SDLWindow;
+global using SDLEvent      = Hexa.NET.SDL3.SDLEvent;
+global using SDLWindowPtr  = Hexa.NET.SDL3.SDLWindowPtr;
+global using SDLWindowB    = Hexa.NET.ImGui.Backends.SDL3.SDLWindow;
+global using SDLEventB     = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
+global using SDLWindowPtrB = Hexa.NET.ImGui.Backends.SDL3.SDLWindowPtr;
 
 // C# stdlib essentials
 global using System;
@@ -20,13 +19,10 @@ global using System.Runtime.Versioning;
 // ImGui C# binding
 global using Hexa.NET.ImGui;
 
-// Win32/D3D11 typedefs
-global using Windows.Win32;
-global using Windows.Win32.Foundation;
-global using Windows.Win32.Storage.FileSystem;
-global using Windows.Win32.Graphics.Direct3D11;
-global using Windows.Win32.Graphics.Direct3D;
-global using Windows.Win32.Graphics.Dxgi;
-global using Windows.Win32.Graphics.Dxgi.Common;
-global using Windows.Win32.Graphics.Gdi;
-global using Windows.Win32.UI.WindowsAndMessaging;
+// SDL3/OGL3 typedefs
+global using Hexa.NET.ImGui.Backends.OpenGL3;
+global using Hexa.NET.ImGui.Backends.SDL3;
+global using Hexa.NET.SDL3;
+global using Hexa.NET.OpenGL;
+
+global using HexaGen.Runtime;
