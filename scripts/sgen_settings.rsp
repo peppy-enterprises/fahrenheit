@@ -1,5 +1,6 @@
 --config
 latest-codegen
+generate-helper-types
 generate-file-scoped-namespaces
 generate-macro-bindings
 log-potential-typedef-remappings

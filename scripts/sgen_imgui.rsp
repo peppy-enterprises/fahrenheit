@@ -9,11 +9,13 @@ C:/opt/programs/winsdk/10/include/10.0.26100.0/shared
 C:/opt/programs/winsdk/10/include/10.0.26100.0/winrt
 ../src/imgui/inc
 --libraryPath
-imgui.lib
+fhimgui.dll
 --traverse
 ../src/imgui/inc/dcimgui.h
 ../src/imgui/inc/dcimgui_impl_dx11.h
 ../src/imgui/inc/dcimgui_impl_win32.h
+../src/imgui/inc/dcimgui_impl_sdl3.h
+../src/imgui/inc/dcimgui_impl_opengl3.h
 --prefixStrip
 ImGui_
 --file
@@ -21,6 +23,6 @@ sgen_imgui.h
 --methodClassName
 ImGui
 --namespace
-Fahrenheit
+Fahrenheit.ImGui
 --output
-../src/test
+../src/imgui_bind

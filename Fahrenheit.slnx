@@ -23,7 +23,8 @@
   <Project Path="src/sdk/Fahrenheit.Sdk.csproj" />  
   <Project Path="src/step/Fahrenheit.Tools.STEP.csproj" />
   <Project Path="test/Fahrenheit.Tests.csproj" />
-  <Project Path="src/imgui/Fahrenheit.ImGui.vcxproj" Id="18040d11-f7c5-4eac-8c6b-9683f2868afa">
+  <Project Path="src/imgui_bind/Fahrenheit.ImGui.csproj" />
+  <Project Path="src/imgui/Fahrenheit.Native.ImGui.vcxproj" Id="18040d11-f7c5-4eac-8c6b-9683f2868afa">
     <Platform Solution="*|ARM64" Project="x64" />
     <Platform Solution="Debug|Any CPU" Project="Win32" />
   </Project>

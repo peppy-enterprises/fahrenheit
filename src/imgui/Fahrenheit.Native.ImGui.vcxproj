@@ -22,11 +22,16 @@
     <ClInclude Include="inc\dcimgui.h" />
     <ClInclude Include="inc\dcimgui_impl_dx11.h" />
     <ClInclude Include="inc\dcimgui_impl_win32.h" />
+    <ClInclude Include="inc\dcimgui_impl_sdl3.h" />
+    <ClInclude Include="inc\dcimgui_impl_opengl3.h" />
     <ClInclude Include="inc\dcimgui_internal.h" />
     <ClInclude Include="inc\imconfig.h" />
     <ClInclude Include="inc\imgui.h" />
     <ClInclude Include="inc\imgui_impl_dx11.h" />
     <ClInclude Include="inc\imgui_impl_win32.h" />
+    <ClInclude Include="inc\imgui_impl_sdl3.h" />
+    <ClInclude Include="inc\imgui_impl_opengl3.h" />
+    <ClInclude Include="inc\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="inc\imgui_internal.h" />
     <ClInclude Include="inc\imstb_rectpack.h" />
     <ClInclude Include="inc\imstb_textedit.h" />
@@ -36,12 +41,16 @@
     <ClCompile Include="src\dcimgui.cpp" />
     <ClCompile Include="src\dcimgui_impl_dx11.cpp" />
     <ClCompile Include="src\dcimgui_impl_win32.cpp" />
+    <ClCompile Include="src\dcimgui_impl_sdl3.cpp" />
+    <ClCompile Include="src\dcimgui_impl_opengl3.cpp" />
     <ClCompile Include="src\dcimgui_internal.cpp" />
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
     <ClCompile Include="src\imgui_impl_dx11.cpp" />
     <ClCompile Include="src\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\imgui_impl_sdl3.cpp" />
+    <ClCompile Include="src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\imgui_tables.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
   </ItemGroup>
@@ -49,31 +58,31 @@
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{18040d11-f7c5-4eac-8c6b-9683f2868afa}</ProjectGuid>
-    <RootNamespace>FahrenheitImGui</RootNamespace>
+    <RootNamespace>FahrenheitNativeImGui</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -97,6 +106,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
   <PropertyGroup>
     <IntDir>$(_FhBaseIntermediateOutputPath)</IntDir>
     <OutDir>$(_FhOutDirBin)</OutDir>

@@ -24,6 +24,12 @@
     <ClInclude Include="inc\dcimgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\dcimgui_impl_sdl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\dcimgui_impl_opengl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="inc\dcimgui_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -37,6 +43,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\imgui_impl_win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\imgui_impl_sdl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\imgui_impl_opengl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\imgui_impl_opengl3_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\imgui_internal.h">
@@ -61,6 +76,12 @@
     </ClCompile>
     <ClCompile Include="src\dcimgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>    
+    <ClCompile Include="src\dcimgui_impl_sdl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dcimgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\dcimgui_internal.cpp">
       <Filter>Source Files</Filter>
@@ -78,6 +99,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui_impl_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl_sdl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui_tables.cpp">

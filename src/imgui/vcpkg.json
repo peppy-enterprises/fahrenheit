@@ -1,0 +1,6 @@
+{
+  "dependencies": [
+    "sdl3",
+    "opengl"
+  ]
+}

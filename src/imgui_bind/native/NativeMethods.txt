@@ -1,0 +1,5 @@
+// D3D11 support
+
+ID3D11Buffer
+ID3D11Device
+ID3D11DeviceContext
