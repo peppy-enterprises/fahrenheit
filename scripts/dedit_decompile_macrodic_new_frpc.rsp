@@ -1,0 +1,9 @@
+decompile-macro
+-o
+.
+-l
+French
+-g
+FFX
+-i
+"..\env\ffx_ps2\ffx\master\new_frpc\menu\macrodic.dcp"

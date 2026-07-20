@@ -85,7 +85,7 @@ internal static class Program {
             AllowMultipleArgumentsPerToken = true
         };
 
-        Option<string> opt_output = new("--output", "-o") {
+        Option<string> opt_output_dir = new("--output", "-o") {
             Description = "What folder to emit outputs to. The folder must already exist.",
             Arity       = ArgumentArity.ExactlyOne,
             Recursive   = true
@@ -130,7 +130,7 @@ internal static class Program {
         };
 
         cmd_root.Options.Add(opt_input);
-        cmd_root.Options.Add(opt_output);
+        cmd_root.Options.Add(opt_output_dir);
         cmd_root.Options.Add(opt_segment);
         cmd_root.Options.Add(opt_encoding);
         cmd_root.Options.Add(opt_lang);
@@ -138,11 +138,13 @@ internal static class Program {
         cmd_root.Options.Add(opt_game);
         cmd_root.Options.Add(opt_macrodict);
 
-        Command cmd_decompile = new("decompile", "Decompiles a dialogue file.");
+        Command cmd_decompile       = new("decompile",       "Decompiles a dialogue file.");
+        Command cmd_decompile_macro = new("decompile-macro", "Decompiles a macro dictionary file.");
+        Command cmd_compile         = new("compile",         "Compiles a dialogue file.");
 
         cmd_decompile.SetAction(parse_result => _c_decompile(
             parse_result.GetRequiredValue(opt_input),
-            parse_result.GetRequiredValue(opt_output),
+            parse_result.GetRequiredValue(opt_output_dir),
             parse_result.GetValue        (opt_segment),
             parse_result.GetRequiredValue(opt_encoding),
             parse_result.GetRequiredValue(opt_lang),
@@ -150,13 +152,16 @@ internal static class Program {
             parse_result.GetRequiredValue(opt_game)
             ));
 
-        Command cmd_decompile_macro = new("decompile-macro", "Decompiles a macro dictionary file.");
-
-        Command cmd_compile = new("compile", "Compiles a dialogue file.");
+        cmd_decompile_macro.SetAction(parse_result => _c_decompile_macro(
+            parse_result.GetRequiredValue(opt_input),
+            parse_result.GetRequiredValue(opt_output_dir),
+            parse_result.GetRequiredValue(opt_lang),
+            parse_result.GetRequiredValue(opt_game)
+        ));
 
         cmd_compile.SetAction(parse_result => _c_compile(
             parse_result.GetRequiredValue(opt_input),
-            parse_result.GetRequiredValue(opt_output),
+            parse_result.GetRequiredValue(opt_output_dir),
             parse_result.GetRequiredValue(opt_encoding),
             parse_result.GetRequiredValue(opt_lang),
             parse_result.GetRequiredValue(opt_index),
@@ -165,6 +170,7 @@ internal static class Program {
             ));
 
         cmd_root.Subcommands.Add(cmd_decompile);
+        cmd_root.Subcommands.Add(cmd_decompile_macro);
         cmd_root.Subcommands.Add(cmd_compile);
 
         ParseResult argparse_result = cmd_root.Parse(args);
@@ -172,12 +178,12 @@ internal static class Program {
     }
 
     /// <summary>
-    ///     Converts all game-encoded dialogue files in <paramref name="input"/> into text files in DEdit syntax, for a specified
-    ///     <paramref name="game"/>, <paramref name="index_type"/>, and <paramref name="lang"/>, emitting them to <paramref name="output"/>.
+    ///     Converts all game-encoded dialogue files in <paramref name="input_files"/> into text files in DEdit syntax, for a specified
+    ///     <paramref name="game"/>, <paramref name="index_type"/>, and <paramref name="lang"/>, emitting them to <paramref name="output_dir"/>.
     /// </summary>
     private static void _c_decompile(
-        List<FileInfo>  input,
-        string          output,
+        List<FileInfo>  input_files,
+        string          output_dir,
         Range           segment,
         FhDEditEncoding encoding,
         FhLangId        lang,
@@ -186,8 +192,8 @@ internal static class Program {
     {
         Stopwatch perf = Stopwatch.StartNew();
 
-        foreach (FileInfo input_file in input) {
-            string output_path = Path.Join(output, $"{input_file.Name}.txt");
+        foreach (FileInfo input_file in input_files) {
+            string output_path = Path.Join(output_dir, $"{input_file.Name}.txt");
 
             using (FileStream input_file_stream  = input_file.OpenRead())
             using (FileStream output_file_stream = new FileStream(output_path, FileMode.Create, FileAccess.Write, FileShare.None)) {
@@ -197,7 +203,33 @@ internal static class Program {
             Console.WriteLine($"{input_file.Name} -> {output_path}");
         }
 
-        Console.WriteLine($"processed {input.Count} files in {perf.Elapsed}");
+        Console.WriteLine($"processed {input_files.Count} files in {perf.Elapsed}");
+    }
+
+    /// <summary>
+    ///     Converts all game-encoded macro dictionaries in <paramref name="input_files"/> into text files in DEdit syntax, for a specified
+    ///     <paramref name="game"/> and <paramref name="lang"/>, emitting them to <paramref name="output_dir"/>.
+    /// </summary>
+    private static void _c_decompile_macro(
+        List<FileInfo> input_files,
+        string         output_dir,
+        FhLangId       lang,
+        FhGameId       game)
+    {
+        Stopwatch perf = Stopwatch.StartNew();
+
+        foreach (FileInfo input_file in input_files) {
+            string output_path = Path.Join(output_dir, $"{input_file.Name}.txt");
+
+            using (FileStream input_file_stream  = input_file.OpenRead())
+            using (FileStream output_file_stream = new FileStream(output_path, FileMode.Create, FileAccess.Write, FileShare.None)) {
+                _decompile_macro(input_file_stream, lang, game, output_file_stream);
+            }
+
+            Console.WriteLine($"{input_file.Name} -> {output_path}");
+        }
+
+        Console.WriteLine($"processed {input_files.Count} files in {perf.Elapsed}");
     }
 
     /// <summary>
@@ -245,13 +277,15 @@ internal static class Program {
 
     /// <summary>
     ///     Processes a input <paramref name="macro_dict_file"/>, enabling its use to resolve {MACRO} ops during (de)compilation.
+    ///     If an <paramref name="output_file"/> is given, then the decoded contents are also emitted to that file.
     ///     <para/>
     ///     The correct <paramref name="lang"/> and <paramref name="game"/> must be specified.
     /// </summary>
-    private static void _macrodict_load(
-        FileStream macro_dict_file,
-        FhLangId   lang,
-        FhGameId   game)
+    private static void _decompile_macro(
+        FileStream  macro_dict_file,
+        FhLangId    lang,
+        FhGameId    game,
+        FileStream? output_file = null)
     {
         Span<byte> macro_dict_bytes = new byte[macro_dict_file.Length];
         macro_dict_file.ReadExactly(macro_dict_bytes);
@@ -294,6 +328,7 @@ internal static class Program {
                 byte[]             dest = ArrayPool<byte>.Shared.Rent(FhEncoding.compute_decode_buffer_size(src, lang, game));
 
                 int dest_written  = FhEncoding.decode(src, dest, lang, game);
+                output_file?.Write(dest.AsSpan()[ .. dest_written ]);
                 _macro_refs[i][k] = Encoding.UTF8.GetString(dest[ .. dest_written ]);
 
                 ArrayPool<byte>.Shared.Return(dest);
@@ -379,7 +414,7 @@ internal static class Program {
         FhTextIndexType index_type,
         FhGameId        game)
     {
-        _macrodict_load(macro_dict_file, lang, game);
+        _decompile_macro(macro_dict_file, lang, game);
 
         Span<byte> input_bytes = new byte[input_file.Length];
         input_file.ReadExactly(input_bytes);

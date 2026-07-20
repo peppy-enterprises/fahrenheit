@@ -1,0 +1,9 @@
+decompile-macro
+-o
+.
+-l
+English
+-g
+FFX
+-i
+"..\env\ffx_ps2\ffx\master\new_uspc\menu\macrodic.dcp"

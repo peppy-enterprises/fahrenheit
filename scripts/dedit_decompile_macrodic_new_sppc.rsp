@@ -1,0 +1,9 @@
+decompile-macro
+-o
+.
+-l
+Spanish
+-g
+FFX
+-i
+"..\env\ffx_ps2\ffx\master\new_sppc\menu\macrodic.dcp"
