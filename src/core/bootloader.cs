@@ -137,8 +137,6 @@ internal sealed class FhLoader {
         Assembly self = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhEnvironment.Finder.Binaries.FullName, "fh.dll"));
         FhInternal.Log.Info($"Fahrenheit {FileVersionInfo.GetVersionInfo(self.Location).ProductVersion}");
 
-        // required for Hexa.NET.ImGui's assembly-probing logic
-        HexaGen.Runtime.LibraryLoader.CustomLoadFolders.Add(FhEnvironment.Finder.Binaries.FullName);
     }
 
     /// <summary>
