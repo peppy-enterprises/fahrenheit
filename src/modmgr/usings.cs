@@ -4,7 +4,6 @@
  */
 global using SDLWindow     = Hexa.NET.SDL3.SDLWindow;
 global using SDLEvent      = Hexa.NET.SDL3.SDLEvent;
-global using SDLWindowPtr  = Hexa.NET.SDL3.SDLWindowPtr;
 global using SDLWindowB    = Hexa.NET.ImGui.Backends.SDL3.SDLWindow;
 global using SDLEventB     = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
 global using SDLWindowPtrB = Hexa.NET.ImGui.Backends.SDL3.SDLWindowPtr;

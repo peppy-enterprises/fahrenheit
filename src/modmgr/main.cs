@@ -37,7 +37,7 @@ internal sealed unsafe class Program {
     private static void Main(string[] args) {
 
         // Setup SDL.
-        uint init_flags = (uint)(
+        SDLInitFlags init_flags = (
             SDLInitFlags.Video
           | SDLInitFlags.Events);
 
@@ -70,9 +70,9 @@ internal sealed unsafe class Program {
             "Fahrenheit Mod Manager",
             int.CreateChecked(1280 * main_display_scale),
             int.CreateChecked(800  * main_display_scale),
-            (uint)window_flags);
+            window_flags);
 
-        if (_sdl_window == SDLWindowPtr.Null) {
+        if (_sdl_window == null) {
             Console.WriteLine($"Fault in SDL_CreateWindow() - {SDL.GetErrorS()}");
             return;
         }
@@ -151,8 +151,7 @@ internal sealed unsafe class Program {
                 };
             }
 
-            SDLWindowFlags current_window_flags = (SDLWindowFlags)
-                SDL.GetWindowFlags(_sdl_window);
+            SDLWindowFlags current_window_flags = SDL.GetWindowFlags(_sdl_window);
 
             if (current_window_flags.HasFlag(SDLWindowFlags.Minimized)) {
                 SDL.Delay(10);
@@ -170,16 +169,16 @@ internal sealed unsafe class Program {
             // Rendering
             ImGui.Render();
 
-            _gl_context!.Viewport  (0, 0, int.CreateChecked( io.DisplaySize.X ), int.CreateChecked( io.DisplaySize.Y ));
-            _gl_context!.ClearColor(0.45F, 0.55F, 0.60F, 1F);
-            _gl_context!.Clear     (GLClearBufferMask.ColorBufferBit);
+            _gl_context.Viewport  (0, 0, int.CreateChecked( io.DisplaySize.X ), int.CreateChecked( io.DisplaySize.Y ));
+            _gl_context.ClearColor(0.45F, 0.55F, 0.60F, 1F);
+            _gl_context.Clear     (GLClearBufferMask.ColorBufferBit);
 
             ImGuiImplOpenGL3.RenderDrawData(ImGui.GetDrawData());
 
             // Update and Render additional Platform Windows
             // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.)
             if (io.ConfigFlags.HasFlag(ImGuiConfigFlags.ViewportsEnable)) {
-                SDLWindowPtr current_window  = SDL.GLGetCurrentWindow();
+                SDLWindow*   current_window  = SDL.GLGetCurrentWindow();
                 SDLGLContext current_context = SDL.GLGetCurrentContext();
 
                 ImGui.UpdatePlatformWindows();
