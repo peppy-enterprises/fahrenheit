@@ -26,7 +26,6 @@ internal class EEditEditorData {
     public FileStream? active_file;
 }
 
-[SupportedOSPlatform("windows6.1")]
 internal static partial class UI {
 
     /// <summary>
