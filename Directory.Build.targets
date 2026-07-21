@@ -52,7 +52,6 @@
         </ItemGroup>
     </Target>
 
-
     <!-- fkelava 09/06/26 17:36
     A placeholder target to force publishing to occur after a build.
     Publishing places build output in its proper place.
