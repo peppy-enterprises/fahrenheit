@@ -234,7 +234,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate float d_CT_RetFloat(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
-    // Debug mod - `printf` style methods
+    // `printf` and similar methods for use by the debug mod
 
     /* [fkelava 17/7/25 02:33]
      * For vararg functions the delegate signature should have an argument count >=
