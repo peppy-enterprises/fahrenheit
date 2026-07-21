@@ -9746,13 +9746,6 @@ public static unsafe partial class FhCall {
     // __stdcall undefined +memclear(undefined4 pointer, undefined4 size) at 0062f690
 
     // Original after pruning:
-    // unknown undefined dbgPrintf() at 0062f6b0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_dbgPrintf();
-    public static FhMethodHandle<d_dbgPrintf> dbgPrintf => new( new FhMethodLocation("FFX.exe", 0x22F6B0) );
-
-    // Original after pruning:
     // unknown undefined debug_exit_trace() at 0062f6c0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -10320,13 +10313,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_scePadSetMainMode();
     public static FhMethodHandle<d_scePadSetMainMode> scePadSetMainMode => new( new FhMethodLocation("FFX.exe", 0x22FD90) );
-
-    // Original after pruning:
-    // unknown undefined scePrintf() at 0062fda0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_scePrintf();
-    public static FhMethodHandle<d_scePrintf> scePrintf => new( new FhMethodLocation("FFX.exe", 0x22FDA0) );
 
     // Symbol on explicit no-emit list:
     // unknown undefined sceRead() at 0062fdb0

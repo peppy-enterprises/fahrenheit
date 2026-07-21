@@ -7211,9 +7211,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00435370();
     public static FhMethodHandle<d_FUN_00435370> FUN_00435370 => new( new FhMethodLocation("FFX.exe", 0x35370) );
 
-    // Symbol skipped (deemed uninterpretable or explicitly rejected):
-    // unknown undefined PhyrePrintf() at 004353f0
-
     // Original after pruning:
     // unknown undefined FUN_00435490() at 00435490
 
