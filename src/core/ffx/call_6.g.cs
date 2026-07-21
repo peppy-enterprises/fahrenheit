@@ -3603,20 +3603,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00873be0> FUN_00873be0 => new( new FhMethodLocation("FFX.exe", 0x473BE0) );
 
     // Original after pruning:
-    // unknown undefined AtelPs2DebugString() at 00873c10
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_AtelPs2DebugString();
-    public static FhMethodHandle<d_AtelPs2DebugString> AtelPs2DebugString => new( new FhMethodLocation("FFX.exe", 0x473C10) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00873c20() at 00873c20
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00873c20();
-    public static FhMethodHandle<d_FUN_00873c20> FUN_00873c20 => new( new FhMethodLocation("FFX.exe", 0x473C20) );
-
-    // Original after pruning:
     // unknown undefined AtelRecoverPreBgPage() at 00873c60
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -28889,13 +28875,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00927520();
     public static FhMethodHandle<d_FUN_00927520> FUN_00927520 => new( new FhMethodLocation("FFX.exe", 0x527520) );
-
-    // Original after pruning:
-    // unknown undefined rcPrint() at 00927550
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_rcPrint();
-    public static FhMethodHandle<d_rcPrint> rcPrint => new( new FhMethodLocation("FFX.exe", 0x527550) );
 
     // Original after pruning:
     // unknown undefined FUN_00927570() at 00927570

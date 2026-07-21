@@ -234,6 +234,43 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate float d_CT_RetFloat(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
+    // Debug mod - `printf` style methods
+
+    /* [fkelava 17/7/25 02:33]
+     * For vararg functions the delegate signature should have an argument count >=
+     * the argument count of the invocation with the most varargs in the executable.
+     *
+     * For now we assume sixteen. If you crash with a buffer/stack overrun, increase it.
+     */
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d__Printf(string fmt,
+        nint va0,  nint va1,  nint va2,  nint va3,
+        nint va4,  nint va5,  nint va6,  nint va7,
+        nint va8,  nint va9,  nint va10, nint va11,
+        nint va12, nint va13, nint va14, nint va15);
+
+    public static FhMethodHandle<d__Printf> dbgPrintf =>
+        new( new FhMethodLocation(0x22F6B0, 0x9ADD0) );
+    public static FhMethodHandle<d__Printf> scePrintf =>
+        new( new FhMethodLocation(0x22FDA0, 0x9B4B0) );
+    public static FhMethodHandle<d__Printf> AtelPs2DebugString =>
+        new( new FhMethodLocation(0x473C10, 0x30E9E0) );
+    public static FhMethodHandle<d__Printf> AtelPs2DebugString2 =>
+        new( new FhMethodLocation(0x473C20, 0x30E9F0) );
+    public static FhMethodHandle<d__Printf> rcPrint =>
+        new( new FhMethodLocation(0x527550, 0x3D9690) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d__PhyrePrintf(int rc, string fmt,
+        nint va0,  nint va1,  nint va2,  nint va3,
+        nint va4,  nint va5,  nint va6,  nint va7,
+        nint va8,  nint va9,  nint va10, nint va11,
+        nint va12, nint va13, nint va14, nint va15);
+
+    public static FhMethodHandle<d__PhyrePrintf> PhyrePrintf =>
+        new ( new FhMethodLocation(0x0353F0, 0x48CC60) );
+
     // PUBLIC/UNRESTRICTED - END
 
 }
