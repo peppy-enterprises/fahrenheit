@@ -108,7 +108,7 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         string active_set      = FhInternal.Saves.get_active_set();
-        string slots_text      = $"({FhInternal.Saves.get_slots_used()}/{FhInternal.Saves.get_slots_total()})";
+        string slots_text      = $"({FhInternal.Saves.get_slots_used_user()}/{FhInternal.Saves.get_slots_total_user()})";
         string active_set_text = $"{active_set} {slots_text}";
 
         float width_window = ImGui.GetWindowSize().X;

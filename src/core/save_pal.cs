@@ -268,7 +268,7 @@ internal static unsafe class FhSavePal {
      */
 
     internal const string DEFAULT_SET_NAME = "default";
-    internal const int    DEFAULT_SET_SIZE = 500;
+    internal const int    DEFAULT_SET_SIZE = 501; // One extra slot for the auto-save
 
     internal static FhSaveDialogState pal_get_dialog_state()                        => FhUtil.get_at<FhSaveDialogState>(pal_addr_dialog_state());
     internal static void              pal_set_dialog_state(FhSaveDialogState value) => FhUtil.set_at(pal_addr_dialog_state(), value);
@@ -679,4 +679,3 @@ internal static unsafe class FhSavePal {
         };
     }
 }
-

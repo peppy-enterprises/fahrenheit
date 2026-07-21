@@ -237,10 +237,25 @@ internal sealed class FhSaves {
     }
 
     /// <summary>
+    ///     Get the number of used up slots in the current set, not counting the auto-save slot.
+    /// </summary>
+    internal int get_slots_used_user() {
+        // The auto-save goes in the first slot, so if that slot is not occupied there is no auto-save.
+        return _sm_active_set_count - (_sm_active_set_slots[0] == 1 ? 1 : 0);
+    }
+
+    /// <summary>
     ///     Get the total number of slots in the current set.
     /// </summary>
     internal int get_slots_total() {
         return _sm_set_size;
+    }
+
+    /// <summary>
+    ///     Get the total number of slots in the current set, not counting the auto-save slot.
+    /// </summary>
+    internal int get_slots_total_user() {
+        return _sm_set_size - 1;
     }
 
     /// <summary>
@@ -261,7 +276,7 @@ internal sealed class FhSaves {
         int target_slot = menu_index != 0
             ? saves[menu_index]
             : slots.IndexOf(-1);
-        Debug.Assert(target_slot != -1);
+        Debug.Assert(target_slot != -1, "No empty slots found. Despite no slot being selected.");
 
         _sm_active_set_slots[target_slot] = 1;
         _sm_active_set_saves[target_slot] = target_slot;
