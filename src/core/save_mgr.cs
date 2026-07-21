@@ -233,14 +233,14 @@ internal sealed class FhSaves {
     ///     Get the number of used up slots in the current set.
     /// </summary>
     internal int get_slots_used() {
-        return _sm_active_set_count;
+        return _sm_active_set_count - 1; // Do not count the auto-save
     }
 
     /// <summary>
     ///     Get the total number of slots in the current set.
     /// </summary>
     internal int get_slots_total() {
-        return _sm_set_size;
+        return _sm_set_size - 1; // Do not count the auto-save
     }
 
     /// <summary>

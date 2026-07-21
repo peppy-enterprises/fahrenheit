@@ -83,7 +83,8 @@ public sealed class FhSaveUiModule : FhModule {
 
         ReadOnlySpan<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
 
-        for (; slot < FhInternal.Saves.get_slots_total(); slot++) {
+        // get_slots_total() does not count the auto-save by default, so we have to add 1
+        for (; slot < FhInternal.Saves.get_slots_total() + 1; slot++) {
             if (display_data[slot].valid) {
                 ui_savefile(slot, display_data[slot]);
             }
