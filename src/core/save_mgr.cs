@@ -261,7 +261,7 @@ internal sealed class FhSaves {
         int target_slot = menu_index != 0
             ? saves[menu_index]
             : slots.IndexOf(-1);
-        Debug.Assert(target_slot != -1);
+        Debug.Assert(target_slot != -1, "No empty slots found. Despite no slot being selected.");
 
         _sm_active_set_slots[target_slot] = 1;
         _sm_active_set_saves[target_slot] = target_slot;

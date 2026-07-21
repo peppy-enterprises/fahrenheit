@@ -679,4 +679,3 @@ internal static unsafe class FhSavePal {
         };
     }
 }
-
