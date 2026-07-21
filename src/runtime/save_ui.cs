@@ -83,8 +83,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         ReadOnlySpan<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
 
-        // get_slots_total() does not count the auto-save by default, so we have to add 1
-        for (; slot < FhInternal.Saves.get_slots_total() + 1; slot++) {
+        for (; slot < FhInternal.Saves.get_slots_total(); slot++) {
             if (display_data[slot].valid) {
                 ui_savefile(slot, display_data[slot]);
             }
@@ -109,7 +108,7 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         string active_set      = FhInternal.Saves.get_active_set();
-        string slots_text      = $"({FhInternal.Saves.get_slots_used()}/{FhInternal.Saves.get_slots_total()})";
+        string slots_text      = $"({FhInternal.Saves.get_slots_used_user()}/{FhInternal.Saves.get_slots_total_user()})";
         string active_set_text = $"{active_set} {slots_text}";
 
         float width_window = ImGui.GetWindowSize().X;
