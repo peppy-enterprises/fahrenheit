@@ -39,6 +39,7 @@ EXCEPTION_POINTERS* g_eh_exception_ptr;
 
 // Globals to hold hostfxr exports
 hostfxr_initialize_for_runtime_config_fn g_fnptr_hostfxr_init;
+hostfxr_set_runtime_property_value_fn    g_fnptr_hostfxr_set_runtime_property;
 hostfxr_get_runtime_delegate_fn          g_fnptr_hostfxr_get_delegate;
 hostfxr_close_fn                         g_fnptr_hostfxr_close;
 
@@ -60,11 +61,15 @@ static bool load_hostfxr() {
     if (lib == nullptr)
         return FALSE;
 
-    g_fnptr_hostfxr_init         = (hostfxr_initialize_for_runtime_config_fn)::GetProcAddress(lib, "hostfxr_initialize_for_runtime_config");
-    g_fnptr_hostfxr_get_delegate = (hostfxr_get_runtime_delegate_fn)         ::GetProcAddress(lib, "hostfxr_get_runtime_delegate");
-    g_fnptr_hostfxr_close        = (hostfxr_close_fn)                        ::GetProcAddress(lib, "hostfxr_close");
+    g_fnptr_hostfxr_init                 = (hostfxr_initialize_for_runtime_config_fn)::GetProcAddress(lib, "hostfxr_initialize_for_runtime_config");
+    g_fnptr_hostfxr_set_runtime_property = (hostfxr_set_runtime_property_value_fn)   ::GetProcAddress(lib, "hostfxr_set_runtime_property_value");
+    g_fnptr_hostfxr_get_delegate         = (hostfxr_get_runtime_delegate_fn)         ::GetProcAddress(lib, "hostfxr_get_runtime_delegate");
+    g_fnptr_hostfxr_close                = (hostfxr_close_fn)                        ::GetProcAddress(lib, "hostfxr_close");
 
-    return (g_fnptr_hostfxr_init && g_fnptr_hostfxr_get_delegate && g_fnptr_hostfxr_close);
+    return g_fnptr_hostfxr_init
+        && g_fnptr_hostfxr_set_runtime_property
+        && g_fnptr_hostfxr_get_delegate
+        && g_fnptr_hostfxr_close;
 }
 
 /* [fkelava 11/06/26 16:27]
@@ -381,6 +386,19 @@ static int stage1_main(void) {
     }
 
     // STEP 7:
+    // Set up AppContext.BaseDirectory so we can use it to find runtime dependencies.
+    rc = g_fnptr_hostfxr_set_runtime_property(
+        cxt,
+        L"APP_CONTEXT_BASE_DIRECTORY",
+        cwd_path.c_str());
+
+    if (rc != 0) {
+        std::wcerr << "hostfxr: failed to set APP_CONTEXT_BASE_DIRECTORY" << std::endl;
+        std::wcerr << "This is an uncommon error. Please contact the Fahrenheit developers at https://github.com/fahrenheit-crew/fahrenheit." << std::endl;
+        exit(rc);
+    }
+
+    // STEP 8:
     // Get function pointers to HostFxr's `load_assembly()` and `get_function_pointer()`.
     rc = g_fnptr_hostfxr_get_delegate(
         cxt,
@@ -409,7 +427,7 @@ static int stage1_main(void) {
     load_assembly_fn        fnptr_hostfxr_load_assembly        = (load_assembly_fn)       ptr_hostfxr_load_assembly;
     get_function_pointer_fn fnptr_hostfxr_get_function_pointer = (get_function_pointer_fn)ptr_hostfxr_get_function_pointer;
 
-    // STEP 8:
+    // STEP 9:
     // Load managed assembly and get function pointer to bootstrap function.
     fh_init fnptr_fh_init = nullptr;
 
@@ -438,14 +456,14 @@ static int stage1_main(void) {
         exit(rc);
     }
 
-    // STEP 9:
+    // STEP 10:
     // Boot Fahrenheit by invoking the boot function in `fh.dll`.
 
     // TRANSITION: NATIVE -> MANAGED
     fnptr_fh_init();
     // TRANSITION: MANAGED -> NATIVE
 
-    // STEP 10:
+    // STEP 11:
     // Change the working directory to the targeted executable's location,
     // now that we have finished initialization.
     rc = _wchdir(host_path.c_str());
