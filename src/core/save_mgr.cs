@@ -23,7 +23,6 @@ internal sealed class FhSaves {
     private readonly int[]                          _sm_active_set_slots;
     private readonly int[]                          _sm_active_set_saves;
     private          int                            _sm_active_set_count;
-    private          bool                           _sm_autosave_exists;
     private readonly string                         _sm_path_base;
     private readonly string                         _sm_path_default_set;
     private readonly FhSaveDisplayData[]            _sm_display_data;
@@ -127,10 +126,6 @@ internal sealed class FhSaves {
 
             _ = Encoding.UTF8.GetBytes($"{slot}\0", _sm_display_data[slot].slot);
             _ = Encoding.UTF8.GetBytes($"{save_file.LastWriteTimeUtc:yyyy/MM/dd HH:mm:ss}\0", _sm_display_data[slot].create_time);
-
-            if (slot == 0) {
-                _sm_autosave_exists = true;
-            }
 
             _sm_active_set_slots[slot]                   = 1;
             _sm_active_set_saves[_sm_active_set_count++] = slot;
@@ -245,7 +240,8 @@ internal sealed class FhSaves {
     ///     Get the number of used up slots in the current set, not counting the auto-save slot.
     /// </summary>
     internal int get_slots_used_user() {
-        return _sm_active_set_count - (_sm_autosave_exists ? 1 : 0);
+        // The auto-save goes in the first slot, so if that slot is not occupied there is no auto-save.
+        return _sm_active_set_count - (_sm_active_set_slots[0] == 1 ? 1 : 0);
     }
 
     /// <summary>
