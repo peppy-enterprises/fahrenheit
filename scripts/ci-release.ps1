@@ -49,6 +49,7 @@ function Help() {
     Write-Host -Object "  -configuration <value>   Build configuration (Debug, Release)"
     Write-Host -Object "  -verbosity <value>       MSBuild verbosity (q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic])"
     Write-Host -Object "  -help                    Print help and exit"
+    Write-Host -Object "  -dryRun                  Abort before actually publishing the package. For local testing purposes."
     Write-Host -Object ""
     Write-Host -Object "Command line arguments not listed above are passed through to MSBuild."
     Write-Host -Object "The above arguments can be shortened as much as to be unambiguous (e.g. -co for configuration)."
@@ -110,7 +111,7 @@ try {
     signtool sign /sha1 $certFingerprint /tr http://time.certum.pl /fd sha1 /td sha256 /v $ArtifactsToSign
     
     # ZIP up the signed release artifacts.
-    7z a -tzip "fahrenheit_windows_x86_$($configuration)_$($tag).zip" $Artifacts
+    7z a -tzip "fahrenheit_$($configuration)_$($tag).zip" $Artifacts
     
     if ($dryRun) {
         Write-Host "Dry run complete. Exiting."
@@ -118,7 +119,7 @@ try {
     }
     
     # Attach the generated release ZIP to the appropriate GH tag.
-    gh release upload $tag "fahrenheit_windows_x86_$($configuration)_$($tag).zip"
+    gh release upload $tag "fahrenheit_$($configuration)_$($tag).zip"
     
     # Push the NuGet packages.
     # They are currently not signed pending a support thread with Certum wrt. inability to sign SHA-256.
