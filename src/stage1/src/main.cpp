@@ -12,9 +12,6 @@
  * For the exception handling, see:
  * - http://code.aaronballman.com/minidumper/MiniDump.cpp
  * - https://github.com/folgerwang/UnrealEngine/blob/release/Engine/Source/Runtime/Core/Private/Windows/WindowsPlatformCrashContext.cpp
- * - https://github.com/goatcorp/Dalamud/blob/master/Dalamud.Boot/veh.cpp
- *
- * Portions of VEH handling (C) Dalamud, under the terms of the AGPL.
  */
 
 #include "fhstage1.h"
@@ -82,51 +79,6 @@ static bool load_hostfxr() {
  * - FFX.exe+226A90
  * - https://www.debuginfo.com/examples/src/effminidumps/MiniDump.cpp
  */
-
-// Since there is no reasonable general list of exceptions to exempt from VEH, I used Dalamud's.
-// https://github.com/goatcorp/Dalamud/blob/7e980a0a5e312c65d22f724703715e0679d2ef8a/Dalamud.Boot/veh.cpp#L40-L80
-static bool stage1_eh_whitelist_exception(const DWORD code)
-{
-    switch (code)
-    {
-        case STATUS_ACCESS_VIOLATION:
-        case STATUS_IN_PAGE_ERROR:
-        case STATUS_INVALID_HANDLE:
-        case STATUS_INVALID_PARAMETER:
-        case STATUS_NO_MEMORY:
-        case STATUS_ILLEGAL_INSTRUCTION:
-        case STATUS_NONCONTINUABLE_EXCEPTION:
-        case STATUS_INVALID_DISPOSITION:
-        case STATUS_ARRAY_BOUNDS_EXCEEDED:
-        case STATUS_FLOAT_DENORMAL_OPERAND:
-        case STATUS_FLOAT_DIVIDE_BY_ZERO:
-        case STATUS_FLOAT_INEXACT_RESULT:
-        case STATUS_FLOAT_INVALID_OPERATION:
-        case STATUS_FLOAT_OVERFLOW:
-        case STATUS_FLOAT_STACK_CHECK:
-        case STATUS_FLOAT_UNDERFLOW:
-        case STATUS_INTEGER_DIVIDE_BY_ZERO:
-        case STATUS_INTEGER_OVERFLOW:
-        case STATUS_PRIVILEGED_INSTRUCTION:
-        case STATUS_STACK_OVERFLOW:
-        case STATUS_DLL_NOT_FOUND:
-        case STATUS_ORDINAL_NOT_FOUND:
-        case STATUS_ENTRYPOINT_NOT_FOUND:
-        case STATUS_DLL_INIT_FAILED:
-        case STATUS_CONTROL_STACK_VIOLATION:
-        case STATUS_FLOAT_MULTIPLE_FAULTS:
-        case STATUS_FLOAT_MULTIPLE_TRAPS:
-        case STATUS_HEAP_CORRUPTION:
-        case STATUS_STACK_BUFFER_OVERRUN:
-        case STATUS_INVALID_CRUNTIME_PARAMETER:
-        case STATUS_THREAD_NOT_RUNNING:
-        case STATUS_ALREADY_REGISTERED:
-        case 0xE0434352: // CLR exception
-            return true;
-        default:
-            return false;
-    }
-}
 
 // Filters the core dump to exclude objects which we do not want to record.
 static BOOL CALLBACK stage1_eh_filter_dump(
@@ -224,23 +176,6 @@ static LONG WINAPI stage1_eh(EXCEPTION_POINTERS* ptr_exception_info) {
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-// The Stage1 vectored exception handler.
-static LONG NTAPI stage1_veh(EXCEPTION_POINTERS* ptr_exception_info) {
-    // TODO: remove logging after testruns
-    auto ec = ptr_exception_info->ExceptionRecord->ExceptionCode;
-    std::wcout << "VEH: " << std::hex << ec << std::endl;
-
-    /* [fkelava 15/06/26 00:43]
-     * Per Passant (https://stackoverflow.com/a/12300563):
-     * > Exception codes with values less than 0x80000000 are
-     * > just informal and never an indicator of real trouble.
-     */
-    if (ec < 0x80000000 || !stage1_eh_whitelist_exception(ec))
-        return EXCEPTION_CONTINUE_SEARCH;
-
-    return stage1_eh(ptr_exception_info);
-}
-
 // Ignores the game's attempt to install its own exception handler.
 static LPTOP_LEVEL_EXCEPTION_FILTER WINAPI stage1_eh_set_filter(LPTOP_LEVEL_EXCEPTION_FILTER fnptr_exception_filter) {
     return &stage1_eh;
@@ -280,7 +215,7 @@ static BOOL stage1_eh_install(LPBYTE ptr_main_module) {
     }
 
     ::SetThreadDescription(g_eh_thread_handler, L"Fahrenheit EH");
-    AddVectoredExceptionHandler(TRUE, &stage1_veh);
+    SetUnhandledExceptionFilter(&stage1_eh);
 
     if (MH_CreateHookApi(L"kernel32.dll", "SetUnhandledExceptionFilter", &stage1_eh_set_filter, reinterpret_cast<void**>(&g_fnptr_eh_original)) != MH_OK
     ||  MH_EnableHook   (&SetUnhandledExceptionFilter)                                                                                          != MH_OK) {
