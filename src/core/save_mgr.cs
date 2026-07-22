@@ -16,28 +16,21 @@ internal sealed class FhSaves {
      * At runtime, you may swap between all sets for the hash.
      */
 
-    private          int                            _sm_lock;
-    private readonly HashSet<string>                _sm_sets;
-    private readonly int                            _sm_set_size;
-    private          string                         _sm_active_set;
-    private readonly int[]                          _sm_active_set_slots;
-    private readonly int[]                          _sm_active_set_saves;
-    private          int                            _sm_active_set_count;
-    private readonly string                         _sm_path_base;
-    private readonly string                         _sm_path_default_set;
-    private readonly FhSaveDisplayData[]            _sm_display_data;
-    private readonly Dictionary<string, FileInfo[]> _sm_file_attributes;
+    private          int                     _sm_lock;
+    private readonly HashSet<string>         _sm_sets;
+    private readonly HashSet<int>            _sm_occupied_slots;
+    private          string                  _sm_active_set;
+    private readonly string                  _sm_path_base;
+    private readonly string                  _sm_path_default_set;
+    private readonly List<FhSaveDisplayData> _sm_display_data;
 
     public FhSaves() {
         _sm_path_base        = Path.Join(FhEnvironment.Finder.Saves.FullName, FhInternal.Hasher.SaveSetHash);
         _sm_path_default_set = Path.Join(_sm_path_base, FhSavePal.DEFAULT_SET_NAME, FhSavePal.pal_get_save_subfolder());
+        _sm_occupied_slots   = [];
         _sm_sets             = [];
-        _sm_set_size         = FhSavePal.DEFAULT_SET_SIZE;
         _sm_active_set       = FhSavePal.DEFAULT_SET_NAME;
-        _sm_active_set_slots = new int              [_sm_set_size];
-        _sm_active_set_saves = new int              [_sm_set_size];
-        _sm_display_data     = new FhSaveDisplayData[_sm_set_size];
-        _sm_file_attributes  = [];
+        _sm_display_data     = [];
 
         /* [fkelava 19/01/26 18:13]
          * Save PAL is not ready to perform indexing operations at 'init' time because
@@ -56,30 +49,6 @@ internal sealed class FhSaves {
      */
 
     /// <summary>
-    ///     Updates the file attribute cache with any sets added since the last call.
-    /// </summary>
-    private void _sm_cache_file_attributes() {
-        foreach (string set in _sm_sets) {
-            if (_sm_file_attributes.TryGetValue(set, out _))
-                continue;
-
-            FileInfo[] set_file_attributes = new FileInfo[_sm_set_size];
-
-            for (int slot = 0; slot < _sm_set_size; slot++) {
-                string save_file_path = Path.Join(
-                    _sm_path_base,
-                    set,
-                    FhSavePal.pal_get_save_subfolder(),
-                    FhSavePal.pal_get_save_name_for_slot(slot));
-
-                set_file_attributes[slot] = new FileInfo(save_file_path);
-            }
-
-            _sm_file_attributes[set] = set_file_attributes;
-        }
-    }
-
-    /// <summary>
     ///     Ensures the default set exists. A default set must exist for every state hash.
     /// </summary>
     private void _sm_create_default_set() {
@@ -90,50 +59,45 @@ internal sealed class FhSaves {
     ///     Indexes the active save set's directory. This function must be called under lock.
     /// </summary>
     private void _sm_index_active_set() {
+        _sm_display_data  .Clear();
+        _sm_occupied_slots.Clear();
 
-        /* [fkelava 08/11/25 21:21]
-         * As in the base game, `-1` indicates the absence and `1` the presence of a save in a slot.
-         */
+        string path_set_folder = Path.Join(
+            _sm_path_base,
+            _sm_active_set,
+            FhSavePal.pal_get_save_subfolder());
 
-        _sm_active_set_count = 0;
-        _sm_active_set_slots.AsSpan().Fill(-1);
-        _sm_active_set_saves.AsSpan().Clear();
-        _sm_active_set_slots[0] = 1;
+        foreach (var save_file in Directory.EnumerateFiles(path_set_folder, FhUtil.select("ffx_*", "ffx2_*", "ffx2_*"))) {
+            FhSaveDisplayData  display_data = new();
+            ReadOnlySpan<char> slot_str     = save_file[ (save_file.LastIndexOf('_') + 1) .. ];
 
-        for (int slot = 0; slot < _sm_set_size; slot++) {
-            _sm_display_data[slot].valid = false;
+            if (!int.TryParse(slot_str, out int slot))
+                continue;
 
-            FileInfo save_file = _sm_file_attributes[_sm_active_set][slot];
-
-            save_file.Refresh();
-            if (!save_file.Exists) continue;
-
-            using (FileStream save_file_stream = save_file.OpenRead()) {
-                save_file_stream.ReadExactly(_sm_display_data[slot].header);
+            using (FileStream save_file_stream = File.OpenRead(save_file)) {
+                save_file_stream.ReadExactly(display_data.header);
             }
 
-            FhSavePal.pal_get_location   (_sm_display_data[slot].header, _sm_display_data[slot].location);
-            FhSavePal.pal_get_icon_chr   (_sm_display_data[slot].header, _sm_display_data[slot].icon_chr1, 0);
-            FhSavePal.pal_get_icon_chr   (_sm_display_data[slot].header, _sm_display_data[slot].icon_chr2, 1);
-            FhSavePal.pal_get_icon_chr   (_sm_display_data[slot].header, _sm_display_data[slot].icon_chr3, 2);
-            FhSavePal.pal_get_icon_map   (_sm_display_data[slot].header, _sm_display_data[slot].icon_map);
-            FhSavePal.pal_get_player_name(_sm_display_data[slot].header, _sm_display_data[slot].player_name);
-            FhSavePal.pal_get_playtime   (_sm_display_data[slot].header, _sm_display_data[slot].play_time);
-            FhSavePal.pal_get_chapter    (_sm_display_data[slot].header, _sm_display_data[slot].chapter);
-            FhSavePal.pal_get_completion (_sm_display_data[slot].header, _sm_display_data[slot].completion);
-            FhSavePal.pal_get_lm_job     (_sm_display_data[slot].header, _sm_display_data[slot].lm_job);
-            FhSavePal.pal_get_lm_level   (_sm_display_data[slot].header, _sm_display_data[slot].lm_level);
+            FhSavePal.pal_get_location   (display_data.header, display_data.location);
+            FhSavePal.pal_get_icon_chr   (display_data.header, display_data.icon_chr1, 0);
+            FhSavePal.pal_get_icon_chr   (display_data.header, display_data.icon_chr2, 1);
+            FhSavePal.pal_get_icon_chr   (display_data.header, display_data.icon_chr3, 2);
+            FhSavePal.pal_get_icon_map   (display_data.header, display_data.icon_map);
+            FhSavePal.pal_get_player_name(display_data.header, display_data.player_name);
+            FhSavePal.pal_get_playtime   (display_data.header, display_data.play_time);
+            FhSavePal.pal_get_chapter    (display_data.header, display_data.chapter);
+            FhSavePal.pal_get_completion (display_data.header, display_data.completion);
+            FhSavePal.pal_get_lm_job     (display_data.header, display_data.lm_job);
+            FhSavePal.pal_get_lm_level   (display_data.header, display_data.lm_level);
 
-            _ = Encoding.UTF8.GetBytes($"{slot}\0", _sm_display_data[slot].slot);
-            _ = Encoding.UTF8.GetBytes($"{save_file.LastWriteTimeUtc:yyyy/MM/dd HH:mm:ss}\0", _sm_display_data[slot].create_time);
+            _ = Encoding.UTF8.GetBytes($"{slot}\0", display_data.slot_str);
+            _ = Encoding.UTF8.GetBytes($"{File.GetLastWriteTimeUtc(save_file):yyyy/MM/dd HH:mm:ss}\0", display_data.create_time);
 
-            _sm_active_set_slots[slot]                   = 1;
-            _sm_active_set_saves[_sm_active_set_count++] = slot;
+            display_data.slot = slot;
 
-            _sm_display_data[slot].valid = true;
+            _sm_occupied_slots.Add(slot);
+            _sm_display_data  .Add(display_data);
         }
-
-        _sm_active_set_saves[ _sm_active_set_count .. ].AsSpan().Fill(-1);
     }
 
     /// <summary>
@@ -146,8 +110,6 @@ internal sealed class FhSaves {
             string set_name = Path.GetFileName(dir);
             _sm_sets.Add(set_name);
         }
-
-        _sm_cache_file_attributes();
 
         /* [fkelava 19/01/26 14:50]
          * Sets can be modified on the disk under us. The user can create a new one, delete the
@@ -170,8 +132,8 @@ internal sealed class FhSaves {
         }
     }
 
-    internal string                          get_active_set()   => _sm_active_set;
-    internal ReadOnlySpan<FhSaveDisplayData> get_display_data() => _sm_display_data;
+    internal string                  get_active_set()   => _sm_active_set;
+    internal List<FhSaveDisplayData> get_display_data() => _sm_display_data;
 
     internal IReadOnlySet<string> get_sets() {
         _sm_query_sets();
@@ -233,36 +195,7 @@ internal sealed class FhSaves {
     ///     Get the number of used up slots in the current set.
     /// </summary>
     internal int get_slots_used() {
-        return _sm_active_set_count;
-    }
-
-    /// <summary>
-    ///     Get the number of used up slots in the current set, not counting the auto-save slot.
-    /// </summary>
-    internal int get_slots_used_user() {
-        // The auto-save goes in the first slot, so if that slot is not occupied there is no auto-save.
-        return _sm_active_set_count - (_sm_active_set_slots[0] == 1 ? 1 : 0);
-    }
-
-    /// <summary>
-    ///     Get the total number of slots in the current set.
-    /// </summary>
-    internal int get_slots_total() {
-        return _sm_set_size;
-    }
-
-    /// <summary>
-    ///     Get the total number of slots in the current set, not counting the auto-save slot.
-    /// </summary>
-    internal int get_slots_total_user() {
-        return _sm_set_size - 1;
-    }
-
-    /// <summary>
-    ///     For a given <paramref name="menu_index"/>, returns the slot number being loaded from.
-    /// </summary>
-    internal int get_slot_load(int menu_index) {
-        return _sm_active_set_saves[menu_index];
+        return _sm_display_data[ 1 .. ].Count;
     }
 
     /// <summary>
@@ -270,19 +203,12 @@ internal sealed class FhSaves {
     /// </summary>
     internal int get_slot_save(int menu_index) {
         // This method is not re-entrant.
-        ReadOnlySpan<int> slots = _sm_active_set_slots;
-        ReadOnlySpan<int> saves = _sm_active_set_saves;
+        if (menu_index != 0) return menu_index;
 
-        int target_slot = menu_index != 0
-            ? saves[menu_index]
-            : slots.IndexOf(-1);
-        Debug.Assert(target_slot != -1, "No empty slots found. Despite no slot being selected.");
+        int target_slot = 0;
+        while (_sm_occupied_slots.Contains(target_slot)) { target_slot++; };
 
-        _sm_active_set_slots[target_slot] = 1;
-        _sm_active_set_saves[target_slot] = target_slot;
-
-        if (menu_index == 0) _sm_active_set_count++;
-
+        _sm_occupied_slots.Add(target_slot);
         return target_slot;
     }
 }

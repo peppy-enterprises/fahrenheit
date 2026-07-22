@@ -231,10 +231,10 @@ internal struct FhSaveDisplayData {
      * and ImGui accept them as input. The sizes are taken from the base game.
      */
 
-    internal bool valid;
+    internal int slot;
 
     public InlineArray64 <byte> header;
-    public InlineArray16 <byte> slot;
+    public InlineArray16 <byte> slot_str;
     public InlineArray64 <byte> create_time;
     public InlineArray128<byte> location;
     public InlineArray128<byte> play_time;
@@ -268,7 +268,6 @@ internal static unsafe class FhSavePal {
      */
 
     internal const string DEFAULT_SET_NAME = "default";
-    internal const int    DEFAULT_SET_SIZE = 501; // One extra slot for the auto-save
 
     internal static FhSaveDialogState pal_get_dialog_state()                        => FhUtil.get_at<FhSaveDialogState>(pal_addr_dialog_state());
     internal static void              pal_set_dialog_state(FhSaveDialogState value) => FhUtil.set_at(pal_addr_dialog_state(), value);
