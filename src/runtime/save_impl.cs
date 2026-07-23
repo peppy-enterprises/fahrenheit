@@ -191,14 +191,11 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     }
 
     /// <summary>
-    ///     Loads the save file in the slot corresponding to the
-    ///     selected <paramref name="index"/> in the save/load menu.
+    ///     Loads the save file in the given <paramref name="slot"/>.
     /// </summary>
-    internal void load(int index) {
-        int    slot      = FhInternal.Saves.get_slot_load(index);
-        string save_name = FhInternal.Saves.get_save_path_for_slot(slot);
-
-        Span<byte> save = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
+    internal void load(int slot) {
+        string     save_name = FhInternal.Saves.get_save_path_for_slot(slot);
+        Span<byte> save      = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
 
         // TODO: add popups on success/failure
         using (FileStream save_stream = File.OpenRead(save_name)) {
@@ -223,11 +220,10 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     }
 
     /// <summary>
-    ///     Performs an Al Bhed Compilation Sphere load from the save
-    ///     at the given <paramref name="index"/> in the save/load menu.
+    ///     Performs an Al Bhed Compilation Sphere load
+    ///     from the save in the given <paramref name="slot"/>.
     /// </summary>
-    internal void load_albd(int index) {
-        int    slot      = FhInternal.Saves.get_slot_load(index);
+    internal void load_albd(int slot) {
         string save_name = FhInternal.Saves.get_save_path_for_slot(slot);
 
         //Span<byte> save = new(

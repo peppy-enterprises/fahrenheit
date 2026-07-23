@@ -68,25 +68,20 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        int slot = 0;
-        if (_sem!.get_system_state() is FhSaveExtensionSystemState.SAVE) {
-            if (FhInternal.Saves.get_slots_used() < FhInternal.Saves.get_slots_total()) {
-                Vector2 size_new_save_btn = new(ImGui.GetContentRegionAvail().X, 0F);
+        bool is_save = _sem!.get_system_state() is FhSaveExtensionSystemState.SAVE;
 
-                if (ImGui.Button("New Save Data", size_new_save_btn)) {
-                    _sem!.save(slot);
-                }
+        if (is_save) {
+            Vector2 size_new_save_btn = new(ImGui.GetContentRegionAvail().X, 0F);
+
+            if (ImGui.Button("New Save Data", size_new_save_btn)) {
+                _sem!.save(0);
             }
-
-            slot = 1;
         }
 
-        ReadOnlySpan<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
+        List<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
 
-        for (; slot < FhInternal.Saves.get_slots_total(); slot++) {
-            if (display_data[slot].valid) {
-                ui_savefile(slot, display_data[slot]);
-            }
+        foreach (FhSaveDisplayData save_file in is_save ? display_data[ 1 .. ] : display_data) {
+            ui_savefile(save_file);
         }
 
         ImGui.End();
@@ -108,7 +103,7 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         string active_set      = FhInternal.Saves.get_active_set();
-        string slots_text      = $"({FhInternal.Saves.get_slots_used_user()}/{FhInternal.Saves.get_slots_total_user()})";
+        string slots_text      = $"({FhInternal.Saves.get_slots_used()} saves)";
         string active_set_text = $"{active_set} {slots_text}";
 
         float width_window = ImGui.GetWindowSize().X;
@@ -150,15 +145,18 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.End();
     }
 
-    private void ui_savefile(int slot, FhSaveDisplayData data) {
+    private void ui_savefile(FhSaveDisplayData data) {
         ImGuiStylePtr style       = ImGui.GetStyle();
         Vector2       spacer_size = new(0F, style.FramePadding.Y);
         Vector2       window_size = new(ImGui.GetContentRegionAvail().X, 0F);
+
+        int slot = data.slot;
 
         // TODO: Change this to ItemSpacing instead of FramePadding
         if (slot != 0) {
             ImGui.Dummy(spacer_size);
         }
+
         Vector2 start = ImGui.GetCursorScreenPos();
         bool hovered = slot == _display_index;
         bool pressed = _pressed;
@@ -217,9 +215,9 @@ public sealed class FhSaveUiModule : FhModule {
         ImGuiStylePtr style   = ImGui.GetStyle();
         float         padding = style.FramePadding.X + style.IndentSpacing;
 
-        bool is_autosave = slot == 0 && _sem!.get_system_state() is FhSaveExtensionSystemState.LOAD;
+        bool is_autosave = slot == 0 && _sem!.get_system_state() is not FhSaveExtensionSystemState.SAVE;
 
-        ImGui.Text(is_autosave ? "Autosave"u8 : data.slot);
+        ImGui.Text(is_autosave ? "Autosave"u8 : data.slot_str);
         ImGui.SameLine(is_autosave ? 100 : 60);
         ImGui.Text(data.location);
         ImGui.SameLine();
