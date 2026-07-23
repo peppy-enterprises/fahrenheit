@@ -17,12 +17,12 @@ namespace Fahrenheit;
 ///     The accessor for objects and helpers that compose the public Fahrenheit API.
 /// </summary>
 public static class FhApi {
-    public static readonly FhModController       Mods          = new FhModController();
-    public static readonly FhLocalizationManager Localization  = new FhLocalizationManager();
-    public static readonly FhResourceLoader      Resources     = new FhResourceLoader();
-    public static readonly FhImGuiHelper         ImGuiHelper   = new FhImGuiHelper();
-    public static readonly FhInput               Input         = new FhInput();
-    public static readonly FhEvents              Events        = new FhEvents();
+    public static readonly FhModController       Mods          = new();
+    public static readonly FhLocalizationManager Localization  = new();
+    public static readonly FhResourceLoader      Resources     = new();
+    public static readonly FhImGuiHelper         ImGuiHelper   = new();
+    public static readonly FhInput               Input         = new();
+    public static readonly FhEvents              Events        = new();
 }
 
 /// <summary>
@@ -30,10 +30,10 @@ public static class FhApi {
 /// </summary>
 internal static class FhInternal {
     // The initialization order here is not incidental. Objects higher in the list may not rely on objects below them in their constructor.
-    public static readonly FhLogger      Log         = new FhLogger("core.log");
-    public static readonly FhLoader      Loader      = new FhLoader();
-    public static readonly FhMethodTable MethodTable = new FhMethodTable();
-    public static readonly FhHasher      Hasher      = new FhHasher();
+    public static readonly FhLogger      Log         = new("core.log");
+    public static readonly FhLoader      Loader      = new();
+    public static readonly FhMethodTable MethodTable = new();
+    public static readonly FhHasher      Hasher      = new();
     public static readonly FhState       State       = new();
     public static readonly FhSaves       Saves       = new();
     public static readonly FhSettings    Settings    = new();

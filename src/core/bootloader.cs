@@ -135,11 +135,11 @@ internal sealed class FhLoader {
     internal FhLoader() {
         // Loading the core library into ALC.Default ensures it does not 'leak' into plugins' load contexts, causing type identity mismatches.
         Assembly self = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Join(FhEnvironment.Finder.Binaries.FullName, "fh.dll"));
+
         FhInternal.Log.LogDirect($"----");
         FhInternal.Log.LogDirect($"Fahrenheit {FileVersionInfo.GetVersionInfo(self.Location).ProductVersion}");
         FhInternal.Log.LogDirect($"OS: {RuntimeInformation.OSDescription} {RuntimeInformation.OSArchitecture}, target: {RuntimeInformation.RuntimeIdentifier}");
         FhInternal.Log.LogDirect($"----");
-
     }
 
     /// <summary>
