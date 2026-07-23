@@ -15,12 +15,6 @@ env:
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: release
 
-  # https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages?pivots=windows-runner
-  # VCPKG binary caching setup
-  USERNAME: fahrenheit-crew
-  FEED_URL: https://nuget.pkg.github.com/fahrenheit-crew/index.json
-  VCPKG_BINARY_SOURCES: "clear;nuget,https://nuget.pkg.github.com/fahrenheit-crew/index.json,readwrite"
-
 # The permissions block is no longer required as explicit PAT is used for NuGet auth;
 # and releases are no longer made on GitHub actions, but locally with ci-release.ps1
 
@@ -51,21 +45,6 @@ jobs:
       run: |
         cd "$VCPKG_INSTALLATION_ROOT"      
         vcpkg integrate install
-
-    - name: Add NuGet sources
-      shell: pwsh
-      run: |
-        cd "$VCPKG_INSTALLATION_ROOT"
-        .$(vcpkg fetch nuget) `
-          sources add `
-          -Source "${{ env.FEED_URL }}" `
-          -StorePasswordInClearText `
-          -Name GitHubPackages `
-          -UserName "${{ env.USERNAME }}" `
-          -Password "${{ secrets.VCPKG_PAT }}"
-        .$(vcpkg fetch nuget) `
-          setapikey "${{ secrets.VCPKG_PAT }}" `
-          -Source "${{ env.FEED_URL }}"
 
       # Compensate for https://github.com/NuGet/Home/issues/14113
     - name: Restore NuGet packages
