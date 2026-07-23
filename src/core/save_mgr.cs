@@ -192,7 +192,7 @@ internal sealed class FhSaves {
     }
 
     /// <summary>
-    ///     Get the number of used up slots in the current set.
+    ///     Get the number of used slots in the current set.
     /// </summary>
     internal int get_slots_used() {
         return _sm_display_data[ 1 .. ].Count;

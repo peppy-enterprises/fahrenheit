@@ -215,7 +215,7 @@ public sealed class FhSaveUiModule : FhModule {
         ImGuiStylePtr style   = ImGui.GetStyle();
         float         padding = style.FramePadding.X + style.IndentSpacing;
 
-        bool is_autosave = slot == 0 && _sem!.get_system_state() is FhSaveExtensionSystemState.LOAD;
+        bool is_autosave = slot == 0 && _sem!.get_system_state() is not FhSaveExtensionSystemState.SAVE;
 
         ImGui.Text(is_autosave ? "Autosave"u8 : data.slot_str);
         ImGui.SameLine(is_autosave ? 100 : 60);
