@@ -18,7 +18,7 @@ internal abstract class EEditComponent<T> : EEditComponent where T : unmanaged {
     internal EEditComponent() {
         EEdit.Editors.active_file.ReadExactly(_file);
 
-        ExcelFileIterator<T> iter = new(_file);
+        ExcelFileReader<T> iter = new(_file);
 
         foreach (ExcelHeader header in iter.headers()) {
             _elements.AddRange(iter.elements(header));

@@ -76,7 +76,7 @@ public struct ExcelHeader {
 /// <summary>
 ///     Allows iteration over an Excel file of <typeparamref name="T"/>.
 /// </summary>
-public unsafe ref struct ExcelFileIterator<T>(ReadOnlySpan<byte> excel_bytes) where T : unmanaged {
+public unsafe ref struct ExcelFileReader<T>(ReadOnlySpan<byte> excel_bytes) where T : unmanaged {
     private readonly ReadOnlySpan<byte> _bytes = excel_bytes;
 
     /// <summary>
@@ -106,7 +106,7 @@ public unsafe ref struct ExcelFileIterator<T>(ReadOnlySpan<byte> excel_bytes) wh
 ///     A container for an array of <typeparamref name="T"/>.
 ///     These files make up most of the game's <c>kernel</c> folder.
 ///     <para/>
-///     To iterate over its contents, use an <see cref="ExcelFileIterator{T}"/>.
+///     To iterate over its contents, use an <see cref="ExcelFileReader{T}"/>.
 /// </summary>
 /// <typeparam name="T">The type of elements in the file.</typeparam>
 [StructLayout(LayoutKind.Sequential, Size = 0x8)]
