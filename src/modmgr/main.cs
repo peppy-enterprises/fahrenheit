@@ -34,9 +34,6 @@ internal sealed unsafe class Program {
     private static uint         _sdl_window_id;
     private static SDLGLContext _sdl_context;
 
-    // OGL3
-    private static GL?          _gl_context;
-
     /* [fkelava 19/07/26 23:56]
      * https://github.com/ocornut/imgui/blob/81c008f90d488d18370dbe6741115e126d67f539/examples/example_sdl3_opengl3/main.cpp#L28
      * This is a straight rewrite. Comments appear as in the original, where they are in the original; with some extras.
@@ -95,8 +92,7 @@ internal sealed unsafe class Program {
             SDLWindowFlags.Opengl
           | SDLWindowFlags.Resizable
           | SDLWindowFlags.Hidden
-          | SDLWindowFlags.HighPixelDensity
-          | SDLWindowFlags.Borderless;
+          | SDLWindowFlags.HighPixelDensity;
 
         _sdl_window = SDL.CreateWindow(
             "Fahrenheit Mod Manager",
@@ -108,14 +104,6 @@ internal sealed unsafe class Program {
             Console.WriteLine($"Fault in SDL_CreateWindow() - {SDL.GetErrorS()}");
             return;
         }
-
-        /* 
-         * Borderless means no OS title bar/min/max/close - FhModManagerUI draws its own
-         * into the menu bar instead (see chrome.cs), so this restores the drag-to-
-         * move and drag-edge-to-resize behavior the OS chrome would otherwise have
-         * provided.
-         */
-        FhWindowChrome.install(_sdl_window);
 
         _sdl_window_id = SDL.GetWindowID    (_sdl_window);
         _sdl_context   = SDL.GLCreateContext(_sdl_window);
@@ -193,17 +181,6 @@ internal sealed unsafe class Program {
         io.ConfigDpiScaleFonts     = true;       // [Experimental] Automatically overwrite style.FontScaleDpi in Begin() when Monitor DPI changes. This will scale fonts but _NOT_ scale sizes/padding for now.
         io.ConfigDpiScaleViewports = true;       // [Experimental] Scale Dear ImGui and Platform Windows when Monitor DPI changes.
 
-        // The stock example this loop otherwise ports zeroes WindowRounding here
-        // (so platform windows spawned by ViewportsEnable, which can't easily
-        // round their own OS-level corners, look consistent with the main one) -
-        // deliberately not done here, since FhTheme.apply() already gave this
-        // window an intentional WindowRounding, and FhWindowChrome.install()
-        // (see chrome.cs) opts the main window out of the OS's own competing
-        // corner rounding instead of flattening ours to match it. Forcing full
-        // opacity is still worth keeping regardless, since the Settings modal's
-        // theme picker lets a user set an alpha on the background color.
-        style.Colors[(int)ImGuiCol.WindowBg].W = 1.0F;
-
         // Setup Platform/Renderer backends
         ImGuiImplSDL3.SetCurrentContext(ctx);
         ImGuiImplSDL3.InitForOpenGL    (new SDLWindowPtrB((SDLWindowB*)_sdl_window), (void*)_sdl_context.Handle);
@@ -214,12 +191,6 @@ internal sealed unsafe class Program {
         /* [fkelava 20/07/26 00:17]
          * See comment beneath main loop body.
          */
-
-        _gl_context = new (new FhGlContext(_sdl_window, _sdl_context));
-
-        // Uploads the menu bar's icon (see icon.cs) as a GL texture - needs a
-        // live GL context, so this can't happen any earlier than here.
-        FhAppIcon.load(_gl_context);
 
         // Main loop
         bool     quit = false;
@@ -236,13 +207,7 @@ internal sealed unsafe class Program {
                     _                                                                            => false
                 };
             }
-
-            // There's no OS close button to raise WindowCloseRequested anymore -
-            // the menu bar's own close button (see chrome.cs) sets this instead.
-            if (FhWindowChrome.QuitRequested) {
-                quit = true;
-            }
-
+            
             SDLWindowFlags current_window_flags = SDL.GetWindowFlags(_sdl_window);
 
             if (current_window_flags.HasFlag(SDLWindowFlags.Minimized)) {
@@ -260,21 +225,6 @@ internal sealed unsafe class Program {
 
             // Rendering
             ImGui.Render();
-
-            // The main window is drawn with rounded corners (see FhTheme.apply's
-            // WindowRounding), but the SDL window behind it is a plain rectangle -
-            // ImGui's rounded fill simply doesn't paint over the four corner
-            // triangles outside that curve, so whatever this clears to is what
-            // shows through them. The stock ImGui example this loop is otherwise a
-            // straight port of (see the comment above Main()) clears to a fixed
-            // teal-gray there, which read as a stray colored pixel in our own
-            // (much darker, user-recolorable) theme; clearing to the theme's own
-            // background keeps those corners visually blank instead.
-            Vector4 clear_color = FhTheme.COLOR_BACKGROUND;
-
-            _gl_context.Viewport  (0, 0, int.CreateChecked( io.DisplaySize.X ), int.CreateChecked( io.DisplaySize.Y ));
-            _gl_context.ClearColor(clear_color.X, clear_color.Y, clear_color.Z, 1F);
-            _gl_context.Clear     (GLClearBufferMask.ColorBufferBit);
 
             ImGuiImplOpenGL3.RenderDrawData(ImGui.GetDrawData());
 
