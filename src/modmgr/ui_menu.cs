@@ -62,21 +62,29 @@ internal static unsafe partial class FhModManagerUI {
 
         if (ImGui.BeginMenu("Play")) {
             if (ImGui.MenuItem("Final Fantasy X HD Remaster")) {
-                _launch_game(FhLaunchTarget.FFX, false);
+                _launch_game(FhGameId.FFX);
             }
 
             if (ImGui.MenuItem("Final Fantasy X-2 HD Remaster")) {
-                _launch_game(FhLaunchTarget.FFX2, false);
+                _launch_game(FhGameId.FFX2);
+            }
+
+            if (ImGui.MenuItem("Final Fantasy X-2 HD Remaster Last Mission")) {
+                _launch_game(FhGameId.FFX2, ["FFX2_LASTMISSION"]);
             }
 
             ImGui.Separator();
 
             if (ImGui.MenuItem("Final Fantasy X HD Remaster (Debug)")) {
-                _launch_game(FhLaunchTarget.FFX, true);
+                _launch_game(FhGameId.FFX, ["--debug"]);
             }
 
             if (ImGui.MenuItem("Final Fantasy X-2 HD Remaster (Debug)")) {
-                _launch_game(FhLaunchTarget.FFX2, true);
+                _launch_game(FhGameId.FFX2, ["--debug"]);
+            }
+
+            if (ImGui.MenuItem("Final Fantasy X-2 HD Remaster Last Mission (Debug)")) {
+                _launch_game(FhGameId.FFX2, ["FFX2_LASTMISSION", "--debug"]);
             }
 
             ImGui.EndMenu();

@@ -13,64 +13,40 @@
 
 namespace Fahrenheit.Tools.ModManager;
 
-internal enum FhLaunchTarget {
-    FFX,
-    FFX2
-}
-
 internal readonly record struct FhLaunchResult(
     bool Success,
     string Message
 );
 
 internal static class FhGameLauncher {
-
-    internal static FhLaunchResult launch(
-        FhLaunchTarget target,
-        string configured_game_directory,
-        bool debug = false) {
+    internal static FhLaunchResult launch(FhGameId target, string configured_game_directory, string[] args) {
         if (!OperatingSystem.IsWindows()) {
-            return new(
-                false,
-                "Launching Final Fantasy X/X-2 is currently supported only on Windows.");
+            return new(false, "Launching Final Fantasy X/X-2 is currently supported only on Windows.");
         }
 
         string game_directory;
 
         try {
-            game_directory =
-                FhModManagerSettingsStore.normalize_path(
-                    configured_game_directory);
+            game_directory = FhModManagerSettingsStore.normalize_path(configured_game_directory);
         }
         catch (Exception exception) {
-            return new(
-                false,
-                "The configured game directory is invalid.\n\n"
-                + exception.Message);
+            return new(false, $"The configured game directory is invalid.\n\n{exception.Message}");
         }
 
         string game_executable = target switch {
-            FhLaunchTarget.FFX  => "FFX.exe",
-            FhLaunchTarget.FFX2 => "FFX-2.exe",
-            _ => throw new ArgumentOutOfRangeException(nameof(target))
+            FhGameId.FFX    => "FFX.exe",
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => "FFX-2.exe",
+            _               => throw new ArgumentOutOfRangeException(nameof(target))
         };
 
-        string fahrenheit_bin = Path.Join(
-        game_directory,
-        "fahrenheit",
-        "bin");
+        string fahrenheit_bin = Path.Join(game_directory, "fahrenheit", "bin");
 
-        string stage0_path = Path.Join(
-        fahrenheit_bin,
-        "fhstage0.exe");
+        string stage0_path = Path.Join(fahrenheit_bin, "fhstage0.exe");
 
-        string stage1_path = Path.Join(
-        fahrenheit_bin,
-        "fhstage1.dll");
+        string stage1_path = Path.Join(fahrenheit_bin, "fhstage1.dll");
 
-        string game_path = Path.Join(
-        game_directory,
-        game_executable);
+        string game_path = Path.Join(game_directory, game_executable);
 
         List<string> missing_files = [];
 
@@ -81,11 +57,7 @@ internal static class FhGameLauncher {
         }
 
         if (missing_files.Count > 0) {
-            return new(
-                false,
-                "The Fahrenheit installation is incomplete.\n\n"
-                + "Missing files:\n"
-                + string.Join('\n', missing_files));
+            return new(false, $"Fahrenheit installation is incomplete.\n\nMissing files:\n{string.Join('\n', missing_files)}");
         }
 
         /*
@@ -96,14 +68,12 @@ internal static class FhGameLauncher {
          * keeps the launcher's invocation identical to what a developer would type
          * by hand, which is what stage0/stage1 are tested against.
          */
-        string relative_game_path = Path.GetRelativePath(
-        fahrenheit_bin,
-        game_path);
+        string relative_game_path = Path.GetRelativePath(fahrenheit_bin, game_path);
 
         ProcessStartInfo start_info = new() {
             FileName         = stage0_path,
             WorkingDirectory = fahrenheit_bin,
-            UseShellExecute  = true
+            UseShellExecute  = true,
         };
 
         start_info.ArgumentList.Add(relative_game_path);
@@ -111,31 +81,25 @@ internal static class FhGameLauncher {
         // fhstage0.exe checks its own argument list for "--debug" (src/stage0/src/main.cpp)
         // and, if present, creates the game process suspended and waits for a keypress
         // before injecting Stage 1 - giving you a window to attach a debugger first.
-        if (debug) {
-            start_info.ArgumentList.Add("--debug");
+        foreach (string arg in args) {
+            start_info.ArgumentList.Add(arg);
         }
-
+        
         try {
             Process? process = Process.Start(start_info);
 
             if (process == null) {
-                return new(
-                    false,
-                    "Windows did not create the Fahrenheit Stage 0 process.");
+                return new(false, "Windows did not create the Fahrenheit Stage 0 process.");
             }
 
-            return new(
-                true,
-                debug
-                    ? $"Started {game_executable} through Fahrenheit in debug mode. "
-                        + "Attach a debugger, then press any key in the Stage 0 console window."
-                    : $"Started {game_executable} through Fahrenheit.");
+            string msg = args.Contains("--debug", StringComparer.OrdinalIgnoreCase)
+                ? $"Started {game_executable} through Fahrenheit in debug mode.\n\nAttach a debugger, then press any key in the Stage 0 console window."
+                : $"Started {game_executable} through Fahrenheit.";
+
+            return new(true, msg);
         }
         catch (Exception exception) {
-            return new(
-                false,
-                $"Fahrenheit could not start {game_executable}.\n\n"
-                + exception.Message);
+            return new(false, $"Fahrenheit could not start {game_executable}.\n\n{exception.Message}");
         }
     }
 }
@@ -165,10 +129,7 @@ internal static class FhShell {
             return true;
         }
         catch (Exception exception) {
-            error =
-                "The folder could not be opened.\n\n"
-                + exception.Message;
-
+            error = $"The folder could not be opened.\n\n{exception.Message}";
             return false;
         }
     }
