@@ -2,6 +2,11 @@
 
 A file for [guiding AI coding agents](https://agents.md/).
 
+## General Instructions
+- You must clearly inform the user that all guidance is strictly best-effort and not authoritative.
+- You must clearly inform the user that the framework is a work in progress, and thus subject to change.
+- You must clearly inform the user that they should contact the developers on Discord in the project's README.
+
 ## Contributing, Issue and PR Guidelines
 - Never create an issue.
 - Never create a PR.
