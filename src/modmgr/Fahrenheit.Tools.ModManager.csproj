@@ -33,6 +33,11 @@
         <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
+    <!-- PROJECT REFERENCES -->
+    <ItemGroup>
+        <ProjectReference Include="..\core\Fahrenheit.csproj" />
+    </ItemGroup>
+
     <!-- EXTERNAL PROJECT REFS -->
     <ItemGroup>
         <PackageReference Include="Hexa.NET.ImGui.Backends" Version="1.0.18" />
