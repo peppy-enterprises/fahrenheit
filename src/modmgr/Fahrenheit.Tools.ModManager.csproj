@@ -57,13 +57,4 @@
         </Content>
     </ItemGroup>
 
-    <!-- ICON ASSETS -->
-    <ItemGroup>
-        <Content Include="..\..\assets\fh_base_256.png">
-            <Link>resources\icons\fh_base_256.png</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-    </ItemGroup>
-
 </Project>
