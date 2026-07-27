@@ -1,4 +1,9 @@
-﻿/* [fkelava 5/7/25 14:16]
+﻿/* Jobs:
+ * - Centralize this project's `global using` directives (stdlib, ImGui/SDL3/
+ *   OpenGL3 bindings, native file dialogs) so individual files don't repeat them.
+ */
+
+/* [fkelava 5/7/25 14:16]
  * Hexa duplicates some definitions for SDL3 structures. We must disambiguate and cast between them
  * because they for some reason aren't one and the same. Heaven only knows why that is so.
  */
@@ -10,10 +15,16 @@ global using SDLWindowPtrB = Hexa.NET.ImGui.Backends.SDL3.SDLWindowPtr;
 
 // C# stdlib essentials
 global using System;
+global using System.Collections.Generic;
+global using System.Diagnostics;
 global using System.Drawing;
+global using System.IO;
+global using System.IO.Compression;
+global using System.Numerics;
 global using System.Runtime.CompilerServices;
 global using System.Runtime.InteropServices;
 global using System.Runtime.Versioning;
+global using System.Text.Json;
 
 // ImGui C# binding
 global using Hexa.NET.ImGui;
@@ -25,3 +36,11 @@ global using Hexa.NET.SDL3;
 global using Hexa.NET.OpenGL;
 
 global using HexaGen.Runtime;
+
+// Native file dialog bindings
+global using NativeFileDialogCore;
+
+// Pure-managed, cross-platform PNG decoding for the app icon (see icon.cs) -
+// System.Drawing.Bitmap would work on Windows only, and this project also
+// targets linux-x64 (see the csproj's RuntimeIdentifiers).
+global using StbImageSharp;

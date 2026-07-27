@@ -39,6 +39,26 @@
         <PackageReference Include="Hexa.NET.ImGui.Backends.SDL3" Version="1.0.18" />
         <PackageReference Include="Hexa.NET.SDL3" Version="1.2.11" />
         <PackageReference Include="Hexa.NET.OpenGL3" Version="1.1.0" />
+        <PackageReference Include="NativeFileDialogCore" Version="1.0.3" />
+        <PackageReference Include="StbImageSharp" Version="2.30.15" />
+    </ItemGroup>
+
+    <!-- FONT ASSETS -->
+    <ItemGroup>
+        <Content Include="..\..\assets\NotoSans-VariableFont_wdth,wght.ttf">
+            <Link>resources\fonts\NotoSans-VariableFont_wdth,wght.ttf</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
+
+    <!-- ICON ASSETS -->
+    <ItemGroup>
+        <Content Include="..\..\assets\fh_base_256.png">
+            <Link>resources\icons\fh_base_256.png</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>
