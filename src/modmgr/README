@@ -1,6 +1,34 @@
 # Fahrenheit Mod Manager
 
-A GUI to perform basic manipulation of Fahrenheit mods.
+A GUI to perform basic manipulation of Fahrenheit mods: enabling/disabling and
+reordering installed mods, importing/exporting mod packs, importing loose EFL
+file trees, and launching Final Fantasy X/X-2 through Fahrenheit.
 
-This is a work in progress. The program stub, which is a basic Win32/D3D11 ImGui desktop application,
-is available for inspection, but no user interface has as of yet been committed.
+## Jobs
+
+Each file below owns a specific responsibility; the "Jobs:" comment at the top
+of the file itself is the authoritative version of this list.
+
+Program stub / bootstrap:
+- `usings.cs` - centralizes this project's `global using` directives.
+- `main.cs` - bootstraps SDL3 + OpenGL3 + Dear ImGui and owns the main window/event loop.
+- `chrome.cs` (`FhWindowChrome`) - restores drag-to-move/resize on the borderless window and draws the minimize/maximize/close buttons.
+- `icon.cs` (`FhAppIcon`) - decodes the Fahrenheit airship mark into a GL texture once at startup for the menu bar to draw.
+
+Domain / data (no ImGui dependency):
+- `settings.cs` (`FhModManagerSettings`, `FhModManagerSettingsStore`) - the persisted `fhmodmgr.json` settings shape, and loading/atomically saving it.
+- `theme.cs` (`FhThemeColor`, `FhTheme`, `FhElements`) - the app's color palette, the derived ImGui style built from it, and reusable styled buttons.
+- `mods.cs` (`FhInstalledMod`, `FhModCatalog`, `FhModScanner`, `FhLoadOrderEditor`) - scans the game directory into a mod catalog, and reads/writes the load order file.
+- `packs.cs` (`FhEflImporter`, `FhModPackExporter`, `FhModPackImporter`) - imports a loose EFL file tree as a new mod, and exports/imports zipped mod packs.
+- `launcher.cs` (`FhGameLauncher`, `FhShell`) - launches FFX/FFX-2 through Fahrenheit, and opens folders in the OS file browser.
+
+UI (`Fahrenheit.Tools.ModManager.FhModManagerUI`, split across `ui*.cs`):
+- `ui.cs` - core state and the `UI()` entry point that drives one frame. This file is the core UI logic and intentionally left with minimal logic.
+- `ui_helpers.cs` - shared ImGui layout/text helpers and small private-state helpers.
+- `ui_menu.cs` - the menu bar, window control buttons, and modal-opening dispatch.
+- `ui_settings_modal.cs` - the Settings modal: the three location rows (game/Fahrenheit/mods) with valid/invalid status icons, and the theme picker grid.
+- `ui_efl_import_modal.cs` - the "Import EFL Mod" modal and its import handler.
+- `ui_mod_list.cs` - the Enabled/Disabled mod panels, table, and per-row rendering.
+- `ui_drag_handle.cs` - the mod row drag-to-reorder grip and its animations.
+- `ui_status_bar.cs` - the bottom status bar: owns the status message state written by `_set_status` and renders it as a fading "toast" rather than a persistent line.
+- `ui_actions.cs` - action handlers (refresh, export/import, launch) and applying queued mod-list mutations once per frame.
