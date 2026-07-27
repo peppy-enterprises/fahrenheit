@@ -39,16 +39,16 @@ public struct ExcelSimplifiableTextOffset {
 ///     The header of Excel files.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal struct ExcelHeader {
+public struct ExcelHeader {
     /// <summary>
     ///     The index of the first element in the file.
     /// </summary>
-    public ushort first_idx;
+    public ushort index_first;
 
     /// <summary>
     ///     The index of the last element in the file.
     /// </summary>
-    public ushort last_idx;
+    public ushort index_last;
 
     /// <summary>
     ///     The size of one element in the file.
@@ -65,21 +65,52 @@ internal struct ExcelHeader {
     ///     An offset from the start of the file to the start of the data.<br/>
     ///     In vanilla, always equivalent to the size of this header.
     /// </summary>
-    public nint data_start;
+    public uint data_start;
 
     /// <summary>
     ///     The length of the array of elements defined by this header.
     /// </summary>
-    public readonly int length => last_idx + 1 - first_idx;
+    public readonly int length => index_last + 1 - index_first;
 }
 
 /// <summary>
-///     An excel file. Stores an array of objects.<br/>
+///     Allows iteration over an Excel file of <typeparamref name="T"/>.
+/// </summary>
+public unsafe ref struct ExcelFileIterator<T>(ReadOnlySpan<byte> excel_bytes) where T : unmanaged {
+    private readonly ReadOnlySpan<byte> _bytes = excel_bytes;
+
+    /// <summary>
+    ///     The headers in this file. Each header defines a section of the file.
+    /// </summary>
+    public ReadOnlySpan<ExcelHeader> headers() {
+        int sz_prolog = sizeof(ExcelFileProlog<T>);
+        int sz_header = sizeof(ExcelHeader);
+
+        return MemoryMarshal.TryRead(_bytes, out ExcelFileProlog<T> prolog)
+            ? MemoryMarshal.Cast<byte, ExcelHeader>(_bytes [ sz_prolog .. (sz_prolog + prolog.header_count * sz_header) ])
+            : [];
+    }
+
+    /// <summary>
+    ///     The elements defined in the given <paramref name="header"/>.
+    /// </summary>
+    public ReadOnlySpan<T> elements(ExcelHeader header) {
+        int start  = (int)header.data_start;
+        int length = (int)header.data_length;
+
+        return MemoryMarshal.Cast<byte, T>(_bytes [ start .. (start + length) ]);
+    }
+}
+
+/// <summary>
+///     A container for an array of <typeparamref name="T"/>.
 ///     These files make up most of the game's <c>kernel</c> folder.
+///     <para/>
+///     To iterate over its contents, use an <see cref="ExcelFileIterator{T}"/>.
 /// </summary>
 /// <typeparam name="T">The type of elements in the file.</typeparam>
-[StructLayout(LayoutKind.Explicit, Size=0x14)]
-internal unsafe struct ExcelFile<T> where T : unmanaged {
+[StructLayout(LayoutKind.Sequential, Size = 0x8)]
+public struct ExcelFileProlog<T> where T : unmanaged {
     /// <summary>
     ///     The amount of headers that map out this file.
     ///     <remarks>
@@ -87,102 +118,8 @@ internal unsafe struct ExcelFile<T> where T : unmanaged {
     ///         Both the games and Fahrenheit support amounts higher than 1.
     ///     </remarks>
     /// </summary>
-    [FieldOffset(0x0)] public ushort header_count;
-
-    // Private fields for creating spans through MemoryMarshal.CreateSpan
-    [FieldOffset(0x0)] private T _dummy_element;
-    [FieldOffset(0x8)] private ExcelHeader _first_header;
-
-    /// <summary>
-    ///     The headers in this file. Each header defines a section of the file.
-    /// </summary>
-    [UnscopedRef]
-    public Span<ExcelHeader> headers
-        => MemoryMarshal.CreateSpan(ref _first_header, header_count);
-
-
-    /// <summary>
-    ///     The elements indicated by a given header.
-    /// </summary>
-    [UnscopedRef]
-    public Span<T> elements(ExcelHeader header)
-        => MemoryMarshal.CreateSpan(ref Unsafe.AddByteOffset(ref _dummy_element, header.data_start), header.length);
-
-    /// <summary>
-    ///     Finds a header that contains the element at a given index.
-    /// </summary>
-    /// <param name="index">The index of the desired element.</param>
-    /// <returns>The header containing the element at the given index, or <c>null</c> if not found.</returns>
-    public ExcelHeader? find_header_for_index(int index) {
-        foreach (ExcelHeader header in headers) {
-            if (header.first_idx <= index && index <= header.last_idx) {
-                return header;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     Gets the element at the specified index, with boundary checking.
-    /// </summary>
-    /// <param name="index">The index of the desired element. Must be withing the bounds specified by one of the headers.</param>
-    /// <returns>The element at the specified index.</returns>
-    /// <exception cref="IndexOutOfRangeException">
-    ///     index is less than <see cref="ExcelHeader.first_idx"><c>header.first_idx</c></see>
-    ///     or greater than <see cref="ExcelHeader.last_idx"><c>header.last_idx</c></see>
-    ///     for all <see cref="headers"/>.
-    /// </exception>
-    [UnscopedRef]
-    public ref T get(int index) {
-        ExcelHeader header = find_header_for_index(index)
-            ?? throw new IndexOutOfRangeException($"Cannot access element {index} of excel file. No header contains this index.");
-
-        return ref elements(header)[index - header.first_idx];
-    }
-
-    /// <summary>
-    ///     Gets the text at the specified offset from a header containing the given index.
-    ///     <remarks>
-    ///         This method performs no bound checking on the <paramref name="offset"/>
-    ///         and <i>may</i> read garbage data if it is not valid.
-    ///     </remarks>
-    /// </summary>
-    /// <param name="index">The index of the element containing the offset.</param>
-    /// <param name="offset">The offset of the text.</param>
-    /// <returns>The decoded text from the specified offset.</returns>
-    /// <exception cref="IndexOutOfRangeException">
-    ///     index is less than <see cref="ExcelHeader.first_idx"><c>header.first_idx</c></see>
-    ///     or greater than <see cref="ExcelHeader.last_idx"><c>header.last_idx</c></see>
-    ///     for all <see cref="headers"/>.
-    /// </exception>
-    internal string get_text(int index, nint offset) {
-        ExcelHeader header = find_header_for_index(index)
-            ?? throw new IndexOutOfRangeException($"Cannot find header for index {index} in excel file.");
-
-        return get_text(header, offset);
-    }
-
-    /// <summary>
-    ///     Gets the text at the specified offset from the given header.
-    ///     <remarks>
-    ///         This method performs no bound checking on the <paramref name="offset"/>
-    ///         and <i>may</i> read garbage data if it is not valid.
-    ///     </remarks>
-    /// </summary>
-    /// <param name="header">The header containing the text.</param>
-    /// <param name="offset">The offset of the text.</param>
-    /// <returns>The decoded text from the specified offset.</returns>
-    internal string get_text(ExcelHeader header, nint offset) {
-        ReadOnlySpan<byte> encoded_text;
-
-        fixed (ExcelFile<T>* this_ptr = &this) {
-            encoded_text = new((byte*)((nint)this_ptr + header.data_start + header.data_length + offset), int.MaxValue);
-        }
-
-        int len = FhEncoding.compute_decode_buffer_size(encoded_text);
-        byte[] out_text = new byte[len];
-        FhEncoding.decode(encoded_text, out_text);
-        return Encoding.UTF8.GetString(out_text);
-    }
+    public  ushort header_count;
+    private ushort _0x02;
+    private ushort _0x04;
+    private ushort _0x06;
 }

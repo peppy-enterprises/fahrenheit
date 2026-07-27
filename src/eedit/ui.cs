@@ -78,7 +78,7 @@ internal static partial class UI {
          */
 
         if (ImGui.BeginCombo("##File Types", _get_component_name_by_mode(EEdit.Display.mode_select_selected_item))) {
-            for (EEditMode mode = 0; mode < EEditMode.FILE_TYPES_COUNT; mode++) {
+            for (EEditMode mode = EEditMode.NULL; mode < EEditMode.COUNT_TYPES; mode++) {
                 bool is_selected = mode == EEdit.Display.mode_select_selected_item;
 
                 if (ImGui.Selectable(_get_component_name_by_mode(mode), is_selected)) {
@@ -162,9 +162,10 @@ internal static partial class UI {
          * Abort if it cannot be displayed.
          */
 
-        ImGuiIOPtr io = ImGui.GetIO();
+        ImGuiIOPtr       io       = ImGui.GetIO();
+        ImGuiViewportPtr viewport = ImGui.GetMainViewport();
 
-        ImGui.SetNextWindowPos (Vector2.Zero);
+        ImGui.SetNextWindowPos (viewport.Pos);
         ImGui.SetNextWindowSize(io.DisplaySize);
 
         if (!ImGui.Begin("EEdit.Main",
