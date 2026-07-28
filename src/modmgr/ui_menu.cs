@@ -22,10 +22,7 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        // Taller than the default FramePadding, so the bar itself grows and both
-        // the menu items and the window control buttons below (which size
-        // themselves off GetFrameHeight()) get more vertical breathing room
-        // instead of sitting flush top-and-bottom against a cramped bar.
+
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, MENU_BAR_FRAME_PADDING);
 
         if (ImGui.BeginMenu("Mods")) {
@@ -44,6 +41,8 @@ internal static unsafe partial class FhModManagerUI {
             }
 
             if (ImGui.MenuItem("Export Mod List")) {
+                // currently this is just exporting the 'loadorder' file with extra steps.
+                // likely not the desired behavior.
                 _export_mod_list();
             }
 

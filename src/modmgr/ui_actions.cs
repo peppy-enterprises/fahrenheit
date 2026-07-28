@@ -42,6 +42,10 @@ internal static unsafe partial class FhModManagerUI {
         Dialog.FileOpen(string.Empty, string.Empty);
     }
 
+    /// <summary>
+    ///     Exports current list of enabled mods to a typeless file; one per line.
+    ///     Mod must have a name in the manifest to be included in the export.
+    /// </summary>
     private static void _export_mod_list() {
         DialogResult result = Dialog.FileSave(string.Empty, string.Empty);
 
