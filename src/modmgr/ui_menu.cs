@@ -15,7 +15,7 @@
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {
-    private static Vector2 MENU_BAR_FRAME_PADDING => new Vector2(10F, 8F) * FhTheme.UiScale;
+    private static Vector2 MENU_BAR_FRAME_PADDING => new Vector2(10F, 8F);
 
     private static void _render_main_menu() {
         if (!ImGui.BeginMenuBar()) {

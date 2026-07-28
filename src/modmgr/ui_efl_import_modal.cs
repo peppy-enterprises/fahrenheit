@@ -19,9 +19,6 @@ namespace Fahrenheit.Tools.ModManager;
 internal static unsafe partial class FhModManagerUI {
     private const int MOD_ID_INPUT_LENGTH = 128;
 
-    // State for the "Import EFL Mod" popup (see _render_main_menu/_render_efl_import_modal).
-    // A menu click can't call ImGui.OpenPopup() directly - see the comment on
-    // _handle_modals() in ui_menu.cs - so it just flips this bool instead.
     private static bool   _show_efl_import_dialog;
     private static int    _efl_import_game_index;
     private static string _efl_import_mod_id       = "";
@@ -31,8 +28,8 @@ internal static unsafe partial class FhModManagerUI {
     private static void _render_efl_import_modal() {
         _center_next_window(
             width_fraction: 0.25F,
-            min_width: 480F * FhTheme.UiScale,
-            max_width: 700F * FhTheme.UiScale);
+            min_width: 480F,
+            max_width: 700F);
 
         if (!ImGui.BeginPopupModal("Import EFL Mod", ImGuiWindowFlags.NoResize)) {
             return;
@@ -68,7 +65,7 @@ internal static unsafe partial class FhModManagerUI {
                 ? "(not selected)"
                 : _efl_import_source_folder);
 
-        if (FhElements.button_secondary("Browse##EflImportSource")) {
+        if (ImGui.Button("Browse##EflImportSource")) {
             DialogResult result = Dialog.FolderPicker(_efl_import_source_folder);
 
             if (result.IsOk && result.Path != null) {
@@ -88,7 +85,7 @@ internal static unsafe partial class FhModManagerUI {
             ImGui.BeginDisabled();
         }
 
-        if (FhElements.button_primary("Import")) {
+        if (ImGui.Button("Import")) {
             _import_efl_mod();
         }
 
@@ -98,7 +95,7 @@ internal static unsafe partial class FhModManagerUI {
 
         ImGui.SameLine();
 
-        if (FhElements.button_secondary("Cancel")) {
+        if (ImGui.Button("Cancel")) {
             _show_efl_import_dialog = false;
             ImGui.CloseCurrentPopup();
         }

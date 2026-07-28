@@ -38,13 +38,7 @@ internal static unsafe partial class FhModManagerUI {
         Vector2 available = ImGui.GetContentRegionAvail();
         float   spacing   = ImGui.GetStyle().ItemSpacing.X;
 
-        // 760 is a raw pixel threshold, so it's scaled by FhTheme.UiScale (see
-        // its own comment in theme.cs) the same as every other layout number in
-        // this app - available.X is itself already in real, DPI-scaled pixels,
-        // so comparing it against an unscaled constant would make the two-panel
-        // layout switch to stacked at a much narrower *effective* window size on
-        // a high-DPI display than on a 100%-scale one.
-        bool stack_panels = available.X < 760F * FhTheme.UiScale;
+        bool stack_panels = available.X < 760F;
 
         // The status bar (see ui_status_bar.cs, rendered right after this method
         // returns) sits flush against the window's true bottom edge rather than
@@ -57,7 +51,7 @@ internal static unsafe partial class FhModManagerUI {
 
         float available_height = Math.Max(0F, available.Y - status_bar_extra_reserve);
 
-        float min_panel_height = 150F * FhTheme.UiScale;
+        float min_panel_height = 150F;
 
         float panel_width;
         float panel_height;
@@ -71,7 +65,7 @@ internal static unsafe partial class FhModManagerUI {
              * Leave a small gutter for DPI rounding and the child-window
              * scrollbars so the right panel remains within the viewport.
              */
-            float gutter = 6F * FhTheme.UiScale;
+            float gutter = 6F;
 
             panel_width  = MathF.Floor((available.X - spacing - gutter) / 2F);
             panel_height = Math.Max(min_panel_height, available_height - (gutter / 3F));
@@ -131,7 +125,7 @@ internal static unsafe partial class FhModManagerUI {
         int column_count = show_load_order ? 4 : 2;
 
         // Spans the full available width, right up to the scrollbar - the
-        // alternating TableRowBgAlt shading (see FhTheme.apply()) is only ever
+        // alternating TableRowBgAlt shading (ImGuiCol.TableRowBgAlt) is only ever
         // drawn within the table's own bounds. The Drag column already carries
         // its own built-in padding for the same reason (see grip_width below);
         // the Details column relies on the table's own CellPadding instead.
@@ -255,7 +249,7 @@ internal static unsafe partial class FhModManagerUI {
         float details_start_y = ImGui.GetCursorPosY();
 
         if (!mod.DirectoryExists) {
-            _text_colored_wrapped(FhTheme.COLOR_ERROR, $"Missing: {mod.Id}");
+            _text_colored_wrapped(ImGui.GetStyle().Colors[(int)ImGuiCol.NavCursor], $"Missing: {mod.Id}");
 
             if (show_load_order) {
                 ImGui.SetCursorPosY(second_line_y);
@@ -282,10 +276,10 @@ internal static unsafe partial class FhModManagerUI {
             }
 
             if (!mod.ManifestExists) {
-                _text_colored_wrapped(FhTheme.COLOR_WARNING, "Invalid mod: expected manifest is missing.");
+                _text_colored_wrapped(ImGui.GetStyle().Colors[(int)ImGuiCol.DragDropTarget], "Invalid mod: expected manifest is missing.");
             }
             else if (!string.IsNullOrWhiteSpace(mod.ManifestError)) {
-                _text_colored_wrapped(FhTheme.COLOR_ERROR, $"Invalid mod: manifest error: {mod.ManifestError}");
+                _text_colored_wrapped(ImGui.GetStyle().Colors[(int)ImGuiCol.NavCursor], $"Invalid mod: manifest error: {mod.ManifestError}");
             }
         }
 

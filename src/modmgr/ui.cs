@@ -55,22 +55,11 @@ internal static unsafe partial class FhModManagerUI {
         }
 
         _render_main_menu();
-
-        // No Spacing() before this one (unlike the pair below): the menu bar's
-        // own bottom border already sits flush against the separator without it,
-        // which is what keeps FhTheme.COLOR_TITLE_BAR's fill looking like one
-        // solid, cleanly-bordered box rather than trailing off into a sliver of
-        // plain COLOR_BACKGROUND before the line (see _render_main_menu in
-        // ui_menu.cs for how the row is centered within that box).
-        // ImGui.Separator();
         ImGui.Spacing();
-
         _render_warnings();
-
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.Spacing();
-
         _render_mod_lists();
         _render_status_bar();
         ImGui.End();
@@ -87,8 +76,10 @@ internal static unsafe partial class FhModManagerUI {
 
         ImGui.Spacing();
 
+        Vector4 warning_color = ImGui.GetStyle().Colors[(int)ImGuiCol.DragDropTarget];
+
         foreach (string warning in _catalog.Warnings) {
-            ImGui.TextColored(FhTheme.COLOR_WARNING, warning);
+            ImGui.TextColored(warning_color, warning);
         }
     }
 }

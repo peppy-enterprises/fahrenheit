@@ -13,28 +13,16 @@ namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {
     private const int GAME_DIRECTORY_INPUT_LENGTH = 1024;
-
-    // State for the "Settings" popup; see the comment on _handle_modals (ui_menu.cs)
-    // for why this is a bool flipped from a menu click rather than an
-    // ImGui.OpenPopup() call.
     private static bool _show_settings_dialog;
 
     private static void _render_settings_modal() {
-        _center_next_window(width_fraction: 0.42F, min_width: 900F * FhTheme.UiScale, max_width: 1300F * FhTheme.UiScale);
+        _center_next_window(width_fraction: 0.42F, min_width: 900F, max_width: 1300F);
 
-        // Passing `ref modal_open` (rather than null) gives the popup its own
-        // native title-bar close button, so there's no need for a separate
-        // "Close" button in the body.
+ 
         bool modal_open = true;
         bool popup_open = ImGui.BeginPopupModal("Settings", ref modal_open, ImGuiWindowFlags.NoResize);
 
-        // BeginPopupModal can return false on the very frame the title-bar X is
-        // clicked (as well as when the popup isn't open at all), so this has to
-        // be checked before the early return below, not only at the bottom of
-        // the function - otherwise that click never actually clears
-        // _show_settings_dialog, and _handle_modals() (ui_menu.cs) just
-        // re-opens the same popup again next frame since, as far as it's
-        // concerned, nothing ever asked to close it.
+
         if (!modal_open) {
             _show_settings_dialog = false;
         }
@@ -43,14 +31,6 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        // Closes on an outside click too, same as a non-modal popup already
-        // does by default - BeginPopupModal on its own only supports that via
-        // the title-bar X or Escape. AllowWhenBlockedByPopup matters here: a
-        // color picker's own popup (opened by clicking a swatch below) counts
-        // as "blocking" this window, and IsWindowHovered excludes a blocked
-        // window by default - without this flag, clicking anywhere in Settings
-        // at all while a color picker happened to be open would already read
-        // as "not hovering Settings" and incorrectly close the whole modal.
         if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)
             && !ImGui.IsWindowHovered(
                 ImGuiHoveredFlags.RootAndChildWindows | ImGuiHoveredFlags.AllowWhenBlockedByPopup)) {
@@ -60,8 +40,6 @@ internal static unsafe partial class FhModManagerUI {
 
         _render_game_directory_row();
 
-        // Derived from the (possibly not-yet-saved) game directory input and the
-        // saved Fahrenheit/Mods overrides, not cached value - so validity icons update live.
         string normalized_game_directory;
 
         try {
@@ -81,9 +59,6 @@ internal static unsafe partial class FhModManagerUI {
         ImGui.EndPopup();
     }
 
-    // The one location that's plain text-editable (Enter to save, matching the
-    // Browse button beside it) rather than Browse-only - everything else about
-    // its row (icon, Browse, Open) matches the other two.
     private static void _render_game_directory_row() {
         ImGui.SeparatorText("FF X/X-2 HD Remaster Location");
 
@@ -99,7 +74,7 @@ internal static unsafe partial class FhModManagerUI {
             reason = exception.Message;
         }
 
-        FhElements.status_icon(valid, reason);
+        _status_icon(valid, reason);
         ImGui.SameLine();
 
         float browse_width  = _get_button_width("Browse");
@@ -112,16 +87,11 @@ internal static unsafe partial class FhModManagerUI {
 
         ImGui.SameLine();
 
-        // "##Game" suffixes here (and "##Fahrenheit"/"##Mods" on the two rows
-        // below) keep all three rows' otherwise-identically-labeled Browse/Open
-        // buttons from colliding on the same ImGui ID - everything past "##" is
-        // stripped from the visible label but still part of the ID, so all
-        // three still just read as "Browse"/"Open".
-        bool browse_pressed = FhElements.button_secondary("Browse##Game", new Vector2(browse_width, 0F));
+        bool browse_pressed = ImGui.Button("Browse##Game", new Vector2(browse_width, 0F));
 
         ImGui.SameLine();
 
-        bool open_pressed = FhElements.button_secondary("Open##Game", new Vector2(open_width, 0F));
+        bool open_pressed = ImGui.Button("Open##Game", new Vector2(open_width, 0F));
 
         if (browse_pressed) {
             _browse_game_directory();
@@ -139,7 +109,7 @@ internal static unsafe partial class FhModManagerUI {
 
         (bool valid, string? reason) = _check_fahrenheit_location(fahrenheit_directory);
 
-        FhElements.status_icon(valid, reason);
+        _status_icon(valid, reason);
         ImGui.SameLine();
 
         float browse_width  = _get_button_width("Browse");
@@ -154,11 +124,11 @@ internal static unsafe partial class FhModManagerUI {
 
         ImGui.SameLine();
 
-        bool browse_pressed = FhElements.button_secondary("Browse##Fahrenheit", new Vector2(browse_width, 0F));
+        bool browse_pressed = ImGui.Button("Browse##Fahrenheit", new Vector2(browse_width, 0F));
 
         ImGui.SameLine();
 
-        bool open_pressed = FhElements.button_secondary("Open##Fahrenheit", new Vector2(open_width, 0F));
+        bool open_pressed = ImGui.Button("Open##Fahrenheit", new Vector2(open_width, 0F));
 
         if (browse_pressed) {
             _browse_fahrenheit_directory();
@@ -168,8 +138,6 @@ internal static unsafe partial class FhModManagerUI {
         }
     }
 
-    // A location "looks valid" if it both exists and contains what's actually
-    // expected there, not just that the folder is present.
     private static (bool IsValid, string? Reason) _check_game_location(string normalized_game_directory) {
         if (!Directory.Exists(normalized_game_directory)) {
             return (false, "This folder does not exist.");

@@ -5,11 +5,9 @@
 
 /* Jobs:
  * - Small, reusable pieces used across the other ui_*.cs rendering files:
- *   state-mutation helpers that touch FhModManagerUI's own private fields
- *   (so they have to live in this partial rather than a standalone class -
- *   see FhElements/FhTheme in theme.cs for helpers that don't need private
- *   access and are shared instead), plus plain ImGui layout/text utilities
- *   that don't have anywhere more specific to live.
+ *   state-mutation helpers that touch FhModManagerUI's own private fields,
+ *   plus plain ImGui layout/text utilities that don't have anywhere more
+ *   specific to live.
  */
 
 namespace Fahrenheit.Tools.ModManager;
@@ -41,11 +39,9 @@ internal static unsafe partial class FhModManagerUI {
     // very visible once the window has been moved, or on a multi-monitor setup.
     //
     // Width is a fraction of the viewport's own width rather than a flat pixel
-    // count, clamped to [min_width, max_width] (the caller is expected to have
-    // already scaled both by FhTheme.UiScale, same as everything else sized in
-    // raw pixels - see UiScale's own comment in theme.cs) while still not
-    // ballooning to something absurd on an ultrawide or 8K screen. Height is
-    // left at 0 (auto-fit content) unless the caller passes one.
+    // count, clamped to [min_width, max_width], while still not ballooning to
+    // something absurd on an ultrawide or 8K screen. Height is left at 0
+    // (auto-fit content) unless the caller passes one.
     private static void _center_next_window(
         float width_fraction,
         float min_width,
@@ -68,7 +64,7 @@ internal static unsafe partial class FhModManagerUI {
     private static float _get_button_width(string label) {
         ImGuiStylePtr style = ImGui.GetStyle();
 
-        return ImGui.CalcTextSize(label).X + (style.FramePadding.X * 2F) + (4F * FhTheme.UiScale);
+        return ImGui.CalcTextSize(label).X + (style.FramePadding.X * 2F) + 4F;
     }
 
     // Nudges the cursor right so that something `content_width` wide, drawn from
@@ -114,5 +110,47 @@ internal static unsafe partial class FhModManagerUI {
         _text_wrapped(text);
 
         ImGui.PopStyleColor();
+    }
+
+    // A small green check (valid) or red X (invalid) glyph next to a directory.
+    // Hand-drawn via the draw list rather than a "✓"/"✗" character: the loaded
+    // font only covers Basic Latin + Latin-1 Supplement, so either glyph would
+    // just render as a blank box.
+    private static void _status_icon(bool is_valid, string? tooltip) {
+        float extent = ImGui.GetTextLineHeight();
+        Vector2 size = new(extent, extent);
+
+        Vector2 top_left = ImGui.GetCursorScreenPos();
+        Vector2 center    = top_left + (size / 2F);
+
+        ImGui.Dummy(size);
+
+        ImDrawListPtr draw_list  = ImGui.GetWindowDrawList();
+        uint          color      = ImGui.GetColorU32(is_valid ? ImGuiCol.CheckMark : ImGuiCol.NavCursor);
+        float         glyph      = extent * 0.5F;
+        float         thickness  = MathF.Max(1F, glyph * 0.3F);
+
+        if (is_valid) {
+            Vector2 p1 = center + new Vector2(-glyph * 0.5F, 0F);
+            Vector2 p2 = center + new Vector2(-glyph * 0.05F, glyph * 0.45F);
+            Vector2 p3 = center + new Vector2(glyph * 0.55F, -glyph * 0.5F);
+
+            draw_list.AddLine(p1, p2, color, thickness);
+            draw_list.AddLine(p2, p3, color, thickness);
+        }
+        else {
+            Vector2 half = new(glyph * 0.5F, glyph * 0.5F);
+
+            draw_list.AddLine(center - half, center + half, color, thickness);
+            draw_list.AddLine(
+                center + new Vector2(half.X, -half.Y),
+                center + new Vector2(-half.X, half.Y),
+                color,
+                thickness);
+        }
+
+        if (!string.IsNullOrWhiteSpace(tooltip) && ImGui.IsItemHovered()) {
+            ImGui.SetTooltip(tooltip);
+        }
     }
 }

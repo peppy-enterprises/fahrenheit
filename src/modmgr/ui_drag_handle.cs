@@ -154,6 +154,13 @@ internal static unsafe partial class FhModManagerUI {
 
         float flash_t = is_flashing ? 1F - (float)(released_elapsed / DRAG_HANDLE_RELEASE_FLASH_SECONDS) : 0F;
 
+        ImGuiStylePtr style = ImGui.GetStyle();
+
+        Vector4 accent          = style.Colors[(int)ImGuiCol.Button];
+        Vector4 surface_hovered = style.Colors[(int)ImGuiCol.HeaderHovered];
+        Vector4 text            = style.Colors[(int)ImGuiCol.Text];
+        Vector4 text_muted      = style.Colors[(int)ImGuiCol.TextDisabled];
+
         // "The whole row lifts, not just the icon": tints the entire row (every
         // column, not just this one) via the table itself, using the same
         // active/flash timing as the grip's own highlight below but softer, since
@@ -161,11 +168,11 @@ internal static unsafe partial class FhModManagerUI {
         // already rendered earlier in this row - the row background is composited
         // once the whole row is done, not as each cell is submitted.
         Vector4 row_background = active
-            ? new Vector4(FhTheme.COLOR_ACCENT.X, FhTheme.COLOR_ACCENT.Y, FhTheme.COLOR_ACCENT.Z, 0.16F)
+            ? new Vector4(accent.X, accent.Y, accent.Z, 0.16F)
             : new Vector4(0F, 0F, 0F, 0F);
 
         if (flash_t > 0F) {
-            Vector4 flash_row_background = new(FhTheme.COLOR_ACCENT.X, FhTheme.COLOR_ACCENT.Y, FhTheme.COLOR_ACCENT.Z, 0.20F);
+            Vector4 flash_row_background = new(accent.X, accent.Y, accent.Z, 0.20F);
             row_background += (flash_row_background - row_background) * flash_t;
         }
 
@@ -173,17 +180,17 @@ internal static unsafe partial class FhModManagerUI {
             ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg0, ImGui.GetColorU32(row_background));
         }
 
-        // COLOR_SURFACE_HOVERED is fully opaque (it's meant for solid button
+        // surface_hovered is fully opaque (it's meant for solid button
         // backgrounds elsewhere), so it's toned down here for a subtle highlight
         // rather than a solid block behind the bars.
         Vector4 background = active
-            ? new Vector4(FhTheme.COLOR_ACCENT.X, FhTheme.COLOR_ACCENT.Y, FhTheme.COLOR_ACCENT.Z, 0.35F)
+            ? new Vector4(accent.X, accent.Y, accent.Z, 0.35F)
             : hovered
-                ? new Vector4(FhTheme.COLOR_SURFACE_HOVERED.X, FhTheme.COLOR_SURFACE_HOVERED.Y, FhTheme.COLOR_SURFACE_HOVERED.Z, 0.6F)
+                ? new Vector4(surface_hovered.X, surface_hovered.Y, surface_hovered.Z, 0.6F)
                 : new Vector4(0F, 0F, 0F, 0F);
 
         if (flash_t > 0F) {
-            Vector4 flash_background = new(FhTheme.COLOR_ACCENT.X, FhTheme.COLOR_ACCENT.Y, FhTheme.COLOR_ACCENT.Z, 0.45F);
+            Vector4 flash_background = new(accent.X, accent.Y, accent.Z, 0.45F);
             background += (flash_background - background) * flash_t;
         }
 
@@ -195,10 +202,10 @@ internal static unsafe partial class FhModManagerUI {
             draw_list.AddRectFilled(center - background_half_size, center + background_half_size, ImGui.GetColorU32(background), 4F);
         }
 
-        Vector4 bar_color = mod.HasValidManifest && (hovered || active) ? FhTheme.COLOR_TEXT : FhTheme.COLOR_TEXT_MUTED;
+        Vector4 bar_color = mod.HasValidManifest && (hovered || active) ? text : text_muted;
 
         if (flash_t > 0F) {
-            bar_color += (FhTheme.COLOR_TEXT - bar_color) * flash_t;
+            bar_color += (text - bar_color) * flash_t;
         }
 
         uint bar_color_u32 = ImGui.GetColorU32(bar_color);
