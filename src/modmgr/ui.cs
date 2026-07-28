@@ -24,12 +24,6 @@ internal static unsafe partial class FhModManagerUI {
 
     static FhModManagerUI() {
         _settings = FhModManagerSettingsStore.load(out string settings_warning);
-        // main.cs already called FhTheme.apply() once with the built-in defaults,
-        // before this constructor could run (it needs a loaded FhModManagerSettings
-        // first). Re-applying here with any saved overrides happens before the
-        // first frame renders, so there's no visible flash of the default palette.
-        FhTheme.load_from_settings(_settings);
-        FhTheme.apply();
 
         _game_directory_input = _settings.GameDirectory;
         _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory, _settings.ModsDirectory);

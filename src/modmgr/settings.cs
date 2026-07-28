@@ -5,8 +5,7 @@
 
 /* Jobs:
  * - Define FhModManagerSettings, the JSON-serializable shape of fhmodmgr.json
- *   (game directory, optional Fahrenheit/mods location overrides, and
- *   optional theme color overrides).
+ *   (game directory and optional Fahrenheit location overrides).
  * - FhModManagerSettingsStore: locate, load, and atomically save that file
  *   beside the executable (this tool is a portable install, so settings
  *   don't live in per-machine state), plus the shared normalize_path/
@@ -25,24 +24,10 @@ internal sealed class FhModManagerSettings {
     // buttons for these two locations (ui_settings_modal.cs).
     public string? FahrenheitDirectory { get; set; }
     public string? ModsDirectory       { get; set; }
-
-    // Null means "not customized" - use FhTheme's DEFAULT_* value. Kept null rather
-    // than snapshotting the current default, so a future rebuild that changes the
-    // defaults doesn't leave an un-customized install pinned to the old palette.
-    public FhThemeColor? AccentColor          { get; set; }
-    public FhThemeColor? SuccessColor         { get; set; }
-    public FhThemeColor? ErrorColor           { get; set; }
-    public FhThemeColor? WarningColor         { get; set; }
-    public FhThemeColor? BackgroundColor      { get; set; }
-    public FhThemeColor? TextColor            { get; set; }
-    public FhThemeColor? TextMutedColor       { get; set; }
-    public FhThemeColor? FrameBackgroundColor { get; set; }
-    public FhThemeColor? TitleBarColor        { get; set; }
 }
 
 internal static class FhModManagerSettingsStore {
-    internal const string DEFAULT_GAME_DIRECTORY =
-        @"C:\Program Files (x86)\Steam\steamapps\common\FINAL FANTASY FFX&FFX-2 HD Remaster";
+    internal const string DEFAULT_GAME_DIRECTORY = @"C:\Program Files (x86)\Steam\steamapps\common\FINAL FANTASY FFX&FFX-2 HD Remaster";
 
     private static readonly JsonSerializerOptions _json_options = new() {
         WriteIndented = true
@@ -94,7 +79,7 @@ internal static class FhModManagerSettingsStore {
             // Defensive: normalize even though every current caller already
             // does, so a save can never persist a non-canonical path.
             settings.GameDirectory = normalize_path(settings.GameDirectory);
-            string json = JsonSerializer.Serialize(settings,_json_options);
+            string json = JsonSerializer.Serialize(settings, _json_options);
             write_atomic(SettingsPath, json);
             return true;
         }

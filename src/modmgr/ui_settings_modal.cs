@@ -6,9 +6,7 @@
 /* Jobs:
  * - Render the "Settings" modal: the three installation-location rows (game,
  *   Fahrenheit, mods), each independently browsable/openable with a live
- *   valid/invalid status icon, and the theme picker grid.
- * - Bind each theme color picker to its FhTheme field and persist the change
- *   into FhModManagerSettings once anything in the section actually changes.
+ *   valid/invalid status icon.
  */
 
 namespace Fahrenheit.Tools.ModManager;
@@ -79,10 +77,6 @@ internal static unsafe partial class FhModManagerUI {
             _settings.ModsDirectory);
 
         _render_fahrenheit_location_row(fahrenheit_directory);
-
-        ImGui.Spacing();
-
-        _render_theme_section();
 
         ImGui.EndPopup();
     }
@@ -198,138 +192,6 @@ internal static unsafe partial class FhModManagerUI {
         }
 
         return (true, null);
-    }
-
-    // Lets the user recolor the app (see FhTheme) and persists whatever they land
-    // on. Each picker writes straight to both the live FhTheme field and the
-    // corresponding FhModManagerSettings field, then apply()/save() run once at
-    // the end if anything actually changed this frame. Laid out as a 3-column
-    // table rather than one picker per line, so the section doesn't dominate
-    // the modal's height - a table (rather than SameLine() calls sized off a
-    // flat column_width) is what actually guarantees every column starts at
-    // the same X on every row, since labels like "Text Primary" and "Accent"
-    // are naturally different widths and would otherwise throw off each
-    // column's start position row to row. NoInputs hides the inline R/G/B/A
-    // number boxes each picker would otherwise show - the swatch already
-    // opens a full picker (with those same numeric fields) on click, so
-    // showing them twice is redundant and eats a lot of width across nine
-    // pickers besides.
-    private static void _render_theme_section() {
-        ImGui.SeparatorText("Theme");
-
-        bool changed = false;
-
-        if (ImGui.BeginTable("##ThemeGrid", 3, ImGuiTableFlags.SizingStretchSame)) {
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Background Primary",
-                ref FhTheme.COLOR_BACKGROUND,
-                static (settings, color) => settings.BackgroundColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Title Bar",
-                ref FhTheme.COLOR_TITLE_BAR,
-                static (settings, color) => settings.TitleBarColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Text Primary",
-                ref FhTheme.COLOR_TEXT,
-                static (settings, color) => settings.TextColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Background Secondary",
-                ref FhTheme.COLOR_FRAME_BACKGROUND,
-                static (settings, color) => settings.FrameBackgroundColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Accent",
-                ref FhTheme.COLOR_ACCENT,
-                static (settings, color) => settings.AccentColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Text Secondary",
-                ref FhTheme.COLOR_TEXT_MUTED,
-                static (settings, color) => settings.TextMutedColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Success",
-                ref FhTheme.COLOR_SUCCESS,
-                static (settings, color) => settings.SuccessColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Warning",
-                ref FhTheme.COLOR_WARNING,
-                static (settings, color) => settings.WarningColor = color);
-
-            ImGui.TableNextColumn();
-
-            changed |= _theme_color_picker(
-                "Error",
-                ref FhTheme.COLOR_ERROR,
-                static (settings, color) => settings.ErrorColor = color);
-
-            ImGui.EndTable();
-        }
-
-        ImGui.Spacing();
-
-        if (FhElements.button_secondary("Reset to Default")) {
-            FhTheme.reset_to_default();
-
-            _settings.AccentColor          = null;
-            _settings.BackgroundColor      = null;
-            _settings.TextColor            = null;
-            _settings.TextMutedColor       = null;
-            _settings.FrameBackgroundColor = null;
-            _settings.TitleBarColor        = null;
-            _settings.SuccessColor         = null;
-            _settings.WarningColor         = null;
-            _settings.ErrorColor           = null;
-
-            changed = true;
-        }
-
-        if (!changed) {
-            return;
-        }
-
-        FhTheme.apply();
-
-        if (!FhModManagerSettingsStore.try_save(_settings, out string save_error)) {
-            _set_status(save_error, true);
-        }
-    }
-
-    // Renders one "Label [swatch]" color picker bound directly to an FhTheme field.
-    // On change, also records the new value into `_settings` via `assign` (or, for
-    // Reset to Default, the caller nulls the settings field out separately) so the
-    // theme section's single save-at-the-end below persists everything at once.
-    private static bool _theme_color_picker(
-        string label,
-        ref Vector4 theme_color,
-        Action<FhModManagerSettings, FhThemeColor> assign) {
-        if (!ImGui.ColorEdit4(label, ref theme_color, ImGuiColorEditFlags.NoInputs)) {
-            return false;
-        }
-
-        assign(_settings, FhThemeColor.from_vector4(theme_color));
-
-        return true;
     }
 
     private static void _browse_game_directory() {
