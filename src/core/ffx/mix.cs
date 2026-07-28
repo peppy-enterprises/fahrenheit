@@ -5,13 +5,7 @@
 
 namespace Fahrenheit.FFX;
 
-[StructLayout(LayoutKind.Sequential)]
-public struct HelpText {
-    public ExcelSimplifiableTextOffset help;
-}
-
-[StructLayout(LayoutKind.Sequential)]
-public struct NameHelpText {
-    public ExcelSimplifiableTextOffset command;
-    public ExcelSimplifiableTextOffset help;
+[InlineArray(0x70)]
+public struct MixRecipe {
+    private ushort _u;
 }

@@ -6,17 +6,17 @@
 namespace Fahrenheit.FFX;
 
 /* [fkelava 28/07/26 02:36]
- * The game stores various data in 'Excel' files, containers for an array of objects.
- * It is a form of binary serialization. These types model generic Excel containers.
+ * The game stores various data in 'Excel' containers, a form of binary serialization.
+ * One or multiple headers precede an array of items, with optional game-encoded text following them.
  *
  * Most of the game's `kernel` directory consists of such files. They contain anything
  * from player command definitions to aeon stat growth curves.
  */
 
 /// <summary>
-///     A representation of an offset to text commonly used in Excel files.
+///     A pointer to text in an Excel container.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Size = 0x4)]
+[StructLayout(LayoutKind.Sequential)]
 public struct ExcelTextOffset {
     /// <summary>
     ///     The offset to the text.
@@ -26,9 +26,9 @@ public struct ExcelTextOffset {
 }
 
 /// <summary>
-///     A representation of offsets to text commonly used in Excel files.
+///     A pointer to text with an alternate simplified version in an Excel container.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Size = 0x8)]
+[StructLayout(LayoutKind.Sequential)]
 public struct ExcelSimplifiableTextOffset {
     /// <summary>
     ///     The offset to the standard text.
@@ -36,41 +36,44 @@ public struct ExcelSimplifiableTextOffset {
     public ExcelTextOffset standard;
 
     /// <summary>
-    ///     The offset to the simplified text.<br/>
-    ///     In Japanese, this would have been the hiragana version of the text.<br/>
+    ///     The offset to the simplified text. In Japanese, this is hiragana;
+    ///     in Western encodings, it has no effect.
+    ///     <para/>
     ///     This is completely unused.
     /// </summary>
     internal ExcelTextOffset simplified;
 }
 
 /// <summary>
-///     The header of an Excel file.
+///     The header of an Excel container.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct ExcelHeader {
     /// <summary>
-    ///     The index of the first element in the file.
+    ///     The index of the first element in the container.
     /// </summary>
     public ushort index_first;
 
     /// <summary>
-    ///     The index of the last element in the file.
+    ///     The index of the last element in the container.
     /// </summary>
     public ushort index_last;
 
     /// <summary>
-    ///     The size of one element in the file.
+    ///     The size of one element in the container.
     /// </summary>
     public ushort element_size;
 
     /// <summary>
-    ///     The combined length, in bytes, of all the elements in the file.<br/>
-    ///     Beyond the data there may be text, referenced using offsets in the elements.
+    ///     The combined length, in bytes, of all the elements in the container.
+    ///     <para/>
+    ///     This does not include any text which may follow the data.
     /// </summary>
     public ushort data_length;
 
     /// <summary>
-    ///     An offset from the start of the file to the start of the data.<br/>
+    ///     The offset, in bytes, from the start of the container to the start of the data.
+    ///     <para/>
     ///     In vanilla, always equivalent to the size of this header.
     /// </summary>
     public uint data_start;
@@ -82,19 +85,19 @@ public struct ExcelHeader {
 }
 
 /// <summary>
-///     Allows iteration over an Excel file of <typeparamref name="T"/>.
+///     Allows iteration over an Excel container of <typeparamref name="T"/>.
 /// </summary>
-public unsafe ref struct ExcelFileReader<T>(ReadOnlySpan<byte> excel_bytes) where T : unmanaged {
+public unsafe ref struct ExcelReader<T>(ReadOnlySpan<byte> excel_bytes) where T : unmanaged {
     private readonly ReadOnlySpan<byte> _bytes = excel_bytes;
 
     /// <summary>
-    ///     Gets the headers of this Excel file. Each defines a section of the file.
+    ///     Gets the headers of this Excel container. Each defines a section of it.
     /// </summary>
     public ReadOnlySpan<ExcelHeader> get_headers() {
-        int sz_prolog = sizeof(ExcelFileProlog);
+        int sz_prolog = sizeof(ExcelProlog);
         int sz_header = sizeof(ExcelHeader);
 
-        return MemoryMarshal.TryRead(_bytes, out ExcelFileProlog prolog)
+        return MemoryMarshal.TryRead(_bytes, out ExcelProlog prolog)
             ? MemoryMarshal.Cast<byte, ExcelHeader>(_bytes [ sz_prolog .. (sz_prolog + prolog.header_count * sz_header) ])
             : [];
     }
@@ -136,14 +139,14 @@ public unsafe ref struct ExcelFileReader<T>(ReadOnlySpan<byte> excel_bytes) wher
 }
 
 /// <summary>
-///     The prologue of an Excel file. Describes the file in enough detail to construct a reader.
+///     The prologue of an Excel container. Describes it in enough detail to construct a reader.
 ///     <para/>
-///     To iterate over the file's contents, use an <see cref="ExcelFileReader{T}"/>.
+///     To iterate over its contents, use an <see cref="ExcelReader{T}"/>.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x8)]
-public struct ExcelFileProlog {
+public struct ExcelProlog {
     /// <summary>
-    ///     The amount of headers that map out this file.
+    ///     The amount of headers that map out this container.
     ///     <remarks>
     ///         In the games, this amount is always 1.
     ///         Both the games and Fahrenheit support amounts higher than 1.

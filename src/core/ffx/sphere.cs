@@ -6,12 +6,9 @@
 namespace Fahrenheit.FFX;
 
 [StructLayout(LayoutKind.Sequential)]
-public struct HelpText {
+public struct SphereUsage {
     public ExcelSimplifiableTextOffset help;
-}
-
-[StructLayout(LayoutKind.Sequential)]
-public struct NameHelpText {
-    public ExcelSimplifiableTextOffset command;
-    public ExcelSimplifiableTextOffset help;
+    public ushort                      type;
+    public ushort                      activates;
+    public int                         _0x0C;
 }

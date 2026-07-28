@@ -18,7 +18,7 @@ internal abstract class EEditComponent<T> : EEditComponent where T : unmanaged {
     internal EEditComponent() {
         EEdit.active_file.ReadExactly(_file);
 
-        ExcelFileReader<T> iter = new(_file);
+        ExcelReader<T> iter = new(_file);
 
         foreach (ExcelHeader header in iter.get_headers()) {
             _elements.AddRange(iter.get_elements(header));
@@ -33,11 +33,15 @@ internal class EditorNull : EEditComponent {
     internal override void render() { }
 }
 
-internal class EditorText : EEditComponent<ExcelSimplifiableTextOffset> {
+internal class EditorRate : EEditComponent<Rate> {
     internal override void render() { }
 }
 
-internal class EditorTextPair : EEditComponent<Txt> {
+internal class EditorText : EEditComponent<HelpText> {
+    internal override void render() { }
+}
+
+internal class EditorTextPair : EEditComponent<NameHelpText> {
     internal override void render() { }
 }
 

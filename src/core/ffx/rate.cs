@@ -6,12 +6,6 @@
 namespace Fahrenheit.FFX;
 
 [StructLayout(LayoutKind.Sequential)]
-public struct HelpText {
-    public ExcelSimplifiableTextOffset help;
-}
-
-[StructLayout(LayoutKind.Sequential)]
-public struct NameHelpText {
-    public ExcelSimplifiableTextOffset command;
-    public ExcelSimplifiableTextOffset help;
+public struct Rate {
+    public uint rate; // TODO: Unfuck
 }
