@@ -3,33 +3,18 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - FhThemeColor: a JSON-friendly RGBA color used to persist theme overrides
- *   in fhmodmgr.json (a plain System.Numerics.Vector4 doesn't round-trip
- *   through the settings store's JSON options).
- * - FhTheme: the single source of truth for the app's palette and the
- *   derived ImGui style values built from it - the Settings modal's theme
- *   section (ui_settings_modal.cs) is the only other place allowed to write
- *   the base COLOR_* fields.
- * - FhElements: small reusable styled ImGui widgets (primary/secondary
- *   buttons, a hand-drawn valid/invalid status icon) that pull their colors
- *   from FhTheme, so widget code never has to push/pop a one-off color by
- *   hand. The window control buttons in ui_menu.cs are hand-drawn directly
- *   instead - see the comment there for why.
- *   
- *   TODO: consider supporting theme "profiles" (light/dark modes, or user-saved palettes) in the future.
- */
 
+/// <summary>
+///     FhElements: small reusable styled ImGui widgets to minimize rebuilding the same push/pop color/style in multiple places.
+/// </summary>
 namespace Fahrenheit.Tools.ModManager;
 
-// A JSON-serializable RGBA color, used to persist user theme customizations in
-// fhmodmgr.json. System.Numerics.Vector4 isn't a good fit for that directly: its
-// components are public fields, and FhModManagerSettingsStore's JsonSerializerOptions
-// don't set IncludeFields, so a Vector4 would round-trip as an empty object.
-internal sealed record FhThemeColor(float R, float G, float B, float A) {
-    internal Vector4 to_vector4() {
-        return new Vector4(R, G, B, A);
-    }
+/// <summary>
+///     FhTheme: (currently) the single source of truth for the app's palette. 
+///     The base colors are 1:1 from src/core/imguihelp.cs's FhImGuiHelper predefined style.
+/// </summary>
+internal static class FhTheme {
+    internal static float UiScale = 1F; // ensures proper scaling on high-dpi displays
 
     internal static FhThemeColor from_vector4(Vector4 color) {
         return new FhThemeColor(color.X, color.Y, color.Z, color.W);
@@ -239,9 +224,9 @@ internal static class FhTheme {
     }
 }
 
-// Small, reusable ImGui widgets that carry FhTheme's styling automatically, so call
-// sites don't each have to remember which color means "primary action" and push/pop
-// it by hand.
+/// <summary>
+///     FhElements: small reusable styled ImGui widgets to minimize rebuilding the same push/pop color/style in multiple places.
+/// </summary>
 internal static class FhElements {
     // The default look (see FhTheme.apply's Button/ButtonHovered/ButtonActive) - use
     // for the one action on a row/dialog that the user is most likely to want, e.g.
@@ -250,13 +235,9 @@ internal static class FhElements {
         return ImGui.Button(label, size);
     }
 
-    // A small green check (valid) or red X (invalid) glyph, e.g. next to a
-    // location the Settings modal is showing the validity of. Hand-drawn via
-    // the draw list rather than a "✓"/"✗" character: the loaded font only
-    // covers Basic Latin + Latin-1 Supplement (see main.cs's
-    // io.Fonts.AddFontFromFileTTF call), so either glyph would just render as
-    // a blank box. Hovering shows `tooltip` if one is given - pass null/empty
-    // for a valid location that doesn't need explaining.
+    /// <summary>
+    ///     A small green check (valid) or red X (invalid) glyph next to a directory.
+    /// </summary>
     internal static void status_icon(bool is_valid, string? tooltip) {
         float extent = ImGui.GetTextLineHeight();
         Vector2 size = new(extent, extent);
