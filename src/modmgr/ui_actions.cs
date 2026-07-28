@@ -43,7 +43,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     private static void _export_mod_list() {
-        DialogResult result = Dialog.FileSave("txt", string.Empty);
+        DialogResult result = Dialog.FileSave(string.Empty, string.Empty);
 
         if (!result.IsOk || result.Path == null) {
             return;
@@ -81,7 +81,7 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        FhModPackResult pack_result = FhModPackImporter.import(_catalog.ModsDirectory, _catalog.LoadOrderPath, result.Path);
+        ImportExportResult pack_result = FhModPackImporter.import(_catalog.ModsDirectory, _catalog.LoadOrderPath, result.Path);
 
         _set_status(pack_result.Message, !pack_result.Success);
 
@@ -97,7 +97,7 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        FhModPackResult pack_result = FhModPackExporter.export(result.Path, _catalog.Enabled);
+        ImportExportResult pack_result = FhModPackExporter.export(result.Path, _catalog.Enabled);
 
         _set_status(pack_result.Message, !pack_result.Success);
     }

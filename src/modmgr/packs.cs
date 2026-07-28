@@ -19,34 +19,10 @@
 
 namespace Fahrenheit.Tools.ModManager;
 
-internal enum FhEflGame {
-    FFX,
-    FFX2
-}
-
-internal readonly record struct FhEflImportResult(
-    bool Success,
-    string Message);
-
-internal readonly record struct FhModPackResult(
-    bool Success,
-    string Message);
-
-// Writable mirror of Fahrenheit's own FhManifest (src/core/module.cs). Duplicated
-// here rather than referenced, because modmgr deliberately doesn't depend on the
-// core project - see FhModScanner._read_mod, which reads manifests field-by-field
-// for the same reason. Flags is a string ("NONE") because the runtime deserializes
-// it through a JsonStringEnumConverter; see fhr.manifest.json for a real example.
-internal sealed record FhWritableManifest(
-    string Id,
-    string Name,
-    string Desc,
-    string Authors,
-    string Version,
-    string Link,
-    string[] Dependencies,
-    string[] LoadAfter,
-    string Flags);
+internal readonly record struct ImportExportResult(
+    bool    Success,
+    string  Message
+    );
 
 internal static class FhEflImporter {
     private static readonly JsonSerializerOptions _json_options = new() {
@@ -56,11 +32,11 @@ internal static class FhEflImporter {
     // Copies a loose file tree already laid out like a VBF (e.g. FFX_Data/ffx_ps2/...,
     // as documented in src/runtime/fileloader.cs) into a new mod's efl/x or efl/x2
     // folder, generating a manifest.json for it.
-    internal static FhEflImportResult import(
+    internal static ImportExportResult import(
         string mods_directory,
         string mod_id,
         string mod_name,
-        FhEflGame game,
+        FhGameId game,
         string source_folder) {
         if (string.IsNullOrWhiteSpace(mod_id)) {
             return new(false, "A mod ID is required.");
@@ -77,14 +53,14 @@ internal static class FhEflImporter {
         }
 
         try {
-            string efl_subfolder = game == FhEflGame.FFX2 ? "x2" : "x";
+            string efl_subfolder = game == FhGameId.FFX2 ? "x2" : "x";
             string efl_directory = Path.Join(mod_directory, "efl", efl_subfolder);
 
             Directory.CreateDirectory(efl_directory);
 
             _copy_directory(source_folder, efl_directory);
 
-            FhWritableManifest manifest = new(
+            FhManifest manifest = new(
                 mod_id,
                 mod_name,
                 "",
@@ -93,7 +69,7 @@ internal static class FhEflImporter {
                 "",
                 [],
                 [],
-                "NONE");
+                FhManifestFlags.NONE);
 
             string manifest_path = Path.Join(
                 mod_directory,
@@ -143,11 +119,11 @@ internal static class FhEflImporter {
     }
 }
 
+/// <summary>
+///     Zips a set of enabled mods' directories plus a `loadorder` entry into a single distributable .zip file.
+/// </summary>
 internal static class FhModPackExporter {
-    // Zips the given mods' complete directories, one top-level folder per mod ID,
-    // plus a root `loadorder` entry (same one-ID-per-line format as Fahrenheit's own
-    // load order file) recording the order they were exported in.
-    internal static FhModPackResult export(
+    internal static ImportExportResult export(
         string destination_zip_path,
         IReadOnlyList<FhInstalledMod> mods_in_order) {
         List<string> included_ids = [];
