@@ -26,7 +26,7 @@ internal static unsafe partial class FhModManagerUI {
         _settings = FhModManagerSettingsStore.load(out string settings_warning);
 
         _game_directory_input = _settings.GameDirectory;
-        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory, _settings.ModsDirectory);
+        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory);
         _set_status(settings_warning);
     }
 

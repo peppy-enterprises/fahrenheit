@@ -34,7 +34,7 @@ internal static unsafe partial class FhModManagerUI {
     // (rather than patching `_catalog` in place), so the in-memory catalog reflects
     // exactly what was written, including anything else that changed underneath us.
     private static void _rescan_mods() {
-        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory, _settings.ModsDirectory);
+        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory);
     }
 
     // Centers the next popup on the app's own viewport, not the desktop. With

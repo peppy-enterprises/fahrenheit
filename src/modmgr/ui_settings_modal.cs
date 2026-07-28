@@ -49,10 +49,7 @@ internal static unsafe partial class FhModManagerUI {
             normalized_game_directory = _game_directory_input;
         }
 
-        (string fahrenheit_directory, string mods_directory) = FhModScanner.resolve_paths(
-            normalized_game_directory,
-            _settings.FahrenheitDirectory,
-            _settings.ModsDirectory);
+        (string fahrenheit_directory, string mods_directory) = FhModScanner.resolve_paths(normalized_game_directory, _settings.FahrenheitDirectory);
 
         _render_fahrenheit_location_row(fahrenheit_directory);
 
