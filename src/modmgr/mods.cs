@@ -3,19 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Define FhInstalledMod/FhModCatalog, the read-only model of an installed
- *   mod and the scan result the UI renders from.
- * - FhModScanner: scan the game's mods directory and load order file into a
- *   FhModCatalog, surfacing anything wrong (missing directories, malformed
- *   manifests, duplicate/blank load-order lines) as warnings rather than
- *   failing outright.
- * - FhLoadOrderEditor: read/write the load order file - enable/disable a mod,
- *   move it by one step, move it to an arbitrary position, or append a batch
- *   of new IDs - normalizing (trimmed, de-duplicated) the file as a side
- *   effect of every write.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 

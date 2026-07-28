@@ -3,16 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Action handlers invoked from menu items and modal buttons: refreshing the
- *   catalog, opening a folder in the OS file browser, installing a mod from
- *   file (stub), exporting/importing a mod list or mod pack, and launching
- *   the game.
- * - Apply the pending mod-list mutations queued this frame by ui_mod_list.cs
- *   and ui_drag_handle.cs (toggle, arrow move, drag preview, drag drop), once
- *   rendering has finished (see UI() in ui.cs).
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {

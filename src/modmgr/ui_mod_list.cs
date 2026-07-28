@@ -3,16 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Lay out the Enabled/Disabled mod panels and their scrollable tables.
- * - Render each mod row: load-order arrows, enabled checkbox, and details text
- *   (the drag handle itself lives in ui_drag_handle.cs).
- * - Queue - rather than apply - the toggle/move a row's controls request, since
- *   applying it mid-iteration would mutate the very list being iterated. See
- *   ui_actions.cs's _apply_pending_* methods, which apply these once per frame
- *   after rendering finishes (see UI() in ui.cs).
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {

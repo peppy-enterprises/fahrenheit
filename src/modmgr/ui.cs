@@ -3,17 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Own FhModManagerUI's core state (settings, game directory input, mod
- *   catalog) and the static constructor that loads it.
- * - Drive the top-level UI() frame: main window, menu bar, header/warnings,
- *   mod lists, status bar, then apply any pending mutations queued this frame.
- * - This file is the entry point and shared state only - see ui_menu.cs,
- *   ui_settings_modal.cs, ui_efl_import_modal.cs, ui_mod_list.cs,
- *   ui_drag_handle.cs, ui_status_bar.cs, ui_actions.cs, and ui_helpers.cs for
- *   everything else.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {

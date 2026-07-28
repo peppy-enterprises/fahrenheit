@@ -45,7 +45,6 @@
         <PackageReference Include="Hexa.NET.SDL3" Version="1.2.11" />
         <PackageReference Include="Hexa.NET.OpenGL3" Version="1.1.0" />
         <PackageReference Include="NativeFileDialogCore" Version="1.0.3" />
-        <PackageReference Include="StbImageSharp" Version="2.30.15" />
     </ItemGroup>
 
     <!-- FONT ASSETS -->

@@ -3,16 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Render the drag-to-reorder grip in the Enabled panel's last column (see
- *   ui_mod_list.cs's _render_mod_table for the column layout it sits in).
- * - Track an in-progress drag purely in memory (_pending_preview_move) for
- *   responsive live feedback, and queue the final position
- *   (_pending_load_order_drop) once on release, for ui_actions.cs to write to
- *   disk (see UI() in ui.cs for where the queued moves get applied).
- * - Animate the grip's "grab pop" and "release flash" visual feedback.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {

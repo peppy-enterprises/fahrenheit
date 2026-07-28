@@ -3,15 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Render the menu bar (Mods / Play / Settings) and dispatch its actions,
- *   plus the app icon (see icon.cs) in its own left inset.
- * - Render the minimize/maximize/close buttons drawn into the menu bar in
- *   place of the OS title bar (see chrome.cs).
- * - Open the Settings/Import EFL Mod popups from outside any menu scope,
- *   since ImGui.OpenPopup() can't be called from inside a BeginMenu() block.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {

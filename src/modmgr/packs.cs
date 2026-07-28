@@ -3,20 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - FhEflImporter: copy a loose VBF-shaped file tree into a new mod's efl/x
- *   or efl/x2 folder and generate a manifest.json for it.
- * - FhModPackExporter: zip a set of enabled mods' directories plus a
- *   `loadorder` entry into a single distributable .zip mod pack.
- * - FhModPackImporter: extract a mod pack's not-already-installed mods
- *   (with a zip-slip guard) and append them to the load order in the pack's
- *   own relative order.
- *   
- *   TODO: 
- *      Test exporting/importing compressed mod lists.
- *      Support .7z, .rar, and .tar.gz compression algorithms.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static class FhEflImporter {
