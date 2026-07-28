@@ -99,7 +99,7 @@ internal static class FhModManagerSettingsStore {
     // so a crash or power loss mid-write can never leave `destination` truncated.
     // Shared with FhLoadOrderEditor, which persists the load order the same way.
     internal static void write_atomic(string destination, string contents) {
-        string temporary_path = $"{ destination}.tmp";
+        string temporary_path = $"{destination}.tmp";
 
         try {
             File.WriteAllText(temporary_path, contents);
