@@ -20,14 +20,14 @@ internal abstract class EEditComponent<T> : EEditComponent where T : unmanaged {
 
         ExcelFileReader<T> iter = new(_file);
 
-        foreach (ExcelHeader header in iter.headers()) {
-            _elements.AddRange(iter.elements(header));
+        foreach (ExcelHeader header in iter.get_headers()) {
+            _elements.AddRange(iter.get_elements(header));
         }
     }
 
 }
 
-// etc. - insert actual UI per wishes
+// TODO: insert actual UI per wishes
 
 internal class EditorMonmagic : EEditComponent<Command> {
     internal override void render() { }
