@@ -35,9 +35,13 @@ internal static unsafe partial class FhModManagerUI {
         }
     }
 
-    // Stubbed: only opens the file picker for now. Wiring up the actual install
-    // flow (what a "mod file" is - a manifest, an archive, something else) is a
-    // follow-up once that's decided.
+    // todo:
+    //  Stubbed - only opens the file picker for now.
+    /// <summary>
+    ///    Opens a file picker to select a compressed mod file. into the mods directory.
+    ///    If the mod is not already installed, it will be extracted into a subdirectory named
+    ///    after the mod's manifest name, or the file name if no manifest is present.
+    /// </summary>
     private static void _install_mod_from_file() {
         Dialog.FileOpen(string.Empty, string.Empty);
     }
@@ -78,6 +82,13 @@ internal static unsafe partial class FhModManagerUI {
         }
     }
 
+    // todo:
+    //  Validation logic on contents
+    //  Support file types (zip, rar, 7z, tar.gz)?
+    /// <summary>
+    ///    Imports a list of enabled mods from a typeless file; one per line.
+    ///    Move any net new mods that are not in the current mods directory.
+    /// </summary>
     private static void _import_mod_pack() {
         DialogResult result = Dialog.FileOpen("zip", string.Empty);
 
@@ -94,6 +105,10 @@ internal static unsafe partial class FhModManagerUI {
         }
     }
 
+    /// <summary>
+    ///   Exports current list of enabled mods' as zip file.
+    ///   File includes all mod directories with a loadorder file.
+    /// </summary>
     private static void _export_mod_pack() {
         DialogResult result = Dialog.FileSave("zip", string.Empty);
 
@@ -101,66 +116,84 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        ResultsMessage pack_result = FhModPackExporter.export(result.Path, _catalog.Enabled);
+        // ensure the file has a .zip extension, since the file picker doesn't enforce it
+        string destination_path = result.Path.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) ? result.Path : $"{result.Path}.zip";
 
+        ResultsMessage pack_result = FhModPackExporter.export(destination_path, _catalog.Enabled);
         _set_status(pack_result.Message, !pack_result.Success);
     }
 
+    /// <summary>
+    ///     Launches the specified target executable with optional arguments.
+    /// </summary>
     private static void _launch_game(FhGameId target, string[]? args = null) {
         ResultsMessage result = FhGameLauncher.launch(target, _game_directory_input, args ?? []);
-
         _set_status(result.Message, !result.Success);
     }
 
-    private static void _apply_pending_mod_toggle() {
-        if (_pending_mod_toggle == null) {
-            return;
+    /// <summary>
+    ///     Takes a pending action from the specified field, clearing it and returning the action.
+    /// </summary>
+    private static bool _take_pending<T>(ref T? pending, out T action) where T : class {
+        if (pending == null) {
+            action = null!;
+            return false;
         }
 
-        FhPendingModToggle action = _pending_mod_toggle;
+        action = pending;
+        pending = null;
 
-        _pending_mod_toggle = null;
-
-        if (!FhLoadOrderEditor.try_set_enabled(_catalog.LoadOrderPath, action.Mod, action.Enable, out string error)) {
-            _set_status(error, true);
-            return;
-        }
-
-        _rescan_mods();
-
-        _set_status(action.Enable ? $"Enabled {action.Mod.Manifest.Name}." : $"Disabled {action.Mod.Manifest.Name}.");
+        return true;
     }
 
-    private static void _apply_pending_load_order_move() {
-        if (_pending_load_order_move == null) {
-            return;
-        }
-
-        FhPendingLoadOrderMove action = _pending_load_order_move;
-
-        _pending_load_order_move = null;
-
-        if (!FhLoadOrderEditor.try_move(_catalog.LoadOrderPath, action.Mod, action.Direction, out string error)) {
+    /// <summary>
+    ///     Applies the result of a load order modification.
+    ///     Rescans loadorder file afterwards and sets the status bar message.
+    /// </summary>
+    private static void _apply_load_order_result(bool success, string error, string success_message) {
+        if (!success) {
             _set_status(error, true);
             return;
         }
 
         _rescan_mods();
+        _set_status(success_message);
+    }
 
+    /// <summary>
+    ///    Applies the pending mod toggle action queued this frame by ui_mod_list.cs, if any.
+    /// </summary>
+    private static void _apply_pending_mod_toggle() {
+        if (!_take_pending(ref _pending_mod_toggle, out FhPendingModToggle action)) {
+            return;
+        }
+
+        bool success = FhLoadOrderEditor.try_set_enabled(_catalog.LoadOrderPath, action.Mod, action.Enable, out string error);
+
+        _apply_load_order_result(success, error, action.Enable ? $"Enabled {action.Mod.Manifest.Name}." : $"Disabled {action.Mod.Manifest.Name}.");
+    }
+
+    /// <summary>
+    ///   Applies the pending mod move action queued this frame by ui_mod_list.cs, if any.
+    /// </summary>
+    private static void _apply_pending_load_order_move() {
+        if (!_take_pending(ref _pending_load_order_move, out FhPendingLoadOrderMove action)) {
+            return;
+        }
+
+        bool   success        = FhLoadOrderEditor.try_move(_catalog.LoadOrderPath, action.Mod, action.Direction, out string error);
         string direction_name = action.Direction < 0 ? "up" : "down";
 
-        _set_status($"Moved {action.Mod.Manifest.Name} {direction_name}.");
+        _apply_load_order_result(success, error, $"Moved {action.Mod.Manifest.Name} {direction_name}.");
     }
 
-    // In-memory-only reorder for live drag feedback: no disk write, no rescan -
-    // see the comment on _dragging_mod (ui_drag_handle.cs) above for why.
+    /// <summary>
+    ///  Applies the pending mod preview move action queued this frame by ui_drag_handle.cs, if any.
+    /// </summary>
     private static void _apply_pending_preview_move() {
-        if (_pending_preview_move == null) {
+        if (!_take_pending(ref _pending_preview_move, out FhPendingPreviewMove action)) {
             return;
         }
-
-        FhPendingPreviewMove action = _pending_preview_move;
-        _pending_preview_move = null;
 
         if (action.FromIndex < 0 || action.FromIndex >= _catalog.Enabled.Count
             || action.ToIndex < 0 || action.ToIndex >= _catalog.Enabled.Count) {
@@ -176,25 +209,15 @@ internal static unsafe partial class FhModManagerUI {
         _catalog = _catalog with { Enabled = reordered };
     }
 
-    // Commits a drag-and-drop reorder to disk once the mouse is released, using
-    // wherever the mod's in-memory preview position (see _apply_pending_preview_move)
-    // ended up as the target.
+    /// <summary>
+    ///  Applies the pending mod drop action queued this frame by ui_drag_handle.cs, if any.
+    /// </summary>
     private static void _apply_pending_load_order_drop() {
-        if (_pending_load_order_drop == null) {
+        if (!_take_pending(ref _pending_load_order_drop, out FhPendingLoadOrderDrop action)) {
             return;
         }
 
-        FhPendingLoadOrderDrop action = _pending_load_order_drop;
-        _pending_load_order_drop = null;
-
-        bool didMove = FhLoadOrderEditor.try_move_to(_catalog.LoadOrderPath, action.Mod, action.TargetIndex, out string error);
-        if (!didMove) {
-            _set_status(error, true);
-            return;
-        }
-
-        _rescan_mods();
-
-        _set_status($"Moved {action.Mod.Manifest.Name}.");
+        bool success = FhLoadOrderEditor.try_move_to(_catalog.LoadOrderPath, action.Mod, action.TargetIndex, out string error);
+        _apply_load_order_result(success, error, $"Moved {action.Mod.Manifest.Name}.");
     }
 }
