@@ -26,10 +26,8 @@ internal sealed record FhInstalledMod(
     bool ManifestExists,
     string ManifestError,
     int? LoadOrderIndex) {
-    internal bool IsEnabled =>
-        LoadOrderIndex.HasValue;
-
-    internal bool HasValidManifest => DirectoryExists && ManifestExists && string.IsNullOrWhiteSpace(ManifestError);
+    internal bool IsEnabled         => LoadOrderIndex.HasValue;
+    internal bool HasValidManifest  => DirectoryExists && ManifestExists && string.IsNullOrWhiteSpace(ManifestError);
 }
 
 /// <summary>
@@ -79,24 +77,24 @@ internal static class FhModScanner {
 
         string load_order_path = Path.Join(mods_directory, "loadorder");
 
-        // Check each level of the expected layout in turn so the warning always
-        // names the first thing that's actually missing, rather than e.g. reporting
-        // a missing mods folder when the real problem is no game directory at all.
-        string? missing_directory_warning = null;
+        // Check for missing directories.
+        bool missing_directory_warning = false;
 
         if (!Directory.Exists(normalized_game_directory)) {
-            missing_directory_warning = $"The game directory does not exist:\n{normalized_game_directory}";
+            missing_directory_warning = true;
+            warnings.Add($"The game directory does not exist:\n{normalized_game_directory}");
         }
-        else if (!Directory.Exists(fahrenheit_directory)) {
-            missing_directory_warning = $"Fahrenheit is not installed at:\n{fahrenheit_directory}";
+        if (!Directory.Exists(fahrenheit_directory)) {
+            missing_directory_warning = true;
+            warnings.Add($"Fahrenheit is not installed at:\n{fahrenheit_directory}");
         }
-        else if (!Directory.Exists(mods_directory)) {
-            missing_directory_warning = $"The Fahrenheit mods directory does not exist:\n{mods_directory}";
+        if (!Directory.Exists(mods_directory)) {
+            missing_directory_warning = true;
+            warnings.Add($"The Fahrenheit mods directory does not exist:\n{mods_directory}");
         }
 
-        if (missing_directory_warning != null) {
-            warnings.Add(missing_directory_warning);
-
+        // Return early if any of the directories are missing.
+        if (missing_directory_warning) {
             return new(enabled, disabled, warnings, mods_directory, load_order_path);
         }
 
@@ -116,31 +114,29 @@ internal static class FhModScanner {
 
         HashSet<string> enabled_ids = new(StringComparer.OrdinalIgnoreCase);
 
+        // Read the load order file into the enabled list, surfacing any issues as warnings.
         for (int index = 0; index < raw_load_order.Length; index++) {
             string raw_mod_id = raw_load_order[index];
 
             if (string.IsNullOrWhiteSpace(raw_mod_id)) {
-                warnings.Add($"Load-order line {index + 1} is empty. Fahrenheit currently treats every line as a mod ID.");
-
+                warnings.Add($"Load-order line {index + 1} is empty. Every line should contain a mod ID.");
                 continue;
             }
 
-            bool hasWhiteSpace = !string.Equals(raw_mod_id, raw_mod_id.Trim(), StringComparison.Ordinal);
-            if (hasWhiteSpace) {
-                warnings.Add( $"Load-order line {index + 1} contains leading or trailing whitespace: '{raw_mod_id}'");
+            string mod_id = raw_mod_id.Trim();
+
+            if (enabled_ids.Contains(mod_id)) {
+                warnings.Add($"Duplicate '{mod_id}' entries in the load order. Edits made here will purge the duplicate entry.");
+                continue;
             }
 
-            string mod_id = raw_mod_id;
-
-            if (!enabled_ids.Add(mod_id)) {
-                warnings.Add($"The mod '{mod_id}' appears more than once in the load order.");
-            }
-
+            enabled_ids.Add(mod_id);
             enabled.Add(_read_mod(mods_directory, mod_id, index));
         }
 
         IEnumerable<string> mod_directories = Directory.EnumerateDirectories( mods_directory, "*", SearchOption.TopDirectoryOnly);
 
+        // Any mod directories not already in the enabled list default to the disabled list.
         foreach (string mod_directory in mod_directories) {
             string mod_id = Path.GetFileName(mod_directory);
 
@@ -151,20 +147,18 @@ internal static class FhModScanner {
             disabled.Add(_read_mod(mods_directory, mod_id, null));
         }
 
-        disabled.Sort(
-            static (left, right) => StringComparer.OrdinalIgnoreCase.Compare(left.Manifest.Name, right.Manifest.Name));
+        disabled.Sort(static (left, right) => StringComparer.OrdinalIgnoreCase.Compare(left.Manifest.Name, right.Manifest.Name));
 
         return new(enabled, disabled, warnings, mods_directory, load_order_path);
     }
 
-    private static FhInstalledMod _read_mod(
-        string mods_directory,
-        string mod_id,
-        int? load_order_index) {
-        string mod_directory = Path.Join(
-            mods_directory,
-            mod_id);
-
+    /// <summary>
+    ///     Loads a mod's manifest and returns an FhInstalledMod record. 
+    ///     If the mod directory or manifest is missing or malformed, the returned record will report error details.
+    /// </summary>
+    private static FhInstalledMod _read_mod(string mods_directory, string mod_id, int? load_order_index) {
+        string mod_directory = Path.Join(mods_directory, mod_id);
+        // guard against mod directory not existing after it was enumerated
         bool directory_exists = Directory.Exists(mod_directory);
 
         if (!directory_exists) {
@@ -183,52 +177,47 @@ internal static class FhModScanner {
             JsonElement root = document.RootElement;
 
             // Version/Authors are purely cosmetic, so they default to blank and get
-            // skipped by the UI; Name falls back to the directory-derived mod_id so
-            // there's always something displayable even if the manifest omits it.
-            string name = _read_string(root,"Name",mod_id);
+            // skipped by the UI; Name falls back to the mod_id
+            string name     = _read_string(root, "Name", mod_id);
+            string version  = _read_string(root, "Version", "0");
+            string authors  = _read_string(root, "Authors", "Unknown");
 
-            string version = _read_string(root,"Version","");
-
-            string authors = _read_string(root,"Authors","");
-
-            return new(new FhManifest(mod_id, mod_id, "", "", "", "", [], [], FhManifestFlags.NONE), mod_directory, true, true, "", load_order_index);
+            return new(new FhManifest(mod_id, name, "", authors, version, "", [], [], FhManifestFlags.NONE), mod_directory, true, true, "", load_order_index);
         }
         catch (Exception exception) {
             return new(new FhManifest(mod_id, mod_id, "", "", "", "", [], [], FhManifestFlags.NONE), mod_directory, true, true, exception.Message, load_order_index);
         }
     }
 
-    private static string _read_string(
-        JsonElement root,
-        string property_name,
-        string fallback) {
-        if (!root.TryGetProperty(
-                property_name,
-                out JsonElement property)) {
+    /// <summary>
+    ///     Reads a string property from mod manifest, defaults to fallback if found value invalid.
+    /// </summary>
+    private static string _read_string(JsonElement root, string property_name, string fallback) {
+        if (!root.TryGetProperty(property_name, out JsonElement property)) {
             return fallback;
         }
 
-        return property.ValueKind == JsonValueKind.String ? property.GetString() ?? fallback : fallback;
+        if (property.ValueKind != JsonValueKind.String) {
+            return fallback;
+        }
+
+        string? readValue = property.GetString();
+        return string.IsNullOrEmpty(readValue) ? fallback : readValue!;
     }
 }
 
+/// <summary>
+///    Reads and writes the load order file, enabling/disabling mods and moving them up/down.
+/// </summary>
 internal static class FhLoadOrderEditor {
-    // Enables or disables a mod in the load order. Deliberately not gated on
-    // FhInstalledMod.HasValidManifest, unlike try_move/try_move_to below: this
-    // only ever adds or removes `mod.Id` from the load order text file, which
-    // doesn't depend on the mod actually having a valid (or even present)
-    // manifest - and disabling has to work on an invalid mod regardless, since
-    // it's the only way to clear a broken entry out of the load order from the UI.
-    internal static bool try_set_enabled(
-        string load_order_path,
-        FhInstalledMod mod,
-        bool enabled,
-        out string error) {
+    /// <summary>
+    ///    Enables or disables a mod by adding or removing its ID from the load order file.
+    /// </summary>
+    internal static bool try_set_enabled(string load_order_path, FhInstalledMod mod, bool enabled, out string error) {
         error = "";
 
         try {
-            string? mods_directory =
-                Path.GetDirectoryName(load_order_path);
+            string? mods_directory = Path.GetDirectoryName(load_order_path);
 
             if (mods_directory == null || !Directory.Exists(mods_directory)) {
                 error = "The Fahrenheit mods directory does not exist.";
@@ -277,9 +266,9 @@ internal static class FhLoadOrderEditor {
         }
     }
 
-    // Appends any of `mod_ids` not already present (case-insensitively) to the end
-    // of the load order, preserving the order they're given in. Used when importing
-    // a mod pack, so newly installed mods keep the pack's own relative ordering.
+    /// <summary>
+    ///    Appends any of `mod_ids` not already present (case-insensitively) to the end of the load order, preserving the order they're given in.
+    /// </summary>
     internal static bool try_append_all(string load_order_path, IReadOnlyList<string> mod_ids, out string error) {
         error = "";
 
@@ -305,11 +294,10 @@ internal static class FhLoadOrderEditor {
         }
     }
 
-    // Reads the load order file into a de-duplicated, whitespace-trimmed list.
-    // FhModScanner.scan() surfaces the same issues as warnings but leaves the file
-    // untouched (it's read-only/diagnostic); every edit made through this class
-    // instead cleans the file up as a side effect of writing it back, so both
-    // try_set_enabled and try_move share this reader to normalize identically.
+    /// <summary>
+    ///    Reads the load order file into a de-duplicated, whitespace-trimmed list.
+    ///    Edits made to the list through the UI are written back out atomically by _write_load_order.
+    /// </summary>
     private static List<string> _read_normalized_load_order(string load_order_path) {
         List<string> load_order = [];
 
@@ -334,10 +322,10 @@ internal static class FhLoadOrderEditor {
         return load_order;
     }
 
-    // Joins the entries back into a loadorder file and writes it atomically.
-    private static void _write_load_order(
-        string load_order_path,
-        IReadOnlyList<string> entries) {
+    /// <summary>
+    ///     Joins the entries back into a loadorder file and writes it atomically.
+    /// </summary>
+    private static void _write_load_order(string load_order_path, IReadOnlyList<string> entries) {
         string contents = string.Join(Environment.NewLine, entries);
 
         if (entries.Count > 0) {
@@ -347,12 +335,10 @@ internal static class FhLoadOrderEditor {
         FhModManagerSettingsStore.write_atomic(load_order_path, contents);
     }
 
-    // Moves the mod up or down by one position in the load order.
-    internal static bool try_move(
-        string load_order_path,
-        FhInstalledMod mod,
-        int direction,
-        out string error) {
+    /// <summary>
+    ///    Moves the mod up or down by one position in the load order.
+    /// </summary>
+    internal static bool try_move(string load_order_path, FhInstalledMod mod, int direction, out string error) {
         if (direction != -1 && direction != 1) {
             error = "Load-order direction must be -1 or 1.";
             return false;
@@ -361,22 +347,16 @@ internal static class FhLoadOrderEditor {
         return _try_reposition(load_order_path, mod, current_index => current_index + direction, out error);
     }
 
-    // Moves the mod to an arbitrary position in the load order - used to commit a
-    // drag-and-drop reorder once (on mouse release), rather than the whole
-    // gesture stepping through try_move repeatedly; see ui.cs's
-    // _apply_pending_load_order_drop.
-    internal static bool try_move_to(
-        string load_order_path,
-        FhInstalledMod mod,
-        int target_index,
-        out string error) {
+    /// <summary>
+    ///    Moves the mod to an arbitrary position in the load order from drag/drop UI.
+    /// </summary>
+    internal static bool try_move_to(string load_order_path, FhInstalledMod mod, int target_index, out string error) {
         return _try_reposition(load_order_path, mod, _ => target_index, out error);
     }
 
-    // Shared by try_move/try_move_to: finds the mod's current position, asks
-    // `compute_target_index` where it should go from there, and - unless that's
-    // where it already is - removes and reinserts it at the (clamped) result
-    // before writing the load order back out.
+    /// <summary>
+    ///    Attempts to reposition the mod in the load order (if changing).
+    /// </summary>
     private static bool _try_reposition(
         string load_order_path,
         FhInstalledMod mod,
@@ -386,14 +366,12 @@ internal static class FhLoadOrderEditor {
 
         if (!mod.HasValidManifest) {
             error = $"The mod '{mod.Manifest.Id}' does not have a valid manifest.";
-
             return false;
         }
 
         try {
             if (!File.Exists(load_order_path)) {
                 error = $"The Fahrenheit load-order file does not exist:\n\n{load_order_path}";
-
                 return false;
             }
 
@@ -404,7 +382,6 @@ internal static class FhLoadOrderEditor {
 
             if (current_index < 0) {
                 error = $"The enabled mod '{mod.Manifest.Id}' was not found in the load order.";
-
                 return false;
             }
 
@@ -426,12 +403,10 @@ internal static class FhLoadOrderEditor {
         }
         catch (UnauthorizedAccessException) {
             error = "Windows denied permission to update the load order.";
-
             return false;
         }
         catch (Exception exception) {
             error = $"The load order could not be changed.\n\n{exception.Message}";
-
             return false;
         }
     }
