@@ -42,41 +42,27 @@ internal sealed record FhModCatalog(
     string ModsDirectory,
     string LoadOrderPath);
 
+/// <summary>
+///     Derives the `fahrenheit` and `fahrenheit/mods` paths.
+/// </summary>
 internal static class FhModScanner {
-    // Derives the `fahrenheit` and `fahrenheit/mods` paths from an already-
-    // normalized game directory - the one place this layout convention is
-    // spelled out, shared by scan() below and the Settings modal's per-location
-    // validity checks (ui_settings_modal.cs), so the two can never disagree
-    // about what "the Fahrenheit location" or "the mods location" actually is.
-    // The two overrides (null by default) let a user point either location
-    // somewhere other than the default derived path - see FhModManagerSettings'
-    // FahrenheitDirectory/ModsDirectory, set via that same modal's Browse
-    // buttons for these two rows.
-    internal static (string FahrenheitDirectory, string ModsDirectory) resolve_paths(
-        string normalized_game_directory,
-        string? fahrenheit_directory_override = null,
-        string? mods_directory_override = null) {
+    internal static (string FahrenheitDirectory, string ModsDirectory) resolve_paths(string normalized_game_directory, string? fahrenheit_directory_override = null) {
         string fahrenheit_directory = string.IsNullOrWhiteSpace(fahrenheit_directory_override)
             ? Path.Join(normalized_game_directory, "fahrenheit")
             : fahrenheit_directory_override;
 
-        string mods_directory = string.IsNullOrWhiteSpace(mods_directory_override)
-            ? Path.Join(fahrenheit_directory, "mods")
-            : mods_directory_override;
+        string mods_directory = Path.Join(fahrenheit_directory, "mods");
 
         return (fahrenheit_directory, mods_directory);
     }
 
-    // Scans the game directory for installed mods and returns a catalog of them.
-    // `fahrenheit_directory_override`/`mods_directory_override` are forwarded
-    // straight to resolve_paths() above.
-    internal static FhModCatalog scan(
-        string game_directory,
-        string? fahrenheit_directory_override = null,
-        string? mods_directory_override = null) {
-        List<FhInstalledMod> enabled = [];
-        List<FhInstalledMod> disabled = [];
-        List<string> warnings = [];
+    /// <summary>
+    ///     Scans the game directory for installed mods and returns a catalog of them.
+    /// </summary>
+    internal static FhModCatalog scan(string game_directory, string? fahrenheit_directory_override = null) {
+        List<FhInstalledMod> enabled    = [];
+        List<FhInstalledMod> disabled   = [];
+        List<string> warnings           = [];
 
         string normalized_game_directory;
 
@@ -89,7 +75,7 @@ internal static class FhModScanner {
             return new(enabled, disabled, warnings, "", "");
         }
 
-        (string fahrenheit_directory, string mods_directory) = resolve_paths(normalized_game_directory, fahrenheit_directory_override, mods_directory_override);
+        (string fahrenheit_directory, string mods_directory) = resolve_paths(normalized_game_directory, fahrenheit_directory_override);
 
         string load_order_path = Path.Join(mods_directory, "loadorder");
 

@@ -3,29 +3,20 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Define FhModManagerSettings, the JSON-serializable shape of fhmodmgr.json
- *   (game directory and optional Fahrenheit location overrides).
- * - FhModManagerSettingsStore: locate, load, and atomically save that file
- *   beside the executable (this tool is a portable install, so settings
- *   don't live in per-machine state), plus the shared normalize_path/
- *   write_atomic helpers FhLoadOrderEditor (mods.cs) also relies on.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
+/// <summary>
+///     Defines FhModManagerSettings persisted to fhmodmgr.json.
+/// </summary>
 internal sealed class FhModManagerSettings {
-
     public string GameDirectory { get; set; } = FhModManagerSettingsStore.DEFAULT_GAME_DIRECTORY;
 
-    // Null means "not overridden" - use the default derived from GameDirectory
-    // (<game>/fahrenheit, <game>/fahrenheit/mods respectively; see
-    // FhModScanner.resolve_paths). Set via the Settings modal's own Browse
-    // buttons for these two locations (ui_settings_modal.cs).
     public string? FahrenheitDirectory { get; set; }
-    public string? ModsDirectory       { get; set; }
 }
 
+/// <summary>
+///     Loads and saves FhModManagerSettings to fhmodmgr.json in the same directory as the executable.
+/// </summary>
 internal static class FhModManagerSettingsStore {
     internal const string DEFAULT_GAME_DIRECTORY = @"C:\Program Files (x86)\Steam\steamapps\common\FINAL FANTASY FFX&FFX-2 HD Remaster";
 
@@ -33,19 +24,15 @@ internal static class FhModManagerSettingsStore {
         WriteIndented = true
     };
 
-    /*
-     * fhmodmgr.exe is deployed to <game>/fahrenheit/bin/, alongside fhstage0.exe.
-     * Fahrenheit and its tools are meant to be fully portable installs, so the
-     * settings file lives beside the executable rather than in per-machine state
-     * such as the Windows user profile. If it exists, it overrides the default
-     * game directory above.
-     */
     internal static string SettingsPath {
         get {
             return Path.Join( AppContext.BaseDirectory, "fhmodmgr.json");
         }
     }
 
+    /// <summary>
+    ///    Loads the settings from fhmodmgr.json, returning a warning message if the load fails or the settings are empty.
+    /// </summary>
     internal static FhModManagerSettings load(out string warning) {
         warning = "";
 
@@ -72,6 +59,9 @@ internal static class FhModManagerSettingsStore {
         }
     }
 
+    /// <summary>
+    ///    Saves the given settings to fhmodmgr.json, returning false and an error message if the save fails.
+    /// </summary>
     internal static bool try_save(FhModManagerSettings settings, out string error) {
         error = "";
 
@@ -89,15 +79,21 @@ internal static class FhModManagerSettingsStore {
         }
     }
 
+    /// <summary>
+    ///    Normalizes a path by:
+    ///     Trimming whitespace/quotes
+    ///     Resolving relative paths to absolute
+    ///     Removing any trailing directory separators
+    /// </summary>
     internal static string normalize_path(string path) {
         string cleaned_path = path.Trim().Trim('"');
         string full_path = Path.GetFullPath(cleaned_path);
         return Path.TrimEndingDirectorySeparator(full_path);
     }
 
-    // Writes a file by staging it under a temporary name and renaming it into place,
-    // so a crash or power loss mid-write can never leave `destination` truncated.
-    // Shared with FhLoadOrderEditor, which persists the load order the same way.
+    /// <summary>
+    ///     Writes a file atomically by staging it under a temporary name and renaming it into place.
+    /// </summary>
     internal static void write_atomic(string destination, string contents) {
         string temporary_path = $"{destination}.tmp";
 
