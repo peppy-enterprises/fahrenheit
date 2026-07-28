@@ -108,6 +108,31 @@ public unsafe ref struct ExcelFileReader<T>(ReadOnlySpan<byte> excel_bytes) wher
 
         return MemoryMarshal.Cast<byte, T>(_bytes [ start .. (start + length) ]);
     }
+
+    /// <summary>
+    ///     Attempts to obtain the Excel header for the element at the given <paramref name="index"/>.
+    /// </summary>
+    private bool find_header_for_index(int index, out ExcelHeader target_header) {
+        foreach (ExcelHeader header in get_headers()) {
+            if (header.index_first <= index && index <= header.index_last) {
+                target_header = header;
+                return true;
+            }
+        }
+
+        target_header = default;
+        return false;
+    }
+
+    /// <summary>
+    ///     Gets a span of bytes containing the text pointed to by an Excel element's <paramref name="ptr_text"/>.
+    /// </summary>
+    public ReadOnlySpan<byte> get_text_span(int element_index, ExcelSimplifiableTextOffset ptr_text) {
+        // We don't really care what the end bound is. Encoding will stop at the null terminator.
+        return find_header_for_index(element_index, out ExcelHeader header)
+            ? _bytes [ ((int)header.data_start + (int)header.data_length + ptr_text.standard.text_offset) .. ]
+            : [ 0x00 ];
+    }
 }
 
 /// <summary>
