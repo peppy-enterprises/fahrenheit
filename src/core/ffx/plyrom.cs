@@ -6,7 +6,7 @@
 namespace Fahrenheit.FFX;
 
 [Flags]
-public enum PlyGender {
+public enum PlyGender : byte {
     NONE  = 0,
     MAN   = 1,
     WOMAN = 2,
