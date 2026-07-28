@@ -3,18 +3,15 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Render the "Settings" modal: the three installation-location rows (game,
- *   Fahrenheit, mods), each independently browsable/openable with a live
- *   valid/invalid status icon.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {
     private const int GAME_DIRECTORY_INPUT_LENGTH = 1024;
     private static bool _show_settings_dialog;
 
+    /// <summary>
+    ///     Renders the "Settings" modal, which allows the user to set the game directory.
+    /// </summary>
     private static void _render_settings_modal() {
         _center_next_window(width_fraction: 0.42F, min_width: 900F, max_width: 1300F);
 
@@ -32,30 +29,18 @@ internal static unsafe partial class FhModManagerUI {
         }
 
         if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)
-            && !ImGui.IsWindowHovered(
-                ImGuiHoveredFlags.RootAndChildWindows | ImGuiHoveredFlags.AllowWhenBlockedByPopup)) {
+            && !ImGui.IsWindowHovered(ImGuiHoveredFlags.RootAndChildWindows | ImGuiHoveredFlags.AllowWhenBlockedByPopup)) {
             _show_settings_dialog = false;
             ImGui.CloseCurrentPopup();
         }
 
         _render_game_directory_row();
-
-        string normalized_game_directory;
-
-        try {
-            normalized_game_directory = FhModManagerSettingsStore.normalize_path(_game_directory_input);
-        }
-        catch {
-            normalized_game_directory = _game_directory_input;
-        }
-
-        (string fahrenheit_directory, string mods_directory) = FhModScanner.resolve_paths(normalized_game_directory, _settings.FahrenheitDirectory);
-
-        _render_fahrenheit_location_row(fahrenheit_directory);
-
         ImGui.EndPopup();
     }
 
+    /// <summary>
+    ///     Renders the row in the settings modal that allows the user to input or browse for the game directory.
+    /// </summary>
     private static void _render_game_directory_row() {
         ImGui.SeparatorText("FF X/X-2 HD Remaster Location");
 
@@ -101,40 +86,9 @@ internal static unsafe partial class FhModManagerUI {
         }
     }
 
-    private static void _render_fahrenheit_location_row(string fahrenheit_directory) {
-        ImGui.SeparatorText("Fahrenheit Location");
-
-        (bool valid, string? reason) = _check_fahrenheit_location(fahrenheit_directory);
-
-        _status_icon(valid, reason);
-        ImGui.SameLine();
-
-        float browse_width  = _get_button_width("Browse");
-        float open_width    = _get_button_width("Open");
-        float buttons_width = browse_width + open_width + (ImGui.GetStyle().ItemSpacing.X * 2F);
-
-        ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - buttons_width);
-
-        string display_path = fahrenheit_directory;
-
-        ImGui.InputText("##FahrenheitLocationInput", ref display_path, GAME_DIRECTORY_INPUT_LENGTH, ImGuiInputTextFlags.ReadOnly);
-
-        ImGui.SameLine();
-
-        bool browse_pressed = ImGui.Button("Browse##Fahrenheit", new Vector2(browse_width, 0F));
-
-        ImGui.SameLine();
-
-        bool open_pressed = ImGui.Button("Open##Fahrenheit", new Vector2(open_width, 0F));
-
-        if (browse_pressed) {
-            _browse_fahrenheit_directory();
-        }
-        else if (open_pressed) {
-            _open_folder(fahrenheit_directory);
-        }
-    }
-
+    /// <summary>
+    ///    Checks if the given game directory is valid by verifying the existence of the directory and a known executable.
+    /// </summary>
     private static (bool IsValid, string? Reason) _check_game_location(string normalized_game_directory) {
         if (!Directory.Exists(normalized_game_directory)) {
             return (false, "This folder does not exist.");
@@ -147,18 +101,9 @@ internal static unsafe partial class FhModManagerUI {
         return (true, null);
     }
 
-    private static (bool IsValid, string? Reason) _check_fahrenheit_location(string fahrenheit_directory) {
-        if (!Directory.Exists(fahrenheit_directory)) {
-            return (false, "This folder does not exist.");
-        }
-
-        if (!File.Exists(Path.Join(fahrenheit_directory, "bin", "fhstage0.exe"))) {
-            return (false, "fhstage0.exe was not found in its bin folder.");
-        }
-
-        return (true, null);
-    }
-
+    /// <summary>
+    ///     Opens a folder picker dialog to select the game directory. If a valid directory is selected, it saves the new location.
+    /// </summary>
     private static void _browse_game_directory() {
         DialogResult result = Dialog.FolderPicker(_game_directory_input);
 
@@ -167,16 +112,16 @@ internal static unsafe partial class FhModManagerUI {
         }
 
         _game_directory_input = result.Path;
-
         _save_game_directory();
     }
 
+    /// <summary>
+    ///     Saves the game directory to the settings store and rescans mods if successful.
+    /// </summary>
     private static void _save_game_directory() {
         try {
-            string normalized = FhModManagerSettingsStore.normalize_path(_game_directory_input);
-
-            _game_directory_input = normalized;
-
+            string normalized       = FhModManagerSettingsStore.normalize_path(_game_directory_input);
+            _game_directory_input   = normalized;
             _settings.GameDirectory = normalized;
 
             if (!FhModManagerSettingsStore.try_save( _settings, out string save_error)) {
@@ -185,35 +130,10 @@ internal static unsafe partial class FhModManagerUI {
             }
 
             _rescan_mods();
-
             _set_status("Game location saved.");
         }
         catch (Exception exception) {
             _set_status($"The game location is invalid.\n\n{exception.Message}", true);
-        }
-    }
-
-    private static void _browse_fahrenheit_directory() {
-        DialogResult result = Dialog.FolderPicker(_settings.FahrenheitDirectory ?? _game_directory_input);
-
-        if (!result.IsOk || result.Path == null) {
-            return;
-        }
-
-        try {
-            _settings.FahrenheitDirectory = FhModManagerSettingsStore.normalize_path(result.Path);
-
-            if (!FhModManagerSettingsStore.try_save(_settings, out string save_error)) {
-                _set_status(save_error, true);
-                return;
-            }
-
-            _rescan_mods();
-
-            _set_status("Fahrenheit location saved.");
-        }
-        catch (Exception exception) {
-            _set_status($"The Fahrenheit location is invalid.\n\n{exception.Message}", true);
         }
     }
 }

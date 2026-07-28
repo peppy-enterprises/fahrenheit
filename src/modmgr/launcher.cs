@@ -3,16 +3,12 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - FhGameLauncher: validate the Fahrenheit install (stage0/stage1/game exe
- *   all present) and launch FFX/FFX-2 through fhstage0.exe, optionally in
- *   debug mode.
- * - FhShell: open an arbitrary folder in the OS's file browser (Explorer on
- *   Windows, xdg-open elsewhere).
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
+/// <summary>
+///     Validates the Fahrenheit install and launches FFX/FFX-2 through fhstage0.exe.
+///     Supports passing in optional command-line arguments to fhstage0.exe 
+/// </summary>
 internal static class FhGameLauncher {
     internal static ResultsMessage launch(FhGameId target, string configured_game_directory, string[] args) {
         if (!OperatingSystem.IsWindows()) {
@@ -35,15 +31,11 @@ internal static class FhGameLauncher {
             _               => throw new ArgumentOutOfRangeException(nameof(target))
         };
 
-        string fahrenheit_bin = Path.Join(game_directory, "fahrenheit", "bin");
-
-        string stage0_path = Path.Join(fahrenheit_bin, "fhstage0.exe");
-
-        string stage1_path = Path.Join(fahrenheit_bin, "fhstage1.dll");
-
-        string game_path = Path.Join(game_directory, game_executable);
-
-        List<string> missing_files = [];
+        string fahrenheit_bin       = AppContext.BaseDirectory;
+        string stage0_path          = Path.Join(fahrenheit_bin, "fhstage0.exe");
+        string stage1_path          = Path.Join(fahrenheit_bin, "fhstage1.dll");
+        string game_path            = Path.Join(game_directory, game_executable);
+        List<string> missing_files  = [];
 
         foreach (string required_path in new[] { stage0_path, stage1_path, game_path }) {
             if (!File.Exists(required_path)) {
@@ -55,14 +47,6 @@ internal static class FhGameLauncher {
             return new(false, $"Fahrenheit installation is incomplete.\n\nMissing files:\n{string.Join('\n', missing_files)}");
         }
 
-        /*
-         * Mirrors the manual install steps from the project README: run fhstage0.exe
-         * with its own directory (fahrenheit/bin) as the working directory, and point
-         * it at the game executable with a path relative to that directory - e.g.
-         * `..\..\FFX.exe`. Passing an absolute path here would also work, but this
-         * keeps the launcher's invocation identical to what a developer would type
-         * by hand, which is what stage0/stage1 are tested against.
-         */
         string relative_game_path = Path.GetRelativePath(fahrenheit_bin, game_path);
 
         ProcessStartInfo start_info = new() {
@@ -73,9 +57,6 @@ internal static class FhGameLauncher {
 
         start_info.ArgumentList.Add(relative_game_path);
 
-        // fhstage0.exe checks its own argument list for "--debug" (src/stage0/src/main.cpp)
-        // and, if present, creates the game process suspended and waits for a keypress
-        // before injecting Stage 1 - giving you a window to attach a debugger first.
         foreach (string arg in args) {
             start_info.ArgumentList.Add(arg);
         }
@@ -99,9 +80,10 @@ internal static class FhGameLauncher {
     }
 }
 
+/// <summary>
+///     Provides a method to open an arbitrary folder in the OS's file browser (Explorer on Windows, xdg-open elsewhere).
+/// </summary>
 internal static class FhShell {
-    // Opens `path` in the OS's file browser (Explorer on Windows, whatever
-    // xdg-open resolves to on Linux - this project targets both RIDs).
     internal static bool try_open_folder(string path, out string error) {
         error = "";
 

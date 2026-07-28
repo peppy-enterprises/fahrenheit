@@ -26,7 +26,7 @@ internal static unsafe partial class FhModManagerUI {
         _settings = FhModManagerSettingsStore.load(out string settings_warning);
 
         _game_directory_input = _settings.GameDirectory;
-        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory);
+        _catalog = FhModScanner.scan(_settings.GameDirectory);
         _set_status(settings_warning);
     }
 
@@ -36,7 +36,6 @@ internal static unsafe partial class FhModManagerUI {
         ImGuiViewportPtr viewport = ImGui.GetMainViewport();
 
         ImGui.SetNextWindowPos(viewport.WorkPos);
-
         ImGui.SetNextWindowSize(viewport.WorkSize);
 
         ImGuiWindowFlags window_flags =

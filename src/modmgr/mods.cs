@@ -40,24 +40,12 @@ internal sealed record FhModCatalog(
     string ModsDirectory,
     string LoadOrderPath);
 
-/// <summary>
-///     Derives the `fahrenheit` and `fahrenheit/mods` paths.
-/// </summary>
+
 internal static class FhModScanner {
-    internal static (string FahrenheitDirectory, string ModsDirectory) resolve_paths(string normalized_game_directory, string? fahrenheit_directory_override = null) {
-        string fahrenheit_directory = string.IsNullOrWhiteSpace(fahrenheit_directory_override)
-            ? Path.Join(normalized_game_directory, "fahrenheit")
-            : fahrenheit_directory_override;
-
-        string mods_directory = Path.Join(fahrenheit_directory, "mods");
-
-        return (fahrenheit_directory, mods_directory);
-    }
-
     /// <summary>
     ///     Scans the game directory for installed mods and returns a catalog of them.
     /// </summary>
-    internal static FhModCatalog scan(string game_directory, string? fahrenheit_directory_override = null) {
+    internal static FhModCatalog scan(string game_directory) {
         List<FhInstalledMod> enabled    = [];
         List<FhInstalledMod> disabled   = [];
         List<string> warnings           = [];
@@ -69,11 +57,17 @@ internal static class FhModScanner {
         }
         catch (Exception exception) {
             warnings.Add($"The game directory is invalid: {exception.Message}");
-
             return new(enabled, disabled, warnings, "", "");
         }
 
-        (string fahrenheit_directory, string mods_directory) = resolve_paths(normalized_game_directory, fahrenheit_directory_override);
+        string fahrenheit_directory = Directory.GetParent(AppContext.BaseDirectory)!.FullName;
+        string mods_directory       = Path.Join(fahrenheit_directory, "mods");
+
+        if (!Directory.Exists(mods_directory) && Directory.Exists(Path.Join(game_directory, "fahrenheit", "mods"))) {
+            warnings.Add("The Fahrenheit mods directory was not found in the application directory. Checking the game directory instead.");
+            warnings.Add("If you installed Fahrenheit to a custom location, please move the bin directory to 'game directory/fahrenheit'");
+            mods_directory = Path.Join(game_directory, "fahrenheit", "mods");
+        }
 
         string load_order_path = Path.Join(mods_directory, "loadorder");
 

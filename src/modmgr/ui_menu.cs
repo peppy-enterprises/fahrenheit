@@ -101,9 +101,7 @@ internal static unsafe partial class FhModManagerUI {
 
         // todo - fill out with menu items or remove
         ImGui.MenuItem("About");
-
         ImGui.PopStyleVar();
-
         ImGui.EndMenuBar();
     }
 

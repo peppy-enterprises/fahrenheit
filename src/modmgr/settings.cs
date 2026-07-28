@@ -10,8 +10,6 @@ namespace Fahrenheit.Tools.ModManager;
 /// </summary>
 internal sealed class FhModManagerSettings {
     public string GameDirectory { get; set; } = FhModManagerSettingsStore.DEFAULT_GAME_DIRECTORY;
-
-    public string? FahrenheitDirectory { get; set; }
 }
 
 /// <summary>

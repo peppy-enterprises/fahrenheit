@@ -25,7 +25,7 @@ internal static unsafe partial class FhModManagerUI {
     ///   This is called whenever the mod list requires updating.
     /// </summary>
     private static void _rescan_mods() {
-        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory);
+        _catalog = FhModScanner.scan(_settings.GameDirectory);
     }
 
     /// <summary>

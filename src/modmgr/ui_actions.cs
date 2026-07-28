@@ -20,7 +20,7 @@ internal static unsafe partial class FhModManagerUI {
         try {
             string normalized = FhModManagerSettingsStore.normalize_path(_game_directory_input);
 
-            _catalog = FhModScanner.scan(normalized, _settings.FahrenheitDirectory);
+            _catalog = FhModScanner.scan(normalized);
 
             _set_status("Mod list refreshed.");
         }
