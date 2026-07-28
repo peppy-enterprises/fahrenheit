@@ -22,7 +22,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///   Renders the status bar at the bottom of the main window, with a toast effect for messages.
+    ///    Renders the status bar at the bottom of the main window, with a toast effect for messages.
     /// </summary>
     private static void _render_status_bar() {
         float height       = _status_bar_height();
@@ -51,7 +51,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Returns the current alpha value for the status bar, based on how long it's been since the last message was set.
+    ///    Returns the current alpha value for the status bar, based on how long it's been since the last message was set.
     /// </summary>
     private static float _status_alpha() {
         if (string.IsNullOrWhiteSpace(_status)) {

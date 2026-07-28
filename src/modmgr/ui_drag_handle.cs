@@ -32,7 +32,7 @@ internal static unsafe partial class FhModManagerUI {
     private static int      _drag_start_index;
 
     /// <summary>
-    ///     Renders the drag handle for a mod in the mod list, allowing the user to reorder mods by dragging and dropping.
+    ///    Renders the drag handle for a mod in the mod list, allowing the user to reorder mods by dragging and dropping.
     /// </summary>
     private static void _render_drag_handle(FhInstalledMod mod, int display_index, int mod_count, float row_height) {
         Vector2 size = new(ImGui.GetFrameHeight() * 1.1F, ImGui.GetFrameHeight() * 0.9F);

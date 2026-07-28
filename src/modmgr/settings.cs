@@ -6,14 +6,14 @@
 namespace Fahrenheit.Tools.ModManager;
 
 /// <summary>
-///     Defines FhModManagerSettings persisted to fhmodmgr.json.
+///    Defines FhModManagerSettings persisted to fhmodmgr.json.
 /// </summary>
 internal sealed class FhModManagerSettings {
     public string GameDirectory { get; set; } = FhModManagerSettingsStore.DEFAULT_GAME_DIRECTORY;
 }
 
 /// <summary>
-///     Loads and saves FhModManagerSettings to fhmodmgr.json in the same directory as the executable.
+///    Loads and saves FhModManagerSettings to fhmodmgr.json in the same directory as the executable.
 /// </summary>
 internal static class FhModManagerSettingsStore {
     internal const string DEFAULT_GAME_DIRECTORY = @"C:\Program Files (x86)\Steam\steamapps\common\FINAL FANTASY FFX&FFX-2 HD Remaster";
@@ -78,10 +78,7 @@ internal static class FhModManagerSettingsStore {
     }
 
     /// <summary>
-    ///    Normalizes a path by:
-    ///     Trimming whitespace/quotes
-    ///     Resolving relative paths to absolute
-    ///     Removing any trailing directory separators
+    ///    Normalizes a path by: trimming whitespace/quotes, resolving relative paths to absolute, removing any trailing directory separators
     /// </summary>
     internal static string normalize_path(string path) {
         string cleaned_path = path.Trim().Trim('"');
@@ -90,7 +87,7 @@ internal static class FhModManagerSettingsStore {
     }
 
     /// <summary>
-    ///     Writes a file atomically by staging it under a temporary name and renaming it into place.
+    ///    Writes a file atomically by staging it under a temporary name and renaming it into place.
     /// </summary>
     internal static void write_atomic(string destination, string contents) {
         string temporary_path = $"{destination}.tmp";

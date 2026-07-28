@@ -10,7 +10,7 @@ internal static unsafe partial class FhModManagerUI {
     private static bool _show_settings_dialog;
 
     /// <summary>
-    ///     Renders the "Settings" modal, which allows the user to set the game directory.
+    ///    Renders the "Settings" modal, which allows the user to set the game directory.
     /// </summary>
     private static void _render_settings_modal() {
         _center_next_window(width_fraction: 0.42F, min_width: 900F, max_width: 1300F);
@@ -39,7 +39,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Renders the row in the settings modal that allows the user to input or browse for the game directory.
+    ///    Renders the row in the settings modal that allows the user to input or browse for the game directory.
     /// </summary>
     private static void _render_game_directory_row() {
         ImGui.SeparatorText("FF X/X-2 HD Remaster Location");
@@ -102,7 +102,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Opens a folder picker dialog to select the game directory. If a valid directory is selected, it saves the new location.
+    ///    Opens a folder picker dialog to select the game directory. If a valid directory is selected, it saves the new location.
     /// </summary>
     private static void _browse_game_directory() {
         DialogResult result = Dialog.FolderPicker(_game_directory_input);
@@ -116,7 +116,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Saves the game directory to the settings store and rescans mods if successful.
+    ///    Saves the game directory to the settings store and rescans mods if successful.
     /// </summary>
     private static void _save_game_directory() {
         try {

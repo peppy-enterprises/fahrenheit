@@ -18,8 +18,8 @@ internal static unsafe partial class FhModManagerUI {
     private static Vector2 MENU_BAR_FRAME_PADDING => new Vector2(10F, 8F);
 
     /// <summary>
-    ///     Renders the main menu bar at the top of the window.
-    ///     "Mods", "Play", "Settings", "About" menus, and their actions.
+    ///    Renders the main menu bar at the top of the window.
+    ///    "Mods", "Play", "Settings", "About" menus, and their actions.
     /// </summary>
     private static void _render_main_menu() {
         if (!ImGui.BeginMenuBar()) {

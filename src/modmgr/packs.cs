@@ -115,7 +115,7 @@ internal static class FhEflImporter {
 }
 
 /// <summary>
-///     Zips a set of enabled mods' directories plus a `loadorder` file into a single distributable .zip file.
+///    Zips a set of enabled mods' directories plus a `loadorder` file into a single distributable .zip file.
 /// </summary>
 internal static class FhModPackExporter {
     internal static ResultsMessage export(string destination_zip_path, IReadOnlyList<FhInstalledMod> mods_in_order) {
@@ -179,9 +179,9 @@ internal static class FhModPackExporter {
 }
 
 /// <summary>
-///     Extracts a mod pack's not-already-installed mods.
-///     Appends them to the already-existing `loadorder` in the pack's defined order.
-///     Existing mods are skipped rather than overwritten.
+///    Extracts a mod pack's not-already-installed mods.
+///    Appends them to the already-existing `loadorder` in the pack's defined order.
+///    Existing mods are skipped rather than overwritten.
 /// </summary>
 internal static class FhModPackImporter {
     internal static ResultsMessage import(

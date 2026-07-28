@@ -37,7 +37,7 @@ internal static unsafe partial class FhModManagerUI {
 
     // todo:
     //  Stubbed - only opens the file picker for now.
-    /// <summary>
+    ///<summary>
     ///    Opens a file picker to select a compressed mod file. into the mods directory.
     ///    If the mod is not already installed, it will be extracted into a subdirectory named
     ///    after the mod's manifest name, or the file name if no manifest is present.

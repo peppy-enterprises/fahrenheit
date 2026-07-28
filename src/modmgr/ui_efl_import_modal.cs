@@ -87,7 +87,7 @@ internal static unsafe partial class FhModManagerUI {
 
     /// todo - add validation logic to ensure source folder adheres to supported structure.
     /// <summary>
-    ///   Performs the import of the loose assets.
+    ///    Performs the import of the loose assets.
     /// </summary>
     private static void _import_efl_mod() {
         FhGameId game   = _efl_import_game_index == 1 ? FhGameId.FFX2 : FhGameId.FFX;

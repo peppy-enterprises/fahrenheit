@@ -6,7 +6,7 @@
 namespace Fahrenheit.Tools.ModManager;
 
 /// <summary>
-///     A simple struct for returning a success/failure result with an optional message.
+///    A simple struct for returning a success/failure result with an optional message.
 /// </summary>
 internal readonly record struct ResultsMessage(bool Success, string Message);
 
@@ -21,17 +21,17 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///   Rescans the game and Fahrenheit directories for mods, updating the catalog. 
-    ///   This is called whenever the mod list requires updating.
+    ///    Rescans the game and Fahrenheit directories for mods, updating the catalog. 
+    ///    This is called whenever the mod list requires updating.
     /// </summary>
     private static void _rescan_mods() {
         _catalog = FhModScanner.scan(_settings.GameDirectory);
     }
 
     /// <summary>
-    ///     Centers the next ImGui window on the main viewport, typically modals.
-    ///     Width based on a fraction of the viewport's width.
-    ///     Clamped between min and max values, and an optional height.
+    ///    Centers the next ImGui window on the main viewport, typically modals.
+    ///    Width based on a fraction of the viewport's width.
+    ///    Clamped between min and max values, and an optional height.
     /// </summary>
     private static void _center_next_window(
         float width_fraction,
@@ -57,7 +57,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///   Centers the cursor horizontally within the available content region, based on the width of the content to be rendered.
+    ///    Centers the cursor horizontally within the available content region, based on the width of the content to be rendered.
     /// </summary>
     private static void _center_cursor_x(float content_width) {
         float available_width = ImGui.GetContentRegionAvail().X;
@@ -68,7 +68,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Renders the load order number for a mod, centered in its column.
+    ///    Renders the load order number for a mod, centered in its column.
     /// </summary>
     private static void _render_centered_load_order_number(int position) {
         string text = position.ToString();
@@ -89,7 +89,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Calls <see cref='_text_wrapped'/> in a colored style.
+    ///    Calls <see cref='_text_wrapped'/> in a colored style.
     /// </summary>
     private static void _text_colored_wrapped(Vector4 color, string text) {
         ImGui.PushStyleColor(ImGuiCol.Text, color);
@@ -98,14 +98,14 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Calls <see cref='_text_colored_wrapped'/> with a disabled (grayed-out) style.
+    ///    Calls <see cref='_text_colored_wrapped'/> with a disabled (grayed-out) style.
     /// </summary>
     private static void _text_disabled_wrapped(string text) {
         _text_colored_wrapped(ImGui.GetStyle().Colors[(int)ImGuiCol.TextDisabled], text);
     }
 
     /// <summary>
-    ///     Renders a small status icon (checkmark or X) with an optional tooltip, based on the validity of a setting.
+    ///    Renders a small status icon (checkmark or X) with an optional tooltip, based on the validity of a setting.
     /// </summary>
     private static void _status_icon(bool is_valid, string? tooltip) {
         float extent = ImGui.GetTextLineHeight();

@@ -6,8 +6,8 @@
 namespace Fahrenheit.Tools.ModManager;
 
 /// <summary>
-///     Validates the Fahrenheit install and launches FFX/FFX-2 through fhstage0.exe.
-///     Supports passing in optional command-line arguments to fhstage0.exe 
+///    Validates the Fahrenheit install and launches FFX/FFX-2 through fhstage0.exe.
+///    Supports passing in optional command-line arguments to fhstage0.exe 
 /// </summary>
 internal static class FhGameLauncher {
     internal static ResultsMessage launch(FhGameId target, string configured_game_directory, string[] args) {
@@ -81,7 +81,7 @@ internal static class FhGameLauncher {
 }
 
 /// <summary>
-///     Provides a method to open an arbitrary folder in the OS's file browser (Explorer on Windows, xdg-open elsewhere).
+///    Provides a method to open an arbitrary folder in the OS's file browser (Explorer on Windows, xdg-open elsewhere).
 /// </summary>
 internal static class FhShell {
     internal static bool try_open_folder(string path, out string error) {

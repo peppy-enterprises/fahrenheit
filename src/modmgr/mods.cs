@@ -43,7 +43,7 @@ internal sealed record FhModCatalog(
 
 internal static class FhModScanner {
     /// <summary>
-    ///     Scans the game directory for installed mods and returns a catalog of them.
+    ///    Scans the game directory for installed mods and returns a catalog of them.
     /// </summary>
     internal static FhModCatalog scan(string game_directory) {
         List<FhInstalledMod> enabled    = [];
@@ -147,8 +147,8 @@ internal static class FhModScanner {
     }
 
     /// <summary>
-    ///     Loads a mod's manifest and returns an FhInstalledMod record. 
-    ///     If the mod directory or manifest is missing or malformed, the returned record will report error details.
+    ///    Loads a mod's manifest and returns an FhInstalledMod record. 
+    ///    If the mod directory or manifest is missing or malformed, the returned record will report error details.
     /// </summary>
     private static FhInstalledMod _read_mod(string mods_directory, string mod_id, int? load_order_index) {
         string mod_directory = Path.Join(mods_directory, mod_id);
@@ -184,7 +184,7 @@ internal static class FhModScanner {
     }
 
     /// <summary>
-    ///     Reads a string property from mod manifest, defaults to fallback if found value invalid.
+    ///    Reads a string property from mod manifest, defaults to fallback if found value invalid.
     /// </summary>
     private static string _read_string(JsonElement root, string property_name, string fallback) {
         if (!root.TryGetProperty(property_name, out JsonElement property)) {
@@ -317,7 +317,7 @@ internal static class FhLoadOrderEditor {
     }
 
     /// <summary>
-    ///     Joins the entries back into a loadorder file and writes it atomically.
+    ///    Joins the entries back into a loadorder file and writes it atomically.
     /// </summary>
     private static void _write_load_order(string load_order_path, IReadOnlyList<string> entries) {
         string contents = string.Join(Environment.NewLine, entries);

@@ -22,7 +22,7 @@ internal static unsafe partial class FhModManagerUI {
     private static FhPendingLoadOrderMove? _pending_load_order_move;
 
     /// <summary>
-    ///   Renders the Enabled and Disabled mod panels, each with a scrollable table of mods.
+    ///    Renders the Enabled and Disabled mod panels, each with a scrollable table of mods.
     /// </summary>
     private static void _render_mod_lists() {
         Vector2 available               = ImGui.GetContentRegionAvail();
@@ -55,7 +55,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Renders a single mod panel, which includes a header with the title and mod count,
+    ///    Renders a single mod panel, which includes a header with the title and mod count,
     /// </summary>
     private static void _render_mod_panel(string title, string child_id, IReadOnlyList<FhInstalledMod> mods, float width, float height, bool show_load_order) {
         bool modPanelHeader = ImGui.BeginChild(child_id, new Vector2(width, height), ImGuiChildFlags.None, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
@@ -80,7 +80,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///   Renders a table of mods, with each mod displayed in a row with its details and controls.
+    ///    Renders a table of mods, with each mod displayed in a row with its details and controls.
     /// </summary>
     private static void _render_mod_table(string child_id, IReadOnlyList<FhInstalledMod> mods, bool show_load_order) {
         int column_count    = show_load_order ? 4 : 2;
@@ -113,7 +113,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///  Renders an arrow button for moving a mod up or down in the load order.
+    ///    Renders an arrow button for moving a mod up or down in the load order.
     /// </summary>
     private static void _render_load_order_arrow_button(FhInstalledMod mod, ImGuiDir direction, int move_direction, bool enabled, string tooltip) {
         if (!enabled) {
@@ -134,7 +134,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     /// <summary>
-    ///     Renders a single mod row in the mod table: checkbox, load order arrows, and mod details.
+    ///    Renders a single mod row in the mod table: checkbox, load order arrows, and mod details.
     /// </summary>
     private static void _render_mod(FhInstalledMod mod, bool show_load_order, int display_index, int mod_count) {
         ImGui.TableNextRow();
