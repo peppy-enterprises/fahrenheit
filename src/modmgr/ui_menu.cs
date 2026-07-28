@@ -17,6 +17,10 @@ namespace Fahrenheit.Tools.ModManager;
 internal static unsafe partial class FhModManagerUI {
     private static Vector2 MENU_BAR_FRAME_PADDING => new Vector2(10F, 8F);
 
+    /// <summary>
+    ///     Renders the main menu bar at the top of the window.
+    ///     "Mods", "Play", "Settings", "About" menus, and their actions.
+    /// </summary>
     private static void _render_main_menu() {
         if (!ImGui.BeginMenuBar()) {
             return;
@@ -42,7 +46,7 @@ internal static unsafe partial class FhModManagerUI {
 
             if (ImGui.MenuItem("Export Mod List")) {
                 // currently this is just exporting the 'loadorder' file with extra steps.
-                // likely not the desired behavior.
+                // likely not the desired behavior, but left for now.
                 _export_mod_list();
             }
 
@@ -95,6 +99,7 @@ internal static unsafe partial class FhModManagerUI {
 
         Vector2 menu_cluster_max = ImGui.GetItemRectMax();
 
+        // todo - fill out with menu items or remove
         ImGui.MenuItem("About");
 
         ImGui.PopStyleVar();
@@ -102,12 +107,9 @@ internal static unsafe partial class FhModManagerUI {
         ImGui.EndMenuBar();
     }
 
-    /* [modeled on EEdit's _handle_modal]
-     * Popups can't be opened from inside a BeginMenu() scope - see
-     * https://github.com/ocornut/imgui/issues/5684#issuecomment-1247928651 - so a
-     * menu click just sets `_show_efl_import_dialog`, and this (called outside any
-     * menu/window scope, at the top of UI()) is what actually opens and renders it.
-     */
+    /// <summary>
+    ///    Opens and renders any modal popups that have been requested by the menu bar.
+    /// </summary>
     private static void _handle_modals() {
         if (_show_efl_import_dialog) {
             ImGui.OpenPopup("Import EFL Mod");

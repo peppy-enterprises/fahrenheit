@@ -3,33 +3,23 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-/* Jobs:
- * - Hold the "Import EFL Mod" popup's input state.
- * - Render the popup and only allow Import once the required inputs are filled in.
- * - Run the import itself via FhEflImporter, and reset/close the dialog on success
- *   (left open on failure so the user can fix the input without retyping everything).
- * 
- *  TODO: 
- *      This logic isn't completely fleshed out:
- *      Name conflicts, mod validation, and other edge cases aren't completely identified or handled yet.
- */
-
 namespace Fahrenheit.Tools.ModManager;
 
 internal static unsafe partial class FhModManagerUI {
-    private const int MOD_ID_INPUT_LENGTH = 128;
+    private const   int     MOD_ID_INPUT_LENGTH = 128;
+    private static  bool    _show_efl_import_dialog;
+    private static  int     _efl_import_game_index;
+    private static  string  _efl_import_mod_id       = "";
+    private static  string  _efl_import_mod_name     = "";
+    private static  string  _efl_import_source_folder = "";
 
-    private static bool   _show_efl_import_dialog;
-    private static int    _efl_import_game_index;
-    private static string _efl_import_mod_id       = "";
-    private static string _efl_import_mod_name     = "";
-    private static string _efl_import_source_folder = "";
-
+    /// <summary>
+    ///    Renders the "Import EFL Mod" modal dialog for importing a loose file tree as a VBF archive.
+    ///    Enables user to create a mod manifest.
+    ///    User prompted to select a game, mod ID, optional mod name, and source folder.
+    /// </summary>
     private static void _render_efl_import_modal() {
-        _center_next_window(
-            width_fraction: 0.25F,
-            min_width: 480F,
-            max_width: 700F);
+        _center_next_window(width_fraction: 0.25F, min_width: 480F, max_width: 700F);
 
         if (!ImGui.BeginPopupModal("Import EFL Mod", ImGuiWindowFlags.NoResize)) {
             return;
@@ -49,7 +39,6 @@ internal static unsafe partial class FhModManagerUI {
         ImGui.Text("Mod ID");
         ImGui.SetNextItemWidth(-1F);
         ImGui.InputText("##EflImportModId", ref _efl_import_mod_id, MOD_ID_INPUT_LENGTH);
-
         ImGui.Text("Mod name (optional, defaults to the ID)");
         ImGui.SetNextItemWidth(-1F);
         ImGui.InputText("##EflImportModName", ref _efl_import_mod_name, MOD_ID_INPUT_LENGTH);
@@ -58,10 +47,7 @@ internal static unsafe partial class FhModManagerUI {
 
         ImGui.Text("Source folder");
 
-        _text_disabled_wrapped(
-            string.IsNullOrWhiteSpace(_efl_import_source_folder)
-                ? "(not selected)"
-                : _efl_import_source_folder);
+        _text_disabled_wrapped(string.IsNullOrWhiteSpace(_efl_import_source_folder) ? "(not selected)" : _efl_import_source_folder);
 
         if (ImGui.Button("Browse##EflImportSource")) {
             DialogResult result = Dialog.FolderPicker(_efl_import_source_folder);
@@ -75,9 +61,7 @@ internal static unsafe partial class FhModManagerUI {
         ImGui.Separator();
         ImGui.Spacing();
 
-        bool can_import =
-            !string.IsNullOrWhiteSpace(_efl_import_mod_id)
-            && !string.IsNullOrWhiteSpace(_efl_import_source_folder);
+        bool can_import = !string.IsNullOrWhiteSpace(_efl_import_mod_id) && !string.IsNullOrWhiteSpace(_efl_import_source_folder);
 
         if (!can_import) {
             ImGui.BeginDisabled();
@@ -101,11 +85,13 @@ internal static unsafe partial class FhModManagerUI {
         ImGui.EndPopup();
     }
 
+    /// todo - add validation logic to ensure source folder adheres to supported structure.
+    /// <summary>
+    ///   Performs the import of the loose assets.
+    /// </summary>
     private static void _import_efl_mod() {
-        FhGameId game = _efl_import_game_index == 1 ? FhGameId.FFX2 : FhGameId.FFX;
-
-        string mod_id = _efl_import_mod_id.Trim();
-
+        FhGameId game   = _efl_import_game_index == 1 ? FhGameId.FFX2 : FhGameId.FFX;
+        string mod_id   = _efl_import_mod_id.Trim();
         string mod_name = string.IsNullOrWhiteSpace(_efl_import_mod_name) ? mod_id : _efl_import_mod_name.Trim();
 
         ResultsMessage result = FhEflImporter.import(
@@ -130,7 +116,6 @@ internal static unsafe partial class FhModManagerUI {
         _efl_import_source_folder  = "";
 
         _rescan_mods();
-
         ImGui.CloseCurrentPopup();
     }
 }
