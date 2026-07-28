@@ -12,11 +12,11 @@ internal abstract class EEditComponent {
 internal abstract class EEditComponent<T> : EEditComponent where T : unmanaged {
 
     protected static readonly string  _type_name = typeof(T).Name;
-    protected        readonly byte[]  _file      = new byte[EEdit.Editors.active_file!.Length];
+    protected        readonly byte[]  _file      = new byte[EEdit.active_file!.Length];
     protected        readonly List<T> _elements  = [];
 
     internal EEditComponent() {
-        EEdit.Editors.active_file.ReadExactly(_file);
+        EEdit.active_file.ReadExactly(_file);
 
         ExcelFileReader<T> iter = new(_file);
 
@@ -28,6 +28,22 @@ internal abstract class EEditComponent<T> : EEditComponent where T : unmanaged {
 }
 
 // TODO: insert actual UI per wishes
+
+internal class EditorNull : EEditComponent {
+    internal override void render() { }
+}
+
+internal class EditorText : EEditComponent<ExcelSimplifiableTextOffset> {
+    internal override void render() { }
+}
+
+internal class EditorTextPair : EEditComponent<Txt> {
+    internal override void render() { }
+}
+
+internal class EditorPlyRom : EEditComponent<PlyRom> {
+    internal override void render() { }
+}
 
 internal class EditorMonmagic : EEditComponent<Command> {
     internal override void render() { }

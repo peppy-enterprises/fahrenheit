@@ -35,4 +35,5 @@ global using System.Text;
 global using NativeFileDialogCore;
 
 // Fahrenheit support libraries
+global using Fahrenheit;
 global using Fahrenheit.FFX;
