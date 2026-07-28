@@ -115,12 +115,10 @@ internal static class FhEflImporter {
 }
 
 /// <summary>
-///     Zips a set of enabled mods' directories plus a `loadorder` entry into a single distributable .zip file.
+///     Zips a set of enabled mods' directories plus a `loadorder` file into a single distributable .zip file.
 /// </summary>
 internal static class FhModPackExporter {
-    internal static ResultsMessage export(
-        string destination_zip_path,
-        IReadOnlyList<FhInstalledMod> mods_in_order) {
+    internal static ResultsMessage export(string destination_zip_path, IReadOnlyList<FhInstalledMod> mods_in_order) {
         List<string> included_ids = [];
         List<string> skipped_ids = [];
 
@@ -227,7 +225,7 @@ internal static class FhModPackImporter {
 
                 string mod_id = entry_path[..separator_index];
 
-                if (!entries_by_mod_id.TryGetValue( mod_id, out List<ZipArchiveEntry>? mod_entries)) {
+                if (!entries_by_mod_id.TryGetValue(mod_id, out List<ZipArchiveEntry>? mod_entries)) {
                     mod_entries = [];
                     entries_by_mod_id[mod_id] = mod_entries;
                 }
@@ -235,9 +233,7 @@ internal static class FhModPackImporter {
                 mod_entries.Add(entry);
             }
 
-            string mods_directory_full =
-                Path.GetFullPath(mods_directory)
-                + Path.DirectorySeparatorChar;
+            string mods_directory_full = Path.GetFullPath(mods_directory) + Path.DirectorySeparatorChar;
 
             foreach ((string mod_id, List<ZipArchiveEntry> mod_entries) in entries_by_mod_id) {
                 string mod_directory = Path.Join(mods_directory, mod_id);
@@ -256,14 +252,12 @@ internal static class FhModPackImporter {
                     string destination_path = Path.GetFullPath(
                         Path.Join(mods_directory, entry.FullName));
 
-                    // Zip-slip guard: refuse any entry whose path would land outside
-                    // the mods directory (e.g. via "../" segments in a crafted pack).
+                    // Zip-slip guard: refuse any entry whose path would land outside the mods directory
                     if (!destination_path.StartsWith(mods_directory_full, StringComparison.OrdinalIgnoreCase)) {
                         continue;
                     }
 
                     Directory.CreateDirectory(Path.GetDirectoryName(destination_path)!);
-
                     entry.ExtractToFile(destination_path, true);
                 }
 
