@@ -16,8 +16,8 @@
 namespace Fahrenheit.Tools.ModManager;
 
 internal sealed class FhModManagerSettings {
-    public string GameDirectory { get; set; } =
-        FhModManagerSettingsStore.DEFAULT_GAME_DIRECTORY;
+
+    public string GameDirectory { get; set; } = FhModManagerSettingsStore.DEFAULT_GAME_DIRECTORY;
 
     // Null means "not overridden" - use the default derived from GameDirectory
     // (<game>/fahrenheit, <game>/fahrenheit/mods respectively; see
@@ -57,9 +57,7 @@ internal static class FhModManagerSettingsStore {
      */
     internal static string SettingsPath {
         get {
-            return Path.Join(
-                AppContext.BaseDirectory,
-                "fhmodmgr.json");
+            return Path.Join( AppContext.BaseDirectory, "fhmodmgr.json");
         }
     }
 
@@ -72,93 +70,55 @@ internal static class FhModManagerSettingsStore {
 
         try {
             string json = File.ReadAllText(SettingsPath);
+            FhModManagerSettings? settings = JsonSerializer.Deserialize<FhModManagerSettings>(json, _json_options);
 
-            FhModManagerSettings? settings =
-                JsonSerializer.Deserialize<FhModManagerSettings>(
-                    json,
-                    _json_options);
-
-            if (settings == null
-                || string.IsNullOrWhiteSpace(settings.GameDirectory)) {
-                warning =
-                    "The saved settings were empty. Using the default game location.";
-
+            if (settings == null || string.IsNullOrWhiteSpace(settings.GameDirectory)) {
+                warning = "The saved settings were empty. Using the default game location.";
                 return new();
             }
 
-            settings.GameDirectory = normalize_path(
-                settings.GameDirectory);
-
+            settings.GameDirectory = normalize_path(settings.GameDirectory);
             return settings;
         }
         catch (Exception exception) {
-            warning =
-                "The saved settings could not be read. "
-                + "Using the default game location.\n\n"
-                + exception.Message;
+            warning = $"The saved settings could not be read. Using the default game location.\n\n{exception.Message}";
 
             return new();
         }
     }
 
-    internal static bool try_save(
-        FhModManagerSettings settings,
-        out string error) {
+    internal static bool try_save(FhModManagerSettings settings, out string error) {
         error = "";
 
         try {
             // Defensive: normalize even though every current caller already
             // does, so a save can never persist a non-canonical path.
-            settings.GameDirectory = normalize_path(
-                settings.GameDirectory);
-
-            string json = JsonSerializer.Serialize(
-                settings,
-                _json_options);
-
+            settings.GameDirectory = normalize_path(settings.GameDirectory);
+            string json = JsonSerializer.Serialize(settings,_json_options);
             write_atomic(SettingsPath, json);
-
             return true;
         }
         catch (Exception exception) {
-            error =
-                "The settings could not be saved.\n\n"
-                + exception.Message;
-
+            error = $"The settings could not be saved.\n\n{exception.Message}";
             return false;
         }
     }
 
     internal static string normalize_path(string path) {
-        string cleaned_path = path
-            .Trim()
-            .Trim('"');
-
-        string full_path =
-            Path.GetFullPath(cleaned_path);
-
-        return Path.TrimEndingDirectorySeparator(
-            full_path);
+        string cleaned_path = path.Trim().Trim('"');
+        string full_path = Path.GetFullPath(cleaned_path);
+        return Path.TrimEndingDirectorySeparator(full_path);
     }
 
     // Writes a file by staging it under a temporary name and renaming it into place,
     // so a crash or power loss mid-write can never leave `destination` truncated.
     // Shared with FhLoadOrderEditor, which persists the load order the same way.
-    internal static void write_atomic(
-        string destination,
-        string contents) {
-        string temporary_path =
-            destination + ".tmp";
+    internal static void write_atomic(string destination, string contents) {
+        string temporary_path = $"{ destination}.tmp";
 
         try {
-            File.WriteAllText(
-                temporary_path,
-                contents);
-
-            File.Move(
-                temporary_path,
-                destination,
-                true);
+            File.WriteAllText(temporary_path, contents);
+            File.Move(temporary_path, destination, true);
         }
         finally {
             if (File.Exists(temporary_path)) {

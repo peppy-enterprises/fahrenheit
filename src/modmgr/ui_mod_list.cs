@@ -23,18 +23,13 @@ internal static unsafe partial class FhModManagerUI {
      * just record what was requested, and UI() applies it once rendering has finished
      * for the frame (see the two _apply_pending_* calls after ImGui.End() above).
      */
-    private sealed record FhPendingModToggle(
-        FhInstalledMod Mod,
-        bool Enable);
+    private sealed record FhPendingModToggle(FhInstalledMod Mod, bool Enable);
 
     private static FhPendingModToggle? _pending_mod_toggle;
 
-    private sealed record FhPendingLoadOrderMove(
-        FhInstalledMod Mod,
-        int Direction);
+    private sealed record FhPendingLoadOrderMove(FhInstalledMod Mod, int Direction);
 
-    private static FhPendingLoadOrderMove?
-        _pending_load_order_move;
+    private static FhPendingLoadOrderMove? _pending_load_order_move;
 
     // Both panels always share the same width/height as each other - only the
     // formula for that shared size (and whether they sit side by side or
@@ -58,9 +53,7 @@ internal static unsafe partial class FhModManagerUI {
         // that bottom WindowPadding once, so only the amount the bar exceeds it
         // by still needs to be carved out here - not the bar's full height on
         // top of it, which would double-reserve and leave a gap above the bar.
-        float status_bar_extra_reserve = Math.Max(
-            0F,
-            _status_bar_height() - ImGui.GetStyle().WindowPadding.Y);
+        float status_bar_extra_reserve = Math.Max(0F, _status_bar_height() - ImGui.GetStyle().WindowPadding.Y);
 
         float available_height = Math.Max(0F, available.Y - status_bar_extra_reserve);
 
@@ -84,50 +77,29 @@ internal static unsafe partial class FhModManagerUI {
             panel_height = Math.Max(min_panel_height, available_height - (gutter / 3F));
         }
 
-        _render_mod_panel(
-            "Enabled Mods",
-            "##EnabledMods",
-            _catalog.Enabled,
-            panel_width,
-            panel_height,
-            true);
+        _render_mod_panel("Enabled Mods", "##EnabledMods", _catalog.Enabled, panel_width, panel_height, true);
 
         if (!stack_panels) {
             ImGui.SameLine();
         }
 
-        _render_mod_panel(
-            "Disabled Mods",
-            "##DisabledMods",
-            _catalog.Disabled,
-            panel_width,
-            panel_height,
-            false);
+        _render_mod_panel("Disabled Mods", "##DisabledMods", _catalog.Disabled, panel_width, panel_height, false);
     }
 
-    private static void _render_mod_panel(
-        string title,
-        string child_id,
-        IReadOnlyList<FhInstalledMod> mods,
-        float width,
-        float height,
-        bool show_load_order) {
+    private static void _render_mod_panel(string title, string child_id, IReadOnlyList<FhInstalledMod> mods, float width, float height, bool show_load_order) {
         // An outer, non-scrolling child keeps the "Title (N)" header pinned in
         // place and gives it the same fixed width as the panel below; the mod
         // list scrolls in a nested child instead of taking the header with it.
-        if (ImGui.BeginChild(
-                child_id,
-                new Vector2(width, height),
-                ImGuiChildFlags.None,
-                ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)) {
-            _render_centered_header(
-                $"{title} ({mods.Count})");
+        bool modPanelHeader = ImGui.BeginChild(child_id, new Vector2(width, height), ImGuiChildFlags.None, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+        if (modPanelHeader) {
+            _center_cursor_x(ImGui.CalcTextSize($"{title} ({mods.Count})").X);
 
-            if (ImGui.BeginChild(
-                    $"{child_id}.List",
-                    Vector2.Zero,
-                    ImGuiChildFlags.None,
-                    ImGuiWindowFlags.AlwaysVerticalScrollbar)) {
+            ImGui.TextUnformatted($"{title} ({mods.Count})");
+            ImGui.Separator();
+
+            bool modPanelList = ImGui.BeginChild($"{child_id}.List", new Vector2(width, height - ImGui.GetFrameHeightWithSpacing()), ImGuiChildFlags.None, ImGuiWindowFlags.AlwaysVerticalScrollbar);
+
+            if (modPanelList) {
                 if (mods.Count == 0) {
                     ImGui.TextDisabled(
                         show_load_order
@@ -165,11 +137,8 @@ internal static unsafe partial class FhModManagerUI {
         // the Details column relies on the table's own CellPadding instead.
         float table_width = ImGui.GetContentRegionAvail().X;
 
-        if (!ImGui.BeginTable(
-                $"{child_id}.Table",
-                column_count,
-                ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.RowBg,
-                new Vector2(table_width, 0F))) {
+        bool table = ImGui.BeginTable($"{child_id}.Table", column_count, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.RowBg, new Vector2(table_width, 0F));
+        if (!table) {
             return;
         }
 
@@ -196,11 +165,7 @@ internal static unsafe partial class FhModManagerUI {
         }
 
         for (int index = 0; index < mods.Count; index++) {
-            _render_mod(
-                mods[index],
-                show_load_order,
-                index,
-                mods.Count);
+            _render_mod(mods[index], show_load_order, index, mods.Count);
         }
 
         ImGui.EndTable();
@@ -263,12 +228,8 @@ internal static unsafe partial class FhModManagerUI {
         // below still calls out exactly what's wrong with it.
         bool enabled = mod.IsEnabled;
 
-        if (ImGui.Checkbox(
-                $"##Enabled.{mod.Id}",
-                ref enabled)) {
-            _pending_mod_toggle = new(
-                mod,
-                enabled);
+        if (ImGui.Checkbox($"##Enabled.{mod.Id}", ref enabled)) {
+            _pending_mod_toggle = new( mod, enabled);
         }
 
         // Where the Order column's down arrow naturally lands: the row's top plus
@@ -294,9 +255,7 @@ internal static unsafe partial class FhModManagerUI {
         float details_start_y = ImGui.GetCursorPosY();
 
         if (!mod.DirectoryExists) {
-            _text_colored_wrapped(
-                FhTheme.COLOR_ERROR,
-                $"Missing: {mod.Id}");
+            _text_colored_wrapped(FhTheme.COLOR_ERROR, $"Missing: {mod.Id}");
 
             if (show_load_order) {
                 ImGui.SetCursorPosY(second_line_y);
@@ -319,19 +278,14 @@ internal static unsafe partial class FhModManagerUI {
             }
 
             if (!string.IsNullOrWhiteSpace(mod.Authors)) {
-                _text_disabled_wrapped(
-                    $"Author: {mod.Authors}");
+                _text_disabled_wrapped($"Author: {mod.Authors}");
             }
 
             if (!mod.ManifestExists) {
-                _text_colored_wrapped(
-                    FhTheme.COLOR_WARNING,
-                    "Invalid mod: expected manifest is missing.");
+                _text_colored_wrapped(FhTheme.COLOR_WARNING, "Invalid mod: expected manifest is missing.");
             }
             else if (!string.IsNullOrWhiteSpace(mod.ManifestError)) {
-                _text_colored_wrapped(
-                    FhTheme.COLOR_ERROR,
-                    $"Invalid mod: manifest error: {mod.ManifestError}");
+                _text_colored_wrapped(FhTheme.COLOR_ERROR, $"Invalid mod: manifest error: {mod.ManifestError}");
             }
         }
 
