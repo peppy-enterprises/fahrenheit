@@ -31,10 +31,7 @@ internal static unsafe partial class FhModManagerUI {
     // (rather than patching `_catalog` in place), so the in-memory catalog reflects
     // exactly what was written, including anything else that changed underneath us.
     private static void _rescan_mods() {
-        _catalog = FhModScanner.scan(
-            _settings.GameDirectory,
-            _settings.FahrenheitDirectory,
-            _settings.ModsDirectory);
+        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory, _settings.ModsDirectory);
     }
 
     // Centers the next popup on the app's own viewport, not the desktop. With
@@ -56,10 +53,7 @@ internal static unsafe partial class FhModManagerUI {
         float height = 0F) {
         ImGuiViewportPtr viewport = ImGui.GetMainViewport();
 
-        float width = Math.Clamp(
-            viewport.Size.X * width_fraction,
-            min_width,
-            max_width);
+        float width = Math.Clamp(viewport.Size.X * width_fraction, min_width, max_width);
 
         Vector2 center = viewport.Pos + viewport.Size / 2F;
 
@@ -74,9 +68,7 @@ internal static unsafe partial class FhModManagerUI {
     private static float _get_button_width(string label) {
         ImGuiStylePtr style = ImGui.GetStyle();
 
-        return ImGui.CalcTextSize(label).X
-            + (style.FramePadding.X * 2F)
-            + (4F * FhTheme.UiScale);
+        return ImGui.CalcTextSize(label).X + (style.FramePadding.X * 2F) + (4F * FhTheme.UiScale);
     }
 
     // Nudges the cursor right so that something `content_width` wide, drawn from
@@ -86,19 +78,8 @@ internal static unsafe partial class FhModManagerUI {
         float available_width = ImGui.GetContentRegionAvail().X;
 
         if (content_width < available_width) {
-            ImGui.SetCursorPosX(
-                ImGui.GetCursorPosX() + (available_width - content_width) / 2F);
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (available_width - content_width) / 2F);
         }
-    }
-
-    // Centers `text` horizontally within the current content region, then
-    // underlines the whole width with a separator - used for the "Enabled Mods"/
-    // "Disabled Mods" panel headers, which act as column headings.
-    private static void _render_centered_header(string text) {
-        _center_cursor_x(ImGui.CalcTextSize(text).X);
-
-        ImGui.TextUnformatted(text);
-        ImGui.Separator();
     }
 
     // The load order position, centered under the Enabled checkbox in its own
@@ -112,9 +93,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     private static void _text_wrapped(string text) {
-        float wrap_position =
-        ImGui.GetCursorPosX()
-        + ImGui.GetContentRegionAvail().X;
+        float wrap_position = ImGui.GetCursorPosX() + ImGui.GetContentRegionAvail().X;
 
         ImGui.PushTextWrapPos(wrap_position);
         ImGui.TextUnformatted(text);
@@ -122,21 +101,15 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     private static void _text_disabled_wrapped(string text) {
-        ImGui.PushStyleColor(
-            ImGuiCol.Text,
-            ImGui.GetColorU32(ImGuiCol.TextDisabled));
+        ImGui.PushStyleColor(ImGuiCol.Text, ImGui.GetColorU32(ImGuiCol.TextDisabled));
 
         _text_wrapped(text);
 
         ImGui.PopStyleColor();
     }
 
-    private static void _text_colored_wrapped(
-        Vector4 color,
-        string text) {
-        ImGui.PushStyleColor(
-            ImGuiCol.Text,
-            color);
+    private static void _text_colored_wrapped( Vector4 color, string text) {
+        ImGui.PushStyleColor(ImGuiCol.Text, color);
 
         _text_wrapped(text);
 

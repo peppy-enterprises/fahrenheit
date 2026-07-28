@@ -54,22 +54,16 @@ internal static unsafe partial class FhModManagerUI {
 
         ImGui.PushStyleColor(ImGuiCol.ChildBg, FhTheme.COLOR_BG_RAISED);
 
-        if (ImGui.BeginChild(
-                "##StatusBar",
-                new Vector2(window_width, height),
-                ImGuiChildFlags.None,
-                ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)) {
+        bool statusBar = ImGui.BeginChild("##StatusBar", new Vector2(window_width, height), ImGuiChildFlags.None, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+        if (statusBar) {
             float alpha = _status_alpha();
 
             if (alpha > 0F) {
                 Vector4 color = _status_is_error ? FhTheme.COLOR_ERROR : FhTheme.COLOR_SUCCESS;
                 color.W *= alpha;
 
-                // Lines up with the header/mod-list text above, which all sit
-                // inset by this same WindowPadding.X from the window's edge.
-                ImGui.SetCursorPos(new Vector2(
-                    ImGui.GetStyle().WindowPadding.X,
-                    STATUS_BAR_VERTICAL_PADDING));
+                // Lines up with the header/mod-list text above, which all sit inset by this same WindowPadding.X from the window's edge.
+                ImGui.SetCursorPos(new Vector2(ImGui.GetStyle().WindowPadding.X,STATUS_BAR_VERTICAL_PADDING));
 
                 ImGui.PushStyleColor(ImGuiCol.Text, color);
                 ImGui.TextUnformatted(_status);

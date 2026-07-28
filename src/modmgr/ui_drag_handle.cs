@@ -23,15 +23,11 @@ internal static unsafe partial class FhModManagerUI {
     // via _pending_load_order_drop.
     private static FhInstalledMod? _dragging_mod;
 
-    private sealed record FhPendingPreviewMove(
-        int FromIndex,
-        int ToIndex);
+    private sealed record FhPendingPreviewMove(int FromIndex, int ToIndex);
 
     private static FhPendingPreviewMove? _pending_preview_move;
 
-    private sealed record FhPendingLoadOrderDrop(
-        FhInstalledMod Mod,
-        int TargetIndex);
+    private sealed record FhPendingLoadOrderDrop(FhInstalledMod Mod, int TargetIndex);
 
     private static FhPendingLoadOrderDrop? _pending_load_order_drop;
 
@@ -72,11 +68,7 @@ internal static unsafe partial class FhModManagerUI {
     // formal ImGui payload drag-and-drop (BeginDragDropSource/
     // AcceptDragDropPayload): it's a plain IsItemActive()/GetMouseDragDelta()
     // reposition with no native payload pointers involved.
-    private static void _render_drag_handle(
-        FhInstalledMod mod,
-        int display_index,
-        int mod_count,
-        float row_height) {
+    private static void _render_drag_handle(FhInstalledMod mod, int display_index, int mod_count, float row_height) {
         // Noticeably bigger than a typical small icon button - it's the only
         // control in the row without a native-looking widget to lean on, so it
         // needs to read as clickable/draggable on its own.
@@ -89,8 +81,7 @@ internal static unsafe partial class FhModManagerUI {
         float vertical_offset   = Math.Max(0F, (row_height - size.Y) / 2F);
         float horizontal_offset = Math.Max(0F, (ImGui.GetContentRegionAvail().X - size.X) / 2F);
 
-        ImGui.SetCursorPos(
-            ImGui.GetCursorPos() + new Vector2(horizontal_offset, vertical_offset));
+        ImGui.SetCursorPos(ImGui.GetCursorPos() + new Vector2(horizontal_offset, vertical_offset));
 
         Vector2 top_left = ImGui.GetCursorScreenPos();
         Vector2 center   = top_left + (size / 2F);
@@ -159,13 +150,9 @@ internal static unsafe partial class FhModManagerUI {
         // that fades back to normal over DRAG_HANDLE_RELEASE_FLASH_SECONDS.
         double released_elapsed = ImGui.GetTime() - _drag_handle_released_at;
 
-        bool is_flashing =
-            _drag_handle_released_mod_id == mod.Id
-            && released_elapsed < DRAG_HANDLE_RELEASE_FLASH_SECONDS;
+        bool is_flashing = _drag_handle_released_mod_id == mod.Id && released_elapsed < DRAG_HANDLE_RELEASE_FLASH_SECONDS;
 
-        float flash_t = is_flashing
-            ? 1F - (float)(released_elapsed / DRAG_HANDLE_RELEASE_FLASH_SECONDS)
-            : 0F;
+        float flash_t = is_flashing ? 1F - (float)(released_elapsed / DRAG_HANDLE_RELEASE_FLASH_SECONDS) : 0F;
 
         // "The whole row lifts, not just the icon": tints the entire row (every
         // column, not just this one) via the table itself, using the same
@@ -205,16 +192,10 @@ internal static unsafe partial class FhModManagerUI {
         if (background.W > 0.01F) {
             Vector2 background_half_size = (size * visual_scale) / 2F;
 
-            draw_list.AddRectFilled(
-                center - background_half_size,
-                center + background_half_size,
-                ImGui.GetColorU32(background),
-                4F);
+            draw_list.AddRectFilled(center - background_half_size, center + background_half_size, ImGui.GetColorU32(background), 4F);
         }
 
-        Vector4 bar_color = mod.HasValidManifest && (hovered || active)
-            ? FhTheme.COLOR_TEXT
-            : FhTheme.COLOR_TEXT_MUTED;
+        Vector4 bar_color = mod.HasValidManifest && (hovered || active) ? FhTheme.COLOR_TEXT : FhTheme.COLOR_TEXT_MUTED;
 
         if (flash_t > 0F) {
             bar_color += (FhTheme.COLOR_TEXT - bar_color) * flash_t;
@@ -231,18 +212,11 @@ internal static unsafe partial class FhModManagerUI {
         for (int i = 1; i <= 3; i++) {
             float y = bars_top + (bar_step * i);
 
-            draw_list.AddLine(
-                new Vector2(bar_x, y),
-                new Vector2(bar_x + bar_width, y),
-                bar_color_u32,
-                2F);
+            draw_list.AddLine(new Vector2(bar_x, y), new Vector2(bar_x + bar_width, y), bar_color_u32, 2F);
         }
 
         if (hovered) {
-            ImGui.SetTooltip(
-                mod.HasValidManifest
-                    ? "Drag to reorder"
-                    : "This mod cannot be reordered");
+            ImGui.SetTooltip(mod.HasValidManifest ? "Drag to reorder" : "This mod cannot be reordered");
         }
     }
 }

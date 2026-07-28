@@ -22,10 +22,7 @@ internal static unsafe partial class FhModManagerUI {
     private static bool _show_settings_dialog;
 
     private static void _render_settings_modal() {
-        _center_next_window(
-            width_fraction: 0.42F,
-            min_width: 900F * FhTheme.UiScale,
-            max_width: 1300F * FhTheme.UiScale);
+        _center_next_window(width_fraction: 0.42F, min_width: 900F * FhTheme.UiScale, max_width: 1300F * FhTheme.UiScale);
 
         // Passing `ref modal_open` (rather than null) gives the popup its own
         // native title-bar close button, so there's no need for a separate
@@ -66,9 +63,7 @@ internal static unsafe partial class FhModManagerUI {
         _render_game_directory_row();
 
         // Derived from the (possibly not-yet-saved) game directory input and the
-        // saved Fahrenheit/Mods overrides, not a cached value - so all three
-        // rows' status icons update live as the user types, browses, or an
-        // override changes, rather than only refreshing after a save.
+        // saved Fahrenheit/Mods overrides, not cached value - so validity icons update live.
         string normalized_game_directory;
 
         try {
@@ -84,17 +79,6 @@ internal static unsafe partial class FhModManagerUI {
             _settings.ModsDirectory);
 
         _render_fahrenheit_location_row(fahrenheit_directory);
-
-        // TODO - hidden for now; 
-        // Setting 'mods' location logic still has value for mod pack/profiles.
-        // Implementation of mod pack/profiles is not yet done, so this is hidden for now.
-        //_render_mods_location_row(mods_directory);
-
-        ImGui.Spacing();
-
-        if (FhElements.button_secondary("Open Settings Folder")) {
-            _open_folder(Path.GetDirectoryName(FhModManagerSettingsStore.SettingsPath)!);
-        }
 
         ImGui.Spacing();
 
@@ -130,11 +114,7 @@ internal static unsafe partial class FhModManagerUI {
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - buttons_width);
 
-        bool submitted = ImGui.InputText(
-            "##GameLocationInput",
-            ref _game_directory_input,
-            GAME_DIRECTORY_INPUT_LENGTH,
-            ImGuiInputTextFlags.EnterReturnsTrue);
+        bool submitted = ImGui.InputText("##GameLocationInput", ref _game_directory_input, GAME_DIRECTORY_INPUT_LENGTH, ImGuiInputTextFlags.EnterReturnsTrue);
 
         ImGui.SameLine();
 
@@ -176,11 +156,7 @@ internal static unsafe partial class FhModManagerUI {
 
         string display_path = fahrenheit_directory;
 
-        ImGui.InputText(
-            "##FahrenheitLocationInput",
-            ref display_path,
-            GAME_DIRECTORY_INPUT_LENGTH,
-            ImGuiInputTextFlags.ReadOnly);
+        ImGui.InputText("##FahrenheitLocationInput", ref display_path, GAME_DIRECTORY_INPUT_LENGTH, ImGuiInputTextFlags.ReadOnly);
 
         ImGui.SameLine();
 
@@ -195,44 +171,6 @@ internal static unsafe partial class FhModManagerUI {
         }
         else if (open_pressed) {
             _open_folder(fahrenheit_directory);
-        }
-    }
-
-    private static void _render_mods_location_row(string mods_directory) {
-        ImGui.SeparatorText("Mods Location");
-
-        (bool valid, string? reason) = _check_mods_location(mods_directory);
-
-        FhElements.status_icon(valid, reason);
-        ImGui.SameLine();
-
-        float browse_width  = _get_button_width("Browse");
-        float open_width    = _get_button_width("Open");
-        float buttons_width = browse_width + open_width + (ImGui.GetStyle().ItemSpacing.X * 2F);
-
-        ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - buttons_width);
-
-        string display_path = mods_directory;
-
-        ImGui.InputText(
-            "##ModsLocationInput",
-            ref display_path,
-            GAME_DIRECTORY_INPUT_LENGTH,
-            ImGuiInputTextFlags.ReadOnly);
-
-        ImGui.SameLine();
-
-        bool browse_pressed = FhElements.button_secondary("Browse##Mods", new Vector2(browse_width, 0F));
-
-        ImGui.SameLine();
-
-        bool open_pressed = FhElements.button_secondary("Open##Mods", new Vector2(open_width, 0F));
-
-        if (browse_pressed) {
-            _browse_mods_directory();
-        }
-        else if (open_pressed) {
-            _open_folder(mods_directory);
         }
     }
 
@@ -257,18 +195,6 @@ internal static unsafe partial class FhModManagerUI {
 
         if (!File.Exists(Path.Join(fahrenheit_directory, "bin", "fhstage0.exe"))) {
             return (false, "fhstage0.exe was not found in its bin folder.");
-        }
-
-        return (true, null);
-    }
-
-    private static (bool IsValid, string? Reason) _check_mods_location(string mods_directory) {
-        if (!Directory.Exists(mods_directory)) {
-            return (false, "This folder does not exist.");
-        }
-
-        if (!File.Exists(Path.Join(mods_directory, "loadorder"))) {
-            return (false, "No loadorder file was found here.");
         }
 
         return (true, null);
@@ -385,7 +311,7 @@ internal static unsafe partial class FhModManagerUI {
         FhTheme.apply();
 
         if (!FhModManagerSettingsStore.try_save(_settings, out string save_error)) {
-            _set_status(save_error, is_error: true);
+            _set_status(save_error, true);
         }
     }
 
@@ -420,20 +346,14 @@ internal static unsafe partial class FhModManagerUI {
 
     private static void _save_game_directory() {
         try {
-            string normalized =
-            FhModManagerSettingsStore.normalize_path(
-                _game_directory_input);
+            string normalized = FhModManagerSettingsStore.normalize_path(_game_directory_input);
 
-            _game_directory_input =
-                normalized;
+            _game_directory_input = normalized;
 
-            _settings.GameDirectory =
-                normalized;
+            _settings.GameDirectory = normalized;
 
-            if (!FhModManagerSettingsStore.try_save(
-                    _settings,
-                    out string save_error)) {
-                _set_status(save_error, is_error: true);
+            if (!FhModManagerSettingsStore.try_save( _settings, out string save_error)) {
+                _set_status(save_error,true);
                 return;
             }
 
@@ -442,9 +362,7 @@ internal static unsafe partial class FhModManagerUI {
             _set_status("Game location saved.");
         }
         catch (Exception exception) {
-            _set_status(
-                "The game location is invalid.\n\n" + exception.Message,
-                is_error: true);
+            _set_status($"The game location is invalid.\n\n{exception.Message}", true);
         }
     }
 
@@ -459,7 +377,7 @@ internal static unsafe partial class FhModManagerUI {
             _settings.FahrenheitDirectory = FhModManagerSettingsStore.normalize_path(result.Path);
 
             if (!FhModManagerSettingsStore.try_save(_settings, out string save_error)) {
-                _set_status(save_error, is_error: true);
+                _set_status(save_error, true);
                 return;
             }
 
@@ -468,35 +386,7 @@ internal static unsafe partial class FhModManagerUI {
             _set_status("Fahrenheit location saved.");
         }
         catch (Exception exception) {
-            _set_status(
-                "The Fahrenheit location is invalid.\n\n" + exception.Message,
-                is_error: true);
-        }
-    }
-
-    private static void _browse_mods_directory() {
-        DialogResult result = Dialog.FolderPicker(_settings.ModsDirectory ?? _game_directory_input);
-
-        if (!result.IsOk || result.Path == null) {
-            return;
-        }
-
-        try {
-            _settings.ModsDirectory = FhModManagerSettingsStore.normalize_path(result.Path);
-
-            if (!FhModManagerSettingsStore.try_save(_settings, out string save_error)) {
-                _set_status(save_error, is_error: true);
-                return;
-            }
-
-            _rescan_mods();
-
-            _set_status("Mods location saved.");
-        }
-        catch (Exception exception) {
-            _set_status(
-                "The mods location is invalid.\n\n" + exception.Message,
-                is_error: true);
+            _set_status($"The Fahrenheit location is invalid.\n\n{exception.Message}", true);
         }
     }
 }

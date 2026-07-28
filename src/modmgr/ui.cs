@@ -23,9 +23,7 @@ internal static unsafe partial class FhModManagerUI {
     private static FhModCatalog _catalog;
 
     static FhModManagerUI() {
-        _settings = FhModManagerSettingsStore.load(
-            out string settings_warning);
-
+        _settings = FhModManagerSettingsStore.load(out string settings_warning);
         // main.cs already called FhTheme.apply() once with the built-in defaults,
         // before this constructor could run (it needs a loaded FhModManagerSettings
         // first). Re-applying here with any saved overrides happens before the
@@ -33,25 +31,19 @@ internal static unsafe partial class FhModManagerUI {
         FhTheme.load_from_settings(_settings);
         FhTheme.apply();
 
-        _game_directory_input =
-            _settings.GameDirectory;
-
-        _rescan_mods();
-
+        _game_directory_input = _settings.GameDirectory;
+        _catalog = FhModScanner.scan(_settings.GameDirectory, _settings.FahrenheitDirectory, _settings.ModsDirectory);
         _set_status(settings_warning);
     }
 
     public static void UI() {
         _handle_modals();
 
-        ImGuiViewportPtr viewport =
-            ImGui.GetMainViewport();
+        ImGuiViewportPtr viewport = ImGui.GetMainViewport();
 
-        ImGui.SetNextWindowPos(
-            viewport.WorkPos);
+        ImGui.SetNextWindowPos(viewport.WorkPos);
 
-        ImGui.SetNextWindowSize(
-            viewport.WorkSize);
+        ImGui.SetNextWindowSize(viewport.WorkSize);
 
         ImGuiWindowFlags window_flags =
           ImGuiWindowFlags.MenuBar
@@ -63,9 +55,7 @@ internal static unsafe partial class FhModManagerUI {
         | ImGuiWindowFlags.NoScrollbar
         | ImGuiWindowFlags.NoScrollWithMouse;
 
-        if (!ImGui.Begin(
-                "Fahrenheit Mod Manager###FhModManager",
-                window_flags)) {
+        if (!ImGui.Begin("Fahrenheit Mod Manager###FhModManager", window_flags)) {
             ImGui.End();
             return;
         }
@@ -81,7 +71,6 @@ internal static unsafe partial class FhModManagerUI {
         // ImGui.Separator();
         ImGui.Spacing();
 
-        _render_header();
         _render_warnings();
 
         ImGui.Spacing();
@@ -97,14 +86,6 @@ internal static unsafe partial class FhModManagerUI {
         _apply_pending_load_order_drop();
     }
 
-    private static void _render_header() {
-        ImGui.Text("Fahrenheit Mod Manager");
-        ImGui.TextDisabled(
-            "Manage the active load order and launch Final Fantasy X / X-2.");
-
-        ImGui.Spacing();
-    }
-
     private static void _render_warnings() {
         if (_catalog.Warnings.Count == 0) {
             return;
@@ -113,9 +94,7 @@ internal static unsafe partial class FhModManagerUI {
         ImGui.Spacing();
 
         foreach (string warning in _catalog.Warnings) {
-            ImGui.TextColored(
-                FhTheme.COLOR_WARNING,
-                warning);
+            ImGui.TextColored(FhTheme.COLOR_WARNING, warning);
         }
     }
 }

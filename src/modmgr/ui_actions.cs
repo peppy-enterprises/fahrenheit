@@ -18,27 +18,20 @@ namespace Fahrenheit.Tools.ModManager;
 internal static unsafe partial class FhModManagerUI {
     private static void _refresh_mods() {
         try {
-            string normalized =
-                FhModManagerSettingsStore.normalize_path(
-                    _game_directory_input);
+            string normalized = FhModManagerSettingsStore.normalize_path(_game_directory_input);
 
-            _catalog = FhModScanner.scan(
-                normalized,
-                _settings.FahrenheitDirectory,
-                _settings.ModsDirectory);
+            _catalog = FhModScanner.scan(normalized, _settings.FahrenheitDirectory, _settings.ModsDirectory);
 
             _set_status("Mod list refreshed.");
         }
         catch (Exception exception) {
-            _set_status(
-                "The mod list could not be refreshed.\n\n" + exception.Message,
-                is_error: true);
+            _set_status($"The mod list could not be refreshed.\n\n{exception.Message}", true);
         }
     }
 
     private static void _open_folder(string path) {
         if (!FhShell.try_open_folder(path, out string error)) {
-            _set_status(error, is_error: true);
+            _set_status(error, true);
         }
     }
 
@@ -46,11 +39,11 @@ internal static unsafe partial class FhModManagerUI {
     // flow (what a "mod file" is - a manifest, an archive, something else) is a
     // follow-up once that's decided.
     private static void _install_mod_from_file() {
-        Dialog.FileOpen(null, null);
+        Dialog.FileOpen(string.Empty, string.Empty);
     }
 
     private static void _export_mod_list() {
-        DialogResult result = Dialog.FileSave("txt", null);
+        DialogResult result = Dialog.FileSave("txt", string.Empty);
 
         if (!result.IsOk || result.Path == null) {
             return;
@@ -60,9 +53,7 @@ internal static unsafe partial class FhModManagerUI {
             List<string> lines = [];
 
             foreach (FhInstalledMod mod in _catalog.Enabled) {
-                lines.Add(string.IsNullOrWhiteSpace(mod.Version)
-                    ? mod.Name
-                    : $"{mod.Name} ({mod.Version})");
+                lines.Add(string.IsNullOrWhiteSpace(mod.Version) ? mod.Name : $"{mod.Name} ({mod.Version})");
             }
 
             string contents = string.Join(Environment.NewLine, lines);
@@ -76,23 +67,18 @@ internal static unsafe partial class FhModManagerUI {
             _set_status("Mod list exported.");
         }
         catch (Exception exception) {
-            _set_status(
-                "The mod list could not be exported.\n\n" + exception.Message,
-                is_error: true);
+            _set_status($"The mod list could not be exported.\n\n{exception.Message}", true);
         }
     }
 
     private static void _import_mod_pack() {
-        DialogResult result = Dialog.FileOpen("zip", null);
+        DialogResult result = Dialog.FileOpen("zip", string.Empty);
 
         if (!result.IsOk || result.Path == null) {
             return;
         }
 
-        FhModPackResult pack_result = FhModPackImporter.import(
-            _catalog.ModsDirectory,
-            _catalog.LoadOrderPath,
-            result.Path);
+        FhModPackResult pack_result = FhModPackImporter.import(_catalog.ModsDirectory, _catalog.LoadOrderPath, result.Path);
 
         _set_status(pack_result.Message, !pack_result.Success);
 
@@ -102,27 +88,19 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     private static void _export_mod_pack() {
-        DialogResult result = Dialog.FileSave("zip", null);
+        DialogResult result = Dialog.FileSave("zip", string.Empty);
 
         if (!result.IsOk || result.Path == null) {
             return;
         }
 
-        FhModPackResult pack_result = FhModPackExporter.export(
-            result.Path,
-            _catalog.Enabled);
+        FhModPackResult pack_result = FhModPackExporter.export(result.Path, _catalog.Enabled);
 
         _set_status(pack_result.Message, !pack_result.Success);
     }
 
-    private static void _launch_game(
-        FhLaunchTarget target,
-        bool debug) {
-        FhLaunchResult result =
-            FhGameLauncher.launch(
-                target,
-                _game_directory_input,
-                debug);
+    private static void _launch_game(FhGameId target, string[]? args = null) {
+        FhLaunchResult result = FhGameLauncher.launch(target, _game_directory_input, args ?? []);
 
         _set_status(result.Message, !result.Success);
     }
@@ -132,25 +110,18 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        FhPendingModToggle action =
-        _pending_mod_toggle;
+        FhPendingModToggle action = _pending_mod_toggle;
 
         _pending_mod_toggle = null;
 
-        if (!FhLoadOrderEditor.try_set_enabled(
-                _catalog.LoadOrderPath,
-                action.Mod,
-                action.Enable,
-                out string error)) {
-            _set_status(error, is_error: true);
+        if (!FhLoadOrderEditor.try_set_enabled(_catalog.LoadOrderPath, action.Mod, action.Enable, out string error)) {
+            _set_status(error, true);
             return;
         }
 
         _rescan_mods();
 
-        _set_status(action.Enable
-            ? $"Enabled {action.Mod.Name}."
-            : $"Disabled {action.Mod.Name}.");
+        _set_status(action.Enable ? $"Enabled {action.Mod.Name}." : $"Disabled {action.Mod.Name}.");
     }
 
     private static void _apply_pending_load_order_move() {
@@ -158,17 +129,12 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        FhPendingLoadOrderMove action =
-        _pending_load_order_move;
+        FhPendingLoadOrderMove action = _pending_load_order_move;
 
         _pending_load_order_move = null;
 
-        if (!FhLoadOrderEditor.try_move(
-                _catalog.LoadOrderPath,
-                action.Mod,
-                action.Direction,
-                out string error)) {
-            _set_status(error, is_error: true);
+        if (!FhLoadOrderEditor.try_move(_catalog.LoadOrderPath, action.Mod, action.Direction, out string error)) {
+            _set_status(error, true);
             return;
         }
 
@@ -214,12 +180,9 @@ internal static unsafe partial class FhModManagerUI {
         FhPendingLoadOrderDrop action = _pending_load_order_drop;
         _pending_load_order_drop = null;
 
-        if (!FhLoadOrderEditor.try_move_to(
-                _catalog.LoadOrderPath,
-                action.Mod,
-                action.TargetIndex,
-                out string error)) {
-            _set_status(error, is_error: true);
+        bool didMove = FhLoadOrderEditor.try_move_to(_catalog.LoadOrderPath, action.Mod, action.TargetIndex, out string error);
+        if (!didMove) {
+            _set_status(error, true);
             return;
         }
 
