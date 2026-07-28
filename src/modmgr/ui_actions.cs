@@ -85,7 +85,7 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        ImportExportResult pack_result = FhModPackImporter.import(_catalog.ModsDirectory, _catalog.LoadOrderPath, result.Path);
+        ResultsMessage pack_result = FhModPackImporter.import(_catalog.ModsDirectory, _catalog.LoadOrderPath, result.Path);
 
         _set_status(pack_result.Message, !pack_result.Success);
 
@@ -101,13 +101,13 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        ImportExportResult pack_result = FhModPackExporter.export(result.Path, _catalog.Enabled);
+        ResultsMessage pack_result = FhModPackExporter.export(result.Path, _catalog.Enabled);
 
         _set_status(pack_result.Message, !pack_result.Success);
     }
 
     private static void _launch_game(FhGameId target, string[]? args = null) {
-        FhLaunchResult result = FhGameLauncher.launch(target, _game_directory_input, args ?? []);
+        ResultsMessage result = FhGameLauncher.launch(target, _game_directory_input, args ?? []);
 
         _set_status(result.Message, !result.Success);
     }

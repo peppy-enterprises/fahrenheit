@@ -13,13 +13,8 @@
 
 namespace Fahrenheit.Tools.ModManager;
 
-internal readonly record struct FhLaunchResult(
-    bool Success,
-    string Message
-);
-
 internal static class FhGameLauncher {
-    internal static FhLaunchResult launch(FhGameId target, string configured_game_directory, string[] args) {
+    internal static ResultsMessage launch(FhGameId target, string configured_game_directory, string[] args) {
         if (!OperatingSystem.IsWindows()) {
             return new(false, "Launching Final Fantasy X/X-2 is currently supported only on Windows.");
         }

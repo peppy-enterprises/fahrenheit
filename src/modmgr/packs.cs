@@ -19,11 +19,6 @@
 
 namespace Fahrenheit.Tools.ModManager;
 
-internal readonly record struct ImportExportResult(
-    bool    Success,
-    string  Message
-    );
-
 internal static class FhEflImporter {
     private static readonly JsonSerializerOptions _json_options = new() {
         WriteIndented = true
@@ -32,7 +27,7 @@ internal static class FhEflImporter {
     // Copies a loose file tree already laid out like a VBF (e.g. FFX_Data/ffx_ps2/...,
     // as documented in src/runtime/fileloader.cs) into a new mod's efl/x or efl/x2
     // folder, generating a manifest.json for it.
-    internal static ImportExportResult import(
+    internal static ResultsMessage import(
         string mods_directory,
         string mod_id,
         string mod_name,
@@ -123,7 +118,7 @@ internal static class FhEflImporter {
 ///     Zips a set of enabled mods' directories plus a `loadorder` entry into a single distributable .zip file.
 /// </summary>
 internal static class FhModPackExporter {
-    internal static ImportExportResult export(
+    internal static ResultsMessage export(
         string destination_zip_path,
         IReadOnlyList<FhInstalledMod> mods_in_order) {
         List<string> included_ids = [];
@@ -191,7 +186,7 @@ internal static class FhModPackExporter {
 ///     Existing mods are skipped rather than overwritten.
 /// </summary>
 internal static class FhModPackImporter {
-    internal static ImportExportResult import(
+    internal static ResultsMessage import(
         string mods_directory,
         string load_order_path,
         string source_zip_path) {

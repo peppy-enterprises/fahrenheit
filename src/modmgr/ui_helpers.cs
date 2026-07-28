@@ -12,6 +12,11 @@
 
 namespace Fahrenheit.Tools.ModManager;
 
+/// <summary>
+///     A simple struct for returning a success/failure result with an optional message.
+/// </summary>
+internal readonly record struct ResultsMessage(bool Success, string Message);
+
 internal static unsafe partial class FhModManagerUI {
     // Sets the message shown in the status bar (see _render_status_bar in
     // ui_status_bar.cs). Centralizes the `_status`/`_status_is_error`/

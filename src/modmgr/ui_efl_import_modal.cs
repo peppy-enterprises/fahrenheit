@@ -35,9 +35,7 @@ internal static unsafe partial class FhModManagerUI {
             return;
         }
 
-        _text_wrapped(
-            "Import a loose file tree already laid out like a VBF archive "
-            + "(e.g. FFX_Data/ffx_ps2/...) as a new mod's External File Loader folder.");
+        _text_wrapped("Import a loose file tree already laid out like a VBF archive (e.g. FFX_Data/ffx_ps2/...).");
 
         ImGui.Spacing();
 
@@ -108,11 +106,9 @@ internal static unsafe partial class FhModManagerUI {
 
         string mod_id = _efl_import_mod_id.Trim();
 
-        string mod_name = string.IsNullOrWhiteSpace(_efl_import_mod_name)
-            ? mod_id
-            : _efl_import_mod_name.Trim();
+        string mod_name = string.IsNullOrWhiteSpace(_efl_import_mod_name) ? mod_id : _efl_import_mod_name.Trim();
 
-        ImportExportResult result = FhEflImporter.import(
+        ResultsMessage result = FhEflImporter.import(
             _catalog.ModsDirectory,
             mod_id,
             mod_name,
