@@ -178,7 +178,7 @@ internal static unsafe partial class FhModManagerUI {
             ImGui.BeginDisabled();
         }
 
-        if (ImGui.ArrowButton($"##Move{direction}.{mod.Id}", direction)) {
+        if (ImGui.ArrowButton($"##Move{direction}.{mod.Manifest.Id}", direction)) {
             _pending_load_order_move = new(mod, move_direction);
         }
 
@@ -222,7 +222,7 @@ internal static unsafe partial class FhModManagerUI {
         // below still calls out exactly what's wrong with it.
         bool enabled = mod.IsEnabled;
 
-        if (ImGui.Checkbox($"##Enabled.{mod.Id}", ref enabled)) {
+        if (ImGui.Checkbox($"##Enabled.{mod.Manifest.Id}", ref enabled)) {
             _pending_mod_toggle = new( mod, enabled);
         }
 
@@ -249,7 +249,7 @@ internal static unsafe partial class FhModManagerUI {
         float details_start_y = ImGui.GetCursorPosY();
 
         if (!mod.DirectoryExists) {
-            _text_colored_wrapped(ImGui.GetStyle().Colors[(int)ImGuiCol.NavCursor], $"Missing: {mod.Id}");
+            _text_colored_wrapped(ImGui.GetStyle().Colors[(int)ImGuiCol.NavCursor], $"Missing: {mod.Manifest.Id}");
 
             if (show_load_order) {
                 ImGui.SetCursorPosY(second_line_y);
@@ -259,11 +259,11 @@ internal static unsafe partial class FhModManagerUI {
                 mod.DirectoryPath);
         }
         else {
-            string version = "" + (string.IsNullOrWhiteSpace(mod.Version)
+            string version = "" + (string.IsNullOrWhiteSpace(mod.Manifest.Version)
                 ? "unknown version"
-                : $"v{mod.Version}");
+                : $"v{mod.Manifest.Version}");
 
-            _text_wrapped(mod.Name);
+            _text_wrapped(mod.Manifest.Name);
             ImGui.SameLine();
             _text_disabled_wrapped(version);
 
@@ -271,8 +271,8 @@ internal static unsafe partial class FhModManagerUI {
                 ImGui.SetCursorPosY(second_line_y);
             }
 
-            if (!string.IsNullOrWhiteSpace(mod.Authors)) {
-                _text_disabled_wrapped($"Author: {mod.Authors}");
+            if (!string.IsNullOrWhiteSpace(mod.Manifest.Authors)) {
+                _text_disabled_wrapped($"Author: {mod.Manifest.Authors}");
             }
 
             if (!mod.ManifestExists) {

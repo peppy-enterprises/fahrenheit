@@ -86,7 +86,7 @@ internal static unsafe partial class FhModManagerUI {
         Vector2 top_left = ImGui.GetCursorScreenPos();
         Vector2 center   = top_left + (size / 2F);
 
-        ImGui.InvisibleButton($"##DragHandle.{mod.Id}", size);
+        ImGui.InvisibleButton($"##DragHandle.{mod.Manifest.Id}", size);
 
         bool hovered = ImGui.IsItemHovered();
         bool active  = ImGui.IsItemActive();
@@ -98,7 +98,7 @@ internal static unsafe partial class FhModManagerUI {
                 _drag_handle_grabbed_at = ImGui.GetTime();
             }
 
-            bool is_dragging_this = _dragging_mod?.Id == mod.Id;
+            bool is_dragging_this = _dragging_mod?.Manifest.Id == mod.Manifest.Id;
 
             if (is_dragging_this && active) {
                 /*
@@ -127,7 +127,7 @@ internal static unsafe partial class FhModManagerUI {
                 _pending_load_order_drop = new(mod, display_index);
                 _dragging_mod = null;
 
-                _drag_handle_released_mod_id = mod.Id;
+                _drag_handle_released_mod_id = mod.Manifest.Id;
                 _drag_handle_released_at     = ImGui.GetTime();
             }
         }
@@ -150,7 +150,7 @@ internal static unsafe partial class FhModManagerUI {
         // that fades back to normal over DRAG_HANDLE_RELEASE_FLASH_SECONDS.
         double released_elapsed = ImGui.GetTime() - _drag_handle_released_at;
 
-        bool is_flashing = _drag_handle_released_mod_id == mod.Id && released_elapsed < DRAG_HANDLE_RELEASE_FLASH_SECONDS;
+        bool is_flashing = _drag_handle_released_mod_id == mod.Manifest.Id && released_elapsed < DRAG_HANDLE_RELEASE_FLASH_SECONDS;
 
         float flash_t = is_flashing ? 1F - (float)(released_elapsed / DRAG_HANDLE_RELEASE_FLASH_SECONDS) : 0F;
 

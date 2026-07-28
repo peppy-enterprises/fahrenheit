@@ -104,7 +104,7 @@ internal static unsafe partial class FhModManagerUI {
     }
 
     private static void _import_efl_mod() {
-        FhEflGame game = _efl_import_game_index == 1 ? FhEflGame.FFX2 : FhEflGame.FFX;
+        FhGameId game = _efl_import_game_index == 1 ? FhGameId.FFX2 : FhGameId.FFX;
 
         string mod_id = _efl_import_mod_id.Trim();
 
@@ -112,7 +112,7 @@ internal static unsafe partial class FhModManagerUI {
             ? mod_id
             : _efl_import_mod_name.Trim();
 
-        FhEflImportResult result = FhEflImporter.import(
+        ImportExportResult result = FhEflImporter.import(
             _catalog.ModsDirectory,
             mod_id,
             mod_name,

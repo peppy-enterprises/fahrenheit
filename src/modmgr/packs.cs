@@ -154,59 +154,44 @@ internal static class FhModPackExporter {
         List<string> skipped_ids = [];
 
         try {
-            using (FileStream zip_stream = File.Create(destination_zip_path))
-            using (ZipArchive archive = new(zip_stream, ZipArchiveMode.Create)) {
-                foreach (FhInstalledMod mod in mods_in_order) {
-                    if (!mod.DirectoryExists) {
-                        skipped_ids.Add(mod.Id);
-                        continue;
-                    }
-
-                    foreach (string file in Directory.EnumerateFiles(
-                            mod.DirectoryPath,
-                            "*",
-                            SearchOption.AllDirectories)) {
-                        string relative_path =
-                            Path.GetRelativePath(mod.DirectoryPath, file)
-                                .Replace('\\', '/');
-
-                        archive.CreateEntryFromFile(
-                            file,
-                            $"{mod.Id}/{relative_path}",
-                            CompressionLevel.Optimal);
-                    }
-
-                    included_ids.Add(mod.Id);
+            using FileStream zip_stream = File.Create(destination_zip_path);
+            using ZipArchive archive = new(zip_stream, ZipArchiveMode.Create);
+    
+            foreach (FhInstalledMod mod in mods_in_order) {
+                if (!mod.DirectoryExists) {
+                    skipped_ids.Add(mod.Manifest.Id);
+                    continue;
                 }
 
-                using StreamWriter writer =
-                    new(archive.CreateEntry("loadorder").Open());
-
-                foreach (string mod_id in included_ids) {
-                    writer.WriteLine(mod_id);
+                IEnumerable<string> files = Directory.EnumerateFiles(mod.DirectoryPath, "*", SearchOption.AllDirectories);
+                foreach (string mod_file in files) {
+                    string relative_path = Path.GetRelativePath(mod.DirectoryPath, mod_file).Replace('\\', '/');
+                    archive.CreateEntryFromFile(mod_file, $"{mod.Manifest.Id}/{relative_path}", CompressionLevel.Optimal);
                 }
+
+                included_ids.Add(mod.Manifest.Id);
+            }
+
+            using StreamWriter writer = new(archive.CreateEntry("loadorder").Open());
+
+            foreach (string mod_id in included_ids) {
+                writer.WriteLine(mod_id);
             }
         }
         catch (Exception exception) {
             _try_delete_file(destination_zip_path);
-
-            return new(
-                false,
-                "The mod pack could not be exported.\n\n" + exception.Message);
+            return new(false, $"The mod pack could not be exported.\n\n{exception.Message}");
         }
 
         if (included_ids.Count == 0) {
             _try_delete_file(destination_zip_path);
-
             return new(false, "No enabled mods were available to export.");
         }
 
         string message = $"Exported {included_ids.Count} mod(s) to the pack.";
 
         if (skipped_ids.Count > 0) {
-            message +=
-                "\n\nSkipped (missing on disk): "
-                + string.Join(", ", skipped_ids);
+            message = $"{message}\n\nSkipped (missing on disk): {string.Join(", ", skipped_ids)}";
         }
 
         return new(true, message);
@@ -224,12 +209,13 @@ internal static class FhModPackExporter {
     }
 }
 
+/// <summary>
+///     Extracts a mod pack's not-already-installed mods.
+///     Appends them to the already-existing `loadorder` in the pack's defined order.
+///     Existing mods are skipped rather than overwritten.
+/// </summary>
 internal static class FhModPackImporter {
-    // Extracts every mod folder in the pack that doesn't already exist locally,
-    // then appends the newly installed mods to the load order (in the pack's own
-    // order, where known). Mods that already exist locally are left untouched
-    // rather than overwritten.
-    internal static FhModPackResult import(
+    internal static ImportExportResult import(
         string mods_directory,
         string load_order_path,
         string source_zip_path) {
@@ -257,8 +243,7 @@ internal static class FhModPackImporter {
                 }
             }
 
-            Dictionary<string, List<ZipArchiveEntry>> entries_by_mod_id =
-                new(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, List<ZipArchiveEntry>> entries_by_mod_id = new(StringComparer.OrdinalIgnoreCase);
 
             foreach (ZipArchiveEntry entry in archive.Entries) {
                 string entry_path = entry.FullName.Replace('\\', '/');
@@ -271,9 +256,7 @@ internal static class FhModPackImporter {
 
                 string mod_id = entry_path[..separator_index];
 
-                if (!entries_by_mod_id.TryGetValue(
-                        mod_id,
-                        out List<ZipArchiveEntry>? mod_entries)) {
+                if (!entries_by_mod_id.TryGetValue( mod_id, out List<ZipArchiveEntry>? mod_entries)) {
                     mod_entries = [];
                     entries_by_mod_id[mod_id] = mod_entries;
                 }
@@ -285,8 +268,7 @@ internal static class FhModPackImporter {
                 Path.GetFullPath(mods_directory)
                 + Path.DirectorySeparatorChar;
 
-            foreach ((string mod_id, List<ZipArchiveEntry> mod_entries)
-                    in entries_by_mod_id) {
+            foreach ((string mod_id, List<ZipArchiveEntry> mod_entries) in entries_by_mod_id) {
                 string mod_directory = Path.Join(mods_directory, mod_id);
 
                 if (Directory.Exists(mod_directory)) {
@@ -305,14 +287,11 @@ internal static class FhModPackImporter {
 
                     // Zip-slip guard: refuse any entry whose path would land outside
                     // the mods directory (e.g. via "../" segments in a crafted pack).
-                    if (!destination_path.StartsWith(
-                            mods_directory_full,
-                            StringComparison.OrdinalIgnoreCase)) {
+                    if (!destination_path.StartsWith(mods_directory_full, StringComparison.OrdinalIgnoreCase)) {
                         continue;
                     }
 
-                    Directory.CreateDirectory(
-                        Path.GetDirectoryName(destination_path)!);
+                    Directory.CreateDirectory(Path.GetDirectoryName(destination_path)!);
 
                     entry.ExtractToFile(destination_path, true);
                 }
@@ -321,25 +300,21 @@ internal static class FhModPackImporter {
             }
         }
         catch (Exception exception) {
-            return new(
-                false,
-                "The mod pack could not be imported.\n\n" + exception.Message);
+            return new(false, $"The mod pack could not be imported.\n\n{exception.Message}");
         }
 
         if (installed_ids.Count == 0) {
             return new(
                 false,
                 skipped_existing_ids.Count > 0
-                    ? "No mods were installed; all mods in the pack already exist:\n"
-                        + string.Join(", ", skipped_existing_ids)
+                    ? $"No mods were installed; all mods in the pack already exist:\n{string.Join(", ", skipped_existing_ids)}"
                     : "The pack did not contain any mods.");
         }
 
         // Preserve the pack's own ordering for the mods we actually installed,
         // falling back to install order for anything the pack didn't list.
         List<string> ordered_new_ids = [];
-        HashSet<string> remaining =
-            new(installed_ids, StringComparer.OrdinalIgnoreCase);
+        HashSet<string> remaining = new(installed_ids, StringComparer.OrdinalIgnoreCase);
 
         foreach (string mod_id in pack_load_order) {
             if (remaining.Remove(mod_id)) {
@@ -354,22 +329,16 @@ internal static class FhModPackImporter {
             }
         }
 
-        if (!FhLoadOrderEditor.try_append_all(
-                load_order_path,
-                ordered_new_ids,
-                out string load_order_error)) {
+        if (!FhLoadOrderEditor.try_append_all(load_order_path, ordered_new_ids, out string load_order_error)) {
             return new(
                 false,
-                $"Installed {installed_ids.Count} mod(s), but the load order "
-                + "could not be updated.\n\n" + load_order_error);
+                $"Installed {installed_ids.Count} mod(s), but the load order could not be updated.\n\n{load_order_error}");
         }
 
         string message = $"Installed {installed_ids.Count} mod(s) from the pack.";
 
         if (skipped_existing_ids.Count > 0) {
-            message +=
-                "\n\nSkipped (already installed): "
-                + string.Join(", ", skipped_existing_ids);
+            message = $"{message}\n\nSkipped (already installed): {string.Join(", ", skipped_existing_ids)}";
         }
 
         return new(true, message);

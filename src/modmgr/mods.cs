@@ -18,11 +18,9 @@
 
 namespace Fahrenheit.Tools.ModManager;
 
+
 internal sealed record FhInstalledMod(
-    string Id,
-    string Name,
-    string Version,
-    string Authors,
+    FhManifest Manifest,
     string DirectoryPath,
     bool DirectoryExists,
     bool ManifestExists,
@@ -34,6 +32,9 @@ internal sealed record FhInstalledMod(
     internal bool HasValidManifest => DirectoryExists && ManifestExists && string.IsNullOrWhiteSpace(ManifestError);
 }
 
+/// <summary>
+///    Lists of enabled and disabled mods, plus any warnings encountered while scanning the game directory.
+/// </summary>
 internal sealed record FhModCatalog(
     IReadOnlyList<FhInstalledMod> Enabled,
     IReadOnlyList<FhInstalledMod> Disabled,
@@ -165,7 +166,7 @@ internal static class FhModScanner {
         }
 
         disabled.Sort(
-            static (left, right) => StringComparer.OrdinalIgnoreCase.Compare(left.Name, right.Name));
+            static (left, right) => StringComparer.OrdinalIgnoreCase.Compare(left.Manifest.Name, right.Manifest.Name));
 
         return new(enabled, disabled, warnings, mods_directory, load_order_path);
     }
@@ -181,13 +182,13 @@ internal static class FhModScanner {
         bool directory_exists = Directory.Exists(mod_directory);
 
         if (!directory_exists) {
-            return new(mod_id, mod_id, "", "", mod_directory, false, false, "The mod directory does not exist.", load_order_index);
+            return new(new FhManifest(mod_id, mod_id, "", "", "", "", [], [], FhManifestFlags.NONE), mod_directory, false, false, "The mod directory does not exist.", load_order_index);
         }
 
         string manifest_path = Path.Join(mod_directory, $"{mod_id}.manifest.json");
 
         if (!File.Exists(manifest_path)) {
-            return new(mod_id, mod_id, "", "", mod_directory, true, false, $"Manifest not found: {manifest_path}", load_order_index);
+            return new(new FhManifest(mod_id, mod_id, "", "", "", "", [], [], FhManifestFlags.NONE), mod_directory, true, false, $"Manifest not found: {manifest_path}", load_order_index);
         }
 
         try {
@@ -204,10 +205,10 @@ internal static class FhModScanner {
 
             string authors = _read_string(root,"Authors","");
 
-            return new(mod_id, name, version, authors, mod_directory, true, true, "", load_order_index);
+            return new(new FhManifest(mod_id, mod_id, "", "", "", "", [], [], FhManifestFlags.NONE), mod_directory, true, true, "", load_order_index);
         }
         catch (Exception exception) {
-            return new(mod_id, mod_id, "", "", mod_directory, true, true, exception.Message, load_order_index);
+            return new(new FhManifest(mod_id, mod_id, "", "", "", "", [], [], FhManifestFlags.NONE), mod_directory, true, true, exception.Message, load_order_index);
         }
     }
 
@@ -254,7 +255,7 @@ internal static class FhLoadOrderEditor {
             bool already_enabled = false;
 
             foreach (string entry in load_order) {
-                if (string.Equals(entry, mod.Id, StringComparison.OrdinalIgnoreCase)) {
+                if (string.Equals(entry, mod.Manifest.Id, StringComparison.OrdinalIgnoreCase)) {
                     already_enabled = true;
                     break;
                 }
@@ -266,12 +267,12 @@ internal static class FhLoadOrderEditor {
                      * New mods are appended to the end of the load order.
                      * Later EFL mods supersede earlier replacements.
                      */
-                    load_order.Add(mod.Id);
+                    load_order.Add(mod.Manifest.Id);
                 }
             }
             else {
                 load_order.RemoveAll(
-                    entry => string.Equals(entry, mod.Id, StringComparison.OrdinalIgnoreCase));
+                    entry => string.Equals(entry, mod.Manifest.Id, StringComparison.OrdinalIgnoreCase));
             }
 
             _write_load_order(load_order_path, load_order);
@@ -398,7 +399,7 @@ internal static class FhLoadOrderEditor {
         error = "";
 
         if (!mod.HasValidManifest) {
-            error = $"The mod '{mod.Id}' does not have a valid manifest.";
+            error = $"The mod '{mod.Manifest.Id}' does not have a valid manifest.";
 
             return false;
         }
@@ -413,10 +414,10 @@ internal static class FhLoadOrderEditor {
             List<string> load_order = _read_normalized_load_order(load_order_path);
 
             int current_index = load_order.FindIndex(
-                entry => string.Equals(entry, mod.Id, StringComparison.OrdinalIgnoreCase));
+                entry => string.Equals(entry, mod.Manifest.Id, StringComparison.OrdinalIgnoreCase));
 
             if (current_index < 0) {
-                error = $"The enabled mod '{mod.Id}' was not found in the load order.";
+                error = $"The enabled mod '{mod.Manifest.Id}' was not found in the load order.";
 
                 return false;
             }
@@ -425,7 +426,7 @@ internal static class FhLoadOrderEditor {
 
             int target_index = Math.Clamp(compute_target_index(current_index), 0, load_order.Count);
 
-            load_order.Insert(target_index, mod.Id);
+            load_order.Insert(target_index, mod.Manifest.Id);
 
             if (target_index == current_index) {
                 // No actual change (e.g. already at the top/bottom, or dropped

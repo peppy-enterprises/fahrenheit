@@ -53,7 +53,10 @@ internal static unsafe partial class FhModManagerUI {
             List<string> lines = [];
 
             foreach (FhInstalledMod mod in _catalog.Enabled) {
-                lines.Add(string.IsNullOrWhiteSpace(mod.Version) ? mod.Name : $"{mod.Name} ({mod.Version})");
+                if (string.IsNullOrEmpty(mod.Manifest.Name)) {
+                    continue;
+                }
+                lines.Add(mod.Manifest.Name);
             }
 
             string contents = string.Join(Environment.NewLine, lines);
@@ -121,7 +124,7 @@ internal static unsafe partial class FhModManagerUI {
 
         _rescan_mods();
 
-        _set_status(action.Enable ? $"Enabled {action.Mod.Name}." : $"Disabled {action.Mod.Name}.");
+        _set_status(action.Enable ? $"Enabled {action.Mod.Manifest.Name}." : $"Disabled {action.Mod.Manifest.Name}.");
     }
 
     private static void _apply_pending_load_order_move() {
@@ -142,7 +145,7 @@ internal static unsafe partial class FhModManagerUI {
 
         string direction_name = action.Direction < 0 ? "up" : "down";
 
-        _set_status($"Moved {action.Mod.Name} {direction_name}.");
+        _set_status($"Moved {action.Mod.Manifest.Name} {direction_name}.");
     }
 
     // In-memory-only reorder for live drag feedback: no disk write, no rescan -
@@ -188,6 +191,6 @@ internal static unsafe partial class FhModManagerUI {
 
         _rescan_mods();
 
-        _set_status($"Moved {action.Mod.Name}.");
+        _set_status($"Moved {action.Mod.Manifest.Name}.");
     }
 }
