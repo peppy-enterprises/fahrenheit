@@ -14,6 +14,8 @@ global using System.Text;
 global using System.Text.Json;
 
 global using CsvHelper;
+global using CsvHelper.Configuration;
 global using CsvHelper.Configuration.Attributes;
+global using CsvHelper.TypeConversion;
 
 global using Microsoft.CodeAnalysis.CSharp;

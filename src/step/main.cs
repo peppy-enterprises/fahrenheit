@@ -9,38 +9,6 @@
 
 namespace Fahrenheit.Tools.STEP;
 
-/// <summary>
-///     Represents a function declaration exported from Ghidra.
-/// </summary>
-internal struct FhFuncDecl {
-    public string Name      { get; set; }
-    public string Location  { get; set; }
-    [Name("Function Signature")]
-    public string Signature { get; set; }
-    [Name("Symbol Source")]
-    public string Source    { get; set; }
-    [Name("Symbol Type")]
-    public string Type      { get; set; }
-    [Name("Function Name")]
-    public string FuncName  { get; set; }
-    [Name("Function Calling Convention")]
-    public string CallConv  { get; set; }
-    public string Namespace { get; set; }
-}
-
-/// <summary>
-///     Represents a global/data symbol exported from Ghidra.
-/// </summary>
-internal struct FhDataLabelDecl {
-    public string Name      { get; set; }
-    public string Location  { get; set; }
-    public string Type      { get; set; }
-    [Name("Data Type")]
-    public string DataType  { get; set; }
-    public string Namespace { get; set; }
-    public string Source    { get; set; }
-}
-
 internal ref struct FhFuncSignatureData {
     public ReadOnlySpan<char>    ReturnType;
     public ReadOnlySpan<char>    FunctionName;
@@ -49,12 +17,23 @@ internal ref struct FhFuncSignatureData {
 
 internal record FhFuncParameter(string ParameterType, string ParameterName);
 
-internal static class Program {
+internal static partial class Program {
 
-    private static int[]                      _s_noemit  = [];
-    private static Dictionary<string, string> _s_typemap = [];
-    private static FhFuncDecl[]               _s_funcs   = [];
-    private static FhDataLabelDecl[]          _s_data    = [];
+    /* [fkelava 01/06/26 13:47]
+     * Generating all functions for either game results in about a 400,000 line file.
+     * IDEs and IntelliSense absolutely cannot handle files that large, not even on
+     * top-end machines. We thus split the file at roughly the 50,000 line mark.
+     */
+
+    const int LINES_PER_FILE = 50_000;
+    const int LINES_PER_DECL = 7; // Guesstimate for file-wraparound
+    const int LINES_PER_SKIP = 4; // Guesstimate for file-wraparound
+
+    private static int[]                             _s_noemit  = [];
+    private static Dictionary<string, string>        _s_typemap = [];
+    private static FhFuncDecl[]                      _s_funcs   = [];
+    private static FhDataLabelDecl[]                 _s_data    = [];
+    private static Dictionary<int, FhCommonFuncDecl> _s_common  = [];
 
     private static void Main(string[] args) {
         Option<string>   opt_globals   = new ("-d", "--data") {
@@ -78,6 +57,10 @@ internal static class Program {
             Required     = false,
             CustomParser = _parse_arg_noemit
         };
+        Option<string>   opt_functions_common = new ("-fc", "--functions-common") {
+            Description = "Set the path to the file containing common function definitions.",
+            Required    = true
+        };
         Option<FhGameId> opt_game      = new ("-g", "--game-id") {
             Description = "Declare which game STEP is generating for.",
             Required    = true
@@ -93,6 +76,7 @@ internal static class Program {
         cmd_root.Options.Add(opt_output);
         cmd_root.Options.Add(opt_typemap);
         cmd_root.Options.Add(opt_noemit);
+        cmd_root.Options.Add(opt_functions_common);
         cmd_root.Options.Add(opt_game);
 
         cmd_root.SetAction(parse_result => _emit_symtable(
@@ -101,6 +85,7 @@ internal static class Program {
             parse_result.GetRequiredValue(opt_output),
             parse_result.GetValue        (opt_typemap) ?? "",
             parse_result.GetRequiredValue(opt_noemit),
+            parse_result.GetRequiredValue(opt_functions_common),
             parse_result.GetRequiredValue(opt_game)
             ));
 
@@ -223,13 +208,19 @@ internal static class Program {
     }
 
     /// <summary>
+    ///     Converts an offset back into its Ghidra equivalent.
+    /// </summary>
+    private static int _addr_to_ghidra(int address) => address + 0x400000;
+
+    /// <summary>
     ///     Converts a Ghidra function declaration and the associated signature data into valid C# code.
     /// </summary>
     /// <param name="function">A Ghidra-provided function declaration.</param>
     /// <param name="signature_data">The signature data associated with the function.</param>
     /// <returns>A valid C# delegate declaration and associated function address constant.</returns>
     private static string _emit_function(FhFuncDecl function, FhFuncSignatureData signature_data, FhGameId game) {
-        int    addr   = int.Parse(function.Location, NumberStyles.HexNumber, CultureInfo.InvariantCulture) - 0x400000;
+        int addr_label = _addr_to_ghidra(function.Location);
+
         string module = game switch {
             FhGameId.FFX    => "FFX.exe",
             FhGameId.FFX2   or
@@ -237,21 +228,45 @@ internal static class Program {
             _               => throw new NotImplementedException($"invalid game id {game} - cannot generate function"),
         };
 
-        if (_s_noemit.Contains(addr)) {
+        if (_s_noemit.Contains(function.Location)) {
             return $"""
                 // Symbol on explicit no-emit list:
-                // {function.CallConv} {function.Signature} at {function.Location}
+                // {function.CallConv} {function.Signature} at {addr_label:x8}
 
             """;
         }
 
         return $"""
                 // Original after pruning:
-                // {function.CallConv} {function.Signature} at {function.Location}
+                // {function.CallConv} {function.Signature} at {addr_label:x8}
 
                 {_emit_callconv_attr(function.CallConv)}
                 public unsafe delegate {signature_data.ReturnType} d_{function.FuncName}{_build_params_string(signature_data.Parameters)};
-                public static FhMethodHandle<d_{function.FuncName}> {function.Name} => new( new FhMethodLocation("{module}", 0x{addr:X}) );
+                public static FhMethodHandle<d_{function.FuncName}> {function.Name} => new( new FhMethodLocation("{module}", 0x{function.Location:X}) );
+
+            """;
+    }
+
+    /// <summary>
+    ///     Emits valid C# code for a fused handle which permits access to a function identical in both binaries.
+    /// </summary>
+    /// <param name="function">A Ghidra-provided function declaration.</param>
+    /// <param name="signature_data">The signature data associated with the function.</param>
+    /// <param name="common_data">Data describing which two functions are being fused.</param>
+    /// <returns>A valid C# delegate declaration and associated function address constant.</returns>
+    private static string _emit_common_function(FhFuncDecl function, FhFuncSignatureData signature_data, FhCommonFuncDecl common_data) {
+        int addr_label_src = _addr_to_ghidra(common_data.SourceAddress);
+        int addr_label_dst = _addr_to_ghidra(common_data.DestAddress);
+
+        string fused_label = $"FUN_{addr_label_src:X8}_{addr_label_dst:X8}";
+
+        return $"""
+                // Fused identical entry {function.CallConv} {function.Signature}
+                // at (FFX.exe+{addr_label_src:X}, FFX-2.exe+{addr_label_dst:X})
+
+                {_emit_callconv_attr(function.CallConv)}
+                public unsafe delegate {signature_data.ReturnType} d_{fused_label}{_build_params_string(signature_data.Parameters)};
+                public static FhMethodHandle<d_{fused_label}> {fused_label} => new( new FhMethodLocation(0x{common_data.SourceAddress:X}, 0x{common_data.DestAddress:X}) );
 
             """;
     }
@@ -262,13 +277,14 @@ internal static class Program {
     /// <param name="global">A global symbol provided by Ghidra</param>
     /// <returns>A valid C# const declaration for the given global</returns>
     private static string _emit_global(FhDataLabelDecl global) {
-        int                addr        = int.Parse(global.Location, NumberStyles.HexNumber, CultureInfo.InvariantCulture) - 0x400000;
+        int addr_label = _addr_to_ghidra(global.Location);
+
         ReadOnlySpan<char> mapped_type = _map_type(global.DataType);
 
-        if (_s_noemit.Contains(addr)) {
+        if (_s_noemit.Contains(global.Location)) {
             return $"""
                 // Symbol on explicit no-emit list:
-                // {global.DataType} {global.Name} at {global.Location}
+                // {global.DataType} {global.Name} at {addr_label:x8}
 
             """;
         }
@@ -276,9 +292,9 @@ internal static class Program {
         //TODO: Make sure C# doesn't have issues with the pointer when the global is an array.
         return $"""
                 // Original after pruning:
-                // {global.DataType} {global.Name} at {global.Location}
+                // {global.DataType} {global.Name} at {addr_label:x8}
 
-                public const nint __addr_{global.Name} = 0x{addr:X};
+                public const nint __addr_{global.Name} = 0x{global.Location:X};
                 public static {mapped_type}* {global.Name} => FhUtil.ptr_at<{mapped_type}>(__addr_{global.Name});
 
             """;
@@ -357,6 +373,31 @@ internal static class Program {
     }
 
     /// <summary>
+    ///     Loads and fixes up the CSV file containing common function definitions.
+    /// </summary>
+    private static void _load_functions_common(string path_functions_common, FhGameId game) {
+        using (StreamReader common_function_reader = new StreamReader(path_functions_common))
+        using (CsvReader    common_function_csv    = new CsvReader   (common_function_reader, CultureInfo.InvariantCulture)) {
+            FhCommonFuncDecl[] common_defs = [ .. common_function_csv.GetRecords<FhCommonFuncDecl>() ];
+
+            /* [fkelava 29/07/26 20:55]
+             * In common-matching, 'source' is always FFX.exe and 'destination' is always FFX-2.exe.
+             * As _s_common is used for exclusion, we have to key it by the game we're emitting for.
+             */
+            foreach (FhCommonFuncDecl common_def in common_defs) {
+                int key = game switch {
+                    FhGameId.FFX    => common_def.SourceAddress,
+                    FhGameId.FFX2   or
+                    FhGameId.FFX2LM => common_def.DestAddress,
+                    _               => throw new NotImplementedException("Invalid game ID."),
+                };
+
+                _s_common[key] = common_def;
+            }
+        }
+    }
+
+    /// <summary>
     ///     Loads the CSV file containing globals and other data labels.
     /// </summary>
     private static void _load_data(string path_data) {
@@ -377,30 +418,23 @@ internal static class Program {
         string   path_dest,
         string   path_typemap,
         int[]    no_emit_addresses,
+        string   path_functions_common,
         FhGameId game) {
 
         _s_noemit = no_emit_addresses;
-
-        /* [fkelava 01/06/26 13:47]
-         * Generating all functions for either game results in about a 400,000 line file.
-         * IDEs and IntelliSense absolutely cannot handle files that large, not even on
-         * top-end machines. We thus split the file at roughly the 50,000 line mark.
-         */
-
-        const int LINES_PER_FILE = 50_000;
-        const int LINES_PER_DECL = 7; // Guesstimate for file-wraparound
-        const int LINES_PER_SKIP = 4; // Guesstimate for file-wraparound
 
         Stopwatch perf = Stopwatch.StartNew();
 
         int file_count = 1;
         int line_count = 0;
 
-        string output_file_path = Path.Join(path_dest, $"call_{file_count++}.g.cs");
+        string output_file_path        = Path.Join(path_dest, $"call_{file_count++}.g.cs");
+        string output_file_path_common = Path.Join(path_dest, $"call.g.cs");
 
-        _load_typemap  (path_typemap);
-        _load_functions(path_functions);
-        _load_data     (path_data);
+        _load_typemap         (path_typemap);
+        _load_functions       (path_functions);
+        _load_functions_common(path_functions_common, game);
+        _load_data            (path_data);
 
         // This local is reused in the loop
         FhFuncSignatureData signature_data = new FhFuncSignatureData {
@@ -408,7 +442,8 @@ internal static class Program {
         };
 
         // Actual file contents.
-        StringBuilder sb = new(_emit_prologue(game));
+        StringBuilder sb        = new(_emit_prologue(game));
+        StringBuilder sb_common = new(_emit_prologue(FhGameId.NULL));
 
         foreach (FhFuncDecl function in _s_funcs) {
             if (line_count >= LINES_PER_FILE) {
@@ -421,7 +456,7 @@ internal static class Program {
 
             if (!_should_interpret(function)) {
                 sb.AppendLine($"    // Symbol skipped (deemed uninterpretable or explicitly rejected):");
-                sb.AppendLine($"    // {function.CallConv} {function.Signature} at {function.Location}");
+                sb.AppendLine($"    // {function.CallConv} {function.Signature} at {_addr_to_ghidra(function.Location):x8}");
                 sb.AppendLine();
 
                 line_count += LINES_PER_SKIP;
@@ -455,7 +490,13 @@ internal static class Program {
                 signature_data.Parameters.Add(new (type, name));
             }
 
-            sb.AppendLine(_emit_function(function, signature_data, game));
+            if (_s_common.TryGetValue(function.Location, out FhCommonFuncDecl common_data)) {
+                sb_common.AppendLine(_emit_common_function(function, signature_data, common_data));
+            }
+            else {
+                sb.AppendLine(_emit_function(function, signature_data, game));
+            }
+
             line_count += LINES_PER_DECL; // Guesstimate for file-wraparound
 
             signature_data.Parameters.Clear();
@@ -472,7 +513,7 @@ internal static class Program {
 
             if (!_should_interpret(global)) {
                 sb.AppendLine($"    // Global skipped (deemed uninterpretable or explicitly rejected):");
-                sb.AppendLine($"    // {global.DataType} {global.Name} at {global.Location}");
+                sb.AppendLine($"    // {global.DataType} {global.Name} at {_addr_to_ghidra(global.Location):x8}");
                 sb.AppendLine();
 
                 line_count += LINES_PER_SKIP;
@@ -483,7 +524,9 @@ internal static class Program {
             line_count += LINES_PER_DECL;
         }
 
-        _dump_symtable(output_file_path, sb);
+        _dump_symtable(output_file_path,        sb);
+        _dump_symtable(output_file_path_common, sb_common);
+
         Console.WriteLine($"Done in {perf.Elapsed}.");
     }
 }
