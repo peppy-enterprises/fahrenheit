@@ -5,19 +5,6 @@
 
 namespace Fahrenheit.Tools.STEP;
 
-/* [fkelava 29/07/26 20:53]
- * Ghidra exports source and destination addresses as ex. '00400F90'.
- * Thus we need to convert from hex and subtract the image base to obtain what we actually need, the offset from imagebase.
- */
-
-public class AddressConverter : DefaultTypeConverter {
-    public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData) {
-        return int.TryParse(text, NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out int i)
-            ? i - 0x400000
-            : base.ConvertFromString(text, row, memberMapData);
-    }
-}
-
 /// <summary>
 ///     Represents a function identical in both games.
 /// </summary>
@@ -78,4 +65,17 @@ internal struct FhDataLabelDecl {
     public string DataType  { get; set; }
     public string Namespace { get; set; }
     public string Source    { get; set; }
+}
+
+/* [fkelava 29/07/26 20:53]
+ * Ghidra exports source and destination addresses as ex. '00400F90'.
+ * Thus we need to convert from hex and subtract the image base to obtain what we actually need, the offset from imagebase.
+ */
+
+public class AddressConverter : DefaultTypeConverter {
+    public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData) {
+        return int.TryParse(text, NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out int i)
+            ? i - 0x400000
+            : base.ConvertFromString(text, row, memberMapData);
+    }
 }
