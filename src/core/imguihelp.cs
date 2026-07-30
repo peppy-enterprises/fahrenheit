@@ -6,7 +6,6 @@
 namespace Fahrenheit;
 
 public unsafe class FhImGuiHelper {
-
     public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
         float size      = ImGui.CalcTextSize(label).X + padding;
         float available = ImGui.GetContentRegionAvail().X;
@@ -15,6 +14,10 @@ public unsafe class FhImGuiHelper {
         if (offset > 0) {
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offset);
         }
+    }
+
+    public enum FhImGuiThemes {
+        CLASSIC_FF = 0,
     }
 
     private void _init_fonts() {
@@ -27,10 +30,6 @@ public unsafe class FhImGuiHelper {
             null,
             io.Fonts.GetGlyphRangesDefault()
         );
-    }
-
-    public enum FhImGuiThemes {
-        CLASSIC_FF = 0,
     }
 
     private static void _init_style(FhImGuiThemes? theme = null) {
@@ -154,8 +153,8 @@ public unsafe class FhImGuiHelper {
     /// <summary>
     /// Initialize values that require ImGui to be running. Called by Runtime.
     /// </summary>
-    internal void init() {
+    internal void init(FhImGuiThemes? theme = null) {
         _init_fonts();
-        _init_style();
+        _init_style(theme);
     }
 }
