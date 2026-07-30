@@ -53,7 +53,7 @@ internal static class Program {
             Required     = true
         };
         Option<string>   opt_reject_x2  = new ("-rex2", "--reject-x2") {
-            Description  = "Set the path to the file specifyin addresses not to emit calls for in FF X-2.",
+            Description  = "Set the path to the file specifying addresses not to emit calls for in FF X-2.",
             Required     = true
         };
 
