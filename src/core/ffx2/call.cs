@@ -226,11 +226,6 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x223290) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsCheckRange(int number, int min, int max);
-    public static FhMethodHandle<d_MsCheckRange> MsCheckRange
-        => new( new FhMethodLocation("FFX-2.exe", 0x224CD0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate uint d_MsGetChrID(uint chr_id);
     public static FhMethodHandle<d_MsGetChrID> MsGetChrID
         => new( new FhMethodLocation("FFX-2.exe", 0x224F90) );
@@ -440,11 +435,6 @@ public static unsafe partial class FhCall {
     public delegate void d_TkMenuSetHelpMessage(int arg1);
     public static FhMethodHandle<d_TkMenuSetHelpMessage> TkMenuSetHelpMessage
         => new( new FhMethodLocation("FFX-2.exe", 0x365B20) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate Chr* d_MsGetChr(uint chr_id);
-    public static FhMethodHandle<d_MsGetChr> MsGetChr
-        => new(new FhMethodLocation("FFX-2.exe", 0x211450));
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate byte* d_GetLastMissionJobName(byte arg1, byte arg2);

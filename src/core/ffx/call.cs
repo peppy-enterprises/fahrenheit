@@ -337,11 +337,6 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x3993F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsCheckRange(int arg1, int arg2, int arg3);
-    public static FhMethodHandle<d_MsCheckRange> MsCheckRange
-        => new( new FhMethodLocation("FFX.exe", 0x39A0D0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate Command* d_MsGetComData(int com_id, byte** arg2);
     public static FhMethodHandle<d_MsGetComData> MsGetComData
         => new( new FhMethodLocation("FFX.exe", 0x39A4C0) );

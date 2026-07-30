@@ -223,6 +223,11 @@ public static unsafe partial class FhCall {
     // PUBLIC/UNRESTRICTED - BEGIN
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int d_MsCheckRange(int value, int min, int max);
+    public static FhMethodHandle<d_MsCheckRange> MsCheckRange
+        => new( new FhMethodLocation(0x39A0D0, 0x224CD0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
