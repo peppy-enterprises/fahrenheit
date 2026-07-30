@@ -11,7 +11,7 @@ namespace Fahrenheit.Tools.STEP;
 /// </summary>
 internal sealed class FhStepEmitter(
     DirectoryInfo output_dir,
-    int[]         reject,
+    RejectData    reject,
     RemapData     remap,
     FuncData      funcs,
     GlobalData    globals,
