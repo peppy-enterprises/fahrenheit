@@ -235,16 +235,8 @@ internal sealed class FhGameSpecificGenerator(
             _               => throw new NotImplementedException($"invalid game id {_game} - cannot generate function"),
         };
 
-        if (_reject.Contains(function.Location)) {
-            _output.AppendLine($"""
-                 // Symbol rejected:
-                 // {function.CallConv} {function.Signature} at {addr_label:x8}
-
-             """);
-
-            _line_count += 3;
+        if (_reject.Contains(function.Location))
             return;
-        }
 
         _output.AppendLine($"""
              // Original:
@@ -267,16 +259,8 @@ internal sealed class FhGameSpecificGenerator(
         int                addr_label = addr_to_ghidra(global.Location);
         ReadOnlySpan<char> type       = remap_type    (global.DataType);
 
-        if (_reject.Contains(global.Location)) {
-            _output.AppendLine($"""
-                 // Symbol rejected:
-                 // {global.DataType} {global.Name} at {addr_label:x8}
-
-             """);
-
-            _line_count += 3;
+        if (_reject.Contains(global.Location))
             return;
-        }
 
         //TODO: Make sure C# doesn't have issues with the pointer when the global is an array.
         _output.AppendLine($"""
@@ -396,16 +380,8 @@ internal sealed class FhCommonGenerator(
 
         string fused_label = $"FUN_{addr_label_src:X8}_{addr_label_dst:X8}";
 
-        if (_reject.Contains(common_data.SourceAddress)) {
-            _output.AppendLine($"""
-                 // Symbol rejected: {function.CallConv} {function.Signature}
-                 // at (FFX.exe+{addr_label_src:X}, FFX-2.exe+{addr_label_dst:X})
-
-             """);
-
-            _line_count += 4;
+        if (_reject.Contains(common_data.SourceAddress))
             return;
-        }
 
         _output.AppendLine($"""
              // Fused identical entry: {function.CallConv} {function.Signature}
