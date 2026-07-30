@@ -239,7 +239,7 @@ internal sealed class FhGameSpecificGenerator(
             return;
 
         _output.AppendLine($"""
-             // Original:
+             // Original after pruning:
              // {function.CallConv} {function.Signature} at {addr_label:x8}
 
              {emit_callconv_attr(function.CallConv)}
@@ -264,7 +264,7 @@ internal sealed class FhGameSpecificGenerator(
 
         //TODO: Make sure C# doesn't have issues with the pointer when the global is an array.
         _output.AppendLine($"""
-             // Original:
+             // Original after pruning:
              // {global.DataType} {global.Name} at {addr_label:x8}
 
              public const nint __addr_{global.Name} = 0x{global.Location:X};
