@@ -32,7 +32,7 @@ public unsafe class FhImGuiHelper {
         );
     }
 
-    private static void _init_style(FhImGuiThemes? theme = null) {
+    private static void _init_style(FhImGuiThemes theme) {
         // Fahrenheit style from ImThemes
         ImGuiStylePtr style = ImGui.GetStyle();
 
