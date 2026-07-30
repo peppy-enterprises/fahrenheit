@@ -7,7 +7,7 @@ namespace Fahrenheit.Tools.STEP;
 
 internal static class Program {
 
-    private static void Main(string[] args) {
+    private static async Task Main(string[] args) {
         Option<string>   opt_output     = new ("-o", "--output") {
             Description = "Set the folder where the C# files should be written.",
             Required    = true
@@ -32,6 +32,10 @@ internal static class Program {
             Description = "Set the path to the file containing function definitions for FF X-2.",
             Required    = true
         };
+        Option<string>   opt_remap      = new ("-r", "--remap") {
+            Description = "Set the path to the file containing Ghidra -> Fh remappings for common functions.",
+            Required    = false
+        };
         Option<string>   opt_remap_x    = new ("-rx", "--remap-x") {
             Description = "Set the path to the file containing Ghidra -> Fh remappings for FF X.",
             Required    = false
@@ -39,6 +43,10 @@ internal static class Program {
         Option<string>   opt_remap_x2   = new ("-rx2", "--remap-x2") {
             Description = "Set the path to the file containing Ghidra -> Fh remappings for FF X-2.",
             Required    = false
+        };
+        Option<string>   opt_reject     = new ("-re", "--reject") {
+            Description  = "Set the path to the file specifying addresses not to emit common calls for.",
+            Required     = true
         };
         Option<string>   opt_reject_x   = new ("-rex", "--reject-x") {
             Description  = "Set the path to the file specifying addresses not to emit calls for in FF X.",
@@ -49,7 +57,7 @@ internal static class Program {
             Required     = true
         };
 
-        RootCommand cmd_root = new RootCommand("Process a Ghidra symbol table and create a C# code file.");
+        RootCommand cmd_root = new RootCommand("Process a Ghidra symbol table and create C# code files.");
 
         cmd_root.Options.Add(opt_output);
         cmd_root.Options.Add(opt_global_x);
@@ -57,39 +65,45 @@ internal static class Program {
         cmd_root.Options.Add(opt_fn);
         cmd_root.Options.Add(opt_fn_x);
         cmd_root.Options.Add(opt_fn_x2);
+        cmd_root.Options.Add(opt_remap);
         cmd_root.Options.Add(opt_remap_x);
         cmd_root.Options.Add(opt_remap_x2);
+        cmd_root.Options.Add(opt_reject);
         cmd_root.Options.Add(opt_reject_x);
         cmd_root.Options.Add(opt_reject_x2);
 
-        cmd_root.SetAction(parse_result => _generate(
+        cmd_root.SetAction(async (parse_result, _) => await _generate(
             parse_result.GetRequiredValue(opt_global_x),
             parse_result.GetRequiredValue(opt_global_x2),
             parse_result.GetRequiredValue(opt_fn),
             parse_result.GetRequiredValue(opt_fn_x),
             parse_result.GetRequiredValue(opt_fn_x2),
+            parse_result.GetRequiredValue(opt_remap),
             parse_result.GetRequiredValue(opt_remap_x),
             parse_result.GetRequiredValue(opt_remap_x2),
+            parse_result.GetRequiredValue(opt_reject),
             parse_result.GetRequiredValue(opt_reject_x),
             parse_result.GetRequiredValue(opt_reject_x2),
             parse_result.GetRequiredValue(opt_output)
             ));
 
         ParseResult parse_result = cmd_root.Parse(args);
-        parse_result.Invoke();
+        await parse_result.InvokeAsync();
     }
 
     /// <summary>
     ///     Generates all symbol tables.
     /// </summary>
-    private static void _generate(
+    private static async Task _generate(
         string path_global_x,
         string path_global_x2,
         string path_fn,
         string path_fn_x,
         string path_fn_x2,
+        string path_remap,
         string path_remap_x,
         string path_remap_x2,
+        string path_reject,
         string path_reject_x,
         string path_reject_x2,
         string path_output_dir)
@@ -99,27 +113,40 @@ internal static class Program {
         string path_output_x  = Path.Join(path_output_dir, "ffx");
         string path_output_x2 = Path.Join(path_output_dir, "ffx2");
 
-        _load_functions_common(path_fn);
+        /* [fkelava 30/07/26 16:07]
+         * For why only FF X functions are passed to the
+         * common generator, see _load_fn_common.
+         */
+        FuncData fn_x = _load_fn(path_fn_x);
 
-        FhStepEmitter emitter_x = new FhStepEmitter(
+        FhCommonGenerator emitter_common = new FhCommonGenerator(
+            Directory.CreateDirectory(path_output_dir),
+            _load_reject   (path_reject),
+            _load_remap    (path_remap),
+            FhGameId.NULL,
+            fn_x,
+            _load_fn_common(path_fn));
+
+        FhGameSpecificGenerator emitter_x = new FhGameSpecificGenerator(
             Directory.CreateDirectory(path_output_x),
-            _load_reject (path_reject_x),
-            _load_remap  (path_remap_x),
-            _load_fn     (path_fn_x),
-            _load_globals(path_global_x),
-            [],
-            FhGameId.FFX);
-        emitter_x.generate_code();
+            _load_reject   (path_reject_x),
+            _load_remap    (path_remap_x),
+            FhGameId.FFX,
+            fn_x,
+            _load_globals  (path_global_x));
 
-        FhStepEmitter emitter_x2 = new FhStepEmitter(
+        FhGameSpecificGenerator emitter_x2 = new FhGameSpecificGenerator(
             Directory.CreateDirectory(path_output_x2),
-            _load_reject (path_reject_x2),
-            _load_remap  (path_remap_x2),
-            _load_fn     (path_fn_x2),
-            _load_globals(path_global_x2),
-            [],
-            FhGameId.FFX2);
-        emitter_x2.generate_code();
+            _load_reject   (path_reject_x2),
+            _load_remap    (path_remap_x2),
+            FhGameId.FFX2,
+            _load_fn       (path_fn_x2),
+            _load_globals  (path_global_x2));
+
+        await Task.WhenAll(
+            Task.Run(emitter_common.generate_code),
+            Task.Run(emitter_x     .generate_code),
+            Task.Run(emitter_x2    .generate_code));
 
         Console.WriteLine($"Complete in {perf.Elapsed}.");
     }
@@ -178,12 +205,18 @@ internal static class Program {
     ///     Loads and fixes up the CSV file containing common function definitions
     ///     from the given absolute <paramref name="file_path"/>.
     /// </summary>
-    private static CommonData _load_functions_common(string file_path) {
+    private static CommonData _load_fn_common(string file_path) {
         using StreamReader common_function_reader = new StreamReader(file_path);
         using CsvReader    common_function_csv    = new CsvReader   (common_function_reader, CultureInfo.InvariantCulture);
 
         FhCommonFuncDecl[] data   = [ .. common_function_csv.GetRecords<FhCommonFuncDecl>() ];
         CommonData         common = [];
+
+        /* [fkelava 30/07/26 16:24]
+         * The 'source' address is the one in FF X, the 'destination' address the one in FF X-2.
+         * Because the former is much more actively and completely reversed, we use it as a basis
+         * for common function generation. Thus common functions also use thei FF X signatures.
+         */
 
         foreach (FhCommonFuncDecl common_def in data) {
             common[common_def.SourceAddress] = common_def;
