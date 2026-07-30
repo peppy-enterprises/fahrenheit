@@ -155,6 +155,6 @@ public unsafe class FhImGuiHelper {
     /// </summary>
     internal void init(FhImGuiThemes? theme = null) {
         _init_fonts();
-        _init_style(theme);
+        _init_style(theme ?? FhImGuiThemes.CLASSIC_FF);
     }
 }
