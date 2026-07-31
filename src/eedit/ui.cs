@@ -110,9 +110,10 @@ internal static partial class UI {
                  * If we can't deduce what kind of file this is, present a mode-select dialog.
                  */
 
-                if ((EEdit.active_editor = _get_component_for_file(opened_file.Name)) == null) {
-                    EEdit.show_mode_select = true;
+                if ((EEdit.mode = _get_mode_by_file_name(opened_file.Name)) != EEditMode.NULL) {
+                    EEdit.active_editor = _get_component_by_mode(EEdit.mode);
                 }
+                else EEdit.show_mode_select = true;
             }
 
             /*

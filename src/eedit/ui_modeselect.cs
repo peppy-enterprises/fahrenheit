@@ -102,36 +102,36 @@ internal static partial class UI {
             EEditMode.BTL_TXT    => new EditorText(),
             EEditMode.RATE       => new EditorRate(),
 
-            EEditMode.A_ABILITY  => throw new NotImplementedException(),
+            EEditMode.A_ABILITY  => new EditorAAbility(),
             EEditMode.AMAPDATA   => throw new NotImplementedException(),
             EEditMode.ARMS_SHOP  => throw new NotImplementedException(),
-            EEditMode.BUKI_GET   => throw new NotImplementedException(),
+            EEditMode.BUKI_GET   => new EditorBukiGet(),
             EEditMode.C_ABILITY  => throw new NotImplementedException(),
-            EEditMode.COMMAND    => throw new NotImplementedException(),
+            EEditMode.COMMAND    => new EditorCommand(),
             EEditMode.CTB_BASE   => throw new NotImplementedException(),
-            EEditMode.IMPORTANT  => throw new NotImplementedException(),
-            EEditMode.ITEM       => throw new NotImplementedException(),
+            EEditMode.IMPORTANT  => new EditorImportant(),
+            EEditMode.ITEM       => new EditorItem(),
             EEditMode.ITEM_GET   => throw new NotImplementedException(),
             EEditMode.ITEM_SHOP  => throw new NotImplementedException(),
-            EEditMode.KAIZOU     => throw new NotImplementedException(),
+            EEditMode.KAIZOU     => new EditorKaizou(),
             EEditMode.MENU       => throw new NotImplementedException(),
             EEditMode.MENU_PANEL => throw new NotImplementedException(),
             EEditMode.MONMAGIC   => throw new NotImplementedException(),
-            EEditMode.MONMAGIC1  => throw new NotImplementedException(),
+            EEditMode.MONMAGIC1  => new EditorMonmagic1(),
             EEditMode.MONSTER    => throw new NotImplementedException(),
-            EEditMode.PANEL      => throw new NotImplementedException(),
+            EEditMode.PANEL      => new EditorPanel(),
             EEditMode.PARTY      => throw new NotImplementedException(),
             EEditMode.PLY_ROM    => new EditorPlyRom(),
-            EEditMode.PLY_SAVE   => throw new NotImplementedException(),
-            EEditMode.PREPARE    => throw new NotImplementedException(),
+            EEditMode.PLY_SAVE   => new EditorPlySave(),
+            EEditMode.PREPARE    => new EditorPrepare(),
             EEditMode.SHOP_ARMS  => throw new NotImplementedException(),
             EEditMode.SPHERE     => new EditorSphere(),
-            EEditMode.ST_NUMBER  => throw new NotImplementedException(),
-            EEditMode.SUM_ASSURE => throw new NotImplementedException(),
-            EEditMode.SUM_GROW   => throw new NotImplementedException(),
-            EEditMode.TAKARA     => throw new NotImplementedException(),
+            EEditMode.ST_NUMBER  => new EditorStNumber(),
+            EEditMode.SUM_ASSURE => new EditorSumAssure(),
+            EEditMode.SUM_GROW   => new EditorSumGrow(),
+            EEditMode.TAKARA     => new EditorTakara(),
             EEditMode.W_NAME     => new EditorWeaponName(),
-            EEditMode.WEAPON     => throw new NotImplementedException(),
+            EEditMode.WEAPON     => new EditorWeapon(),
             EEditMode.NULL       or
             _                    => new EditorNull()
         };
@@ -141,7 +141,7 @@ internal static partial class UI {
     ///     If the name of the file at <paramref name="file_path"/> is well-known,
     ///     returns the correct <see cref="EEditComponent"/> to edit it.
     /// </summary>
-    private static EEditComponent? _get_component_for_file(string file_path) {
+    private static EEditMode _get_mode_by_file_name(string file_path) {
 
         /* [fkelava 15/02/26 17:28]
          * PS {...}\ffx_ps2\ffx\master\jppc\battle\kernel> gci | Select Name
@@ -152,6 +152,7 @@ internal static partial class UI {
             "btlend_txt.bin" or
             "build_txt.bin"  or
             "config_txt.bin" or
+            "help_txt.bin"   or
             "item_txt.bin"   or
             "menu_txt.bin"   or
             "menu_txt2.bin"  or
@@ -159,46 +160,45 @@ internal static partial class UI {
             "name_txt.bin"   or
             "save_txt.bin"   or
             "status_txt.bin" or
-            "summon_txt.bin" => new EditorTextPair(),
-            "btl_txt.bin"    => new EditorText(),
+            "summon_txt.bin" => EEditMode.TXT,
+            "btl_txt.bin"    => EEditMode.BTL_TXT,
             "arms_rate.bin"  or
-            "item_rate.bin"  => new EditorRate(),
+            "item_rate.bin"  => EEditMode.RATE,
 
-            "a_ability.bin"  => null,
-            "amapdata.bin"   => null,
-            "arms_shop.bin"  => null,
-            "buki_get.bin"   => null,
-            "c_ability.bin"  => null,
-            "command.bin"    => null,
-            "ctb_base.bin"   => null,
-            "help_txt.bin"   => null,
-            "important.bin"  => null,
-            "item_get.bin"   => null,
-            "item_shop.bin"  => null,
-            "item.bin"       => null,
-            "kaizou.bin"     => null,
-            "menu_panel.bin" => null,
-            "menu.bin"       => null,
-            "monmagic.bin"   => null,
+            "a_ability.bin"  => EEditMode.A_ABILITY,
+            "amapdata.bin"   => EEditMode.AMAPDATA,
+            "arms_shop.bin"  => EEditMode.ARMS_SHOP,
+            "buki_get.bin"   => EEditMode.BUKI_GET,
+            "c_ability.bin"  => EEditMode.C_ABILITY,
+            "command.bin"    => EEditMode.COMMAND,
+            "ctb_base.bin"   => EEditMode.CTB_BASE,
+            "important.bin"  => EEditMode.IMPORTANT,
+            "item_get.bin"   => EEditMode.ITEM_GET,
+            "item_shop.bin"  => EEditMode.ITEM_SHOP,
+            "item.bin"       => EEditMode.ITEM,
+            "kaizou.bin"     => EEditMode.KAIZOU,
+            "menu_panel.bin" => EEditMode.MENU_PANEL,
+            "menu.bin"       => EEditMode.MENU,
+            "monmagic.bin"   => EEditMode.MONMAGIC,
             "monmagic1.bin"  or
-            "monmagic2.bin"  => null,
+            "monmagic2.bin"  => EEditMode.MONMAGIC1,
             "monster1.bin"   or
             "monster2.bin"   or
-            "monster3.bin"   => null,
-            "panel.bin"      => null,
-            "party.bin"      => null,
-            "ply_rom.bin"    => new EditorPlyRom(),
-            "ply_save.bin"   => null,
-            "prepare.bin"    => null,
-            "shop_arms.bin"  => null,
-            "sphere.bin"     => new EditorSphere(),
-            "st_number.bin"  => null,
-            "sum_assure.bin" => null,
-            "sum_grow.bin"   => null,
-            "takara.bin"     => null,
-            "w_name.bin"     => new EditorWeaponName(),
-            "weapon.bin"     => null,
-            _                => null,
+            "monster3.bin"   => EEditMode.MONSTER,
+            "panel.bin"      => EEditMode.PANEL,
+            "party.bin"      => EEditMode.PARTY,
+            "ply_rom.bin"    => EEditMode.PLY_ROM,
+            "ply_save.bin"   => EEditMode.PLY_SAVE,
+            "prepare.bin"    => EEditMode.PREPARE,
+            "shop_arms.bin"  => EEditMode.SHOP_ARMS,
+            "sphere.bin"     => EEditMode.SPHERE,
+            "st_number.bin"  => EEditMode.ST_NUMBER,
+            "sum_assure.bin" => EEditMode.SUM_ASSURE,
+            "sum_grow.bin"   => EEditMode.SUM_GROW,
+            "takara.bin"     => EEditMode.TAKARA,
+            "w_name.bin"     => EEditMode.W_NAME,
+            "weapon.bin"     => EEditMode.WEAPON,
+            _                => EEditMode.NULL,
         };
     }
 }
