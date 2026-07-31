@@ -35715,13 +35715,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00635b30> FUN_00635b30 => new( new FhMethodLocation("FFX.exe", 0x235B30) );
 
     // Original after pruning:
-    // unknown undefined FUN_00635c20() at 00635c20
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00635c20();
-    public static FhMethodHandle<d_FUN_00635c20> FUN_00635c20 => new( new FhMethodLocation("FFX.exe", 0x235C20) );
-
-    // Original after pruning:
     // unknown undefined FUN_00635c80() at 00635c80
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -38051,13 +38044,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_graphicGetTextureVideoInfo> graphicGetTextureVideoInfo => new( new FhMethodLocation("FFX.exe", 0x2415B0) );
 
     // Original after pruning:
-    // unknown undefined graphicGetTime() at 006415c0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicGetTime();
-    public static FhMethodHandle<d_graphicGetTime> graphicGetTime => new( new FhMethodLocation("FFX.exe", 0x2415C0) );
-
-    // Original after pruning:
     // unknown undefined FUN_00641610() at 00641610
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -39107,25 +39093,11 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00644970> FUN_00644970 => new( new FhMethodLocation("FFX.exe", 0x244970) );
 
     // Original after pruning:
-    // __stdcall float graphicUiRemapX2(float x) at 00644990
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate float d_graphicUiRemapX2(float x);
-    public static FhMethodHandle<d_graphicUiRemapX2> graphicUiRemapX2 => new( new FhMethodLocation("FFX.exe", 0x244990) );
-
-    // Original after pruning:
     // unknown undefined FUN_006449b0() at 006449b0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_006449b0();
     public static FhMethodHandle<d_FUN_006449b0> FUN_006449b0 => new( new FhMethodLocation("FFX.exe", 0x2449B0) );
-
-    // Original after pruning:
-    // __stdcall float graphicUiRemapY2(float y) at 006449d0
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate float d_graphicUiRemapY2(float y);
-    public static FhMethodHandle<d_graphicUiRemapY2> graphicUiRemapY2 => new( new FhMethodLocation("FFX.exe", 0x2449D0) );
 
     // Original after pruning:
     // unknown undefined graphicUnlockScreenFadeColor() at 00644a80
