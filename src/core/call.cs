@@ -34,68 +34,44 @@ public static unsafe partial class FhCall {
      * circumvent it. We simply refuse to support any such scenario.
      */
 
-    // Fused identical entry: unknown undefined FUN_0088e6c0()
-    // at (FFX.exe+88E6C0, FFX-2.exe+74C2B0)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0088E6C0_0074C2B0();
+    public unsafe delegate int d_FUN_0088E6C0_0074C2B0(int param_1);
     public static FhMethodHandle<d_FUN_0088E6C0_0074C2B0> FUN_0088E6C0_0074C2B0 =>
         new( new FhMethodLocation(0x48E6C0, 0x34C2B0) );
 
-    // Fused identical entry: unknown undefined AtelGetSaveDic()
-    // at (FFX.exe+86C3A0, FFX-2.exe+726B60)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0086C3A0_00726B60();
-    public static FhMethodHandle<d_FUN_0086C3A0_00726B60> FUN_0086C3A0_00726B60 =>
+    public unsafe delegate int d_AtelGetSaveDic(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public static FhMethodHandle<d_AtelGetSaveDic> AtelGetSaveDic =>
         new( new FhMethodLocation(0x46C3A0, 0x326B60) );
 
-    // Fused identical entry: unknown undefined MsSetSavePartyMember()
-    // at (FFX.exe+786A10, FFX-2.exe+60EB20)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00786A10_0060EB20();
-    public static FhMethodHandle<d_FUN_00786A10_0060EB20> FUN_00786A10_0060EB20 =>
+    public unsafe delegate void d_MsSetSavePartyMember(uint param_1, uint param_2, uint param_3);
+    public static FhMethodHandle<d_MsSetSavePartyMember> MsSetSavePartyMember =>
         new( new FhMethodLocation(0x386A10, 0x20EB20) );
 
-    // Fused identical entry: unknown undefined FUN_0088e6a0()
-    // at (FFX.exe+88E6A0, FFX-2.exe+74C290)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0088E6A0_0074C290();
+    public unsafe delegate int d_FUN_0088E6A0_0074C290(int param_1);
     public static FhMethodHandle<d_FUN_0088E6A0_0074C290> FUN_0088E6A0_0074C290 =>
         new( new FhMethodLocation(0x48E6A0, 0x34C290) );
 
-    // Fused identical entry: unknown undefined MsGetSaveItemNum()
-    // at (FFX.exe+790500, FFX-2.exe+620BC0)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00790500_00620BC0();
-    public static FhMethodHandle<d_FUN_00790500_00620BC0> FUN_00790500_00620BC0 =>
+    public unsafe delegate uint d_MsGetSaveItemNum(uint param_1);
+    public static FhMethodHandle<d_MsGetSaveItemNum> MsGetSaveItemNum =>
         new( new FhMethodLocation(0x390500, 0x220BC0) );
 
-    // Fused identical entry: unknown undefined FUN_0085c6b0()
-    // at (FFX.exe+85C6B0, FFX-2.exe+719360)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0085C6B0_00719360();
-    public static FhMethodHandle<d_FUN_0085C6B0_00719360> FUN_0085C6B0_00719360 =>
+    public unsafe delegate int d_CT_RetInt_0172_fillPartyMemberMp(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public static FhMethodHandle<d_CT_RetInt_0172_fillPartyMemberMp> CT_RetInt_0172_fillPartyMemberMp =>
         new( new FhMethodLocation(0x45C6B0, 0x319360) );
 
-    // Fused identical entry: unknown undefined FUN_0086e2a0()
-    // at (FFX.exe+86E2A0, FFX-2.exe+728DA0)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0086E2A0_00728DA0();
-    public static FhMethodHandle<d_FUN_0086E2A0_00728DA0> FUN_0086E2A0_00728DA0 =>
+    public unsafe delegate int d_AtelPushMember(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public static FhMethodHandle<d_AtelPushMember> AtelPushMember =>
         new( new FhMethodLocation(0x46E2A0, 0x328DA0) );
 
-    // Fused identical entry: unknown undefined FUN_0086dd40()
-    // at (FFX.exe+86DD40, FFX-2.exe+7287E0)
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0086DD40_007287E0();
-    public static FhMethodHandle<d_FUN_0086DD40_007287E0> FUN_0086DD40_007287E0 =>
+    public unsafe delegate int d_AtelPopMember(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public static FhMethodHandle<d_AtelPopMember> AtelPopMember =>
         new( new FhMethodLocation(0x46DD40, 0x3287E0) );
 
     // RT - Input tracking
