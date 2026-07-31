@@ -33,6 +33,14 @@ internal class EditorNull : EEditComponent {
     internal override void render() { }
 }
 
+internal class EditorSphere : EEditComponent<Sphere> {
+    internal override void render() { }
+}
+
+internal class EditorWeaponName : EEditComponent<WeaponName> {
+    internal override void render() { }
+}
+
 internal class EditorRate : EEditComponent<Rate> {
     internal override void render() { }
 }

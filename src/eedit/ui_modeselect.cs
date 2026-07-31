@@ -86,7 +86,7 @@ internal static partial class UI {
             EEditMode.SUM_ASSURE => $"{nameof(AeonStatBoostsMinimum)} - (sum_assure.bin)",
             EEditMode.SUM_GROW   => $"{nameof(AeonAbilityRecipe)} - (sum_grow.bin)",
             EEditMode.TAKARA     => $"{nameof(Treasure)} - (takara.bin)",
-            EEditMode.W_NAME     => $"(w_name.bin)",
+            EEditMode.W_NAME     => $"{nameof(WeaponName)} - (w_name.bin)",
             EEditMode.WEAPON     => $"{nameof(Equipment)} - (weapon.bin)",
             EEditMode.NULL       => $"(Unknown Type)",
             _                    => throw new NotImplementedException("UNREACHABLE")
@@ -125,12 +125,12 @@ internal static partial class UI {
             EEditMode.PLY_SAVE   => throw new NotImplementedException(),
             EEditMode.PREPARE    => throw new NotImplementedException(),
             EEditMode.SHOP_ARMS  => throw new NotImplementedException(),
-            EEditMode.SPHERE     => throw new NotImplementedException(),
+            EEditMode.SPHERE     => new EditorSphere(),
             EEditMode.ST_NUMBER  => throw new NotImplementedException(),
             EEditMode.SUM_ASSURE => throw new NotImplementedException(),
             EEditMode.SUM_GROW   => throw new NotImplementedException(),
             EEditMode.TAKARA     => throw new NotImplementedException(),
-            EEditMode.W_NAME     => throw new NotImplementedException(),
+            EEditMode.W_NAME     => new EditorWeaponName(),
             EEditMode.WEAPON     => throw new NotImplementedException(),
             EEditMode.NULL       or
             _                    => new EditorNull()
@@ -191,12 +191,12 @@ internal static partial class UI {
             "ply_save.bin"   => null,
             "prepare.bin"    => null,
             "shop_arms.bin"  => null,
-            "sphere.bin"     => null,
+            "sphere.bin"     => new EditorSphere(),
             "st_number.bin"  => null,
             "sum_assure.bin" => null,
             "sum_grow.bin"   => null,
             "takara.bin"     => null,
-            "w_name.bin"     => null,
+            "w_name.bin"     => new EditorWeaponName(),
             "weapon.bin"     => null,
             _                => null,
         };

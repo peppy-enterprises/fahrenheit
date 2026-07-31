@@ -130,10 +130,10 @@ public unsafe ref struct ExcelReader<T>(ReadOnlySpan<byte> excel_bytes) where T 
     /// <summary>
     ///     Gets a span of bytes containing the text pointed to by an Excel element's <paramref name="ptr_text"/>.
     /// </summary>
-    public ReadOnlySpan<byte> get_text_span(int element_index, ExcelSimplifiableTextOffset ptr_text) {
+    public ReadOnlySpan<byte> get_text_span(int element_index, ExcelTextOffset ptr_text) {
         // We don't really care what the end bound is. Encoding will stop at the null terminator.
         return find_header_for_index(element_index, out ExcelHeader header)
-            ? _bytes [ ((int)header.data_start + (int)header.data_length + ptr_text.standard.text_offset) .. ]
+            ? _bytes [ ((int)header.data_start + (int)header.data_length + ptr_text.text_offset) .. ]
             : [ 0x00 ];
     }
 }
