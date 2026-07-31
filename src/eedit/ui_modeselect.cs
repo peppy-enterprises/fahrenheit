@@ -81,7 +81,7 @@ internal static partial class UI {
             EEditMode.PLY_SAVE   => $"{nameof(PlySave)} - (ply_save.bin)",
             EEditMode.PREPARE    => $"{nameof(MixRecipe)} - (prepare.bin)",
             EEditMode.SHOP_ARMS  => $"(shop_arms.bin)",
-            EEditMode.SPHERE     => $"{nameof(SphereUsage)} - (sphere.bin)",
+            EEditMode.SPHERE     => $"{nameof(Sphere)} - (sphere.bin)",
             EEditMode.ST_NUMBER  => $"{nameof(StNumber)} - (st_number.bin)",
             EEditMode.SUM_ASSURE => $"{nameof(AeonStatBoostsMinimum)} - (sum_assure.bin)",
             EEditMode.SUM_GROW   => $"{nameof(AeonAbilityRecipe)} - (sum_grow.bin)",
