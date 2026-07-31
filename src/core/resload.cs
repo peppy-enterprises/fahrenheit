@@ -118,7 +118,7 @@ public sealed record FhTexture(string path, FhTextureType type) {
              * Testing the return value of Release is meaningless because it is not guaranteed to be precise.
              * If you believe you're leaking textures, turn on the D3D debug layer instead.
              */
-            ((ID3D11ShaderResourceView*)(void*)_tex_ref.GetTexID())->Release();
+            ((ID3D11ShaderResourceView*)(void*)_tex_ref.TexID)->Release();
         }
 
         _tex_ref      = default;
