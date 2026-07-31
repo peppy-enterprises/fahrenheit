@@ -42,11 +42,6 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4F5C10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_FUN_0088e6c0(int param_1);
-    public static FhMethodHandle<d_FUN_0088e6c0> FUN_0088e6c0
-        => new ( new FhMethodLocation("FFX.exe", 0x48E6C0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate byte d_TkMenuGetPlayerFromIndex2(int param_1);
     public static FhMethodHandle<d_TkMenuGetPlayerFromIndex2> TkMenuGetPlayerFromIndex2
         => new ( new FhMethodLocation("FFX.exe", 0x4A9AB0) );
@@ -166,11 +161,6 @@ public static partial class FhCall {
     public static FhMethodHandle<d_TOMkpShapeXYWHUVC2> TOMkpShapeXYWHUVC2
         => new ( new FhMethodLocation("FFX.exe", 0x503EE0) );
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int d_AtelGetSaveDic(AtelBasicWorker* work, int* storage, AtelStack* stack);
-    public static FhMethodHandle<d_AtelGetSaveDic> AtelGetSaveDic
-        => new ( new FhMethodLocation("FFX.exe", 0x46C3A0) );
-
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate int d_MsGetSaveConfigEnglish();
     public static FhMethodHandle<d_MsGetSaveConfigEnglish> MsGetSaveConfigEnglish
@@ -215,16 +205,6 @@ public static partial class FhCall {
     public delegate void d_MsSetSavePlyJoin(uint chr_id, int enable);
     public static FhMethodHandle<d_MsSetSavePlyJoin> MsSetSavePlyJoin
         => new ( new FhMethodLocation("FFX.exe", 0x386A70) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_MsSetSavePartyMember(uint param_1, uint param_2, uint param_3);
-    public static FhMethodHandle<d_MsSetSavePartyMember> MsSetSavePartyMember
-        => new ( new FhMethodLocation("FFX.exe", 0x386A10) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_FUN_0088e6a0(int param_1);
-    public static FhMethodHandle<d_FUN_0088e6a0> FUN_0088e6a0
-        => new ( new FhMethodLocation("FFX.exe", 0x48E6A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate uint d_FUN_008bd9d0(int param_1);
@@ -285,11 +265,6 @@ public static partial class FhCall {
     public delegate uint d_TOCheckBtlCommandUse(uint param_1, uint param_2);
     public static FhMethodHandle<d_TOCheckBtlCommandUse> TOCheckBtlCommandUse
         => new ( new FhMethodLocation("FFX.exe", 0x49AC10) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsGetSaveItemNum(uint param_1);
-    public static FhMethodHandle<d_MsGetSaveItemNum> MsGetSaveItemNum
-        => new ( new FhMethodLocation("FFX.exe", 0x390500) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int d_MsGetCommandMP(uint chr_id, uint command);
@@ -409,9 +384,6 @@ public static partial class FhCall {
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0171_fillPartyMemberHp
         => new ( new FhMethodLocation("FFX.exe", 0x45C4F0) );
 
-    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp
-        => new ( new FhMethodLocation("FFX.exe", 0x45C6B0) );
-
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate void d_TkMenuDrawMain();
     public static FhMethodHandle<d_TkMenuDrawMain> TkMenuDrawMain
@@ -421,16 +393,6 @@ public static partial class FhCall {
     public delegate void d_FUN_008c0220(uint param_1, float param_2, float param_3, float param_4, float param_5);
     public static FhMethodHandle<d_FUN_008c0220> FUN_008c0220
         => new ( new FhMethodLocation("FFX.exe", 0x4C0220) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int d_AtelPushMember(AtelBasicWorker* work, int* storage, AtelStack* stack);
-    public static FhMethodHandle<d_AtelPushMember> AtelPushMember
-        => new ( new FhMethodLocation("FFX.exe", 0x46E2A0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int d_AtelPopMember(AtelBasicWorker* work, int* storage, AtelStack* stack);
-    public static FhMethodHandle<d_AtelPopMember> AtelPopMember
-        => new ( new FhMethodLocation("FFX.exe", 0x46DD40) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_FUN_008bc300(int param_1);

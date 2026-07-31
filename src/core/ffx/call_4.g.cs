@@ -32906,13 +32906,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_MsBtlGetTerm> MsBtlGetTerm => new( new FhMethodLocation("FFX.exe", 0x398B80) );
 
     // Original after pruning:
-    // __stdcall int FUN_00798c20(undefined4 chr_id, ChrLoot* loot, BattleRewardData* rewards) at 00798c20
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate int d_FUN_00798c20(uint chr_id, nint loot, nint rewards);
-    public static FhMethodHandle<d_FUN_00798c20> FUN_00798c20 => new( new FhMethodLocation("FFX.exe", 0x398C20) );
-
-    // Original after pruning:
     // unknown undefined MsCalcWeaponCap() at 00798ec0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
