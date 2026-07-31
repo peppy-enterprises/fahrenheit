@@ -59,7 +59,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_MsGetSaveItemNum> MsGetSaveItemNum =>
         new( new FhMethodLocation(0x390500, 0x220BC0) );
 
-    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp =>
+    public static FhMethodHandle<d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp =>
         new( new FhMethodLocation(0x45C6B0, 0x319360) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
