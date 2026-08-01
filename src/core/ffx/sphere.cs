@@ -12,7 +12,7 @@ public enum SphereBehavior : ushort {
 }
 
 [Flags]
-public enum SphereApplicability : ushort {
+public enum SphereTargets : ushort {
     STRENGTH      = 1,
     DEFENSE       = 1 << 1,
     MAGIC         = 1 << 2,

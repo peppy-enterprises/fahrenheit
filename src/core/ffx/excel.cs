@@ -7,11 +7,71 @@ namespace Fahrenheit.FFX;
 
 /* [fkelava 28/07/26 02:36]
  * The game stores various data in 'Excel' containers, a form of binary serialization.
- * One or multiple headers precede an array of items, with optional game-encoded text following them.
+ * 'Headers' define 'sections' consisting of an array of elements and, optionally, text.
  *
  * Most of the game's `kernel` directory consists of such files. They contain anything
  * from player command definitions to aeon stat growth curves.
  */
+
+/// <summary>
+///     The prologue of an Excel container. Describes it in enough detail to construct a reader.
+///     <para/>
+///     To iterate over its contents, use an <see cref="ExcelReader{T}"/>.
+/// </summary>
+[StructLayout(LayoutKind.Sequential, Size = 0x8)]
+public struct ExcelProlog {
+    /// <summary>
+    ///     The amount of headers that map out this container.
+    /// </summary>
+    /// <remarks>
+    ///     In the games, this amount is always 1.
+    ///     Both the games and Fahrenheit support amounts higher than 1.
+    /// </remarks>
+    public  ushort header_count;
+    private ushort _0x02;
+    private ushort _0x04;
+    private ushort _0x06;
+}
+
+/// <summary>
+///     The header of an Excel section.
+/// </summary>
+[StructLayout(LayoutKind.Sequential)]
+public struct ExcelHeader {
+    /// <summary>
+    ///     The index of the first element in the section.
+    /// </summary>
+    public ushort index_first;
+
+    /// <summary>
+    ///     The index of the last element in the section.
+    /// </summary>
+    public ushort index_last;
+
+    /// <summary>
+    ///     The size of one element in the section.
+    /// </summary>
+    public ushort element_size;
+
+    /// <summary>
+    ///     The combined length, in bytes, of all the elements in the section.
+    ///     <para/>
+    ///     This does not include any text which may follow the data.
+    /// </summary>
+    public ushort data_length;
+
+    /// <summary>
+    ///     The offset, in bytes, from the start of the section to the start of the data.
+    ///     <para/>
+    ///     In vanilla, always equivalent to the size of this header.
+    /// </summary>
+    public uint data_start;
+
+    /// <summary>
+    ///     The length of the array of elements defined by this header.
+    /// </summary>
+    public readonly int length => index_last + 1 - index_first;
+}
 
 /// <summary>
 ///     A pointer to text in an Excel container.
@@ -42,46 +102,6 @@ public struct ExcelSimplifiableTextOffset {
     ///     This is completely unused.
     /// </summary>
     internal ExcelTextOffset simplified;
-}
-
-/// <summary>
-///     The header of an Excel container.
-/// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public struct ExcelHeader {
-    /// <summary>
-    ///     The index of the first element in the container.
-    /// </summary>
-    public ushort index_first;
-
-    /// <summary>
-    ///     The index of the last element in the container.
-    /// </summary>
-    public ushort index_last;
-
-    /// <summary>
-    ///     The size of one element in the container.
-    /// </summary>
-    public ushort element_size;
-
-    /// <summary>
-    ///     The combined length, in bytes, of all the elements in the container.
-    ///     <para/>
-    ///     This does not include any text which may follow the data.
-    /// </summary>
-    public ushort data_length;
-
-    /// <summary>
-    ///     The offset, in bytes, from the start of the container to the start of the data.
-    ///     <para/>
-    ///     In vanilla, always equivalent to the size of this header.
-    /// </summary>
-    public uint data_start;
-
-    /// <summary>
-    ///     The length of the array of elements defined by this header.
-    /// </summary>
-    public readonly int length => index_last + 1 - index_first;
 }
 
 /// <summary>
@@ -136,24 +156,4 @@ public unsafe ref struct ExcelReader<T>(ReadOnlySpan<byte> excel_bytes) where T 
             ? _bytes [ ((int)header.data_start + (int)header.data_length + ptr_text.text_offset) .. ]
             : [ 0x00 ];
     }
-}
-
-/// <summary>
-///     The prologue of an Excel container. Describes it in enough detail to construct a reader.
-///     <para/>
-///     To iterate over its contents, use an <see cref="ExcelReader{T}"/>.
-/// </summary>
-[StructLayout(LayoutKind.Sequential, Size = 0x8)]
-public struct ExcelProlog {
-    /// <summary>
-    ///     The amount of headers that map out this container.
-    ///     <remarks>
-    ///         In the games, this amount is always 1.
-    ///         Both the games and Fahrenheit support amounts higher than 1.
-    ///     </remarks>
-    /// </summary>
-    public  ushort header_count;
-    private ushort _0x02;
-    private ushort _0x04;
-    private ushort _0x06;
 }
