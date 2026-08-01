@@ -3,7 +3,7 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-namespace Fahrenheit.FFX;
+namespace Fahrenheit.FFX2;
 
 /* [fkelava 28/07/26 02:36]
  * The game stores various data in 'Excel' containers, a form of binary serialization.
@@ -18,7 +18,7 @@ namespace Fahrenheit.FFX;
 ///     <para/>
 ///     To iterate over its contents, use an <see cref="ExcelReader{T}"/>.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Size = 0x8)]
+[StructLayout(LayoutKind.Sequential, Size = 0xC)]
 public struct ExcelProlog {
     /// <summary>
     ///     The amount of headers that map out this container.
@@ -27,10 +27,9 @@ public struct ExcelProlog {
     ///     In the games, this amount is always 1.
     ///     Both the games and Fahrenheit support amounts higher than 1.
     /// </remarks>
-    public  ushort header_count;
-    private ushort _0x02;
-    private ushort _0x04;
-    private ushort _0x06;
+    public  uint header_count;
+    private uint _0x04;
+    private uint _0x08;
 }
 
 /// <summary>
@@ -41,24 +40,24 @@ public struct ExcelHeader {
     /// <summary>
     ///     The index of the first element in the section.
     /// </summary>
-    public ushort index_first;
+    public uint index_first;
 
     /// <summary>
     ///     The index of the last element in the section.
     /// </summary>
-    public ushort index_last;
+    public uint index_last;
 
     /// <summary>
     ///     The size of one element in the section.
     /// </summary>
-    public ushort element_size;
+    public uint element_size;
 
     /// <summary>
     ///     The combined length, in bytes, of all the elements in the section.
     ///     <para/>
     ///     This does not include any text which may follow the data.
     /// </summary>
-    public ushort data_length;
+    public uint data_length;
 
     /// <summary>
     ///     The offset, in bytes, from the start of the container to the start of the data.
@@ -70,7 +69,7 @@ public struct ExcelHeader {
     /// <summary>
     ///     The length of the array of elements defined by this header.
     /// </summary>
-    public readonly int length => index_last + 1 - index_first;
+    public readonly int length => int.CreateChecked(index_last + 1 - index_first);
 }
 
 /// <summary>
@@ -87,7 +86,7 @@ public unsafe ref struct ExcelReader<T>(ReadOnlySpan<byte> excel_bytes) where T 
         int sz_header = sizeof(ExcelHeader);
 
         return MemoryMarshal.TryRead(_bytes, out ExcelProlog prolog)
-            ? MemoryMarshal.Cast<byte, ExcelHeader>(_bytes [ sz_prolog .. (sz_prolog + prolog.header_count * sz_header) ])
+            ? MemoryMarshal.Cast<byte, ExcelHeader>(_bytes [ sz_prolog .. (int)(sz_prolog + prolog.header_count * sz_header) ])
             : [];
     }
 
