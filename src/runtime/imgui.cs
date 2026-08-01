@@ -100,7 +100,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
         ImGuiImplWin32.SetCurrentContext(ctx);
         ImGuiImplD3D11.SetCurrentContext(ctx);
-        ImGuiImplWin32.Init(_hWnd);
+        ImGuiImplWin32.Init((nint)_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
 
         /* [fkelava 20/06/26 17:38]
