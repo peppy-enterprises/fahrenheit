@@ -34,7 +34,7 @@ public struct ExcelProlog {
 }
 
 /// <summary>
-///     The header of an Excel section.
+///     The header that defines a section of an Excel container.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct ExcelHeader {
@@ -61,7 +61,7 @@ public struct ExcelHeader {
     public ushort data_length;
 
     /// <summary>
-    ///     The offset, in bytes, from the start of the section to the start of the data.
+    ///     The offset, in bytes, from the start of the container to the start of the data.
     ///     <para/>
     ///     In vanilla, always equivalent to the size of this header.
     /// </summary>
