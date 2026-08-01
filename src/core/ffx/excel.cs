@@ -7,7 +7,7 @@ namespace Fahrenheit.FFX;
 
 /* [fkelava 28/07/26 02:36]
  * The game stores various data in 'Excel' containers, a form of binary serialization.
- * 'Headers' define 'sections' consisting of an array of elements and, optionally, text.
+ * Headers define sections consisting of an array of elements and, optionally, text.
  *
  * Most of the game's `kernel` directory consists of such files. They contain anything
  * from player command definitions to aeon stat growth curves.

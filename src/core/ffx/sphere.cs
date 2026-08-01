@@ -5,6 +5,12 @@
 
 namespace Fahrenheit.FFX;
 
+[Flags]
+public enum SphereRange : byte {
+    NORMAL    = 1,
+    UNLIMITED = 1 << 5
+}
+
 public enum SphereBehavior : ushort {
     NONE      = 0,
     ACTIVATOR = 1,
@@ -28,8 +34,11 @@ public enum SphereTargets : ushort {
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Sphere {
-    public ExcelSimplifiableTextOffset help;
-    public SphereBehavior              type;
-    public SphereApplicability         activates;
-    public int                         _0x0C;
+    public  ExcelSimplifiableTextOffset help;
+    public  SphereBehavior              type;
+    public  SphereTargets               activates;
+    // TODO: determine how the data parser would like to be credited for below fields
+    public  SphereRange                 range;
+    public  byte                        special_role;
+    private ushort                      _0x0E;
 }
