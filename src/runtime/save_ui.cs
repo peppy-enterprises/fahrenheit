@@ -234,7 +234,6 @@ public sealed class FhSaveUiModule : FhModule {
         ImGuiStylePtr style   = ImGui.GetStyle();
         float         padding = style.FramePadding.X + style.IndentSpacing;
 
-        ImGui.Text(data.icon_chr1);
         ImGui.SameLine();
         FhApi.ImGuiHelper.set_next_align(data.completion, 1.0F, padding);
         ImGui.Text(data.completion);

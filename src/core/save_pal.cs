@@ -43,69 +43,6 @@ public enum FhSaveScreenState {
 }
 
 /// <summary>
-///     Represents the possible states of the game's default Iggy-based save/load UI.
-///     <para/>
-///     This is not used when Fahrenheit is overriding the save UI.
-/// </summary>
-public enum FhSaveUiState {
-    /// <summary>
-    ///     No-op. Flows from <see cref="SAVE_TERMINATING"/>.
-    ///     Default state on boot, and in-game if the last action was a save.
-    /// </summary>
-    SAVE_TERMINATED     = 0x00,
-    /// <summary>
-    ///     Input is blocked. The disk is queried for existing save games.
-    /// </summary>
-    // "Loading. Do not close the game."
-    SAVE_LISTING        = 0x01,
-    // Listing complete, handling input
-    SAVE_IDLE           = 0x02,
-    // "Save this game? Yes/No"
-    SAVE_PROMPT_IDLE    = 0x03,
-    // "Saving. Do not close the game."
-    //` h_save` invoked on this/the next main loop
-    SAVE_REQUESTED      = 0x04,
-    // `h_save` finished
-    // Dismisses "Saving. Do not close the game"
-    // Listing triggered
-    SAVE_COMPLETE       = 0x05,
-    // Destroy menu, swap to state 0x00
-    SAVE_TERMINATING    = 0x06,
-    // NOP, flows from LOAD_TERMINATING
-    // Default state in-game when last action was load
-    LOAD_TERMINATED     = 0x0A,
-    // "Loading. Do not close the game."
-    // Input blocked
-    LOAD_LISTING        = 0x0B,
-    // Listing complete, handling input
-    LOAD_IDLE           = 0x0C,
-    // "Load this game? Yes/No"
-    LOAD_PROMPT_IDLE    = 0x0D,
-    // "Loading. Do not close the game."
-    // `h_load` invoked on this/the next main loop
-    LOAD_REQUESTED      = 0x0E,
-    // `h_load` finished
-    // Dismisses "Loading. Do not close the game"
-    // CRC/player name checks triggered
-    LOAD_POSTPROCESS    = 0x0F,
-    // CRC corrupt or player name needs reset
-    // Wait for player to acknowledge this - CRC is fatal, playername is non-fatal fault
-    LOAD_FAILED         = 0x10,
-    // Destroy menu, swap to state 0x0A
-    LOAD_TERMINATING    = 0x11,
-
-    // FF X only, Al-Bhed Compilation Sphere modes
-    ALBHED_TERMINATED    = 0x14,
-    ALBHED_LISTING       = 0x15,
-    ALBHED_IDLE          = 0x16,
-    ALBHED_REQUESTED     = 0x17,
-    ALBHED_COMPLETE      = 0x18,
-    ALBHED_POSTPROCESS   = 0x19,
-    ALBHED_TERMINATING_A = 0x1A,
-    ALBHED_TERMINATING_B = 0x1B,
-}
-
-/// <summary>
 ///     The game's default save data manager structure for FF X.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x488)]
@@ -142,15 +79,6 @@ public unsafe struct FhSaveDataManager2 {
     public int                    operation_canceled;
 }
 
-/// <summary>
-///     The game's default representation of an entry in the save manager's list.
-/// </summary>
-[StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveListEntry(int slot_nb) {
-    public int slot          = slot_nb;
-    public int creation_date = -1;
-    public int creation_time = -1;
-}
 
 [InlineArray(0x20)]
 internal struct FhSavePlayerName {
@@ -162,15 +90,17 @@ internal struct FhSavePlayerName {
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct FhSaveHeader {
+    [InlineArray(0x7)]
+    internal struct Formation {
+        private byte _e0;
+    }
+
     public uint             _0x00;
     public byte             _0x04;
-    public byte             id_chr1;
-    public byte             id_chr2;
-    public byte             id_chr3;
-    public uint             _0x08;
+    public Formation        formation;
     public uint             _0x0c;
-    public uint             playtime_sec;
-    public uint             _0x14;
+    public uint             playtime_secs;
+    public uint             gil;
     public ushort           id_location;
     public ushort           _0x1a;
     public ushort           _0x1c;
@@ -197,22 +127,15 @@ internal struct FhSaveHeader2 {
     public byte   id_chr2_dress;
     public byte   id_chr3_dress;
     public uint   playtime_secs;
-    public uint   _0x14;
-    public ushort location_id;
+    public uint   gil;
+    public ushort _0x18;
     public ushort _0x1A;
     public uint   _0x1C;
-    public byte   _0x20;
-    public byte   _0x21;
-    public byte   _0x22;
-    public byte   _0x23;
-    public byte   _0x24;
-    public byte   _0x25;
-    public byte   _0x26;
-    public byte   _0x27;
+    public uint   _0x20;
+    public uint   _0x24;
     public byte   _0x28;
     public byte   _0x29;
-    public byte   _0x2A;
-    public byte   _0x2B;
+    public ushort id_location;
     public byte   _0x2C;
 }
 
@@ -239,9 +162,6 @@ internal struct FhSaveDisplayData {
     public InlineArray128<byte> location;
     public InlineArray128<byte> play_time;
     public InlineArray32 <byte> player_name;
-    public InlineArray16 <byte> icon_chr1;
-    public InlineArray16 <byte> icon_chr2;
-    public InlineArray16 <byte> icon_chr3;
     public InlineArray16 <byte> icon_map;
     public InlineArray128<byte> chapter;
     public InlineArray128<byte> completion;
