@@ -17,6 +17,7 @@ public enum PlyGender : byte {
 ///     As the name <c>PlyRom</c> (Player Read-Only Memory) indicates,<br/>
 ///     this struct contains a few constants player characters use.
 /// </summary>
+[StructLayout(LayoutKind.Sequential)]
 public struct PlyRom {
     /// <summary>
     ///     The help text displayed when switching to the character.
