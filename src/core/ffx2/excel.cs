@@ -18,7 +18,7 @@ namespace Fahrenheit.FFX2;
 ///     <para/>
 ///     To iterate over its contents, use an <see cref="ExcelReader{T}"/>.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Size = 0xC)]
+[StructLayout(LayoutKind.Sequential)]
 public struct ExcelProlog {
     /// <summary>
     ///     The amount of headers that map out this container.
