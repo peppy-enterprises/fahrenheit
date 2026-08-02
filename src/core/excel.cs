@@ -5,7 +5,6 @@
 
 namespace Fahrenheit;
 
-
 /// <summary>
 ///     A pointer to text in an Excel container.
 /// </summary>
