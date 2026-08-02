@@ -131,38 +131,38 @@ internal static partial class UI {
             EEditMode.W_NAME     => $"{nameof(WeaponName)} - (w_name.bin)",
             EEditMode.WEAPON     => $"{nameof(Equipment)} - (weapon.bin)",
 
-            EEditMode.ACCESSORY  => throw new NotImplementedException(),
-            EEditMode.EXT_PARTY  => throw new NotImplementedException(),
-            EEditMode.JOB        => throw new NotImplementedException(),
-            EEditMode.MON_GET    => throw new NotImplementedException(),
-            EEditMode.OVERSOUL   => throw new NotImplementedException(),
-            EEditMode.PLATE      => throw new NotImplementedException(),
-            EEditMode.ROM        => throw new NotImplementedException(),
+            EEditMode.ACCESSORY  => $"(accessory.bin)",
+            EEditMode.EXT_PARTY  => $"(ext_party.bin)",
+            EEditMode.JOB        => $"(job.bin)",
+            EEditMode.MON_GET    => $"(mon_get.bin)",
+            EEditMode.OVERSOUL   => $"(oversoul.bin)",
+            EEditMode.PLATE      => $"(plate.bin)",
+            EEditMode.ROM        => $"(rom.bin)",
 
-            EEditMode.LM_ACCESARY                => throw new NotImplementedException(),
-            EEditMode.LM_BIN_STATUS_COUNT        => throw new NotImplementedException(),
-            EEditMode.LM_CAPACITY                => throw new NotImplementedException(),
-            EEditMode.LM_COMMAND                 => throw new NotImplementedException(),
-            EEditMode.LM_DEF_STCOUNT_INDEX_COUNT => throw new NotImplementedException(),
-            EEditMode.LM_DRESS                   => throw new NotImplementedException(),
-            EEditMode.LM_DRESSCOM                => throw new NotImplementedException(),
-            EEditMode.LM_FLOORNAME               => throw new NotImplementedException(),
-            EEditMode.LM_FLOOROBJ                => throw new NotImplementedException(),
-            EEditMode.LM_HIT                     => throw new NotImplementedException(),
-            EEditMode.LM_ITEM                    => throw new NotImplementedException(),
-            EEditMode.LM_ITEMBOX                 => throw new NotImplementedException(),
-            EEditMode.LM_LVEXP                   => throw new NotImplementedException(),
-            EEditMode.LM_LVHPMP                  => throw new NotImplementedException(),
-            EEditMode.LM_MES                     => throw new NotImplementedException(),
-            EEditMode.LM_MONMAGIC                => throw new NotImplementedException(),
-            EEditMode.LM_MONSTER                 => throw new NotImplementedException(),
-            EEditMode.LM_PLAYER                  => throw new NotImplementedException(),
-            EEditMode.LM_STATUSCHG               => throw new NotImplementedException(),
-            EEditMode.LM_TRAP                    => throw new NotImplementedException(),
-            EEditMode.LM_WAREHOUSE               => throw new NotImplementedException(),
-            EEditMode.LM_YS_DEF                  => throw new NotImplementedException(),
-            EEditMode.LM_YS_DEF_BIN              => throw new NotImplementedException(),
-            EEditMode.LM_MES_CHK                 => throw new NotImplementedException(),
+            EEditMode.LM_ACCESARY                => $"(lm_accesary.bin)",
+            EEditMode.LM_BIN_STATUS_COUNT        => $"(lm_bin_status_count.bin)",
+            EEditMode.LM_CAPACITY                => $"(lm_capacity.bin)",
+            EEditMode.LM_COMMAND                 => $"(lm_command.bin)",
+            EEditMode.LM_DEF_STCOUNT_INDEX_COUNT => $"(lm_def_stcount_index_count.bin)",
+            EEditMode.LM_DRESS                   => $"(lm_dress.bin)",
+            EEditMode.LM_DRESSCOM                => $"(lm_dresscom.bin)",
+            EEditMode.LM_FLOORNAME               => $"(lm_floorname.bin)",
+            EEditMode.LM_FLOOROBJ                => $"(lm_floorobj.bin)",
+            EEditMode.LM_HIT                     => $"(lm_hit.bin)",
+            EEditMode.LM_ITEM                    => $"(lm_item.bin)",
+            EEditMode.LM_ITEMBOX                 => $"(lm_itembox.bin)",
+            EEditMode.LM_LVEXP                   => $"(lm_lvexp.bin)",
+            EEditMode.LM_LVHPMP                  => $"(lm_lvhpmp.bin)",
+            EEditMode.LM_MES                     => $"(lm_mes.bin)",
+            EEditMode.LM_MONMAGIC                => $"(lm_monmagic.bin)",
+            EEditMode.LM_MONSTER                 => $"(lm_monster.bin)",
+            EEditMode.LM_PLAYER                  => $"(lm_player.bin)",
+            EEditMode.LM_STATUSCHG               => $"(lm_statuschg.bin)",
+            EEditMode.LM_TRAP                    => $"(lm_trap.bin)",
+            EEditMode.LM_WAREHOUSE               => $"(lm_warehouse.bin)",
+            EEditMode.LM_YS_DEF                  => $"(lm_ys_def.bin)",
+            EEditMode.LM_YS_DEF_BIN              => $"(lm_ys_def_bin.bin)",
+            EEditMode.LM_MES_CHK                 => $"(mes_chk.bin)",
 
             _                                    => throw new NotImplementedException("UNREACHABLE")
         };
@@ -254,7 +254,7 @@ internal static partial class UI {
     private static EEditMode _get_mode_by_file_name(string file_path) {
 
         /* [fkelava 15/02/26 17:28]
-         * PS {...}\ffx_ps2\ffx\master\jppc\battle\kernel> gci | Select Name
+         * https://gist.github.com/fkelava/77d3ab26e81d23bc6b22899eaef3dc27
          */
 
         return Path.GetFileName(file_path) switch {
