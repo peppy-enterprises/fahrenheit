@@ -10,14 +10,14 @@ public struct PCommand {
     public PCommandData command_pdata;
 }
 
-[StructLayout(LayoutKind.Sequential, Size = 0x4)]
+[StructLayout(LayoutKind.Sequential)]
 public struct PCommandData {
     public  byte   ordering_idx;
     public  byte   sphere_grid_role;
     private ushort _0x02;
 }
 
-[StructLayout(LayoutKind.Sequential, Size = 0x5C)]
+[StructLayout(LayoutKind.Sequential)]
 public struct Command {
     public ExcelTextOffset   name_offset;
     public ExcelTextOffset   dash_offset;

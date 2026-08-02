@@ -5,6 +5,7 @@
 
 namespace Fahrenheit.FFX.Battle;
 
+[StructLayout(LayoutKind.Sequential)]
 public struct ChrItemLoot {
     public ushort item_primary_common;
     public ushort item_primary_rare;
@@ -37,6 +38,7 @@ public struct ChrEquipmentLootAbilities {
     public ChrEquipmentLootAbilitiesArray armor_abilities;
 }
 
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct ChrEquipmentLoot {
     public byte slot_count;
     public byte dmg_formula;
@@ -53,7 +55,7 @@ public struct ChrEquipmentLoot {
     public ChrEquipmentLootAbilities abilities_rikku;
 }
 
-[StructLayout(LayoutKind.Sequential, Pack = 4, Size = 0x118)]
+[StructLayout(LayoutKind.Sequential)]
 public struct ChrLoot {
     public ushort gil;
     public ushort ap;

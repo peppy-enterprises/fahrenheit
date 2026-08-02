@@ -22,7 +22,7 @@ public static partial class FhEnumExt {
 /// <summary>
 ///     Recipe for customizing an auto-ability onto gear using a set amount of an item.
 /// </summary>
-[StructLayout(LayoutKind.Sequential, Size = 0x08)]
+[StructLayout(LayoutKind.Sequential)]
 public struct CustomizationRecipe {
     /// <summary>
     ///     The gear type that can be customized using this recipe.

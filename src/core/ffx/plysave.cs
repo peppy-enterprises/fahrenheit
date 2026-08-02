@@ -10,7 +10,7 @@ public struct PlySaveLimitModeCtrArray {
     private ushort _u;
 }
 
-[StructLayout(LayoutKind.Sequential, Size = 0x94)]
+[StructLayout(LayoutKind.Sequential, Pack = 2)]
 public struct PlySave {
     public  ExcelTextOffset          name_offset;
     public  uint                     base_hp;

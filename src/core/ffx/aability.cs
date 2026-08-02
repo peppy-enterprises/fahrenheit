@@ -5,7 +5,7 @@
 
 namespace Fahrenheit.FFX;
 
-[StructLayout(LayoutKind.Sequential, Size = 0x6C)]
+[StructLayout(LayoutKind.Sequential)]
 public struct AutoAbility {
     public ExcelTextOffset       name_offset;
     public ExcelTextOffset       dash_offset;
