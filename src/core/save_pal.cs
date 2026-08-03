@@ -98,7 +98,9 @@ internal struct FhSaveHeader {
     public uint             _0x00;
     public byte             _0x04;
     public Formation        formation;
-    public uint             _0x0c;
+    public FhLangId         lang_id;
+    public byte             _0x0D;
+    public ushort           _0x0E;
     public uint             playtime_secs;
     public uint             gil;
     public ushort           id_location;
@@ -113,30 +115,30 @@ internal struct FhSaveHeader {
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct FhSaveHeader2 {
-    public uint   _0x00;
-    public byte   _0x04;
-    public byte   id_chr1;
-    public byte   id_chr2;
-    public byte   id_chr3;
-    public byte   _0x08;
-    public byte   _0x09;
-    public byte   _0x0A;
-    public byte   chapter;
-    public byte   completion;
-    public byte   id_chr1_dress;
-    public byte   id_chr2_dress;
-    public byte   id_chr3_dress;
-    public uint   playtime_secs;
-    public uint   gil;
-    public ushort _0x18;
-    public ushort _0x1A;
-    public uint   _0x1C;
-    public uint   _0x20;
-    public uint   _0x24;
-    public byte   _0x28;
-    public byte   _0x29;
-    public ushort id_location;
-    public byte   _0x2C;
+    public uint     _0x00;
+    public byte     _0x04;
+    public byte     id_chr1;
+    public byte     id_chr2;
+    public byte     id_chr3;
+    public byte     _0x08;
+    public byte     _0x09;
+    public byte     _0x0A;
+    public byte     chapter;
+    public byte     completion;
+    public byte     id_chr1_dress;
+    public byte     id_chr2_dress;
+    public byte     id_chr3_dress;
+    public uint     playtime_secs;
+    public uint     gil;
+    public ushort   _0x18;
+    public ushort   _0x1A;
+    public uint     _0x1C;
+    public uint     _0x20;
+    public uint     _0x24;
+    public FhLangId lang_id;
+    public byte     _0x29;
+    public ushort   id_location;
+    public byte     _0x2C;
 }
 
 /// <summary>
@@ -264,7 +266,7 @@ internal static unsafe class FhSavePal {
      */
 
     /// <summary>
-    ///     Writes the icon ID of the current map in the save represented by
+    ///     Writes the icon ID of the current map in the save with the given
     ///     <paramref name="header"/> to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
     internal static void pal_get_icon_map(in ReadOnlySpan<byte> header, in Span<byte> dest) {
@@ -290,22 +292,24 @@ internal static unsafe class FhSavePal {
      */
 
     /// <summary>
-    ///     Writes the story chapter in the FF X-2 save represented by
-    ///     <paramref name="header"/> to <paramref name="dest"/> as a UTF-8 string.
+    ///     Writes the story chapter in the FF X-2 save with the given
+    ///     <paramref name="header_bytes"/> to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
-    internal static void pal_get_chapter(in ReadOnlySpan<byte> header, in Span<byte> dest) {
+    internal static void pal_get_chapter(in ReadOnlySpan<byte> header_bytes, in Span<byte> dest) {
         if (FhGlobal.game_id is not FhGameId.FFX2) {
             dest[0] = 0x00;
             return;
         }
 
+        FhSaveHeader2 header = MemoryMarshal.Read<FhSaveHeader2>(header_bytes);
+
         byte*      ptr_chapter_encoded = FhUtil.ptr_at<byte>(0x9ED648);
         Span<byte> chapter_encoded     = new(ptr_chapter_encoded, 0x80);
 
         FhCall.SaveDataGetLoc.fnptr!(0x4D8, ptr_chapter_encoded);
-        pal_fill_template(chapter_encoded, header[0x0B]);
+        pal_fill_template(chapter_encoded, header.chapter);
 
-        int len_chapter = FhEncoding.decode(chapter_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
+        int len_chapter = FhEncoding.decode(chapter_encoded, dest, header.lang_id, flags: FhEncodingFlags.IMPLICIT_END);
         dest[ len_chapter ] = 0x00;
     }
 
@@ -314,22 +318,24 @@ internal static unsafe class FhSavePal {
      */
 
     /// <summary>
-    ///     Writes the story completion in the FF X-2 save represented by
-    ///     <paramref name="header"/> to <paramref name="dest"/> as a UTF-8 string.
+    ///     Writes the story completion in the FF X-2 save with the given
+    ///     <paramref name="header_bytes"/> to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
-    internal static void pal_get_completion(in ReadOnlySpan<byte> header, in Span<byte> dest) {
+    internal static void pal_get_completion(in ReadOnlySpan<byte> header_bytes, in Span<byte> dest) {
         if (FhGlobal.game_id is not FhGameId.FFX2) {
             dest[0] = 0x00;
             return;
         }
 
+        FhSaveHeader2 header = MemoryMarshal.Read<FhSaveHeader2>(header_bytes);
+
         byte*      ptr_completion_encoded = FhUtil.ptr_at<byte>(0x9ED7C8);
         Span<byte> completion_encoded     = new(ptr_completion_encoded, 0x80);
 
         FhCall.SaveDataGetLoc.fnptr!(0x39A, ptr_completion_encoded);
-        pal_fill_template(completion_encoded, header[0x0C]);
+        pal_fill_template(completion_encoded, header.completion);
 
-        int len_completion = FhEncoding.decode(completion_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
+        int len_completion = FhEncoding.decode(completion_encoded, dest, header.lang_id, flags: FhEncodingFlags.IMPLICIT_END);
         dest [ len_completion ] = 0x00;
     }
 
@@ -340,7 +346,7 @@ internal static unsafe class FhSavePal {
      */
 
     /// <summary>
-    ///     Writes the total play time in the save represented by
+    ///     Writes the total play time in the save with the given
     ///     <paramref name="header"/> to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
     internal static void pal_get_playtime(in ReadOnlySpan<byte> header, in Span<byte> dest) {
@@ -365,14 +371,16 @@ internal static unsafe class FhSavePal {
      */
 
     /// <summary>
-    ///     Writes the player character's name in the save represented by
-    ///     <paramref name="header"/> to <paramref name="dest"/> as a UTF-8 string.
+    ///     Writes the player character's name in the save with the given
+    ///     <paramref name="header_bytes"/> to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
-    internal static void pal_get_player_name(in ReadOnlySpan<byte> header, in Span<byte> dest) {
+    internal static void pal_get_player_name(in ReadOnlySpan<byte> header_bytes, in Span<byte> dest) {
         int len_player_name;
 
         if (FhGlobal.game_id is FhGameId.FFX) {
-            len_player_name = FhEncoding.decode(header[ 0x20 .. ], dest, flags: FhEncodingFlags.IMPLICIT_END);
+            FhSaveHeader header = MemoryMarshal.Read<FhSaveHeader>(header_bytes);
+
+            len_player_name = FhEncoding.decode(header.player_name, dest, header.lang_id, flags: FhEncodingFlags.IMPLICIT_END);
             dest [ len_player_name ] = 0x00;
             return;
         }
@@ -380,7 +388,7 @@ internal static unsafe class FhSavePal {
         byte*              ptr_player_name_encoded = FhUtil.ptr_at<byte>(pal_addr_buf_player_name_encoded());
         ReadOnlySpan<byte> player_name_encoded     = new(ptr_player_name_encoded, int.MaxValue);
 
-        FhCall.SaveDataGetLoc.fnptr!(0xDD + header[0x21], ptr_player_name_encoded);
+        FhCall.SaveDataGetLoc.fnptr!(0xDD + header_bytes[0x21], ptr_player_name_encoded);
 
         len_player_name = FhEncoding.decode(player_name_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
         dest [ len_player_name ] = 0x00;
@@ -391,7 +399,7 @@ internal static unsafe class FhSavePal {
      */
 
     /// <summary>
-    ///     Writes the player's job in the FF X-2 LM save represented by
+    ///     Writes the player's job in the FF X-2 LM save with the given
     ///     <paramref name="header"/> to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
     internal static void pal_get_lm_job(in ReadOnlySpan<byte> header, in Span<byte> dest) {
@@ -412,7 +420,7 @@ internal static unsafe class FhSavePal {
      */
 
     /// <summary>
-    ///     Writes the player's level in the FF X-2 LM save represented by
+    ///     Writes the player's level in the FF X-2 LM save with the given
     ///     <paramref name="header"/> to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
     internal static void pal_get_lm_level(in ReadOnlySpan<byte> header, in Span<byte> dest) {
@@ -433,7 +441,7 @@ internal static unsafe class FhSavePal {
     }
 
     /// <summary>
-    ///     Writes the current location in the save represented by <paramref name="header"/>
+    ///     Writes the current location in the save with the given <paramref name="header"/>
     ///     to <paramref name="dest"/> as a UTF-8 string.
     /// </summary>
     internal static void pal_get_location(in ReadOnlySpan<byte> header, in Span<byte> dest) {
@@ -469,31 +477,6 @@ internal static unsafe class FhSavePal {
         int len_lm_location        = len_lm_location_prefix + FhEncoding.decode(lm_location_suffix_encoded, dest[ len_lm_location_prefix .. ], flags: FhEncodingFlags.IMPLICIT_END);
 
         dest [ len_lm_location ] = 0x00;
-    }
-
-    /* [fkelava 13/11/25 22:08]
-     * FFX.exe  +2F0DA0, L63-65   (X)
-     * FFX-2.exe+11DC50, L80-82   (X-2)
-     * FFX-2.exe+11DC50, L146-160 (X-2 LM)
-     */
-
-    // todo: not according to spec for LM
-
-    /// <summary>
-    ///     Writes to <paramref name="dest"/> the UTF-8 string ID of the icon for the
-    ///     <paramref name="index"/>'th player character in the save represented by <paramref name="header"/>.
-    /// </summary>
-    internal static void pal_get_icon_chr(in ReadOnlySpan<byte> header, in Span<byte> dest, int index) {
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(index, 2); // inform JIT of true access bounds
-
-        int len_icon_chr = FhGlobal.game_id switch {
-            FhGameId.FFX    => Encoding.UTF8.GetBytes($"_{header[0x05 + index] + 1}",                       dest),
-            FhGameId.FFX2   or
-            FhGameId.FFX2LM => Encoding.UTF8.GetBytes($"{header[0x05 + index] + 1}_{header[0x0D + index]}", dest),
-            _               => throw new Exception("Invalid game type")
-        };
-
-        dest [ len_icon_chr ] = 0x00;
     }
 
     /// <summary>
