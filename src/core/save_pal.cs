@@ -251,8 +251,8 @@ internal static unsafe class FhSavePal {
         int target = template.IndexOf(marker);
         int end    = template.IndexOf((byte)0x00);
 
-        template[ (target + 2) .. (end)                         ].CopyTo(template [ (target + length) .. ]);
-        template[ (target)     .. (target + int.Max(2, length)) ].Fill(0);
+        template[ (target)     .. (target + 2) ].Fill(0);
+        template[ (target + 2) .. (end)        ].CopyTo(template [ (target + length) .. ]);
 
         /* [fkelava 04/08/26 14:16]
          * The fill-byte will always be encoded as its Basic Latin block representation,
