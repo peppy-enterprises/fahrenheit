@@ -243,16 +243,14 @@ internal static unsafe class FhSavePal {
     ///     Inserts <paramref name="fill"/> into the empty space
     ///     in a game-encoded <paramref name="template"/> string.
     /// </summary>
-    internal static void pal_fill_template(Span<byte> template, byte fill) {
+    internal static void pal_fill_template(Span<byte> template, int fill) {
         ReadOnlySpan<byte> marker  = [ 0x05, 0x30 ];
         Span<byte>         scratch = stackalloc byte[8];
 
         int length = Encoding.UTF8.GetBytes($"{fill}", scratch);
         int target = template.IndexOf(marker);
-        int end    = template.IndexOf((byte)0x00);
 
-        template[ (target)     .. (target + 2) ].Fill(0);
-        template[ (target + 2) .. (end)        ].CopyTo(template [ (target + length) .. ]);
+        ReadOnlySpan<byte> post = [ .. template [ (target + 2) .. template.IndexOf((byte)0) ] ];
 
         /* [fkelava 04/08/26 14:16]
          * The fill-byte will always be encoded as its Basic Latin block representation,
@@ -262,11 +260,14 @@ internal static unsafe class FhSavePal {
          * See generally #200. Step through this function without the flag and the issue should be clear.
          */
 
-        _ = FhEncoding.encode(
+        target += FhEncoding.encode(
             scratch [ .. length ],
             template[ target .. ],
             flags: FhEncodingFlags.IMPLICIT_CJK_EXTENSION
         );
+
+        post.CopyTo(template [ target .. ]);
+        template[ (target + post.Length) ] = 0;
     }
 
     /* [fkelava 18/11/25 21:27]
