@@ -68,9 +68,7 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        bool is_save = _sem!.get_system_state() is FhSaveExtensionSystemState.SAVE;
-
-        if (is_save) {
+        if (_sem!.get_system_state() is FhSaveExtensionSystemState.SAVE) {
             Vector2 size_new_save_btn = new(ImGui.GetContentRegionAvail().X, 0F);
 
             if (ImGui.Button("New Save Data", size_new_save_btn)) {
@@ -80,7 +78,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         List<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
 
-        foreach (FhSaveDisplayData save_file in is_save ? display_data[ 1 .. ] : display_data) {
+        foreach (FhSaveDisplayData save_file in display_data) {
             ui_savefile(save_file);
         }
 
@@ -146,6 +144,9 @@ public sealed class FhSaveUiModule : FhModule {
     }
 
     private void ui_savefile(FhSaveDisplayData data) {
+        if (data.slot == 0 && _sem!.get_system_state() is FhSaveExtensionSystemState.SAVE)
+            return;
+
         ImGuiStylePtr style       = ImGui.GetStyle();
         Vector2       spacer_size = new(0F, style.FramePadding.Y);
         Vector2       window_size = new(ImGui.GetContentRegionAvail().X, 0F);
