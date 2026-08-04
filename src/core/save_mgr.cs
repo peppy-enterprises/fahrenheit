@@ -207,7 +207,7 @@ internal sealed class FhSaves {
         // This method is not re-entrant.
         if (menu_index != 0) return menu_index;
 
-        int target_slot = 0;
+        int target_slot = 1;
         while (_sm_occupied_slots.Contains(target_slot)) { target_slot++; };
 
         _sm_occupied_slots.Add(target_slot);
