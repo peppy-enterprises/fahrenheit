@@ -249,7 +249,15 @@ internal static unsafe class FhSavePal {
         int fill_length = Encoding.UTF8.GetBytes($"{fill}", scratch);
         int fill_target = template.IndexOf((byte)0x05);
 
-        _ = FhEncoding.encode(scratch[ .. fill_length ], template[ (fill_target + 1) .. ]);
+        /* [fkelava 04/08/26 14:16]
+         * The fill-byte will always be encoded as its Basic Latin block representation,
+         * but the game in CJK modes expects the fullwidth equivalent. This is thus the one case
+         * where implicit extension is not merely handy, but required for proper functionality.
+         *
+         * See generally #200. Step through this function without the flag and the issue should be clear.
+         */
+
+        _ = FhEncoding.encode(scratch[ .. fill_length ], template[ (fill_target + 1) .. ], flags: FhEncodingFlags.IMPLICIT_CJK_EXTENSION);
 
         template [ (fill_target + 1) .. ].CopyTo(template[ fill_target .. ]);
     }
@@ -309,7 +317,7 @@ internal static unsafe class FhSavePal {
         FhCall.SaveDataGetLoc.fnptr!(0x4D8, ptr_chapter_encoded);
         pal_fill_template(chapter_encoded, header.chapter);
 
-        int len_chapter = FhEncoding.decode(chapter_encoded, dest, header.lang_id, flags: FhEncodingFlags.IMPLICIT_END);
+        int len_chapter = FhEncoding.decode(chapter_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
         dest[ len_chapter ] = 0x00;
     }
 
@@ -335,7 +343,7 @@ internal static unsafe class FhSavePal {
         FhCall.SaveDataGetLoc.fnptr!(0x39A, ptr_completion_encoded);
         pal_fill_template(completion_encoded, header.completion);
 
-        int len_completion = FhEncoding.decode(completion_encoded, dest, header.lang_id, flags: FhEncodingFlags.IMPLICIT_END);
+        int len_completion = FhEncoding.decode(completion_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
         dest [ len_completion ] = 0x00;
     }
 
