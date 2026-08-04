@@ -5,7 +5,18 @@
 
 namespace Fahrenheit;
 
+/// <summary>
+///     Fonts, style and theming for user interfaces in Fahrenheit.
+/// </summary>
 public unsafe class FhImGuiHelper {
+
+    // Fonts for standardized style across Fahrenheit
+    public ImFontPtr FONT_DEFAULT;
+    public ImFontPtr FONT_JP;
+    public ImFontPtr FONT_KR;
+    public ImFontPtr FONT_CH_S;
+    public ImFontPtr FONT_CH_T;
+
     public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
         float size      = ImGui.CalcTextSize(label).X + padding;
         float available = ImGui.GetContentRegionAvail().X;
@@ -21,15 +32,26 @@ public unsafe class FhImGuiHelper {
     }
 
     private void _init_fonts() {
-        ImGuiIOPtr io      = ImGui.GetIO();
-        string     fontdir = Path.Join(FhEnvironment.Finder.Binaries.FullName, "resources", "fonts");
+        ImGuiIOPtr io        = ImGui.GetIO();
+        string     dir_fonts = Path.Join(FhEnvironment.Finder.Binaries.FullName, "resources", "fonts");
 
-        FONT_DEFAULT = io.Fonts.AddFontFromFileTTF(
-            Path.Join(fontdir, "NotoSans-VariableFont_wdth,wght.ttf"),
-            20f,
-            null,
-            io.Fonts.GetGlyphRangesDefault()
-        );
+        /* [fkelava 04/08/26 00:33]
+         * https://github.com/HexaEngine/Hexa.NET.ImGui/issues/118
+         * `new ImFontConfig()` does not work as expected due to technical limitations.
+         *
+         * The workaround is to call the native constructor and explicitly destroy after use.
+         */
+
+        ImFontConfigPtr font_config = ImGui.ImFontConfig();
+        font_config.MergeMode = true;
+
+        FONT_DEFAULT = io.Fonts.AddFontFromFileTTF(Path.Join(dir_fonts, "NotoSans-Regular.ttf"),   20f);
+        FONT_JP      = io.Fonts.AddFontFromFileTTF(Path.Join(dir_fonts, "NotoSansJP-Regular.ttf"), 20f, font_config);
+        FONT_KR      = io.Fonts.AddFontFromFileTTF(Path.Join(dir_fonts, "NotoSansKR-Regular.ttf"), 20f, font_config);
+        FONT_CH_S    = io.Fonts.AddFontFromFileTTF(Path.Join(dir_fonts, "NotoSansSC-Regular.ttf"), 20f, font_config);
+        FONT_CH_T    = io.Fonts.AddFontFromFileTTF(Path.Join(dir_fonts, "NotoSansTC-Regular.ttf"), 20f, font_config);
+
+        font_config.Destroy();
     }
 
     private static void _init_style(FhImGuiThemes theme) {
@@ -143,10 +165,6 @@ public unsafe class FhImGuiHelper {
           | ImGuiWindowFlags.NoResize
           | ImGuiWindowFlags.NoBringToFrontOnFocus
           | ImGuiWindowFlags.NoNavFocus;
-
-    // Fonts for standardized style across Fahrenheit
-    //TODO: Add more fonts
-    public ImFontPtr FONT_DEFAULT { get; private set; }
 
     //TODO: Add more constants for standardized style
 
