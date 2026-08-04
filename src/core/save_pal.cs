@@ -120,9 +120,9 @@ internal struct FhSaveHeader2 {
     public byte     id_chr1;
     public byte     id_chr2;
     public byte     id_chr3;
-    public byte     _0x08;
-    public byte     _0x09;
-    public byte     _0x0A;
+    public byte     level_chr1;
+    public byte     level_chr2;
+    public byte     level_chr3;
     public byte     chapter;
     public byte     completion;
     public byte     id_chr1_dress;
