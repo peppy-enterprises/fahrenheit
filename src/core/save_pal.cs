@@ -228,11 +228,11 @@ internal static unsafe class FhSavePal {
     }
 
     /* [fkelava 12/11/25 16:51]
-     * To show `Tower {X}F` in LM or `Chapter {X}` and `Story Completion: {X}%` in X-2,
-     * the game gets a template from SaveDataGetLoc(), with a 0x05 byte marking a fill point.
-     * The string must be shifted left after filling to remove the mark byte.
+     * To show `Tower {X}F` in LM or `Chapter {X}` and `Story Completion: {X}%` in X-2, the game gets
+     * a template from SaveDataGetLoc(), with a [ 0x05, 0x30 ] sequence marking a fill point.
+     * The marker must be removed after completing the fill.
      *
-     * It is unclear whether this is the only use of the 0x05 opcode.
+     * It is unclear whether 0x05 is a dialogue op code in this context or simply a random choice.
      */
 
     /* [fkelava 13/11/25 22:05]
@@ -244,10 +244,15 @@ internal static unsafe class FhSavePal {
     ///     in a game-encoded <paramref name="template"/> string.
     /// </summary>
     internal static void pal_fill_template(Span<byte> template, byte fill) {
-        Span<byte> scratch = stackalloc byte[8];
+        ReadOnlySpan<byte> marker  = [ 0x05, 0x30 ];
+        Span<byte>         scratch = stackalloc byte[8];
 
-        int fill_length = Encoding.UTF8.GetBytes($"{fill}", scratch);
-        int fill_target = template.IndexOf((byte)0x05);
+        int length = Encoding.UTF8.GetBytes($"{fill}", scratch);
+        int target = template.IndexOf(marker);
+        int end    = template.IndexOf((byte)0x00);
+
+        template[ (target + 2) .. (end)                         ].CopyTo(template [ (target + length) .. ]);
+        template[ (target)     .. (target + int.Max(2, length)) ].Fill(0);
 
         /* [fkelava 04/08/26 14:16]
          * The fill-byte will always be encoded as its Basic Latin block representation,
@@ -257,9 +262,11 @@ internal static unsafe class FhSavePal {
          * See generally #200. Step through this function without the flag and the issue should be clear.
          */
 
-        _ = FhEncoding.encode(scratch[ .. fill_length ], template[ (fill_target + 1) .. ], flags: FhEncodingFlags.IMPLICIT_CJK_EXTENSION);
-
-        template [ (fill_target + 1) .. ].CopyTo(template[ fill_target .. ]);
+        _ = FhEncoding.encode(
+            scratch [ .. length ],
+            template[ target .. ],
+            flags: FhEncodingFlags.IMPLICIT_CJK_EXTENSION
+        );
     }
 
     /* [fkelava 18/11/25 21:27]
