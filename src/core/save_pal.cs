@@ -490,8 +490,9 @@ internal static unsafe class FhSavePal {
         pal_fill_template(lm_location_suffix_encoded, (byte)(header[0x25] >> 1));
 
         int len_lm_location_prefix = FhEncoding.decode(lm_location_prefix_encoded, dest, flags: FhEncodingFlags.IMPLICIT_END);
-        int len_lm_location        = len_lm_location_prefix + FhEncoding.decode(lm_location_suffix_encoded, dest[ len_lm_location_prefix .. ], flags: FhEncodingFlags.IMPLICIT_END);
+        int len_lm_location        = len_lm_location_prefix + Encoding.UTF8.GetBytes(" ", dest[ len_lm_location_prefix .. ]);
 
+        len_lm_location += FhEncoding.decode(lm_location_suffix_encoded, dest[ len_lm_location .. ], flags: FhEncodingFlags.IMPLICIT_END);
         dest [ len_lm_location ] = 0x00;
     }
 
