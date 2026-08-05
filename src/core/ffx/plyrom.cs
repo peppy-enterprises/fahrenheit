@@ -62,7 +62,7 @@ public struct PlyRom {
     public int slv_req_max;
 
     /// <summary>
-    ///     Factors in the calculation of aeon stat boosts based on yuna's stats.
+    ///     Factors in the calculation of aeon stat boosts based on Yuna's stats.
     /// </summary>
     public AeonStatBoostsScaling aeon_stat_scaling;
 

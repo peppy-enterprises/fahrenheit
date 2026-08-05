@@ -37,7 +37,6 @@ public struct Sphere {
     public  ExcelSimplifiableTextOffset help;
     public  SphereBehavior              type;
     public  SphereTargets               activates;
-    // TODO: determine how the data parser would like to be credited for below fields
     public  SphereRange                 range;
     public  byte                        special_role;
     private ushort                      _0x0E;

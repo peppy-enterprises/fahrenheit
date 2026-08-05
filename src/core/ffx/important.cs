@@ -9,8 +9,8 @@ namespace Fahrenheit.FFX;
 public struct KeyItem {
     public ExcelSimplifiableTextOffset name;
     public ExcelSimplifiableTextOffset help;
-    public byte                        item_type;  // in FFX, "is Al Bhed Primer"?
-    public byte                        item_value; // _0x10, potentially unused
+    public byte                        item_type;
+    public byte                        item_value;
     public byte                        icon;
     public byte                        number;
 }
