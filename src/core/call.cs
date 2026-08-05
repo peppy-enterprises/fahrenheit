@@ -34,6 +34,28 @@ public static unsafe partial class FhCall {
      * circumvent it. We simply refuse to support any such scenario.
      */
 
+    // RT - Allocator fix
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void* d__VirtualAlloc_Commit_RW(void* ptr, nuint size);
+    internal static FhMethodHandle<d__VirtualAlloc_Commit_RW> _VirtualAlloc_Commit_RW =>
+       new( new FhMethodLocation(0x5438B0, 0x4782B0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void* d__VirtualFree_Decommit(void* ptr, nuint size);
+    internal static FhMethodHandle<d__VirtualFree_Decommit> _VirtualFree_Decommit =>
+        new( new FhMethodLocation(0x5438E0, 0x4782E0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void* d__VirtualAlloc_Reserve_NA(nuint size);
+    internal static FhMethodHandle<d__VirtualAlloc_Reserve_NA> _VirtualAlloc_Reserve_NA =>
+        new( new FhMethodLocation(0x5439A0, 0x4783A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void* d__VirtualAlloc_ReserveCommit_TopDown_RW(nuint size);
+    internal static FhMethodHandle<d__VirtualAlloc_ReserveCommit_TopDown_RW> _VirtualAlloc_ReserveCommit_TopDown_RW =>
+        new( new FhMethodLocation(0x2EBD00, 0x113340) );
+
     // RT - Input tracking
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
