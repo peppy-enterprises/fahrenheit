@@ -66,12 +66,21 @@ public unsafe sealed class FhMallocModule : FhModule {
 
         FhCall.FUN_009428A0_008772A0.fnptr!();
 
+        /* [fkelava 06/08/26 23:51]
+         * Be VERY careful. The pool size can't be _too small_ because it's reused as the upper
+         * bound of any future allocation through the primary allocator. If that size is too small
+         * for whatever the game has in mind, the allocator will spiral out of control reserving
+         * {POOL_SIZE} in a loop until it exhausts the entire address space, killing the process.
+         *
+         * Maybe one day we'll fix that latent bug, but today ain't the one.
+         */
+
         __ALLOC_STRUCT* alloc_struct = (__ALLOC_STRUCT*) NativeMemory.Alloc(0x30);
-        uint            pool_size    = 0x200_0000; // default: 0x3000_0000
+        uint            pool_size    = 0x800_0000; // default: 0x3000_0000
 
         PInvoke.InitializeCriticalSection(&alloc_struct->crit_sec);
 
-        FhUtil.set_at(FhUtil.select(0x8E900C, 0x9EDBE4, 0x9EDBE4), (uint)&alloc_struct->crit_sec);
+        FhUtil.set_at(FhUtil.select(0x8E900C, 0x9EDBE4, 0x9EDBE4), (uint)alloc_struct);
         _ = FhCall.FUN_00942A40_00877440.fnptr!(&alloc_struct->data, pool_size, 0, uint.CreateChecked( pool_size - 0x100000 ));
 
         PInvoke.EnterCriticalSection(&alloc_struct->crit_sec);
