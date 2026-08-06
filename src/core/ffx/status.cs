@@ -5,6 +5,7 @@
 
 namespace Fahrenheit.FFX;
 
+[StructLayout(LayoutKind.Sequential)]
 public struct StatusMap {
     public byte death;
     public byte zombie;
@@ -33,6 +34,7 @@ public struct StatusMap {
     public byte slow;
 }
 
+[StructLayout(LayoutKind.Sequential)]
 public struct StatusDurationMap {
     public byte sleep;
     public byte silence;
