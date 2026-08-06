@@ -61,16 +61,16 @@ public struct PlySave {
     public AbilityMap            abi_map;
     public AutoAbilityEffectsMap auto_ability_effects;
 
-    public uint                     battle_count;
-    public uint                     enemies_defeated;
-    public uint                     deaths;
-    public uint                     limits_charged;
+    public uint battle_count;
+    public uint enemies_defeated;
+    public uint deaths;
+    public uint limits_charged;
+
     public PlySaveLimitModeCtrArray limit_mode_counters;
+    public OverdriveModeFlags       obtained_limit_modes;
 
-    public OverdriveModeFlags obtained_limit_modes;
-
-    private uint                     __0x8C;
-    private uint                     __0x90;
+    private uint __0x8C;
+    private uint __0x90;
 
     public bool join   { readonly get { return ply_flags.get_bit(0); } set { ply_flags.set_bit(0, value); } }
     public bool joined { readonly get { return ply_flags.get_bit(4); } set { ply_flags.set_bit(4, value); } }
