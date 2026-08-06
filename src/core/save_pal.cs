@@ -133,7 +133,10 @@ internal struct FhSaveHeader2 {
     public ushort   _0x18;
     public ushort   _0x1A;
     public uint     _0x1C;
-    public uint     _0x20;
+    public byte     _0x20;
+    public byte     id_chr_lm;
+    public byte     level_chr_lm;
+    public byte     id_job_lm;
     public uint     _0x24;
     public FhLangId lang_id;
     public byte     _0x29;
