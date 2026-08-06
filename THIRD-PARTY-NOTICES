@@ -102,6 +102,11 @@ Uses the Noto Sans font family under the Open Font License.
     FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
     OTHER DEALINGS IN THE FONT SOFTWARE.
 
+Adapts code from the FFXDataParser.
+----
+    Project has no defined license. Used with permission of the author.
+    https://github.com/Karifean/FFXDataParser
+
 Adapts code from MiniDumper.
 ----
     Copyright (c) 2011 Aaron Ballman (aaron@aaronballman.com)
