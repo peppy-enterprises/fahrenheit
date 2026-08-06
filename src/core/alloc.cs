@@ -22,9 +22,9 @@ internal struct __ALLOC_DATA {
     public uint size;
     public uint _0x04;
     public uint _0x08;
-    public uint _0x0C;
+    public uint addr_primary_pool;
     public uint align;
-    public uint _0x14;
+    public uint addr_last_reserve;
 }
 
 /// <summary>
