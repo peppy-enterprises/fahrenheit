@@ -17,6 +17,12 @@ public struct Shop {
         private ushort _e0;
     }
 
-    private ushort     _0x00;
-    public  ShopOffers offers;
+    /// <summary>
+    ///     The percentage the base price of each offer should be adjusted by.
+    ///     <example>
+    ///         A value of 150 would set prices to 1.5 times their base amounts.
+    ///     </example>
+    /// </summary>
+    public ushort     price_percentage;
+    public ShopOffers offers;
 }

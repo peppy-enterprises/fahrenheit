@@ -12,8 +12,8 @@ internal enum EEditMode {
     // Common
     NULL = 1,
     TXT  = 2,
-    RATE = 3,
 
+    RATE      = 3,
     A_ABILITY = 4,
     BTL_TXT   = 5,
     COMMAND   = 6,
@@ -94,24 +94,24 @@ internal static partial class UI {
     /// </summary>
     private static string _get_component_name_by_mode(EEditMode mode) {
         return mode switch {
-            EEditMode.NULL       => $"(Unknown Type)",
-            EEditMode.TXT        => $"{nameof(NameHelpText)} - (*_txt.bin)",
-            EEditMode.RATE       => $"{nameof(Rate)} - (*_rate.bin)",
+            EEditMode.NULL => $"(Unknown Type)",
+            EEditMode.TXT  => $"{nameof(NameHelpText)} - (*_txt.bin)",
 
-            EEditMode.A_ABILITY  => $"{nameof(AutoAbility)} - (a_ability.bin)",
-            EEditMode.BTL_TXT    => $"{nameof(HelpText)} - (btl_txt.bin)",
-            EEditMode.COMMAND    => $"{nameof(PCommand)} - (command.bin)",
-            EEditMode.IMPORTANT  => $"{nameof(KeyItem)} - (important.bin)",
-            EEditMode.ITEM_GET   => $"(item_get.bin)",
-            EEditMode.ITEM_SHOP  => $"(item_shop.bin)",
-            EEditMode.MONMAGIC   => $"(monmagic.bin)",
-            EEditMode.MONSTER    => $"(monster*.bin)",
-            EEditMode.PARTY      => $"(party.bin)",
-            EEditMode.PLY_ROM    => $"{nameof(PlyRom)} - (ply_rom.bin)",
-            EEditMode.PLY_SAVE   => $"{nameof(PlySave)} - (ply_save.bin)",
-            EEditMode.PREPARE    => $"{nameof(MixRecipe)} - (prepare.bin)",
-            EEditMode.ST_NUMBER  => $"{nameof(StNumber)} - (st_number.bin)",
-            EEditMode.TAKARA     => $"{nameof(Treasure)} - (takara.bin)",
+            EEditMode.RATE      => $"{nameof(Rate)} - (*_rate.bin)",
+            EEditMode.A_ABILITY => $"{nameof(AutoAbility)} - (a_ability.bin)",
+            EEditMode.BTL_TXT   => $"{nameof(HelpText)} - (btl_txt.bin)",
+            EEditMode.COMMAND   => $"{nameof(PCommand)} - (command.bin)",
+            EEditMode.IMPORTANT => $"{nameof(KeyItem)} - (important.bin)",
+            EEditMode.ITEM_GET  => $"(item_get.bin)",
+            EEditMode.ITEM_SHOP => $"(item_shop.bin)",
+            EEditMode.MONMAGIC  => $"(monmagic.bin)",
+            EEditMode.MONSTER   => $"(monster*.bin)",
+            EEditMode.PARTY     => $"(party.bin)",
+            EEditMode.PLY_ROM   => $"{nameof(PlyRom)} - (ply_rom.bin)",
+            EEditMode.PLY_SAVE  => $"{nameof(PlySave)} - (ply_save.bin)",
+            EEditMode.PREPARE   => $"{nameof(MixRecipe)} - (prepare.bin)",
+            EEditMode.ST_NUMBER => $"{nameof(StNumber)} - (st_number.bin)",
+            EEditMode.TAKARA    => $"{nameof(Treasure)} - (takara.bin)",
 
             EEditMode.AMAPDATA   => $"(amapdata.bin)",
             EEditMode.ARMS_SHOP  => $"(arms_shop.bin)",
@@ -131,13 +131,13 @@ internal static partial class UI {
             EEditMode.W_NAME     => $"{nameof(WeaponName)} - (w_name.bin)",
             EEditMode.WEAPON     => $"{nameof(Equipment)} - (weapon.bin)",
 
-            EEditMode.ACCESSORY  => $"(accessory.bin)",
-            EEditMode.EXT_PARTY  => $"(ext_party.bin)",
-            EEditMode.JOB        => $"(job.bin)",
-            EEditMode.MON_GET    => $"(mon_get.bin)",
-            EEditMode.OVERSOUL   => $"(oversoul.bin)",
-            EEditMode.PLATE      => $"(plate.bin)",
-            EEditMode.ROM        => $"(rom.bin)",
+            EEditMode.ACCESSORY => $"(accessory.bin)",
+            EEditMode.EXT_PARTY => $"(ext_party.bin)",
+            EEditMode.JOB       => $"(job.bin)",
+            EEditMode.MON_GET   => $"(mon_get.bin)",
+            EEditMode.OVERSOUL  => $"(oversoul.bin)",
+            EEditMode.PLATE     => $"(plate.bin)",
+            EEditMode.ROM       => $"(rom.bin)",
 
             EEditMode.LM_ACCESARY                => $"(lm_accesary.bin)",
             EEditMode.LM_BIN_STATUS_COUNT        => $"(lm_bin_status_count.bin)",
@@ -164,7 +164,7 @@ internal static partial class UI {
             EEditMode.LM_YS_DEF_BIN              => $"(lm_ys_def_bin.bin)",
             EEditMode.LM_MES_CHK                 => $"(mes_chk.bin)",
 
-            _                                    => throw new NotImplementedException("UNREACHABLE")
+            _ => throw new NotImplementedException("UNREACHABLE")
         };
     }
 
@@ -173,23 +173,23 @@ internal static partial class UI {
     /// </summary>
     private static EEditComponent _get_component_by_mode(EEditMode mode) {
         return mode switch {
-            EEditMode.TXT        => new EditorTextPair(),
-            EEditMode.RATE       => new EditorRate(),
+            EEditMode.TXT => new EditorTextPair(),
 
-            EEditMode.A_ABILITY  => new EditorAAbility(),
-            EEditMode.BTL_TXT    => new EditorText(),
-            EEditMode.COMMAND    => new EditorCommand(),
-            EEditMode.IMPORTANT  => new EditorImportant(),
-            EEditMode.ITEM_GET   => throw new NotImplementedException(),
-            EEditMode.ITEM_SHOP  => throw new NotImplementedException(),
-            EEditMode.MONMAGIC   => throw new NotImplementedException(),
-            EEditMode.MONSTER    => throw new NotImplementedException(),
-            EEditMode.PARTY      => throw new NotImplementedException(),
-            EEditMode.PLY_ROM    => new EditorPlyRom(),
-            EEditMode.PLY_SAVE   => new EditorPlySave(),
-            EEditMode.PREPARE    => new EditorPrepare(),
-            EEditMode.ST_NUMBER  => new EditorStNumber(),
-            EEditMode.TAKARA     => new EditorTakara(),
+            EEditMode.RATE      => new EditorRate(),
+            EEditMode.A_ABILITY => new EditorAAbility(),
+            EEditMode.BTL_TXT   => new EditorText(),
+            EEditMode.COMMAND   => new EditorCommand(),
+            EEditMode.IMPORTANT => new EditorImportant(),
+            EEditMode.ITEM_GET  => throw new NotImplementedException(),
+            EEditMode.ITEM_SHOP => throw new NotImplementedException(),
+            EEditMode.MONMAGIC  => throw new NotImplementedException(),
+            EEditMode.MONSTER   => throw new NotImplementedException(),
+            EEditMode.PARTY     => throw new NotImplementedException(),
+            EEditMode.PLY_ROM   => new EditorPlyRom(),
+            EEditMode.PLY_SAVE  => new EditorPlySave(),
+            EEditMode.PREPARE   => new EditorPrepare(),
+            EEditMode.ST_NUMBER => new EditorStNumber(),
+            EEditMode.TAKARA    => new EditorTakara(),
 
             EEditMode.AMAPDATA   => throw new NotImplementedException(),
             EEditMode.ARMS_SHOP  => throw new NotImplementedException(),
@@ -209,13 +209,13 @@ internal static partial class UI {
             EEditMode.W_NAME     => new EditorWeaponName(),
             EEditMode.WEAPON     => new EditorWeapon(),
 
-            EEditMode.ACCESSORY  => throw new NotImplementedException(),
-            EEditMode.EXT_PARTY  => throw new NotImplementedException(),
-            EEditMode.JOB        => throw new NotImplementedException(),
-            EEditMode.MON_GET    => throw new NotImplementedException(),
-            EEditMode.OVERSOUL   => throw new NotImplementedException(),
-            EEditMode.PLATE      => throw new NotImplementedException(),
-            EEditMode.ROM        => throw new NotImplementedException(),
+            EEditMode.ACCESSORY => throw new NotImplementedException(),
+            EEditMode.EXT_PARTY => throw new NotImplementedException(),
+            EEditMode.JOB       => throw new NotImplementedException(),
+            EEditMode.MON_GET   => throw new NotImplementedException(),
+            EEditMode.OVERSOUL  => throw new NotImplementedException(),
+            EEditMode.PLATE     => throw new NotImplementedException(),
+            EEditMode.ROM       => throw new NotImplementedException(),
 
             EEditMode.LM_ACCESARY                => throw new NotImplementedException(),
             EEditMode.LM_BIN_STATUS_COUNT        => throw new NotImplementedException(),
@@ -271,6 +271,7 @@ internal static partial class UI {
             "save_txt.bin"   or
             "status_txt.bin" or
             "summon_txt.bin" => EEditMode.TXT,
+
             "arms_rate.bin"  or
             "item_rate.bin"  => EEditMode.RATE,
 
@@ -281,9 +282,11 @@ internal static partial class UI {
             "item.bin"       => EEditMode.ITEM,
             "item_shop.bin"  => EEditMode.ITEM_SHOP,
             "monmagic.bin"   => EEditMode.MONMAGIC,
+
             "monster1.bin"   or
             "monster2.bin"   or
             "monster3.bin"   => EEditMode.MONSTER,
+
             "party.bin"      => EEditMode.PARTY,
             "ply_rom.bin"    => EEditMode.PLY_ROM,
             "ply_save.bin"   => EEditMode.PLY_SAVE,
@@ -300,8 +303,10 @@ internal static partial class UI {
             "kaizou.bin"     => EEditMode.KAIZOU,
             "menu.bin"       => EEditMode.MENU,
             "menu_panel.bin" => EEditMode.MENU_PANEL,
+
             "monmagic1.bin"  or
             "monmagic2.bin"  => EEditMode.MONMAGIC1,
+
             "panel.bin"      => EEditMode.PANEL,
             "shop_arms.bin"  => EEditMode.SHOP_ARMS,
             "sphere.bin"     => EEditMode.SPHERE,

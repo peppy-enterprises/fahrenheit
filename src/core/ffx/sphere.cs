@@ -34,10 +34,12 @@ public enum SphereTargets : ushort {
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Sphere {
-    public  ExcelSimplifiableTextOffset help;
-    public  SphereBehavior              type;
-    public  SphereTargets               activates;
-    public  SphereRange                 range;
-    public  byte                        special_role;
-    private ushort                      _0x0E;
+    public ExcelSimplifiableTextOffset help;
+
+    public SphereBehavior type;
+    public SphereTargets  activates;
+    public SphereRange    range;
+    public byte           special_role;
+
+    private ushort _0x0E;
 }

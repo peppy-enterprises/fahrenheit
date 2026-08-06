@@ -7,31 +7,37 @@ namespace Fahrenheit.FFX;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct AutoAbility {
-    public ExcelTextOffset       name_offset;
-    public ExcelTextOffset       dash_offset;
-    public ExcelTextOffset       desc_offset;
-    public ExcelTextOffset       misc_offset;
-    public bool                  is_sos;
-    public ElementFlags          elem_strike;
-    public ElementFlags          elem_absorb;
-    public ElementFlags          elem_ignore;
-    public ElementFlags          elem_resist;
-    public ElementFlags          elem_weak;
-    public StatusMap             status_inflict;
-    public StatusDurationMap     status_duration;
-    public StatusMap             status_resist;
-    public byte                  stat_inc_amount;
-    public StatIncreaseFlags     stat_inc_flags;
-    public StatusPermanentFlags  status_auto_permanent;
-    public StatusTemporalFlags   status_auto_temporal;
-    public StatusExtraFlags      status_auto_extra;
-    public StatusExtraFlags      status_inflict_extra;
-    public StatusExtraFlags      status_resist_extra;
+    public ExcelSimplifiableTextOffset name;
+    public ExcelSimplifiableTextOffset desc;
+
+    public bool is_sos;
+
+    public ElementFlags elem_strike;
+    public ElementFlags elem_absorb;
+    public ElementFlags elem_ignore;
+    public ElementFlags elem_resist;
+    public ElementFlags elem_weak;
+
+    public StatusMap         status_inflict;
+    public StatusDurationMap status_duration;
+    public StatusMap         status_resist;
+
+    public byte              stat_inc_amount;
+    public StatIncreaseFlags stat_inc_flags;
+
+    public StatusPermanentFlags status_auto_permanent;
+    public StatusTemporalFlags  status_auto_temporal;
+    public StatusExtraFlags     status_auto_extra;
+
+    public StatusExtraFlags status_inflict_extra;
+    public StatusExtraFlags status_resist_extra;
+
     public AutoAbilityEffectsMap auto_ability_effects;
-    public byte                  icon;
-    public byte                  group_idx;
-    public byte                  group_level;
-    public byte                  international_bonus_idx;
+
+    public byte icon;
+    public byte group_idx;
+    public byte group_level;
+    public byte international_bonus_idx;
 }
 
 [Flags]

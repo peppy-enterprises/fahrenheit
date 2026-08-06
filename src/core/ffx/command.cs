@@ -19,42 +19,48 @@ public struct PCommandData {
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Command {
-    public ExcelTextOffset   name_offset;
-    public ExcelTextOffset   dash_offset;
-    public ExcelTextOffset   desc_offset;
-    public ExcelTextOffset   misc_offset;
-    public ushort            anim_1;
-    public ushort            anim_2;
-    public byte              icon;
-    public byte              caster_anim;
-    public byte              flags_menu;
-    public byte              sub_menu_cat2;
-    public byte              sub_menu_cat;
-    public byte              user_id;
-    public byte              flags_target;
-    public byte              flags_usage;
-    public uint              flags_misc;
-    public byte              flags_damage;
-    public bool              steals_gil;
-    public byte              party_preview;
-    public byte              flags_damage_class;
-    public byte              ctb_rank;
-    public byte              mp_cost;
-    public byte              limit_cost;
-    public byte              crit_bonus;
-    public byte              dmg_formula;
-    public byte              accuracy;
-    public byte              power;
-    public byte              hit_count;
-    public byte              shatter_chance;
-    public ElementFlags      element;
+    public ExcelSimplifiableTextOffset name;
+    public ExcelSimplifiableTextOffset desc;
+
+    public ushort anim_1;
+    public ushort anim_2;
+    public byte   icon;
+    public byte   caster_anim;
+
+    public byte flags_menu;
+    public byte sub_menu_cat2;
+    public byte sub_menu_cat;
+    public byte user_id;
+
+    public byte flags_target;
+    public byte flags_usage;
+    public uint flags_misc;
+    public byte flags_damage;
+    public bool steals_gil;
+    public byte party_preview;
+    public byte flags_damage_class;
+
+    public byte ctb_rank;
+    public byte mp_cost;
+    public byte limit_cost;
+
+    public byte crit_bonus;
+    public byte dmg_formula;
+    public byte accuracy;
+    public byte power;
+    public byte hit_count;
+    public byte shatter_chance;
+
+    public ElementFlags element;
+
     public StatusMap         status_map;
     public StatusDurationMap status_duration_map;
     public StatusExtraFlags  flags_status_extra;
-    public ushort            flags_buffs_stat;
-    public byte              overdrive_category;
-    public byte              buff_amount;
-    public ushort            flags_buffs_mix;
+
+    public ushort flags_buffs_stat;
+    public byte   overdrive_category;
+    public byte   buff_amount;
+    public ushort flags_buffs_mix;
 
     public  bool is_top_level_in_menu { get { return flags_menu.get_bit(0); } set { flags_menu.set_bit (0, value); } }
     private bool _menu_f4             { get { return flags_menu.get_bit(3); } set { flags_menu.set_bit (3, value); } } // Only used on Skill, Special, Blk/Wht Magic

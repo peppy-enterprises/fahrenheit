@@ -12,49 +12,63 @@ public struct PlySaveLimitModeCtrArray {
 
 [StructLayout(LayoutKind.Sequential, Pack = 2)]
 public struct PlySave {
-    public  ExcelTextOffset          name_offset;
-    public  uint                     base_hp;
-    public  uint                     base_mp;
-    public  byte                     base_strength;
-    public  byte                     base_defense;
-    public  byte                     base_magic;
-    public  byte                     base_magic_defense;
-    public  byte                     base_agility;
-    public  byte                     base_luck;
-    public  byte                     base_evasion;
-    public  byte                     base_accuracy;
-    public  uint                     total_ap;
-    public  uint                     ap;
-    public  uint                     hp;
-    public  uint                     mp;
-    public  uint                     max_hp;
-    public  uint                     max_mp;
-    public  byte                     ply_flags;
-    public  byte                     wpn_inv_idx;
-    public  byte                     arm_inv_idx;
-    public  byte                     strength;
-    public  byte                     defense;
-    public  byte                     magic;
-    public  byte                     magic_defense;
-    public  byte                     agility;
-    public  byte                     luck;
-    public  byte                     evasion;
-    public  byte                     accuracy;
-    public  byte                     poison_dmg;
-    public  byte                     limit_mode_index;
-    public  byte                     limit_charge;
-    public  byte                     limit_charge_max;
-    public  byte                     slv_available;
-    public  byte                     slv_spent;
-    public  byte                     battles_until_recovery;
-    public  AbilityMap               abi_map;
-    public  AutoAbilityEffectsMap    auto_ability_effects;
-    public  uint                     battle_count;
-    public  uint                     enemies_defeated;
-    public  uint                     deaths;
-    public  uint                     limits_charged;
-    public  PlySaveLimitModeCtrArray limit_mode_counters;
-    public  OverdriveModeFlags       obtained_limit_modes;
+    public ExcelTextOffset name;
+
+    public uint base_hp;
+    public uint base_mp;
+    public byte base_strength;
+    public byte base_defense;
+    public byte base_magic;
+    public byte base_magic_defense;
+    public byte base_agility;
+    public byte base_luck;
+    public byte base_evasion;
+    public byte base_accuracy;
+
+    public uint total_ap;
+    public uint ap;
+
+    public uint hp;
+    public uint mp;
+    public uint max_hp;
+    public uint max_mp;
+
+    public byte ply_flags;
+
+    public byte wpn_inv_idx;
+    public byte arm_inv_idx;
+
+    public byte strength;
+    public byte defense;
+    public byte magic;
+    public byte magic_defense;
+    public byte agility;
+    public byte luck;
+    public byte evasion;
+    public byte accuracy;
+
+    public byte poison_dmg;
+
+    public byte limit_mode_index;
+    public byte limit_charge;
+    public byte limit_charge_max;
+
+    public byte slv_available;
+    public byte slv_spent;
+
+    public byte battles_until_recovery;
+
+    public AbilityMap            abi_map;
+    public AutoAbilityEffectsMap auto_ability_effects;
+
+    public uint                     battle_count;
+    public uint                     enemies_defeated;
+    public uint                     deaths;
+    public uint                     limits_charged;
+    public PlySaveLimitModeCtrArray limit_mode_counters;
+
+    public OverdriveModeFlags obtained_limit_modes;
+
     private uint                     __0x8C;
     private uint                     __0x90;
 

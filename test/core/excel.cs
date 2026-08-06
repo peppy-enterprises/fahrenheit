@@ -12,9 +12,9 @@ public class FhExcelTests {
     public void ffx_excel_sizeof() {
         using (Assert.EnterMultipleScope()) {
             Assert.That(Unsafe.SizeOf<FFX.AutoAbility>(),         Is.EqualTo(0x6C)); // a_ability.bin
-            Assert.That(Unsafe.SizeOf<FFX.Command>(),             Is.EqualTo(0x5C)); // {item|command|monmagic*}.bin
+            Assert.That(Unsafe.SizeOf<FFX.Command>(),             Is.EqualTo(0x5C)); // monmagic{1|2}.bin
+            Assert.That(Unsafe.SizeOf<FFX.PCommand>(),            Is.EqualTo(0x60)); // {item|command}.bin
             Assert.That(Unsafe.SizeOf<FFX.PCommandData>(),        Is.EqualTo(0x04)); // ^
-            Assert.That(Unsafe.SizeOf<FFX.PCommand>(),            Is.EqualTo(0x60)); // ^
             Assert.That(Unsafe.SizeOf<FFX.CtbBase>(),             Is.EqualTo(0x02)); // ctb_base.bin
             Assert.That(Unsafe.SizeOf<FFX.CustomizationRecipe>(), Is.EqualTo(0x08)); // kaizou.bin
             Assert.That(Unsafe.SizeOf<FFX.Equipment>(),           Is.EqualTo(0x16)); // weapon.bin
