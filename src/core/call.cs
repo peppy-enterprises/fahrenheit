@@ -56,6 +56,26 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d__VirtualAlloc_ReserveCommit_TopDown_RW> _VirtualAlloc_ReserveCommit_TopDown_RW =>
         new( new FhMethodLocation(0x2EBD00, 0x113340) );
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d__malloc_pool_init();
+    internal static FhMethodHandle<d__malloc_pool_init> _malloc_pool_init =>
+        new( new FhMethodLocation(0x2FBA90, 0x121F90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_FUN_009428A0_008772A0();
+    internal static FhMethodHandle<d_FUN_009428A0_008772A0> FUN_009428A0_008772A0 =>
+        new( new FhMethodLocation(0x5428A0, 0x4772A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate void* d_FUN_00942A40_00877440(void* ptr_this, nuint size, uint p2, uint p3);
+    internal static FhMethodHandle<d_FUN_00942A40_00877440> FUN_00942A40_00877440 =>
+        new( new FhMethodLocation(0x542A40, 0x477440) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate void* d_FUN_00942B60_00877560(void* ptr_this, uint arg2);
+    internal static FhMethodHandle<d_FUN_00942B60_00877560> FUN_00942B60_00877560 =>
+        new( new FhMethodLocation(0x542B60, 0x477560) );
+
     // RT - Input tracking
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
