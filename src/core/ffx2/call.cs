@@ -407,7 +407,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x356590) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_TOBtlGetComName(uint ability_id);
+    public delegate byte* d_TOBtlGetComName(uint ability_id);
     public static FhMethodHandle<d_TOBtlGetComName> TOBtlGetComName
         => new( new FhMethodLocation("FFX-2.exe", 0x359FD0) );
 
@@ -422,7 +422,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x35E2C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_TOMenuSetHelpMes(int addr_of_txt_bytes);
+    public delegate void d_TOMenuSetHelpMes(byte* addr_of_txt_bytes);
     public static FhMethodHandle<d_TOMenuSetHelpMes> TOMenuSetHelpMes
         => new( new FhMethodLocation("FFX-2.exe", 0x363970) );
 
@@ -432,7 +432,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x364680) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_TkMenuSetHelpMessage(int arg1);
+    public delegate void d_TkMenuSetHelpMessage(byte* text_location);
     public static FhMethodHandle<d_TkMenuSetHelpMessage> TkMenuSetHelpMessage
         => new( new FhMethodLocation("FFX-2.exe", 0x365B20) );
 
@@ -477,7 +477,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x377270) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_777C60(int arg1);
+    public delegate void d_FUN_777C60(uint arg1);
     public static FhMethodHandle<d_FUN_777C60> FUN_777C60
         => new( new FhMethodLocation("FFX-2.exe", 0x377C60) );
 
@@ -522,7 +522,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x378F70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TOGetMenuText(uint arg1);
+    public delegate byte* d_TOGetMenuText(uint arg1);
     public static FhMethodHandle<d_TOGetMenuText> TOGetMenuText
         => new( new FhMethodLocation("FFX-2.exe", 0x379250) );
 
@@ -552,12 +552,12 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x393190) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TOGetRomHelp(uint arg1);
+    public delegate byte* d_TOGetRomHelp(uint arg1);
     public static FhMethodHandle<d_TOGetRomHelp> TOGetRomHelp
         => new( new FhMethodLocation("FFX-2.exe", 0x394500) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TOGetSaveJobName(uint chr_id);
+    public delegate byte* d_TOGetSaveJobName(uint chr_id);
     public static FhMethodHandle<d_TOGetSaveJobName> TOGetSaveJobName
         => new( new FhMethodLocation("FFX-2.exe", 0x394600) );
 
@@ -567,7 +567,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x396330) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_TOMenuSetMacroCommandValue(int arg1, int arg2, uint arg3);
+    public delegate void d_TOMenuSetMacroCommandValue(int arg1, int arg2, byte* arg3);
     public static FhMethodHandle<d_TOMenuSetMacroCommandValue> TOMenuSetMacroCommandValue
         => new( new FhMethodLocation("FFX-2.exe", 0x396360) );
 
@@ -602,7 +602,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x3AE9B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_007AEDA0(int arg1, int arg2, int arg3);
+    public delegate void d_FUN_007AEDA0(byte* arg1, int arg2, int arg3);
     public static FhMethodHandle<d_FUN_007AEDA0> FUN_007AEDA0
         => new( new FhMethodLocation("FFX-2.exe", 0x3AEDA0) );
 
