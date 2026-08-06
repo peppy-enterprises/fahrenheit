@@ -34,3 +34,4 @@ global using Windows.Win32.Graphics.Dxgi;
 global using Windows.Win32.Graphics.Dxgi.Common;
 global using Windows.Win32.Graphics.Gdi;
 global using Windows.Win32.UI.WindowsAndMessaging;
+global using Windows.Win32.System.Threading;

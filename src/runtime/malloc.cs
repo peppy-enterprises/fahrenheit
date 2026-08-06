@@ -6,28 +6,6 @@
 namespace Fahrenheit.Runtime;
 
 /// <summary>
-///     An opaque structure used by the game's allocator.
-/// </summary>
-[StructLayout(LayoutKind.Sequential)]
-internal struct __ALLOC_STRUCT {
-    public CRITICAL_SECTION crit_sec;
-    public __ALLOC_DATA     data;
-}
-
-/// <summary>
-///     An opaque structure used by the game's allocator.
-/// </summary>
-[StructLayout(LayoutKind.Sequential)]
-internal struct __ALLOC_DATA {
-    public uint size;
-    public uint _0x04;
-    public uint _0x08;
-    public uint _0x0C;
-    public uint align;
-    public uint _0x14;
-}
-
-/// <summary>
 ///     Manipulates the game's allocator to improve its behavior.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]

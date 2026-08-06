@@ -67,12 +67,12 @@ public static unsafe partial class FhCall {
         new( new FhMethodLocation(0x5428A0, 0x4772A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate void* d_FUN_00942A40_00877440(void* ptr_this, nuint size, uint p2, uint p3);
+    internal delegate __ALLOC_DATA* d_FUN_00942A40_00877440(__ALLOC_DATA* ptr_this, nuint size, uint p2, uint p3);
     internal static FhMethodHandle<d_FUN_00942A40_00877440> FUN_00942A40_00877440 =>
         new( new FhMethodLocation(0x542A40, 0x477440) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate void* d_FUN_00942B60_00877560(void* ptr_this, uint arg2);
+    internal delegate void* d_FUN_00942B60_00877560(__ALLOC_DATA* ptr_this, uint arg2);
     internal static FhMethodHandle<d_FUN_00942B60_00877560> FUN_00942B60_00877560 =>
         new( new FhMethodLocation(0x542B60, 0x477560) );
 
