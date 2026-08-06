@@ -67,7 +67,7 @@ public unsafe sealed class FhMallocModule : FhModule {
         FhCall.FUN_009428A0_008772A0.fnptr!();
 
         __ALLOC_STRUCT* alloc_struct = (__ALLOC_STRUCT*) NativeMemory.Alloc(0x30);
-        nuint           pool_size    = 0x200_0000; // default: 0x3000_0000
+        uint            pool_size    = 0x200_0000; // default: 0x3000_0000
 
         PInvoke.InitializeCriticalSection(&alloc_struct->crit_sec);
 
@@ -100,41 +100,45 @@ public unsafe sealed class FhMallocModule : FhModule {
      * https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualfree.
      *
      * By passing MEM_TOP_DOWN, VirtualAlloc can be induced to go top-down; that is, start allocating
-     * from 7FFF_FFFF downwards. This applies to the primary pool as well! Effectively, we can move
-     * it (and all other primary allocator actions) above the 2G mark.
+     * from {7|F}FFF_FFFF downwards. This applies to the primary pool as well!
+     * When the game is 4G patched, this leaves a much larger free block under 2G.
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void* h__VirtualAlloc_Reserve_NA(nuint size) {
-        _logger.Info($"MEM_RESERVE(0x{size:X8})");
-        void* rv = FhCall._VirtualAlloc_Reserve_NA.chain_from(h__VirtualAlloc_Reserve_NA).fnptr!(size);
-        _logger.Info($"0x{(nint)rv:X8}");
-        _logger.Info($"TOTAL RESERVED: 0x{_reserved:X8}");
+    private void* h__VirtualAlloc_Reserve_NA(uint size) {
+        void* rv = FhEnvironment.LargeAddressAware
+            ? FhCall._VirtualAlloc_ReserveCommit_TopDown_RW.chain_from(h__VirtualAlloc_ReserveCommit_TopDown_RW).fnptr!(size)
+            : FhCall._VirtualAlloc_Reserve_NA              .chain_from(h__VirtualAlloc_Reserve_NA)              .fnptr!(size);
+
+        _logger.Debug($"MEM_RESERVE(0x{size:X8}) = 0x{(nint)rv:X8}");
+        _logger.Debug($"TOTAL RESERVED: 0x{_reserved:X8}");
         return rv;
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void* h__VirtualAlloc_Commit_RW(void* ptr, nuint size) {
-        _logger.Info($"MEM_COMMIT(0x{(nint)ptr:X8}, 0x{size:X8})");
+    private void* h__VirtualAlloc_Commit_RW(void* ptr, uint size) {
         void* rv = FhCall._VirtualAlloc_Commit_RW.chain_from(h__VirtualAlloc_Commit_RW).fnptr!(ptr, size);
-        _logger.Info($"TOTAL COMMITTED: 0x{_committed:X8}");
+
+        _logger.Debug($"MEM_COMMIT(0x{(nint)ptr:X8}, 0x{size:X8})");
+        _logger.Debug($"TOTAL COMMITTED: 0x{_committed:X8}");
         return rv;
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private bool h__VirtualFree_Decommit(void* ptr, nuint size) {
-        _logger.Info($"MEM_DECOMMIT(0x{(nint)ptr:X8}, 0x{size:X8})");
+    private bool h__VirtualFree_Decommit(void* ptr, uint size) {
         bool rv = FhCall._VirtualFree_Decommit.chain_from(h__VirtualFree_Decommit).fnptr!(ptr, size);
-        _logger.Info($"TOTAL COMMITTED: 0x{_committed:X8}");
+
+        _logger.Debug($"MEM_DECOMMIT(0x{(nint)ptr:X8}, 0x{size:X8})");
+        _logger.Debug($"TOTAL COMMITTED: 0x{_committed:X8}");
         return rv;
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void* h__VirtualAlloc_ReserveCommit_TopDown_RW(nuint size) {
-        _logger.Info($"MEM_RESERVE+COMMIT(TOP_DOWN, 0x{size:X8})");
+    private void* h__VirtualAlloc_ReserveCommit_TopDown_RW(uint size) {
         void* rv = FhCall._VirtualAlloc_ReserveCommit_TopDown_RW.chain_from(h__VirtualAlloc_ReserveCommit_TopDown_RW).fnptr!(size);
-        _logger.Info($"0x{(nint)rv:X8}");
-        _logger.Info($"TOTAL RESERVED: 0x{_reserved:X8}");
+
+        _logger.Debug($"MEM_RESERVE+COMMIT(TOP_DOWN, 0x{size:X8}) = 0x{(nint)rv:X8}");
+        _logger.Debug($"TOTAL RESERVED: 0x{_reserved:X8}");
         return rv;
     }
 

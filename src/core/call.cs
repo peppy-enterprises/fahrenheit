@@ -37,22 +37,22 @@ public static unsafe partial class FhCall {
     // RT - Allocator fix
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void* d__VirtualAlloc_Commit_RW(void* ptr, nuint size);
+    internal delegate void* d__VirtualAlloc_Commit_RW(void* ptr, uint size);
     internal static FhMethodHandle<d__VirtualAlloc_Commit_RW> _VirtualAlloc_Commit_RW =>
        new( new FhMethodLocation(0x5438B0, 0x4782B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate bool d__VirtualFree_Decommit(void* ptr, nuint size);
+    internal delegate bool d__VirtualFree_Decommit(void* ptr, uint size);
     internal static FhMethodHandle<d__VirtualFree_Decommit> _VirtualFree_Decommit =>
         new( new FhMethodLocation(0x5438E0, 0x4782E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void* d__VirtualAlloc_Reserve_NA(nuint size);
+    internal delegate void* d__VirtualAlloc_Reserve_NA(uint size);
     internal static FhMethodHandle<d__VirtualAlloc_Reserve_NA> _VirtualAlloc_Reserve_NA =>
         new( new FhMethodLocation(0x5439A0, 0x4783A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void* d__VirtualAlloc_ReserveCommit_TopDown_RW(nuint size);
+    internal delegate void* d__VirtualAlloc_ReserveCommit_TopDown_RW(uint size);
     internal static FhMethodHandle<d__VirtualAlloc_ReserveCommit_TopDown_RW> _VirtualAlloc_ReserveCommit_TopDown_RW =>
         new( new FhMethodLocation(0x2EBD00, 0x113340) );
 
@@ -67,7 +67,7 @@ public static unsafe partial class FhCall {
         new( new FhMethodLocation(0x5428A0, 0x4772A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate __ALLOC_DATA* d_FUN_00942A40_00877440(__ALLOC_DATA* ptr_this, nuint size, uint p2, uint p3);
+    internal delegate __ALLOC_DATA* d_FUN_00942A40_00877440(__ALLOC_DATA* ptr_this, uint size, uint p2, uint p3);
     internal static FhMethodHandle<d_FUN_00942A40_00877440> FUN_00942A40_00877440 =>
         new( new FhMethodLocation(0x542A40, 0x477440) );
 
