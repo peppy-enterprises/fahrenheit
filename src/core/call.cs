@@ -42,7 +42,7 @@ public static unsafe partial class FhCall {
        new( new FhMethodLocation(0x5438B0, 0x4782B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void* d__VirtualFree_Decommit(void* ptr, nuint size);
+    internal delegate bool d__VirtualFree_Decommit(void* ptr, nuint size);
     internal static FhMethodHandle<d__VirtualFree_Decommit> _VirtualFree_Decommit =>
         new( new FhMethodLocation(0x5438E0, 0x4782E0) );
 

@@ -122,9 +122,9 @@ public unsafe sealed class FhMallocModule : FhModule {
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void* h__VirtualFree_Decommit(void* ptr, nuint size) {
+    private bool h__VirtualFree_Decommit(void* ptr, nuint size) {
         _logger.Info($"MEM_DECOMMIT(0x{(nint)ptr:X8}, 0x{size:X8})");
-        void* rv = FhCall._VirtualFree_Decommit.chain_from(h__VirtualFree_Decommit).fnptr!(ptr, size);
+        bool rv = FhCall._VirtualFree_Decommit.chain_from(h__VirtualFree_Decommit).fnptr!(ptr, size);
         _logger.Info($"TOTAL COMMITTED: 0x{_committed:X8}");
         return rv;
     }
