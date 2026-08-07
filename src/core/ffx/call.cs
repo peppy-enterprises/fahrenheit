@@ -22,7 +22,7 @@ namespace Fahrenheit.FFX;
 public static partial class FhCall {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate PlySave* d_MsGetSavePlayerPtr(uint chr_id);
+    public unsafe delegate PlySave* d_MsGetSavePlayerPtr(int ply_id);
     public static FhMethodHandle<d_MsGetSavePlayerPtr> MsGetSavePlayerPtr
         => new ( new FhMethodLocation("FFX.exe", 0x3853F0) );
 
@@ -42,7 +42,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4F5C10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_TkMenuGetPlayerFromIndex2(int param_1);
+    public delegate byte d_TkMenuGetPlayerFromIndex2(int ply_idx);
     public static FhMethodHandle<d_TkMenuGetPlayerFromIndex2> TkMenuGetPlayerFromIndex2
         => new ( new FhMethodLocation("FFX.exe", 0x4A9AB0) );
 
@@ -62,17 +62,17 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4A9B20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_DrawWaterWaveShapeC2(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, float param_8, float param_9, float param_10, uint param_11, uint param_12);
+    public delegate void d_DrawWaterWaveShapeC2(float x, float y, float w, float h, float start_x, float start_y, float param_7, float param_8, float move_x, float move_y, uint color_start, uint color_end);
     public static FhMethodHandle<d_DrawWaterWaveShapeC2> DrawWaterWaveShapeC2
         => new ( new FhMethodLocation("FFX.exe", 0x4E7D30) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_FUN_008a9a20(uint param_1);
+    public delegate byte d_FUN_008a9a20(int ply_id);
     public static FhMethodHandle<d_FUN_008a9a20> FUN_008a9a20
         => new ( new FhMethodLocation("FFX.exe", 0x4A9A20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* name, float param_2, float param_3, byte color, float param_5, int param_6);
+public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* text, float param_2, float param_3, byte color, float param_5, float param_6);
     public static FhMethodHandle<d_ToMakeBtlEasyEdgeFont> ToMakeBtlEasyEdgeFont
         => new ( new FhMethodLocation("FFX.exe", 0x505930) );
 
@@ -82,32 +82,32 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4AC2A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TkMenuGetMaxHP(uint param_1);
+    public delegate uint d_TkMenuGetMaxHP(int ply_id);
     public static FhMethodHandle<d_TkMenuGetMaxHP> TkMenuGetMaxHP
         => new ( new FhMethodLocation("FFX.exe", 0x4A9940) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TkMenuGetHP(uint param_1);
+    public delegate uint d_TkMenuGetHP(int ply_id);
     public static FhMethodHandle<d_TkMenuGetHP> TkMenuGetHP
         => new ( new FhMethodLocation("FFX.exe", 0x4A9870) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_TOMkpCrossEasyStrFontSClut(byte* param_1, float param_2, float param_3, byte param_4, float param_5, float param_6);
+    public unsafe delegate void d_TOMkpCrossEasyStrFontSClut(byte* text, float param_2, float param_3, byte param_4, float param_5, float param_6);
     public static FhMethodHandle<d_TOMkpCrossEasyStrFontSClut> TOMkpCrossEasyStrFontSClut
         => new ( new FhMethodLocation("FFX.exe", 0x501660) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TkMenuGetMaxMP(uint param_1);
+    public delegate uint d_TkMenuGetMaxMP(int ply_id);
     public static FhMethodHandle<d_TkMenuGetMaxMP> TkMenuGetMaxMP
         => new ( new FhMethodLocation("FFX.exe", 0x4A9960) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TkMenuGetMP(uint param_1);
+    public delegate uint d_TkMenuGetMP(int ply_id);
     public static FhMethodHandle<d_TkMenuGetMP> TkMenuGetMP
         => new ( new FhMethodLocation("FFX.exe", 0x4A9920) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_FUN_008a9b30(byte param_1);
+    public delegate int d_FUN_008a9b30(byte ply_id);
     public static FhMethodHandle<d_FUN_008a9b30> FUN_008a9b30
         => new ( new FhMethodLocation("FFX.exe", 0x4A9B30) );
 
@@ -137,12 +137,12 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4F4B20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int d_MsGetGIL(AtelBasicWorker* work, int* storage, AtelStack* stack);
+    public unsafe delegate int d_MsGetGIL();
     public static FhMethodHandle<d_MsGetGIL> MsGetGIL
         => new ( new FhMethodLocation("FFX.exe", 0x384F40) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008c09f0(float param_1, float param_2, float param_3, float param_4, int param_5);
+    public delegate void d_FUN_008c09f0(float x, float y, float w, float h, int param_5);
     public static FhMethodHandle<d_FUN_008c09f0> FUN_008c09f0
         => new ( new FhMethodLocation("FFX.exe", 0x4C09F0) );
 
@@ -152,12 +152,12 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4A9C00) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008e19f0(uint param_1, float param_2, float param_3, byte param_4, int param_5);
+    public delegate void d_FUN_008e19f0(uint param_1, float param_2, float param_3, int param_4, int param_5);
     public static FhMethodHandle<d_FUN_008e19f0> FUN_008e19f0
         => new ( new FhMethodLocation("FFX.exe", 0x4E19F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_TOMkpShapeXYWHUVC2(uint param_1, float x, float y, float w, float h, float param_6, float param_7, float param_8, float param_9, uint color_1, uint color_2);
+    public delegate void d_TOMkpShapeXYWHUVC2(uint param_1, float x, float y, float w, float h, float param_6, float param_7, float param_8, float param_9, uint color_start, uint color_end);
     public static FhMethodHandle<d_TOMkpShapeXYWHUVC2> TOMkpShapeXYWHUVC2
         => new ( new FhMethodLocation("FFX.exe", 0x503EE0) );
 
@@ -167,7 +167,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x385290) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_TkMenuDraw1612Width(byte* param_1);
+    public unsafe delegate byte* d_TkMenuDraw1612Width(byte* text);
     public static FhMethodHandle<d_TkMenuDraw1612Width> TkMenuDraw1612Width
         => new ( new FhMethodLocation("FFX.exe", 0x4DC9C0) );
 
@@ -182,7 +182,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4AC870) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_TOGetImageWH(int param_1, float* w, float* h);
+    public unsafe delegate void d_TOGetImageWH(int param_1, float* out_width, float* out_height);
     public static FhMethodHandle<d_TOGetImageWH> TOGetImageWH
         => new ( new FhMethodLocation("FFX.exe", 0x4AC3B0) );
 
@@ -197,17 +197,17 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x385300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsGetSavePlyJoin(uint chr_id);
+    public delegate int d_MsGetSavePlyJoin(byte ply_id);
     public static FhMethodHandle<d_MsGetSavePlyJoin> MsGetSavePlyJoin
         => new ( new FhMethodLocation("FFX.exe", 0x385440) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_MsSetSavePlyJoin(uint chr_id, int enable);
+    public delegate void d_MsSetSavePlyJoin(int ply_id, int enable);
     public static FhMethodHandle<d_MsSetSavePlyJoin> MsSetSavePlyJoin
         => new ( new FhMethodLocation("FFX.exe", 0x386A70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_FUN_008bd9d0(int param_1);
+    public delegate uint d_FUN_008bd9d0(int ply_id);
     public static FhMethodHandle<d_FUN_008bd9d0> FUN_008bd9d0
         => new ( new FhMethodLocation("FFX.exe", 0x4BD9D0) );
 
@@ -1007,7 +1007,7 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x46D660) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int d_AtelPopStackInteger(AtelBasicWorker* arg1, AtelStack* atelStack);
+    public unsafe delegate int d_AtelPopStackInteger(AtelBasicWorker* work, AtelStack* stack);
     public static FhMethodHandle<d_AtelPopStackInteger> AtelPopStackInteger
         => new( new FhMethodLocation("FFX.exe", 0x46DE90) );
 
