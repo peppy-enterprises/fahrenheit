@@ -122,7 +122,7 @@ public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* text, float param_2, f
         => new ( new FhMethodLocation("FFX.exe", 0x505820) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate byte d_FUN_008a9c10();
+    public delegate int d_FUN_008a9c10();
     public static FhMethodHandle<d_FUN_008a9c10> FUN_008a9c10
         => new ( new FhMethodLocation("FFX.exe", 0x4A9C10) );
 
@@ -383,6 +383,9 @@ public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* text, float param_2, f
 
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0171_fillPartyMemberHp
         => new ( new FhMethodLocation("FFX.exe", 0x45C4F0) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp
+        => new ( new FhMethodLocation("FFX.exe", 0x45C6B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate void d_TkMenuDrawMain();
