@@ -22,4 +22,7 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_GetLastMissionJobName> GetLastMissionJobName
         => new( new FhMethodLocation("FFX-2.exe", 0x368570) );
 
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp
+        => new( new FhMethodLocation("FFX-2.exe", 0x319360) );
+
 }
