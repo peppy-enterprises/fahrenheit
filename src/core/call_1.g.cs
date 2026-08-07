@@ -34587,13 +34587,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_006FB9F0_00521EF0();
     public static FhMethodHandle<d_FUN_006FB9F0_00521EF0> FUN_006FB9F0_00521EF0 => new( new FhMethodLocation(0x2FB9F0, 0x121EF0) );
 
-    // Fused identical entry: unknown undefined FUN_006fba90()
-    // at (FFX.exe+6FBA90, FFX-2.exe+521F90)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_006FBA90_00521F90();
-    public static FhMethodHandle<d_FUN_006FBA90_00521F90> FUN_006FBA90_00521F90 => new( new FhMethodLocation(0x2FBA90, 0x121F90) );
-
     // Fused identical entry: unknown undefined FUN_006fbb70()
     // at (FFX.exe+6FBB70, FFX-2.exe+522070)
 
@@ -55034,13 +55027,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00942830_00877230();
     public static FhMethodHandle<d_FUN_00942830_00877230> FUN_00942830_00877230 => new( new FhMethodLocation(0x542830, 0x477230) );
 
-    // Fused identical entry: unknown undefined FUN_009428a0()
-    // at (FFX.exe+9428A0, FFX-2.exe+8772A0)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_009428A0_008772A0();
-    public static FhMethodHandle<d_FUN_009428A0_008772A0> FUN_009428A0_008772A0 => new( new FhMethodLocation(0x5428A0, 0x4772A0) );
-
     // Fused identical entry: unknown undefined FUN_009428b0()
     // at (FFX.exe+9428B0, FFX-2.exe+8772B0)
 
@@ -55055,26 +55041,12 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00942950_00877350();
     public static FhMethodHandle<d_FUN_00942950_00877350> FUN_00942950_00877350 => new( new FhMethodLocation(0x542950, 0x477350) );
 
-    // Fused identical entry: unknown undefined FUN_00942a40()
-    // at (FFX.exe+942A40, FFX-2.exe+877440)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00942A40_00877440();
-    public static FhMethodHandle<d_FUN_00942A40_00877440> FUN_00942A40_00877440 => new( new FhMethodLocation(0x542A40, 0x477440) );
-
     // Fused identical entry: unknown undefined FUN_00942a80()
     // at (FFX.exe+942A80, FFX-2.exe+877480)
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00942A80_00877480();
     public static FhMethodHandle<d_FUN_00942A80_00877480> FUN_00942A80_00877480 => new( new FhMethodLocation(0x542A80, 0x477480) );
-
-    // Fused identical entry: unknown undefined FUN_00942b60()
-    // at (FFX.exe+942B60, FFX-2.exe+877560)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00942B60_00877560();
-    public static FhMethodHandle<d_FUN_00942B60_00877560> FUN_00942B60_00877560 => new( new FhMethodLocation(0x542B60, 0x477560) );
 
     // Fused identical entry: unknown undefined FUN_00942d00()
     // at (FFX.exe+942D00, FFX-2.exe+877700)
@@ -55216,33 +55188,12 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00943830_00878230();
     public static FhMethodHandle<d_FUN_00943830_00878230> FUN_00943830_00878230 => new( new FhMethodLocation(0x543830, 0x478230) );
 
-    // Fused identical entry: unknown undefined FUN_009438b0()
-    // at (FFX.exe+9438B0, FFX-2.exe+8782B0)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_009438B0_008782B0();
-    public static FhMethodHandle<d_FUN_009438B0_008782B0> FUN_009438B0_008782B0 => new( new FhMethodLocation(0x5438B0, 0x4782B0) );
-
-    // Fused identical entry: unknown undefined FUN_009438e0()
-    // at (FFX.exe+9438E0, FFX-2.exe+8782E0)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_009438E0_008782E0();
-    public static FhMethodHandle<d_FUN_009438E0_008782E0> FUN_009438E0_008782E0 => new( new FhMethodLocation(0x5438E0, 0x4782E0) );
-
     // Fused identical entry: unknown undefined FUN_00943940()
     // at (FFX.exe+943940, FFX-2.exe+878340)
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00943940_00878340();
     public static FhMethodHandle<d_FUN_00943940_00878340> FUN_00943940_00878340 => new( new FhMethodLocation(0x543940, 0x478340) );
-
-    // Fused identical entry: unknown undefined FUN_009439a0()
-    // at (FFX.exe+9439A0, FFX-2.exe+8783A0)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_009439A0_008783A0();
-    public static FhMethodHandle<d_FUN_009439A0_008783A0> FUN_009439A0_008783A0 => new( new FhMethodLocation(0x5439A0, 0x4783A0) );
 
     // Fused identical entry: unknown undefined FUN_009439d0()
     // at (FFX.exe+9439D0, FFX-2.exe+8783D0)

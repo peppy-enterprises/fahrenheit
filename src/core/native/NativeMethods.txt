@@ -20,6 +20,13 @@ LRESULT
 HRESULT
 HMODULE
 
+// RT: Allocator fix
+
+InitializeCriticalSection
+EnterCriticalSection
+LeaveCriticalSection
+IMAGE_FILE_HEADER
+
 // RT: ImGui (WndProc, in-process)
 
 DefWindowProcW

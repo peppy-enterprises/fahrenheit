@@ -62,8 +62,8 @@
     <ItemGroup>
         <None Include="resources/**" CopyToOutputDirectory="Always" />
 
-        <!-- Runtime font. -->
-        <None Include="$(SolutionDir)\assets\NotoSans-VariableFont_wdth,wght.ttf" Link="resources\fonts\NotoSans-VariableFont_wdth,wght.ttf">
+        <!-- Runtime fonts. -->
+        <None Include="$(SolutionDir)\assets\*.ttf" LinkBase="resources\fonts">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
