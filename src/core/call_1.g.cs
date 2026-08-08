@@ -22785,13 +22785,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00607F10_008910A0();
     public static FhMethodHandle<d_FUN_00607F10_008910A0> FUN_00607F10_008910A0 => new( new FhMethodLocation(0x207F10, 0x4910A0) );
 
-    // Fused identical entry: unknown undefined FUN_00607f40()
-    // at (FFX.exe+607F40, FFX-2.exe+8910D0)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00607F40_008910D0();
-    public static FhMethodHandle<d_FUN_00607F40_008910D0> FUN_00607F40_008910D0 => new( new FhMethodLocation(0x207F40, 0x4910D0) );
-
     // Fused identical entry: unknown undefined FUN_00607fc0()
     // at (FFX.exe+607FC0, FFX-2.exe+891150)
 

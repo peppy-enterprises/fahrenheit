@@ -80,3 +80,73 @@ internal unsafe struct VFile {
     public byte*           ptr_buf_0x100000;
     public uint            _0x1C;
 }
+
+/// <summary>
+///     A disposable structure returned when loading a file from the VBF
+///     archive which ensures its release once the scope is exited.
+/// </summary>
+internal ref struct FhVbfFileScope {
+
+    private PStreamFile _file;
+    private uint        _file_size;
+
+    /// <summary>Attempts to open a file at the given relative <paramref name="path"/> in the VBF.</summary>
+    /// <remarks>
+    ///     If the path is constant, make it a UTF-8 literal and call the
+    ///     <see cref="FhVbfFileScope(ReadOnlySpan{byte})"/> constructor instead.
+    /// </remarks>
+    public FhVbfFileScope(string path) : this(Encoding.UTF8.GetBytes(path)) { }
+
+    /// <summary>Attempts to open a file at the given relative path in the VBF.</summary>
+    /// <remarks>
+    ///     <paramref name="path_u8"/> must be a UTF-8 literal or byte span.
+    /// </remarks>
+    public FhVbfFileScope(ReadOnlySpan<byte> path_u8) {
+        unsafe { // SAFETY: P/Invoke with verified signature
+            fixed (PStreamFile* ptr_file    = &_file)
+            fixed (byte*        ptr_path_u8 = path_u8) {
+                _ = FhCall.Phyre_PSerialization_PStreamFile_ctor.fnptr!(
+                    ptr_file,
+                    ptr_path_u8,
+                    true,
+                    0,
+                    0,
+                    true
+                );
+            }
+        }
+    }
+
+    /// <summary>Returns the size, in bytes, of the referred-to file.</summary>
+    public uint get_file_size() {
+         unsafe { // SAFETY: P/Invoke with verified signature
+             fixed (PStreamFile* ptr_file = &_file) {
+                 return _file_size = FhCall.Phyre_PSerialization_PStreamFile_getFileSize.fnptr!(ptr_file);
+             }
+         }
+    }
+
+    /// <summary>Reads the contents of the file into a user-supplied <paramref name="buffer"/>.</summary>
+    /// <returns>The number of bytes read into <paramref name="buffer"/>.</returns>
+    public uint read(Span<byte> buffer) {
+        unsafe { // SAFETY: P/Invoke with verified signature
+            fixed (PStreamFile* ptr_file = &_file)
+            fixed (byte*        ptr_fbuf = &buffer[0]) {
+                return FhCall.Phyre_PSerialization_PStreamFile_read.fnptr!(
+                    ptr_file,
+                    ptr_fbuf,
+                    uint.CreateChecked(buffer.Length)
+                );
+            }
+        }
+    }
+
+    /// <summary>Closes the referred-to file.</summary>
+    public void Dispose() {
+        unsafe { // SAFETY: P/Invoke with verified signature
+            fixed (PStreamFile* ptr_file = &_file) {
+                FhCall.Phyre_PSerialization_PStreamFile_closeFile.fnptr!(ptr_file);
+            }
+        }
+    }
+}

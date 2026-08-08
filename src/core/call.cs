@@ -186,6 +186,11 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_read> Phyre_PSerialization_PStreamFile_read
         => new( new FhMethodLocation(0x208250, 0x4913F0) );
 
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate uint d_Phyre_PSerialization_PStreamFile_closeFile(PStreamFile* ptr_this);
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_closeFile> Phyre_PSerialization_PStreamFile_closeFile
+        => new( new FhMethodLocation(0x207F40, 0x4910D0) );
+
     // RT - Phyre loader
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
