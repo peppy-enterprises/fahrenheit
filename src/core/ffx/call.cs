@@ -20,15 +20,6 @@ namespace Fahrenheit.FFX;
 ///     An accessor for game function calls exclusive to FF X.
 /// </summary>
 public static partial class FhCall {
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate bool d_Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint filename, bool readOnly, nint arg4, nint arg5, nint arg6);
-    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_openFile> Phyre_PSerialization_PStreamFileWin32_openFile
-        => new( new FhMethodLocation("FFX.exe", 0x208100) );
-
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate uint d_Phyre_PSerialization_PStreamFileWin32_Read(nint ptr_this, nint buffer, uint max_len);
-    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_Read> Phyre_PSerialization_PStreamFileWin32_Read
-        => new( new FhMethodLocation("FFX.exe", 0x208250) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int d_sceClose(void* arg1);
