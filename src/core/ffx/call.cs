@@ -22,6 +22,16 @@ namespace Fahrenheit.FFX;
 public static partial class FhCall {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_Ch_CalcAnim(float delta);
+    internal static FhMethodHandle<d_Ch_CalcAnim> Ch_CalcMain =>
+        new( new FhMethodLocation("FFX.exe", 0x432E90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_TOBtlCtrlLimitTimer();
+    internal static FhMethodHandle<d_TOBtlCtrlLimitTimer> TOBtlCtrlLimitTimer
+        => new( new FhMethodLocation("FFX.exe", 0x491A30) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int d_sceClose(void* arg1);
     public static FhMethodHandle<d_sceClose> sceClose
         => new( new FhMethodLocation("FFX.exe", 0x22F7C0) );

@@ -44659,13 +44659,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_Sg_ToggleParticle> Sg_ToggleParticle => new( new FhMethodLocation("FFX.exe", 0x421F50) );
 
     // Original after pruning:
-    // unknown undefined FUN_00821f90() at 00821f90
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00821f90();
-    public static FhMethodHandle<d_FUN_00821f90> FUN_00821f90 => new( new FhMethodLocation("FFX.exe", 0x421F90) );
-
-    // Original after pruning:
     // unknown undefined FUN_008222e0() at 008222e0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -46667,13 +46660,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_Ch_CalcElement();
     public static FhMethodHandle<d_Ch_CalcElement> Ch_CalcElement => new( new FhMethodLocation("FFX.exe", 0x4327E0) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00832e90() at 00832e90
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00832e90();
-    public static FhMethodHandle<d_FUN_00832e90> FUN_00832e90 => new( new FhMethodLocation("FFX.exe", 0x432E90) );
 
     // Original after pruning:
     // unknown undefined FUN_00833410() at 00833410

@@ -138,6 +138,33 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_FUN_00942B60_00877560> FUN_00942B60_00877560 =>
         new( new FhMethodLocation(0x542B60, 0x477560) );
 
+    // RT - Frame limiter
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval(uint param_1);
+    internal static FhMethodHandle<d_Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval> Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval
+        => new( new FhMethodLocation(0x225250, 0x6B4B00) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate uint d_Phyre_PFramework_PApplication_frame(PApplication* ptr_this);
+    internal static FhMethodHandle<d_Phyre_PFramework_PApplication_frame> Phyre_PFramework_PApplication_frame
+        => new( new FhMethodLocation(0x227AF0, 0x6B7390) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate uint d_rnd();
+    internal static FhMethodHandle<d_rnd> rnd
+        => new( new FhMethodLocation(0x3989B0, 0x21E360) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_FUN_00821F90_00606930(float delta);
+    internal static FhMethodHandle<d_FUN_00821F90_00606930> FUN_00821F90_00606930
+        => new( new FhMethodLocation(0x421F90, 0x206930) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate byte d_graphicIsVideoPlaying();
+    internal static FhMethodHandle<d_graphicIsVideoPlaying> graphicIsVideoPlaying
+        => new( new FhMethodLocation(0x241EA0, 0x052CD0) );
+
     // RT - Input tracking
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]

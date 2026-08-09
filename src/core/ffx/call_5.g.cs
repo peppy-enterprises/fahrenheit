@@ -9023,13 +9023,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_008919a0> FUN_008919a0 => new( new FhMethodLocation("FFX.exe", 0x4919A0) );
 
     // Original after pruning:
-    // unknown undefined FUN_00891a30() at 00891a30
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00891a30();
-    public static FhMethodHandle<d_FUN_00891a30> FUN_00891a30 => new( new FhMethodLocation("FFX.exe", 0x491A30) );
-
-    // Original after pruning:
     // unknown undefined TOBtlCtrlLuluLimitWindow() at 00891af0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
