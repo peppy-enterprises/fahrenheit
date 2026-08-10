@@ -67,6 +67,22 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
         return 1;
     }
 
+    /* [fkelava 09/08/26 22:07]
+     * The game assumes there are always two vertical blanks for each horizontal blank.
+     * Correcting for this is required to properly retime animations.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_FUN_00821F90_00606930(float delta) {
+        FhCall.FUN_00821F90_00606930.chain_from(h_FUN_00821F90_00606930).fnptr!(delta);
+
+        if (s_flipVSyncInterval == 1) {
+            sg_vcount  = sg_count;
+            sg_vcount2 = sg_count;
+        }
+    }
+
+
     /* [fkelava 10/08/26 14:40]
      * The camera predominantly (or even entirely?) uses frame-based waits.
      * If they are not retimed, cutscenes will fall out of sync because they can synchronize on a `camWait`.
@@ -178,23 +194,6 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
         uint uVar3 = uint.CreateSaturating( *limit_timer_raw * 10 );
 
         FhUtil.set_at(0xF3F754, ((iVar2 % 10) + (uVar3 * 10)) / 100F);
-    }
-
-    /* [fkelava 09/08/26 22:07]
-     * The game assumes there will always be two vertical blanks
-     * for each horizontal blank. Correcting for this at least partly
-     * 'fixes' animations, since they use `sg_vcount` for synchronization
-     * when Sg_SetKeepFps is not active.
-     */
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void h_FUN_00821F90_00606930(float delta) {
-        FhCall.FUN_00821F90_00606930.chain_from(h_FUN_00821F90_00606930).fnptr!(delta);
-
-        if (s_flipVSyncInterval == 1) {
-            sg_vcount  = sg_count;
-            sg_vcount2 = sg_count;
-        }
     }
 
     /* [fkelava 10/08/26 14:43]
