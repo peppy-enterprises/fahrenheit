@@ -141,6 +141,11 @@ public static unsafe partial class FhCall {
     // RT - Frame limiter
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_pppFpStopStatus(uint arg1);
+    internal static FhMethodHandle<d_pppFpStopStatus> pppFpStopStatus
+        => new( new FhMethodLocation(0x32A840, 0x411010) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate sbyte d_Sg_GetKeepFps();
     internal static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps
         => new( new FhMethodLocation(0x4206B0, 0x2E63B0) );

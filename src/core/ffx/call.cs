@@ -36,11 +36,6 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d__set_ppvUserStopPartF(uint arg1);
-    internal static FhMethodHandle<d__set_ppvUserStopPartF> _set_ppvUserStopPartF
-        => new( new FhMethodLocation("FFX.exe", 0x32A840) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_Sg_EffectRoutineEnable(sbyte arg1);
     internal static FhMethodHandle<d_Sg_EffectRoutineEnable> Sg_EffectRoutineEnable
         => new( new FhMethodLocation("FFX.exe", 0x420490) );

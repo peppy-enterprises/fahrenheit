@@ -54,7 +54,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
             && FhCall.MsCameraMoveAcc                                       .hook(this, h_MsCameraMoveAcc)
             && FhCall.Sg_SetKeepFps                                         .hook(this, h_Sg_SetKeepFps)
             && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930)
-            && (!is_ffx || FFX.FhCall._set_ppvUserStopPartF                 .hook(this, h__set_ppvUserStopPartF))
+            && FhCall.pppFpStopStatus                                       .hook(this, h_pppFpStopStatus)
             && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
             && (!is_ffx || FFX.FhCall.graphicDrawMainMenuWaterEffect        .hook(this, h_graphicDrawMainMenuWaterEffect))
             && (!is_ffx || FFX .FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed))
@@ -92,23 +92,23 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
             ? 1U
             : 0U;
 
-        FFX.FhCall._set_ppvUserStopPartF.chain_from(h__set_ppvUserStopPartF).fnptr!(stop_particles_this_frame);
+        FhCall.pppFpStopStatus.chain_from(h_pppFpStopStatus).fnptr!(stop_particles_this_frame);
     }
 
     /* [fkelava 10/08/26 22:14]
-     * FF X explicitly disables particles at only one instance, in Zanarkand - Harbour:
+     * If the game explicitly disables particles, we should not interfere.
+     *
+     * An example from FF X in Zanarkand - Harbour:
      *
      * 022C | AE0100 D86680 | call Map.setGfxPausedGlobal [8066h](paused=true [01h]);
      * 059E | AE0000 D86680 | call Map.setGfxPausedGlobal [8066h](paused=false [00h]);
-     *
-     * We intercept this so we know not to interfere during this time.
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void h__set_ppvUserStopPartF(uint arg1) {
+    private void h_pppFpStopStatus(uint arg1) {
         Interlocked.Exchange(ref _ppvUserStopPartF, arg1);
 
-        FFX.FhCall._set_ppvUserStopPartF.chain_from(h__set_ppvUserStopPartF).fnptr!(arg1);
+        FhCall.pppFpStopStatus.chain_from(h_pppFpStopStatus).fnptr!(arg1);
     }
 
     /* [fkelava 10/08/26 15:28]

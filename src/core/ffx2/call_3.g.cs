@@ -11060,13 +11060,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00810f00> FUN_00810f00 => new( new FhMethodLocation("FFX-2.exe", 0x410F00) );
 
     // Original after pruning:
-    // unknown undefined FUN_00811010() at 00811010
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00811010();
-    public static FhMethodHandle<d_FUN_00811010> FUN_00811010 => new( new FhMethodLocation("FFX-2.exe", 0x411010) );
-
-    // Original after pruning:
     // unknown undefined FUN_00811030() at 00811030
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
