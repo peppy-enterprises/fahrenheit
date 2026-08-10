@@ -59,7 +59,7 @@ public sealed class FhSaveUiModule : FhModule {
     private readonly Vector2 _tex_bmenu1_size  = new(1024f, 1024f);
     private readonly Vector2 _tex_message_size = new(2048f, 2048f);
 
-    // TODO: Location .pngs, readjust text, fix up ui_setswap
+    // TODO: Fix up ui_setswap
 
     public FhSaveUiModule() {
         _sem_handle = new(this);
@@ -276,10 +276,9 @@ public sealed class FhSaveUiModule : FhModule {
     ///     Draws the set swap UI for the save/load screen.
     /// </summary>
     private unsafe void ui_setswap() {
-        if (!_texture_message.try_use(out ImTextureRef message, out _))
+        if (!_texture_message.try_use(out ImTextureRef message, out _)) {
             return;
-
-        // This is a mess :/
+        }
 
         (Vector2 window_size, Vector2 window_offset) = get_window_bounds();
 
@@ -315,13 +314,13 @@ public sealed class FhSaveUiModule : FhModule {
         draw.AddImage(message, accent1_tl, accent1_br, tex_uv1, tex_uv2);
         draw.AddImage(message, accent2_tl, accent2_br, tex_uv1, tex_uv2);
 
-        string save_count = FhInternal.Saves.get_slots_used() == 1 ? "(1 Save)" : $"({FhInternal.Saves.get_slots_used()} Saves)";
+        string save_count = FhInternal.Saves.get_slots_used() == 1 ? "1 Save" : $"{FhInternal.Saves.get_slots_used()} Saves";
 
         Vector2 text_offset = scale_screen_uv(base_screen_size, new(1717f, 121f), Vector2.Zero).Item1;
         float   text_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, save_count).X;
         Vector2 text_start  = new(text_offset.X - text_width, text_offset.Y);
 
-        draw.AddText(font, font_size, text_start, 0xFFFFFFFF, save_count); // (X Saves), drawn right to left
+        draw.AddText(font, font_size, text_start, 0xFFFFFFFF, save_count); // X Saves, drawn right to left
 
         Vector2 box_size = br - tl;
         ImGui.SetNextWindowPos(tl);
@@ -383,8 +382,8 @@ public sealed class FhSaveUiModule : FhModule {
 
         float scale_factor = window_size.Y / 1080.0f;
 
-        Vector2 offset = window_offset + new Vector2(window_size.X * (146f / 1920f), window_size.Y * (161f / 1080f));
-        Vector2 size   = new(window_size.X * (1587f / 1920f), window_size.Y * (828f / 1080f));
+        Vector2 offset = window_offset + new Vector2(window_size.X * (156f / 1920f), window_size.Y * (161f / 1080f));
+        Vector2 size   = new(window_size.X * (1567f / 1920f), window_size.Y * (828f / 1080f));
 
         ImGui.SetNextWindowPos(offset);
         ImGui.SetNextWindowSize(size);
@@ -422,7 +421,12 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        foreach (FhSaveDisplayData save_file in FhInternal.Saves.get_display_data()) {
+        // Sorts saves top-down based on creation time like vanilla
+        var sorted = FhInternal.Saves.get_display_data()
+        .OrderByDescending(save => save.slot == 0) // Force autosave to always be first
+        .ThenByDescending(save => Encoding.UTF8.GetString(((ReadOnlySpan<byte>)save.create_time).TrimEnd((byte)0)));
+        
+        foreach (FhSaveDisplayData save_file in sorted) {
             ui_savefile(save_file);
         }
 
@@ -844,15 +848,16 @@ public sealed class FhSaveUiModule : FhModule {
 
         string slot_text       = is_autosave ? "Autosave" : Encoding.UTF8.GetString(((ReadOnlySpan<byte>)data.slot_str).TrimEnd((byte)0));
         uint   slot_text_color = is_autosave ? 0xFF17BEE0 : 0xFFFFFFFF; // Yellow : White
-        float  location_offset = is_autosave ? 269f : 119f;
+        float  slot_offset     = is_autosave ? 28f  :  29f; // Actually a 4px difference?
+        float  location_offset = is_autosave ? 267f : 119f;
 
-        Vector2 slot_offset          = new(25f * scale_factor, 7f * scale_factor);
+        Vector2 slot_true_offset          = new(slot_offset * scale_factor, 7f * scale_factor);
         Vector2 location_true_offset = new(location_offset * scale_factor, 7f * scale_factor);
 
-        draw.AddText(font, 50f * scale_factor, save_start + slot_offset, slot_text_color, slot_text);
+        draw.AddText(font, 50f * scale_factor, save_start + slot_true_offset, slot_text_color, slot_text);
         draw.AddText(font, font_size, save_start + location_true_offset, 0xFFFFFFFF, data.location);
 
-        float   base_offset          = 1259f * scale_factor;
+        float   base_offset          = 1269f * scale_factor;
         float   creation_time_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.create_time).X;
         Vector2 creation_time_offset = new(base_offset - creation_time_width, 7f * scale_factor);
 
@@ -876,7 +881,7 @@ public sealed class FhSaveUiModule : FhModule {
         draw.AddText(font, font_size, save_start + name_offset, 0xFFFFFFFF, data.player_name);
         draw.AddText(font, font_size, save_start + chapter_offset, 0xFFFFFFFF, data.chapter);
 
-        float   base_offset       = 1259f * scale_factor;
+        float   base_offset       = 1269f * scale_factor;
         float   completion_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.completion).X;
         Vector2 completion_offset = new(base_offset - completion_width, 55f * scale_factor);
 
@@ -904,49 +909,71 @@ public sealed class FhSaveUiModule : FhModule {
         Vector2 face_offset = new(19.0f * scale_factor, 61.0f * scale_factor);
         Vector2 face_size   = new(92.0f * scale_factor, 86.0f * scale_factor);
 
+        string filename;
         for (int i = 0; i < 3; i++) {
             (byte chr_id, byte dress_id) = party[i];
 
-            string filename;
-
             // No Dressphere
-            if (dress_id == 0x0) filename = "mface_000.dds.phyre"; // Empty
-            // Leblanc Goon
-            else if (dress_id == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
-            else {
-                string chr = chr_id switch {
-                    0 => "yuna",
-                    1 => "rikku",
-                    2 => "paine",
-                    _ => "m"
-                };
-                // Rewires Rikku and Paine's Dressphere IDs to match the original filenames
-                byte dressphere = dress_id switch {
-                    24 or 25 => 12,       // Trainer
-                    26 or 27 => 14,       // Mascot
-                    28       => 16,       // Psychic
-                    29 or 30 or 31 => 17, // Festivalist
-                    32       => 18,       // Freelancer
-                    _        => dress_id
-                };
-                filename = $"{chr}face_{dressphere:D3}.dds.phyre";
+            if (dress_id != 0x0) {
+                // Leblanc Goon
+                if (dress_id == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
+                else {
+                    string chr = chr_id switch {
+                        0 => "yuna",
+                        1 => "rikku",
+                        2 => "paine",
+                        _ => "m"
+                    };
+                    // Rewires Rikku and Paine's Dressphere IDs to match the original filenames
+                    byte dressphere = dress_id switch {
+                        24 or 25 => 12,       // Trainer
+                        26 or 27 => 14,       // Mascot
+                        28       => 16,       // Psychic
+                        29 or 30 or 31 => 17, // Festivalist
+                        32       => 18,       // Freelancer
+                        _        => dress_id
+                    };
+                    filename = $"{chr}face_{dressphere:D3}.dds.phyre";
+                }
+
+                FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
+
+                if (!portrait.is_loaded()) {
+                    FhApi.Resources.load_game_texture_2d(portrait);
+                }
+
+                if (portrait.try_use(out ImTextureRef faces, out _)) {
+                    Vector2 next_offset = face_offset + new Vector2(i * 95.0f * scale_factor, 0f);
+                    Vector2 face_start  = save_start + next_offset;
+                    Vector2 face_end    = face_start + face_size;
+
+                    draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv);
+                }
             }
+        }
 
-            FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
+        (Vector2 map_tu, Vector2 map_tv) = scale_tex_uv(
+            _tex_map_size,
+            new(0f  , 176f),
+            new(320f,   0f)
+        );
 
-            if (!portrait.is_loaded()) {
-                FhApi.Resources.load_game_texture_2d(portrait);
-            }
+        Vector2 map_offset = new(1293.0f * scale_factor, 9.0f * scale_factor);
+        Vector2 map_size   = new(255.0f * scale_factor, 138.0f * scale_factor);
 
-            if (portrait.try_use(out ImTextureRef faces, out _)) {
-                float x_spacing = 95.0f * scale_factor;
+        filename = $"{header2.id_location}_0.png";
 
-                Vector2 next_offset = face_offset + new Vector2(i * x_spacing, 0f);
-                Vector2 face_start  = save_start + next_offset;
-                Vector2 face_end    = face_start + face_size;
+        FhTexture map = new(SAVEDATAICONS_DIR + filename, FhTextureType.PNG);
 
-                draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv);
-            }
+        if (!map.is_loaded()) {
+            FhApi.Resources.load_game_texture_2d(map);
+        }
+
+        if (map.try_use(out ImTextureRef map_icon, out _)) {
+            Vector2 map_start = save_start + map_offset;
+            Vector2 map_end   = map_start + map_size;
+
+            draw.AddImage(map_icon, map_start, map_end, map_tu, map_tv);
         }
     }
 
@@ -964,7 +991,7 @@ public sealed class FhSaveUiModule : FhModule {
         draw.AddText(font, font_size, save_start + dressphere_offset, 0xFFFFFFFF, data.lm_job);
         draw.AddText(font, font_size, save_start + level_offset, 0xFFFFFFFF, data.lm_level);
 
-        float   base_offset     = 1259f * scale_factor;
+        float   base_offset     = 1269f * scale_factor;
         float   playtime_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.play_time).X;
         Vector2 playtime_offset = new(base_offset - playtime_width, 101f * scale_factor);
 
@@ -982,49 +1009,70 @@ public sealed class FhSaveUiModule : FhModule {
         Vector2 face_offset = new(19.0f * scale_factor, 61.0f * scale_factor);
         Vector2 face_size   = new(92.0f * scale_factor, 86.0f * scale_factor);
 
+        string filename;
         for (int i = 3; i >= 0; i--) {
-            string filename;
-
             // No Dressphere
-            if (header2.id_job_lm == 0x0) filename = "mface_000.dds.phyre"; // Empty
-            // Leblanc Goon
-            else if (header2.id_job_lm == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
-            else {
-                string chr = header2.id_chr_lm switch {
-                    0 => "yuna",
-                    1 => "rikku",
-                    2 => "paine",
-                    _ => "m"
-                };
-                // Rewires Rikku and Paine's Dressphere IDs to match the original filenames
-                byte dressphere = header2.id_job_lm switch {
-                    24 or 25 => 12,       // Trainer
-                    26 or 27 => 14,       // Mascot
-                    28       => 16,       // Psychic
-                    29 or 30 or 31 => 17, // Festivalist
-                    32       => 18,       // Freelancer
-                    _        => header2.id_job_lm
-                };
-                filename = $"{chr}face_{dressphere:D3}.dds.phyre";
+            if (header2.id_job_lm != 0x0) {
+                // Leblanc Goon
+                if (header2.id_job_lm == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
+                else {
+                    string chr = header2.id_chr_lm switch {
+                        0 => "yuna",
+                        1 => "rikku",
+                        2 => "paine",
+                        _ => "m"
+                    };
+                    // Rewires Rikku and Paine's Dressphere IDs to match the original filenames
+                    byte dressphere = header2.id_job_lm switch {
+                        24 or 25 => 12,       // Trainer
+                        26 or 27 => 14,       // Mascot
+                        28       => 16,       // Psychic
+                        29 or 30 or 31 => 17, // Festivalist
+                        32       => 18,       // Freelancer
+                        _        => header2.id_job_lm
+                    };
+                    filename = $"{chr}face_{dressphere:D3}.dds.phyre";
+                }
+
+                FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
+
+                if (!portrait.is_loaded()) {
+                    FhApi.Resources.load_game_texture_2d(portrait);
+                }
+
+                if (portrait.try_use(out ImTextureRef faces, out _)) {
+                    Vector2 next_offset = face_offset + new Vector2(i * 21.0f * scale_factor, 0f);
+                    Vector2 face_start  = save_start + next_offset;
+                    Vector2 face_end    = face_start + face_size;
+                    uint    color       = ImGui.GetColorU32(new Vector4(1f, 1f, 1f, 1f - (i * 0.25f)));
+
+                    draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv, color);
+                }
             }
+        }
 
-            FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
+        (Vector2 map_tu, Vector2 map_tv) = scale_tex_uv(
+            _tex_map_size,
+            new(0f  , 176f),
+            new(320f,   0f)
+        );
 
-            if (!portrait.is_loaded()) {
-                FhApi.Resources.load_game_texture_2d(portrait);
-            }
+        Vector2 map_offset = new(1293.0f * scale_factor, 9.0f * scale_factor);
+        Vector2 map_size   = new(255.0f * scale_factor, 138.0f * scale_factor);
 
-            if (portrait.try_use(out ImTextureRef faces, out _)) {
-                float x_spacing = 21.0f * scale_factor;
+        filename = $"{header2.id_location}_0.png";
 
-                Vector2 next_offset = face_offset + new Vector2(i * x_spacing, 0f);
-                Vector2 face_start  = save_start + next_offset;
-                Vector2 face_end    = face_start + face_size;
+        FhTexture map = new(SAVEDATAICONS_DIR + filename, FhTextureType.PNG);
 
-                uint color = ImGui.GetColorU32(new Vector4(1f, 1f, 1f, 1f - (i * 0.25f)));
+        if (!map.is_loaded()) {
+            FhApi.Resources.load_game_texture_2d(map);
+        }
 
-                draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv, color);
-            }
+        if (map.try_use(out ImTextureRef map_icon, out _)) {
+            Vector2 map_start = save_start + map_offset;
+            Vector2 map_end   = map_start + map_size;
+
+            draw.AddImage(map_icon, map_start, map_end, map_tu, map_tv);
         }
     }
 }
