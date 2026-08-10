@@ -45581,13 +45581,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_0082b3e0> FUN_0082b3e0 => new( new FhMethodLocation("FFX.exe", 0x42B3E0) );
 
     // Original after pruning:
-    // unknown undefined Ch_SetMotionSpeed() at 0082b400
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_Ch_SetMotionSpeed();
-    public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed => new( new FhMethodLocation("FFX.exe", 0x42B400) );
-
-    // Original after pruning:
     // unknown undefined Ch_SetMotionType() at 0082b420
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

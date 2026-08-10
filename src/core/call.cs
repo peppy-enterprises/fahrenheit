@@ -165,6 +165,16 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_graphicIsVideoPlaying> graphicIsVideoPlaying
         => new( new FhMethodLocation(0x241EA0, 0x052CD0) );
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_MsCameraMoveFrame(uint camera_id, uint arg2, uint arg3, uint frame_count, uint arg5);
+    internal static FhMethodHandle<d_MsCameraMoveFrame> MsCameraMoveFrame
+        => new( new FhMethodLocation(0x3BDDD0, 0x251D20) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_MsCameraMoveAcc(uint camera_id, uint mode_non_ref, uint mode_polar, uint arg4, uint arg5, uint arg6, uint arg7);
+    internal static FhMethodHandle<d_MsCameraMoveAcc> MsCameraMoveAcc
+        => new( new FhMethodLocation(0x3BD7E0, 0x251720) );
+
     // RT - Input tracking
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
