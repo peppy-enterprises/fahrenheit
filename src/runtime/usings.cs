@@ -35,6 +35,8 @@ global using System.Text;                     // Encoding.UTF8 et al.
 global using System.Text.Json;                // For JSON (de)serialization, we use STJ.
 global using System.Threading;                // Interlocked, Lock, et al.
 
+global using Fahrenheit.Atel;
+
 global using Hexa.NET.ImGui;                  // ImGui is required to render large parts of the runtime UI.
 
 global using Fahrenheit.Gui;

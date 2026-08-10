@@ -1424,13 +1424,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_0085c360();
     public static FhMethodHandle<d_FUN_0085c360> FUN_0085c360 => new( new FhMethodLocation("FFX.exe", 0x45C360) );
 
-    // Original after pruning:
-    // unknown undefined FUN_0085c3e0() at 0085c3e0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0085c3e0();
-    public static FhMethodHandle<d_FUN_0085c3e0> FUN_0085c3e0 => new( new FhMethodLocation("FFX.exe", 0x45C3E0) );
-
     // Symbol skipped (deemed uninterpretable):
     // __stdcall int +CT_01D1_ret(AtelBasicWorker* work, int storage, AtelStack* stack) at 0085c400
 

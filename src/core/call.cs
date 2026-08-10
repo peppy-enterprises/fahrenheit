@@ -385,7 +385,7 @@ public static unsafe partial class FhCall {
     public delegate void d_CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_CT_Exec(AtelBasicWorker* work, AtelStack* stack);
+    public delegate int d_CT_Exec(AtelBasicWorker* work, int* storage);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int d_CT_RetInt(AtelBasicWorker* work, int* storage, AtelStack* stack);

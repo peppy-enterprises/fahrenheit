@@ -43,9 +43,23 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
         return FhCall.Phyre_PFramework_PApplication_frame                   .hook(this, h_frame)
             && FhCall.Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval.hook(this, h_set_vsync)
+            && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
             && (!is_ffx || FFX.FhCall.TOBtlCtrlLimitTimer                   .hook(this, h_TOBtlCtrlLimitTimer))
             && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain))
             && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_CT_0000_Init(AtelBasicWorker* work, int* storage, AtelStack* stack) {
+        /* [fkelava 10/08/26 00:11]
+         * Frame-based waits have to be doubled if we're in 60FPS mode,
+         * except trivial one-frame waits which are used as 'idle' loops.
+         */
+        int rv = FFX.FhCall.AtelPopStackInteger.fnptr!((int*)work, &work->stack);
+
+        *storage = s_flipVSyncInterval == 1U && rv != 1
+            ? rv * 2
+            : rv;
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
