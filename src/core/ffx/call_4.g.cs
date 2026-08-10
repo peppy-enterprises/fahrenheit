@@ -44470,13 +44470,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_008206a0> FUN_008206a0 => new( new FhMethodLocation("FFX.exe", 0x4206A0) );
 
     // Original after pruning:
-    // unknown undefined Sg_GetKeepFps() at 008206b0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_Sg_GetKeepFps();
-    public static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps => new( new FhMethodLocation("FFX.exe", 0x4206B0) );
-
-    // Original after pruning:
     // unknown undefined Sg_GetMapAlphaFast() at 008206e0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

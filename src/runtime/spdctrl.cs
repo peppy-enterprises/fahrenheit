@@ -38,11 +38,6 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
         get => FhUtil.get_at<uint>(FhUtil.select(0x8DED2C, 0x9C6960, 0x9C6960));
     }
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate sbyte d_Sg_GetKeepFps();
-    internal static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps =>
-        new( new FhMethodLocation("FFX.exe", 0x4206B0) );
-
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
 
@@ -51,7 +46,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
             && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
             && (!is_ffx || FFX.FhCall.TOBtlCtrlLimitTimer                   .hook(this, h_TOBtlCtrlLimitTimer))
             && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain))
-            && Sg_GetKeepFps                                                .hook(this, h_Sg_GetKeepFps)
+            && (!is_ffx || FFX.FhCall.Sg_GetKeepFps                         .hook(this, h_Sg_GetKeepFps))
             && FhCall.MsCameraMoveFrame                                     .hook(this, h_MsCameraMoveFrame)
             && FhCall.MsCameraMoveAcc                                       .hook(this, h_MsCameraMoveAcc)
             && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930);

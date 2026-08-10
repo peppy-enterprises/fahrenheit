@@ -35,6 +35,11 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x42B400) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate sbyte d_Sg_GetKeepFps();
+    internal static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps =>
+        new( new FhMethodLocation("FFX.exe", 0x4206B0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_TOBtlCtrlLimitTimer();
     internal static FhMethodHandle<d_TOBtlCtrlLimitTimer> TOBtlCtrlLimitTimer
         => new( new FhMethodLocation("FFX.exe", 0x491A30) );
