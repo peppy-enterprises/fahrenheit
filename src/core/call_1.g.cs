@@ -41734,13 +41734,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00821B60_00606500();
     public static FhMethodHandle<d_FUN_00821B60_00606500> FUN_00821B60_00606500 => new( new FhMethodLocation(0x421B60, 0x206500) );
 
-    // Fused identical entry: unknown undefined Sg_SetKeepFps()
-    // at (FFX.exe+821C00, FFX-2.exe+6065A0)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00821C00_006065A0();
-    public static FhMethodHandle<d_FUN_00821C00_006065A0> FUN_00821C00_006065A0 => new( new FhMethodLocation(0x421C00, 0x2065A0) );
-
     // Fused identical entry: unknown undefined Sg_SetMuteSound()
     // at (FFX.exe+821D80, FFX-2.exe+606720)
 

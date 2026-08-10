@@ -3,6 +3,9 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
+using Fahrenheit.Events;
+using Fahrenheit.FFX;
+
 namespace Fahrenheit.Runtime;
 
 /// <summary>
@@ -10,6 +13,9 @@ namespace Fahrenheit.Runtime;
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhSpdCtrlModule : FhModule {
+
+    private sbyte _animation_retiming_active = 0;
+    private uint  _ppvUserStopPartF_actual   = 0;
 
     private static uint sg_count {
         get => FhUtil.get_at<uint>(FhUtil.select(0x1FCBBF0, 0x16CDD60, 0x16CDD60));
@@ -41,30 +47,82 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
 
-        return FhCall.Phyre_PFramework_PApplication_frame                   .hook(this, h_frame)
+        return FhApi.Events.Common.GameLoop.PreUpdate.subscribe(h_pre)
+            && FhCall.Phyre_PFramework_PApplication_frame                   .hook(this, h_frame)
             && FhCall.Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval.hook(this, h_set_vsync)
-            && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
-            && (!is_ffx || FFX.FhCall.TOBtlCtrlLimitTimer                   .hook(this, h_TOBtlCtrlLimitTimer))
-            && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain))
-            && (!is_ffx || FFX.FhCall.Sg_GetKeepFps                         .hook(this, h_Sg_GetKeepFps))
             && FhCall.MsCameraMoveFrame                                     .hook(this, h_MsCameraMoveFrame)
             && FhCall.MsCameraMoveAcc                                       .hook(this, h_MsCameraMoveAcc)
-            && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930);
+            && FhCall.Sg_SetKeepFps                                         .hook(this, h_Sg_SetKeepFps)
+            && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930)
+            && (!is_ffx || FFX.FhCall._set_ppvUserStopPartF                 .hook(this, h__set_ppvUserStopPartF))
+            && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
+            && (!is_ffx || FFX.FhCall.Ch_SetMotionSpeed                     .hook(this, h_Ch_SetMotionSpeed))
+            && (!is_ffx || FFX.FhCall.TOBtlCtrlLimitTimer                   .hook(this, h_TOBtlCtrlLimitTimer))
+            && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain));
+    }
+
+    /* [fkelava 10/08/26 22:14]
+     * Unlike most other systems where it is possible to pre-emptively retime a wait for the target framerate,
+     * particles have full control over their own timing. Patching them all is impossible. Instead, we have
+     * to selectively 'drop frames' from their perspective by asserting `ppvUserStopPartF` every other frame.
+     */
+
+    private void h_pre(UpdateLoopEventArgs args) {
+        if (Interlocked.CompareExchange(ref _ppvUserStopPartF_actual, 1, 1) == 1) return;
+
+        uint stop_particles_this_frame = s_flipVSyncInterval == 1 && sg_count % 2 == 1
+            ? 1U
+            : 0U;
+
+        FFX.FhCall._set_ppvUserStopPartF.chain_from(h__set_ppvUserStopPartF).fnptr!(stop_particles_this_frame);
+    }
+
+    /* [fkelava 10/08/26 22:14]
+     * FF X explicitly disables particles at only one instance, in Zanarkand - Harbour:
+     *
+     * 022C | AE0100 D86680 | call Map.setGfxPausedGlobal [8066h](paused=true [01h]);
+     * 059E | AE0000 D86680 | call Map.setGfxPausedGlobal [8066h](paused=false [00h]);
+     *
+     * We intercept this so we know not to interfere during this time.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h__set_ppvUserStopPartF(uint arg1) {
+        Interlocked.Exchange(ref _ppvUserStopPartF_actual, arg1);
+
+        FFX.FhCall._set_ppvUserStopPartF.chain_from(h__set_ppvUserStopPartF).fnptr!(arg1);
     }
 
     /* [fkelava 10/08/26 15:28]
-     * For animations, we take advantage of a provision the game already has.
+     * Motion speed is proportional to framerate, and animation speed is coupled to motion speed _unless_ `Sg_GetKeepFps` is asserted.
      *
+     * Thus, retiming _motions_ also retimes _animations_, which is required to preserve cutscene pacing.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed) {
+        if (_animation_retiming_active == 0) {
+            speed /= 2;
+        }
+
+        FFX.FhCall.Ch_SetMotionSpeed.chain_from(h_Ch_SetMotionSpeed).fnptr!(ptr_actor, speed);
+    }
+
+    /* [fkelava 10/08/26 15:28]
      * The game in `Sg_MainCalcRate` computes, every frame, `sg_rate{f}` - the ratio of vertical (`sg_vcount`)
      * to horizontal (`sg_count`) blanks. We already, in `h_FUN_00821F90_{...}`, ensure we properly count up
      * vertical blanks instead of assuming two per horizontal blank.
      *
-     * If `Sg_GetKeepFps` is asserted, the game uses `sg_rate` to retime animations. See `Ch_Anim`.
+     * If `Sg_GetKeepFps` is asserted, the game uses `sg_rate` to retime animations. See `Ch_Anim`. This provides
+     * the correct result, but then we have to be careful not to separately retime motions, which would cause
+     * a double slowdown.
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private sbyte h_Sg_GetKeepFps() {
-        return 1;
+    private sbyte h_Sg_SetKeepFps(sbyte arg1) {
+        _animation_retiming_active = arg1;
+
+        return FhCall.Sg_SetKeepFps.chain_from(h_Sg_SetKeepFps).fnptr!(arg1);
     }
 
     /* [fkelava 09/08/26 22:07]
@@ -76,12 +134,9 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
     private void h_FUN_00821F90_00606930(float delta) {
         FhCall.FUN_00821F90_00606930.chain_from(h_FUN_00821F90_00606930).fnptr!(delta);
 
-        if (s_flipVSyncInterval == 1) {
-            sg_vcount  = sg_count;
-            sg_vcount2 = sg_count;
-        }
+        sg_vcount  = sg_count;
+        sg_vcount2 = sg_count;
     }
-
 
     /* [fkelava 10/08/26 14:40]
      * The camera predominantly (or even entirely?) uses frame-based waits.
@@ -96,9 +151,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
         uint frame_count,
         uint arg5
     ) {
-        if (s_flipVSyncInterval == 1) {
-            frame_count *= 2;
-        }
+        frame_count *= 2;
 
         FhCall.MsCameraMoveFrame.chain_from(h_MsCameraMoveFrame).fnptr!(camera_id, arg2, arg3, frame_count, arg5);
     }
@@ -117,12 +170,10 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
         uint arg6,
         uint arg7
     ) {
-        if (s_flipVSyncInterval == 1) {
-            arg4 *= 2;
-            arg5 *= 2;
-            arg6 *= 2;
-            arg7 *= 2;
-        }
+        arg4 *= 2;
+        arg5 *= 2;
+        arg6 *= 2;
+        arg7 *= 2;
 
         FhCall.MsCameraMoveAcc.chain_from(h_MsCameraMoveAcc).fnptr!(camera_id, mode_non_ref, mode_polar, arg4, arg5, arg6, arg7);
     }
@@ -134,7 +185,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_CT_0000_Init(AtelBasicWorker* work, int* storage, AtelStack* stack) {
-        int rv = FFX.FhCall.AtelPopStackInteger.fnptr!((int*)work, &work->stack);
+        int rv = FFX.FhCall.AtelPopStackInteger.fnptr!((int*)work, stack);
 
         *storage = s_flipVSyncInterval == 1U && rv != 1
             ? rv * 2

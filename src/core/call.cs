@@ -141,6 +141,11 @@ public static unsafe partial class FhCall {
     // RT - Frame limiter
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate sbyte d_Sg_SetKeepFps(sbyte arg1);
+    public static FhMethodHandle<d_Sg_SetKeepFps> Sg_SetKeepFps
+        => new( new FhMethodLocation(0x421C00, 0x2065A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval(uint param_1);
     internal static FhMethodHandle<d_Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval> Phyre_PFramework_PWindowWin32Base_SetFlipVSyncInterval
         => new( new FhMethodLocation(0x225250, 0x6B4B00) );

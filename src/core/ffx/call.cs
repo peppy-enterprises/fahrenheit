@@ -24,20 +24,41 @@ public static partial class FhCall {
     internal static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_0000_Init
         => new( new FhMethodLocation("FFX.exe", 0x45C3E0) );
 
+    internal static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_5021_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x679510) );
+
+    internal static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_504C_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d__set_ppvUserStopPartF(uint arg1);
+    internal static FhMethodHandle<d__set_ppvUserStopPartF> _set_ppvUserStopPartF
+        => new( new FhMethodLocation("FFX.exe", 0x32A840) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_Sg_EffectRoutineEnable(sbyte arg1);
+    internal static FhMethodHandle<d_Sg_EffectRoutineEnable> Sg_EffectRoutineEnable
+        => new( new FhMethodLocation("FFX.exe", 0x420490) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate Actor* d_AtelGetCharHandle(AtelBasicWorker* ptr_worker);
+    internal static FhMethodHandle<d_AtelGetCharHandle> AtelGetCharHandle
+        => new( new FhMethodLocation("FFX.exe", 0x46AE10) );
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_Ch_CalcAnim(float delta);
     internal static FhMethodHandle<d_Ch_CalcAnim> Ch_CalcMain
         => new( new FhMethodLocation("FFX.exe", 0x432E90) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_Ch_SetMotionSpeed(uint chr_id, ushort speed);
+    internal unsafe delegate void d_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed);
     internal static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
         => new( new FhMethodLocation("FFX.exe", 0x42B400) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate sbyte d_Sg_GetKeepFps();
-    internal static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps =>
-        new( new FhMethodLocation("FFX.exe", 0x4206B0) );
+    internal static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps
+        => new( new FhMethodLocation("FFX.exe", 0x4206B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_TOBtlCtrlLimitTimer();

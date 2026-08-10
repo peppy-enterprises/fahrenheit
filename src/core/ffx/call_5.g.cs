@@ -3131,13 +3131,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_AtelGetCameraWorkAdrs> AtelGetCameraWorkAdrs => new( new FhMethodLocation("FFX.exe", 0x46ADE0) );
 
     // Original after pruning:
-    // __stdcall int FUN_0086ae10(AtelBasicWorker* param_1) at 0086ae10
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate int d_FUN_0086ae10(nint param_1);
-    public static FhMethodHandle<d_FUN_0086ae10> FUN_0086ae10 => new( new FhMethodLocation("FFX.exe", 0x46AE10) );
-
-    // Original after pruning:
     // unknown undefined FUN_0086ae20() at 0086ae20
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

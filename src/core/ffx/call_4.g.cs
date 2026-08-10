@@ -19552,13 +19552,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_pppFpSetWoodMatrix> pppFpSetWoodMatrix => new( new FhMethodLocation("FFX.exe", 0x32A780) );
 
     // Original after pruning:
-    // unknown undefined FUN_0072a840() at 0072a840
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0072a840();
-    public static FhMethodHandle<d_FUN_0072a840> FUN_0072a840 => new( new FhMethodLocation("FFX.exe", 0x32A840) );
-
-    // Original after pruning:
     // unknown undefined FUN_0072a850() at 0072a850
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -44356,13 +44349,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00820470();
     public static FhMethodHandle<d_FUN_00820470> FUN_00820470 => new( new FhMethodLocation("FFX.exe", 0x420470) );
-
-    // Original after pruning:
-    // unknown undefined Sg_EffectRoutineEnable() at 00820490
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_Sg_EffectRoutineEnable();
-    public static FhMethodHandle<d_Sg_EffectRoutineEnable> Sg_EffectRoutineEnable => new( new FhMethodLocation("FFX.exe", 0x420490) );
 
     // Original after pruning:
     // unknown undefined Sg_EnableCalcCam() at 008204b0
