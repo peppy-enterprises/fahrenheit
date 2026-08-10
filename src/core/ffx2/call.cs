@@ -22,4 +22,9 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_GetLastMissionJobName> GetLastMissionJobName
         => new( new FhMethodLocation("FFX-2.exe", 0x368570) );
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_Ch_SetMotionSpeed(uint ptr_actor, ushort speed);
+    internal static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
+        => new( new FhMethodLocation("FFX-2.exe", 0x2E63B0) );
+
 }

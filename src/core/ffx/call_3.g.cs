@@ -37568,13 +37568,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_0063e6b0> FUN_0063e6b0 => new( new FhMethodLocation("FFX.exe", 0x23E6B0) );
 
     // Original after pruning:
-    // unknown undefined graphicDrawMainMenuWaterEffect() at 0063ead0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicDrawMainMenuWaterEffect();
-    public static FhMethodHandle<d_graphicDrawMainMenuWaterEffect> graphicDrawMainMenuWaterEffect => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );
-
-    // Original after pruning:
     // unknown undefined graphicDrawUIAbmapElement() at 0063eae0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

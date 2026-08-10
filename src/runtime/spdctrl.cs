@@ -14,8 +14,8 @@ namespace Fahrenheit.Runtime;
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhSpdCtrlModule : FhModule {
 
-    private sbyte _animation_retiming_active = 0;
-    private uint  _ppvUserStopPartF_actual   = 0;
+    private sbyte _Sg_KeepFps       = 0;
+    private uint  _ppvUserStopPartF = 0;
 
     private static uint sg_count {
         get => FhUtil.get_at<uint>(FhUtil.select(0x1FCBBF0, 0x16CDD60, 0x16CDD60));
@@ -56,9 +56,27 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
             && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930)
             && (!is_ffx || FFX.FhCall._set_ppvUserStopPartF                 .hook(this, h__set_ppvUserStopPartF))
             && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
-            && (!is_ffx || FFX.FhCall.Ch_SetMotionSpeed                     .hook(this, h_Ch_SetMotionSpeed))
+            && (!is_ffx || FFX.FhCall.graphicDrawMainMenuWaterEffect        .hook(this, h_graphicDrawMainMenuWaterEffect))
+            && (!is_ffx || FFX .FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed))
+            && ( is_ffx || FFX2.FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed_2))
             && (!is_ffx || FFX.FhCall.TOBtlCtrlLimitTimer                   .hook(this, h_TOBtlCtrlLimitTimer))
             && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain));
+    }
+
+    /* [fkelava 11/08/26 00:08]
+     * The water effect in the FF X main menu is a series of images scrolling by, one per frame.
+     * We have to 'frame skip' by having it render the same one for two frames.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_graphicDrawMainMenuWaterEffect() {
+        FFX.FhCall.graphicDrawMainMenuWaterEffect.chain_from(h_graphicDrawMainMenuWaterEffect).fnptr!();
+
+        byte water_current_frame = FhUtil.get_at<byte>(0x8CBA09);
+
+        if (s_flipVSyncInterval == 1 && sg_count % 2 == 0) {
+            FhUtil.set_at(0x8CBA09, byte.Clamp(water_current_frame--, 0, 69));
+        }
     }
 
     /* [fkelava 10/08/26 22:14]
@@ -68,9 +86,9 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
      */
 
     private void h_pre(UpdateLoopEventArgs args) {
-        if (Interlocked.CompareExchange(ref _ppvUserStopPartF_actual, 1, 1) == 1) return;
+        if (Interlocked.CompareExchange(ref _ppvUserStopPartF, 1, 1) == 1) return;
 
-        uint stop_particles_this_frame = s_flipVSyncInterval == 1 && sg_count % 2 == 1
+        uint stop_particles_this_frame = s_flipVSyncInterval == 1 && sg_count % 2 == 0
             ? 1U
             : 0U;
 
@@ -88,7 +106,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h__set_ppvUserStopPartF(uint arg1) {
-        Interlocked.Exchange(ref _ppvUserStopPartF_actual, arg1);
+        Interlocked.Exchange(ref _ppvUserStopPartF, arg1);
 
         FFX.FhCall._set_ppvUserStopPartF.chain_from(h__set_ppvUserStopPartF).fnptr!(arg1);
     }
@@ -101,11 +119,20 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed) {
-        if (_animation_retiming_active == 0) {
+        if (_Sg_KeepFps == 0) {
             speed /= 2;
         }
 
         FFX.FhCall.Ch_SetMotionSpeed.chain_from(h_Ch_SetMotionSpeed).fnptr!(ptr_actor, speed);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_Ch_SetMotionSpeed_2(uint ptr_actor, ushort speed) {
+        if (_Sg_KeepFps == 0) {
+            speed /= 2;
+        }
+
+        FFX2.FhCall.Ch_SetMotionSpeed.chain_from(h_Ch_SetMotionSpeed_2).fnptr!(ptr_actor, speed);
     }
 
     /* [fkelava 10/08/26 15:28]
@@ -120,7 +147,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private sbyte h_Sg_SetKeepFps(sbyte arg1) {
-        _animation_retiming_active = arg1;
+        _Sg_KeepFps = arg1;
 
         return FhCall.Sg_SetKeepFps.chain_from(h_Sg_SetKeepFps).fnptr!(arg1);
     }

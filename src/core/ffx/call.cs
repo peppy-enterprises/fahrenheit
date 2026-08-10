@@ -31,6 +31,11 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_graphicDrawMainMenuWaterEffect();
+    internal static FhMethodHandle<d_graphicDrawMainMenuWaterEffect> graphicDrawMainMenuWaterEffect
+        => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d__set_ppvUserStopPartF(uint arg1);
     internal static FhMethodHandle<d__set_ppvUserStopPartF> _set_ppvUserStopPartF
         => new( new FhMethodLocation("FFX.exe", 0x32A840) );
@@ -54,11 +59,6 @@ public static partial class FhCall {
     internal unsafe delegate void d_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed);
     internal static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
         => new( new FhMethodLocation("FFX.exe", 0x42B400) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate sbyte d_Sg_GetKeepFps();
-    internal static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps
-        => new( new FhMethodLocation("FFX.exe", 0x4206B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_TOBtlCtrlLimitTimer();
