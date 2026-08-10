@@ -14,8 +14,13 @@ namespace Fahrenheit.Runtime;
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhSpdCtrlModule : FhModule {
 
-    private sbyte _Sg_KeepFps       = 0;
-    private uint  _ppvUserStopPartF = 0;
+    private sbyte _Sg_KeepFps            = 0;
+    private uint  _ppvUserStopPartF_game = 0;
+
+    private static uint ppvUserStopPartF {
+        get => FhUtil.get_at<uint>(FhUtil.select(0x1F0FD34, 0x18F679C, 0x18F679C));
+        set => FhUtil.set_at      (FhUtil.select(0x1F0FD34, 0x18F679C, 0x18F679C), value);
+    }
 
     private static uint sg_count {
         get => FhUtil.get_at<uint>(FhUtil.select(0x1FCBBF0, 0x16CDD60, 0x16CDD60));
@@ -86,13 +91,11 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
      */
 
     private void h_pre(UpdateLoopEventArgs args) {
-        if (Interlocked.CompareExchange(ref _ppvUserStopPartF, 1, 1) == 1) return;
+        if (_ppvUserStopPartF_game == 1) return;
 
-        uint stop_particles_this_frame = s_flipVSyncInterval == 1 && sg_count % 2 == 0
+        ppvUserStopPartF = s_flipVSyncInterval == 1 && sg_count % 2 == 0
             ? 1U
             : 0U;
-
-        FhCall.pppFpStopStatus.chain_from(h_pppFpStopStatus).fnptr!(stop_particles_this_frame);
     }
 
     /* [fkelava 10/08/26 22:14]
@@ -106,9 +109,8 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_pppFpStopStatus(uint arg1) {
-        Interlocked.Exchange(ref _ppvUserStopPartF, arg1);
-
-        FhCall.pppFpStopStatus.chain_from(h_pppFpStopStatus).fnptr!(arg1);
+        _ppvUserStopPartF_game = arg1;
+        ppvUserStopPartF       = arg1;
     }
 
     /* [fkelava 10/08/26 15:28]
