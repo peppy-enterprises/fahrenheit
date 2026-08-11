@@ -140,6 +140,31 @@ public static unsafe partial class FhCall {
 
     // RT - Frame limiter
 
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate ulong d_Phyre_PVideo_PVideoPlaybackWin32_getCurrentTime(uint* ptr_this);
+    internal static FhMethodHandle<d_Phyre_PVideo_PVideoPlaybackWin32_getCurrentTime> Phyre_PVideo_PVideoPlaybackWin32_getCurrentTime
+        => new( new FhMethodLocation(0x627BD0, 0x50F740) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate ulong d_Phyre_PVideo_PVideoPlaybackWin32_getEndTime(uint* ptr_this);
+    internal static FhMethodHandle<d_Phyre_PVideo_PVideoPlaybackWin32_getEndTime> Phyre_PVideo_PVideoPlaybackWin32_getEndTime
+        => new( new FhMethodLocation(0x627C40, 0x50F7C0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate void d_PhyreScene_UpdateTextureVideo(uint* ptr_this);
+    internal static FhMethodHandle<d_PhyreScene_UpdateTextureVideo> PhyreScene_UpdateTextureVideo
+        => new( new FhMethodLocation(0x254B10, 0x064C00) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_graphicTextureVideoPlay(uint arg1);
+    internal static FhMethodHandle<d_graphicTextureVideoPlay> graphicTextureVideoPlay
+        => new( new FhMethodLocation(0x244430, 0x055460) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_graphicTextureVideoUpdate();
+    internal static FhMethodHandle<d_graphicTextureVideoUpdate> graphicTextureVideoUpdate
+        => new( new FhMethodLocation(0x244470, 0x055490) );
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_pppFpStopStatus(uint arg1);
     internal static FhMethodHandle<d_pppFpStopStatus> pppFpStopStatus
@@ -148,7 +173,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate sbyte d_Sg_GetKeepFps();
     internal static FhMethodHandle<d_Sg_GetKeepFps> Sg_GetKeepFps
-        => new( new FhMethodLocation(0x4206B0, 0x2E63B0) );
+        => new( new FhMethodLocation(0x4206B0, 0x204B70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate sbyte d_Sg_SetKeepFps(sbyte arg1);
