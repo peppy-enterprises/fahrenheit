@@ -111,8 +111,8 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private PStreamFile* h_fopen(PStreamFile* ptr_this, nint ptr_path, bool read_only, nint p3, nint p4, bool p5) {
-        string path            = Marshal.PtrToStringAnsi(ptr_path)!;
+    private PStreamFile* h_fopen(PStreamFile* ptr_this, byte* ptr_path, bool read_only, uint p3, uint p4, bool p5) {
+        string path            = new string((sbyte*)ptr_path);
         string path_normalized = normalize_path(path);
 
         if (!_index.TryGetValue(path_normalized, out string? path_modded)) {
@@ -138,7 +138,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
             FILE_FLAGS_AND_ATTRIBUTES flags = FILE_FLAGS_AND_ATTRIBUTES.FILE_FLAG_SEQUENTIAL_SCAN;
 
-            ptr_this->handle_vbf = 0;
+            ptr_this->handle_vbf = null;
             ptr_this->handle_os  = PInvoke.CreateFileW(
                 ptr_path_modded,
                 (uint)access,

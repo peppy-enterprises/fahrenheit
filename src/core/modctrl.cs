@@ -9,7 +9,7 @@ namespace Fahrenheit;
 ///     Stores all loaded mods' <see cref="FhModContext"/> for runtime lookup,
 ///     and exposes facilities to find <see cref="FhModule"/>s at runtime.
 /// </summary>
-public sealed class FhModController {
+public sealed class FhMods {
 
     /* [fkelava 23/06/26 14:27]
      * While module contexts are always accessible through the mod contexts,
@@ -18,7 +18,7 @@ public sealed class FhModController {
     private readonly ImmutableArray<FhModContext>    _mods;
     private readonly ImmutableArray<FhModuleContext> _modules;
 
-    internal FhModController() {
+    internal FhMods() {
         FhModContext[]        mods    = new FhModContext[FhEnvironment.Manifests.Length];
         List<FhModuleContext> modules = [];
 

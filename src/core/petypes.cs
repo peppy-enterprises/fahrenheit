@@ -609,8 +609,8 @@ internal struct PWorld { }
 /// <summary>
 ///     A file as seen by the game. Can be backed by either a VBF or OS handle.
 /// </summary>
-internal struct PStreamFile {
-    public nint handle_os;
-    public nint handle_vbf;
+internal unsafe struct PStreamFile {
+    public HANDLE handle_os;
+    public VFile* handle_vbf;
 }
 

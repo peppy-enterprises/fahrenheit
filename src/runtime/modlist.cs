@@ -32,7 +32,7 @@ public unsafe class FhModListDisplayModule : FhModule {
         ImGui.SetNextWindowSize(new Vector2(350, 500));
 
         if (ImGui.Begin("Fh.ModList", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoInputs)) {
-            ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 18f);
+            ImGui.PushFont(FhApi.Gui.FONT_DEFAULT, 18f);
             FhModContext[] mods = [ .. FhApi.Mods.get_mods() ];
 
             ImGui.Text($"{mods.Length} mods loaded");

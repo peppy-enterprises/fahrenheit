@@ -51,7 +51,7 @@ internal static class FhEnvironment {
         FhApi.Mods.initialize();
 
         // post-init - may require later editing
-        FhInternal.MethodTable.commit();
+        FhInternal.Methods.commit();
     }
 
     /// <summary>

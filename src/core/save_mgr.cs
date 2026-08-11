@@ -94,9 +94,6 @@ internal sealed class FhSaves {
             }
 
             FhSavePal.pal_get_location   (display_data.header, display_data.location);
-            FhSavePal.pal_get_icon_chr   (display_data.header, display_data.icon_chr1, 0);
-            FhSavePal.pal_get_icon_chr   (display_data.header, display_data.icon_chr2, 1);
-            FhSavePal.pal_get_icon_chr   (display_data.header, display_data.icon_chr3, 2);
             FhSavePal.pal_get_icon_map   (display_data.header, display_data.icon_map);
             FhSavePal.pal_get_player_name(display_data.header, display_data.player_name);
             FhSavePal.pal_get_playtime   (display_data.header, display_data.play_time);
