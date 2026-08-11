@@ -63,7 +63,7 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowPos (new (io.DisplaySize.X * 0.008F, io.DisplaySize.Y * 0.105F));
         ImGui.SetNextWindowSize(new (io.DisplaySize.X * 0.984F, io.DisplaySize.Y * 0.88F));
 
-        if (!ImGui.Begin("Save/Load###Fh.Runtime.SaveSystem.SaveLoadUI", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoScrollbar) & (~ImGuiWindowFlags.NoNavFocus))) {
+        if (!ImGui.Begin("Save/Load###Fh.Runtime.SaveSystem.SaveLoadUI", FhApi.Gui.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoScrollbar) & (~ImGuiWindowFlags.NoNavFocus))) {
             ImGui.End();
             return;
         }
@@ -95,7 +95,7 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowPos (new ((io.DisplaySize.X - width_modal) / 2, io.DisplaySize.Y * 0.015F));
         ImGui.SetNextWindowSize(new (width_modal,                          io.DisplaySize.Y * 0.075F));
 
-        if (!ImGui.Begin("Set Swap###Fh.Runtime.SaveSystem.SetSwap", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoNavFocus))) {
+        if (!ImGui.Begin("Set Swap###Fh.Runtime.SaveSystem.SetSwap", FhApi.Gui.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoNavFocus))) {
             ImGui.End();
             return;
         }
@@ -110,7 +110,7 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.SetCursorPosX((width_window - width_text) * 0.5f);
         ImGui.Text(active_set_text);
 
-        FhApi.ImGuiHelper.set_next_align("Change Set"u8, 0.5F, style.FramePadding.X * 2.0F);
+        FhApi.Gui.set_next_align("Change Set"u8, 0.5F, style.FramePadding.X * 2.0F);
 
         if (ImGui.Button("Change Set"u8)) {
             /* [fkelava 22/01/26 14:14]
@@ -172,9 +172,9 @@ public sealed class FhSaveUiModule : FhModule {
             _                     => ImGui.GetColorU32(ImGuiCol.FrameBg)
         });
 
-        if (ImGui.BeginChild($"###Slot{slot}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
+        if (ImGui.BeginChild($"###Slot{slot}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.Gui.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
             ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetColorU32(ImGuiCol.TitleBg));
-            if (ImGui.BeginChild("##Title", window_size, ImGuiChildFlags.AutoResizeY, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
+            if (ImGui.BeginChild("##Title", window_size, ImGuiChildFlags.AutoResizeY, FhApi.Gui.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
                 ImGui.Indent();
                 ui_save_info_generic(data, slot);
                 ImGui.Unindent();
@@ -222,7 +222,7 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.SameLine(is_autosave ? 100 : 60);
         ImGui.Text(data.location);
         ImGui.SameLine();
-        FhApi.ImGuiHelper.set_next_align(data.create_time, 1.0F, style.FramePadding.X + style.IndentSpacing);
+        FhApi.Gui.set_next_align(data.create_time, 1.0F, style.FramePadding.X + style.IndentSpacing);
         ImGui.Text(data.create_time);
     }
 
@@ -236,11 +236,11 @@ public sealed class FhSaveUiModule : FhModule {
         float         padding = style.FramePadding.X + style.IndentSpacing;
 
         ImGui.SameLine();
-        FhApi.ImGuiHelper.set_next_align(data.completion, 1.0F, padding);
+        FhApi.Gui.set_next_align(data.completion, 1.0F, padding);
         ImGui.Text(data.completion);
         ImGui.Text(data.chapter);
         ImGui.SameLine();
-        FhApi.ImGuiHelper.set_next_align(data.play_time, 1.0F, padding);
+        FhApi.Gui.set_next_align(data.play_time, 1.0F, padding);
         ImGui.Text(data.play_time);
     }
 
