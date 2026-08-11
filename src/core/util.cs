@@ -25,14 +25,17 @@ public unsafe static class FhUtil {
     public static T  get_at<T>(nint address) where T : unmanaged => *ptr_at<T>(address);
 
     /// <summary>
-    ///     Writes a given <paramref name="value"/> of type <typeparamref name="T"/> to the given <paramref name="address"/>.
+    ///     Writes a given <paramref name="value"/> of type <typeparamref name="T"/> to the address obtained
+    ///     by adding the given <paramref name="offset"/> to the base address of the running game's executable.
     /// </summary>
     /// <remarks>
-    ///     The target <paramref name="address"/> must be in a writable memory region.
+    ///     The target <paramref name="offset"/> must be in a writable memory region.
     ///     If it is not, you must use a <see cref="FhVirtualProtectScope{T}"/>.
     /// </remarks>
+    /// <param name="offset">The offset, from the running game executable's base address, to write the given <paramref name="value"/> to.</param>
+    /// <param name="value">The value of type <typeparamref name="T"/> to write at the given address.</param>
     /// <returns>The previous value at the given address.</returns>
-    public static T set_at<T>(nint address, T value) where T : unmanaged => *ptr_at<T>(address) = value;
+    public static T set_at<T>(nint offset, T value) where T : unmanaged => *ptr_at<T>(offset) = value;
 
     public static void cast_to_bytes<T>(in ReadOnlySpan<T> src, in Span<byte> dest, out int bytesWritten) where T : struct {
         bytesWritten = Unsafe.SizeOf<T>() * src.Length;

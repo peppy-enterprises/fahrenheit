@@ -19,18 +19,24 @@ public unsafe readonly ref struct FhVirtualProtectScope<T> where T : unmanaged {
     private readonly PAGE_PROTECTION_FLAGS _protection_flags_old;
 
     /// <summary>
-    ///     Changes the page protection at the given <paramref name="address"/> to <paramref name="protection_flags"/>.
+    ///     Changes the memory protection mode beginning at the given <paramref name="address"/> to <paramref name="protection_mode"/>.
     /// </summary>
-    public FhVirtualProtectScope(T* address, PAGE_PROTECTION_FLAGS protection_flags) {
+    /// <remarks>
+    ///     The protection of any memory page containing one or more bytes from <paramref name="address"/> to
+    ///     (<paramref name="address"/> + sizeof(<typeparamref name="T"/>)) will be changed.
+    /// </remarks>
+    /// <param name="address">The starting address to change the memory protection mode at.</param>
+    /// <param name="protection_mode">The memory protection mode to set for the targeted memory region.</param>
+    public FhVirtualProtectScope(T* address, PAGE_PROTECTION_FLAGS protection_mode) {
         PAGE_PROTECTION_FLAGS flOldProtect;
-        PInvoke.VirtualProtect(address, (nuint) sizeof(T), protection_flags, &flOldProtect);
+        PInvoke.VirtualProtect(address, (nuint) sizeof(T), protection_mode, &flOldProtect);
 
         _address              = address;
         _protection_flags_old = flOldProtect;
     }
 
     /// <summary>
-    ///     Reverts the page protection at the target address to its previous state.
+    ///     Reverts the memory protection mode of the targeted region to its previous state.
     /// </summary>
     public void Dispose() {
         PAGE_PROTECTION_FLAGS discard;
