@@ -176,7 +176,7 @@ internal interface IFhResourceLoader {
 /// <summary>
 ///     Allows for loading of resources such as images for use in ImGui code.
 /// </summary>
-public sealed class FhResourceLoader {
+public sealed class FhResources {
 
     internal readonly FhRuntimeHandle<IFhResourceLoader> loader = new(); // RT connects here.
 
