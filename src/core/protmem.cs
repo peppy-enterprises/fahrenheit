@@ -14,21 +14,27 @@ namespace Fahrenheit;
 ///     which would normally cause an access violation.
 /// </remarks>
 [SupportedOSPlatform("windows5.1.2600")]
-internal unsafe readonly ref struct FhVirtualProtectScope<T> where T : unmanaged {
-    private readonly T*                    _lpAddress;
-    private readonly PAGE_PROTECTION_FLAGS _flOldProtect;
+public unsafe readonly ref struct FhVirtualProtectScope<T> where T : unmanaged {
+    private readonly T*                    _address;
+    private readonly PAGE_PROTECTION_FLAGS _protection_flags_old;
 
-    public FhVirtualProtectScope(T* lpAddress, PAGE_PROTECTION_FLAGS flNewProtect) {
+    /// <summary>
+    ///     Changes the page protection at the given <paramref name="address"/> to <paramref name="protection_flags"/>.
+    /// </summary>
+    public FhVirtualProtectScope(T* address, PAGE_PROTECTION_FLAGS protection_flags) {
         PAGE_PROTECTION_FLAGS flOldProtect;
-        PInvoke.VirtualProtect(lpAddress, (nuint) sizeof(T), flNewProtect, &flOldProtect);
+        PInvoke.VirtualProtect(address, (nuint) sizeof(T), protection_flags, &flOldProtect);
 
-        _lpAddress    = lpAddress;
-        _flOldProtect = flOldProtect;
+        _address              = address;
+        _protection_flags_old = flOldProtect;
     }
 
+    /// <summary>
+    ///     Reverts the page protection at the target address to its previous state.
+    /// </summary>
     public void Dispose() {
         PAGE_PROTECTION_FLAGS discard;
-        PInvoke.VirtualProtect(_lpAddress, (nuint) sizeof(T), _flOldProtect, &discard);
+        PInvoke.VirtualProtect(_address, (nuint) sizeof(T), _protection_flags_old, &discard);
     }
 }
 

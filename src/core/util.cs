@@ -21,9 +21,18 @@ public unsafe static class FhUtil {
         };
     }
 
-    public static T* ptr_at<T>(nint address)          where T : unmanaged { return (T*)(FhEnvironment.BaseAddr + address); }
-    public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                    }
-    public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;            }
+    public static T* ptr_at<T>(nint address) where T : unmanaged => (T*)(FhEnvironment.BaseAddr + address);
+    public static T  get_at<T>(nint address) where T : unmanaged => *ptr_at<T>(address);
+
+    /// <summary>
+    ///     Writes a given <paramref name="value"/> of type <typeparamref name="T"/> to the given <paramref name="address"/>.
+    /// </summary>
+    /// <remarks>
+    ///     The target <paramref name="address"/> must be in a writable memory region.
+    ///     If it is not, you must use a <see cref="FhVirtualProtectScope{T}"/>.
+    /// </remarks>
+    /// <returns>The previous value at the given address.</returns>
+    public static T set_at<T>(nint address, T value) where T : unmanaged => *ptr_at<T>(address) = value;
 
     public static void cast_to_bytes<T>(in ReadOnlySpan<T> src, in Span<byte> dest, out int bytesWritten) where T : struct {
         bytesWritten = Unsafe.SizeOf<T>() * src.Length;
