@@ -21,8 +21,21 @@ public unsafe static class FhUtil {
         };
     }
 
-    public static T* ptr_at<T>(nint address) where T : unmanaged => (T*)(FhEnvironment.BaseAddr + address);
-    public static T  get_at<T>(nint address) where T : unmanaged => *ptr_at<T>(address);
+    /// <summary>
+    ///     Returns a pointer to <typeparamref name="T"/> at the absolute address obtained by
+    ///     adding the given <paramref name="offset"/> to the base address of the running game's executable.
+    /// </summary>
+    /// <param name="offset">The offset, from the running game executable's base address, to return a pointer to <typeparamref name="T"/> at.</param>
+    /// <returns>A pointer to a value of type <typeparamref name="T"/> at the given address.</returns>
+    public static T* ptr_at<T>(nint offset) where T : unmanaged => (T*)(FhEnvironment.BaseAddr + offset);
+
+    /// <summary>
+    ///     Reads a value of type <typeparamref name="T"/> from the address obtained by adding
+    ///     the given <paramref name="offset"/> to the base address of the running game's executable.
+    /// </summary>
+    /// <param name="offset">The offset, from the running game executable's base address, to read a value of type <typeparamref name="T"/> from.</param>
+    /// <returns>The current value at the given address.</returns>
+    public static T get_at<T>(nint offset) where T : unmanaged => *ptr_at<T>(offset);
 
     /// <summary>
     ///     Writes a given <paramref name="value"/> of type <typeparamref name="T"/> to the address obtained
