@@ -12,6 +12,7 @@ namespace Fahrenheit.Runtime;
 ///     Patches game systems to be (more) independent of the target framerate.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
+[SupportedOSPlatform("windows5.1.2600")]
 public unsafe sealed class FhSpdCtrlModule : FhModule {
 
     private sbyte _Sg_KeepFps            = 0;
@@ -286,13 +287,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private uint h_frame(PApplication* ptr_this) {
-        /* [fkelava 09/08/26 23:05]
-         * You would think 'graphicIsVideoPlaying' would check whether
-         * sFMVPlayerManager is null before dereferencing its fields. Nope.
-         */
-        s_flipVSyncInterval = sFMVPlayerManager == 0 || FhCall.graphicIsVideoPlaying.fnptr!() == 1
-            ? 2U
-            : 1U;
+        s_flipVSyncInterval = 1U;
 
         return FhCall.Phyre_PFramework_PApplication_frame.chain_from(h_frame).fnptr!(ptr_this);
     }
