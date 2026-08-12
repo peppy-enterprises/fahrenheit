@@ -20,6 +20,10 @@ LRESULT
 HRESULT
 HMODULE
 
+// Memory protection modifier
+
+VirtualProtect
+
 // RT: Allocator fix
 
 InitializeCriticalSection
