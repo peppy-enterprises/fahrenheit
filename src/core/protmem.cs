@@ -25,7 +25,7 @@ public unsafe readonly ref struct FhVirtualProtectScope<T> where T : unmanaged {
     ///     The protection of any memory page containing one or more bytes from <paramref name="address"/> to
     ///     (<paramref name="address"/> + sizeof(<typeparamref name="T"/>)) will be changed.
     /// </remarks>
-    /// <param name="address">The address to start change the memory protection mode from.</param>
+    /// <param name="address">The address to start changing the memory protection mode from.</param>
     /// <param name="protection_mode">The memory protection mode to set for the targeted memory region.</param>
     public FhVirtualProtectScope(T* address, PAGE_PROTECTION_FLAGS protection_mode) {
         PAGE_PROTECTION_FLAGS flOldProtect;
