@@ -13,7 +13,7 @@ namespace Fahrenheit.Runtime;
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows5.1.2600")]
-public unsafe sealed class FhSpdCtrlModule : FhModule {
+public unsafe sealed class PWarpModule : FhModule {
 
     private sbyte _Sg_KeepFps            = 0;
     private uint  _ppvUserStopPartF_game = 0;
@@ -61,6 +61,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
             && FhCall.Sg_SetKeepFps                                         .hook(this, h_Sg_SetKeepFps)
             && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930)
             && FhCall.pppFpStopStatus                                       .hook(this, h_pppFpStopStatus)
+            && FhCall.PhyFMVPlayerManager_UpdateTexture                     .hook(this, h_fmv_UpdateTexture)
             && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
             && (!is_ffx || FFX.FhCall.graphicDrawMainMenuWaterEffect        .hook(this, h_graphicDrawMainMenuWaterEffect))
             && (!is_ffx || FFX .FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed))
@@ -69,6 +70,21 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
             && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain));
     }
 
+    /* [fkelava 12/08/26 13:33]
+     * FMVs run at double speed when the game does, as the game hardcodes a framerate of 29.97
+     * when calculating the time-step in the video update loop.
+     *
+     * We thus frameskip that update loop, which produces a optically correct result. If the FMV
+     * were recoded to a different framerate, this would break; but such a user would have to patch
+     * that constant in `.rdata` anyway. Warp can provide support for this when the need arises...
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private void h_fmv_UpdateTexture(uint ptr_this) {
+        if (sg_count % 2 == 0) {
+            FhCall.PhyFMVPlayerManager_UpdateTexture.chain_from(h_fmv_UpdateTexture).fnptr!(ptr_this);
+        }
+    }
     /* [fkelava 11/08/26 00:08]
      * The water effect in the FF X main menu is a series of images scrolling by, one per frame.
      * We have to 'frame skip' by having it render the same one for two frames.
@@ -80,7 +96,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
 
         byte water_current_frame = FhUtil.get_at<byte>(0x8CBA09);
 
-        if (s_flipVSyncInterval == 1 && sg_count % 2 == 0) {
+        if (sg_count % 2 == 0) {
             FhUtil.set_at(0x8CBA09, byte.Clamp(water_current_frame--, 0, 69));
         }
     }
@@ -94,9 +110,9 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
     private void h_pre(UpdateLoopEventArgs args) {
         if (_ppvUserStopPartF_game == 1) return;
 
-        ppvUserStopPartF = s_flipVSyncInterval == 1 && sg_count % 2 == 0
-            ? 1U
-            : 0U;
+        //ppvUserStopPartF = sg_count % 2 == 0
+        //    ? 1U
+        //    : 0U;
     }
 
     /* [fkelava 10/08/26 22:14]
@@ -217,7 +233,7 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
     private void h_CT_0000_Init(AtelBasicWorker* work, int* storage, AtelStack* stack) {
         int rv = FFX.FhCall.AtelPopStackInteger.fnptr!((int*)work, stack);
 
-        *storage = s_flipVSyncInterval == 1U && rv != 1
+        *storage = rv != 1
             ? rv * 2
             : rv;
     }
@@ -278,11 +294,8 @@ public unsafe sealed class FhSpdCtrlModule : FhModule {
     }
 
     /* [fkelava 10/08/26 14:43]
-     * FMVs run at double speed when we're removing the frame limiter. We adapt by
-     * lowering the framerate back to 30 when a video is set to play.
-     *
-     * Note that 'graphicIsVideoPlaying' begins firing at a variable delay before the FMV
-     * actually begins. This is a bit ugly, but better slow down ahead of time than mid-FMV.
+     * We let the game retime its own display/frame loop by setting the
+     * flip V-Sync interval to one frame instead of two.
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]

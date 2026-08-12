@@ -31,6 +31,16 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_graphicVideoUpdate();
+    internal static FhMethodHandle<d_graphicVideoUpdate> graphicVideoUpdate
+        => new( new FhMethodLocation("FFX.exe", 0x245FA0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_MsEffectSetSpeed(byte chr_id, ushort speed);
+    internal static FhMethodHandle<d_MsEffectSetSpeed> MsEffectSetSpeed
+        => new( new FhMethodLocation("FFX.exe", 0x3884F0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_graphicDrawMainMenuWaterEffect();
     internal static FhMethodHandle<d_graphicDrawMainMenuWaterEffect> graphicDrawMainMenuWaterEffect
         => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );

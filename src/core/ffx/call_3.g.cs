@@ -39436,13 +39436,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_graphicVideoPause> graphicVideoPause => new( new FhMethodLocation("FFX.exe", 0x245F90) );
 
     // Original after pruning:
-    // unknown undefined FUN_00645fa0() at 00645fa0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00645fa0();
-    public static FhMethodHandle<d_FUN_00645fa0> FUN_00645fa0 => new( new FhMethodLocation("FFX.exe", 0x245FA0) );
-
-    // Original after pruning:
     // unknown undefined FUN_00645ff0() at 00645ff0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

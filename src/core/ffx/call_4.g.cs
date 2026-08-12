@@ -10845,13 +10845,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_006d76a0> FUN_006d76a0 => new( new FhMethodLocation("FFX.exe", 0x2D76A0) );
 
     // Original after pruning:
-    // unknown undefined FUN_006d77b0() at 006d77b0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_006d77b0();
-    public static FhMethodHandle<d_FUN_006d77b0> FUN_006d77b0 => new( new FhMethodLocation("FFX.exe", 0x2D77B0) );
-
-    // Original after pruning:
     // unknown undefined FUN_006d79f0() at 006d79f0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -30723,13 +30716,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_007884b0();
     public static FhMethodHandle<d_FUN_007884b0> FUN_007884b0 => new( new FhMethodLocation("FFX.exe", 0x3884B0) );
-
-    // Original after pruning:
-    // unknown undefined FUN_007884f0() at 007884f0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_007884f0();
-    public static FhMethodHandle<d_FUN_007884f0> FUN_007884f0 => new( new FhMethodLocation("FFX.exe", 0x3884F0) );
 
     // Original after pruning:
     // unknown undefined MsEffectStart() at 00788540

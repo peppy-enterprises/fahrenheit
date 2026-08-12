@@ -141,6 +141,11 @@ public static unsafe partial class FhCall {
     // RT - Frame limiter
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate void d_PhyFMVPlayerManager_UpdateTexture(uint ptr_this);
+    internal static FhMethodHandle<d_PhyFMVPlayerManager_UpdateTexture> PhyFMVPlayerManager_UpdateTexture
+        => new( new FhMethodLocation(0x2D77B0, 0x035600) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     internal unsafe delegate ulong d_Phyre_PVideo_PVideoPlaybackWin32_getCurrentTime(uint* ptr_this);
     internal static FhMethodHandle<d_Phyre_PVideo_PVideoPlaybackWin32_getCurrentTime> Phyre_PVideo_PVideoPlaybackWin32_getCurrentTime
         => new( new FhMethodLocation(0x627BD0, 0x50F740) );
