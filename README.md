@@ -46,8 +46,9 @@ To install/test your development build:
 and make sure to enable [mixed-mode debugging](https://learn.microsoft.com/en-us/visualstudio/debugger/how-to-debug-managed-and-native-code?view=vs-2022).
 
 ## Compatibility notes
-Fahrenheit supplies its own External File Loader. If you separately use ffgriever's
-[External File Loader for FFX/FFX-2](https://gitlab.com/ffgriever/ffx-x-2-hd-external-file-loader), the two may override each other.
+Fahrenheit is incompatible with ffgriever's
+[External File Loader for FFX/FFX-2](https://gitlab.com/ffgriever/ffx-x-2-hd-external-file-loader).
+Fahrenheit comes with an integrated external file loader. Existing file-based mods must be converted to Fahrenheit format.
 
 If you use [Untitled Project X](https://github.com/Kaldaien/UnX) with Fahrenheit,
 you **must** patch the game executable to be large-address-aware (apply the "4GB patch"). If you don't, you will run out of memory at boot.
