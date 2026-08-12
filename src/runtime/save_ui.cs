@@ -129,7 +129,7 @@ public sealed class FhSaveUiModule : FhModule {
 
     private (Vector2 size, Vector2 offset) get_window_bounds() {
         Vector2 window_size   = ImGui.GetMainViewport().WorkSize;
-        float   target_aspect = 16.0f / 9.0f; // Force 16:9 aspect ratio
+        float   target_aspect = 16f / 9f; // Force 16:9 aspect ratio
         float   window_aspect = window_size.X / window_size.Y;
 
         if (window_aspect > target_aspect) {
@@ -182,12 +182,12 @@ public sealed class FhSaveUiModule : FhModule {
         (Vector2 mahojin_tu, Vector2 mahojin_tv) = scale_tex_uv(
             _tex_mahojin_size,
             new(6f   , 2038f),
-            new(1514f,  529f)
+            new(1514f, 529f)
         );
 
         (Vector2 mahojin_su, Vector2 mahojin_sv) = scale_screen_uv(
             screen_size,
-            new(374f ,  -53f),
+            new(374f , -53f),
             new(1600f, 1165f)
         );
 
@@ -238,7 +238,7 @@ public sealed class FhSaveUiModule : FhModule {
             uint grad_l = 0xFF00bfb5; // Yellow
             uint grad_r = 0x1000bfb5;
 
-            Vector2 tl = scale_screen_uv(screen_size, new(   0f, 141.5f), Vector2.Zero).Item1;
+            Vector2 tl = scale_screen_uv(screen_size, new(0f   , 141.5f), Vector2.Zero).Item1;
             Vector2 br = scale_screen_uv(screen_size, new(1920f,   138f), Vector2.Zero).Item1;
 
             draw.AddRectFilledMultiColor(tl, br, grad_l, grad_r, grad_r, grad_l);
@@ -252,7 +252,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         (Vector2 help_su, Vector2 help_sv) = scale_screen_uv(
             screen_size,
-            new(151f,  94f),
+            new(151f, 94f),
             new(229f, 126f)
         );
 
@@ -398,8 +398,8 @@ public sealed class FhSaveUiModule : FhModule {
 
         ImGui.SetCursorPos(new Vector2(0f, 11f * scale_factor));
 
-        _scroll_y      = ImGui.GetScrollY();
-        _scroll_max_y  = ImGui.GetScrollMaxY();
+        _scroll_y = ImGui.GetScrollY();
+        _scroll_max_y = ImGui.GetScrollMaxY();
         _window_height = ImGui.GetWindowHeight();
 
         bool is_save = _sem!.get_system_state() is FhSaveExtensionSystemState.SAVE;
@@ -437,7 +437,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         ImDrawListPtr draw            = ImGui.GetBackgroundDrawList();
         Vector2       mouse_pos       = ImGui.GetMousePos();
-        (Vector2      window_size, _) = get_window_bounds();
+        (Vector2 window_size, _) = get_window_bounds();
         Vector2       screen_size     = new(1920f, 1080f);
         float         scale_factor    = window_size.Y / 1080f;
 
@@ -518,8 +518,8 @@ public sealed class FhSaveUiModule : FhModule {
 
         if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)) {
             if (mouse_pos.X >= tl.X && mouse_pos.X <= br.X && mouse_pos.Y >= tl.Y && mouse_pos.Y <= br.Y) {
-                _dragging_scrollbar  = true;
-                _drag_start_mouse_y  = mouse_pos.Y;
+                _dragging_scrollbar = true;
+                _drag_start_mouse_y = mouse_pos.Y;
                 _drag_start_scroll_y = _scroll_y;
             }
         }
@@ -527,7 +527,7 @@ public sealed class FhSaveUiModule : FhModule {
         if (_dragging_scrollbar) {
             if (ImGui.IsMouseDown(ImGuiMouseButton.Left)) {
                 float drag_distance = mouse_pos.Y - _drag_start_mouse_y;
-                float scroll_amount = total_travel_distance > 0f ? (drag_distance / total_travel_distance) * _scroll_max_y : 0f;
+                float scroll_amount = total_travel_distance > 0f ? drag_distance / total_travel_distance * _scroll_max_y : 0f;
 
                 _scroll_y = Math.Clamp(_drag_start_scroll_y + scroll_amount, 0f, _scroll_max_y);
                 ImGui.SetScrollY(_scroll_y);
@@ -729,7 +729,7 @@ public sealed class FhSaveUiModule : FhModule {
         (Vector2 window_size, _) = get_window_bounds();
         float    scale_factor    = window_size.Y / 1080f;
 
-        Vector2 save_start = ImGui.GetCursorScreenPos();
+        Vector2 save_start  = ImGui.GetCursorScreenPos();
         Vector2 avail_width = new(ImGui.GetContentRegionAvail().X, 0f);
 
         int  slot    = data.slot;
@@ -741,7 +741,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         (Vector2 save_tu, Vector2 save_tv) = scale_tex_uv(
             _tex_save_size,
-            new(0f  , 506f),
+            new(0f, 506f),
             new(511f, 375f)
         );
 
@@ -821,7 +821,7 @@ public sealed class FhSaveUiModule : FhModule {
         Vector2 ghost_start  = save_start  + ghost_offset;
         Vector2 ghost_end    = ghost_start + cursor_size;
 
-        draw.AddImage(freetex, ghost_start,  ghost_end,  cursor_tu, cursor_tv, ghost_color);
+        draw.AddImage(freetex, ghost_start, ghost_end, cursor_tu, cursor_tv, ghost_color);
         draw.AddImage(freetex, cursor_start, cursor_end, cursor_tu, cursor_tv, 0xFFFFFFFF);
     }
 
