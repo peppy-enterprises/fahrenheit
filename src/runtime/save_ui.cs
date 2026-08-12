@@ -322,7 +322,7 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowPos(tl);
         ImGui.SetNextWindowSize(box_size);
 
-        ImGuiWindowFlags flags = FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN
+        ImGuiWindowFlags flags = FhApi.Gui.WINDOW_FLAGS_FULLSCREEN
         & ~ImGuiWindowFlags.NoNavFocus
         | ImGuiWindowFlags.NoBackground;
 
@@ -385,7 +385,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
 
-        ImGuiWindowFlags flags = FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN
+        ImGuiWindowFlags flags = FhApi.Gui.WINDOW_FLAGS_FULLSCREEN
         & ~ImGuiWindowFlags.NoNavFocus
         | ImGuiWindowFlags.NoScrollbar
         | ImGuiWindowFlags.NoBackground;
@@ -756,7 +756,7 @@ public sealed class FhSaveUiModule : FhModule {
         draw.AddImage(save_tex, save_start, save_end, save_tu, save_tv); // Save texture
 
         ImGui.PushStyleColor(ImGuiCol.ChildBg, 0x00000000);
-        if (ImGui.BeginChild($"###Slot{slot}", save_size, ImGuiChildFlags.None, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
+        if (ImGui.BeginChild($"###Slot{slot}", save_size, ImGuiChildFlags.None, FhApi.Gui.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
             ImGui.Indent();
             ui_save_info_generic(data, slot, save_start, scale_factor);
             ImGui.Unindent();
