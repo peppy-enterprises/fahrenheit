@@ -19,13 +19,13 @@ public unsafe readonly ref struct FhVirtualProtectScope<T> where T : unmanaged {
     private readonly PAGE_PROTECTION_FLAGS _protection_flags_old;
 
     /// <summary>
-    ///     Changes the memory protection mode beginning at the given <paramref name="address"/> to <paramref name="protection_mode"/>.
+    ///     Changes the memory protection mode beginning at the given address.
     /// </summary>
     /// <remarks>
     ///     The protection of any memory page containing one or more bytes from <paramref name="address"/> to
     ///     (<paramref name="address"/> + sizeof(<typeparamref name="T"/>)) will be changed.
     /// </remarks>
-    /// <param name="address">The starting address to change the memory protection mode at.</param>
+    /// <param name="address">The address to start change the memory protection mode from.</param>
     /// <param name="protection_mode">The memory protection mode to set for the targeted memory region.</param>
     public FhVirtualProtectScope(T* address, PAGE_PROTECTION_FLAGS protection_mode) {
         PAGE_PROTECTION_FLAGS flOldProtect;
