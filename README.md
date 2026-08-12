@@ -53,6 +53,9 @@ Fahrenheit comes with an integrated external file loader. Existing file-based mo
 If you use [Untitled Project X](https://github.com/Kaldaien/UnX) with Fahrenheit,
 you **must** patch the game executable to be large-address-aware (apply the "4GB patch"). If you don't, you will run out of memory at boot.
 
+If you use [RivaTuner Statistics Server](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/) with Fahrenheit,
+you **must** enable 'Use Microsoft Detours API hooking' in `Setup > General > Compatibility properties`.
+
 ## What's next?
 Time permitting, the goals (in no specific order) of the project are:
 - Provide actual code-behind, helper functions, and tooling to make various modding tasks approachable.
