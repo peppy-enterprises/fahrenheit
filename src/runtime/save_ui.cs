@@ -377,8 +377,8 @@ public sealed class FhSaveUiModule : FhModule {
         (Vector2 window_size, Vector2 window_offset) = get_window_bounds();
         float    scale_factor                        = window_size.Y / 1080f;
 
-        Vector2 offset = window_offset + new Vector2(window_size.X * (156f / 1920f), window_size.Y * (161f / 1080f));
-        Vector2 size   = new(window_size.X * (1567f / 1920f), window_size.Y * (828f / 1080f));
+        Vector2 offset = window_offset + new Vector2(window_size.X * (0f / 1920f), window_size.Y * (161f / 1080f));
+        Vector2 size   = new(window_size.X * (1723f / 1920f), window_size.Y * (828f / 1080f));
 
         ImGui.SetNextWindowPos(offset);
         ImGui.SetNextWindowSize(size);
@@ -644,12 +644,16 @@ public sealed class FhSaveUiModule : FhModule {
         float    scale_factor    = window_size.Y / 1080f;
         float    font_size       = 50f * scale_factor;
 
-        Vector2 save_start  = ImGui.GetCursorScreenPos();
-        Vector2 avail_width = new(ImGui.GetContentRegionAvail().X, 0f);
+        Vector2 window_start = ImGui.GetCursorScreenPos();
+        Vector2 avail_width  = new(ImGui.GetContentRegionAvail().X, 0f);
 
-        float target_height = 155f * scale_factor;
-        Vector2 save_size   = new(avail_width.X, target_height);
-        Vector2 save_end    = save_start + save_size;
+        float   save_x_offset = 157f * scale_factor;
+        Vector2 save_start    = window_start + new Vector2(save_x_offset, 0f);
+
+        float   target_height = 155f * scale_factor;
+        float   target_width  = avail_width.X - save_x_offset;
+        Vector2 save_size     = new(target_width, target_height);
+        Vector2 save_end      = save_start + save_size;
 
         (Vector2 save_tu, Vector2 save_tv) = scale_tex_uv(
             _tex_save_size,
@@ -729,26 +733,30 @@ public sealed class FhSaveUiModule : FhModule {
         (Vector2 window_size, _) = get_window_bounds();
         float    scale_factor    = window_size.Y / 1080f;
 
-        Vector2 save_start  = ImGui.GetCursorScreenPos();
-        Vector2 avail_width = new(ImGui.GetContentRegionAvail().X, 0f);
-
         int  slot    = data.slot;
         bool hovered = slot == _display_index;
 
+        Vector2 window_start = ImGui.GetCursorScreenPos();
+        Vector2 avail_width  = new(ImGui.GetContentRegionAvail().X, 0f);
+        
+        float   save_x_offset = 157f * scale_factor;
+        Vector2 save_start    = window_start + new Vector2(save_x_offset, 0f);
+        
         float   target_height = 155f * scale_factor;
-        Vector2 slot_size     = new(avail_width.X, target_height);
-        Vector2 save_end      = save_start + slot_size;
+        float   target_width  = avail_width.X - save_x_offset;
+        Vector2 save_size     = new(target_width, target_height);
+        Vector2 save_end      = save_start + save_size;
 
         (Vector2 save_tu, Vector2 save_tv) = scale_tex_uv(
             _tex_save_size,
-            new(0f, 506f),
+            new(0f  , 506f),
             new(511f, 375f)
         );
 
         draw.AddImage(save_tex, save_start, save_end, save_tu, save_tv); // Save texture
 
         ImGui.PushStyleColor(ImGuiCol.ChildBg, 0x00000000);
-        if (ImGui.BeginChild($"###Slot{slot}", slot_size, ImGuiChildFlags.None, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
+        if (ImGui.BeginChild($"###Slot{slot}", save_size, ImGuiChildFlags.None, FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
             ImGui.Indent();
             ui_save_info_generic(data, slot, save_start, scale_factor);
             ImGui.Unindent();
@@ -766,7 +774,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         ImGui.SetCursorScreenPos(save_start);
         ImGui.SetNextItemAllowOverlap();
-        bool pressed = ImGui.InvisibleButton($"###Slot{slot}.Button", slot_size, ImGuiButtonFlags.EnableNav | ImGuiButtonFlags.MouseButtonLeft);
+        bool pressed = ImGui.InvisibleButton($"###Slot{slot}.Button", save_size, ImGuiButtonFlags.EnableNav | ImGuiButtonFlags.MouseButtonLeft);
         if (pressed) {
             switch (_sem!.get_system_state()) {
                 case FhSaveExtensionSystemState.SAVE: _sem!.save(slot); break;
@@ -794,7 +802,7 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        ImDrawListPtr draw = ImGui.GetForegroundDrawList();
+        ImDrawListPtr draw = ImGui.GetWindowDrawList();
 
         (Vector2 cursor_tu, Vector2 cursor_tv) = scale_tex_uv(
             _tex_freetex_size,
