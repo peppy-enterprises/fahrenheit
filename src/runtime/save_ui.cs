@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// SPDX-License-Identifier: LGPL-3.0-or-later
 //
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
@@ -59,7 +59,7 @@ public sealed class FhSaveUiModule : FhModule {
     private readonly Vector2 _tex_bmenu1_size  = new(1024f, 1024f);
     private readonly Vector2 _tex_message_size = new(2048f, 2048f);
 
-    // TODO: Location .pngs, readjust text, fix up ui_setswap
+    // TODO: Fix up ui_setswap
 
     public FhSaveUiModule() {
         _sem_handle = new(this);
@@ -178,16 +178,16 @@ public sealed class FhSaveUiModule : FhModule {
         Vector2 tex_v = new(1f, 0f);
 
         draw.AddImage(bg, bg_su, bg_sv, tex_u, tex_v);
-            
+
         (Vector2 mahojin_tu, Vector2 mahojin_tv) = scale_tex_uv(
             _tex_mahojin_size,
             new(6f   , 2038f),
             new(1514f,  529f)
         );
-            
+
         (Vector2 mahojin_su, Vector2 mahojin_sv) = scale_screen_uv(
             screen_size,
-            new(374f ,   -53),
+            new(374f ,  -53f),
             new(1600f, 1165f)
         );
 
@@ -219,8 +219,10 @@ public sealed class FhSaveUiModule : FhModule {
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        Vector2 display_size = ImGui.GetMainViewport().WorkSize;
-        Vector2 screen_size  = new(1920f, 1080f);
+        (Vector2 window_size, _) = get_window_bounds();
+        Vector2  screen_size     = new(1920f, 1080f);
+        float    scale_factor    = window_size.Y / 1080f;
+        float    font_size       = 50f * scale_factor;
 
         {
             uint grad_l = 0xFF000000; // Black
@@ -264,11 +266,6 @@ public sealed class FhSaveUiModule : FhModule {
             Vector2.Zero
         );
 
-        float    base_font_size  = 50f; // Nearly perfect match to the original Flash UI font size at 1920x1080
-        (Vector2 window_size, _) = get_window_bounds();
-        float    scale_factor    = window_size.Y / 1080.0f;
-        float    font_size       = base_font_size * scale_factor;
-
         draw.AddText(ImGui.GetFont(), font_size, text_su, 0xFFFFFFFF, is_save ? "Select save area" : "Select save data");
     }
 
@@ -276,22 +273,20 @@ public sealed class FhSaveUiModule : FhModule {
     ///     Draws the set swap UI for the save/load screen.
     /// </summary>
     private unsafe void ui_setswap() {
-        if (!_texture_message.try_use(out ImTextureRef message, out _))
+        if (!_texture_message.try_use(out ImTextureRef message, out _)) {
             return;
-
-        // This is a mess :/
+        }
 
         (Vector2 window_size, Vector2 window_offset) = get_window_bounds();
-
-        Vector2 base_screen_size = new(1920f, 1080f);
-        float scale_factor       = window_size.Y / 1080.0f;
-        float font_size          = 50.0f * scale_factor;
+        Vector2  screen_size                         = new(1920f, 1080f);
+        float    scale_factor                        = window_size.Y / 1080f;
+        float    font_size                           = 50f * scale_factor;
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
-        ImFontPtr font     = ImGui.GetFont();
+        ImFontPtr     font = ImGui.GetFont();
 
-        Vector2 tl = scale_screen_uv(base_screen_size, new(692f, 22f), Vector2.Zero).Item1;
-        Vector2 br = scale_screen_uv(base_screen_size, new(1244f, 88f), Vector2.Zero).Item1;
+        Vector2 tl = scale_screen_uv(screen_size, new(692f , 22f), Vector2.Zero).Item1;
+        Vector2 br = scale_screen_uv(screen_size, new(1244f, 88f), Vector2.Zero).Item1;
         draw.AddRectFilled(tl, br, 0x80000000); // Transparent black message box
 
         (Vector2 tex_uv1, Vector2 tex_uv2) = scale_tex_uv(
@@ -301,13 +296,13 @@ public sealed class FhSaveUiModule : FhModule {
         );
 
         (Vector2 accent1_tl, Vector2 accent1_br) = scale_screen_uv(
-            base_screen_size,
+            screen_size,
             new(690f, 90f),
             new(760f, 20f)
         );
 
         (Vector2 accent2_tl, Vector2 accent2_br) = scale_screen_uv(
-            base_screen_size,
+            screen_size,
             new(1246f, 20f),
             new(1176f, 90f)
         );
@@ -315,13 +310,13 @@ public sealed class FhSaveUiModule : FhModule {
         draw.AddImage(message, accent1_tl, accent1_br, tex_uv1, tex_uv2);
         draw.AddImage(message, accent2_tl, accent2_br, tex_uv1, tex_uv2);
 
-        string save_count = FhInternal.Saves.get_slots_used() == 1 ? "(1 Save)" : $"({FhInternal.Saves.get_slots_used()} Saves)";
+        string save_count = FhInternal.Saves.get_slots_used() == 1 ? "1 Save" : $"{FhInternal.Saves.get_slots_used()} Saves";
 
-        Vector2 text_offset = scale_screen_uv(base_screen_size, new(1717f, 121f), Vector2.Zero).Item1;
+        Vector2 text_offset = scale_screen_uv(screen_size, new(1717f, 121f), Vector2.Zero).Item1;
         float   text_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, save_count).X;
         Vector2 text_start  = new(text_offset.X - text_width, text_offset.Y);
 
-        draw.AddText(font, font_size, text_start, 0xFFFFFFFF, save_count); // (X Saves), drawn right to left
+        draw.AddText(font, font_size, text_start, 0xFFFFFFFF, save_count); // X Saves, drawn right to left
 
         Vector2 box_size = br - tl;
         ImGui.SetNextWindowPos(tl);
@@ -337,20 +332,20 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         string active_set = FhInternal.Saves.get_active_set();
-        Vector2 set_label_size = font.CalcTextSizeA(font_size, float.MaxValue, 0f, active_set);
+        Vector2 set_name_size = font.CalcTextSizeA(font_size, float.MaxValue, 0f, active_set);
 
         Vector2 win_pos       = ImGui.GetWindowPos();
         Vector2 win_size      = ImGui.GetWindowSize();
-        Vector2 set_label_pos = win_pos + new Vector2((win_size.X - set_label_size.X) * 0.5f, 4.0f * scale_factor);
+        Vector2 set_name_pos = win_pos + new Vector2((win_size.X - set_name_size.X) * 0.5f, 4f * scale_factor);
 
-        ImGui.SetCursorScreenPos(set_label_pos);
+        ImGui.SetCursorScreenPos(set_name_pos);
 
-        if (ImGui.Selectable("###ActiveSetSelectable", false, ImGuiSelectableFlags.None, set_label_size)) {
+        if (ImGui.Selectable("###ActiveSetSelectable", false, ImGuiSelectableFlags.None, set_name_size)) {
             _sets = FhInternal.Saves.get_sets();
             ImGui.OpenPopup("Select Set"u8);
         }
 
-        draw.AddText(font, font_size, set_label_pos, 0xFFFFFFFF, active_set);
+        draw.AddText(font, font_size, set_name_pos, 0xFFFFFFFF, active_set);
 
         Vector2 modal_size = new(Math.Max(600f, window_size.X * 0.35f), Math.Max(400f, window_size.Y * 0.7f));
         Vector2 modal_pos  = window_offset + (window_size - modal_size) * 0.5f;
@@ -380,11 +375,10 @@ public sealed class FhSaveUiModule : FhModule {
     /// </summary>
     private void ui_mainwindow() {
         (Vector2 window_size, Vector2 window_offset) = get_window_bounds();
+        float    scale_factor                        = window_size.Y / 1080f;
 
-        float scale_factor = window_size.Y / 1080.0f;
-
-        Vector2 offset = window_offset + new Vector2(window_size.X * (146f / 1920f), window_size.Y * (161f / 1080f));
-        Vector2 size   = new(window_size.X * (1587f / 1920f), window_size.Y * (828f / 1080f));
+        Vector2 offset = window_offset + new Vector2(window_size.X * (156f / 1920f), window_size.Y * (161f / 1080f));
+        Vector2 size   = new(window_size.X * (1567f / 1920f), window_size.Y * (828f / 1080f));
 
         ImGui.SetNextWindowPos(offset);
         ImGui.SetNextWindowSize(size);
@@ -402,7 +396,7 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        ImGui.SetCursorPos(new Vector2(0.0f, 11.0f * scale_factor));
+        ImGui.SetCursorPos(new Vector2(0f, 11f * scale_factor));
 
         _scroll_y      = ImGui.GetScrollY();
         _scroll_max_y  = ImGui.GetScrollMaxY();
@@ -416,7 +410,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         if (!is_save && FhInternal.Saves.get_display_data().Count < 1) {
             ui_no_saves();
-            ImGui.Dummy(new Vector2(0, 11.0f * scale_factor));
+            ImGui.Dummy(new Vector2(0f, 11f * scale_factor));
             ImGui.PopStyleVar();
             ImGui.End();
             return;
@@ -441,9 +435,11 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        ImDrawListPtr draw        = ImGui.GetBackgroundDrawList();
-        Vector2       screen_size = new(1920f, 1080f);
-        Vector2       mouse_pos   = ImGui.GetMousePos();
+        ImDrawListPtr draw            = ImGui.GetBackgroundDrawList();
+        Vector2       mouse_pos       = ImGui.GetMousePos();
+        (Vector2      window_size, _) = get_window_bounds();
+        Vector2       screen_size     = new(1920f, 1080f);
+        float         scale_factor    = window_size.Y / 1080f;
 
         float track_start  = 207f;
         float track_end    = 957f;
@@ -455,7 +451,7 @@ public sealed class FhSaveUiModule : FhModule {
         float travel_distance = track_height - thumb_height;
 
         Vector2 track_top = scale_screen_uv(screen_size, new(1755f, track_start), Vector2.Zero).Item1;
-        Vector2 track_bot = scale_screen_uv(screen_size, new(1755f, track_end), Vector2.Zero).Item1;
+        Vector2 track_bot = scale_screen_uv(screen_size, new(1755f, track_end),   Vector2.Zero).Item1;
 
         float total_track_height    = track_bot.Y - track_top.Y;
         float total_travel_distance = total_track_height * (travel_distance / track_height);
@@ -478,13 +474,13 @@ public sealed class FhSaveUiModule : FhModule {
 
         (Vector2 up_tu, Vector2 up_tv) = scale_tex_uv(
             _tex_bmenu1_size,
-            new(965f, 913f),
+            new(965f , 913f),
             new(1019f, 943f)
         );
 
         (Vector2 down_tu, Vector2 down_tv) = scale_tex_uv(
             _tex_bmenu1_size,
-            new(965f, 943f),
+            new(965f , 943f),
             new(1019f, 913f)
         );
 
@@ -494,7 +490,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         // Arrow handling
         if (ImGui.IsMouseClicked(ImGuiMouseButton.Left, repeat: true)) {
-            float scroll_jump = 825f; // Skips ~5 saves
+            float scroll_jump = 825f * scale_factor; // Skips ~5 saves
 
             bool IsHovered(Vector2 corner_a, Vector2 corner_b) {
                 Vector2 min = Vector2.Min(corner_a, corner_b);
@@ -518,12 +514,12 @@ public sealed class FhSaveUiModule : FhModule {
         float thumb_end    = thumb_start + thumb_height;
 
         Vector2 tl = scale_screen_uv(screen_size, new(1755f, thumb_start), Vector2.Zero).Item1;
-        Vector2 br = scale_screen_uv(screen_size, new(1768f, thumb_end), Vector2.Zero).Item1;
+        Vector2 br = scale_screen_uv(screen_size, new(1768f, thumb_end)  , Vector2.Zero).Item1;
 
         if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)) {
             if (mouse_pos.X >= tl.X && mouse_pos.X <= br.X && mouse_pos.Y >= tl.Y && mouse_pos.Y <= br.Y) {
-                _dragging_scrollbar = true;
-                _drag_start_mouse_y = mouse_pos.Y;
+                _dragging_scrollbar  = true;
+                _drag_start_mouse_y  = mouse_pos.Y;
                 _drag_start_scroll_y = _scroll_y;
             }
         }
@@ -545,7 +541,7 @@ public sealed class FhSaveUiModule : FhModule {
             uint clr = 0xFF000000;
             Vector2 track_tl = scale_screen_uv(screen_size, new(1753f, 959f), Vector2.Zero).Item1;
             Vector2 track_br = scale_screen_uv(screen_size, new(1770f, 205f), Vector2.Zero).Item1;
-            draw.AddRectFilledMultiColor(track_tl, track_br, clr, clr, clr, clr); // Track
+            draw.AddRectFilled(track_tl, track_br, clr); // Track
         }
 
         {
@@ -566,8 +562,10 @@ public sealed class FhSaveUiModule : FhModule {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
         ImFontPtr     font = ImGui.GetFont();
 
-        Vector2 display_size = ImGui.GetMainViewport().WorkSize;
-        Vector2 screen_size  = new(1920f, 1080f);
+        (Vector2 window_size, _) = get_window_bounds();
+        Vector2  screen_size     = new(1920f, 1080f);
+        float    scale_factor    = window_size.Y / 1080f;
+        float    font_size       = 50f * scale_factor;
 
         Vector2 tl = scale_screen_uv(screen_size, new(482f , 605f), Vector2.Zero).Item1;
         Vector2 br = scale_screen_uv(screen_size, new(1425f, 455f), Vector2.Zero).Item1;
@@ -577,7 +575,7 @@ public sealed class FhSaveUiModule : FhModule {
         (Vector2 message_tu, Vector2 message_tv) = scale_tex_uv(
             _tex_message_size,
             new(1469f, 1020f),
-            new(1755f,  733f)
+            new(1755f, 733f)
         );
 
         (Vector2 accent1_su, Vector2 accent1_sv) = scale_screen_uv(
@@ -603,7 +601,7 @@ public sealed class FhSaveUiModule : FhModule {
             new(1425f, 605f)
         );
 
-        Vector2 screen_center = (message_su + message_sv) * 0.5f;
+        Vector2 center = (message_su + message_sv) * 0.5f;
 
         (Vector2 text_su, _) = scale_screen_uv(
             screen_size,
@@ -611,22 +609,18 @@ public sealed class FhSaveUiModule : FhModule {
             Vector2.Zero
         );
 
-        float    base_font_size  = 50f;
-        (Vector2 window_size, _) = get_window_bounds();
-        float    scale_factor    = window_size.Y / 1080.0f;
-        float    font_size       = base_font_size * scale_factor;
         string[] text            = {
             "No Saved Data, please return to the Main Menu",
             "or select another Save Set."
         };
 
         float total_height = text.Length * font_size;
-        float text_y       = screen_center.Y - (total_height * 0.5f);
+        float text_y       = center.Y - (total_height * 0.5f);
 
         for (int i = 0; i < text.Length; i++) {
-            Vector2 text_size = font.CalcTextSizeA(font_size, float.MaxValue, 0.0f, text[i]);
+            Vector2 text_size = font.CalcTextSizeA(font_size, float.MaxValue, 0f, text[i]);
 
-            float current_text_x = screen_center.X - (text_size.X * 0.5f);
+            float current_text_x = center.X - (text_size.X * 0.5f);
             float current_text_y = text_y + (i * font_size);
 
             draw.AddText(font, font_size, new Vector2(current_text_x, current_text_y), 0xFFFFFFFF, text[i]);
@@ -643,21 +637,19 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        ImDrawListPtr draw      = ImGui.GetWindowDrawList();
-        ImDrawListPtr draw_fg   = ImGui.GetForegroundDrawList();
-        ImDrawListPtr slot_draw = ImGui.GetWindowDrawList();
-        ImFontPtr     font      = ImGui.GetFont();
+        ImDrawListPtr draw = ImGui.GetWindowDrawList();
+        ImFontPtr     font = ImGui.GetFont();
 
         (Vector2 window_size, _) = get_window_bounds();
-        float    scale_factor    = window_size.Y / 1080.0f;
+        float    scale_factor    = window_size.Y / 1080f;
+        float    font_size       = 50f * scale_factor;
 
         Vector2 save_start  = ImGui.GetCursorScreenPos();
-        Vector2 avail_width = new(ImGui.GetContentRegionAvail().X, 0F);
+        Vector2 avail_width = new(ImGui.GetContentRegionAvail().X, 0f);
 
-        float target_height = 155.0f * scale_factor;
-
-        Vector2 save_size = new(avail_width.X, target_height);
-        Vector2 save_end  = save_start + save_size;
+        float target_height = 155f * scale_factor;
+        Vector2 save_size   = new(avail_width.X, target_height);
+        Vector2 save_end    = save_start + save_size;
 
         (Vector2 save_tu, Vector2 save_tv) = scale_tex_uv(
             _tex_save_size,
@@ -665,12 +657,11 @@ public sealed class FhSaveUiModule : FhModule {
             new(511f, 375f)
         );
 
-        draw.AddImage(save_tex, save_start, save_end, save_tu, save_tv); // Save slot
+        draw.AddImage(save_tex, save_start, save_end, save_tu, save_tv); // Save texture
 
-        float   font_size   = 50f * scale_factor;
         Vector2 text_offset = new(25f * scale_factor, 7f * scale_factor);
 
-        slot_draw.AddText(font, font_size, save_start + text_offset, 0xFFFFFFFF, "New Save Data");
+        draw.AddText(font, font_size, save_start + text_offset, 0xFFFFFFFF, "New Save Data");
 
         {
             uint grad_l = 0xFF191919; // grey
@@ -692,13 +683,12 @@ public sealed class FhSaveUiModule : FhModule {
                 new(617f, 724f)
             );
 
-            Vector2 icon_size = new(40f * scale_factor, 40f * scale_factor);
-
+            Vector2 icon_size  = new(40f * scale_factor, 40f * scale_factor);
             Vector2 box_center = (tl + br) * 0.5f;
             Vector2 icon_start = box_center - (icon_size * 0.5f);
             Vector2 icon_end   = icon_start + icon_size;
 
-            draw.AddImage(freetex, icon_start, icon_end, plus_tu, plus_tv); // + symbol
+            draw.AddImage(freetex, icon_start, icon_end, plus_tu, plus_tv); // "+" icon
         }
 
         ImGui.SetCursorScreenPos(save_start);
@@ -716,11 +706,11 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         // Vertical spacing between each slot
-        Vector2 next_save_start = new(save_start.X, save_end.Y + 9.0f * scale_factor);
+        Vector2 next_save_start = new(save_start.X, save_end.Y + 9f * scale_factor);
 
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
         ImGui.SetCursorScreenPos(next_save_start);
-        ImGui.Dummy(new Vector2(1.0f, 1.0f));
+        ImGui.Dummy(new Vector2(1f, 1f));
         ImGui.PopStyleVar();
     }
 
@@ -737,15 +727,15 @@ public sealed class FhSaveUiModule : FhModule {
         ImDrawListPtr draw = ImGui.GetWindowDrawList();
 
         (Vector2 window_size, _) = get_window_bounds();
-        float    scale_factor    = window_size.Y / 1080.0f;
+        float    scale_factor    = window_size.Y / 1080f;
 
         Vector2 save_start = ImGui.GetCursorScreenPos();
-        Vector2 avail_width = new(ImGui.GetContentRegionAvail().X, 0F);
+        Vector2 avail_width = new(ImGui.GetContentRegionAvail().X, 0f);
 
-        int slot = data.slot;
+        int  slot    = data.slot;
         bool hovered = slot == _display_index;
 
-        float   target_height = 155.0f * scale_factor;
+        float   target_height = 155f * scale_factor;
         Vector2 slot_size     = new(avail_width.X, target_height);
         Vector2 save_end      = save_start + slot_size;
 
@@ -791,11 +781,11 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         // Vertical spacing between each slot
-        Vector2 next_save_start = new(save_start.X, save_end.Y + 9.0f * scale_factor);
+        Vector2 next_save_start = new(save_start.X, save_end.Y + 9f * scale_factor);
 
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
         ImGui.SetCursorScreenPos(next_save_start);
-        ImGui.Dummy(new Vector2(1.0f, 1.0f));
+        ImGui.Dummy(new Vector2(1f, 1f));
         ImGui.PopStyleVar();
     }
 
@@ -812,13 +802,13 @@ public sealed class FhSaveUiModule : FhModule {
             new(175f, 480f)
         );
 
-        Vector2 cursor_size = new(103f * scale_factor, 58f * scale_factor);
-
-        float loop_progress = ((float)ImGui.GetTime() * 2f) % 1f;
+        float loop_progress = (float)ImGui.GetTime() * 2f % 1f;
         float base_offset   = loop_progress * 12f * scale_factor;
 
-        Vector2 cursor_offset = new((-80f * scale_factor) + base_offset, 8f * scale_factor);
-        Vector2 cursor_start  = save_start + cursor_offset;
+        Vector2 cursor_size = new(103f * scale_factor, 58f * scale_factor);
+
+        Vector2 cursor_offset = new(-80f * scale_factor + base_offset, 8f * scale_factor);
+        Vector2 cursor_start  = save_start   + cursor_offset;
         Vector2 cursor_end    = cursor_start + cursor_size;
 
         // Handles the trail + fade out effect of the cursor
@@ -826,11 +816,12 @@ public sealed class FhSaveUiModule : FhModule {
         float ghost_x_offset = ghost_progress * 8f * scale_factor;
         float ghost_alpha    = (1f - loop_progress) * 0.75f;
         uint  ghost_color    = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, ghost_alpha));
-        Vector2 ghost_offset = new((-87f * scale_factor) + ghost_x_offset, 8f * scale_factor);
-        Vector2 ghost_start  = save_start + ghost_offset;
+
+        Vector2 ghost_offset = new(-87f * scale_factor + ghost_x_offset, 8f * scale_factor);
+        Vector2 ghost_start  = save_start  + ghost_offset;
         Vector2 ghost_end    = ghost_start + cursor_size;
 
-        draw.AddImage(freetex, ghost_start, ghost_end, cursor_tu, cursor_tv, ghost_color);
+        draw.AddImage(freetex, ghost_start,  ghost_end,  cursor_tu, cursor_tv, ghost_color);
         draw.AddImage(freetex, cursor_start, cursor_end, cursor_tu, cursor_tv, 0xFFFFFFFF);
     }
 
@@ -840,22 +831,21 @@ public sealed class FhSaveUiModule : FhModule {
 
         float font_size = 50f * scale_factor;
 
-        bool   is_autosave = slot == 0 && _sem!.get_system_state() is not FhSaveExtensionSystemState.SAVE;
+        float creation_time_width = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.create_time).X;
+
+        bool is_autosave = slot == 0 && _sem!.get_system_state() is not FhSaveExtensionSystemState.SAVE;
 
         string slot_text       = is_autosave ? "Autosave" : Encoding.UTF8.GetString(((ReadOnlySpan<byte>)data.slot_str).TrimEnd((byte)0));
         uint   slot_text_color = is_autosave ? 0xFF17BEE0 : 0xFFFFFFFF; // Yellow : White
-        float  location_offset = is_autosave ? 269f : 119f;
+        float  slot_offset     = is_autosave ? 28f  :  29f; // Actually a 4px difference?
+        float  location_offset = is_autosave ? 267f : 119f;
 
-        Vector2 slot_offset          = new(25f * scale_factor, 7f * scale_factor);
-        Vector2 location_true_offset = new(location_offset * scale_factor, 7f * scale_factor);
+        Vector2 slot_true_offset     = new(slot_offset     * scale_factor,             7f * scale_factor);
+        Vector2 location_true_offset = new(location_offset * scale_factor,             7f * scale_factor);
+        Vector2 creation_time_offset = new(1269f * scale_factor - creation_time_width, 7f * scale_factor);
 
-        draw.AddText(font, 50f * scale_factor, save_start + slot_offset, slot_text_color, slot_text);
+        draw.AddText(font, font_size, save_start + slot_true_offset, slot_text_color, slot_text);
         draw.AddText(font, font_size, save_start + location_true_offset, 0xFFFFFFFF, data.location);
-
-        float   base_offset          = 1259f * scale_factor;
-        float   creation_time_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.create_time).X;
-        Vector2 creation_time_offset = new(base_offset - creation_time_width, 7f * scale_factor);
-
         draw.AddText(font, font_size, save_start + creation_time_offset, 0xFFFFFFFF, data.create_time);
     }
 
@@ -870,21 +860,18 @@ public sealed class FhSaveUiModule : FhModule {
 
         float font_size = 50f * scale_factor;
 
-        Vector2 name_offset    = new(359f * scale_factor, 55f * scale_factor);
-        Vector2 chapter_offset = new(359f * scale_factor, 101f * scale_factor);
+        float completion_width = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.completion).X;
+        float playtime_width   = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.play_time).X;
 
-        draw.AddText(font, font_size, save_start + name_offset, 0xFFFFFFFF, data.player_name);
-        draw.AddText(font, font_size, save_start + chapter_offset, 0xFFFFFFFF, data.chapter);
+        Vector2 name_offset       = new(359f  * scale_factor, 55f  * scale_factor);
+        Vector2 chapter_offset    = new(359f  * scale_factor, 101f * scale_factor);
+        Vector2 completion_offset = new(1269f * scale_factor - completion_width, 55f  * scale_factor);
+        Vector2 playtime_offset   = new(1269f * scale_factor - playtime_width,   101f * scale_factor);
 
-        float   base_offset       = 1259f * scale_factor;
-        float   completion_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.completion).X;
-        Vector2 completion_offset = new(base_offset - completion_width, 55f * scale_factor);
-
-        float   playtime_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.play_time).X;
-        Vector2 playtime_offset = new(base_offset - playtime_width, 101f * scale_factor);
-
+        draw.AddText(font, font_size, save_start + name_offset,       0xFFFFFFFF, data.player_name);
+        draw.AddText(font, font_size, save_start + chapter_offset,    0xFFFFFFFF, data.chapter);
         draw.AddText(font, font_size, save_start + completion_offset, 0xFFFFFFFF, data.completion);
-        draw.AddText(font, font_size, save_start + playtime_offset, 0xFFFFFFFF, data.play_time);
+        draw.AddText(font, font_size, save_start + playtime_offset,   0xFFFFFFFF, data.play_time);
 
         ReadOnlySpan<byte> header_span = data.header;
         ref readonly FhSaveHeader2 header2 = ref MemoryMarshal.AsRef<FhSaveHeader2>(header_span);
@@ -901,53 +888,77 @@ public sealed class FhSaveUiModule : FhModule {
             new(256f,   0f)
         );
 
-        Vector2 face_offset = new(19.0f * scale_factor, 61.0f * scale_factor);
-        Vector2 face_size   = new(92.0f * scale_factor, 86.0f * scale_factor);
+        Vector2 face_offset = new(19f * scale_factor, 61f * scale_factor);
+        Vector2 face_size   = new(92f * scale_factor, 86f * scale_factor);
 
+        string filename;
         for (int i = 0; i < 3; i++) {
             (byte chr_id, byte dress_id) = party[i];
 
-            string filename;
-
             // No Dressphere
-            if (dress_id == 0x0) filename = "mface_000.dds.phyre"; // Empty
-            // Leblanc Goon
-            else if (dress_id == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
-            else {
-                string chr = chr_id switch {
-                    0 => "yuna",
-                    1 => "rikku",
-                    2 => "paine",
-                    _ => "m"
-                };
-                // Rewires Rikku and Paine's Dressphere IDs to match the original filenames
-                byte dressphere = dress_id switch {
-                    24 or 25 => 12,       // Trainer
-                    26 or 27 => 14,       // Mascot
-                    28       => 16,       // Psychic
-                    29 or 30 or 31 => 17, // Festivalist
-                    32       => 18,       // Freelancer
-                    _        => dress_id
-                };
-                filename = $"{chr}face_{dressphere:D3}.dds.phyre";
-            }
+            if (dress_id != 0x0) {
+                // Leblanc Goon
+                if (dress_id == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
+                else {
+                    string chr = chr_id switch {
+                        0 => "yuna",
+                        1 => "rikku",
+                        2 => "paine",
+                        _ => "m"
+                    };
+                    // Rewires Rikku's and Paine's Dressphere IDs to match the original filenames
+                    byte dressphere = dress_id switch {
+                        24 or 25 => 12,       // Trainer
+                        26 or 27 => 14,       // Mascot
+                        28       => 16,       // Psychic
+                        29 or 30 or 31 => 17, // Festivalist
+                        32       => 18,       // Freelancer
+                        _        => dress_id
+                    };
+                    filename = $"{chr}face_{dressphere:D3}.dds.phyre";
+                }
 
-            FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
+                FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
 
-            if (!portrait.is_loaded()) {
-                FhApi.Resources.load_game_texture_2d(portrait);
-            }
+                if (!portrait.is_loaded()) {
+                    FhApi.Resources.load_game_texture_2d(portrait);
+                }
 
-            if (portrait.try_use(out ImTextureRef faces, out _)) {
-                float x_spacing = 95.0f * scale_factor;
+                if (portrait.try_use(out ImTextureRef faces, out _)) {
+                    Vector2 next_offset = face_offset + new Vector2(i * 95f * scale_factor, 0f);
+                    Vector2 face_start  = save_start + next_offset;
+                    Vector2 face_end    = face_start + face_size;
 
-                Vector2 next_offset = face_offset + new Vector2(i * x_spacing, 0f);
-                Vector2 face_start  = save_start + next_offset;
-                Vector2 face_end    = face_start + face_size;
-
-                draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv);
+                    draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv);
+                }
             }
         }
+
+        /*(Vector2 map_tu, Vector2 map_tv) = scale_tex_uv(
+            _tex_map_size,
+            new(0f  , 176f),
+            new(320f,   0f)
+        );
+        
+        Vector2 map_offset = new(1293f * scale_factor, 9f   * scale_factor);
+        Vector2 map_size   = new(255f  * scale_factor, 138f * scale_factor);
+
+        // TODO: Some maps use "{header2.id_location}_1"
+        // Those need to be rewired like the dresspheres above
+        filename = $"{header2.id_location}_0.png";
+        
+        FhTexture map = new(SAVEDATAICONS_DIR + filename, FhTextureType.PNG);
+        
+        if (!map.is_loaded()) {
+            FhApi.Resources.load_game_texture_2d(map);
+        }
+        
+        if (map.try_use(out ImTextureRef map_icon, out _)) {
+            Vector2 map_start = save_start + map_offset;
+            Vector2 map_end   = map_start + map_size;
+        
+            draw.AddImage(map_icon, map_start, map_end, map_tu, map_tv);
+        }*/
     }
 
     private unsafe void ui_save_info_x2lm(FhSaveDisplayData data, Vector2 save_start, float scale_factor) {
@@ -956,19 +967,18 @@ public sealed class FhSaveUiModule : FhModule {
 
         float font_size = 50f * scale_factor;
 
-        Vector2 name_offset       = new(272f * scale_factor, 55f * scale_factor);
-        Vector2 dressphere_offset = new(272f * scale_factor, 101f * scale_factor);
-        Vector2 level_offset      = new(544f * scale_factor, 101f * scale_factor);
+        float dressphere_width = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.lm_job).X;
+        float playtime_width   = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.play_time).X;
 
-        draw.AddText(font, font_size, save_start + name_offset, 0xFFFFFFFF, data.player_name);
+        Vector2 name_offset       = new(272f  * scale_factor, 55f  * scale_factor);
+        Vector2 dressphere_offset = new(272f  * scale_factor, 101f * scale_factor);
+        Vector2 level_offset      = new(348f  * scale_factor + dressphere_width, 101f * scale_factor);
+        Vector2 playtime_offset   = new(1269f * scale_factor - playtime_width,   101f * scale_factor);
+
+        draw.AddText(font, font_size, save_start + name_offset,       0xFFFFFFFF, data.player_name);
         draw.AddText(font, font_size, save_start + dressphere_offset, 0xFFFFFFFF, data.lm_job);
-        draw.AddText(font, font_size, save_start + level_offset, 0xFFFFFFFF, data.lm_level);
-
-        float   base_offset     = 1259f * scale_factor;
-        float   playtime_width  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, data.play_time).X;
-        Vector2 playtime_offset = new(base_offset - playtime_width, 101f * scale_factor);
-
-        draw.AddText(font, font_size, save_start + playtime_offset, 0xFFFFFFFF, data.play_time);
+        draw.AddText(font, font_size, save_start + level_offset,      0xFFFFFFFF, data.lm_level);
+        draw.AddText(font, font_size, save_start + playtime_offset,   0xFFFFFFFF, data.play_time);
 
         ReadOnlySpan<byte> header_span = data.header;
         ref readonly FhSaveHeader2 header2 = ref MemoryMarshal.AsRef<FhSaveHeader2>(header_span);
@@ -979,52 +989,75 @@ public sealed class FhSaveUiModule : FhModule {
             new(256f,   0f)
         );
 
-        Vector2 face_offset = new(19.0f * scale_factor, 61.0f * scale_factor);
-        Vector2 face_size   = new(92.0f * scale_factor, 86.0f * scale_factor);
+        Vector2 face_offset = new(19f * scale_factor, 61f * scale_factor);
+        Vector2 face_size   = new(92f * scale_factor, 86f * scale_factor);
 
+        string filename;
         for (int i = 3; i >= 0; i--) {
-            string filename;
-
             // No Dressphere
-            if (header2.id_job_lm == 0x0) filename = "mface_000.dds.phyre"; // Empty
-            // Leblanc Goon
-            else if (header2.id_job_lm == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
-            else {
-                string chr = header2.id_chr_lm switch {
-                    0 => "yuna",
-                    1 => "rikku",
-                    2 => "paine",
-                    _ => "m"
-                };
-                // Rewires Rikku and Paine's Dressphere IDs to match the original filenames
-                byte dressphere = header2.id_job_lm switch {
-                    24 or 25 => 12,       // Trainer
-                    26 or 27 => 14,       // Mascot
-                    28       => 16,       // Psychic
-                    29 or 30 or 31 => 17, // Festivalist
-                    32       => 18,       // Freelancer
-                    _        => header2.id_job_lm
-                };
-                filename = $"{chr}face_{dressphere:D3}.dds.phyre";
-            }
+            if (header2.id_job_lm != 0x0) {
+                // Leblanc Goon
+                if (header2.id_job_lm == 0x21) filename = "mface_147.dds.phyre"; // She-Goon
+                else {
+                    string chr = header2.id_chr_lm switch {
+                        0 => "yuna",
+                        1 => "rikku",
+                        2 => "paine",
+                        _ => "m"
+                    };
+                    // Rewires Rikku's and Paine's Dressphere IDs to match the original filenames
+                    byte dressphere = header2.id_job_lm switch {
+                        24 or 25 => 12,       // Trainer
+                        26 or 27 => 14,       // Mascot
+                        28       => 16,       // Psychic
+                        29 or 30 or 31 => 17, // Festivalist
+                        32       => 18,       // Freelancer
+                        _        => header2.id_job_lm
+                    };
+                    filename = $"{chr}face_{dressphere:D3}.dds.phyre";
+                }
 
-            FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
+                FhTexture portrait = new(MENU_FACEDATA_DIR + filename, FhTextureType.PHYRE);
 
-            if (!portrait.is_loaded()) {
-                FhApi.Resources.load_game_texture_2d(portrait);
-            }
+                if (!portrait.is_loaded()) {
+                    FhApi.Resources.load_game_texture_2d(portrait);
+                }
 
-            if (portrait.try_use(out ImTextureRef faces, out _)) {
-                float x_spacing = 21.0f * scale_factor;
+                if (portrait.try_use(out ImTextureRef faces, out _)) {
+                    Vector2 next_offset = face_offset + new Vector2(i * 21f * scale_factor, 0f);
+                    Vector2 face_start  = save_start + next_offset;
+                    Vector2 face_end    = face_start + face_size;
+                    uint    color       = ImGui.GetColorU32(new Vector4(1f, 1f, 1f, 1f - (i * 0.25f)));
 
-                Vector2 next_offset = face_offset + new Vector2(i * x_spacing, 0f);
-                Vector2 face_start  = save_start + next_offset;
-                Vector2 face_end    = face_start + face_size;
-
-                uint color = ImGui.GetColorU32(new Vector4(1f, 1f, 1f, 1f - (i * 0.25f)));
-
-                draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv, color);
+                    draw.AddImage(faces, face_start, face_end, faces_tu, faces_tv, color);
+                }
             }
         }
+
+        /*(Vector2 map_tu, Vector2 map_tv) = scale_tex_uv(
+            _tex_map_size,
+            new(0f  , 176f),
+            new(320f,   0f)
+        );
+        
+        Vector2 map_offset = new(1293f * scale_factor, 9f   * scale_factor);
+        Vector2 map_size   = new(255f  * scale_factor, 138f * scale_factor);
+
+        // TODO: Some maps use "{header2.id_location}_1"
+        // Those need to be rewired like the dresspheres above
+        filename = $"{header2.id_location}_0.png";
+        
+        FhTexture map = new(SAVEDATAICONS_DIR + filename, FhTextureType.PNG);
+        
+        if (!map.is_loaded()) {
+            FhApi.Resources.load_game_texture_2d(map);
+        }
+        
+        if (map.try_use(out ImTextureRef map_icon, out _)) {
+            Vector2 map_start = save_start + map_offset;
+            Vector2 map_end   = map_start + map_size;
+        
+            draw.AddImage(map_icon, map_start, map_end, map_tu, map_tv);
+        }*/
     }
 }
