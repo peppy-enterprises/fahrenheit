@@ -23,7 +23,9 @@ public unsafe class FhModListDisplayModule : FhModule {
     public override void render_imgui() {
         int curr_event_id = FhUtil.select(*FFX.Globals.event_id, *FFX2.Globals.event_id, *FFX2.Globals.event_id);
 
-        if (curr_event_id != 0x17) return; // Deactivate the mod list outside the main menu.
+        if (curr_event_id != 0x17
+            || FhSavePal.pal_get_screen_state() == FhSaveScreenState.OPEN
+            || FhSavePal.pal_get_screen_state() == FhSaveScreenState.OPENING) return; // Deactivate the mod list outside the main menu.
 
         // Create a window for the mod list and render all the mods
         ImGui.SetNextWindowPos (new Vector2(0,   0  ));
