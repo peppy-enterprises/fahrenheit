@@ -398,8 +398,8 @@ public sealed class FhSaveUiModule : FhModule {
 
         ImGui.SetCursorPos(new Vector2(0f, 11f * scale_factor));
 
-        _scroll_y = ImGui.GetScrollY();
-        _scroll_max_y = ImGui.GetScrollMaxY();
+        _scroll_y      = ImGui.GetScrollY();
+        _scroll_max_y  = ImGui.GetScrollMaxY();
         _window_height = ImGui.GetWindowHeight();
 
         bool is_save = _sem!.get_system_state() is FhSaveExtensionSystemState.SAVE;
@@ -609,7 +609,7 @@ public sealed class FhSaveUiModule : FhModule {
             Vector2.Zero
         );
 
-        string[] text            = {
+        string[] text = {
             "No Saved Data, please return to the Main Menu",
             "or select another Save Set."
         };
