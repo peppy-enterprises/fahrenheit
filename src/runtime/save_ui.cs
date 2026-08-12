@@ -873,8 +873,7 @@ public sealed class FhSaveUiModule : FhModule {
         draw.AddText(font, font_size, save_start + completion_offset, 0xFFFFFFFF, data.completion);
         draw.AddText(font, font_size, save_start + playtime_offset,   0xFFFFFFFF, data.play_time);
 
-        ReadOnlySpan<byte> header_span = data.header;
-        ref readonly FhSaveHeader2 header2 = ref MemoryMarshal.AsRef<FhSaveHeader2>(header_span);
+        FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(data.header);
 
         ReadOnlySpan<(byte chr_id, byte dress_id)> party = [
             (header2.id_chr1, header2.id_chr1_dress),
@@ -980,8 +979,7 @@ public sealed class FhSaveUiModule : FhModule {
         draw.AddText(font, font_size, save_start + level_offset,      0xFFFFFFFF, data.lm_level);
         draw.AddText(font, font_size, save_start + playtime_offset,   0xFFFFFFFF, data.play_time);
 
-        ReadOnlySpan<byte> header_span = data.header;
-        ref readonly FhSaveHeader2 header2 = ref MemoryMarshal.AsRef<FhSaveHeader2>(header_span);
+        FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(data.header);
 
         (Vector2 faces_tu, Vector2 faces_tv) = scale_tex_uv(
             _tex_faces_size,
