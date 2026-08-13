@@ -64,6 +64,7 @@ public sealed class FhSaveUiModule : FhModule {
      * Sort saves by Create Time
      * Split Play Time and Create Time strings for LM
      * Trim extra 0's from Create Time, i.e. 2026/08/01 -> 2026/8/1
+     * Change "Select Set" ImGui popup to use game textures? 
     */ 
 
     public FhSaveUiModule() {
@@ -368,18 +369,19 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowSize(modal_size);
 
         if (ImGui.BeginPopupModal("Select Set")) {
-            foreach (string set in _sets) {
+            foreach (string set in _sets!) {
                 bool is_selected = set == active_set;
-
+        
                 if (ImGui.Selectable(set, is_selected)) {
                     FhInternal.Saves.switch_active_set(set);
                     ImGui.CloseCurrentPopup();
                 }
-
+        
                 if (is_selected) ImGui.SetItemDefaultFocus();
             }
+        
             ImGui.EndPopup();
-        }
+        };
 
         ImGui.End();
     }
