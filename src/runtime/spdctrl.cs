@@ -61,13 +61,37 @@ public unsafe sealed class PWarpModule : FhModule {
             && FhCall.Sg_SetKeepFps                                         .hook(this, h_Sg_SetKeepFps)
             && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930)
             && FhCall.pppFpStopStatus                                       .hook(this, h_pppFpStopStatus)
+            && FhCall.Sg_Flash                                              .hook(this, h_Sg_Flash)
+            && FhCall.Sg_Fade_Common                                        .hook(this, h_Sg_Fade_Common)
             && FhCall.PhyFMVPlayerManager_UpdateTexture                     .hook(this, h_fmv_UpdateTexture)
+            && (!is_ffx || FFX.FhCall.Sg_AccSetAlpha                        .hook(this, h_Sg_AccSetAlpha))
             && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
             && (!is_ffx || FFX.FhCall.graphicDrawMainMenuWaterEffect        .hook(this, h_graphicDrawMainMenuWaterEffect))
             && (!is_ffx || FFX .FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed))
             && ( is_ffx || FFX2.FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed_2))
             && (!is_ffx || FFX.FhCall.TOBtlCtrlLimitTimer                   .hook(this, h_TOBtlCtrlLimitTimer))
             && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain));
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_Sg_AccSetAlpha(ushort alpha, ushort frame_count) {
+        frame_count *= 2;
+
+        FFX.FhCall.Sg_AccSetAlpha.chain_from(h_Sg_AccSetAlpha).fnptr!(alpha, frame_count);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_Sg_Flash(ushort frame_count, byte arg2, byte arg3, byte arg4) {
+        frame_count *= 2;
+
+        FhCall.Sg_Flash.chain_from(h_Sg_Flash).fnptr!(frame_count, arg2, arg3, arg4);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_Sg_Fade_Common(ushort frame_count, uint mode_in, uint mode_w) {
+        frame_count *= 2;
+
+        FhCall.Sg_Fade_Common.chain_from(h_Sg_Fade_Common).fnptr!(frame_count, mode_in, mode_w);
     }
 
     /* [fkelava 12/08/26 13:33]
@@ -85,6 +109,7 @@ public unsafe sealed class PWarpModule : FhModule {
             FhCall.PhyFMVPlayerManager_UpdateTexture.chain_from(h_fmv_UpdateTexture).fnptr!(ptr_this);
         }
     }
+
     /* [fkelava 11/08/26 00:08]
      * The water effect in the FF X main menu is a series of images scrolling by, one per frame.
      * We have to 'frame skip' by having it render the same one for two frames.

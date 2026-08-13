@@ -31,6 +31,11 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_Sg_AccSetAlpha(ushort alpha, ushort frames);
+    internal static FhMethodHandle<d_Sg_AccSetAlpha> Sg_AccSetAlpha
+        => new( new FhMethodLocation("FFX.exe", 0x42BD90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_graphicVideoUpdate();
     internal static FhMethodHandle<d_graphicVideoUpdate> graphicVideoUpdate
         => new( new FhMethodLocation("FFX.exe", 0x245FA0) );

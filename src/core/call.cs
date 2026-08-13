@@ -140,6 +140,38 @@ public static unsafe partial class FhCall {
 
     // RT - Frame limiter
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate uint* d_Sg_GetDBuffDC(uint* out_sg_count);
+    internal static FhMethodHandle<d_Sg_GetDBuffDC> Sg_GetDBuffDC
+        => new( new FhMethodLocation(0x420640, 0x204B00) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_yiCallFieldParticle();
+    public static FhMethodHandle<d_yiCallFieldParticle> yiCallFieldParticle
+        => new( new FhMethodLocation(0x5083E0, 0x3B9220) );
+
+    // Unofficial name
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_rcefTaskRetSeqCont_Inner(uint* ptr_task);
+    internal static FhMethodHandle<d_rcefTaskRetSeqCont_Inner> rcefTaskRetSeqCont_Inner
+        => new( new FhMethodLocation(0x52EDE0, 0x3E92F0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_rcefTaskRetSeqCont(uint* ptr_task);
+    internal static FhMethodHandle<d_rcefTaskRetSeqCont> rcefTaskRetSeqCont
+        => new( new FhMethodLocation(0x52EE00, 0x3E9310) );
+
+    // Unofficial name
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_Sg_Fade_Common(ushort frame_count, uint mode_in, uint mode_w);
+    internal static FhMethodHandle<d_Sg_Fade_Common> Sg_Fade_Common
+        => new( new FhMethodLocation(0x42CE40, 0x2D4980) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_Sg_Flash(ushort frame_count, byte arg2, byte arg3, byte arg4);
+    public static FhMethodHandle<d_Sg_Flash> Sg_Flash
+        => new( new FhMethodLocation(0x42CD20, 0x2D4810) );
+
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     internal delegate void d_PhyFMVPlayerManager_UpdateTexture(uint ptr_this);
     internal static FhMethodHandle<d_PhyFMVPlayerManager_UpdateTexture> PhyFMVPlayerManager_UpdateTexture
