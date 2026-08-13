@@ -8,7 +8,7 @@ namespace Fahrenheit;
 /// <summary>
 ///     Fonts, style and theming for user interfaces in Fahrenheit.
 /// </summary>
-public unsafe class FhImGuiHelper {
+public unsafe class FhGui {
 
     // Fonts for standardized style across Fahrenheit
     public ImFontPtr FONT_DEFAULT;

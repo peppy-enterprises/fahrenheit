@@ -72,7 +72,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4A9A20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* text, float param_2, float param_3, byte color, float param_5, float param_6);
+    public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* text, float param_2, float param_3, byte color, float param_5, float param_6);
     public static FhMethodHandle<d_ToMakeBtlEasyEdgeFont> ToMakeBtlEasyEdgeFont
         => new ( new FhMethodLocation("FFX.exe", 0x505930) );
 

@@ -129,7 +129,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         pio.PlatformSetWindowFocus = (void*)Marshal.GetFunctionPointerForDelegate
             <ImGui_ImplWin32_SetWindowFocus>(h_implw32_setwindowfocus);
 
-        FhApi.ImGuiHelper.init();
+        FhApi.Gui.init();
 
         FhCall.DXGI_IDXGISwapChain_Present      (_ptr_swapchain).hook(this, h_present);
         FhCall.DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).hook(this, h_resize_buffers);

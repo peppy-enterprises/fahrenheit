@@ -54,9 +54,9 @@ public sealed class FhModConfigModule : FhModule {
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0f);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
         ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0, 0, 0, 1));
-        ImGui.PushFont(FhApi.ImGuiHelper.FONT_DEFAULT, 20f);
+        ImGui.PushFont(FhApi.Gui.FONT_DEFAULT, 20f);
 
-        if (ImGui.Begin("ModConfig", FhApi.ImGuiHelper.WINDOW_FLAGS_FULLSCREEN)) {
+        if (ImGui.Begin("ModConfig", FhApi.Gui.WINDOW_FLAGS_FULLSCREEN)) {
 
             //TODO: Make this work
 

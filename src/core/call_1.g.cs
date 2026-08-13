@@ -22757,13 +22757,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00607C50_00A8E700();
     public static FhMethodHandle<d_FUN_00607C50_00A8E700> FUN_00607C50_00A8E700 => new( new FhMethodLocation(0x207C50, 0x68E700) );
 
-    // Fused identical entry: unknown undefined PStreamFile()
-    // at (FFX.exe+607D80, FFX-2.exe+890E40)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00607D80_00890E40();
-    public static FhMethodHandle<d_FUN_00607D80_00890E40> FUN_00607D80_00890E40 => new( new FhMethodLocation(0x207D80, 0x490E40) );
-
     // Fused identical entry: unknown undefined FUN_00607de0()
     // at (FFX.exe+607DE0, FFX-2.exe+890EA0)
 
@@ -22785,20 +22778,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_00607F10_008910A0();
     public static FhMethodHandle<d_FUN_00607F10_008910A0> FUN_00607F10_008910A0 => new( new FhMethodLocation(0x207F10, 0x4910A0) );
 
-    // Fused identical entry: unknown undefined FUN_00607f40()
-    // at (FFX.exe+607F40, FFX-2.exe+8910D0)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00607F40_008910D0();
-    public static FhMethodHandle<d_FUN_00607F40_008910D0> FUN_00607F40_008910D0 => new( new FhMethodLocation(0x207F40, 0x4910D0) );
-
-    // Fused identical entry: unknown undefined FUN_00607f80()
-    // at (FFX.exe+607F80, FFX-2.exe+891110)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00607F80_00891110();
-    public static FhMethodHandle<d_FUN_00607F80_00891110> FUN_00607F80_00891110 => new( new FhMethodLocation(0x207F80, 0x491110) );
-
     // Fused identical entry: unknown undefined FUN_00607fc0()
     // at (FFX.exe+607FC0, FFX-2.exe+891150)
 
@@ -22812,20 +22791,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_006080E0_00891270();
     public static FhMethodHandle<d_FUN_006080E0_00891270> FUN_006080E0_00891270 => new( new FhMethodLocation(0x2080E0, 0x491270) );
-
-    // Fused identical entry: __thiscall bool openFile(PStreamFileWin32* this, char* param_1, char param_2, undefined4 param_3, undefined4 param_4)
-    // at (FFX.exe+608100, FFX-2.exe+8912A0)
-
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public unsafe delegate bool d_FUN_00608100_008912A0(nint _this, byte* param_1, byte param_2, uint param_3, uint param_4);
-    public static FhMethodHandle<d_FUN_00608100_008912A0> FUN_00608100_008912A0 => new( new FhMethodLocation(0x208100, 0x4912A0) );
-
-    // Fused identical entry: __thiscall uint Read(void* this, LPVOID param_1, DWORD param_2)
-    // at (FFX.exe+608250, FFX-2.exe+8913F0)
-
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public unsafe delegate uint d_FUN_00608250_008913F0(nint _this, nint param_1, nint param_2);
-    public static FhMethodHandle<d_FUN_00608250_008913F0> FUN_00608250_008913F0 => new( new FhMethodLocation(0x208250, 0x4913F0) );
 
     // Fused identical entry: unknown undefined FUN_006082a0()
     // at (FFX.exe+6082A0, FFX-2.exe+891440)

@@ -190,13 +190,41 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     internal delegate PStreamFile* d_Phyre_PSerialization_PStreamFile_ctor(
         PStreamFile* ptr_this,
-        nint         ptr_path,
+        byte*        ptr_path,
         bool         read_only,
-        nint         p3,  // unused?
-        nint         p4,  // unused?
-        bool         p5); // unused?
+        uint         p3,  // unused
+        uint         p4,  // unused
+        bool         p5); // unused
     internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_ctor> Phyre_PSerialization_PStreamFile_ctor
         => new( new FhMethodLocation(0x207D80, 0x490E40) );
+
+    // RT - VBF loader
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate bool d_Phyre_PSerialization_PStreamFileWin32_openFile(
+        PStreamFile* ptr_this,
+        byte*        ptr_path,
+        bool         read_only,
+        uint         p3,  // unused
+        uint         p4,  // unused
+        bool         p5); // unused
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_openFile> Phyre_PSerialization_PStreamFileWin32_openFile
+        => new( new FhMethodLocation(0x208100, 0x4912A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate uint d_Phyre_PSerialization_PStreamFile_getFileSize(PStreamFile* ptr_this);
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_getFileSize> Phyre_PSerialization_PStreamFile_getFileSize
+        => new( new FhMethodLocation(0x207F80, 0x491110) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate uint d_Phyre_PSerialization_PStreamFile_read(PStreamFile* ptr_this, void* buffer, uint size);
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_read> Phyre_PSerialization_PStreamFile_read
+        => new( new FhMethodLocation(0x208250, 0x4913F0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal delegate uint d_Phyre_PSerialization_PStreamFile_closeFile(PStreamFile* ptr_this);
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_closeFile> Phyre_PSerialization_PStreamFile_closeFile
+        => new( new FhMethodLocation(0x207F40, 0x4910D0) );
 
     // RT - Phyre loader
 
