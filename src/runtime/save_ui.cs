@@ -367,7 +367,7 @@ public sealed class FhSaveUiModule : FhModule {
         ImGui.SetNextWindowPos(modal_pos);
         ImGui.SetNextWindowSize(modal_size);
 
-        if (ImGui.BeginPopupModal("Select Set") && _sets != null) {
+        if (ImGui.BeginPopupModal("Select Set")) {
             foreach (string set in _sets) {
                 bool is_selected = set == active_set;
 
