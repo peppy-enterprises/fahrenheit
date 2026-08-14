@@ -50673,13 +50673,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_0088EA60_0074C720();
     public static FhMethodHandle<d_FUN_0088EA60_0074C720> FUN_0088EA60_0074C720 => new( new FhMethodLocation(0x48EA60, 0x34C720) );
 
-    // Fused identical entry: unknown undefined TkSetFadeOut()
-    // at (FFX.exe+88EAC0, FFX-2.exe+74C780)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0088EAC0_0074C780();
-    public static FhMethodHandle<d_FUN_0088EAC0_0074C780> FUN_0088EAC0_0074C780 => new( new FhMethodLocation(0x48EAC0, 0x34C780) );
-
     // Fused identical entry: unknown undefined FUN_0088eb10()
     // at (FFX.exe+88EB10, FFX-2.exe+74C7E0)
 

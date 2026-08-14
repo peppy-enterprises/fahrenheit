@@ -141,6 +141,11 @@ public static unsafe partial class FhCall {
     // RT - Frame limiter
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_TkSetFadeOut(uint frame_count);
+    internal static FhMethodHandle<d_TkSetFadeOut> TkSetFadeOut
+        => new( new FhMethodLocation(0x48EAC0, 0x34C780) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal unsafe delegate void d_PhyreScene_updateTextureVideoCallback(uint param_1);
     internal static FhMethodHandle<d_PhyreScene_updateTextureVideoCallback> PhyreScene_updateTextureVideoCallback
         => new( new FhMethodLocation(0x272210, 0x085F70) );

@@ -50,6 +50,7 @@ public unsafe sealed class PWarpModule : FhModule {
             && FhCall.Sg_Fade_Common                                        .hook(this, h_Sg_Fade_Common)
             && FhCall.enableGameControlTextureAnimation                     .hook(this, h_enableGameControlTextureAnimation)
             && FhCall.PhyFMVPlayerManager_UpdateTexture                     .hook(this, h_fmv_UpdateTexture)
+            && FhCall.TkSetFadeOut                                          .hook(this, h_TkSetFadeOut)
             && (!is_ffx || FFX. FhCall.MsEffectSetSpeed                     .hook(this, h_MsEffectSetSpeed))
             && (!is_ffx || FFX .FhCall.FUN_003B4AA0                         .hook(this, h_FUN_003B4AA0))
             && (!is_ffx || FFX .FhCall.MsSetChrStatInfo                     .hook(this, h_MsSetChrStatInfo))
@@ -70,7 +71,7 @@ public unsafe sealed class PWarpModule : FhModule {
         FFX.FhCall.MsEffectSetSpeed.chain_from(h_MsEffectSetSpeed).fnptr!(chr_id, speed);
     }
 
-    // TODO : explain affected CTs
+    // FFX: CT 70AB, 7018
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value) {
         value = stat_id switch {
@@ -85,6 +86,7 @@ public unsafe sealed class PWarpModule : FhModule {
         FFX.FhCall.MsSetChrStatInfo.chain_from(h_MsSetChrStatInfo).fnptr!(chr_id, stat_id, target_id, value);
     }
 
+    // FFX: CT 70A8, 70B2
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_FUN_003B4AA0(uint chr_id, uint stat_id, float value) {
         value = stat_id switch {
@@ -107,8 +109,8 @@ public unsafe sealed class PWarpModule : FhModule {
     private void h_pre(UpdateLoopEventArgs args) {
         FhCall.enableGameControlTextureAnimation.chain_from(h_enableGameControlTextureAnimation).fnptr!(
             sg_count % 2 == 0
-                ? 0U
-                : 1U);
+                ? 1U
+                : 0U);
     }
 
     /* [fkelava 13/08/26 22:13]
@@ -120,6 +122,7 @@ public unsafe sealed class PWarpModule : FhModule {
 
     // TODO : explain affected CTs
 
+    // FFX: CT 401A
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_Sg_AccSetAlpha(ushort alpha, ushort frame_count) {
         frame_count *= 2;
@@ -127,6 +130,7 @@ public unsafe sealed class PWarpModule : FhModule {
         FFX.FhCall.Sg_AccSetAlpha.chain_from(h_Sg_AccSetAlpha).fnptr!(alpha, frame_count);
     }
 
+    // FFX: CT 4003
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_Sg_Flash(ushort frame_count, byte arg2, byte arg3, byte arg4) {
         frame_count *= 2;
@@ -134,11 +138,26 @@ public unsafe sealed class PWarpModule : FhModule {
         FhCall.Sg_Flash.chain_from(h_Sg_Flash).fnptr!(frame_count, arg2, arg3, arg4);
     }
 
+    /* [fkelava 14/08/26 18:02]
+     * Intercepting at FF X CT 00BB would fix both Sg_Fade* and TkSetFadeOut for a subset of fades (map-warp/jump fades).
+     *
+     * But fades can be invoked at any time through 400{4|5|6|7}, and if we fix those, we must defer retiming 00BB to the actual TkSetFadeOut call.
+     */
+
+    // FFX: CT 4004, 4005, 4006, 4007
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_Sg_Fade_Common(ushort frame_count, uint mode_in, uint mode_w) {
         frame_count *= 2;
 
         FhCall.Sg_Fade_Common.chain_from(h_Sg_Fade_Common).fnptr!(frame_count, mode_in, mode_w);
+    }
+
+    // FFX : CT 00BB
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_TkSetFadeOut(uint frame_count) {
+        frame_count *= 2;
+
+        FhCall.TkSetFadeOut.chain_from(h_TkSetFadeOut).fnptr!(frame_count);
     }
 
     /* [fkelava 12/08/26 13:33]
