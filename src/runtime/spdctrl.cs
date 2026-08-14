@@ -5,6 +5,7 @@
 
 using Fahrenheit.Events;
 using Fahrenheit.FFX;
+using Fahrenheit.FFX.Ids;
 
 namespace Fahrenheit.Runtime;
 
@@ -15,8 +16,7 @@ namespace Fahrenheit.Runtime;
 [SupportedOSPlatform("windows5.1.2600")]
 public unsafe sealed class PWarpModule : FhModule {
 
-    private sbyte _Sg_KeepFps            = 0;
-    private uint  _ppvUserStopPartF_game = 0;
+    private sbyte _Sg_KeepFps = 0;
 
     private static uint ppvUserStopPartF {
         get => FhUtil.get_at<uint>(FhUtil.select(0x1F0FD34, 0x18F679C, 0x18F679C));
@@ -28,26 +28,12 @@ public unsafe sealed class PWarpModule : FhModule {
         set => FhUtil.set_at      (FhUtil.select(0x1FCBBF0, 0x16CDD60, 0x16CDD60), value);
     }
 
-    private static uint sg_vcount {
-        get => FhUtil.get_at<uint>(FhUtil.select(0xEFB7A8, 0x9F7430, 0x9F7430));
-        set => FhUtil.set_at      (FhUtil.select(0xEFB7A8, 0x9F7430, 0x9F7430), value);
-    }
-
-    private static uint sg_vcount2 {
-        get => FhUtil.get_at<uint>(FhUtil.select(0xEFB7AC, 0x9F7434, 0x9F7434));
-        set => FhUtil.set_at      (FhUtil.select(0xEFB7AC, 0x9F7434, 0x9F7434), value);
-    }
-
     /* [fkelava 09/08/26 22:41]
      * You would think that if SetFlipVSyncInterval is a thing, there'd be a getter method. You'd be wrong.
      */
     private static uint s_flipVSyncInterval {
         get => FhUtil.get_at<uint>(FhUtil.select(0x830E88, 0x9B34B0, 0x9B34B0));
         set => FhUtil.set_at      (FhUtil.select(0x830E88, 0x9B34B0, 0x9B34B0), value);
-    }
-
-    private static uint sFMVPlayerManager {
-        get => FhUtil.get_at<uint>(FhUtil.select(0x8DED2C, 0x9C6960, 0x9C6960));
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
@@ -59,19 +45,80 @@ public unsafe sealed class PWarpModule : FhModule {
             && FhCall.MsCameraMoveFrame                                     .hook(this, h_MsCameraMoveFrame)
             && FhCall.MsCameraMoveAcc                                       .hook(this, h_MsCameraMoveAcc)
             && FhCall.Sg_SetKeepFps                                         .hook(this, h_Sg_SetKeepFps)
-            && FhCall.FUN_00821F90_00606930                                 .hook(this, h_FUN_00821F90_00606930)
             && FhCall.pppFpStopStatus                                       .hook(this, h_pppFpStopStatus)
             && FhCall.Sg_Flash                                              .hook(this, h_Sg_Flash)
             && FhCall.Sg_Fade_Common                                        .hook(this, h_Sg_Fade_Common)
+            && FhCall.enableGameControlTextureAnimation                     .hook(this, h_enableGameControlTextureAnimation)
             && FhCall.PhyFMVPlayerManager_UpdateTexture                     .hook(this, h_fmv_UpdateTexture)
-            && (!is_ffx || FFX.FhCall.Sg_AccSetAlpha                        .hook(this, h_Sg_AccSetAlpha))
-            && (!is_ffx || FFX.FhCall.CT_0000_Init                          .hook(this, h_CT_0000_Init))
-            && (!is_ffx || FFX.FhCall.graphicDrawMainMenuWaterEffect        .hook(this, h_graphicDrawMainMenuWaterEffect))
+            && (!is_ffx || FFX. FhCall.MsEffectSetSpeed                     .hook(this, h_MsEffectSetSpeed))
+            && (!is_ffx || FFX .FhCall.FUN_003B4AA0                         .hook(this, h_FUN_003B4AA0))
+            && (!is_ffx || FFX .FhCall.MsSetChrStatInfo                     .hook(this, h_MsSetChrStatInfo))
+            && (!is_ffx || FFX .FhCall.Sg_AccSetAlpha                       .hook(this, h_Sg_AccSetAlpha))
+            && (!is_ffx || FFX .FhCall.CT_0000_Init                         .hook(this, h_CT_0000_Init))
+            && (!is_ffx || FFX .FhCall.graphicDrawMainMenuWaterEffect       .hook(this, h_graphicDrawMainMenuWaterEffect))
             && (!is_ffx || FFX .FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed))
             && ( is_ffx || FFX2.FhCall.Ch_SetMotionSpeed                    .hook(this, h_Ch_SetMotionSpeed_2))
-            && (!is_ffx || FFX.FhCall.TOBtlCtrlLimitTimer                   .hook(this, h_TOBtlCtrlLimitTimer))
-            && (!is_ffx || FFX.FhCall.Ch_CalcMain                           .hook(this, h_Ch_CalcMain));
+            && (!is_ffx || FFX .FhCall.TOBtlCtrlLimitTimer                  .hook(this, h_TOBtlCtrlLimitTimer))
+            && (!is_ffx || FFX .FhCall.Ch_CalcMain                          .hook(this, h_Ch_CalcMain));
     }
+
+    // TODO : explain affected CTs
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_MsEffectSetSpeed(byte chr_id, ushort speed) {
+        speed /= 2;
+
+        FFX.FhCall.MsEffectSetSpeed.chain_from(h_MsEffectSetSpeed).fnptr!(chr_id, speed);
+    }
+
+    // TODO : explain affected CTs
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value) {
+        value = stat_id switch {
+            ChrStatId.STAT_ATTACK_INC_SPEED    or
+            ChrStatId.STAT_ATTACK_DEC_SPEED    => value / 2,
+            ChrStatId.STAT_ATTACK_NORMAL_FRAME or
+            ChrStatId.STAT_ATTACK_NEAR_FRAME   or
+            ChrStatId.STAT_ATTACK_MOTION_FRAME => value * 2,
+            _                                  => value
+        };
+
+        FFX.FhCall.MsSetChrStatInfo.chain_from(h_MsSetChrStatInfo).fnptr!(chr_id, stat_id, target_id, value);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_FUN_003B4AA0(uint chr_id, uint stat_id, float value) {
+        value = stat_id switch {
+            0x03 or            // MOTION_RUN_SPEED
+            0x04 or            // MOTION_RUN_SPEED_RETURN
+            0x05 or            // MOTION_RUN_SPEED_V0
+            0x06 => value / 2, // MOTION_RUN_SPEED_ACC
+            _    => value
+        };
+
+        FFX.FhCall.FUN_003B4AA0.chain_from(h_FUN_003B4AA0).fnptr!(chr_id, stat_id, value);
+    }
+
+    /* [fkelava 10/08/26 22:14]
+     * Unlike most other systems where it is possible to pre-emptively retime a wait for the target framerate,
+     * particles have full control over their own timing. Patching them all is impossible. Instead, we have
+     * to selectively 'drop frames' from their perspective by asserting `ppvUserStopPartF` every other frame.
+     */
+
+    private void h_pre(UpdateLoopEventArgs args) {
+        FhCall.enableGameControlTextureAnimation.chain_from(h_enableGameControlTextureAnimation).fnptr!(
+            sg_count % 2 == 0
+                ? 0U
+                : 1U);
+    }
+
+    /* [fkelava 13/08/26 22:13]
+     * Texture animation control is suppressed and (re)activated every other frame.
+     */
+
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private void h_enableGameControlTextureAnimation(uint enable) { }
+
+    // TODO : explain affected CTs
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_Sg_AccSetAlpha(ushort alpha, ushort frame_count) {
@@ -127,20 +174,6 @@ public unsafe sealed class PWarpModule : FhModule {
     }
 
     /* [fkelava 10/08/26 22:14]
-     * Unlike most other systems where it is possible to pre-emptively retime a wait for the target framerate,
-     * particles have full control over their own timing. Patching them all is impossible. Instead, we have
-     * to selectively 'drop frames' from their perspective by asserting `ppvUserStopPartF` every other frame.
-     */
-
-    private void h_pre(UpdateLoopEventArgs args) {
-        if (_ppvUserStopPartF_game == 1) return;
-
-        //ppvUserStopPartF = sg_count % 2 == 0
-        //    ? 1U
-        //    : 0U;
-    }
-
-    /* [fkelava 10/08/26 22:14]
      * If the game explicitly disables particles, we should not interfere.
      *
      * An example from FF X in Zanarkand - Harbour:
@@ -151,19 +184,19 @@ public unsafe sealed class PWarpModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_pppFpStopStatus(uint arg1) {
-        _ppvUserStopPartF_game = arg1;
-        ppvUserStopPartF       = arg1;
+        ppvUserStopPartF = arg1;
     }
 
     /* [fkelava 10/08/26 15:28]
-     * Motion speed is proportional to framerate, and animation speed is coupled to motion speed _unless_ `Sg_GetKeepFps` is asserted.
+     * Motion speed is proportional to framerate, and animation speed is coupled to motion speed _unless_
+     * `Sg_GetKeepFps` is asserted or an individual actor's `Ch_GetKeepFps` is asserted.
      *
      * Thus, retiming _motions_ also retimes _animations_, which is required to preserve cutscene pacing.
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed) {
-        if (_Sg_KeepFps == 0) {
+        if (_Sg_KeepFps == 0 || !ptr_actor->chr_flags.HasFlag(ActorFlags.KEEP_FPS)) {
             speed /= 2;
         }
 
@@ -194,19 +227,6 @@ public unsafe sealed class PWarpModule : FhModule {
         _Sg_KeepFps = arg1;
 
         return FhCall.Sg_SetKeepFps.chain_from(h_Sg_SetKeepFps).fnptr!(arg1);
-    }
-
-    /* [fkelava 09/08/26 22:07]
-     * The game assumes there are always two vertical blanks for each horizontal blank.
-     * Correcting for this is required to properly retime animations.
-     */
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void h_FUN_00821F90_00606930(float delta) {
-        FhCall.FUN_00821F90_00606930.chain_from(h_FUN_00821F90_00606930).fnptr!(delta);
-
-        sg_vcount  = sg_count;
-        sg_vcount2 = sg_count;
     }
 
     /* [fkelava 10/08/26 14:40]

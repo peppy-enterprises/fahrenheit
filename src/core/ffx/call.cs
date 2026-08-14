@@ -31,6 +31,26 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value);
+    internal static FhMethodHandle<d_MsSetChrStatInfo> MsSetChrStatInfo
+        => new( new FhMethodLocation("FFX.exe", 0x3B4B80) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_FUN_003B4AA0(uint chr_id, uint stat_id, float value);
+    internal static FhMethodHandle<d_FUN_003B4AA0> FUN_003B4AA0
+        => new( new FhMethodLocation("FFX.exe", 0x3B4AA0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_Ch_SetKeepFps(Actor* ptr_actor, uint keep_fps);
+    internal static FhMethodHandle<d_Ch_SetKeepFps> Ch_SetKeepFps
+        => new( new FhMethodLocation("FFX.exe", 0x439BD0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
+    internal static FhMethodHandle<d_rcefObjProc> rcefObjProc
+        => new( new FhMethodLocation("FFX.exe", 0x530060) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void d_Sg_AccSetAlpha(ushort alpha, ushort frames);
     internal static FhMethodHandle<d_Sg_AccSetAlpha> Sg_AccSetAlpha
         => new( new FhMethodLocation("FFX.exe", 0x42BD90) );

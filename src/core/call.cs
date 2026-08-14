@@ -141,13 +141,23 @@ public static unsafe partial class FhCall {
     // RT - Frame limiter
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_PhyreScene_updateTextureVideoCallback(uint param_1);
+    internal static FhMethodHandle<d_PhyreScene_updateTextureVideoCallback> PhyreScene_updateTextureVideoCallback
+        => new( new FhMethodLocation(0x272210, 0x085F70) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void d_MsEffectProcess(uint param_1);
+    internal static FhMethodHandle<d_MsEffectProcess> MsEffectProcess
+        => new( new FhMethodLocation(0x387EC0, 0x216680) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal unsafe delegate uint* d_Sg_GetDBuffDC(uint* out_sg_count);
     internal static FhMethodHandle<d_Sg_GetDBuffDC> Sg_GetDBuffDC
         => new( new FhMethodLocation(0x420640, 0x204B00) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_yiCallFieldParticle();
-    public static FhMethodHandle<d_yiCallFieldParticle> yiCallFieldParticle
+    internal delegate void d_yiCallFieldParticle();
+    internal static FhMethodHandle<d_yiCallFieldParticle> yiCallFieldParticle
         => new( new FhMethodLocation(0x5083E0, 0x3B9220) );
 
     // Unofficial name
@@ -160,6 +170,11 @@ public static unsafe partial class FhCall {
     internal delegate void d_rcefTaskRetSeqCont(uint* ptr_task);
     internal static FhMethodHandle<d_rcefTaskRetSeqCont> rcefTaskRetSeqCont
         => new( new FhMethodLocation(0x52EE00, 0x3E9310) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_enableGameControlTextureAnimation(uint enable);
+    internal static FhMethodHandle<d_enableGameControlTextureAnimation> enableGameControlTextureAnimation
+        => new( new FhMethodLocation(0x436790, 0x2E56A0) );
 
     // Unofficial name
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

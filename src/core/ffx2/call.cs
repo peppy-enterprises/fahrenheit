@@ -27,4 +27,9 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
         => new( new FhMethodLocation("FFX-2.exe", 0x2E63B0) );
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
+    internal static FhMethodHandle<d_rcefObjProc> rcefObjProc
+        => new( new FhMethodLocation("FFX.exe", 0x3EA6C0) );
+
 }
