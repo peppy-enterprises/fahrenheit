@@ -6,19 +6,19 @@
 namespace Fahrenheit.FFX;
 
 [StructLayout(LayoutKind.Sequential, Size = 0xBC)]
-internal struct RcEffectTask { }
+public struct RcEffectTask { }
 
 [StructLayout(LayoutKind.Sequential, Size = 0xD0)]
-internal struct RcEffectModel { }
+public struct RcEffectModel { }
 
 [StructLayout(LayoutKind.Sequential, Size = 0x90)]
-internal struct RcEffectAnimation { }
+public struct RcEffectAnimation { }
 
 [StructLayout(LayoutKind.Sequential, Size = 0xB0)]
-internal struct RcEffectParticle { }
+public struct RcEffectParticle { }
 
 [StructLayout(LayoutKind.Explicit, Size = 0x490)]
-internal struct RcEffectObj {
+public struct RcEffectObj {
     [FieldOffset(0x1B0)] Matrix4x4 mat_local;
     [FieldOffset(0x1F0)] Matrix4x4 mat_world;
     [FieldOffset(0x230)] Matrix4x4 mat_parent;

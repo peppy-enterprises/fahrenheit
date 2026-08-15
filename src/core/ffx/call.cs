@@ -21,78 +21,78 @@ namespace Fahrenheit.FFX;
 /// </summary>
 public static partial class FhCall {
 
-    internal static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_0000_Init
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_0000_Init
         => new( new FhMethodLocation("FFX.exe", 0x45C3E0) );
 
-    internal static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_5021_RetInt
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_5021_RetInt
         => new( new FhMethodLocation("FFX.exe", 0x679510) );
 
-    internal static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_504C_RetInt
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_504C_RetInt
         => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value);
-    internal static FhMethodHandle<d_MsSetChrStatInfo> MsSetChrStatInfo
+    public delegate void d_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value);
+    public static FhMethodHandle<d_MsSetChrStatInfo> MsSetChrStatInfo
         => new( new FhMethodLocation("FFX.exe", 0x3B4B80) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_FUN_003B4AA0(uint chr_id, uint stat_id, float value);
-    internal static FhMethodHandle<d_FUN_003B4AA0> FUN_003B4AA0
+    public delegate void d_FUN_003B4AA0(uint chr_id, uint stat_id, float value);
+    public static FhMethodHandle<d_FUN_003B4AA0> FUN_003B4AA0
         => new( new FhMethodLocation("FFX.exe", 0x3B4AA0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate void d_Ch_SetKeepFps(Actor* ptr_actor, uint keep_fps);
-    internal static FhMethodHandle<d_Ch_SetKeepFps> Ch_SetKeepFps
+    public unsafe delegate void d_Ch_SetKeepFps(Actor* ptr_actor, uint keep_fps);
+    public static FhMethodHandle<d_Ch_SetKeepFps> Ch_SetKeepFps
         => new( new FhMethodLocation("FFX.exe", 0x439BD0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
-    internal static FhMethodHandle<d_rcefObjProc> rcefObjProc
+    public unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
+    public static FhMethodHandle<d_rcefObjProc> rcefObjProc
         => new( new FhMethodLocation("FFX.exe", 0x530060) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_Sg_AccSetAlpha(ushort alpha, ushort frames);
-    internal static FhMethodHandle<d_Sg_AccSetAlpha> Sg_AccSetAlpha
+    public delegate void d_Sg_AccSetAlpha(ushort alpha, ushort frames);
+    public static FhMethodHandle<d_Sg_AccSetAlpha> Sg_AccSetAlpha
         => new( new FhMethodLocation("FFX.exe", 0x42BD90) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_graphicVideoUpdate();
-    internal static FhMethodHandle<d_graphicVideoUpdate> graphicVideoUpdate
+    public delegate void d_graphicVideoUpdate();
+    public static FhMethodHandle<d_graphicVideoUpdate> graphicVideoUpdate
         => new( new FhMethodLocation("FFX.exe", 0x245FA0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_MsEffectSetSpeed(byte chr_id, ushort speed);
-    internal static FhMethodHandle<d_MsEffectSetSpeed> MsEffectSetSpeed
+    public delegate void d_MsEffectSetSpeed(byte chr_id, ushort speed);
+    public static FhMethodHandle<d_MsEffectSetSpeed> MsEffectSetSpeed
         => new( new FhMethodLocation("FFX.exe", 0x3884F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_graphicDrawMainMenuWaterEffect();
-    internal static FhMethodHandle<d_graphicDrawMainMenuWaterEffect> graphicDrawMainMenuWaterEffect
+    public delegate void d_graphicDrawMainMenuWaterEffect();
+    public static FhMethodHandle<d_graphicDrawMainMenuWaterEffect> graphicDrawMainMenuWaterEffect
         => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_Sg_EffectRoutineEnable(sbyte arg1);
-    internal static FhMethodHandle<d_Sg_EffectRoutineEnable> Sg_EffectRoutineEnable
+    public delegate void d_Sg_EffectRoutineEnable(sbyte arg1);
+    public static FhMethodHandle<d_Sg_EffectRoutineEnable> Sg_EffectRoutineEnable
         => new( new FhMethodLocation("FFX.exe", 0x420490) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate Actor* d_AtelGetCharHandle(AtelBasicWorker* ptr_worker);
-    internal static FhMethodHandle<d_AtelGetCharHandle> AtelGetCharHandle
+    public unsafe delegate Actor* d_AtelGetCharHandle(AtelBasicWorker* ptr_worker);
+    public static FhMethodHandle<d_AtelGetCharHandle> AtelGetCharHandle
         => new( new FhMethodLocation("FFX.exe", 0x46AE10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_Ch_CalcAnim(float delta);
-    internal static FhMethodHandle<d_Ch_CalcAnim> Ch_CalcMain
+    public delegate void d_Ch_CalcAnim(float delta);
+    public static FhMethodHandle<d_Ch_CalcAnim> Ch_CalcMain
         => new( new FhMethodLocation("FFX.exe", 0x432E90) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate void d_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed);
-    internal static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
+    public unsafe delegate void d_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed);
+    public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
         => new( new FhMethodLocation("FFX.exe", 0x42B400) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void d_TOBtlCtrlLimitTimer();
-    internal static FhMethodHandle<d_TOBtlCtrlLimitTimer> TOBtlCtrlLimitTimer
+    public delegate void d_TOBtlCtrlLimitTimer();
+    public static FhMethodHandle<d_TOBtlCtrlLimitTimer> TOBtlCtrlLimitTimer
         => new( new FhMethodLocation("FFX.exe", 0x491A30) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
