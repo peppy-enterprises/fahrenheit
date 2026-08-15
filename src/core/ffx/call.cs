@@ -30,6 +30,12 @@ public static partial class FhCall {
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_504C_RetInt
         => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_0001_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x45CE70) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_5010_Init
+        => new( new FhMethodLocation("FFX.exe", 0x679820) );
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value);
     public static FhMethodHandle<d_MsSetChrStatInfo> MsSetChrStatInfo
@@ -54,6 +60,11 @@ public static partial class FhCall {
     public delegate void d_Sg_AccSetAlpha(ushort alpha, ushort frames);
     public static FhMethodHandle<d_Sg_AccSetAlpha> Sg_AccSetAlpha
         => new( new FhMethodLocation("FFX.exe", 0x42BD90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate uint d_Sg_GetCurExecFrames();
+    public static FhMethodHandle<d_Sg_GetCurExecFrames> Sg_GetCurExecFrames
+        => new( new FhMethodLocation("FFX.exe", 0x42D860) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_graphicVideoUpdate();

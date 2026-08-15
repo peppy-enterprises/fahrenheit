@@ -45889,13 +45889,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_0082d200> FUN_0082d200 => new( new FhMethodLocation("FFX.exe", 0x42D200) );
 
     // Original after pruning:
-    // unknown undefined Sg_GetCurExecFrames() at 0082d860
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_Sg_GetCurExecFrames();
-    public static FhMethodHandle<d_Sg_GetCurExecFrames> Sg_GetCurExecFrames => new( new FhMethodLocation("FFX.exe", 0x42D860) );
-
-    // Original after pruning:
     // unknown undefined Sg_GetExecFrames() at 0082d890
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
