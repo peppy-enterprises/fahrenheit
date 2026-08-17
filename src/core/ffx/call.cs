@@ -37,6 +37,31 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x679820) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    public unsafe delegate void d_PhyreScene_doDeleteMeshInstances(uint ptr_this);
+    public static FhMethodHandle<d_PhyreScene_doDeleteMeshInstances> PhyreScene_doDeleteMeshInstances
+        => new( new FhMethodLocation("FFX.exe", 0x25A7B0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    public unsafe delegate void d_DynGeoMemManager_clearDynGeoMemory(uint ptr_this);
+    public static FhMethodHandle<d_DynGeoMemManager_clearDynGeoMemory> DynGeoMemManager_clearDynGeoMemory
+        => new( new FhMethodLocation("FFX.exe", 0x2DE830) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_JobSchedule_pppPart_fillBuffer_Kick(uint param_1);
+    public static FhMethodHandle<d_JobSchedule_pppPart_fillBuffer_Kick> JobSchedule_pppPart_fillBuffer_Kick
+        => new( new FhMethodLocation("FFX.exe", 0x31EE90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_JobSchedule_pppPart_clearFillBufferReques();
+    public static FhMethodHandle<d_JobSchedule_pppPart_clearFillBufferReques> JobSchedule_pppPart_clearFillBufferRequest
+        => new( new FhMethodLocation("FFX.exe", 0x31EDB0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_ClassVFXRenderDataTable_Clear(ClassVFXRenderDataTable* ptr_this);
+    public static FhMethodHandle<d_ClassVFXRenderDataTable_Clear> ClassVFXRenderDataTable_Clear
+        => new( new FhMethodLocation("FFX.exe", 0x29F140) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     public unsafe delegate void d_ClassVFXRenderDataTable_ClearVFXDrawData(ClassVFXRenderDataTable* ptr_this);
     public static FhMethodHandle<d_ClassVFXRenderDataTable_ClearVFXDrawData> ClassVFXRenderDataTable_ClearVFXDrawData
         => new( new FhMethodLocation("FFX.exe", 0x29F3F0) );
