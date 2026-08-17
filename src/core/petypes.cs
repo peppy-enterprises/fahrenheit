@@ -408,7 +408,7 @@ internal struct PNamedSemanticDescriptor {
 ///     This type is a stub and corresponds to no Phyre type.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x80, Pack = 4)]
-internal struct PUnknown {
+public struct PUnknown {
     public nint _0x00;
     public nint _0x04;
     public nint _0x08;

@@ -140,6 +140,11 @@ public static unsafe partial class FhCall {
 
     // Frame limiter
 
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    public unsafe delegate VFXDynamicGeometry* d_ClassVFXRenderDataTable_GetDynamicGeometryByInstance(ClassVFXRenderDataTable* ptr_this, uint param_1, uint param_2);
+    public static FhMethodHandle<d_ClassVFXRenderDataTable_GetDynamicGeometryByInstance> ClassVFXRenderDataTable_GetDynamicGeometryByInstance
+        => new( new FhMethodLocation(0x29F760, 0x0B3050) );
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_TkSetFadeOut(uint frame_count);
     public static FhMethodHandle<d_TkSetFadeOut> TkSetFadeOut

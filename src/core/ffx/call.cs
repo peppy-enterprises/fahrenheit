@@ -36,6 +36,81 @@ public static partial class FhCall {
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_5010_Init
         => new( new FhMethodLocation("FFX.exe", 0x679820) );
 
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    public unsafe delegate void d_ClassVFXRenderDataTable_ClearVFXDrawData(ClassVFXRenderDataTable* ptr_this);
+    public static FhMethodHandle<d_ClassVFXRenderDataTable_ClearVFXDrawData> ClassVFXRenderDataTable_ClearVFXDrawData
+        => new( new FhMethodLocation("FFX.exe", 0x29F3F0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicDynGeoMemManagerSwapBuffer(uint param_1);
+    public static FhMethodHandle<d_graphicDynGeoMemManagerSwapBuffer> graphicDynGeoMemManagerSwapBuffer
+        => new( new FhMethodLocation("FFX.exe", 0x240120) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXUpdateWithType(uint param_1, uint param_2, uint type);
+    public static FhMethodHandle<d_graphicVFXUpdateWithType> graphicVFXUpdateWithType
+        => new( new FhMethodLocation("FFX.exe", 0x245D50) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXDestroy(uint param_1, uint param_2);
+    public static FhMethodHandle<d_graphicVFXDestroy> graphicVFXDestroy
+        => new( new FhMethodLocation("FFX.exe", 0x245430) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXCreate(uint param_1, uint param_2, uint flags);
+    public static FhMethodHandle<d_graphicVFXCreate> graphicVFXCreate
+        => new( new FhMethodLocation("FFX.exe", 0x244F90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXSetVisible(uint param_1, uint param_2, uint visible);
+    public static FhMethodHandle<d_graphicVFXSetVisible> graphicVFXSetVisible
+        => new( new FhMethodLocation("FFX.exe", 0x2458C0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXUpdate(uint param_1, uint param_2);
+    public static FhMethodHandle<d_graphicVFXUpdate> graphicVFXUpdate
+        => new( new FhMethodLocation("FFX.exe", 0x245A50) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_hideDisplayOffParticle(uint ptr_par);
+    public static FhMethodHandle<d_hideDisplayOffParticle> hideDisplayOffParticle
+        => new( new FhMethodLocation("FFX.exe", 0x328F30) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate uint d__pppRunPartFp(uint ptr_par, byte flags);
+    public static FhMethodHandle<d__pppRunPartFp> _pppRunPartFp
+        => new( new FhMethodLocation("FFX.exe", 0x3123D0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate uint d__pppRunPart(uint ptr_par, byte flags);
+    public static FhMethodHandle<d__pppRunPart> _pppRunPart
+        => new( new FhMethodLocation("FFX.exe", 0x312330) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_op_loop_ffx_after();
+    public static FhMethodHandle<d_op_loop_ffx_after> op_loop_ffx_after
+        => new( new FhMethodLocation("FFX.exe", 0x3FF5A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_op_loop_ffx_before();
+    public static FhMethodHandle<d_op_loop_ffx_before> op_loop_ffx_before
+        => new( new FhMethodLocation("FFX.exe", 0x3FF690) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_MsEffectStart();
+    public static FhMethodHandle<d_MsEffectStart> MsEffectStart
+        => new( new FhMethodLocation("FFX.exe", 0x388540) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_op_ot_draw();
+    public static FhMethodHandle<d_op_ot_draw> op_ot_draw
+        => new( new FhMethodLocation("FFX.exe", 0x3EC390) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_pppPartLoop();
+    public static FhMethodHandle<d_pppPartLoop> pppPartLoop
+        => new( new FhMethodLocation("FFX.exe", 0x362330) );
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value);
     public static FhMethodHandle<d_MsSetChrStatInfo> MsSetChrStatInfo

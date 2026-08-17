@@ -29799,13 +29799,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_0069F6C0_004B2FD0();
     public static FhMethodHandle<d_FUN_0069F6C0_004B2FD0> FUN_0069F6C0_004B2FD0 => new( new FhMethodLocation(0x29F6C0, 0xB2FD0) );
 
-    // Fused identical entry: unknown undefined GetDynamicGeometryByInstance()
-    // at (FFX.exe+69F760, FFX-2.exe+4B3050)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0069F760_004B3050();
-    public static FhMethodHandle<d_FUN_0069F760_004B3050> FUN_0069F760_004B3050 => new( new FhMethodLocation(0x29F760, 0xB3050) );
-
     // Fused identical entry: unknown undefined GetVFXDataByInstance()
     // at (FFX.exe+69F820, FFX-2.exe+4B3130)
 
