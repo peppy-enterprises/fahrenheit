@@ -21,7 +21,7 @@ namespace Fahrenheit.Runtime;
 /// <summary>
 ///     Implements Fahrenheit's replacement save/load user interface.
 /// </summary>
-[FhLoad(FhGameId.FFX2 | FhGameId.FFX2LM)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
     private class ScrollableData {
         public int current;
@@ -110,7 +110,6 @@ public sealed class FhSaveUiModule : FhModule {
      * Trim extra 0's from Create Time, i.e. 2026/08/01 -> 2026/8/1
      * Change "Select Set" ImGui popup to use game textures? 
      * Fix scrolling
-     * Fix No saves and set name
      * Fix portrait + map drawing to be safer
     */
 
@@ -446,6 +445,12 @@ public sealed class FhSaveUiModule : FhModule {
 
         draw.AddImage(message, accent1_tl, accent1_br, accent1_uv1, accent1_uv2);
         draw.AddImage(message, accent2_tl, accent2_br, accent2_uv1, accent2_uv2);
+
+        // Display current Number of Saves
+        Vector2 text_offset = scale_screen_uv(screen_size, new(1717f, 146f), Vector2.Zero).Item1;
+        string  save_count  = FhInternal.Saves.get_slots_used() == 1 ? "1 Save" : $"{FhInternal.Saves.get_slots_used()} Saves";
+
+        FhApi.Gui.draw_text(draw, text_offset, save_count, font_size, true, TextAlignment.END, TextAlignment.CENTER);
 
         Vector2 bg_size = br - tl;
         ImGui.SetNextWindowPos(tl);
