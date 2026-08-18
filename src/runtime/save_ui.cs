@@ -22,7 +22,7 @@ namespace Fahrenheit.Runtime;
 ///     Implements Fahrenheit's replacement save/load user interface.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public sealed class FhX2SaveUiModule : FhModule {
+public sealed class FhSaveUiModule : FhModule {
     private class ScrollableData {
         public int current;
         public int max;
@@ -106,13 +106,12 @@ public sealed class FhX2SaveUiModule : FhModule {
 
     /* TODO: 
      * Translate Autosave, Help, and Save Count text
-     * Sort saves by Create Time
      * Split Play Time and Create Time strings for LM
      * Trim extra 0's from Create Time, i.e. 2026/08/01 -> 2026/8/1
      * Change "Select Set" ImGui popup to use game textures? 
     */
 
-    public FhX2SaveUiModule() {
+    public FhSaveUiModule() {
         _sem_handle = new(this);
     }
 
@@ -163,11 +162,9 @@ public sealed class FhX2SaveUiModule : FhModule {
         if (ImGui.IsKeyPressed(ImGuiKey.PageDown)) scroll_amount = _scrollable_saves.visible;
         if (ImGui.IsKeyPressed(ImGuiKey.Home)) { _scrollable_saves.scroll_begin(); _display_index = 0; return false; }
         if (ImGui.IsKeyPressed(ImGuiKey.End)) { _scrollable_saves.scroll_end(); _display_index = _scrollable_saves.max - 1; return false; }
-
         if (ImGui.IsKeyPressed(ImGuiKey.W)) scroll_amount = -1;
         if (ImGui.IsKeyPressed(ImGuiKey.S)) scroll_amount = 1;
 
-        // Cursor handling, forces scroll to match current cursor pos
         if (scroll_amount != 0) {
             _display_index += scroll_amount;
 
@@ -240,6 +237,9 @@ public sealed class FhX2SaveUiModule : FhModule {
         return (scaled_u, scaled_v);
     }
 
+    /// <summary>
+    ///     Draws the highlights/shadows for the save slot texture.
+    /// </summary>
     void draw_highlight_shadow(ImDrawListPtr draw, Vector2 pos_topleft, Vector2 size, float thickness, uint highlight, uint shadow) {
         // Top Highlight
         draw.AddRectFilled(
@@ -376,11 +376,11 @@ public sealed class FhX2SaveUiModule : FhModule {
 
         (Vector2 text_su, _) = scale_screen_uv(
             screen_size,
-            new(240f, 91f),
+            new(240f, 118f),
             Vector2.Zero
         );
 
-        FhApi.Gui.draw_text(draw, text_su, is_save ? "Select save area" : "Select save data", font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
+        FhApi.Gui.draw_text(draw, text_su, is_save ? "Select save area" : "Select save data", font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
     }
 
     /// <summary>
@@ -440,10 +440,10 @@ public sealed class FhX2SaveUiModule : FhModule {
         draw.AddImage(message, accent2_tl, accent2_br, accent2_uv1, accent2_uv2);
 
         // Display current Number of Saves
-        Vector2 text_offset = scale_screen_uv(screen_size, new(1717f, 123f), Vector2.Zero).Item1;
+        Vector2 text_offset = scale_screen_uv(screen_size, new(1717f, 146f), Vector2.Zero).Item1;
         string  save_count  = FhInternal.Saves.get_slots_used() == 1 ? "1 Save" : $"{FhInternal.Saves.get_slots_used()} Saves";
 
-        FhApi.Gui.draw_text(draw, text_offset, save_count, font_size, true, TextAlignment.END, TextAlignment.BEGIN);
+        FhApi.Gui.draw_text(draw, text_offset, save_count, font_size, true, TextAlignment.END, TextAlignment.CENTER);
 
         Vector2 bg_size = br - tl;
         ImGui.SetNextWindowPos(tl);
@@ -534,7 +534,7 @@ public sealed class FhX2SaveUiModule : FhModule {
             return;
         }
 
-        // If saving, forces slot 0 to be the New Save option
+        // If saving, forces slot 0 into the New Save option
         List<FhSaveDisplayData> save_list = new();
 
         if (is_save) {
@@ -565,14 +565,13 @@ public sealed class FhX2SaveUiModule : FhModule {
                 if (i == 0) {
                     ui_savefile(0, new FhSaveDisplayData { slot = 0 }); // New Save Data
                 } else {
-                    ui_savefile(i, save_list[i - 1]);
+                    ui_savefile(i, save_list[i - 1]); // Remove Autosave from list
                 }
             } else {
                 ui_savefile(i, save_list[i]);
             }
         }
 
-        // Persistent Cursor on saves even when not hovered
         if (_scrollable_saves.is_within_clip(_display_index)) {
             int relative_index = _display_index - start;
 
@@ -765,7 +764,7 @@ public sealed class FhX2SaveUiModule : FhModule {
         for (int i = 0; i < text.Length; i++) {
             float current_y = start_y + (i * font_size);
 
-            FhApi.Gui.draw_text(draw, new Vector2(center.X, current_y), text[i], font_size, true, TextAlignment.CENTER, TextAlignment.BEGIN);
+            FhApi.Gui.draw_text(draw, new Vector2(center.X, current_y), text[i], font_size, true, TextAlignment.CENTER, TextAlignment.CENTER);
         }
     }
 
@@ -872,8 +871,8 @@ public sealed class FhX2SaveUiModule : FhModule {
 
         bool pressed;
         if (is_newsave) {
-            Vector2 text_offset = new(16f * scale_factor, 73f * scale_factor);
-            FhApi.Gui.draw_text(draw, save_start + text_offset, "New Save Data", font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
+            Vector2 text_offset = new(16f * scale_factor, 100f * scale_factor);
+            FhApi.Gui.draw_text(draw, save_start + text_offset, "New Save Data", font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
 
             uint grad_l = 0xFF191919; // grey
             uint grad_r = 0xFF252525; // black
@@ -995,21 +994,21 @@ public sealed class FhX2SaveUiModule : FhModule {
         string completion_text  = Encoding.UTF8.GetString(data.completion);
         string playtime_text    = Encoding.UTF8.GetString(data.play_time);
 
-        Vector2 slot_pos          = new(17f   * scale_factor, -5f * scale_factor);
-        Vector2 location_pos      = new(location_offset * scale_factor, -5f * scale_factor);
-        Vector2 create_time_pos   = new(1258f * scale_factor, -5f * scale_factor);
-        Vector2 name_offset       = new(356f  * scale_factor, 49f * scale_factor);
-        Vector2 chapter_offset    = new(356f  * scale_factor, 98f * scale_factor);
-        Vector2 completion_offset = new(1259f * scale_factor, 49f * scale_factor);
-        Vector2 playtime_offset   = new(1258f * scale_factor, 98f * scale_factor);
+        Vector2 slot_pos          = new(17f   * scale_factor, 22f  * scale_factor);
+        Vector2 location_pos      = new(location_offset * scale_factor, 22f * scale_factor);
+        Vector2 create_time_pos   = new(1258f * scale_factor, 22f  * scale_factor);
+        Vector2 name_offset       = new(356f  * scale_factor, 76f  * scale_factor);
+        Vector2 chapter_offset    = new(356f  * scale_factor, 125f * scale_factor);
+        Vector2 completion_offset = new(1259f * scale_factor, 76f  * scale_factor);
+        Vector2 playtime_offset   = new(1258f * scale_factor, 125f * scale_factor);
 
-        FhApi.Gui.draw_text(draw, save_start + slot_pos, slot_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN, slot_text_color);
-        FhApi.Gui.draw_text(draw, save_start + location_pos, location_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + create_time_pos, create_time_text, font_size, true, TextAlignment.END, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + name_offset, name_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + chapter_offset, chapter_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + completion_offset, completion_text, font_size, true, TextAlignment.END, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + playtime_offset, playtime_text, font_size, true, TextAlignment.END, TextAlignment.BEGIN);
+        FhApi.Gui.draw_text(draw, save_start + slot_pos, slot_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER, slot_text_color);
+        FhApi.Gui.draw_text(draw, save_start + location_pos, location_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + create_time_pos, create_time_text, font_size, true, TextAlignment.END, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + name_offset, name_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + chapter_offset, chapter_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + completion_offset, completion_text, font_size, true, TextAlignment.END, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + playtime_offset, playtime_text, font_size, true, TextAlignment.END, TextAlignment.CENTER);
 
         FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(data.header);
 
@@ -1119,21 +1118,21 @@ public sealed class FhX2SaveUiModule : FhModule {
         float  location_offset = is_autosave ? 258f : 130f;
         float  level_offset    = 92f * scale_factor;
 
-        Vector2 slot_pos        = new(17f   * scale_factor, -5f * scale_factor);
-        Vector2 location_pos    = new(location_offset * scale_factor, -5f * scale_factor);
-        Vector2 create_time_pos = new(1259f * scale_factor, -5f * scale_factor);
-        Vector2 name_pos        = new(269f  * scale_factor, 49f * scale_factor);
-        Vector2 job_pos         = new(269f  * scale_factor, 98f * scale_factor);
-        Vector2 level_pos       = new(job_pos.X + job_width.X + level_offset, 98f * scale_factor);
-        Vector2 playtime_pos    = new(1259f * scale_factor, 98f * scale_factor);
+        Vector2 slot_pos        = new(17f   * scale_factor, 22f  * scale_factor);
+        Vector2 location_pos    = new(location_offset * scale_factor, 22f * scale_factor);
+        Vector2 create_time_pos = new(1259f * scale_factor, 22f  * scale_factor);
+        Vector2 name_pos        = new(269f  * scale_factor, 76f  * scale_factor);
+        Vector2 job_pos         = new(269f  * scale_factor, 125f * scale_factor);
+        Vector2 level_pos       = new(job_pos.X + job_width.X + level_offset, 125f * scale_factor);
+        Vector2 playtime_pos    = new(1259f * scale_factor, 125f * scale_factor);
 
-        FhApi.Gui.draw_text(draw, save_start + slot_pos, slot_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN, slot_text_color);
-        FhApi.Gui.draw_text(draw, save_start + location_pos, location_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + create_time_pos, create_time_text, font_size, true, TextAlignment.END, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + name_pos, name_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + job_pos, job_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + level_pos, level_text, font_size, true, TextAlignment.BEGIN, TextAlignment.BEGIN);
-        FhApi.Gui.draw_text(draw, save_start + playtime_pos, playtime_text, font_size, true, TextAlignment.END, TextAlignment.BEGIN);
+        FhApi.Gui.draw_text(draw, save_start + slot_pos, slot_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER, slot_text_color);
+        FhApi.Gui.draw_text(draw, save_start + location_pos, location_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + create_time_pos, create_time_text, font_size, true, TextAlignment.END, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + name_pos, name_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + job_pos, job_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + level_pos, level_text, font_size, true, TextAlignment.BEGIN, TextAlignment.CENTER);
+        FhApi.Gui.draw_text(draw, save_start + playtime_pos, playtime_text, font_size, true, TextAlignment.END, TextAlignment.CENTER);
 
         FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(data.header);
 
