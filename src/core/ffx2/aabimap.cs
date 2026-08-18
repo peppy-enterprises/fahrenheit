@@ -44,9 +44,9 @@ public struct AutoAbilityEffectsMap {
     public bool has_trigger_happy_lv2  { readonly get { return this[1].get_bit(14); } set { this[1].set_bit(14, value); } }
     public bool has_trigger_happy_lv3  { readonly get { return this[1].get_bit(15); } set { this[1].set_bit(15, value); } }
 
-    public bool has_scan_lvl2          { readonly get { return this[2].get_bit(0); } set { this[2].set_bit(0, value); } }
-    public bool has_scan_lvl3          { readonly get { return this[2].get_bit(1); } set { this[2].set_bit(1, value); } }
-    public bool has_half_mp_cost       { readonly get { return this[2].get_bit(2); } set { this[2].set_bit(2, value); } }
-    public bool has_one_mp_cost        { readonly get { return this[2].get_bit(3); } set { this[2].set_bit(3, value); } } 
+    public bool has_scan_lv2     { readonly get { return this[2].get_bit(0); } set { this[2].set_bit(0, value); } }
+    public bool has_scan_lv3     { readonly get { return this[2].get_bit(1); } set { this[2].set_bit(1, value); } }
+    public bool has_half_mp_cost { readonly get { return this[2].get_bit(2); } set { this[2].set_bit(2, value); } }
+    public bool has_one_mp_cost  { readonly get { return this[2].get_bit(3); } set { this[2].set_bit(3, value); } } 
 
 }
