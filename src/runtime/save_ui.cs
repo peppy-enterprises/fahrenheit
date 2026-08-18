@@ -21,7 +21,7 @@ namespace Fahrenheit.Runtime;
 /// <summary>
 ///     Implements Fahrenheit's replacement save/load user interface.
 /// </summary>
-[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
+[FhLoad(FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
     private class ScrollableData {
         public int current;
@@ -109,6 +109,9 @@ public sealed class FhSaveUiModule : FhModule {
      * Split Play Time and Create Time strings for LM
      * Trim extra 0's from Create Time, i.e. 2026/08/01 -> 2026/8/1
      * Change "Select Set" ImGui popup to use game textures? 
+     * Fix scrolling
+     * Fix No saves and set name
+     * Fix portrait + map drawing to be safer
     */
 
     public FhSaveUiModule() {
@@ -143,8 +146,12 @@ public sealed class FhSaveUiModule : FhModule {
         draw.PopClipRect();
     }
 
-    /// <summary>Handle player input.</summary>
-    /// <returns>Whether the save/load screen was closed.</returns>
+    /// <summary>
+    ///     Handle player input.
+    /// </summary>
+    /// <returns>
+    ///     Whether the save/load screen was closed.
+    /// </returns>
     private bool handle_input() {
         if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed(ImGuiKey.Backspace)) {
             _sem!.signal_exit_abort();
@@ -399,30 +406,31 @@ public sealed class FhSaveUiModule : FhModule {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
         ImFontPtr     font = ImGui.GetFont();
 
-        string active_set = FhInternal.Saves.get_active_set();
-
-        Vector2 text_size = font.CalcTextSizeA(font_size, float.MaxValue, 0f, active_set);
+        string  active_set = FhInternal.Saves.get_active_set();
+        Vector2 text_size  = font.CalcTextSizeA(font_size, float.MaxValue, 0f, active_set);
 
         float padding_x = 250f * scale_factor;
+        float padding_y = 20f  * scale_factor;
         float min_width = 450f * scale_factor;
+
         float bg_width  = MathF.Max(min_width, text_size.X + padding_x);
+        float bg_height = text_size.Y + padding_y;
 
         Vector2 center_top = scale_screen_uv(screen_size, new(960f, 22f), Vector2.Zero).Item1;
         Vector2 tl         = new(center_top.X - (bg_width * 0.5f), center_top.Y);
-        Vector2 br         = scale_screen_uv(screen_size, new(960f, 88f), Vector2.Zero).Item1 with { X = tl.X + bg_width };
+        Vector2 br         = tl + new Vector2(bg_width, bg_height);
 
         draw.AddRectFilled(tl, br, 0x80000000); // Transparent black background
 
         // Gold accents on message background
-        float accent_w = 70f * scale_factor;
-        float accent_h = 70f * scale_factor;
-        float accent_y = scale_screen_uv(screen_size, new(0f, 20f), Vector2.Zero).Item1.Y;
+        float accent_w = bg_height;
+        float accent_h = bg_height;
 
-        Vector2 accent1_tl = new(tl.X - (2f * scale_factor), accent_y);
-        Vector2 accent1_br = new(accent1_tl.X + accent_w, accent_y + accent_h);
+        Vector2 accent1_tl = new(tl.X - (2f * scale_factor), tl.Y + (2f * scale_factor));
+        Vector2 accent1_br = accent1_tl + new Vector2(accent_w, accent_h);
 
-        Vector2 accent2_br = new(br.X + (2f * scale_factor), accent_y);
-        Vector2 accent2_tl = new(accent2_br.X - accent_w, accent_y + accent_h);
+        Vector2 accent2_br = new(br.X + (1f * scale_factor), br.Y - (2f * scale_factor));
+        Vector2 accent2_tl = new(accent2_br.X - accent_w, tl.Y - (2f * scale_factor));
 
         (Vector2 accent1_uv1, Vector2 accent1_uv2) = scale_tex_uv(
             _tex_message_size,
@@ -432,18 +440,12 @@ public sealed class FhSaveUiModule : FhModule {
 
         (Vector2 accent2_uv1, Vector2 accent2_uv2) = scale_tex_uv(
             _tex_message_size,
-            new(1755f, 1020f),
-            new(1469f,  733f)
+            new(1755f,  733f),
+            new(1469f, 1020f)
         );
 
         draw.AddImage(message, accent1_tl, accent1_br, accent1_uv1, accent1_uv2);
         draw.AddImage(message, accent2_tl, accent2_br, accent2_uv1, accent2_uv2);
-
-        // Display current Number of Saves
-        Vector2 text_offset = scale_screen_uv(screen_size, new(1717f, 146f), Vector2.Zero).Item1;
-        string  save_count  = FhInternal.Saves.get_slots_used() == 1 ? "1 Save" : $"{FhInternal.Saves.get_slots_used()} Saves";
-
-        FhApi.Gui.draw_text(draw, text_offset, save_count, font_size, true, TextAlignment.END, TextAlignment.CENTER);
 
         Vector2 bg_size = br - tl;
         ImGui.SetNextWindowPos(tl);
@@ -534,7 +536,7 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        // If saving, forces slot 0 into the New Save option
+        // If saving, replaces slot 0 with the New Save option
         List<FhSaveDisplayData> save_list = new();
 
         if (is_save) {
@@ -565,7 +567,7 @@ public sealed class FhSaveUiModule : FhModule {
                 if (i == 0) {
                     ui_savefile(0, new FhSaveDisplayData { slot = 0 }); // New Save Data
                 } else {
-                    ui_savefile(i, save_list[i - 1]); // Remove Autosave from list
+                    ui_savefile(i, save_list[i - 1]); // Add New Save button to list
                 }
             } else {
                 ui_savefile(i, save_list[i]);
@@ -713,58 +715,68 @@ public sealed class FhSaveUiModule : FhModule {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
         ImFontPtr     font = ImGui.GetFont();
 
-        (Vector2 window_size, _) = get_window_bounds();
-        Vector2  screen_size     = new(1920f, 1080f);
-        float    scale_factor    = window_size.Y / 1080f;
-        float    font_size       = 42f * scale_factor;
+        (Vector2 window_size, Vector2 window_offset) = get_window_bounds();
+        Vector2  screen_size                         = new(1920f, 1080f);
+        float    scale_factor                        = window_size.Y / 1080f;
+        float    font_size                           = 42f * scale_factor;
 
-        Vector2 tl = scale_screen_uv(screen_size, new(410f , 605f), Vector2.Zero).Item1;
-        Vector2 br = scale_screen_uv(screen_size, new(1510f, 455f), Vector2.Zero).Item1;
+        string[] lines = {
+            "No Saved Data, please return to the Main Menu",
+            "or select another Save Set."
+        };
+
+        float max_text_width = 0f;
+        foreach (string line in lines) {
+            Vector2 line_size = font.CalcTextSizeA(font_size, float.MaxValue, 0f, line);
+            if (line_size.X > max_text_width) {
+                max_text_width = line_size.X;
+            }
+        }
+        float text_height = lines.Length * font_size;
+
+        float padding_x = 350f * scale_factor;
+        float padding_y = 60f  * scale_factor;
+        float min_width = 800f * scale_factor;
+
+        float bg_width  = MathF.Max(min_width, max_text_width + padding_x);
+        float bg_height = text_height + padding_y;
+
+        Vector2 screen_center = window_offset + (window_size * 0.5f);
+        Vector2 tl            = screen_center - new Vector2(bg_width * 0.5f, bg_height * 0.5f);
+        Vector2 br            = tl + new Vector2(bg_width, bg_height);
 
         draw.AddRectFilled(tl, br, 0x80000000); // Transparent black background
 
         // Gold accents on message background
-        (Vector2 message_tu, Vector2 message_tv) = scale_tex_uv(
+        float accent_w = 150f * scale_factor;
+        float accent_h = bg_height;
+
+        Vector2 accent1_tl = new(tl.X - (5f * scale_factor), tl.Y + (5f * scale_factor));
+        Vector2 accent1_br = new(accent1_tl.X + accent_w, accent1_tl.Y + accent_h);
+
+        Vector2 accent2_br = new(br.X + (4f * scale_factor), br.Y - (5f * scale_factor));
+        Vector2 accent2_tl = new(accent2_br.X - accent_w, (br.Y - accent_h) - (5f * scale_factor));
+
+        (Vector2 accent1_tu, Vector2 accent1_tv) = scale_tex_uv(
             _tex_message_size,
             new(1469f, 1020f),
             new(1755f,  733f)
         );
 
-        (Vector2 accent1_su, Vector2 accent1_sv) = scale_screen_uv(
-            screen_size,
-            new(406f, 460f),
-            new(556f, 610f)
+        (Vector2 accent2_tu, Vector2 accent2_tv) = scale_tex_uv(
+            _tex_message_size,
+            new(1755f,  733f),
+            new(1469f, 1020f)
         );
 
-        (Vector2 accent2_su, Vector2 accent2_sv) = scale_screen_uv(
-            screen_size,
-            new(1514f, 600f),
-            new(1364f, 450f)
-        );
+        draw.AddImage(message, accent1_tl, accent1_br, accent1_tu, accent1_tv);
+        draw.AddImage(message, accent2_tl, accent2_br, accent2_tu, accent2_tv);
 
-        draw.AddImage(message, accent1_su, accent1_sv, message_tu, message_tv);
-        draw.AddImage(message, accent2_su, accent2_sv, message_tu, message_tv);
+        float start_y = screen_center.Y - (text_height * 0.5f) + (font_size * 0.5f);
 
-        (Vector2 message_su, Vector2 message_sv) = scale_screen_uv(
-            screen_size,
-            new(410f , 455f),
-            new(1510f, 605f)
-        );
-
-        Vector2 center = (message_su + message_sv) * 0.5f;
-
-        string[] text = {
-            "No Saved Data, please return to the Main Menu",
-            "or select another Save Set."
-        };
-
-        float total_height = text.Length * font_size;
-        float start_y      = center.Y - (total_height * 0.5f);
-
-        for (int i = 0; i < text.Length; i++) {
+        for (int i = 0; i < lines.Length; i++) {
             float current_y = start_y + (i * font_size);
-
-            FhApi.Gui.draw_text(draw, new Vector2(center.X, current_y), text[i], font_size, true, TextAlignment.CENTER, TextAlignment.CENTER);
+            FhApi.Gui.draw_text(draw, new Vector2(screen_center.X, current_y), lines[i], font_size, true, TextAlignment.CENTER, TextAlignment.CENTER);
         }
     }
 
