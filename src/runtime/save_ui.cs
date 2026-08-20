@@ -73,8 +73,7 @@ public sealed class FhSaveUiModule : FhModule {
                     hovered += amount;
                     hovered = Math.Clamp(hovered, 0, Math.Max(0, max - 1));
                 }
-            }
-            else {
+            } else {
                 // Clip the hovered index to the range of visible indices so it never goes off-screen
                 if (Math.Sign(amount) > 0) {
                     hovered = get_clip_start();
@@ -289,7 +288,7 @@ public sealed class FhSaveUiModule : FhModule {
                 break;
 
             case FhSaveScreenState.OPENING:
-                mode = FhSaveUiMode.SAVE_LIST;
+                mode  = FhSaveUiMode .SAVE_LIST;
                 focus = FhSaveUiFocus.LIST;
 
                 //populate_map_icons();
@@ -312,7 +311,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         _current_scrollable = mode switch {
             FhSaveUiMode.SET_SWAP => _scrollable_sets,
-            _ => _scrollable_saves,
+            _                     => _scrollable_saves,
         };
 
         // We update this one every frame because it's relatively inexpensive and can change easily
@@ -744,7 +743,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         Vector2 cursor_center = new(
             target_pos.X - cursor_size.X / 2f + overlap,
-            target_pos.Y + 4f // Cursor midpoint is weird, this "+ 4f" actually centers the tip
+            target_pos.Y + 4f // Cursor midpoint is weird, "+ 4f" actually centers the tip
         );
         Vector2 cursor_offset = cursor_center - (cursor_size / 2f);
 
@@ -774,7 +773,7 @@ public sealed class FhSaveUiModule : FhModule {
                 }
 
                 color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
-                pos = cursor_offset + new Vector2(offset, 0f);
+                pos   = cursor_offset + new Vector2(offset, 0f);
                 draw.AddImage(freetex, pos, pos + cursor_size, cursor_tu, cursor_tv, color);
             }
 
@@ -796,7 +795,7 @@ public sealed class FhSaveUiModule : FhModule {
                 }
 
                 color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
-                pos = cursor_offset + new Vector2(offset, 0f);
+                pos   = cursor_offset + new Vector2(offset, 0f);
                 draw.AddImage(freetex, pos, pos + cursor_size, cursor_tu, cursor_tv, color);
             }
         }
@@ -854,12 +853,12 @@ public sealed class FhSaveUiModule : FhModule {
         (Vector2 accent1_uv1, Vector2 accent1_uv2) = scale_tex_uv(
             _tex_message_size,
             new(1469f, 1020f),
-            new(1755f, 733f)
+            new(1755f,  733f)
         );
 
         (Vector2 accent2_uv1, Vector2 accent2_uv2) = scale_tex_uv(
             _tex_message_size,
-            new(1755f, 733f),
+            new(1755f,  733f),
             new(1469f, 1020f)
         );
 
@@ -1273,8 +1272,7 @@ public sealed class FhSaveUiModule : FhModule {
             Vector2 icon_end   = icon_start + icon_size;
 
             draw.AddImage(freetex, icon_start, icon_end, plus_tu, plus_tv); // "+" icon
-        }
-        else {
+        } else {
             uint  slot_text_color = is_autosave ? 0xFF19D8FF : 0xFFFFFFFF; // Yellow : White
             float location_offset = is_autosave ? 258f : 130f;
 
@@ -1295,8 +1293,8 @@ public sealed class FhSaveUiModule : FhModule {
             // TODO: Redo this texture loading to be nicer/safer
             (Vector2 faces_tu, Vector2 faces_tv) = scale_tex_uv(
                 _tex_faces_size,
-                new(0f, 239f),
-                new(256f, 0f)
+                new(  0f, 239f),
+                new(256f,   0f)
             );
 
             Vector2 face_offset = new(  5f * scale_factor, 56f * scale_factor);
@@ -1473,7 +1471,7 @@ public sealed class FhSaveUiModule : FhModule {
     /// <summary>Render the scrollbar.</summary>
     private void ui_scrollbar() {
         if (mode == FhSaveUiMode.SAVE_LIST && _scrollable_saves.max <= _scrollable_saves.visible
-         || mode == FhSaveUiMode.SET_SWAP && _scrollable_sets.max <= _scrollable_sets.visible
+         || mode == FhSaveUiMode.SET_SWAP  && _scrollable_sets.max  <= _scrollable_sets.visible
          ) {
             return;
         }
