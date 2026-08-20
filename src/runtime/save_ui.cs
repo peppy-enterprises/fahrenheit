@@ -1172,8 +1172,8 @@ public sealed class FhSaveUiModule : FhModule {
             _scrollable_saves.hovered = index;
         }
 
-        float header_height  = 47f  * scale_factor;
-        float vertical_space =  4f  * scale_factor;
+        float header_height  = 47f * scale_factor;
+        float vertical_space =  4f * scale_factor;
 
         Vector2 header_start = save_topleft;
         Vector2 header_end   = new(save_topleft.X + save_size.X, header_start.Y + header_height);
@@ -1306,7 +1306,7 @@ public sealed class FhSaveUiModule : FhModule {
 
             /*(Vector2 map_tu, Vector2 map_tv) = scale_tex_uv(
                 _tex_map_size,
-                new(0f  ,   0f),
+                new(  0f,   0f),
                 new(320f, 176f)
             );
         
