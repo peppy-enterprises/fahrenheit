@@ -259,7 +259,6 @@ public sealed class FhSaveUiModule : FhModule {
      * Translate Autosave, Help, New Save Data, and Save Count text
      * Split Play Time and Create Time strings for LM
      * Trim extra 0's from Create Time, i.e. 2026/08/01 -> 2026/8/1
-     * Handle input in set swapping ui
      * Fix Escape menu handling
      * Fix portrait + map drawing to be safer
     */
@@ -320,7 +319,6 @@ public sealed class FhSaveUiModule : FhModule {
                 ? FhInternal.Saves.get_slots_used()
                 : FhInternal.Saves.get_display_data().Count;
 
-        if (handle_input()) return;
         if (!try_load_textures()) return;
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
@@ -335,6 +333,7 @@ public sealed class FhSaveUiModule : FhModule {
         ui_help();
 
         if (mode == FhSaveUiMode.SET_SWAP) {
+            if (handle_input()) return;
             ui_setswap();
         }
         else {
@@ -364,7 +363,7 @@ public sealed class FhSaveUiModule : FhModule {
             int total_count = is_saving ? save_list.Count + 1 : save_list.Count;
             _scrollable_saves.max = total_count;
 
-            // Call this again here to account for the New Save button
+            // Call this here to account for the New Save button
             if (handle_input()) return;
 
             for (int i = _scrollable_saves.get_clip_start(); i < _scrollable_saves.max; i++) {
