@@ -223,7 +223,7 @@ public sealed class FhSaveUiModule : FhModule {
         //TODO: Add sorting and sort selection button
     }
 
-    public FhSaveUiMode mode { get; private set; }
+    public FhSaveUiMode  mode  { get; private set; }
     public FhSaveUiFocus focus { get; private set; }
 
     private readonly FhModuleHandle<FhSaveExtensionModule> _sem_handle;
@@ -735,7 +735,7 @@ public sealed class FhSaveUiModule : FhModule {
         float overlap = cursor_size.X * 0.1f;
         Vector2 cursor_center = new(
             target_pos.X - cursor_size.X / 2f + overlap,
-            target_pos.Y + 4f // Cursor midpoint is weird, this + 4f actually centres the tip
+            target_pos.Y + 4f // Cursor midpoint is weird, this + 4f actually centers the tip
         );
         Vector2 cursor_offset = cursor_center - (cursor_size / 2f);
 
