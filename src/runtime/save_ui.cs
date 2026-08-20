@@ -66,24 +66,25 @@ public sealed class FhSaveUiModule : FhModule {
             int old_current = current;
 
             current += amount;
-            current = Math.Clamp(current, 0, max - visible);
+            current = Math.Clamp(current, 0, Math.Max(0, max - visible)); // Ensure we never go below 0
 
             if (is_within_clip(hovered)) {
                 if (current != old_current) {
                     hovered += amount;
-                    hovered = Math.Clamp(hovered, 0, max - 1);
+                    hovered = Math.Clamp(hovered, 0, Math.Max(0, max - 1));
                 }
             }
             else {
                 // Clip the hovered index to the range of visible indices so it never goes off-screen
                 if (Math.Sign(amount) > 0) {
                     hovered = get_clip_start();
-                } else {
+                }
+                else {
                     hovered = get_clip_end() - 1;
                 }
             }
             // New Save button handling
-            hovered = Math.Clamp(hovered, 0, max - 1);
+            hovered = Math.Clamp(hovered, 0, Math.Max(0, max - 1));
         }
 
         public void move_hover(int amount) {
@@ -106,8 +107,8 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         public void scroll_end() {
-            current = max - visible;
-            hovered = max - 1;
+            current = Math.Max(0, max - visible);
+            hovered = Math.Max(0, max - 1);
         }
 
         public void handle_input() {
@@ -259,6 +260,7 @@ public sealed class FhSaveUiModule : FhModule {
      * Translate Autosave, Help, New Save Data, and Save Count text
      * Split Play Time and Create Time strings for LM
      * Trim extra 0's from Create Time, i.e. 2026/08/01 -> 2026/8/1
+     * Remove autosaves from set counts
      * Fix Escape menu handling
      * Fix portrait + map drawing to be safer
     */
@@ -287,7 +289,7 @@ public sealed class FhSaveUiModule : FhModule {
                 break;
 
             case FhSaveScreenState.OPENING:
-                mode  = FhSaveUiMode.SAVE_LIST;
+                mode = FhSaveUiMode.SAVE_LIST;
                 focus = FhSaveUiFocus.LIST;
 
                 //populate_map_icons();
@@ -310,7 +312,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         _current_scrollable = mode switch {
             FhSaveUiMode.SET_SWAP => _scrollable_sets,
-            _                     => _scrollable_saves,
+            _ => _scrollable_saves,
         };
 
         // We update this one every frame because it's relatively inexpensive and can change easily
@@ -343,6 +345,7 @@ public sealed class FhSaveUiModule : FhModule {
             List<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
 
             if (!is_saving && display_data.Count < 1) {
+                if (handle_input()) return;
                 ui_no_saves();
                 return;
             }
@@ -470,13 +473,12 @@ public sealed class FhSaveUiModule : FhModule {
                     _current_scrollable!.handle_input();
 
                     if (mode == FhSaveUiMode.SAVE_LIST && pressed_confirm()) {
-                        FhSaveDisplayData save = FhInternal.Saves.get_display_data()[_current_scrollable!.hovered];
-
                         if (is_saving && _current_scrollable!.hovered == 0) {
                             _sem!.save(0);
                         }
                         else {
-                            execute(FhInternal.Saves.get_display_data()[_current_scrollable!.hovered].slot);
+                            int display_index = is_saving ? _current_scrollable!.hovered - 1 : _current_scrollable!.hovered;
+                            execute(FhInternal.Saves.get_display_data()[display_index].slot);
                         }
 
                         break;
@@ -621,7 +623,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         (Vector2 mahojin_su, Vector2 mahojin_sv) = scale_screen_uv(
             screen_size,
-            new(374f ,  -53f),
+            new( 374f,  -53f),
             new(1600f, 1165f)
         );
 
@@ -736,12 +738,13 @@ public sealed class FhSaveUiModule : FhModule {
             new Vector2(175f, 480f)
         );
 
-        Vector2 cursor_size   = new(103f * scale_factor, 58f * scale_factor);
+        Vector2 cursor_size = new(103f * scale_factor, 58f * scale_factor);
 
         float overlap = cursor_size.X * 0.1f;
+
         Vector2 cursor_center = new(
             target_pos.X - cursor_size.X / 2f + overlap,
-            target_pos.Y + 4f // Cursor midpoint is weird, this + 4f actually centers the tip
+            target_pos.Y + 4f // Cursor midpoint is weird, this "+ 4f" actually centers the tip
         );
         Vector2 cursor_offset = cursor_center - (cursor_size / 2f);
 
@@ -793,7 +796,7 @@ public sealed class FhSaveUiModule : FhModule {
                 }
 
                 color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
-                pos   = cursor_offset + new Vector2(offset, 0f);
+                pos = cursor_offset + new Vector2(offset, 0f);
                 draw.AddImage(freetex, pos, pos + cursor_size, cursor_tu, cursor_tv, color);
             }
         }
@@ -851,12 +854,12 @@ public sealed class FhSaveUiModule : FhModule {
         (Vector2 accent1_uv1, Vector2 accent1_uv2) = scale_tex_uv(
             _tex_message_size,
             new(1469f, 1020f),
-            new(1755f,  733f)
+            new(1755f, 733f)
         );
 
         (Vector2 accent2_uv1, Vector2 accent2_uv2) = scale_tex_uv(
             _tex_message_size,
-            new(1755f,  733f),
+            new(1755f, 733f),
             new(1469f, 1020f)
         );
 
@@ -1059,7 +1062,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         for (int set_idx = start_idx; set_idx < end_idx; set_idx++) {
             string set_name   = set_list[set_idx];
-            int    save_count = Math.Max(0, FhInternal.Saves.get_save_counts()[set_name] - 1); // Remove autosave from count
+            int    save_count = FhInternal.Saves.get_save_counts()[set_name]; // TODO: Remove Autosaves from count
 
             ui_set(set_idx, set_name, save_count);
         }
@@ -1170,7 +1173,7 @@ public sealed class FhSaveUiModule : FhModule {
         }
 
         float header_height  = 47f  * scale_factor;
-        float vertical_space = 4f   * scale_factor;
+        float vertical_space =  4f  * scale_factor;
 
         Vector2 header_start = save_topleft;
         Vector2 header_end   = new(save_topleft.X + save_size.X, header_start.Y + header_height);
@@ -1270,7 +1273,8 @@ public sealed class FhSaveUiModule : FhModule {
             Vector2 icon_end   = icon_start + icon_size;
 
             draw.AddImage(freetex, icon_start, icon_end, plus_tu, plus_tv); // "+" icon
-        } else {
+        }
+        else {
             uint  slot_text_color = is_autosave ? 0xFF19D8FF : 0xFFFFFFFF; // Yellow : White
             float location_offset = is_autosave ? 258f : 130f;
 
@@ -1291,8 +1295,8 @@ public sealed class FhSaveUiModule : FhModule {
             // TODO: Redo this texture loading to be nicer/safer
             (Vector2 faces_tu, Vector2 faces_tv) = scale_tex_uv(
                 _tex_faces_size,
-                new(  0f, 239f),
-                new(256f,   0f)
+                new(0f, 239f),
+                new(256f, 0f)
             );
 
             Vector2 face_offset = new(  5f * scale_factor, 56f * scale_factor);
@@ -1469,7 +1473,7 @@ public sealed class FhSaveUiModule : FhModule {
     /// <summary>Render the scrollbar.</summary>
     private void ui_scrollbar() {
         if (mode == FhSaveUiMode.SAVE_LIST && _scrollable_saves.max <= _scrollable_saves.visible
-         || mode == FhSaveUiMode.SET_SWAP  && _scrollable_sets.max  <= _scrollable_sets.visible
+         || mode == FhSaveUiMode.SET_SWAP && _scrollable_sets.max <= _scrollable_sets.visible
          ) {
             return;
         }
