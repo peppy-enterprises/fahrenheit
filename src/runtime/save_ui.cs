@@ -304,6 +304,11 @@ public sealed class FhSaveUiModule : FhModule {
                 return;
         }
 
+        if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed(ImGuiKey.Backspace)) {
+            _sem!.signal_exit_abort();
+            return;
+        }
+
         _current_scrollable = mode switch {
             FhSaveUiMode.SET_SWAP => _scrollable_sets,
             _                     => _scrollable_saves,
@@ -315,6 +320,7 @@ public sealed class FhSaveUiModule : FhModule {
                 ? FhInternal.Saves.get_slots_used()
                 : FhInternal.Saves.get_display_data().Count;
 
+        if (handle_input()) return;
         if (!try_load_textures()) return;
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
@@ -358,6 +364,7 @@ public sealed class FhSaveUiModule : FhModule {
             int total_count = is_saving ? save_list.Count + 1 : save_list.Count;
             _scrollable_saves.max = total_count;
 
+            // Call this again here to account for the New Save button
             if (handle_input()) return;
 
             for (int i = _scrollable_saves.get_clip_start(); i < _scrollable_saves.max; i++) {
