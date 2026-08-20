@@ -288,7 +288,7 @@ public sealed class FhSaveUiModule : FhModule {
                 break;
 
             case FhSaveScreenState.OPENING:
-                mode  = FhSaveUiMode .SAVE_LIST;
+                mode  = FhSaveUiMode.SAVE_LIST;
                 focus = FhSaveUiFocus.LIST;
 
                 //populate_map_icons();
@@ -824,7 +824,7 @@ public sealed class FhSaveUiModule : FhModule {
 
         // Dynamically change box size based on text
         float padding_x = 250f * scale_factor;
-        float padding_y = 20f  * scale_factor;
+        float padding_y =  20f * scale_factor;
         float min_width = 450f * scale_factor;
 
         float bg_width  = MathF.Max(min_width, text_size.X + padding_x);
@@ -933,8 +933,8 @@ public sealed class FhSaveUiModule : FhModule {
 
         (Vector2 set_tu, Vector2 set_tv) = scale_tex_uv(
             _tex_save_size,
-            new(  0f, uv_y_start),
-            new(512f,   uv_y_end)
+            new(0f, uv_y_start),
+            new(512f, uv_y_end)
         );
 
         // Shadows behind slots
@@ -1096,7 +1096,7 @@ public sealed class FhSaveUiModule : FhModule {
         float text_height = text.Length * font_size;
 
         float padding_x = 350f * scale_factor;
-        float padding_y = 60f  * scale_factor;
+        float padding_y =  60f * scale_factor;
         float min_width = 800f * scale_factor;
 
         float bg_width  = MathF.Max(min_width, text_width + padding_x);
@@ -1308,8 +1308,8 @@ public sealed class FhSaveUiModule : FhModule {
                 new(320f, 176f)
             );
         
-            Vector2 map_offset = new(1305f * scale_factor, 5f   * scale_factor);
-            Vector2 map_size   = new(255f  * scale_factor, 145f * scale_factor);
+            Vector2 map_offset = new(1305f * scale_factor    5f * scale_factor);
+            Vector2 map_size   = new( 255f * scale_factor, 145f * scale_factor);
 
             // TODO: Some maps use "{header2.id_location}_1"
             // Those need to be rewired like the dresspheres below
@@ -1390,8 +1390,7 @@ public sealed class FhSaveUiModule : FhModule {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 string name_text     = Encoding.UTF8.GetString(save.player_name);
                 string job_text      = Encoding.UTF8.GetString(save.lm_job);
                 string level_text    = Encoding.UTF8.GetString(save.lm_level);
