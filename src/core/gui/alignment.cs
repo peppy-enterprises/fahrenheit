@@ -5,14 +5,14 @@
 
 namespace Fahrenheit.Gui;
 
-/// <summary>Represents alignment of some element on one axis.</summary>
+/// <summary>Represents the alignment of some element on one axis.</summary>
 public enum Alignment {
     BEGIN  = 0,
     CENTER = 1,
     END    = 2,
 }
 
-/// <summary>Represents alignment of some element in 2D.</summary>
+/// <summary>Represents the alignment of some element in 2D.</summary>
 /// <param name="h">The horizontal alignment of the element.</param>
 /// <param name="v">The vertical alignment of the element.</param>
 public readonly record struct Alignment2D (
