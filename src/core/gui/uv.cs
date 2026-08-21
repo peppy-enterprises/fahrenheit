@@ -5,9 +5,9 @@
 
 namespace Fahrenheit.Gui;
 
-/// <summary>Represents UV coordinates.</summary>
-/// <param name="p0">The first UV coordinate.</param>
-/// <param name="p1">The second UV coordinate.</param>
+/// <summary>Represents a pair of UV coordinates.</summary>
+/// <param name="p0">The first set of UV coordinates.</param>
+/// <param name="p1">The second set of UV coordinates.</param>
 public readonly record struct UV(Vector2 p0, Vector2 p1);
 
 public static partial class FhExt {
