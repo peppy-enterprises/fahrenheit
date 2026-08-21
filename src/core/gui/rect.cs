@@ -17,10 +17,10 @@ public struct Rect {
     /// <summary>The top-left corner of the rectangle.</summary>
     public Vector2 top_left     => pos;
 
-    /// <summary>The top-left corner of the rectangle.</summary>
+    /// <summary>The top-right corner of the rectangle.</summary>
     public Vector2 top_right    => pos with { X = pos.X + size.X };
 
-    /// <summary>The top-left corner of the rectangle.</summary>
+    /// <summary>The bottom-left corner of the rectangle.</summary>
     public Vector2 bottom_left  => pos with { Y = pos.Y + size.Y };
 
     /// <summary>The bottom-right corner of the rectangle.</summary>

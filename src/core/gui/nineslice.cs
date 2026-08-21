@@ -14,7 +14,7 @@ public sealed class NineSliceHelper {
     private bool _finalized;
 
     /// <summary>
-    ///     Create a NineSliceHelper with given top-left and bottom-right corners and a specificed corner size.
+    ///     Create a NineSliceHelper with given top-left and bottom-right corners and a specified corner size.
     ///     The helper is automatically finalized using the provided texture size.
     /// </summary>
     /// <remarks>
@@ -41,7 +41,7 @@ public sealed class NineSliceHelper {
     }
 
     /// <summary>
-    ///     Create a NineSliceHelper with given a rectangle and a specificed corner size.
+    ///     Create a NineSliceHelper with given a rectangle and a specified corner size.
     ///     The helper is automatically finalized using the provided texture size.
     /// </summary>
     /// <remarks>

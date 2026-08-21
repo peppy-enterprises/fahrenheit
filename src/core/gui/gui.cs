@@ -196,7 +196,7 @@ public unsafe class FhGui {
 
     /// <summary>Check whether any of the specified keys were pressed.</summary>
     /// <param name="keys">Set of keys to be pressed.</param>
-    /// <returns></returns>
+    /// <returns>Whether any of the keys were pressed.</returns>
     public bool is_any_pressed(IEnumerable<ImGuiKey> keys) {
         foreach (ImGuiKey key in keys) {
             if (ImGui.IsKeyPressed(key)) {
