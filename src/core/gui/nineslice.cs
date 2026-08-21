@@ -22,10 +22,10 @@ public sealed class NineSliceHelper {
     ///     If you wish to create a NineSliceHelper with varied corners, please use the individual slice methods.
     /// </remarks>
     /// <param name="texture_size">The texture size to finalize the helper with.</param>
-    /// <param name="top_left">The coordinates of top-left corner of the top-left slice.</param>
+    /// <param name="top_left">The coordinates of the top-left corner of the top-left slice.</param>
     /// <param name="bottom_right">The coordinates of the bottom-right corner of the bottom-right slice.</param>
     /// <param name="corner_size">The size of each corner.</param>
-    /// <returns></returns>
+    /// <returns>A new NineSliceHelper with the specificed parameters.</returns>
     public static NineSliceHelper create(
         Vector2 texture_size,
         Vector2 top_left,
@@ -54,7 +54,7 @@ public sealed class NineSliceHelper {
     /// <param name="texture_size">The texture size to finalize the helper with.</param>
     /// <param name="rect">The bounding rectangle of the nine-slice texture.</param>
     /// <param name="corner_size">The size of each corner.</param>
-    /// <returns></returns>
+    /// <returns>A new NineSliceHelper with the specificed parameters.</returns>
     public static NineSliceHelper create(
         Vector2 texture_size,
         Rect    rect,
