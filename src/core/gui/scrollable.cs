@@ -38,7 +38,7 @@ public class Scrollable {
 
     /// <summary>Get the value one after the last index currently visible in the scrollable.</summary>
     public int get_clip_end() {
-        return Math.Min(current + visible, max);
+        return int.Min(current + visible, max);
     }
 
     /// <summary>Determine whether a given index is currently visible in the scrollable.</summary>
@@ -59,12 +59,12 @@ public class Scrollable {
 
         // Slightly weird math: we technically only scroll through the first visible items,
         // so we must reduce the amount of max items by how many are visible at once.
-        float progress = current / (float)Math.Max(0, max - visible);
+        float progress = current / float.Max(0, max - visible);
 
         // When debugging, a visual glitch in the scrollbar may be useful for identifying an issue,
         // so we only clamp in release.
 #if !DEBUG
-        progress = Math.Clamp(progress, 0f, 1f);
+        progress = float.Clamp(progress, 0f, 1f);
 #endif
 
         return progress;
@@ -83,15 +83,15 @@ public class Scrollable {
     ///     This will safely move the hovered value to fit within the new range of visible indices.
     /// </remarks>
     public void set_progress(float value) {
-        value = Math.Clamp(value, 0f, 1f);
+        value = float.Clamp(value, 0f, 1f);
 
         int old_current = current;
 
-        current = (int)Math.Round(value * Math.Max(0, max - visible));
-        current = Math.Clamp(current, 0, max - visible);
+        current = (int)float.Round(value * int.Max(0, max - visible));
+        current = int.Clamp(current, 0, max - visible);
 
         if (!is_within_clip(hovered)) {
-            if (Math.Sign(current - old_current) > 0) {
+            if (int.Sign(current - old_current) > 0) {
                 hovered = get_clip_start();
             } else {
                 hovered = get_clip_end() - 1;
@@ -106,16 +106,16 @@ public class Scrollable {
         int old_current = current;
 
         current += amount;
-        current = Math.Clamp(current, 0, max - visible);
+        current = int.Clamp(current, 0, max - visible);
 
         if (is_within_clip(hovered)) {
             if (current != old_current) {
                 hovered += amount;
-                hovered = Math.Clamp(hovered, 0, max - visible);
+                hovered = int.Clamp(hovered, 0, max - visible);
             }
         } else {
             // Clip the hovered index to the range of visible indices so it never goes off-screen
-            if (Math.Sign(amount) > 0) {
+            if (int.Sign(amount) > 0) {
                 hovered = get_clip_start();
             } else {
                 hovered = get_clip_end() - 1;
@@ -131,7 +131,7 @@ public class Scrollable {
     /// </remarks>
     public void move_hover(int amount) {
         hovered += amount;
-        hovered = Math.Clamp(hovered, 0, max - 1);
+        hovered = int.Clamp(hovered, 0, max - 1);
 
         if (is_within_clip(hovered)) return;
 
