@@ -179,10 +179,10 @@ public unsafe class FhGui {
     /// <summary>
     ///     Draw text with a given size, alignment, and color.
     ///     Optionally, draws a shadow under the text.
-    ///     <remarks>
-    ///         The alignment will use the entire available content region to determine center and end positions.
-    ///     </remarks>
     /// </summary>
+    /// <remarks>
+    ///     The alignment will use the entire available content region to determine center and end positions.
+    /// </remarks>
     /// <param name="text">The text to be drawn.</param>
     /// <param name="font_size">The font size to draw the text at.</param>
     /// <param name="draw_shadow">Whether a shadow should be drawn under the text.</param>
