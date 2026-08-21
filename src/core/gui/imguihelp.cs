@@ -3,10 +3,10 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-namespace Fahrenheit;
+namespace Fahrenheit.Gui;
 
 /// <summary>
-///     Fonts, style and theming for user interfaces in Fahrenheit.
+///     Fonts, style, and helper functions for user interfaces in Fahrenheit.
 /// </summary>
 public unsafe class FhGui {
 
@@ -16,16 +16,6 @@ public unsafe class FhGui {
     public ImFontPtr FONT_KR;
     public ImFontPtr FONT_CH_S;
     public ImFontPtr FONT_CH_T;
-
-    public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
-        float size      = ImGui.CalcTextSize(label).X + padding;
-        float available = ImGui.GetContentRegionAvail().X;
-        float offset    = (available - size) * t;
-
-        if (offset > 0) {
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offset);
-        }
-    }
 
     public enum FhImGuiThemes {
         CLASSIC_FF = 0,
@@ -175,4 +165,133 @@ public unsafe class FhGui {
         _init_fonts();
         _init_style(theme ?? FhImGuiThemes.CLASSIC_FF);
     }
+
+    public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
+        float size      = ImGui.CalcTextSize(label).X + padding;
+        float available = ImGui.GetContentRegionAvail().X;
+        float offset    = (available - size) * t;
+
+        if (offset > 0) {
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offset);
+        }
+    }
+
+    /// <summary>
+    ///     Draw text with a given size, alignment, and color.
+    ///     Optionally, draws a shadow under the text.
+    ///     <remarks>
+    ///         The alignment will use the entire available content region to determine center and end positions.
+    ///     </remarks>
+    /// </summary>
+    /// <param name="text">The text to be drawn.</param>
+    /// <param name="font_size">The font size to draw the text at.</param>
+    /// <param name="draw_shadow">Whether a shadow should be drawn under the text.</param>
+    /// <param name="align">The alignment of the text inside the available content region.</param>
+    /// <param name="color">The color to draw the text using in the format 0xAABBGGRR, i.e. RGBA8.</param>
+    public void draw_text(
+        string      text,
+        float       font_size,
+        bool        draw_shadow = true,
+        Alignment2D align       = default,
+        uint        color       = 0xFFFFFFFF
+    ) {
+        Vector2 position = ImGui.GetContentRegionAvail();
+
+        position.X = align.h switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => position.X / 2f,
+            Alignment.END    => position.X,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position.Y = align.v switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => position.Y / 2f,
+            Alignment.END    => position.Y,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position += ImGui.GetCursorPos();
+
+        // Instead of repeating the text alignment logic here using ImGui.SetCursorPos,
+        // we call through to the draw list variant with the window's draw list.
+        draw_text(
+            ImGui.GetWindowDrawList(),
+            position,
+            text,
+            font_size,
+            draw_shadow,
+            align,
+            color
+        );
+    }
+
+    /// <summary>
+    ///     Draw text with a given size, alignment, and color at some position in a draw list.
+    ///     Optionally, draws a shadow under the text.
+    /// </summary>
+    /// <remarks>
+    ///     The text will be aligned relative to the position. For example:
+    ///     <ul>
+    ///         <li>Text aligned to (BEGIN, BEGIN) will be drawn with its top-left corner at the position.</li>
+    ///         <li>Text aligned to (CENTER, CENTER) will be drawn with its center at the position.</li>
+    ///         <li>Text aligned to (END, END) will be drawn with its bottom-right corner at the position.</li>
+    ///     </ul>
+    /// </remarks>
+    /// <param name="draw_list">The draw list to add the text to.</param>
+    /// <param name="position">The position to draw the text at.</param>
+    /// <param name="text">The text to be drawn.</param>
+    /// <param name="font_size">The font size to draw the text at.</param>
+    /// <param name="draw_shadow">Whether a shadow should be drawn under the text.</param>
+    /// <param name="align">The alignment of the text relative to the position.</param>
+    /// <param name="color">The color to draw the text using in the format <c>0xAABBGGRR</c>, i.e. RGBA8.</param>
+    /// <returns>The size of the drawn text.</returns>
+    /// <seealso cref="ImGui.GetWindowDrawList()"/>
+    /// <seealso cref="ImGui.GetBackgroundDrawList()"/>
+    /// <seealso cref="ImGui.GetForegroundDrawList()"/>
+    public Vector2 draw_text(
+        ImDrawListPtr draw_list,
+        Vector2       position,
+        string        text,
+        float         font_size,
+        bool          draw_shadow = false,
+        Alignment2D   align       = default,
+        uint          color       = 0xFFFFFFFF
+    ) {
+        ImGui.PushFont(null, font_size);
+
+        Vector2 text_size = ImGui.CalcTextSize(text);
+
+        position.X -= align.h switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => text_size.X / 2f,
+            Alignment.END    => text_size.X,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position.Y -= align.v switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => text_size.Y / 2f,
+            Alignment.END    => text_size.Y,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        if (draw_shadow) {
+            // Use the alpha from the provided color
+            uint shadow_color = 0 | (color & 0xFF000000);
+
+            draw_list.AddText(position + new Vector2(2f), shadow_color, text);
+        }
+
+        draw_list.AddText(position, color, text);
+
+        ImGui.PopFont();
+
+        return text_size;
+    }
+
 }
