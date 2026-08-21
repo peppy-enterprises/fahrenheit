@@ -27629,13 +27629,6 @@ public static unsafe partial class FhCall {
     // Symbol skipped (deemed uninterpretable):
     // unknown undefined GetStreamPrefix() at 00607ef0
 
-    // Original after pruning:
-    // unknown undefined FUN_00607f00() at 00607f00
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00607f00();
-    public static FhMethodHandle<d_FUN_00607f00> FUN_00607f00 => new( new FhMethodLocation("FFX.exe", 0x207F00) );
-
     // Symbol skipped (deemed uninterpretable):
     // __thiscall bool openFile(PStreamFileWin32* this, char* param_1, char param_2, undefined4 param_3, undefined4 param_4) at 00608100
 
