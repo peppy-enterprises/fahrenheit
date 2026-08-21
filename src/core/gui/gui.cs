@@ -149,7 +149,7 @@ public unsafe class FhGui {
         style.Colors[(int)ImGuiCol.ModalWindowDimBg]      = new Vector4(0.8f  , 0.8f  , 0.8f  , 0.35f );
     }
 
-    public const ImGuiWindowFlags WINDOW_FLAGS_FULLSCREEN =
+    public readonly ImGuiWindowFlags WINDOW_FLAGS_FULLSCREEN =
             ImGuiWindowFlags.NoDecoration
           | ImGuiWindowFlags.NoMove
           | ImGuiWindowFlags.NoResize
@@ -158,28 +158,28 @@ public unsafe class FhGui {
 
     //TODO: Add more constants for standardized style
 
-    public static readonly ImGuiKey[] keys_up = [
+    public readonly ImGuiKey[] keys_up = [
         ImGuiKey.W,
         ImGuiKey.UpArrow,
         ImGuiKey.GamepadDpadUp,
         ImGuiKey.GamepadLStickUp,
     ];
 
-    public static readonly ImGuiKey[] keys_down = [
+    public readonly ImGuiKey[] keys_down = [
         ImGuiKey.S,
         ImGuiKey.DownArrow,
         ImGuiKey.GamepadDpadDown,
         ImGuiKey.GamepadLStickDown,
     ];
 
-    public static readonly ImGuiKey[] keys_left = [
+    public readonly ImGuiKey[] keys_left = [
         ImGuiKey.A,
         ImGuiKey.LeftArrow,
         ImGuiKey.GamepadDpadLeft,
         ImGuiKey.GamepadLStickLeft,
     ];
 
-    public static readonly ImGuiKey[] keys_right = [
+    public readonly ImGuiKey[] keys_right = [
         ImGuiKey.D,
         ImGuiKey.RightArrow,
         ImGuiKey.GamepadDpadRight,

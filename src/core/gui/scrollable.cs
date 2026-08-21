@@ -166,18 +166,18 @@ public class Scrollable {
     /// <remarks>This method should be called at most once per ImGui frame whenever desired.</remarks>
     public void handle_input() {
         // Various scrolling methods
-        bool hover_up   = FhApi.Gui.is_any_pressed(FhGui.keys_up);
-        bool hover_down = FhApi.Gui.is_any_pressed(FhGui.keys_down);
+        bool hover_up   = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up);
+        bool hover_down = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down);
 
         float mouse_wheel = ImGui.GetIO().MouseWheel;
 
         bool scroll_page_up =
             ImGui.IsKeyPressed(ImGuiKey.PageUp)
-         || FhApi.Gui.is_any_pressed(FhGui.keys_left);
+         || FhApi.Gui.is_any_pressed(FhApi.Gui.keys_left);
 
         bool scroll_page_down =
             ImGui.IsKeyPressed(ImGuiKey.PageDown)
-         || FhApi.Gui.is_any_pressed(FhGui.keys_right);
+         || FhApi.Gui.is_any_pressed(FhApi.Gui.keys_right);
 
         bool scroll_to_start =
             ImGui.IsKeyPressed(ImGuiKey.Home)
