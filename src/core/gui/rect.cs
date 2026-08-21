@@ -61,11 +61,11 @@ public struct Rect {
     /// <param name="flipped">Whether the UV coordinates should be flipped for use with DDS textures.</param>
     /// <returns>The calculated UV coordinates.</returns>
     public UV as_uv(Vector2 texture_size, bool flipped = true) {
-        Rect scaled = scale_raw(new Vector2(1f) / texture_size);
+        Rect scaled = scale_raw(Vector2.One / texture_size);
 
         return flipped
             ? new(scaled.bottom_left, scaled.top_right)
-            : new(scaled.top_left, scaled.bottom_right);
+            : new(scaled.top_left,    scaled.bottom_right);
     }
 
     /// <summary>Determine whether a given point lies inside the rectangle.</summary>
@@ -75,7 +75,7 @@ public struct Rect {
         Vector2 pos2 = pos + size;
 
         return pos.X <= point.X && point.X < pos2.X
-                                && pos.Y <= point.Y && point.Y < pos2.Y;
+            && pos.Y <= point.Y && point.Y < pos2.Y;
     }
 
     private void adjust_pos_for_size(Vector2 size_increase, Alignment2D align) {
@@ -118,7 +118,6 @@ public struct Rect {
         Vector2 old_size = size;
 
         Rect scaled = this with { size = size * by };
-
         scaled.adjust_pos_for_size(scaled.size - old_size, align);
 
         return scaled;
