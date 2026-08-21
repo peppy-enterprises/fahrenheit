@@ -166,33 +166,18 @@ public class Scrollable {
     /// <remarks>This method should be called at most once per ImGui frame whenever desired.</remarks>
     public void handle_input() {
         // Various scrolling methods
-        bool hover_up   =
-            ImGui.IsKeyPressed(ImGuiKey.W)
-         || ImGui.IsKeyPressed(ImGuiKey.UpArrow)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadDpadUp)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadLStickUp);
-
-        bool hover_down =
-            ImGui.IsKeyPressed(ImGuiKey.S)
-         || ImGui.IsKeyPressed(ImGuiKey.DownArrow)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadDpadDown)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadLStickDown);
+        bool hover_up   = FhApi.Gui.is_any_pressed(FhGui.keys_up);
+        bool hover_down = FhApi.Gui.is_any_pressed(FhGui.keys_down);
 
         float mouse_wheel = ImGui.GetIO().MouseWheel;
 
         bool scroll_page_up =
             ImGui.IsKeyPressed(ImGuiKey.PageUp)
-         || ImGui.IsKeyPressed(ImGuiKey.A)
-         || ImGui.IsKeyPressed(ImGuiKey.LeftArrow)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadDpadLeft)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadL1);
+         || FhApi.Gui.is_any_pressed(FhGui.keys_left);
 
         bool scroll_page_down =
             ImGui.IsKeyPressed(ImGuiKey.PageDown)
-         || ImGui.IsKeyPressed(ImGuiKey.D)
-         || ImGui.IsKeyPressed(ImGuiKey.RightArrow)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadDpadRight)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadR1);
+         || FhApi.Gui.is_any_pressed(FhGui.keys_right);
 
         bool scroll_to_start =
             ImGui.IsKeyPressed(ImGuiKey.Home)

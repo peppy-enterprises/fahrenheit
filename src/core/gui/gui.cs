@@ -149,7 +149,7 @@ public unsafe class FhGui {
         style.Colors[(int)ImGuiCol.ModalWindowDimBg]      = new Vector4(0.8f  , 0.8f  , 0.8f  , 0.35f );
     }
 
-    public ImGuiWindowFlags WINDOW_FLAGS_FULLSCREEN =
+    public const ImGuiWindowFlags WINDOW_FLAGS_FULLSCREEN =
             ImGuiWindowFlags.NoDecoration
           | ImGuiWindowFlags.NoMove
           | ImGuiWindowFlags.NoResize
@@ -158,12 +158,53 @@ public unsafe class FhGui {
 
     //TODO: Add more constants for standardized style
 
+    public static readonly ImGuiKey[] keys_up = [
+        ImGuiKey.W,
+        ImGuiKey.UpArrow,
+        ImGuiKey.GamepadDpadUp,
+        ImGuiKey.GamepadLStickUp,
+    ];
+
+    public static readonly ImGuiKey[] keys_down = [
+        ImGuiKey.S,
+        ImGuiKey.DownArrow,
+        ImGuiKey.GamepadDpadDown,
+        ImGuiKey.GamepadLStickDown,
+    ];
+
+    public static readonly ImGuiKey[] keys_left = [
+        ImGuiKey.A,
+        ImGuiKey.LeftArrow,
+        ImGuiKey.GamepadDpadLeft,
+        ImGuiKey.GamepadLStickLeft,
+    ];
+
+    public static readonly ImGuiKey[] keys_right = [
+        ImGuiKey.D,
+        ImGuiKey.RightArrow,
+        ImGuiKey.GamepadDpadRight,
+        ImGuiKey.GamepadLStickRight,
+    ];
+
     /// <summary>
     /// Initialize values that require ImGui to be running. Called by Runtime.
     /// </summary>
     internal void init(FhImGuiThemes? theme = null) {
         _init_fonts();
         _init_style(theme ?? FhImGuiThemes.CLASSIC_FF);
+    }
+
+    /// <summary>Check whether any of the specified keys were pressed.</summary>
+    /// <param name="keys">Set of keys to be pressed.</param>
+    /// <returns></returns>
+    public bool is_any_pressed(IEnumerable<ImGuiKey> keys) {
+        foreach (ImGuiKey key in keys) {
+            if (ImGui.IsKeyPressed(key)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
