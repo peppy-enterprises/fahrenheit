@@ -11,27 +11,18 @@
 
 #pragma once
 #pragma comment(lib, "dbghelp.lib")
+#pragma comment(lib, "pathcch.lib")
 
 #define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
 
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
 #include <iostream>
-#include <fstream>
-#include <direct.h>
 
+// Win32 API
 #include <windows.h>
-#include <winternl.h>
 #include <DbgHelp.h>
+#include <PathCch.h>
 
-#define STR(s) L ## s
-#define CH(c)  L ## c
-#define DIR_SEPARATOR L'\\'
-
- // .NET hosting headers
+// .NET hosting headers
 #include <nethost.h>
 #include <coreclr_delegates.h>
 #include <hostfxr.h>

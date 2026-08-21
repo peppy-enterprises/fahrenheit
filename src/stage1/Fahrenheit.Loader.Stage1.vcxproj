@@ -156,6 +156,7 @@
     <ClInclude Include="inc\resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\eh.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

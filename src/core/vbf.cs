@@ -85,7 +85,7 @@ internal unsafe struct VFile {
 ///     A disposable structure returned when loading a file from the VBF
 ///     archive which ensures its release once the scope is exited.
 /// </summary>
-internal ref struct FhVbfFileScope {
+public ref struct FhVbfFileScope {
 
     private PStreamFile _file;
     private uint        _file_size;
