@@ -46,14 +46,14 @@ internal sealed class FhFinder {
 
     internal FhFinder() {
         // If this somehow throws, we really have no business executing at all.
-        string cwd_parent = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName!;
+        string cwd = Directory.GetCurrentDirectory();
 
-        Binaries = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_bin));
-        Config   = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_cfg));
-        Mods     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_mods));
-        Logs     = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_logs, FhUtil.get_timestamp_string()));
-        State    = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_state));
-        Saves    = Directory.CreateDirectory(Path.Join(cwd_parent, _dirname_saves));
+        Binaries = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_bin));
+        Config   = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_cfg));
+        Mods     = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_mods));
+        Logs     = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_logs, FhUtil.get_timestamp_string()));
+        State    = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_state));
+        Saves    = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_saves));
     }
 
     /// <summary>
