@@ -11,7 +11,7 @@ namespace Fahrenheit.Gui;
 /// </summary>
 public sealed class NineSliceHelper {
     private readonly Vector2[,] _points = new Vector2[4, 4];
-    private bool finalized;
+    private bool _finalized;
 
     /// <summary>
     ///     Create a NineSliceHelper with given top-left and bottom-right corners and a specificed corner size.
@@ -22,21 +22,21 @@ public sealed class NineSliceHelper {
     ///     If you wish to create a NineSliceHelper with varied corners, please use the individual slice methods.
     /// </remarks>
     /// <param name="texture_size">The texture size to finalize the helper with.</param>
-    /// <param name="topleft">The coordinates of top-left corner of the top-left slice.</param>
-    /// <param name="bottomright">The coordinates of the bottom-right corner of the bottom-right slice.</param>
+    /// <param name="top_left">The coordinates of top-left corner of the top-left slice.</param>
+    /// <param name="bottom_right">The coordinates of the bottom-right corner of the bottom-right slice.</param>
     /// <param name="corner_size">The size of each corner.</param>
     /// <returns></returns>
     public static NineSliceHelper create(
         Vector2 texture_size,
-        Vector2 topleft,
-        Vector2 bottomright,
+        Vector2 top_left,
+        Vector2 bottom_right,
         Vector2 corner_size
     ) {
         return new NineSliceHelper()
-            .slice_topleft    ( topleft, corner_size )
-            .slice_topright   ( new Vector2(bottomright.X, topleft.Y), corner_size )
-            .slice_bottomleft ( new Vector2(topleft.X, bottomright.Y), corner_size )
-            .slice_bottomright( bottomright, corner_size )
+            .slice_top_left    ( top_left, corner_size )
+            .slice_top_right   ( new Vector2(bottom_right.X, top_left.Y), corner_size )
+            .slice_bottom_left ( new Vector2(top_left.X, bottom_right.Y), corner_size )
+            .slice_bottom_right( bottom_right, corner_size )
             .finalize(texture_size);
     }
 
@@ -65,11 +65,11 @@ public sealed class NineSliceHelper {
     /// <param name="size">The size of the top-left corner.</param>
     /// <returns>This helper, to allow chaining method calls.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the NineSliceHelper was already finalized.</exception>
-    public NineSliceHelper slice_topleft(
+    public NineSliceHelper slice_top_left(
         Vector2 corner,
         Vector2 size
     ) {
-        if (finalized) {
+        if (_finalized) {
             throw new InvalidOperationException("Cannot modify NineSliceHelper slices after it has been finalized.");
         }
 
@@ -94,11 +94,11 @@ public sealed class NineSliceHelper {
     /// <param name="size">The size of the top-right corner.</param>
     /// <returns>This helper, to allow chaining method calls.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the NineSliceHelper was already finalized.</exception>
-    public NineSliceHelper slice_topright(
+    public NineSliceHelper slice_top_right(
         Vector2 corner,
         Vector2 size
     ) {
-        if (finalized) {
+        if (_finalized) {
             throw new InvalidOperationException("Cannot modify NineSliceHelper slices after it has been finalized.");
         }
 
@@ -126,11 +126,11 @@ public sealed class NineSliceHelper {
     /// <param name="size">The size of the bottom-left corner.</param>
     /// <returns>This helper, to allow chaining method calls.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the NineSliceHelper was already finalized.</exception>
-    public NineSliceHelper slice_bottomleft(
+    public NineSliceHelper slice_bottom_left(
         Vector2 corner,
         Vector2 size
     ) {
-        if (finalized) {
+        if (_finalized) {
             throw new InvalidOperationException("Cannot modify NineSliceHelper slices after it has been finalized.");
         }
 
@@ -158,11 +158,11 @@ public sealed class NineSliceHelper {
     /// <param name="size">The size of the bottom-right corner.</param>
     /// <returns>This helper, to allow chaining method calls.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the NineSliceHelper was already finalized.</exception>
-    public NineSliceHelper slice_bottomright(
+    public NineSliceHelper slice_bottom_right(
         Vector2 corner,
         Vector2 size
     ) {
-        if (finalized) {
+        if (_finalized) {
             throw new InvalidOperationException("Cannot modify NineSliceHelper slices after it has been finalized.");
         }
 
@@ -196,7 +196,7 @@ public sealed class NineSliceHelper {
     public NineSliceHelper finalize(
         Vector2 texture_size
     ) {
-        if (finalized) {
+        if (_finalized) {
             throw new InvalidOperationException("Cannot finalize a NineSliceHelper twice.");
         }
 
@@ -206,8 +206,7 @@ public sealed class NineSliceHelper {
             }
         }
 
-        finalized = true;
-
+        _finalized = true;
         return this;
     }
 
@@ -224,7 +223,7 @@ public sealed class NineSliceHelper {
     ///     Thrown when <paramref name="slice_idx"/> is lower than 0 or greater than 8.
     /// </exception>
     public Vector2[] get_uvs(int slice_idx) {
-        if (!finalized) {
+        if (!_finalized) {
             throw new InvalidOperationException("Cannot get 9-slice UVs before the NineSliceHelper is finalized.");
         }
 
