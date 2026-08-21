@@ -103,7 +103,6 @@ public struct Rect {
     /// <remarks>When center-aligned, the size to expand by will be split evenly between both sides.</remarks>
     public Rect expand(Vector2 by, Alignment2D align) {
         Rect expanded = this with { size = size + by };
-
         expanded.adjust_pos_for_size(by, align);
 
         return expanded;

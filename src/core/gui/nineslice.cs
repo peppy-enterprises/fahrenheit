@@ -32,12 +32,15 @@ public sealed class NineSliceHelper {
         Vector2 bottom_right,
         Vector2 corner_size
     ) {
+        Vector2 top_right   = new(bottom_right.X, top_left.Y    );
+        Vector2 bottom_left = new(top_left.X,     bottom_right.Y);
+
         return new NineSliceHelper()
-            .slice_top_left    ( top_left, corner_size )
-            .slice_top_right   ( new Vector2(bottom_right.X, top_left.Y), corner_size )
-            .slice_bottom_left ( new Vector2(top_left.X, bottom_right.Y), corner_size )
-            .slice_bottom_right( bottom_right, corner_size )
-            .finalize(texture_size);
+            .slice_top_left    (top_left,     corner_size)
+            .slice_top_right   (top_right,    corner_size)
+            .slice_bottom_left (bottom_left,  corner_size)
+            .slice_bottom_right(bottom_right, corner_size)
+            .finalize          (texture_size);
     }
 
     /// <summary>
