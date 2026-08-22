@@ -21,7 +21,7 @@ namespace Fahrenheit.Runtime;
 /// <summary>
 ///     Implements Fahrenheit's replacement save/load user interface.
 /// </summary>
-[FhLoad(FhGameId. FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
+[FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
     /// <summary>Possible open windows of the save/load menu.</summary>
     public enum FhSaveUiMode {
