@@ -82,7 +82,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
         _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
 
-        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(ptr_this, ptr_prefix);
+        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(ptr_this, ptr_stream_prefix);
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
@@ -90,7 +90,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
         _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
 
-        FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.chain_from(h_sf_sp_set).fnptr!(ptr_prefix);
+        FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.chain_from(h_sf_sp_set).fnptr!(ptr_stream_prefix);
     }
 
     /* [fkelava 11/02/26 03:39]
