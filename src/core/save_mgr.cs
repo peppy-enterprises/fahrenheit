@@ -5,6 +5,8 @@
 
 namespace Fahrenheit;
 
+using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
+
 /// <summary>
 ///     Allows multiple sets of saves to exist.
 /// </summary>
@@ -18,6 +20,7 @@ internal sealed class FhSaves {
 
     private          int                     _sm_lock;
     private readonly HashSet<string>         _sm_sets;
+    private readonly SaveCounts              _sm_set_save_counts;
     private readonly HashSet<int>            _sm_occupied_slots;
     private          string                  _sm_active_set;
     private readonly string                  _sm_path_base;
@@ -31,6 +34,12 @@ internal sealed class FhSaves {
         _sm_sets             = [];
         _sm_active_set       = FhSavePal.DEFAULT_SET_NAME;
         _sm_display_data     = [];
+
+        _sm_set_save_counts  = new() {
+            { FhGameId.FFX,    [] },
+            { FhGameId.FFX2,   [] },
+            { FhGameId.FFX2LM, [] },
+        };
 
         /* [fkelava 19/01/26 18:13]
          * Save PAL is not ready to perform indexing operations at 'init' time because
@@ -118,9 +127,26 @@ internal sealed class FhSaves {
     private void _sm_query_sets() {
         _sm_sets.Clear();
 
+        _sm_set_save_counts[FhGameId.FFX]   .Clear();
+        _sm_set_save_counts[FhGameId.FFX2]  .Clear();
+        _sm_set_save_counts[FhGameId.FFX2LM].Clear();
+
         foreach (string dir in Directory.EnumerateDirectories(_sm_path_base)) {
             string set_name = Path.GetFileName(dir);
             _sm_sets.Add(set_name);
+
+            string x_dir  = Path.Join(dir, "FINAL FANTASY X");
+            string x2_dir = Path.Join(dir, "FINAL FANTASY X-2");
+            string lm_dir = Path.Join(dir, "FINAL FANTASY X-2 LAST MISSION");
+
+            _sm_set_save_counts[FhGameId.FFX][set_name]
+                = Directory.CreateDirectory(x_dir) .GetFiles("ffx_*") .Length;
+
+            _sm_set_save_counts[FhGameId.FFX2][set_name]
+                = Directory.CreateDirectory(x2_dir).GetFiles("ffx2_*").Length;
+
+            _sm_set_save_counts[FhGameId.FFX2LM][set_name]
+                = Directory.CreateDirectory(lm_dir).GetFiles("ffx2_*").Length;
         }
 
         /* [fkelava 19/01/26 14:50]
@@ -150,6 +176,10 @@ internal sealed class FhSaves {
     internal IReadOnlySet<string> get_sets() {
         _sm_query_sets();
         return _sm_sets;
+    }
+
+    internal IReadOnlyDictionary<string, int> get_save_counts() {
+        return _sm_set_save_counts[FhGlobal.game_id];
     }
 
     /// <summary>
@@ -205,7 +235,7 @@ internal sealed class FhSaves {
         if (menu_index != 0) return menu_index;
 
         int target_slot = 1;
-        while (_sm_occupied_slots.Contains(target_slot)) { target_slot++; };
+        while (_sm_occupied_slots.Contains(target_slot)) { target_slot++; }
 
         _sm_occupied_slots.Add(target_slot);
         return target_slot;
