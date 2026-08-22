@@ -93,7 +93,8 @@ public class Scrollable {
         if (!is_within_clip(hovered)) {
             if (int.Sign(current - old_current) > 0) {
                 hovered = get_clip_start();
-            } else {
+            }
+            else {
                 hovered = get_clip_end() - 1;
             }
         }
@@ -113,11 +114,13 @@ public class Scrollable {
                 hovered += amount;
                 hovered = int.Clamp(hovered, 0, max - visible);
             }
-        } else {
+        }
+        else {
             // Clip the hovered index to the range of visible indices so it never goes off-screen
             if (int.Sign(amount) > 0) {
                 hovered = get_clip_start();
-            } else {
+            }
+            else {
                 hovered = get_clip_end() - 1;
             }
         }
@@ -138,7 +141,8 @@ public class Scrollable {
         // Move the clip to the hovered index
         if (hovered < get_clip_start()) {
             current = hovered;
-        } else {
+        }
+        else {
             current = hovered - visible + 1;
         }
     }
@@ -214,7 +218,8 @@ public class Scrollable {
         if (scroll_page_up) {
             if (current == 0) {
                 hovered = 0;
-            } else {
+            }
+            else {
                 scroll(-visible);
             }
         }
@@ -222,7 +227,8 @@ public class Scrollable {
         if (scroll_page_down) {
             if (current == max - visible) {
                 hovered = max - 1;
-            } else {
+            }
+            else {
                 scroll(visible);
             }
         }
