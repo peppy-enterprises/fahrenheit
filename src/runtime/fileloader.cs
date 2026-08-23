@@ -252,7 +252,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         int pos_bad_path_prefix = dest[ .. strlen ].IndexOf(bad_path_prefix);
 
         if (pos_bad_path_prefix != -1) {
-            dest[ (pos_bad_path_prefix + bad_path_prefix.Length) .. strlen ].CopyTo(dest [ (pos_bad_path_prefix + bad_path_prefix.Length) .. ]);
+            dest[ (pos_bad_path_prefix + bad_path_prefix.Length) .. strlen ].CopyTo(dest [ (pos_bad_path_prefix + valid_path_prefix.Length) .. ]);
             valid_path_prefix.CopyTo(dest[ pos_bad_path_prefix .. ]);
         }
     }
