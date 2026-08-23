@@ -268,6 +268,10 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         return rv;
     }
 
+    /* [fkelava 23/08/26 15:53]
+     * The path length limit of 0x100 is a game invariant that we replicate faithfully.
+     */
+
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private PStreamFile* h_fopen(PStreamFile* ptr_this, byte* ptr_path, bool read_only, uint p3, uint p4, bool p5) {
         ReadOnlySpan<byte> buf_path            = new(ptr_path, 0x100);
