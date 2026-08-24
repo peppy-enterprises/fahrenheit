@@ -34,6 +34,38 @@ public static unsafe partial class FhCall {
      * circumvent it. We simply refuse to support any such scenario.
      */
 
+    // RT - File cross-loader
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate void d_BigFileStream_ctor(BigFileStream* ptr_this);
+    internal static FhMethodHandle<d_BigFileStream_ctor> BigFileStream_ctor =>
+        new( new FhMethodLocation(0x21BF90, 0x542A60) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate void d_BigFileStream_setStreamPrefix(BigFileStream* ptr_this, byte* ptr_stream_prefix);
+    internal static FhMethodHandle<d_BigFileStream_setStreamPrefix> BigFileStream_setStreamPrefix => 
+        new( new FhMethodLocation(0x21C560, 0x543030) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate int d_BigFileStream_registerBigFile(BigFileStream* ptr_this, byte* ptr_vbf_name);
+    internal static FhMethodHandle<d_BigFileStream_registerBigFile> BigFileStream_registerBigFile =>
+        new( new FhMethodLocation(0x21C310, 0x542DE0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate byte* d_Phyre_PSerialization_PStreamFile_GetStreamPrefix();
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_GetStreamPrefix> Phyre_PSerialization_PStreamFile_GetStreamPrefix => 
+        new( new FhMethodLocation(0x207EF0, 0x490FB0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_Phyre_PSerialization_PStreamFile_SetStreamPrefix(byte* ptr_stream_prefix);
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_SetStreamPrefix> Phyre_PSerialization_PStreamFile_SetStreamPrefix => 
+        new( new FhMethodLocation(0x207F00, 0x491090) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate VFile* d_BigFileStream_openFile(BigFileStream* ptr_this, byte* ptr_file_name);
+    internal static FhMethodHandle<d_BigFileStream_openFile> BigFileStream_openFile => 
+        new( new FhMethodLocation(0x21C0D0, 0x542BA0) );
+
     // RT - Allocator fix
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

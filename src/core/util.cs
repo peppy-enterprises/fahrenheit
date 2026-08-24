@@ -217,6 +217,10 @@ public unsafe static class FhUtil {
         };
     }
 
+    public static Vector2 inverse(this Vector2 vec) {
+        return new Vector2(1f) / vec;
+    }
+
     public static uint as_rgba(this Vector4 vec) {
         return (uint)(
             ((byte)(vec.X * 255f) << 0)
