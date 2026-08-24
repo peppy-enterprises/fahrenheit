@@ -51,11 +51,6 @@ public static partial class FhCall {
     public static FhMethodHandle<d_FUN_00656c90> FUN_00656c90
         => new( new FhMethodLocation("FFX.exe", 0x256C90) );
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_fiosUnifyFilename(nint in_string, nint out_buffer, int buffer_size);
-    public static FhMethodHandle<d_fiosUnifyFilename> fiosUnifyFilename
-        => new( new FhMethodLocation("FFX.exe", 0x2799D0) );
-
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     public unsafe delegate void d_LocalizationManager_Initialize(LocalizationManager* ptr_this);
     public static FhMethodHandle<d_LocalizationManager_Initialize> LocalizationManager_Initialize

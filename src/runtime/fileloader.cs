@@ -66,67 +66,9 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
         return FhCall.Phyre_PSerialization_PStreamFile_ctor           .hook(this, h_fopen)
             && FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.hook(this, h_sf_sp_set)
-            && FhCall.BigFileStream_setStreamPrefix                   .hook(this, h_vbf_sp_set);
-    }
-
-    /* [fkelava 21/08/26 14:10]
-     * The game has the concept of a 'stream prefix', prepended to any and all paths. For some silly reason,
-     * the default is '../../..', but it doesn't have to be. We can simplify it, which is desirable so the
-     * user need not remember it.
-     * 
-     * Note that the prefix can't be empty. The game will take an access violation if so.
-     */
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private void h_vbf_sp_set(BigFileStream* ptr_this, byte* ptr_stream_prefix) {
-        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
-        _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
-
-        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(ptr_this, ptr_stream_prefix);
-    }
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void h_sf_sp_set(byte* ptr_stream_prefix) {
-        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
-        _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
-
-        FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.chain_from(h_sf_sp_set).fnptr!(ptr_stream_prefix);
-    }
-
-    /* [fkelava 11/02/26 03:39]
-     * The game internally uses a number of file addressing schemes, including, but not limited to:
-     *
-     * - host0:/ffx/master/jppc/event/obj/sc/scene1/scene1.ebp
-     * - pfs0:sizetbl.bin
-     * - /FFX_Data/GameData/PS3Data/chr/mon/m220/fp/tex/GCM/16128_0_0_8_256_128.dds.phyre
-     * - /ffx_ps2/ffx/master/new_depc
-     * - /help/test_proj/test_proj_page.sps2
-     * - ../../../ffx_ps2/ffx/proj/map/masaki/
-     *
-     * EFL normalizes any and all paths to a path relative to the root 
-     * of the VBF archive, with forward slashes as a separator.
-     *
-     * If you experience issues with files not being replaced, your best bet is to check
-     * the inputs and outputs to this function. While I tested by logging millions of file open
-     * calls, it is entirely possible some edge case was skipped or not encountered.
-     */
-
-    /// <summary>
-    ///     Normalizes the paths the game uses to address files.
-    /// </summary>
-    private static string normalize_path(string path) {
-        string path_no_host0   = path.Replace("host0:", "ffx_ps2");
-        int    path_prefix_end = path_no_host0.IndexOf('f', StringComparison.OrdinalIgnoreCase);
-        string path_prefixless = path_no_host0[ path_prefix_end .. ];
-
-        /* [fkelava 28/01/26 01:05]
-         * The game internally prefers a forward slash as path separator. Additionally, both major OSes support it well.
-         *
-         * https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-strings#recommendations-for-string-usage
-         * > Use the String.ToUpperInvariant method instead of the String.ToLowerInvariant method when you normalize strings for comparison.
-         */
-
-        return path_prefixless.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).ToUpperInvariant();
+            && FhCall.BigFileStream_setStreamPrefix                   .hook(this, h_vbf_sp_set)
+            && FhCall.BigFileStream_openFile                          .hook(this, h_vbf_fopen)
+            && FhCall.fiosUnifyFilename                               .hook(this, h_fiosUnifyFilename);
     }
 
     /// <summary>
@@ -137,7 +79,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
     private void _index_dir(FhModContext mod, string path_efl_dir) {
         foreach (FileInfo efl_file in Directory.CreateDirectory(path_efl_dir).GetFiles("*.*", SearchOption.AllDirectories)) {
             string path_rel            = Path.GetRelativePath(path_efl_dir, efl_file.FullName);
-            string path_rel_normalized = normalize_path(path_rel);
+            string path_rel_normalized = $"/{path_rel.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).ToUpperInvariant()}";
 
             if (_index.ContainsKey(path_rel_normalized)) {
                 _logger.Warning($"{path_rel} is being superseded by mod {mod.Manifest.Name}");
@@ -196,53 +138,193 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         return ptr_this;
     }
 
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private PStreamFile* h_fopen(PStreamFile* ptr_this, byte* ptr_path, bool read_only, uint p3, uint p4, bool p5) {
-        string path            = new ((sbyte*) ptr_path);
-        string path_normalized = normalize_path(path);
+    /// <summary>
+    ///     Normalizes the paths the game uses to address files.
+    /// </summary>
+    private static void normalize_path(ReadOnlySpan<byte> src, Span<byte> dest) {
+        
+        /* [fkelava 22/08/26 18:16]
+        * `size` is NOT the length of the string passed in `src`.
+        * 
+        * In fact, `src` and `dest` will regularly contain garbage off the end, 
+        * so all searches must be constrained by `strlen(src)`.
+        */
 
-        if (!_index.TryGetValue(path_normalized, out string? path_modded)) {
-            PStreamFile* rv = FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path, read_only, p3, p4, p5);
-            return _crossload(rv, ptr_path);
-        }
+        int strlen = src.IndexOf((byte)0x00);
 
-        /* [fkelava 01/10/24 16:49]
-         * FFX.exe+208100 at +2081B9 onward:
-         * if (readOnly) { pvVar4 = CreateFileW(path, 1, 1, 0, 3, 0x08000000, 0); }
-         * else          { pvVar4 = CreateFileW(path, 2, 0, 0, 4, 0x08000000, 0); }
+        /* [fkelava 22/08/26 15:40]
+         * There are three errors the game's path normalizer fixes.
+         * - A path might not have the stream prefix prepended.
+         * - Some shader paths have the wrong file extension.
+         * - Some paths have the wrong platform ID.
+         * 
+         * The second and third could have been completely avoided by the developers
+         * if they were more attentive, but they weren't, so we replicate those fixes.
+         * 
+         * The first, however, is different in Fahrenheit's case; because we simplify the stream
+         * prefix from '../../..' to '/', we must also remove now-invalid prefixes. We also
+         * fix the fourth case where an old-style 'host0' path is used.
          */
 
-        fixed (char* ptr_path_modded = path_modded) {
-            FILE_ACCESS_RIGHTS        access      = read_only
-                ? FILE_ACCESS_RIGHTS.FILE_READ_DATA
-                : FILE_ACCESS_RIGHTS.FILE_WRITE_DATA;
-            FILE_SHARE_MODE           sharing     = read_only
-                ? FILE_SHARE_MODE.FILE_SHARE_READ
-                : FILE_SHARE_MODE.FILE_SHARE_NONE;
-            FILE_CREATION_DISPOSITION disposition = read_only
-                ? FILE_CREATION_DISPOSITION.OPEN_EXISTING
-                : FILE_CREATION_DISPOSITION.OPEN_ALWAYS;
+        ReadOnlySpan<byte> bad_path_prefix   = "host0:"u8;
+        ReadOnlySpan<byte> bad_shader_suffix = ".cgfx.phyre"u8;
+        ReadOnlySpan<byte> bad_stream_prefix = "../../.."u8;
+        ReadOnlySpan<byte> bad_platform_id   = "GCM"u8;
+        ReadOnlySpan<byte> valid_path_prefix = "/ffx_ps2"u8;
+        ReadOnlySpan<byte> valid_platform_id = "D3D11"u8;
 
-            FILE_FLAGS_AND_ATTRIBUTES flags = FILE_FLAGS_AND_ATTRIBUTES.FILE_FLAG_SEQUENTIAL_SCAN;
+        int pos_bad_shader_suffix = src[ .. strlen ].IndexOf(bad_shader_suffix);
+        int pos_bad_stream_prefix = src[ .. strlen ].IndexOf(bad_stream_prefix);
 
-            ptr_this->handle_vbf = null;
-            ptr_this->handle_os  = PInvoke.CreateFileW(
-                ptr_path_modded,
-                (uint)access,
-                sharing,
-                null,
-                disposition,
-                flags,
-                HANDLE.Null);
+        Index copy_range_start = pos_bad_stream_prefix != -1
+            ? bad_stream_prefix.Length
+            : 0;
+        Index copy_range_end   = pos_bad_shader_suffix != -1
+            ? pos_bad_shader_suffix
+            : strlen;
+
+        ReadOnlySpan<byte> src_valid = src[ copy_range_start .. copy_range_end ];
+        src_valid.CopyTo(dest);
+
+        if (pos_bad_shader_suffix != -1) {
+            ".fx.phyre"u8.CopyTo(dest[ src_valid.Length .. ]);
         }
 
-        if (ptr_this->handle_os == HANDLE.INVALID_HANDLE_VALUE) {
-            _logger.Error($"Replacement file open failed for {path_modded} - bailing out");
+        int pos_bad_platform_id = dest[ .. strlen ].IndexOf(bad_platform_id);
 
-            PStreamFile* rv = FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path, read_only, p3, p4, p5);
-            return _crossload(rv, ptr_path);
+        if (pos_bad_platform_id != -1) {
+            dest[ (pos_bad_platform_id + bad_platform_id.Length) .. strlen ].CopyTo(dest [ (pos_bad_platform_id + valid_platform_id.Length) .. ]);
+            valid_platform_id.CopyTo(dest[ pos_bad_platform_id .. ]);
         }
 
-        return ptr_this;
+        int pos_bad_path_prefix = dest[ .. strlen ].IndexOf(bad_path_prefix);
+
+        if (pos_bad_path_prefix != -1) {
+            dest[ (pos_bad_path_prefix + bad_path_prefix.Length) .. strlen ].CopyTo(dest [ (pos_bad_path_prefix + valid_path_prefix.Length) .. ]);
+            valid_path_prefix.CopyTo(dest[ pos_bad_path_prefix .. ]);
+        }
+    }
+
+    /* [fkelava 21/08/26 14:10]
+     * The game has the concept of a 'stream prefix', prepended to any and all paths. For some silly reason,
+     * the default is '../../..', but it doesn't have to be. We can simplify it, which is desirable so the
+     * user need not remember it.
+     * 
+     * Note that the VBF stream prefix can't be empty. The game will take an access violation if so.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private void h_vbf_sp_set(BigFileStream* ptr_this, byte* ptr_stream_prefix) {
+        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
+        _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
+
+        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(ptr_this, ptr_prefix);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_sf_sp_set(byte* ptr_stream_prefix) {
+        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
+
+        FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.chain_from(h_sf_sp_set).fnptr!(ptr_prefix);
+    }
+    
+    /* [fkelava 22/08/26 15:20]
+     * The game internally uses a number of file addressing schemes, including, but not limited to:
+     *
+     * - host0:/ffx/master/jppc/event/obj/sc/scene1/scene1.ebp
+     * - pfs0:sizetbl.bin
+     * - /FFX_Data/GameData/PS3Data/chr/mon/m220/fp/tex/GCM/16128_0_0_8_256_128.dds.phyre
+     * - /ffx_ps2/ffx/master/new_depc
+     * - /help/test_proj/test_proj_page.sps2
+     * - ../../../ffx_ps2/ffx/proj/map/masaki/
+     * 
+     * and has a path normalization function `fiosUnifyFilename`. Unfortunately, that function
+     * is deficient and doesn't correct a bad stream prefix on a file. Sometimes the game doesn't
+     * even bother normalizing a path before attempting a file open, which also has nasty consequences.
+     * 
+     * We therefore shift things up a bit. We reduce `fiosUnifyFilename` to a copying stub. Instead,
+     * we run a combined normalizer at the point a file is opened, so the game can't avoid it.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_fiosUnifyFilename(byte* ptr_src, byte* ptr_dest, int size) {
+        ReadOnlySpan<byte> src  = new(ptr_src,  size);
+        Span        <byte> dest = new(ptr_dest, size);
+
+        dest.Clear();
+
+        int strlen = src.IndexOf((byte)0x00);
+        src [ .. strlen ].CopyTo(dest);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private VFile* h_vbf_fopen(BigFileStream* ptr_this, byte* ptr_file_name) {
+        VFile* rv = FhCall.BigFileStream_openFile.chain_from(h_vbf_fopen).fnptr!(ptr_this, ptr_file_name);
+
+        if (rv == null) { 
+            _logger.Error($"{Marshal.PtrToStringAnsi((nint)ptr_file_name)} not found in VBF {Marshal.PtrToStringAnsi((nint)ptr_this->ptr_handle_0x10->ptr_file_path)}"); 
+        }
+        
+        return rv;
+    }
+
+    /* [fkelava 23/08/26 15:53]
+     * The path length limit of 0x100 is a game invariant that we replicate faithfully.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private PStreamFile* h_fopen(PStreamFile* ptr_this, byte* ptr_path, bool read_only, uint p3, uint p4, bool p5) {
+        ReadOnlySpan<byte> buf_path            = new(ptr_path, 0x100);
+                Span<byte> buf_path_normalized = stackalloc byte [ 0x100 ];
+
+        normalize_path(buf_path, buf_path_normalized);
+
+        fixed (byte* ptr_path_normalized = buf_path_normalized) {
+            string path_str = new string((sbyte*)ptr_path_normalized).ToUpperInvariant();
+
+            if (!_index.TryGetValue(path_str, out string? path_modded)) {
+                PStreamFile* rv = FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path_normalized, read_only, p3, p4, p5);
+                return _crossload(rv, ptr_path_normalized);
+            }
+            
+            /* [fkelava 01/10/24 16:49]
+             * FFX.exe+208100 at +2081B9 onward:
+             * if (readOnly) { pvVar4 = CreateFileW(path, 1, 1, 0, 3, 0x08000000, 0); }
+             * else          { pvVar4 = CreateFileW(path, 2, 0, 0, 4, 0x08000000, 0); }
+             */
+            
+            fixed (char* ptr_path_modded = path_modded) {
+                FILE_ACCESS_RIGHTS        access      = read_only
+                    ? FILE_ACCESS_RIGHTS.FILE_READ_DATA
+                    : FILE_ACCESS_RIGHTS.FILE_WRITE_DATA;
+                FILE_SHARE_MODE           sharing     = read_only
+                    ? FILE_SHARE_MODE.FILE_SHARE_READ
+                    : FILE_SHARE_MODE.FILE_SHARE_NONE;
+                FILE_CREATION_DISPOSITION disposition = read_only
+                    ? FILE_CREATION_DISPOSITION.OPEN_EXISTING
+                    : FILE_CREATION_DISPOSITION.OPEN_ALWAYS;
+            
+                FILE_FLAGS_AND_ATTRIBUTES flags = FILE_FLAGS_AND_ATTRIBUTES.FILE_FLAG_SEQUENTIAL_SCAN;
+            
+                ptr_this->handle_vbf = null;
+                ptr_this->handle_os  = PInvoke.CreateFileW(
+                    ptr_path_modded,
+                    (uint)access,
+                    sharing,
+                    null,
+                    disposition,
+                    flags,
+                    HANDLE.Null);
+            }
+            
+            if (ptr_this->handle_os == HANDLE.INVALID_HANDLE_VALUE) {
+                _logger.Error($"Replacement file open failed for {path_modded} - bailing out");
+            
+                PStreamFile* rv = FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path_normalized, read_only, p3, p4, p5);
+                return _crossload(rv, ptr_path_normalized);
+            }
+            
+            return ptr_this;
+        }
     }
 }
