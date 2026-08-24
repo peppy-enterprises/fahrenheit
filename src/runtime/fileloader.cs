@@ -170,7 +170,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         ReadOnlySpan<byte> bad_shader_suffix = ".cgfx.phyre"u8;
         ReadOnlySpan<byte> bad_stream_prefix = "../../.."u8;
         ReadOnlySpan<byte> bad_platform_id   = "GCM"u8;
-        ReadOnlySpan<byte> valid_path_prefix = "ffx_ps2"u8;
+        ReadOnlySpan<byte> valid_path_prefix = "/ffx_ps2"u8;
         ReadOnlySpan<byte> valid_platform_id = "D3D11"u8;
 
         int pos_bad_shader_suffix = src[ .. strlen ].IndexOf(bad_shader_suffix);
@@ -284,7 +284,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
             if (!_index.TryGetValue(path_str, out string? path_modded)) {
                 PStreamFile* rv = FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path_normalized, read_only, p3, p4, p5);
-                return _crossload(rv, ptr_path);
+                return _crossload(rv, ptr_path_normalized);
             }
             
             /* [fkelava 01/10/24 16:49]
@@ -321,7 +321,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
                 _logger.Error($"Replacement file open failed for {path_modded} - bailing out");
             
                 PStreamFile* rv = FhCall.Phyre_PSerialization_PStreamFile_ctor.chain_from(h_fopen).fnptr!(ptr_this, ptr_path_normalized, read_only, p3, p4, p5);
-                return _crossload(rv, ptr_path);
+                return _crossload(rv, ptr_path_normalized);
             }
             
             return ptr_this;
