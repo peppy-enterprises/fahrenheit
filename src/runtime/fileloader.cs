@@ -137,58 +137,6 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
         return ptr_this;
     }
-    
-    /* [fkelava 21/08/26 14:10]
-     * The game has the concept of a 'stream prefix', prepended to any and all paths. For some silly reason,
-     * the default is '../../..', but it doesn't have to be. We can simplify it, which is desirable so the
-     * user need not remember it.
-     * 
-     * Note that the VBF stream prefix can't be empty. The game will take an access violation if so.
-     */
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    private void h_vbf_sp_set(BigFileStream* ptr_this, byte* ptr_stream_prefix) {
-        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
-        _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
-
-        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(ptr_this, ptr_prefix);
-    }
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void h_sf_sp_set(byte* ptr_stream_prefix) {
-        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
-
-        FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.chain_from(h_sf_sp_set).fnptr!(ptr_prefix);
-    }
-    
-    /* [fkelava 22/08/26 15:20]
-     * The game internally uses a number of file addressing schemes, including, but not limited to:
-     *
-     * - host0:/ffx/master/jppc/event/obj/sc/scene1/scene1.ebp
-     * - pfs0:sizetbl.bin
-     * - /FFX_Data/GameData/PS3Data/chr/mon/m220/fp/tex/GCM/16128_0_0_8_256_128.dds.phyre
-     * - /ffx_ps2/ffx/master/new_depc
-     * - /help/test_proj/test_proj_page.sps2
-     * - ../../../ffx_ps2/ffx/proj/map/masaki/
-     * 
-     * and has a path normalization function `fiosUnifyFilename`. Unfortunately, that function
-     * is deficient and doesn't correct a bad stream prefix on a file. Sometimes the game doesn't
-     * even bother normalizing a path before attempting a file open, which also has nasty consequences.
-     * 
-     * We therefore shift things up a bit. We reduce `fiosUnifyFilename` to a copying stub. Instead,
-     * we normalize at the point a file is opened, so the game can't avoid it.
-     */
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void h_fiosUnifyFilename(byte* ptr_src, byte* ptr_dest, int size) {
-        ReadOnlySpan<byte> src  = new(ptr_src,  size);
-        Span        <byte> dest = new(ptr_dest, size);
-
-        dest.Clear();
-
-        int strlen = src.IndexOf((byte)0x00);
-        src [ .. strlen ].CopyTo(dest);
-    }
 
     /// <summary>
     ///     Normalizes the paths the game uses to address files.
@@ -257,8 +205,60 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         }
     }
 
+    /* [fkelava 21/08/26 14:10]
+     * The game has the concept of a 'stream prefix', prepended to any and all paths. For some silly reason,
+     * the default is '../../..', but it doesn't have to be. We can simplify it, which is desirable so the
+     * user need not remember it.
+     * 
+     * Note that the VBF stream prefix can't be empty. The game will take an access violation if so.
+     */
+
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
-    internal VFile* h_vbf_fopen(BigFileStream* ptr_this, byte* ptr_file_name) {
+    private void h_vbf_sp_set(BigFileStream* ptr_this, byte* ptr_stream_prefix) {
+        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
+        _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
+
+        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(ptr_this, ptr_prefix);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_sf_sp_set(byte* ptr_stream_prefix) {
+        byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
+
+        FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.chain_from(h_sf_sp_set).fnptr!(ptr_prefix);
+    }
+    
+    /* [fkelava 22/08/26 15:20]
+     * The game internally uses a number of file addressing schemes, including, but not limited to:
+     *
+     * - host0:/ffx/master/jppc/event/obj/sc/scene1/scene1.ebp
+     * - pfs0:sizetbl.bin
+     * - /FFX_Data/GameData/PS3Data/chr/mon/m220/fp/tex/GCM/16128_0_0_8_256_128.dds.phyre
+     * - /ffx_ps2/ffx/master/new_depc
+     * - /help/test_proj/test_proj_page.sps2
+     * - ../../../ffx_ps2/ffx/proj/map/masaki/
+     * 
+     * and has a path normalization function `fiosUnifyFilename`. Unfortunately, that function
+     * is deficient and doesn't correct a bad stream prefix on a file. Sometimes the game doesn't
+     * even bother normalizing a path before attempting a file open, which also has nasty consequences.
+     * 
+     * We therefore shift things up a bit. We reduce `fiosUnifyFilename` to a copying stub. Instead,
+     * we run a combined normalizer at the point a file is opened, so the game can't avoid it.
+     */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
+    private void h_fiosUnifyFilename(byte* ptr_src, byte* ptr_dest, int size) {
+        ReadOnlySpan<byte> src  = new(ptr_src,  size);
+        Span        <byte> dest = new(ptr_dest, size);
+
+        dest.Clear();
+
+        int strlen = src.IndexOf((byte)0x00);
+        src [ .. strlen ].CopyTo(dest);
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private VFile* h_vbf_fopen(BigFileStream* ptr_this, byte* ptr_file_name) {
         VFile* rv = FhCall.BigFileStream_openFile.chain_from(h_vbf_fopen).fnptr!(ptr_this, ptr_file_name);
 
         if (rv == null) { 
