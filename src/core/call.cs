@@ -66,6 +66,11 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_BigFileStream_openFile> BigFileStream_openFile => 
         new( new FhMethodLocation(0x21C0D0, 0x542BA0) );
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_fiosUnifyFilename(byte* src, byte* dest, int size);
+    internal static FhMethodHandle<d_fiosUnifyFilename> fiosUnifyFilename => 
+        new( new FhMethodLocation(0x2799D0, 0x094E90) );
+
     // RT - Allocator fix
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
