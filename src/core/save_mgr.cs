@@ -7,10 +7,57 @@ namespace Fahrenheit;
 
 using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
 
+/// <summary>Represents the current purpose of the save system, if any.</summary>
+public enum FhExtendedSaveSystemMode {
+    /// <summary>The save system is not active.</summary>
+    NULL = 0,
+
+    /// <summary>The save system wants to load a save file.</summary>
+    LOAD = 1,
+
+    /// <summary>The save system wants to save to a slot.</summary>
+    SAVE = 2,
+
+    /// <summary>The save system wants to compile Al Bhed information from a save filr to the current save data.</summary>
+    /// <remarks>This mode is only valid and entered in Final Fantasy X.</remarks>
+    ALBD = 3,
+}
+
+internal interface IFhSaveExtensionApi {
+    /// <summary>Retrieve the current save system mode.</summary>
+    /// <returns>The current mode of the save system.</returns>
+    internal FhExtendedSaveSystemMode get_system_mode();
+
+    /// <summary>Save to the specified slot.</summary>
+    /// <param name="slot">The slot to save to. Set this to <c>0</c> if saving to a new slot.</param>
+    internal void save(int slot);
+
+    /// <summary>Load the save file in the specified slot.</summary>
+    /// <param name="slot">The slot to load from.</param>
+    internal void load(int slot);
+
+    /// <summary>Compile Al Bhed primers from a specified slot.</summary>
+    /// <remarks>
+    ///     Compilation fills the currently loaded save data's obtained
+    ///     Al Bhed primers with ones from the chosen save file.
+    /// </remarks>
+    /// <param name="slot">The slot to compile primers from.</param>
+    internal void copy_albd(int slot);
+
+    /// <summary>Exit the save screen through cancellation or error.</summary>
+    internal void exit_cancel();
+
+    /// <summary>Exit the save screen through successfully loading, saving, or compiling a save.</summary>
+    internal void exit_success();
+}
+
 /// <summary>
 ///     Allows multiple sets of saves to exist.
 /// </summary>
-internal sealed class FhSaves {
+public sealed class FhSaves {
+
+    internal readonly FhRuntimeHandle<IFhSaveExtensionApi> ext_api = new();
+
 
     /* [fkelava 07/11/25 15:01]
      * Fh computes a load-order sensitive hash over all mods that declare 'separate saves'.
@@ -27,6 +74,10 @@ internal sealed class FhSaves {
     private readonly string                  _sm_path_base;
     private readonly string                  _sm_path_default_set;
     private readonly List<FhSaveDisplayData> _sm_display_data;
+
+    private readonly Dictionary<string, FhSaveUiRenderer> _renderers = [];
+
+    internal const string DEFAULT_RENDERER_ID = "default";
 
     public FhSaves() {
         _sm_path_base           = Path.Join(FhEnvironment.Finder.Saves.FullName, FhInternal.Hasher.SaveSetHash);
@@ -172,31 +223,6 @@ internal sealed class FhSaves {
         }
     }
 
-    internal string                  get_active_set()   => _sm_active_set;
-    internal List<FhSaveDisplayData> get_display_data() => _sm_display_data;
-
-    internal IReadOnlySet<string> get_sets() {
-        _sm_query_sets();
-        return _sm_sets;
-    }
-
-    internal IReadOnlyDictionary<string, int> get_save_counts() {
-        return _sm_set_save_counts[FhGlobal.game_id];
-    }
-
-    /// <summary>
-    ///     Sets the active save set to <paramref name="set_name"/>, then indexes it.
-    /// </summary>
-    internal void switch_active_set(string set_name) {
-        if (Interlocked.CompareExchange(ref _sm_lock, 1, 0) != 0)
-            return;
-
-        _sm_active_set = set_name;
-        _sm_index_active_set();
-
-        Interlocked.Decrement(ref _sm_lock);
-    }
-
     /// <summary>
     ///     Reindexes the active save set.
     /// </summary>
@@ -207,6 +233,17 @@ internal sealed class FhSaves {
         _sm_index_active_set();
 
         Interlocked.Decrement(ref _sm_lock);
+    }
+
+    /// <summary>
+    ///     For a given <paramref name="slot"/> in the given <paramref name="set"/>, gets the full path of the corresponding save file.
+    /// </summary>
+    internal string get_save_path_for_slot(string set, int slot) {
+        return Path.Join(
+            _sm_path_base,
+            set,
+            FhSavePal.pal_get_save_subfolder(),
+            FhSavePal.pal_get_save_name_for_slot(slot));
     }
 
     /// <summary>
@@ -221,20 +258,11 @@ internal sealed class FhSaves {
     }
 
     /// <summary>
-    ///     Get the number of used slots in the current set.
+    ///     For a given <paramref name="slot"/>, returns the slot number being saved to.
     /// </summary>
-    internal int get_slots_used() {
-        return _sm_occupied_slots.Contains(0)
-            ? _sm_display_data.Count - 1
-            : _sm_display_data.Count;
-    }
-
-    /// <summary>
-    ///     For a given <paramref name="menu_index"/>, returns the slot number being saved to.
-    /// </summary>
-    internal int get_slot_save(int menu_index) {
+    internal int remap_slot(int slot) {
         // This method is not re-entrant.
-        if (menu_index != 0) return menu_index;
+        if (slot != 0) return slot;
 
         int target_slot = 1;
         while (_sm_occupied_slots.Contains(target_slot)) { target_slot++; }
@@ -243,10 +271,136 @@ internal sealed class FhSaves {
         return target_slot;
     }
 
+    /// <summary>Get the save UI renderer associated with the given ID.</summary>
+    /// <param name="id">The ID of the desired renderer.</param>
+    /// <param name="renderer">The renderer with the given ID.</param>
+    /// <returns>Whether the operation succeeded.</returns>
+    internal bool get_renderer(string id, out FhSaveUiRenderer? renderer) {
+        return _renderers.TryGetValue(id, out renderer);
+    }
+
+    /// <summary>The name of the active set.</summary>
+    public string active_set => _sm_active_set;
+
+    /// <summary>The list of display data of saves in the active set.</summary>
+    public List<FhSaveDisplayData> display_data => _sm_display_data;
+
+
+    /// <summary>Register a new save UI renderer for selection by the user.</summary>
+    /// <param name="id">The id of the renderer to register.</param>
+    /// <param name="renderer">The new renderer to register.</param>
+    public void register_renderer(string id, FhSaveUiRenderer renderer) {
+        _renderers[id] = renderer;
+    }
+
+    /// <summary>Regenerate and retrieve the loadable sets.</summary>
+    /// <remarks>
+    ///     Regenerating sets involves expensive file operations,
+    ///     so only do this when you have to.
+    /// </remarks>
+    /// <returns>A set of the available set names.</returns>
+    public IReadOnlySet<string> get_sets() {
+        _sm_query_sets();
+        return _sm_sets;
+    }
+
+    /// <summary>Retrieve the save counts for each set for the current game.</summary>
+    /// <returns>A dictionary of save counts keyed by set names.</returns>
+    public IReadOnlyDictionary<string, int> get_save_counts() {
+        return _sm_set_save_counts[FhGlobal.game_id];
+    }
+
     /// <summary>Determine whether a set contains an autosave.</summary>
     /// <param name="set_name">The name of the set to check for an autosave.</param>
     /// <returns>Whether the specified set contains an autosave.</returns>
     public bool set_has_autosave(string set_name) {
         return _sm_sets_with_autosaves.Contains(set_name);
+    }
+
+    /// <summary>Switch to the specified save set, and index it.</summary>
+    /// <remarks>
+    ///     Indexing a set involves expensive file operations,
+    ///     so only do this when you have to.
+    /// </remarks>
+    /// <param name="set_name">The name of the set to switch to.</param>
+    public void switch_active_set(string set_name) {
+        if (Interlocked.CompareExchange(ref _sm_lock, 1, 0) != 0)
+            return;
+
+        _sm_active_set = set_name;
+        _sm_index_active_set();
+
+        Interlocked.Decrement(ref _sm_lock);
+    }
+
+    /// <summary>Get the number of slots used in the current set.</summary>
+    /// <remarks>This does not include the autosave.</remarks>
+    /// <returns>The number of slots used.</returns>
+    public int get_slots_used() {
+        return _sm_occupied_slots.Contains(0)
+            ? _sm_display_data.Count - 1
+            : _sm_display_data.Count;
+    }
+
+    /// <summary>Retrieve the current save system mode.</summary>
+    /// <param name="mode">The current mode of the system.</param>
+    /// <returns>Whether the operation succeeded.</returns>
+    public bool get_system_mode(out FhExtendedSaveSystemMode? mode) {
+        mode = null;
+        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+            return false;
+
+        mode = api.get_system_mode();
+        return true;
+    }
+
+    /// <inheritdoc cref="IFhSaveExtensionApi.save"/>
+    /// <returns>Whether the operation succeeded.</returns>
+    public bool save(int slot) {
+        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+            return false;
+
+        api.save(slot);
+        return true;
+    }
+
+    /// <inheritdoc cref="IFhSaveExtensionApi.load"/>
+    /// <returns>Whether the operation succeeded.</returns>
+    public bool load(int slot) {
+        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+            return false;
+
+        api.load(slot);
+        return true;
+    }
+
+    /// <inheritdoc cref="IFhSaveExtensionApi.copy_albd"/>
+    /// <returns>Whether the operation succeeded.</returns>
+    public bool copy_albd(int slot) {
+        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+            return false;
+
+        api.copy_albd(slot);
+        return true;
+    }
+
+    /// <inheritdoc cref="IFhSaveExtensionApi.exit_cancel"/>
+    /// <returns>Whether the operation succeeded.</returns>
+    public bool exit_cancel() {
+        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+            return false;
+
+        api.exit_cancel();
+        return true;
+    }
+
+    /// <inheritdoc cref="IFhSaveExtensionApi.exit_success"/>
+    /// <returns>Whether the operation succeeded.</returns>
+    public bool exit_success() {
+        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+            return false;
+
+        api.exit_cancel();
+        return true;
     }
 }

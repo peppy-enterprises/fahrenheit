@@ -34,7 +34,7 @@ internal sealed class FhState {
         string local_state_dir = Path.Join(
             FhEnvironment.Finder.State.FullName,
             FhInternal.Hasher.SaveSetHash,
-            FhInternal.Saves.get_active_set(),
+            FhApi.Saves.active_set,
             FhSavePal.pal_get_save_subfolder(),
             FhSavePal.pal_get_save_name_for_slot(slot),
             mod_context.Manifest.Id,

@@ -25,6 +25,7 @@ public static class FhApi {
     public static readonly FhGui          Gui          = new();
     public static readonly FhInput        Input        = new();
     public static readonly FhEvents       Events       = new();
+    public static readonly FhSaves    Saves    = new();
 }
 
 /// <summary>
@@ -37,6 +38,5 @@ internal static class FhInternal {
     public static readonly FhMethods  Methods  = new();
     public static readonly FhHasher   Hasher   = new();
     public static readonly FhState    State    = new();
-    public static readonly FhSaves    Saves    = new();
     public static readonly FhSettings Settings = new();
 }

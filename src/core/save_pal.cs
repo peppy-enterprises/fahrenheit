@@ -79,19 +79,18 @@ public unsafe struct FhSaveDataManager2 {
     public int                    operation_canceled;
 }
 
-
-[InlineArray(0x20)]
-internal struct FhSavePlayerName {
-    private byte _b;
-}
-
 /// <summary>
 ///     The save game header for FF X.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveHeader {
+public struct FhSaveHeader {
+    [InlineArray(0x20)]
+    public struct FhSavePlayerName {
+        private byte _b;
+    }
+
     [InlineArray(0x7)]
-    internal struct Formation {
+    public struct Formation {
         private byte _e0;
     }
 
@@ -114,7 +113,7 @@ internal struct FhSaveHeader {
 ///     The save game header for FF X-2.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveHeader2 {
+public struct FhSaveHeader2 {
     public uint     _0x00;
     public byte     _0x04;
     public byte     id_chr1;
@@ -150,7 +149,7 @@ internal struct FhSaveHeader2 {
 ///     Contains the fields the game shows as part of its standard save game display.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveDisplayData {
+public struct FhSaveDisplayData {
 
     /* [fkelava 19/01/26 13:14]
      * An array of these of size DEFAULT_SET_SIZE is allocated by the save UI module on boot.
@@ -186,7 +185,7 @@ internal struct FhSaveDisplayData {
 /// <summary>
 ///     Abstracts the game's save data system.
 /// </summary>
-internal static unsafe class FhSavePal {
+internal unsafe static class FhSavePal {
 
     /* [fkelava 01/01/26 15:04]
      * TODO:
