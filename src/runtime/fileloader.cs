@@ -239,11 +239,12 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
      * - ../../../ffx_ps2/ffx/proj/map/masaki/
      * 
      * and has a path normalization function `fiosUnifyFilename`. Unfortunately, that function
-     * is deficient and doesn't correct a bad stream prefix on a file. Sometimes the game doesn't
-     * even bother normalizing a path before attempting a file open, which also has nasty consequences.
+     * is deficient and doesn't correct a bad stream prefix on a file, so we have to reimplement it.
      * 
-     * We therefore shift things up a bit. We reduce `fiosUnifyFilename` to a copying stub. Instead,
-     * we run a combined normalizer at the point a file is opened, so the game can't avoid it.
+     * By itself, that is not a problem, but two further issues make it one. Sometimes the game doesn't
+     * bother normalizing a path before attempting a file open, while other times it will normalize a path
+     * without opening the file. The only way around that dichotomy is to normalize in both places.
+     * It is an unfortunate cost and entirely spurious in a number of cases, but the only correct approach.
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
@@ -253,8 +254,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
         dest.Clear();
 
-        int strlen = src.IndexOf((byte)0x00);
-        src [ .. strlen ].CopyTo(dest);
+        normalize_path(src, dest);
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
