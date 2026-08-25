@@ -12,18 +12,21 @@ namespace Fahrenheit.Runtime;
 [SupportedOSPlatform("windows5.1.2600")]
 public unsafe sealed class FhMallocModule : FhModule {
 
-    // TODO: UI to optionally display memory statistics
-    private static nuint _reserved  => FhUtil.get_at<nuint>(FhUtil.select(0x153CD44, 0x14E6AB4, 0x14E6AB4));
-    private static nuint _committed => FhUtil.get_at<nuint>(FhUtil.select(0x153CD48, 0x14E6AB8, 0x14E6AB8));
+    private static nuint _reserved { 
+        get => FhUtil.get_at<nuint>(FhUtil.select(0x153CD44, 0x14E6AB4, 0x14E6AB4)); 
+        set => FhUtil.set_at       (FhUtil.select(0x153CD44, 0x14E6AB4, 0x14E6AB4), value);
+    }
+
+    private static nuint _committed {
+        get => FhUtil.get_at<nuint>(FhUtil.select(0x153CD48, 0x14E6AB8, 0x14E6AB8));
+        set => FhUtil.set_at       (FhUtil.select(0x153CD48, 0x14E6AB8, 0x14E6AB8), value);
+    }
 
     public FhMallocModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return FhCall._malloc_pool_init                     .hook(this, h__malloc_pool_init)
-            && FhCall._VirtualAlloc_Reserve_NA              .hook(this, h__VirtualAlloc_Reserve_NA)
-            && FhCall._VirtualAlloc_Commit_RW               .hook(this, h__VirtualAlloc_Commit_RW)
-            && FhCall._VirtualAlloc_ReserveCommit_TopDown_RW.hook(this, h__VirtualAlloc_ReserveCommit_TopDown_RW)
-            && FhCall._VirtualFree_Decommit                 .hook(this, h__VirtualFree_Decommit);
+        return FhCall._malloc_pool_init       .hook(this, h_mpool_init)
+            && FhCall._VirtualAlloc_Reserve_NA.hook(this, h_mreserve);
     }
 
     /* [fkelava 06/08/26 14:02]
@@ -54,7 +57,7 @@ public unsafe sealed class FhMallocModule : FhModule {
     ///     Replaces the game's primary memory pool initializer.
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void h__malloc_pool_init() {
+    private void h_mpool_init() {
 
         /* [fkelava 06/08/26 14:49]
          * If the game's default pool initializer fails to reserve 0x3000_0000 bytes,
@@ -114,41 +117,32 @@ public unsafe sealed class FhMallocModule : FhModule {
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void* h__VirtualAlloc_Reserve_NA(uint size) {
-        void* rv = FhEnvironment.LargeAddressAware
-            ? FhCall._VirtualAlloc_ReserveCommit_TopDown_RW.chain_from(h__VirtualAlloc_ReserveCommit_TopDown_RW).fnptr!(size)
-            : FhCall._VirtualAlloc_Reserve_NA              .chain_from(h__VirtualAlloc_Reserve_NA)              .fnptr!(size);
+    private void* h_mreserve(uint size) {
+        VIRTUAL_ALLOCATION_TYPE alloc_type = FhEnvironment.LargeAddressAware
+            ? VIRTUAL_ALLOCATION_TYPE.MEM_RESERVE | (VIRTUAL_ALLOCATION_TYPE) 0x100_000 // MEM_TOP_DOWN
+            : VIRTUAL_ALLOCATION_TYPE.MEM_RESERVE;
 
-        _logger.Debug($"MEM_RESERVE(0x{size:X8}) = 0x{(nint)rv:X8}");
-        _logger.Debug($"TOTAL RESERVED: 0x{_reserved:X8}");
+        void* rv = PInvoke.VirtualAlloc(null, size, alloc_type, PAGE_PROTECTION_FLAGS.PAGE_NOACCESS);
+
+        // The game does not track reversed allocations for some reason.
+        if (rv != null) {
+            _reserved += size;
+        }
+
         return rv;
     }
 
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void* h__VirtualAlloc_Commit_RW(void* ptr, uint size) {
-        void* rv = FhCall._VirtualAlloc_Commit_RW.chain_from(h__VirtualAlloc_Commit_RW).fnptr!(ptr, size);
+    public override void render_imgui() {
+#if DEBUG
+        if (!ImGui.Begin("Fh.MDbg")) { 
+            ImGui.End();
+            return;
+        }
 
-        _logger.Debug($"MEM_COMMIT(0x{(nint)ptr:X8}, 0x{size:X8})");
-        _logger.Debug($"TOTAL COMMITTED: 0x{_committed:X8}");
-        return rv;
-    }
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private bool h__VirtualFree_Decommit(void* ptr, uint size) {
-        bool rv = FhCall._VirtualFree_Decommit.chain_from(h__VirtualFree_Decommit).fnptr!(ptr, size);
-
-        _logger.Debug($"MEM_DECOMMIT(0x{(nint)ptr:X8}, 0x{size:X8})");
-        _logger.Debug($"TOTAL COMMITTED: 0x{_committed:X8}");
-        return rv;
-    }
-
-    [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
-    private void* h__VirtualAlloc_ReserveCommit_TopDown_RW(uint size) {
-        void* rv = FhCall._VirtualAlloc_ReserveCommit_TopDown_RW.chain_from(h__VirtualAlloc_ReserveCommit_TopDown_RW).fnptr!(size);
-
-        _logger.Debug($"MEM_RESERVE+COMMIT(TOP_DOWN, 0x{size:X8}) = 0x{(nint)rv:X8}");
-        _logger.Debug($"TOTAL RESERVED: 0x{_reserved:X8}");
-        return rv;
+        ImGui.Text($"Committed: 0x{_committed:X8}");
+        ImGui.Text($"Reserved:  0x{_reserved:X8}");
+        ImGui.End();
+#endif 
     }
 
 }
