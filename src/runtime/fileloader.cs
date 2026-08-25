@@ -108,6 +108,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
     /* [fkelava 25/08/26 20:00]
      * There's a nasty race condition hidden here. Normally, Fahrenheit initialization does not run game code. It is intended
+     * that game code does not run until all hooks have installed, to ensure no calls 'escape' hooking from an interested module.
      *  
      * The 'allocator fix' module wants to hook that initializer. If it doesn't, we lose its benefits. However, intra-DLL, Fahrenheit 
      * leaves the initialization order of modules undefined. If we blithely `_init_crossload` in `init`, and this module ran `init` 
