@@ -139,14 +139,13 @@ internal sealed class FhSaves {
             string x2_dir = Path.Join(dir, "FINAL FANTASY X-2");
             string lm_dir = Path.Join(dir, "FINAL FANTASY X-2 LAST MISSION");
 
-            _sm_set_save_counts[FhGameId.FFX][set_name]
-                = Directory.CreateDirectory(x_dir) .GetFiles("ffx_*") .Length;
+            DirectoryInfo x_dir  = Directory.CreateDirectory(Path.Join(dir, "FINAL FANTASY X"));
+            DirectoryInfo x2_dir = Directory.CreateDirectory(Path.Join(dir, "FINAL FANTASY X-2"));
+            DirectoryInfo lm_dir = Directory.CreateDirectory(Path.Join(dir, "FINAL FANTASY X-2 LAST MISSION"));
 
-            _sm_set_save_counts[FhGameId.FFX2][set_name]
-                = Directory.CreateDirectory(x2_dir).GetFiles("ffx2_*").Length;
-
-            _sm_set_save_counts[FhGameId.FFX2LM][set_name]
-                = Directory.CreateDirectory(lm_dir).GetFiles("ffx2_*").Length;
+            _sm_set_save_counts[FhGameId.FFX   ][set_name] = x_dir .GetFiles("ffx_*") .Length;
+            _sm_set_save_counts[FhGameId.FFX2  ][set_name] = x2_dir.GetFiles("ffx2_*").Length;
+            _sm_set_save_counts[FhGameId.FFX2LM][set_name] = lm_dir.GetFiles("ffx2_*").Length;
         }
 
         /* [fkelava 19/01/26 14:50]
