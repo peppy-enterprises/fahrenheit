@@ -62,7 +62,6 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         _init_index();
-        _init_crossload();
 
         return FhCall.Phyre_PSerialization_PStreamFile_ctor           .hook(this, h_fopen)
             && FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.hook(this, h_sf_sp_set)
@@ -107,12 +106,23 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         }
     }
 
+    /* [fkelava 25/08/26 20:00]
+     * There's a nasty race condition hidden here. Normally, Fahrenheit initialization does not run game code. It is intended
+     *  
+     * The 'allocator fix' module wants to hook that initializer. If it doesn't, we lose its benefits. However, intra-DLL, Fahrenheit 
+     * leaves the initialization order of modules undefined. If we blithely `_init_crossload` in `init`, and this module ran `init` 
+     * before the 'allocator fix' module did, the call would go through before that module could hook it. 
+     * We therefore defer it to `fiosInitialize`, when the game sets up the primary VBF.
+     * 
+     * Note also the 'creative' use of chaining from another method, our hook of the stream prefix setter, to avoid a stack overflow.
+     */
+
     private void _init_crossload() {
         byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
         _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
 
-        FhCall.BigFileStream_ctor           .fnptr!(_ptr_vbf_secondary);
-        FhCall.BigFileStream_setStreamPrefix.fnptr!(_ptr_vbf_secondary, ptr_prefix);
+        FhCall.BigFileStream_ctor                                    .fnptr!(_ptr_vbf_secondary);
+        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(_ptr_vbf_secondary, ptr_prefix);
         
         if (FhCall.BigFileStream_registerBigFile.fnptr!(_ptr_vbf_secondary, _ptr_vbf_secondary_path) == 0)
             throw new Exception("Failed to initialize cross-loader function. Your game data may be corrupt or missing.");
@@ -215,6 +225,8 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private void h_vbf_sp_set(BigFileStream* ptr_this, byte* ptr_stream_prefix) {
+        _init_crossload();
+
         byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
         _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
 
