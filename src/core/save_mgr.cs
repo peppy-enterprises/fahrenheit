@@ -20,6 +20,7 @@ internal sealed class FhSaves {
 
     private          int                     _sm_lock;
     private readonly HashSet<string>         _sm_sets;
+    private readonly HashSet<string>         _sm_sets_with_autosaves;
     private readonly SaveCounts              _sm_set_save_counts;
     private readonly HashSet<int>            _sm_occupied_slots;
     private          string                  _sm_active_set;
@@ -28,12 +29,13 @@ internal sealed class FhSaves {
     private readonly List<FhSaveDisplayData> _sm_display_data;
 
     public FhSaves() {
-        _sm_path_base        = Path.Join(FhEnvironment.Finder.Saves.FullName, FhInternal.Hasher.SaveSetHash);
-        _sm_path_default_set = Path.Join(_sm_path_base, FhSavePal.DEFAULT_SET_NAME, FhSavePal.pal_get_save_subfolder());
-        _sm_occupied_slots   = [];
-        _sm_sets             = [];
-        _sm_active_set       = FhSavePal.DEFAULT_SET_NAME;
-        _sm_display_data     = [];
+        _sm_path_base           = Path.Join(FhEnvironment.Finder.Saves.FullName, FhInternal.Hasher.SaveSetHash);
+        _sm_path_default_set    = Path.Join(_sm_path_base, FhSavePal.DEFAULT_SET_NAME, FhSavePal.pal_get_save_subfolder());
+        _sm_occupied_slots      = [];
+        _sm_sets                = [];
+        _sm_sets_with_autosaves = [];
+        _sm_active_set          = FhSavePal.DEFAULT_SET_NAME;
+        _sm_display_data        = [];
 
         _sm_set_save_counts  = new() {
             { FhGameId.FFX,    [] },
@@ -125,7 +127,8 @@ internal sealed class FhSaves {
     ///     Queries the disk for available save sets.
     /// </summary>
     private void _sm_query_sets() {
-        _sm_sets.Clear();
+        _sm_sets               .Clear();
+        _sm_sets_with_autosaves.Clear();
 
         _sm_set_save_counts[FhGameId.FFX]   .Clear();
         _sm_set_save_counts[FhGameId.FFX2]  .Clear();
@@ -135,9 +138,9 @@ internal sealed class FhSaves {
             string set_name = Path.GetFileName(dir);
             _sm_sets.Add(set_name);
 
-            string x_dir  = Path.Join(dir, "FINAL FANTASY X");
-            string x2_dir = Path.Join(dir, "FINAL FANTASY X-2");
-            string lm_dir = Path.Join(dir, "FINAL FANTASY X-2 LAST MISSION");
+            if (File.Exists(get_save_path_for_slot(set_name, 0))) {
+                _sm_sets_with_autosaves.Add(set_name);
+            }
 
             DirectoryInfo x_dir  = Directory.CreateDirectory(Path.Join(dir, "FINAL FANTASY X"));
             DirectoryInfo x2_dir = Directory.CreateDirectory(Path.Join(dir, "FINAL FANTASY X-2"));
@@ -238,5 +241,12 @@ internal sealed class FhSaves {
 
         _sm_occupied_slots.Add(target_slot);
         return target_slot;
+    }
+
+    /// <summary>Determine whether a set contains an autosave.</summary>
+    /// <param name="set_name">The name of the set to check for an autosave.</param>
+    /// <returns>Whether the specified set contains an autosave.</returns>
+    public bool set_has_autosave(string set_name) {
+        return _sm_sets_with_autosaves.Contains(set_name);
     }
 }
