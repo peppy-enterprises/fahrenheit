@@ -230,8 +230,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     private bool pressed_confirm() {
-        ImGuiKey gamepad_confirm =
-            FhGlobal.lang_id == FhLangId.Japanese
+        ImGuiKey gamepad_confirm = FhGlobal.lang_id == FhLangId.Japanese
                 ? ImGuiKey.GamepadFaceRight
                 : ImGuiKey.GamepadFaceDown;
 
@@ -240,8 +239,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     private bool pressed_cancel() {
-        ImGuiKey gamepad_cancel =
-            FhGlobal.lang_id == FhLangId.Japanese
+        ImGuiKey gamepad_cancel = FhGlobal.lang_id == FhLangId.Japanese
                 ? ImGuiKey.GamepadFaceDown
                 : ImGuiKey.GamepadFaceRight;
 
