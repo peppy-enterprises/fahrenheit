@@ -30636,13 +30636,6 @@ public static unsafe partial class FhCall {
     // __cdecl ATLSTRINGRESOURCEIMAGE* AtlGetStringResourceImage(HINSTANCE__* param_1, uint param_2) at 0061b4a0
 
     // Original after pruning:
-    // unknown undefined FUN_0061bf70() at 0061bf70
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0061bf70();
-    public static FhMethodHandle<d_FUN_0061bf70> FUN_0061bf70 => new( new FhMethodLocation("FFX.exe", 0x21BF70) );
-
-    // Original after pruning:
     // unknown undefined FUN_0061c5b0() at 0061c5b0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
