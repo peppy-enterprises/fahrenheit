@@ -105,8 +105,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     protected internal override void handle_input() {
         switch (_focus) {
             case FhSaveUiFocus.LIST: {
-                if (
-                    _mode == FhSaveUiMode.SAVE_LIST
+                if (_mode == FhSaveUiMode.SAVE_LIST
                  && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up)
                  && _current_scrollable!.hovered == 0
                 ) {
@@ -132,8 +131,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             }
 
             case FhSaveUiFocus.ACTIVE_SET: {
-                if (
-                    _mode == FhSaveUiMode.SAVE_LIST
+                if (_mode == FhSaveUiMode.SAVE_LIST
                  && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down)
                 ) {
                     _focus = FhSaveUiFocus.LIST;
@@ -275,8 +273,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     /// <summary>Render the help text for the save/load screen.</summary>
     private unsafe void ui_help() {
-        if (
-            !_texture_battle_kuang.try_use(out ImTextureRef battle_kuang, out _)
+        if (!_texture_battle_kuang.try_use(out ImTextureRef battle_kuang, out _)
          || !_texture_meswin      .try_use(out ImTextureRef meswin,       out _)
         ) {
             return;
@@ -687,8 +684,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             return;
         }
 
-        if (
-            !_texture_meswin.try_use(out ImTextureRef meswin, out _)
+        if (!_texture_meswin.try_use(out ImTextureRef meswin, out _)
          || !_texture_faces.try_use(out ImTextureRef faces, out _)
         ) {
             return;
