@@ -79,6 +79,12 @@ public sealed class FhSaves {
 
     internal const string DEFAULT_RENDERER_ID = "default";
 
+    /// <summary>The name of the active set.</summary>
+    public string active_set => _sm_active_set;
+
+    /// <summary>The list of display data of saves in the active set.</summary>
+    public List<FhSaveDisplayData> display_data => _sm_display_data;
+
     public FhSaves() {
         _sm_path_base           = Path.Join(FhEnvironment.Finder.Saves.FullName, FhInternal.Hasher.SaveSetHash);
         _sm_path_default_set    = Path.Join(_sm_path_base, FhSavePal.DEFAULT_SET_NAME, FhSavePal.pal_get_save_subfolder());
@@ -278,12 +284,6 @@ public sealed class FhSaves {
     internal bool get_renderer(string id, out FhSaveUiRenderer? renderer) {
         return _renderers.TryGetValue(id, out renderer);
     }
-
-    /// <summary>The name of the active set.</summary>
-    public string active_set => _sm_active_set;
-
-    /// <summary>The list of display data of saves in the active set.</summary>
-    public List<FhSaveDisplayData> display_data => _sm_display_data;
 
 
     /// <summary>Register a new save UI renderer for selection by the user.</summary>
