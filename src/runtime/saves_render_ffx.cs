@@ -1099,5 +1099,14 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             triangle_bottom.top_right,
             triangle_color
         );
+
+        // Handle input
+        if (FhApi.Gui.mouse_clicked(triangle_top, repeat: true)) {
+            _current_scrollable!.move_hover(-1);
+        }
+
+        if (FhApi.Gui.mouse_clicked(triangle_bottom, repeat: true)) {
+            _current_scrollable!.move_hover(1);
+        }
     }
 }

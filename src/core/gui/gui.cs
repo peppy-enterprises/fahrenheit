@@ -236,10 +236,11 @@ public unsafe class FhGui {
     /// <summary>Detect whether the user clicked on a specified rectangle.</summary>
     /// <param name="rect">The rect describing an area of the game window to detect mouse clicks on.</param>
     /// <param name="button">The button of the mouse to detect clicks of.</param>
+    /// <param name="repeat">Whether the method should repeatedly return <c>true</c> for held inputs.</param>
     /// <returns>Whether the user clicked with the button on the specified rectangle.</returns>
-    public bool mouse_clicked(Rect rect, ImGuiMouseButton button = ImGuiMouseButton.Left) {
+    public bool mouse_clicked(Rect rect, ImGuiMouseButton button = ImGuiMouseButton.Left, bool repeat = false) {
         return ImGui.IsMouseHoveringRect(rect.pos, rect.pos + rect.size, false)
-            && ImGui.IsMouseClicked(button);
+            && ImGui.IsMouseClicked(button, repeat);
     }
 
     public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
