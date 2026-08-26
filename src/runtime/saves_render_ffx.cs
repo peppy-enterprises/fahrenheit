@@ -44,14 +44,14 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     private readonly Dictionary<string, FhTexture> _map_icon_textures = [ ];
 
-    private readonly FhTexture _texture_map_icon_default = new(MAP_ICONS_DIR + "0.png", FhTextureType.PNG);
+    private readonly FhTexture _texture_map_icon_default = new(Path.Join(MAP_ICONS_DIR, "0.png"), FhTextureType.PNG);
 
-    private readonly FhTexture _texture_bg           = new(MENU_D3D11_DIR + "ffx_bg.dds.phyre",       FhTextureType.PHYRE);
-    private readonly FhTexture _texture_battle       = new(MENU_D3D11_DIR + "battle.dds.phyre",       FhTextureType.PHYRE);
-    private readonly FhTexture _texture_battle_kuang = new(MENU_D3D11_DIR + "battle_kuang.dds.phyre", FhTextureType.PHYRE);
-    private readonly FhTexture _texture_faces        = new(MENU_D3D11_DIR + "face_ply.dds.phyre",     FhTextureType.PHYRE);
-    private readonly FhTexture _texture_meswin       = new(MENU_D3D11_DIR + "meswin.dds.phyre",       FhTextureType.PHYRE);
-    private readonly FhTexture _texture_summonbg     = new(MENU_D3D11_DIR + "summonbg.dds.phyre",     FhTextureType.PHYRE);
+    private readonly FhTexture _texture_bg           = new(Path.Join(MENU_D3D11_DIR, "ffx_bg.dds.phyre"),       FhTextureType.PHYRE);
+    private readonly FhTexture _texture_battle       = new(Path.Join(MENU_D3D11_DIR, "battle.dds.phyre"),       FhTextureType.PHYRE);
+    private readonly FhTexture _texture_battle_kuang = new(Path.Join(MENU_D3D11_DIR, "battle_kuang.dds.phyre"), FhTextureType.PHYRE);
+    private readonly FhTexture _texture_faces        = new(Path.Join(MENU_D3D11_DIR, "face_ply.dds.phyre"),     FhTextureType.PHYRE);
+    private readonly FhTexture _texture_meswin       = new(Path.Join(MENU_D3D11_DIR, "meswin.dds.phyre"),       FhTextureType.PHYRE);
+    private readonly FhTexture _texture_summonbg     = new(Path.Join(MENU_D3D11_DIR, "summonbg.dds.phyre"),     FhTextureType.PHYRE);
 
     private readonly Vector2 _tex_map_icon_size     = new(310f, 210f);
 
@@ -256,8 +256,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         foreach (FhSaveDisplayData save in FhApi.Saves.display_data) {
             string map = Encoding.UTF8.GetString(save.icon_map);
-            string filename = $"{map}.png";
-            FhTexture map_icon = new(MAP_ICONS_DIR + filename, FhTextureType.PNG);
+            FhTexture map_icon = new(Path.Join(MAP_ICONS_DIR, $"{map}.png"), FhTextureType.PNG);
 
             _map_icon_textures.TryAdd(map, map_icon);
         }
