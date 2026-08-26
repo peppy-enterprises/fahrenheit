@@ -32,8 +32,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         //TODO: Add sorting and sort selection button
     }
 
-    public FhSaveUiMode  mode  { get; private set; }
-    public FhSaveUiFocus focus { get; private set; }
+    private FhSaveUiMode  _mode;
+    private FhSaveUiFocus _focus;
 
     private readonly List<string> _set_list = [ ];
 
@@ -84,8 +84,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     protected override string get_id() => FhSaves.DEFAULT_RENDERER_ID;
 
     protected internal override bool load_data() {
-        mode  = FhSaveUiMode.SAVE_LIST;
-        focus = FhSaveUiFocus.LIST;
+        _mode  = FhSaveUiMode.SAVE_LIST;
+        _focus = FhSaveUiFocus.LIST;
 
         populate_map_icons();
         bool textures_loaded = try_load_textures();
@@ -103,20 +103,20 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     protected internal override void handle_input() {
-        switch (focus) {
+        switch (_focus) {
             case FhSaveUiFocus.LIST: {
                 if (
-                    mode == FhSaveUiMode.SAVE_LIST
+                    _mode == FhSaveUiMode.SAVE_LIST
                  && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up)
                  && _current_scrollable!.hovered == 0
                 ) {
-                    focus = FhSaveUiFocus.ACTIVE_SET;
+                    _focus = FhSaveUiFocus.ACTIVE_SET;
                     break;
                 }
 
                 _current_scrollable!.handle_input();
 
-                if (mode == FhSaveUiMode.SAVE_LIST && pressed_confirm()) {
+                if (_mode == FhSaveUiMode.SAVE_LIST && pressed_confirm()) {
                     if (is_saving && _current_scrollable!.hovered == 0) {
                         FhApi.Saves.save(0);
                     }
@@ -133,12 +133,12 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
             case FhSaveUiFocus.ACTIVE_SET: {
                 if (
-                    mode == FhSaveUiMode.SAVE_LIST
+                    _mode == FhSaveUiMode.SAVE_LIST
                  && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down)
                 ) {
-                    focus = FhSaveUiFocus.LIST;
+                    _focus = FhSaveUiFocus.LIST;
 
-                    if (focus == FhSaveUiFocus.LIST) {
+                    if (_focus == FhSaveUiFocus.LIST) {
                         _current_scrollable!.hovered = _current_scrollable!.current;
                     }
 
@@ -156,7 +156,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         if (pressed_cancel()) {
-            switch (mode) {
+            switch (_mode) {
                 case FhSaveUiMode.SET_SWAP:
                     change_mode(FhSaveUiMode.SAVE_LIST);
                     break;
@@ -169,7 +169,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     protected internal override void render_ui() {
-        _current_scrollable = mode switch {
+        _current_scrollable = _mode switch {
             FhSaveUiMode.SET_SWAP => _scrollable_sets,
             _                     => _scrollable_saves,
         };
@@ -180,7 +180,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         ui_background();
         ui_help();
 
-        if (mode == FhSaveUiMode.SET_SWAP) {
+        if (_mode == FhSaveUiMode.SET_SWAP) {
             ui_setswap();
         }
         else {
@@ -194,7 +194,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     private void change_mode(FhSaveUiMode new_mode) {
         _current_scrollable!.reset();
-        mode = new_mode;
+        _mode = new_mode;
     }
 
     private void exit() {
@@ -371,7 +371,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         //TODO: Add localization
 
         FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
-        string text = mode switch {
+        string text = _mode switch {
             FhSaveUiMode.SET_SWAP => "Select save set",
 
             FhSaveUiMode.SAVE_LIST  or
@@ -522,7 +522,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         UV bg_suv = bg_screen.as_uv();
 
         if (mouse_hovering(bg_screen)) {
-            focus = FhSaveUiFocus.ACTIVE_SET;
+            _focus = FhSaveUiFocus.ACTIVE_SET;
         }
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
@@ -543,7 +543,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             new(Alignment.CENTER, Alignment.CENTER)
         );
 
-        if (focus == FhSaveUiFocus.ACTIVE_SET) {
+        if (_focus == FhSaveUiFocus.ACTIVE_SET) {
             float text_left = text_pos.X - text_size.X / 2f;
             float text_margin = 33f * scale_factor.X;
 
@@ -607,7 +607,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         float font_size = 36f * scale_factor.Y;
 
         if (mouse_hovering(button_scaled)) {
-            focus = FhSaveUiFocus.LIST;
+            _focus = FhSaveUiFocus.LIST;
             _scrollable_sets.hovered = set_idx;
         }
 
@@ -670,7 +670,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     private void ui_setswap() {
-        if (mode != FhSaveUiMode.SET_SWAP) return;
+        if (_mode != FhSaveUiMode.SET_SWAP) return;
 
         // Drawing time
 
@@ -737,7 +737,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         save_rect.pos.Y += (save_rect.size.Y + save_gap) * (index - _scrollable_saves.current);
 
         if (mouse_hovering(save_rect.scale_raw(scale_factor))) {
-            focus = FhSaveUiFocus.LIST;
+            _focus = FhSaveUiFocus.LIST;
             _scrollable_saves.hovered = index;
         }
 
@@ -973,7 +973,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         // Cursor
-        if (focus == FhSaveUiFocus.LIST && _scrollable_saves.hovered == index) {
+        if (_focus == FhSaveUiFocus.LIST && _scrollable_saves.hovered == index) {
             ui_cursor(save_rect.scale_raw(scale_factor).left);
         }
 
@@ -1002,7 +1002,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         Vector2 save_border_size = new(4f);
 
         if (mouse_hovering(save_rect.scale_raw(scale_factor))) {
-            focus = FhSaveUiFocus.LIST;
+            _focus = FhSaveUiFocus.LIST;
             _scrollable_saves.hovered = 0;
         }
 
@@ -1071,7 +1071,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         // Cursor
         {
-            if (focus == FhSaveUiFocus.LIST && _scrollable_saves.hovered == 0) {
+            if (_focus == FhSaveUiFocus.LIST && _scrollable_saves.hovered == 0) {
                 ui_cursor(save_rect.scale_raw(scale_factor).left);
             }
         }
