@@ -28,6 +28,9 @@ hostfxr_set_runtime_property_value_fn    g_fnptr_hostfxr_set_runtime_property;
 hostfxr_get_runtime_delegate_fn          g_fnptr_hostfxr_get_delegate;
 hostfxr_close_fn                         g_fnptr_hostfxr_close;
 
+FILE* g_stdout;
+FILE* g_stderr;
+
 BOOL stage1_eh_install(LPBYTE ptr_main_module); // Forward declaration of EH installer function
 
 /*
@@ -63,22 +66,6 @@ static bool load_hostfxr() {
 
 // Runs before the program's own entrypoint, setting up Fahrenheit.
 static int stage1_main(void) {
-    // STEP 4:
-    // Attach to the Stage0 console and forward stdout/stderr to it.
-    if (!AttachConsole(ATTACH_PARENT_PROCESS)) {
-        std::wcerr << "Failed to attach to the Stage0 console." << std::endl;
-        exit(GetLastError());
-    }
-
-    FILE* parent_stdout;
-    FILE* parent_stderr;
-
-    if (freopen_s(&parent_stdout, "CONOUT$", "w", stdout) != 0 ||
-        freopen_s(&parent_stderr, "CONOUT$", "w", stderr) != 0) {
-        std::wcerr << "Failed to redirect standard output and error pipes to Stage0 console." << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
     // STEP 5:
     // If supported, install an EH override which allows us to capture
     // a customized core dump for easier debugging.
@@ -215,6 +202,19 @@ static int stage1_main(void) {
  * unmodified when they load into the process, which occurs immediately after Stage 1 exits `DllMain`.
  */
 static BOOL stage1_init() {
+    // STEP 2:
+    // Attach to the Stage0 console and forward stdout/stderr to it.
+    if (!AttachConsole(ATTACH_PARENT_PROCESS)) {
+        std::wcerr << "Failed to attach to the Stage0 console." << std::endl;
+        exit(GetLastError());
+    }
+
+    if (freopen_s(&g_stdout, "CONOUT$", "w", stdout) != 0 ||
+        freopen_s(&g_stderr, "CONOUT$", "w", stderr) != 0) {
+        std::wcerr << "Failed to redirect standard input, output and error to Stage0 console." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
     auto path_target_size = ::GetModuleFileNameW(
         NULL, 
         path_target_buf, 
@@ -245,7 +245,7 @@ static BOOL stage1_init() {
     std::basic_string<char_t> target_path = path_target_buf;
     std::wcout << "Stage 1 Loader executing for: " << target_path << std::endl;
 
-    // STEP 2:
+    // STEP 3:
     // Change the working directory to the targeted executable's location.
     int rc = _wchdir(target_path.c_str());
     if (rc != 0) {
@@ -253,7 +253,7 @@ static BOOL stage1_init() {
         return FALSE;
     }
 
-    // STEP 3:
+    // STEP 4:
     // Override the program entrypoint. We need to run Fahrenheit initialization first.
     HMODULE hMainModule = GetModuleHandleW(nullptr);
     LPBYTE  pMainModule = reinterpret_cast<LPBYTE>(hMainModule);
