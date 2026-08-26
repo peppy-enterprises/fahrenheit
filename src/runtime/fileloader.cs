@@ -248,8 +248,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
      * Simplifying the stream prefix, on paper, should not be problematic. The game has a path normalizer
      * function `fiosUnifyFilename`, so at worst we have to reimplement just that, right?
      * 
-     * The game's actual _use_ of path normalization can most charitably be described as completely batshit insane.
-     * It manages to achieve almost every possible permutation of fault:
+     * The game's usage of path normalization is, at best, inconsistent. It manages to fail in almost every way possible:
      * - Blindly hardcoding the normal '../../..' stream prefix into a path.
      * - Blindly opening a path without normalizing.
      * - Blindly hashing a path without normalizing, then looking up tables with it.
