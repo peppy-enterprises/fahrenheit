@@ -208,7 +208,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         _set_list.Clear();
         _set_list.AddRange(FhApi.Saves.get_sets());
-        _logger.Info($"Detected {_set_list.Count} save sets.");
 
         _scrollable_sets.max = FhApi.Saves.get_sets().Count;
         _scrollable_saves.max = is_saving
