@@ -115,8 +115,6 @@ internal struct FhSaveHeader {
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 internal struct FhSaveHeader2 {
-    public bool is_new_game_plus => times_played > 1;
-
     public uint     _0x00;
     public byte     _0x04;
     public byte     id_chr1;
@@ -147,6 +145,8 @@ internal struct FhSaveHeader2 {
     public byte     _0x29;
     public ushort   id_location;
     public byte     _0x2C;
+
+    public bool is_new_game_plus => times_played > 1;
 }
 
 /// <summary>
