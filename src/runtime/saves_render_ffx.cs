@@ -260,7 +260,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         if (!_texture_bg.try_use(out ImTextureRef bg, out _)) return;
 
         UV tex_uv = new Rect {
-            pos  = new(0f, 0f),
+            pos  = new(   0f,    0f),
             size = new(1920f, 1024f),
         }.as_uv(_tex_bg_size);
 
@@ -541,7 +541,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         UV button_tuv = new Rect {
             pos  = new(   0f, 954f - tex_y_diff),
-            size = new(1024f, 70f),
+            size = new(1024f,  70f),
         }.as_uv(_tex_summonbg_size);
 
         // Screen coordinates
@@ -712,7 +712,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             _tex_meswin_size,
             new(385f, 544f),
             new(450f, 609f),
-            new(9f, 9f)
+            new(  9f,   9f)
         );
 
         _savefile_border_screen_helper = NineSliceHelper.create(
@@ -926,7 +926,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        Vector2 save_topleft = new(133f, 146f);
+        Vector2 save_topleft = new( 133f, 146f);
         Vector2 save_size    = new(1302f, 127f);
 
         Rect save_rect = new Rect {
@@ -948,7 +948,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             _tex_meswin_size,
             new(385f, 544f),
             new(450f, 609f),
-            new(9f, 9f)
+            new(  9f,   9f)
         );
 
         _savefile_border_screen_helper = NineSliceHelper.create(
