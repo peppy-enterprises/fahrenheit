@@ -5,6 +5,16 @@
 
 namespace Fahrenheit.Runtime;
 
+/*
+ * Some conventions are assumed across the various methods in this file:
+ * Variables named '*_tuv' are texture UVs
+ * Variables named '*_suv' are on-screen UVs
+ *
+ * Notably, we lie about on-screen UVs being UVs; they are, in fact, pixel coordinates.
+ * This is because usage of the UV type is still beneficial, and the distinction
+ * may as well not exist past the actual calculation.
+ */
+
 [FhLoad(FhGameId.FFX)]
 public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     /// <summary>Possible open windows of the save/load menu.</summary>
