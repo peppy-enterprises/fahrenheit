@@ -78,19 +78,29 @@ public class Scrollable {
     ///     How far through the scrollable, in percent,
     ///     the new visible range of indices should be.
     /// </param>
+    /// <param name="preserve_hover">
+    ///     Whether the hovered index should be preserved
+    ///     relative to the visible range of indices.
+    /// </param>
     /// <remarks>
     ///     The new progress value will be safely clamped to between 0 and 1.
     ///     This will safely move the hovered value to fit within the new range of visible indices.
     /// </remarks>
-    public void set_progress(float value) {
+    public void set_progress(float value, bool preserve_hover = false) {
         value = float.Clamp(value, 0f, 1f);
 
         int old_current = current;
+        int hover_diff  = hovered - current;
 
         current = (int)float.Round(value * int.Max(0, max - visible));
         current = int.Clamp(current, 0, int.Max(0, max - visible));
 
-        if (!is_within_clip(hovered)) {
+        if (preserve_hover) {
+            hovered = current + hover_diff;
+            hovered = int.Clamp(hovered, 0, int.Max(0, max - 1));
+        }
+        else {
+            // Clip the hovered index to the range of visible indices so it never goes off-screen
             if (int.Sign(current - old_current) > 0) {
                 hovered = get_clip_start();
             }

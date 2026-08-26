@@ -85,7 +85,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         visible = 9,
     };
 
-    private bool _scrollbar_dragging;
+    private bool     _scrollbar_dragging;
+    private Vector2? _scrollbar_held_pos;
 
     protected override Vector2 get_ref_size() => new(1600f, 900f);
 
@@ -111,6 +112,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     protected internal override void handle_input() {
+        if (_scrollbar_dragging) return;
+
         switch (_focus) {
             case FhSaveUiFocus.LIST: {
                 if (_mode == FhSaveUiMode.SAVE_LIST
@@ -1069,6 +1072,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         triangle_top    = triangle_top   .scale_raw(scale_factor);
         triangle_bottom = triangle_bottom.scale_raw(scale_factor);
 
+        scrollable_track_height *= scale_factor.Y;
+
         draw.AddRectFilled(
             track.top_left,
             track.bottom_right,
@@ -1099,6 +1104,36 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         );
 
         // Handle input
+
+        // Allow grabbing the thumb on the entire track width
+        Rect expanded_thumb = thumb.expand(
+            new(track.size.X - thumb.size.X),
+            new(Alignment.CENTER, Alignment.CENTER)
+        );
+
+        float expanded_track_height = scrollable_track_height + (track.size.X - thumb.size.X);
+
+        if (FhApi.Gui.mouse_clicked(expanded_thumb)) {
+            _scrollbar_dragging = true;
+            _scrollbar_held_pos = ImGui.GetMousePos() - expanded_thumb.pos;
+        }
+
+        if (_scrollbar_dragging) {
+            Vector2 new_held_pos = ImGui.GetMousePos() - expanded_thumb.pos;
+
+            float drag_delta     = new_held_pos.Y - _scrollbar_held_pos!.Value.Y;
+            float progress_delta = drag_delta / expanded_track_height;
+
+            _current_scrollable!.set_progress(progress + progress_delta, true);
+
+            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left)) {
+                _scrollbar_dragging = false;
+                _scrollbar_held_pos = null;
+            }
+
+            return;
+        }
+
         if (FhApi.Gui.mouse_clicked(triangle_top, repeat: true)) {
             _current_scrollable!.move_hover(-1);
         }
