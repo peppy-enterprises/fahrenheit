@@ -116,7 +116,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
                 _current_scrollable!.handle_input();
 
-                if (_mode == FhSaveUiMode.SAVE_LIST && pressed_confirm()) {
+                if (_mode == FhSaveUiMode.SAVE_LIST && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
                     if (is_saving && _current_scrollable!.hovered == 0) {
                         FhApi.Saves.save(0);
                     }
@@ -145,7 +145,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                     break;
                 }
 
-                if (pressed_confirm()) {
+                if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
                     change_mode(FhSaveUiMode.SET_SWAP);
                 }
 
@@ -155,7 +155,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             default: throw new NotImplementedException();
         }
 
-        if (pressed_cancel()) {
+        if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_cancel)) {
             switch (_mode) {
                 case FhSaveUiMode.SET_SWAP:
                     change_mode(FhSaveUiMode.SAVE_LIST);
@@ -219,35 +219,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         FhApi.Saves.switch_active_set(set_name);
         change_mode(FhSaveUiMode.SAVE_LIST);
     }
-
-    private bool mouse_hovering(Rect rect) {
-        return ImGui.IsMouseHoveringRect(rect.pos, rect.pos + rect.size, false);
-    }
-
-    private bool mouse_clicked(Rect rect, ImGuiMouseButton button = ImGuiMouseButton.Left) {
-        return ImGui.IsMouseHoveringRect(rect.pos, rect.pos + rect.size, false)
-            && ImGui.IsMouseClicked(button);
-    }
-
-    private bool pressed_confirm() {
-        ImGuiKey gamepad_confirm = FhGlobal.lang_id == FhLangId.Japanese
-                ? ImGuiKey.GamepadFaceRight
-                : ImGuiKey.GamepadFaceDown;
-
-        return ImGui.IsKeyPressed(ImGuiKey.Enter)
-            || ImGui.IsKeyPressed(gamepad_confirm);
-    }
-
-    private bool pressed_cancel() {
-        ImGuiKey gamepad_cancel = FhGlobal.lang_id == FhLangId.Japanese
-                ? ImGuiKey.GamepadFaceDown
-                : ImGuiKey.GamepadFaceRight;
-
-        return ImGui.IsKeyPressed(ImGuiKey.Escape)
-            || ImGui.IsKeyPressed(ImGuiKey.Backspace)
-            || ImGui.IsKeyPressed(gamepad_cancel);
-    }
-
 
     private void populate_map_icons() {
         _map_icon_textures.Clear();
@@ -519,7 +490,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         UV bg_suv = bg_screen.as_uv();
 
-        if (mouse_hovering(bg_screen)) {
+        if (FhApi.Gui.mouse_hovering(bg_screen)) {
             _focus = FhSaveUiFocus.ACTIVE_SET;
         }
 
@@ -557,7 +528,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         // Prevent accidentally capturing input when the user is focused on an actual ImGui window
         if (ImGui.GetIO().WantCaptureMouse) return;
 
-        if (mouse_clicked(bg_screen)) {
+        if (FhApi.Gui.mouse_clicked(bg_screen)) {
             change_mode(FhSaveUiMode.SET_SWAP);
         }
     }
@@ -604,7 +575,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         float font_size = 36f * scale_factor.Y;
 
-        if (mouse_hovering(button_scaled)) {
+        if (FhApi.Gui.mouse_hovering(button_scaled)) {
             _focus = FhSaveUiFocus.LIST;
             _scrollable_sets.hovered = set_idx;
         }
@@ -661,7 +632,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         // Handle input
 
-        if (!io.WantCaptureMouse && mouse_clicked(button_scaled)) {
+        if (!io.WantCaptureMouse && FhApi.Gui.mouse_clicked(button_scaled)) {
             io.WantCaptureMouse = true;
             switch_set(name);
         }
@@ -734,7 +705,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         save_rect.pos.Y += (save_rect.size.Y + save_gap) * (index - _scrollable_saves.current);
 
-        if (mouse_hovering(save_rect.scale_raw(scale_factor))) {
+        if (FhApi.Gui.mouse_hovering(save_rect.scale_raw(scale_factor))) {
             _focus = FhSaveUiFocus.LIST;
             _scrollable_saves.hovered = index;
         }
@@ -975,7 +946,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             ui_cursor(save_rect.scale_raw(scale_factor).left);
         }
 
-        if (mouse_clicked(save_rect.scale_raw(scale_factor))) {
+        if (FhApi.Gui.mouse_clicked(save_rect.scale_raw(scale_factor))) {
             execute(save.slot);
         }
     }
@@ -999,7 +970,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         // We only want to respect the outermost border, so we use 4f.
         Vector2 save_border_size = new(4f);
 
-        if (mouse_hovering(save_rect.scale_raw(scale_factor))) {
+        if (FhApi.Gui.mouse_hovering(save_rect.scale_raw(scale_factor))) {
             _focus = FhSaveUiFocus.LIST;
             _scrollable_saves.hovered = 0;
         }
@@ -1074,7 +1045,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             }
         }
 
-        if (mouse_clicked(save_rect)) {
+        if (FhApi.Gui.mouse_clicked(save_rect)) {
             FhApi.Saves.save(0);
         }
     }

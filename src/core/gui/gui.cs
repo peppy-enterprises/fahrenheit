@@ -149,6 +149,11 @@ public unsafe class FhGui {
         style.Colors[(int)ImGuiCol.ModalWindowDimBg]      = new Vector4(0.8f  , 0.8f  , 0.8f  , 0.35f );
     }
 
+    //TODO: Reorganize the helpers into multiple sections/files:
+    //      - Input
+    //      - DrawList
+    //      - High-level
+
     public readonly ImGuiWindowFlags WINDOW_FLAGS_FULLSCREEN =
             ImGuiWindowFlags.NoDecoration
           | ImGuiWindowFlags.NoMove
@@ -156,8 +161,7 @@ public unsafe class FhGui {
           | ImGuiWindowFlags.NoBringToFrontOnFocus
           | ImGuiWindowFlags.NoNavFocus;
 
-    //TODO: Add more constants for standardized style
-
+    //TODO: Change these keys arrays to private and add ReadOnlySpan accessors
     public readonly ImGuiKey[] keys_up = [
         ImGuiKey.W,
         ImGuiKey.UpArrow,
@@ -186,6 +190,21 @@ public unsafe class FhGui {
         ImGuiKey.GamepadLStickRight,
     ];
 
+    public readonly ImGuiKey[] keys_confirm = [
+        ImGuiKey.Enter,
+        FhGlobal.lang_id == FhLangId.Japanese
+            ? ImGuiKey.GamepadFaceRight
+            : ImGuiKey.GamepadFaceDown,
+    ];
+
+    public readonly ImGuiKey[] keys_cancel = [
+        ImGuiKey.Escape,
+        ImGuiKey.Backspace,
+        FhGlobal.lang_id == FhLangId.Japanese
+            ? ImGuiKey.GamepadFaceDown
+            : ImGuiKey.GamepadFaceRight,
+    ];
+
     /// <summary>
     /// Initialize values that require ImGui to be running. Called by Runtime.
     /// </summary>
@@ -205,6 +224,22 @@ public unsafe class FhGui {
         }
 
         return false;
+    }
+
+    /// <summary>Detect whether the mouse cursor is hovering over a specified rectangle.</summary>
+    /// <param name="rect">The rect describing an area of the game window to detect the mouse cursor over.</param>
+    /// <returns>Whether the mouse cursor is hovering the specified rectangle.</returns>
+    public bool mouse_hovering(Rect rect) {
+        return ImGui.IsMouseHoveringRect(rect.pos, rect.pos + rect.size, false);
+    }
+
+    /// <summary>Detect whether the user clicked on a specified rectangle.</summary>
+    /// <param name="rect">The rect describing an area of the game window to detect mouse clicks on.</param>
+    /// <param name="button">The button of the mouse to detect clicks of.</param>
+    /// <returns>Whether the user clicked with the button on the specified rectangle.</returns>
+    public bool mouse_clicked(Rect rect, ImGuiMouseButton button = ImGuiMouseButton.Left) {
+        return ImGui.IsMouseHoveringRect(rect.pos, rect.pos + rect.size, false)
+            && ImGui.IsMouseClicked(button);
     }
 
     public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
