@@ -694,10 +694,12 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             return;
         }
 
+        // Not returning early, so let's get to drawing
+
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
         Rect save_rect = new Rect {
-            pos  = new( 133f, 146f),
+            pos  = new( 133f, 146f), // Topmost position
             size = new(1302f, 127f),
         };
 
@@ -705,247 +707,233 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         save_rect.pos.Y += (save_rect.size.Y + save_gap) * (index - _scrollable_saves.current);
 
+        // We set the hovered state early to potentially use it later.
         if (FhApi.Gui.mouse_hovering(save_rect.scale_raw(scale_factor))) {
             _focus = FhSaveUiFocus.LIST;
             _scrollable_saves.hovered = index;
+        }
+
+        /* ===== Border ===== */
+        _savefile_border_helper ??= NineSliceHelper.create(
+            _tex_meswin_size,
+            new(385f, 544f),
+            new(450f, 609f),
+            new(9f, 9f)
+        );
+
+        _savefile_border_screen_helper = NineSliceHelper.create(
+            new(1f),
+            save_rect,
+            new(9f, 9f)
+        );
+
+        for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
+            Vector2[] tex_uv = _savefile_border_helper.get_uvs(slice_idx);
+            Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
+
+            draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
         }
 
         // The border effectively has two sizes: 4f and 9f.
         // We only want to respect the outermost border, so we use 4f.
         Vector2 save_border_size = new(4f);
 
-        // Border
-        {
-            _savefile_border_helper ??= NineSliceHelper.create(
-                _tex_meswin_size,
-                new(385f, 544f),
-                new(450f, 609f),
-                new(9f, 9f)
-            );
+        /* ===== Header Gradient ===== */
+        float header_size = 35f;
 
-            _savefile_border_screen_helper = NineSliceHelper.create(
-                new(1f),
-                save_rect,
-                new(9f, 9f)
-            );
+        uint grad_l = 0xFF000000; // black
+        uint grad_r = 0x00800000; // transparent blue
 
-            for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
-                Vector2[] tex_uv = _savefile_border_helper.get_uvs(slice_idx);
-                Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
+        UV header_uv = new Rect {
+            pos  = save_rect.pos + save_border_size,
+            size = save_rect.size with { Y = header_size },
+        }.scale_raw(scale_factor).as_uv();
 
-                draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
-            }
+        draw.AddRectFilledMultiColor(header_uv.p0, header_uv.p1, grad_l, grad_r, grad_r, grad_l);
+
+        /* ===== Party Icons ===== */
+        UV[] face_tuvs = new UV[8];
+
+        for (int i = 0; i < 8; i++) {
+            float x1 = 200f * (i % 4);
+            float x2 = x1 + 200f;
+
+            float y1 = 512f;
+            if (i > 3) y1 -= 200f;
+            float y2 = y1 - 200f;
+
+            face_tuvs[i] = new UV(
+                new(x1, y1),
+                new(x2, y2)
+            ).map_to(_tex_faces_size);
         }
 
-        // Header gradient
-        {
-            // RGBA8 (little-endian)
-            uint grad_l = 0xFF000000; // black
-            uint grad_r = 0x00800000; // transparent blue
+        Vector2 face_size = new(83f);
+        float   face_gap  = 5f;
 
-            UV header_uv = new Rect {
-                pos  = save_rect.pos + save_border_size,
-                size = save_rect.size with { Y = 35f },
-            }.scale_raw(scale_factor).as_uv();
+        Rect face = new Rect {
+            pos = new(
+                save_rect.left.X + face_gap,
+                save_rect.bottom.Y - save_border_size.Y - face_size.Y
+            ),
 
-            draw.AddRectFilledMultiColor(header_uv.p0, header_uv.p1, grad_l, grad_r, grad_r, grad_l);
+            size = face_size,
+        };
+
+        UV face_suv = face.scale_raw(scale_factor).as_uv();
+
+        Vector2 face_screen_offset = new Vector2(face_size.X + face_gap, 0f) * scale_factor;
+
+        FhSaveHeader header = MemoryMarshal.Read<FhSaveHeader>(save.header);
+
+        byte[] chrs = header.formation[..3].ToArray();
+        foreach (int chr in chrs) {
+            if (chr == 0xFF) continue;
+
+            UV tuv = face_tuvs[chr];
+
+            draw.AddImage(faces, face_suv.p0, face_suv.p1, tuv.p0, tuv.p1);
+
+            face_suv = face_suv.move(face_screen_offset);
         }
 
-        // Party icons
-        {
-            UV[] face_tuvs = new UV[8];
+        /* ===== Location Icon ===== */
+        string map = Encoding.UTF8.GetString(save.icon_map);
 
-            for (int i = 0; i < 8; i++) {
-                float x1 = 200f * (i % 4);
-                float x2 = x1 + 200f;
+        FhTexture tex_map = _map_icon_textures.GetValueOrDefault(map, _texture_map_icon_default);
 
-                float y1 = 512f;
-                if (i > 3) y1 -= 200f;
-                float y2 = y1 - 200f;
+        // if (tex_map.try_use(out ImTextureRef map_icon, out _)) {
+        //     UV tuv = new(new(0f, 1f), new(1f, 0f));
+        //
+        //     UV suv = new Rect {
+        //         pos  = save_rect.pos + new Vector2(1085f, 4f),
+        //         size = new(212f, 120f),
+        //     }.scale_raw(scale_factor).as_uv();
+        //
+        //     draw.AddImage(map_icon, suv.p0, suv.p1, tuv.p0, tuv.p1);
+        // }
 
-                face_tuvs[i] = new UV(
-                    new(x1, y1),
-                    new(x2, y2)
-                ).map_to(_tex_faces_size);
-            }
+        /* ===== Text ===== */
 
-            Vector2 face_screen_size   = new(83f);
+        /* ===== Header ===== */
+        float text_margin_left = 10f;
+        float text_margin_between = 40f;
 
-            Rect face = new Rect {
-                pos = new(
-                    save_rect.left.X + 5f,
-                    save_rect.bottom.Y - save_border_size.Y - face_screen_size.Y
-                ),
+        Vector2 text_pos_left =
+              save_rect.pos
+            + save_border_size
+            + new Vector2( text_margin_left, header_size / 2f);
 
-                size = face_screen_size,
-            };
+        float font_size = 36f * scale_factor.Y;
 
-            UV face_suv = face.scale_raw(scale_factor).as_uv();
+        //TODO: Add localization
+        string slot_text = save.slot == 0 ? "Autosave" : save.slot.ToString();
 
-            Vector2 face_screen_offset = new Vector2(face_screen_size.X + 5f, 0f) * scale_factor;
+        string location_name = Encoding.UTF8.GetString(save.location);
+        string create_time   = Encoding.UTF8.GetString(save.create_time);
 
-            FhSaveHeader header = MemoryMarshal.Read<FhSaveHeader>(save.header);
+        string[] datetime = create_time.Split(' ');
+        string[] date = datetime[0].Split('-');
+        string[] time = datetime[1].Split(':');
 
-            byte[] chrs = header.formation[..3].ToArray();
-            foreach (int chr in chrs) {
-                if (chr == 0xFF) continue;
+        (string year, string month , string day)    = (date[0], date[1], date[2]);
+        (string hour, string minute, string second) = (time[0], time[1], time[2]);
 
-                UV tuv = face_tuvs[chr];
-
-                draw.AddImage(faces, face_suv.p0, face_suv.p1, tuv.p0, tuv.p1);
-
-                face_suv = face_suv.move(face_screen_offset);
-            }
+        if (month.StartsWith('0')) {
+            month = month[1..];
         }
 
-        // Location icon
-        {
-            string map = Encoding.UTF8.GetString(save.icon_map);
-
-            FhTexture tex_map = _map_icon_textures.GetValueOrDefault(map, _texture_map_icon_default);
-
-            // if (tex_map.try_use(out ImTextureRef map_icon, out _)) {
-            //     UV tuv = new(new(0f, 1f), new(1f, 0f));
-            //
-            //     UV suv = new Rect {
-            //         pos  = save_rect.pos + new Vector2(1085f, 4f),
-            //         size = new(212f, 120f),
-            //     }.scale_raw(scale_factor).as_uv();
-            //
-            //     draw.AddImage(map_icon, suv.p0, suv.p1, tuv.p0, tuv.p1);
-            // }
+        if (day.StartsWith('0')) {
+            day = day[1..];
         }
 
-        // Header text
-        {
-            float text_margin_left = 10f;
-            float text_margin_between = 40f;
-
-            float header_size = 35f;
-
-            Vector2 text_pos_left =
-                  save_rect.pos
-                + save_border_size
-                + new Vector2( text_margin_left, header_size / 2f);
-
-            float font_size = 36f * scale_factor.Y;
-
-            //TODO: Add localization
-            string slot_text = save.slot == 0 ? "Autosave" : save.slot.ToString();
-
-            string location_name = Encoding.UTF8.GetString(save.location);
-            string create_time   = Encoding.UTF8.GetString(save.create_time);
-
-            string[] datetime = create_time.Split(' ');
-            string[] date = datetime[0].Split('-');
-            string[] time = datetime[1].Split(':');
-
-            (string year, string month , string day)    = (date[0], date[1], date[2]);
-            (string hour, string minute, string second) = (time[0], time[1], time[2]);
-
-            if (month.StartsWith('0')) {
-                month = month[1..];
-            }
-
-            if (day.StartsWith('0')) {
-                day = day[1..];
-            }
-
-            if (hour.StartsWith('0')) {
-                hour = hour[1..];
-            }
-
-            create_time = $"{year}/{month}/{day} {hour}:{minute}:{second}";
-
-            Vector2 text_size = FhApi.Gui.draw_text(
-                draw,
-                text_pos_left * scale_factor,
-                slot_text,
-                font_size,
-                true,
-                new(Alignment.BEGIN, Alignment.CENTER),
-                save.slot == 0 ? 0xFF19D8FF : 0xFFFFFFFF // Autosave text is yellow
-            );
-
-            text_pos_left.X += text_size.X + text_margin_between;
-
-            // For some reason, if the slot text is "Autosave", the margin is doubled
-            if (save.slot == 0) {
-                text_pos_left.X += text_margin_between;
-            }
-
-            FhApi.Gui.draw_text(
-                draw,
-                text_pos_left * scale_factor,
-                location_name,
-                font_size,
-                true,
-                new(Alignment.BEGIN, Alignment.CENTER)
-            );
-
-            float map_icon_size = 212f;
-
-            Vector2 text_pos_right =
-                  save_rect.top_right
-                + new Vector2(-save_border_size.X, save_border_size.Y)
-                + new Vector2(-(map_icon_size + text_margin_between), header_size / 2f);
-
-            FhApi.Gui.draw_text(
-                draw,
-                text_pos_right * scale_factor,
-                create_time,
-                font_size,
-                true,
-                new(Alignment.END, Alignment.CENTER)
-            );
+        if (hour.StartsWith('0')) {
+            hour = hour[1..];
         }
 
-        // Details text
-        {
-            float face_size = 83f;
-            float face_gap  = 5f;
+        create_time = $"{year}/{month}/{day} {hour}:{minute}:{second}";
 
-            float margin_from_last_face = 31f;
+        Vector2 text_size = FhApi.Gui.draw_text(
+            draw,
+            text_pos_left * scale_factor,
+            slot_text,
+            font_size,
+            true,
+            new(Alignment.BEGIN, Alignment.CENTER),
+            save.slot == 0 ? 0xFF19D8FF : 0xFFFFFFFF // Autosave text is yellow
+        );
 
-            float header_size = 40f;
-            float line_height = 40f;
+        text_pos_left.X += text_size.X + text_margin_between;
 
-            Vector2 text_pos = save_rect.pos + new Vector2(
-                face_size * 3 + face_gap * 2 + margin_from_last_face,
-                header_size + line_height / 2f
-            );
-
-            float font_size = 36f * scale_factor.Y;
-
-            string player_name = Encoding.UTF8.GetString(save.player_name);
-            string playtime    = Encoding.UTF8.GetString(save.play_time);
-
-            FhApi.Gui.draw_text(
-                draw,
-                text_pos * scale_factor,
-                player_name,
-                font_size,
-                true,
-                new(Alignment.BEGIN, Alignment.CENTER)
-            );
-
-            text_pos.Y += line_height;
-
-            FhApi.Gui.draw_text(
-                draw,
-                text_pos * scale_factor,
-                playtime,
-                font_size,
-                true,
-                new(Alignment.BEGIN, Alignment.CENTER)
-            );
+        // For some reason, if the slot text is "Autosave", the margin is doubled
+        if (save.slot == 0) {
+            text_pos_left.X += text_margin_between;
         }
 
-        // Cursor
+        FhApi.Gui.draw_text(
+            draw,
+            text_pos_left * scale_factor,
+            location_name,
+            font_size,
+            true,
+            new(Alignment.BEGIN, Alignment.CENTER)
+        );
+
+        float map_icon_size = 212f;
+
+        Vector2 text_pos_right =
+              save_rect.top_right
+            + new Vector2(-save_border_size.X, save_border_size.Y)
+            + new Vector2(-(map_icon_size + text_margin_between), header_size / 2f);
+
+        FhApi.Gui.draw_text(
+            draw,
+            text_pos_right * scale_factor,
+            create_time,
+            font_size,
+            true,
+            new(Alignment.END, Alignment.CENTER)
+        );
+
+        /* ===== Details ===== */
+        float margin_from_last_face = 31f;
+
+        float line_height = 40f;
+
+        Vector2 text_pos = save_rect.pos + new Vector2(
+            face_size.X * 3 + face_gap * 2 + margin_from_last_face,
+            header_size + line_height / 2f
+        );
+
+        string player_name = Encoding.UTF8.GetString(save.player_name);
+        string playtime    = Encoding.UTF8.GetString(save.play_time);
+
+        FhApi.Gui.draw_text(
+            draw,
+            text_pos * scale_factor,
+            player_name,
+            font_size,
+            true,
+            new(Alignment.BEGIN, Alignment.CENTER)
+        );
+
+        text_pos.Y += line_height;
+
+        FhApi.Gui.draw_text(
+            draw,
+            text_pos * scale_factor,
+            playtime,
+            font_size,
+            true,
+            new(Alignment.BEGIN, Alignment.CENTER)
+        );
+
+        /* ===== Cursor ===== */
         if (_focus == FhSaveUiFocus.LIST && _scrollable_saves.hovered == index) {
             ui_cursor(save_rect.scale_raw(scale_factor).left);
         }
 
+        // Handle input
         if (FhApi.Gui.mouse_clicked(save_rect.scale_raw(scale_factor))) {
             execute(save.slot);
         }
@@ -975,76 +963,68 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             _scrollable_saves.hovered = 0;
         }
 
-        // Border
-        {
-            _savefile_border_helper ??= NineSliceHelper.create(
-                _tex_meswin_size,
-                new(385f, 544f),
-                new(450f, 609f),
-                new(9f, 9f)
-            );
+        /* ===== Border ===== */
+        _savefile_border_helper ??= NineSliceHelper.create(
+            _tex_meswin_size,
+            new(385f, 544f),
+            new(450f, 609f),
+            new(9f, 9f)
+        );
 
-            _savefile_border_screen_helper = NineSliceHelper.create(
-                new(1f),
-                save_rect,
-                new(9f, 9f)
-            );
+        _savefile_border_screen_helper = NineSliceHelper.create(
+            new(1f),
+            save_rect,
+            new(9f, 9f)
+        );
 
-            for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
-                Vector2[] tex_uv = _savefile_border_helper.get_uvs(slice_idx);
-                Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
+        for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
+            Vector2[] tex_uv = _savefile_border_helper.get_uvs(slice_idx);
+            Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
 
-                draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
-            }
+            draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
         }
 
-        // Header gradient
-        {
-            // RGBA8 (little-endian)
-            uint grad_l = 0xFF000000; // black
-            uint grad_r = 0x00800000; // transparent blue
+        /* ===== Header Gradient ===== */
+        uint grad_l = 0xFF000000; // black
+        uint grad_r = 0x00800000; // transparent blue
 
-            UV header_uv = new Rect {
-                pos  = save_rect.pos + save_border_size,
-                size = save_rect.size with { Y = 35f },
-            }.scale_raw(scale_factor).as_uv();
+        UV header_uv = new Rect {
+            pos  = save_rect.pos + save_border_size,
+            size = save_rect.size with { Y = 35f },
+        }.scale_raw(scale_factor).as_uv();
 
-            draw.AddRectFilledMultiColor(header_uv.p0, header_uv.p1, grad_l, grad_r, grad_r, grad_l);
+        draw.AddRectFilledMultiColor(header_uv.p0, header_uv.p1, grad_l, grad_r, grad_r, grad_l);
+
+        /* ===== New Save Data Text ===== */
+        //TODO: Add localization
+        string text = "New Save Data";
+
+        float header_height = 35f;
+
+        Vector2 text_pos = save_rect.top_left + new Vector2(
+            12f,
+            header_height + (save_rect.size.Y - header_height) / 2f
+        );
+
+        text_pos *= scale_factor;
+
+        float font_size = 36f * scale_factor.Y;
+
+        FhApi.Gui.draw_text(
+            draw,
+            text_pos,
+            text,
+            font_size,
+            true,
+            new(Alignment.BEGIN, Alignment.CENTER)
+        );
+
+        /* ===== Cursor ===== */
+        if (_focus == FhSaveUiFocus.LIST && _scrollable_saves.hovered == 0) {
+            ui_cursor(save_rect.scale_raw(scale_factor).left);
         }
 
-        // New Save Data text
-        {
-            //TODO: Add localization
-            string text = "New Save Data";
-
-            float header_height = 35f;
-
-            Vector2 text_pos = save_rect.top_left + new Vector2(
-                12f,
-                header_height + (save_rect.size.Y - header_height) / 2f
-            );
-
-            text_pos *= scale_factor;
-
-            float font_size = 36f * scale_factor.Y;
-
-            FhApi.Gui.draw_text(
-                draw,
-                text_pos,
-                text,
-                font_size,
-                true,
-                new(Alignment.BEGIN, Alignment.CENTER)
-            );
-        }
-
-        // Cursor
-        {
-            if (_focus == FhSaveUiFocus.LIST && _scrollable_saves.hovered == 0) {
-                ui_cursor(save_rect.scale_raw(scale_factor).left);
-            }
-        }
-
+        // Handle input
         if (FhApi.Gui.mouse_clicked(save_rect)) {
             FhApi.Saves.save(0);
         }
