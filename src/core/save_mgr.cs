@@ -281,7 +281,7 @@ public sealed class FhSaves {
     /// <param name="id">The ID of the desired renderer.</param>
     /// <param name="renderer">The renderer with the given ID.</param>
     /// <returns>Whether the operation succeeded.</returns>
-    internal bool get_renderer(string id, out FhSaveUiRenderer? renderer) {
+    internal bool get_renderer(string id, [NotNullWhen(true)] out FhSaveUiRenderer? renderer) {
         return _renderers.TryGetValue(id, out renderer);
     }
 
@@ -345,7 +345,7 @@ public sealed class FhSaves {
     /// <summary>Retrieve the current save system mode.</summary>
     /// <param name="mode">The current mode of the system.</param>
     /// <returns>Whether the operation succeeded.</returns>
-    public bool get_system_mode(out FhSaveSystemMode? mode) {
+    public bool get_system_mode([NotNullWhen(true)] out FhSaveSystemMode? mode) {
         mode = null;
         if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;
