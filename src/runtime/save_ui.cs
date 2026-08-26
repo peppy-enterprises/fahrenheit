@@ -52,6 +52,8 @@ public sealed class FhSaveUiModule : FhModule {
             // So we try to fall back to default
             _logger.Warning("Failed to find desired renderer, falling back to default.");
 
+            _settings.renderer.set(FhSaves.DEFAULT_RENDERER_ID);
+
             if (!FhApi.Saves.get_renderer(_settings.renderer.get(), out renderer)) {
                 // Something has gone disasterously wrong – we're missing our default renderer!
                 _logger.Error("Failed to find default renderer.");
