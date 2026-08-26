@@ -36,6 +36,8 @@ global using System.Threading;                // Interlocked, Lock, et al.
 
 global using Hexa.NET.ImGui;                  // ImGui is required to render large parts of the runtime UI.
 
+global using Fahrenheit.Gui;
+
 // Win32/D3D11 typedefs
 global using Windows.Win32;
 global using Windows.Win32.Foundation;
