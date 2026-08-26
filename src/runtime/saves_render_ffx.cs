@@ -72,10 +72,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     private bool is_saving => FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode) && system_mode is FhSaveSystemMode.SAVE;
 
-    private NineSliceHelper? _savefile_border_helper;
-    private NineSliceHelper? _savefile_border_screen_helper;
-
-    private Scrollable? _current_scrollable;
+    private readonly NineSliceHelper  _savefile_border_helper;
+    private          NineSliceHelper? _savefile_border_screen_helper;
 
     private readonly Scrollable _scrollable_saves = new() {
         visible = 5,
@@ -85,8 +83,21 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         visible = 9,
     };
 
+    private Scrollable _current_scrollable;
+
     private bool     _scrollbar_dragging;
     private Vector2? _scrollbar_held_pos;
+
+    public FhSaveUiRendererFFX() {
+        _current_scrollable = _scrollable_saves;
+
+        _savefile_border_helper = NineSliceHelper.create(
+            _tex_meswin_size,
+            new(385f, 544f),
+            new(450f, 609f),
+            new(  9f,   9f)
+        );
+    }
 
     protected override Vector2 get_ref_size() => new(1600f, 900f);
 
@@ -118,20 +129,20 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             case FhSaveUiFocus.LIST: {
                 if (_mode == FhSaveUiMode.SAVE_LIST
                  && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up)
-                 && _current_scrollable!.hovered == 0
+                 && _current_scrollable.hovered == 0
                 ) {
                     _focus = FhSaveUiFocus.ACTIVE_SET;
                     break;
                 }
 
-                _current_scrollable!.handle_input();
+                _current_scrollable.handle_input();
 
                 if (_mode == FhSaveUiMode.SAVE_LIST && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
-                    if (is_saving && _current_scrollable!.hovered == 0) {
+                    if (is_saving && _current_scrollable.hovered == 0) {
                         FhApi.Saves.save(0);
                     }
                     else {
-                        FhSaveDisplayData save = FhApi.Saves.display_data[_current_scrollable!.hovered];
+                        FhSaveDisplayData save = FhApi.Saves.display_data[_current_scrollable.hovered];
                         execute(save.slot);
                     }
 
@@ -148,7 +159,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                     _focus = FhSaveUiFocus.LIST;
 
                     if (_focus == FhSaveUiFocus.LIST) {
-                        _current_scrollable!.hovered = _current_scrollable!.current;
+                        _current_scrollable.hovered = _current_scrollable.current;
                     }
 
                     break;
@@ -202,7 +213,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     private void change_mode(FhSaveUiMode new_mode) {
-        _current_scrollable!.reset();
+        _current_scrollable.reset();
         _mode = new_mode;
     }
 
@@ -716,13 +727,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         /* ===== Border ===== */
-        _savefile_border_helper ??= NineSliceHelper.create(
-            _tex_meswin_size,
-            new(385f, 544f),
-            new(450f, 609f),
-            new(  9f,   9f)
-        );
-
         _savefile_border_screen_helper = NineSliceHelper.create(
             new(1f),
             save_rect,
@@ -881,12 +885,13 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         );
 
         /* ===== Details ===== */
+        float margin_from_header    =  5f;
         float margin_from_last_face = 31f;
         float line_height           = 40f;
 
         Vector2 text_pos = save_rect.pos + new Vector2(
             face_size.X * 3 + face_gap * 2 + margin_from_last_face,
-            header_size + line_height / 2f
+            header_size + margin_from_header + line_height / 2f
         );
 
         string player_name = Encoding.UTF8.GetString(save.player_name);
@@ -948,13 +953,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         /* ===== Border ===== */
-        _savefile_border_helper ??= NineSliceHelper.create(
-            _tex_meswin_size,
-            new(385f, 544f),
-            new(450f, 609f),
-            new(  9f,   9f)
-        );
-
         _savefile_border_screen_helper = NineSliceHelper.create(
             new(1f),
             save_rect,
@@ -1053,7 +1051,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        float progress = _current_scrollable?.get_progress() ?? 0f;
+        float progress = _current_scrollable.get_progress();
 
         float scrollable_track_height = track.size.Y - thumb_margin.Y * 2 - thumb_size.Y;
         float thumb_progress = progress * scrollable_track_height;
@@ -1124,7 +1122,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             float drag_delta     = new_held_pos.Y - _scrollbar_held_pos!.Value.Y;
             float progress_delta = drag_delta / expanded_track_height;
 
-            _current_scrollable!.set_progress(progress + progress_delta, true);
+            _current_scrollable.set_progress(progress + progress_delta, true);
 
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Left)) {
                 _scrollbar_dragging = false;
@@ -1135,11 +1133,11 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         if (FhApi.Gui.mouse_clicked(triangle_top, repeat: true)) {
-            _current_scrollable!.move_hover(-1);
+            _current_scrollable.move_hover(-1);
         }
 
         if (FhApi.Gui.mouse_clicked(triangle_bottom, repeat: true)) {
-            _current_scrollable!.move_hover(1);
+            _current_scrollable.move_hover(1);
         }
     }
 }
