@@ -14,7 +14,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         /// <summary>The list of saves to save/load/compile from.</summary>
         SAVE_LIST = 0,
 
-        /// <summary>The set save selection window.</summary>
+        /// <summary>The save set selection window.</summary>
         SET_SWAP = 1,
 
         /// <summary>The popup for displaying save/load errors and notifications.</summary>

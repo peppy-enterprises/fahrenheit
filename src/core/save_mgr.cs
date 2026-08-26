@@ -7,7 +7,7 @@ namespace Fahrenheit;
 
 using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
 
-/// <summary>Represents the current purpose of the save system, if any.</summary>
+/// <summary>Represents the current operating mode of the save system.</summary>
 public enum FhExtendedSaveSystemMode {
     /// <summary>The save system is not active.</summary>
     NULL = 0,
@@ -18,7 +18,7 @@ public enum FhExtendedSaveSystemMode {
     /// <summary>The save system wants to save to a slot.</summary>
     SAVE = 2,
 
-    /// <summary>The save system wants to compile Al Bhed information from a save filr to the current save data.</summary>
+    /// <summary>The save system wants to compile Al Bhed information from a save file to the current save data.</summary>
     /// <remarks>This mode is only valid and entered in Final Fantasy X.</remarks>
     ALBD = 3,
 }
