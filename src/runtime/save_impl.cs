@@ -61,6 +61,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
         FhApi.Saves.index_active_set();
         _mode = FhSaveSystemMode.SAVE;
         FhSavePal.pal_set_system_state(FhSaveSystemState.SAVE);
+
+        FhApi.Events.Common.GameLoop.PostOpenSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -71,6 +73,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
         FhApi.Saves.index_active_set();
         _mode = FhSaveSystemMode.LOAD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
+
+        FhApi.Events.Common.GameLoop.PostOpenSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -82,6 +86,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
         FhApi.Saves.index_active_set();
         _mode = FhSaveSystemMode.ALBD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
+
+        FhApi.Events.Common.GameLoop.PostOpenSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -93,6 +99,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
+
+        FhApi.Events.Common.GameLoop.PostCloseSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -104,6 +112,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
+
+        FhApi.Events.Common.GameLoop.PostCloseSaveMenu.invoke(EventArgs.Empty);
     }
 
     /* [fkelava 16/01/26 14:29]

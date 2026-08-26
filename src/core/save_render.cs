@@ -31,12 +31,6 @@ public abstract class FhSaveUiRenderer : FhModule {
     /// <returns>The ID to be used for this renderer.</returns>
     protected abstract string get_id();
 
-    //TODO: Does this run once? Many times?
-    /// <summary>Load data required for the save UI.</summary>
-    /// <remarks>This method is called every time the save UI opens.</remarks>
-    /// <returns>Whether all requisite data was loaded successfully.</returns>
-    protected internal abstract bool load_data();
-
     /// <summary>Render the save UI.</summary>
     protected internal abstract void render_ui();
 

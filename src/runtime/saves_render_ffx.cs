@@ -99,28 +99,15 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         );
     }
 
+    public override bool init(FhModContext context, FileStream global_state) {
+        return base.init(context, global_state)
+            && FhApi.Events.Common.GameLoop.PostOpenSaveMenu .subscribe(post_open)
+            && FhApi.Events.Common.GameLoop.PostCloseSaveMenu.subscribe(post_close);
+    }
+
     protected override Vector2 get_ref_size() => new(1600f, 900f);
 
     protected override string get_id() => FhSaves.DEFAULT_RENDERER_ID;
-
-    protected internal override bool load_data() {
-        _mode  = FhSaveUiMode.SAVE_LIST;
-        _focus = FhSaveUiFocus.LIST;
-
-        populate_map_icons();
-        bool textures_loaded = try_load_textures();
-
-        _set_list.Clear();
-        _set_list.AddRange(FhApi.Saves.get_sets());
-        _logger.Info($"Detected {_set_list.Count} save sets.");
-
-        _scrollable_sets.max = FhApi.Saves.get_sets().Count;
-        _scrollable_saves.max = is_saving
-            ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
-            : FhApi.Saves.display_data.Count;
-
-        return textures_loaded;
-    }
 
     protected internal override void handle_input() {
         if (_scrollbar_dragging) return;
@@ -182,7 +169,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                     break;
 
                 default:
-                    exit();
+                    FhApi.Saves.exit_cancel();
                     break;
             }
         }
@@ -212,16 +199,32 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         ui_scrollbar();
     }
 
-    private void change_mode(FhSaveUiMode new_mode) {
-        _current_scrollable.reset();
-        _mode = new_mode;
+    private void post_open(EventArgs e) {
+        _mode  = FhSaveUiMode.SAVE_LIST;
+        _focus = FhSaveUiFocus.LIST;
+
+        populate_map_icons();
+        try_load_textures();
+
+        _set_list.Clear();
+        _set_list.AddRange(FhApi.Saves.get_sets());
+        _logger.Info($"Detected {_set_list.Count} save sets.");
+
+        _scrollable_sets.max = FhApi.Saves.get_sets().Count;
+        _scrollable_saves.max = is_saving
+            ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
+            : FhApi.Saves.display_data.Count;
     }
 
-    private void exit() {
-        FhApi.Saves.exit_cancel();
+    private void post_close(EventArgs e) {
         _scrollable_saves.reset();
         _scrollable_sets.reset();
         _map_icon_textures.Clear();
+    }
+
+    private void change_mode(FhSaveUiMode new_mode) {
+        _current_scrollable.reset();
+        _mode = new_mode;
     }
 
     private void execute(int slot) {

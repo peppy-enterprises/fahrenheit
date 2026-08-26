@@ -50,7 +50,7 @@ public sealed class FhSaveUiModule : FhModule {
         if (!FhApi.Saves.get_renderer(_settings.renderer.get(), out FhSaveUiRenderer? renderer)) {
             // Previous renderer is missing (provider mod updated and broke API?)
             // So we try to fall back to default
-            _logger.Warning("Failed to find desired renderer, falling back to default.");
+            _logger.Warning($"Failed to find desired renderer \"{_settings.renderer.get()}\", falling back to default.");
 
             _settings.renderer.set(FhSaves.DEFAULT_RENDERER_ID);
 
@@ -64,15 +64,9 @@ public sealed class FhSaveUiModule : FhModule {
         // Silence warnings about further uses of 'renderer' potentially being null.
         if (renderer is null) throw new UnreachableException();
 
-        switch (FhSavePal.pal_get_screen_state()) {
-            case FhSaveScreenState.OPENING:
-                renderer.load_data();
-                break;
-
-            case FhSaveScreenState.OPEN:
-                renderer.render_ui();
-                renderer.handle_input();
-                break;
+        if (FhSavePal.pal_get_screen_state() is FhSaveScreenState.OPEN) {
+            renderer.render_ui();
+            renderer.handle_input();
         }
     }
 }
