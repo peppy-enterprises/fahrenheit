@@ -25,7 +25,7 @@ namespace Fahrenheit.Runtime;
 public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi {
 
     private int                      _load_pending_slot;
-    private FhExtendedSaveSystemMode _mode;
+    private FhSaveSystemMode _mode;
 
     public FhSaveExtensionModule() { }
 
@@ -59,7 +59,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_save() {
         FhApi.Saves.index_active_set();
-        _mode = FhExtendedSaveSystemMode.SAVE;
+        _mode = FhSaveSystemMode.SAVE;
         FhSavePal.pal_set_system_state(FhSaveSystemState.SAVE);
     }
 
@@ -69,7 +69,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_load() {
         FhApi.Saves.index_active_set();
-        _mode = FhExtendedSaveSystemMode.LOAD;
+        _mode = FhSaveSystemMode.LOAD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
     }
 
@@ -80,7 +80,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl ) ] )]
     private void signal_enter_albd() {
         FhApi.Saves.index_active_set();
-        _mode = FhExtendedSaveSystemMode.ALBD;
+        _mode = FhSaveSystemMode.ALBD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
     }
 
@@ -89,7 +89,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
     /// </summary>
     internal void signal_exit_abort() {
         FhSavePal.pal_set_cancel_state(1);
-        FhCall.SaveDataSaveLoadSucceed.fnptr!(_mode is FhExtendedSaveSystemMode.SAVE
+        FhCall.SaveDataSaveLoadSucceed.fnptr!(_mode is FhSaveSystemMode.SAVE
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
@@ -100,7 +100,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
     /// </summary>
     internal void signal_exit_success() {
         FhSavePal.pal_set_cancel_state(0);
-        FhCall.SaveDataSaveLoadSucceed.fnptr!(_mode is FhExtendedSaveSystemMode.SAVE
+        FhCall.SaveDataSaveLoadSucceed.fnptr!(_mode is FhSaveSystemMode.SAVE
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
@@ -162,7 +162,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
      * just kicking the ball down the curb to mod authors, who can do nothing in such cases.
      */
 
-    FhExtendedSaveSystemMode IFhSaveExtensionApi.get_system_mode() {
+    FhSaveSystemMode IFhSaveExtensionApi.get_system_mode() {
         return _mode;
     }
 

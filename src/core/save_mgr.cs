@@ -8,7 +8,7 @@ namespace Fahrenheit;
 using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
 
 /// <summary>Represents the current operating mode of the save system.</summary>
-public enum FhExtendedSaveSystemMode {
+public enum FhSaveSystemMode {
     /// <summary>The save system is not active.</summary>
     NULL = 0,
 
@@ -26,7 +26,7 @@ public enum FhExtendedSaveSystemMode {
 internal interface IFhSaveExtensionApi {
     /// <summary>Retrieve the current save system mode.</summary>
     /// <returns>The current mode of the save system.</returns>
-    internal FhExtendedSaveSystemMode get_system_mode();
+    internal FhSaveSystemMode get_system_mode();
 
     /// <summary>Save to the specified slot.</summary>
     /// <param name="slot">The slot to save to. Set this to <c>0</c> if saving to a new slot.</param>
@@ -345,7 +345,7 @@ public sealed class FhSaves {
     /// <summary>Retrieve the current save system mode.</summary>
     /// <param name="mode">The current mode of the system.</param>
     /// <returns>Whether the operation succeeded.</returns>
-    public bool get_system_mode(out FhExtendedSaveSystemMode? mode) {
+    public bool get_system_mode(out FhSaveSystemMode? mode) {
         mode = null;
         if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;

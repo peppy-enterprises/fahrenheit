@@ -62,7 +62,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     private readonly Vector2 _tex_meswin_size       = new(1024f, 1024f);
     private readonly Vector2 _tex_summonbg_size     = new(1024f, 1024f);
 
-    private bool is_saving => FhApi.Saves.get_system_mode(out FhExtendedSaveSystemMode? system_mode) && system_mode is FhExtendedSaveSystemMode.SAVE;
+    private bool is_saving => FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode) && system_mode is FhSaveSystemMode.SAVE;
 
     private NineSliceHelper? _savefile_border_helper;
     private NineSliceHelper? _savefile_border_screen_helper;
@@ -205,11 +205,11 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     }
 
     private void execute(int slot) {
-        FhApi.Saves.get_system_mode(out FhExtendedSaveSystemMode? system_mode);
+        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
         switch (system_mode) {
-            case FhExtendedSaveSystemMode.SAVE: FhApi.Saves.save(slot);      break;
-            case FhExtendedSaveSystemMode.LOAD: FhApi.Saves.load(slot);      break;
-            case FhExtendedSaveSystemMode.ALBD: FhApi.Saves.copy_albd(slot); break;
+            case FhSaveSystemMode.SAVE: FhApi.Saves.save(slot);      break;
+            case FhSaveSystemMode.LOAD: FhApi.Saves.load(slot);      break;
+            case FhSaveSystemMode.ALBD: FhApi.Saves.copy_albd(slot); break;
 
             default: throw new InvalidOperationException();
         }
@@ -370,15 +370,15 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         //TODO: Add localization
 
-        FhApi.Saves.get_system_mode(out FhExtendedSaveSystemMode? system_mode);
+        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
         string text = mode switch {
             FhSaveUiMode.SET_SWAP => "Select save set",
 
             FhSaveUiMode.SAVE_LIST  or
             FhSaveUiMode.SAVE_POPUP => system_mode switch {
-                FhExtendedSaveSystemMode.LOAD => "Select save data",
-                FhExtendedSaveSystemMode.SAVE => "Select save area",
-                FhExtendedSaveSystemMode.ALBD => "Select save data",
+                FhSaveSystemMode.LOAD => "Select save data",
+                FhSaveSystemMode.SAVE => "Select save area",
+                FhSaveSystemMode.ALBD => "Select save data",
 
                 _ => "",
             },

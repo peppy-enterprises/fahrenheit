@@ -41,8 +41,8 @@ public sealed class FhSaveUiModule : FhModule {
     }
 
     public override void render_imgui() {
-        if (FhApi.Saves.get_system_mode(out FhExtendedSaveSystemMode? mode)
-            && mode is FhExtendedSaveSystemMode.NULL
+        if (FhApi.Saves.get_system_mode(out FhSaveSystemMode? mode)
+            && mode is FhSaveSystemMode.NULL
         ) {
             return;
         }
