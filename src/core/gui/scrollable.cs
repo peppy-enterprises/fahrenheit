@@ -170,26 +170,16 @@ public class Scrollable {
     /// <remarks>This method should be called at most once per ImGui frame whenever desired.</remarks>
     public void handle_input() {
         // Various scrolling methods
-        bool hover_up   = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up);
-        bool hover_down = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down);
+        bool hover_up   = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up  , true);
+        bool hover_down = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down, true);
 
         float mouse_wheel = ImGui.GetIO().MouseWheel;
 
-        bool scroll_page_up =
-            ImGui.IsKeyPressed(ImGuiKey.PageUp)
-         || FhApi.Gui.is_any_pressed(FhApi.Gui.keys_left);
+        bool scroll_page_up   = FhApi.Gui.is_any_pressed([ ImGuiKey.PageUp  , .. FhApi.Gui.keys_left  ], true);
+        bool scroll_page_down = FhApi.Gui.is_any_pressed([ ImGuiKey.PageDown, .. FhApi.Gui.keys_right ], true);
 
-        bool scroll_page_down =
-            ImGui.IsKeyPressed(ImGuiKey.PageDown)
-         || FhApi.Gui.is_any_pressed(FhApi.Gui.keys_right);
-
-        bool scroll_to_start =
-            ImGui.IsKeyPressed(ImGuiKey.Home)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadL2);
-
-        bool scroll_to_end =
-            ImGui.IsKeyPressed(ImGuiKey.End)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadR2);
+        bool scroll_to_start = FhApi.Gui.is_any_pressed([ ImGuiKey.Home, ImGuiKey.GamepadL2 ]);
+        bool scroll_to_end   = FhApi.Gui.is_any_pressed([ ImGuiKey.End , ImGuiKey.GamepadR2 ]);
 
         ImGui.GetIO().WantCaptureKeyboard |=
             hover_up

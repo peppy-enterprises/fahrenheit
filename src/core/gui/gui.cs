@@ -214,11 +214,38 @@ public unsafe class FhGui {
     }
 
     /// <summary>Check whether any of the specified keys were pressed.</summary>
-    /// <param name="keys">Set of keys to be pressed.</param>
+    /// <param name="keys">Set of keys to be checked.</param>
+    /// <param name="repeat">Whether the method should repeatedly return <c>true</c> for held inputs.</param>
     /// <returns>Whether any of the keys were pressed.</returns>
-    public bool is_any_pressed(IEnumerable<ImGuiKey> keys) {
+    public bool is_any_pressed(IEnumerable<ImGuiKey> keys, bool repeat = false) {
         foreach (ImGuiKey key in keys) {
-            if (ImGui.IsKeyPressed(key)) {
+            if (ImGui.IsKeyPressed(key, repeat)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>Check whether any of the specified keys were held down.</summary>
+    /// <param name="keys">Set of keys to be checked.</param>
+    /// <returns>Whether any of the keys were held down.</returns>
+    public bool is_any_down(IEnumerable<ImGuiKey> keys) {
+        foreach (ImGuiKey key in keys) {
+            if (ImGui.IsKeyDown(key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>Check whether any of the specified keys were released.</summary>
+    /// <param name="keys">Set of keys to be checked.</param>
+    /// <returns>Whether any of the keys were released.</returns>
+    public bool is_any_released(IEnumerable<ImGuiKey> keys) {
+        foreach (ImGuiKey key in keys) {
+            if (ImGui.IsKeyReleased(key)) {
                 return true;
             }
         }
