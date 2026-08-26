@@ -400,7 +400,7 @@ public sealed class FhSaves {
         if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
             return false;
 
-        api.exit_cancel();
+        api.exit_success();
         return true;
     }
 }
