@@ -255,9 +255,9 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     /// <summary>Render the background for the save/load screen.</summary>
     private void ui_background() {
-        ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
-
         if (!_texture_bg.try_use(out ImTextureRef bg, out _)) return;
+
+        ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
         UV tex_uv = new Rect {
             pos  = new(   0f,    0f),
