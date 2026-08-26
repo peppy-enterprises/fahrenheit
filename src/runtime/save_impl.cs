@@ -30,7 +30,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
     public FhSaveExtensionModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        FhApi.Saves.ext_api.set_impl(this);
+        FhApi.Saves.impl_handle.set(this);
 
         bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
 

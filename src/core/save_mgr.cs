@@ -56,7 +56,7 @@ internal interface IFhSaveExtensionApi {
 /// </summary>
 public sealed class FhSaves {
 
-    internal readonly FhRuntimeHandle<IFhSaveExtensionApi> ext_api = new();
+    internal readonly FhRuntimeHandle<IFhSaveExtensionApi> impl_handle = new();
 
 
     /* [fkelava 07/11/25 15:01]
@@ -347,60 +347,60 @@ public sealed class FhSaves {
     /// <returns>Whether the operation succeeded.</returns>
     public bool get_system_mode(out FhExtendedSaveSystemMode? mode) {
         mode = null;
-        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;
 
-        mode = api.get_system_mode();
+        mode = impl.get_system_mode();
         return true;
     }
 
     /// <inheritdoc cref="IFhSaveExtensionApi.save"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool save(int slot) {
-        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;
 
-        api.save(slot);
+        impl.save(slot);
         return true;
     }
 
     /// <inheritdoc cref="IFhSaveExtensionApi.load"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool load(int slot) {
-        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;
 
-        api.load(slot);
+        impl.load(slot);
         return true;
     }
 
     /// <inheritdoc cref="IFhSaveExtensionApi.copy_albd"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool copy_albd(int slot) {
-        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;
 
-        api.copy_albd(slot);
+        impl.copy_albd(slot);
         return true;
     }
 
     /// <inheritdoc cref="IFhSaveExtensionApi.exit_cancel"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool exit_cancel() {
-        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;
 
-        api.exit_cancel();
+        impl.exit_cancel();
         return true;
     }
 
     /// <inheritdoc cref="IFhSaveExtensionApi.exit_success"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool exit_success() {
-        if (!ext_api.get_impl(out IFhSaveExtensionApi? api))
+        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
             return false;
 
-        api.exit_success();
+        impl.exit_success();
         return true;
     }
 }

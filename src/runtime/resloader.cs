@@ -25,7 +25,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        FhApi.Resources.loader.set_impl(this);
+        FhApi.Resources.impl_handle.set(this);
         FhModuleHandle<FhPhyreLoaderModule> plm_handle = new FhModuleHandle<FhPhyreLoaderModule>(this);
 
         return plm_handle.try_get_module(out _plm);
