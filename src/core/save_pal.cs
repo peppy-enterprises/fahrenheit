@@ -160,11 +160,11 @@ public struct FhSaveDisplayData {
      * and ImGui accept them as input. The sizes are taken from the base game.
      */
 
-    internal int slot;
+    public int            slot;
+    public DateTimeOffset create_time;
 
     public InlineArray64 <byte> header;
     public InlineArray16 <byte> slot_str;
-    public InlineArray64 <byte> create_time;
     public InlineArray128<byte> location;
     public InlineArray128<byte> play_time;
     public InlineArray32 <byte> player_name;

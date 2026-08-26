@@ -741,15 +741,22 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         /* ===== Header Gradient ===== */
         float header_size = 35f;
 
-        uint grad_l = 0xFF000000; // black
-        uint grad_r = 0x00800000; // transparent blue
+        uint header_grad_l = 0xFF000000; // black
+        uint header_grad_r = 0x00800000; // transparent blue
 
         UV header_uv = new Rect {
             pos  = save_rect.pos + save_border_size,
             size = save_rect.size with { Y = header_size },
         }.scale_raw(scale_factor).as_uv();
 
-        draw.AddRectFilledMultiColor(header_uv.p0, header_uv.p1, grad_l, grad_r, grad_r, grad_l);
+        draw.AddRectFilledMultiColor(
+            header_uv.p0,
+            header_uv.p1,
+            header_grad_l,
+            header_grad_r,
+            header_grad_r,
+            header_grad_l
+        );
 
         /* ===== Party Icons ===== */
         UV[] face_tuvs = new UV[8];
@@ -830,28 +837,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         string slot_text = save.slot == 0 ? "Autosave" : save.slot.ToString();
 
         string location_name = Encoding.UTF8.GetString(save.location);
-        string create_time   = Encoding.UTF8.GetString(save.create_time);
-
-        string[] datetime = create_time.Split(' ');
-        string[] date = datetime[0].Split('-');
-        string[] time = datetime[1].Split(':');
-
-        (string year, string month , string day)    = (date[0], date[1], date[2]);
-        (string hour, string minute, string second) = (time[0], time[1], time[2]);
-
-        if (month.StartsWith('0')) {
-            month = month[1..];
-        }
-
-        if (day.StartsWith('0')) {
-            day = day[1..];
-        }
-
-        if (hour.StartsWith('0')) {
-            hour = hour[1..];
-        }
-
-        create_time = $"{year}/{month}/{day} {hour}:{minute}:{second}";
+        string create_time   = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
 
         Vector2 text_size = FhApi.Gui.draw_text(
             draw,

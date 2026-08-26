@@ -171,9 +171,9 @@ public sealed class FhSaves {
             FhSavePal.pal_get_lm_level   (display_data.header, display_data.lm_level);
 
             _ = Encoding.UTF8.GetBytes($"{slot}\0", display_data.slot_str);
-            _ = Encoding.UTF8.GetBytes($"{File.GetLastWriteTimeUtc(save_file):yyyy/MM/dd HH:mm:ss}\0", display_data.create_time);
 
-            display_data.slot = slot;
+            display_data.slot        = slot;
+            display_data.create_time = File.GetLastWriteTimeUtc(save_file);
 
             _sm_occupied_slots.Add(slot);
             _sm_display_data  .Add(display_data);
