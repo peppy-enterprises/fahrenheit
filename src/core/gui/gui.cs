@@ -243,16 +243,6 @@ public unsafe class FhGui {
             && ImGui.IsMouseClicked(button, repeat);
     }
 
-    public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
-        float size      = ImGui.CalcTextSize(label).X + padding;
-        float available = ImGui.GetContentRegionAvail().X;
-        float offset    = (available - size) * t;
-
-        if (offset > 0) {
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offset);
-        }
-    }
-
     /// <summary>
     ///     Draw text with a given size, alignment, and color.
     ///     Optionally, draws a shadow under the text.
