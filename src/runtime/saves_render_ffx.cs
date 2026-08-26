@@ -220,7 +220,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         _map_icon_textures.Clear();
 
         foreach (FhSaveDisplayData save in FhApi.Saves.display_data) {
-            string map = Encoding.UTF8.GetString(save.icon_map);
+            string    map      = Encoding.UTF8.GetString(save.icon_map);
             FhTexture map_icon = new(Path.Join(MAP_ICONS_DIR, $"{map}.png"), FhTextureType.PNG);
 
             _map_icon_textures.TryAdd(map, map_icon);
@@ -367,7 +367,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     /// <summary>Render the active set name and set count.</summary>
     private void ui_savecount() {
-
         string active_set = FhApi.Saves.active_set;
         bool has_autosave = FhApi.Saves.set_has_autosave(active_set);
 
@@ -378,10 +377,10 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             ? $" + {save_count} saves"
             : $"{save_count} saves";
 
-        Vector2 text_pos  = new(1435f, 120f);
-        float line_height = 32f;
+        Vector2 text_pos = new(1435f, 120f);
 
-        float font_size = 36f * scale_factor.Y;
+        float line_height = 32f;
+        float font_size   = 36f * scale_factor.Y;
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
@@ -443,7 +442,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         // Multiply by pi so cycle_length can be expressed in seconds.
         float cycle_t = MathF.Sin((float)ImGui.GetTime() * MathF.PI / cycle_length) / 2f + 0.5f;
-        float offset = -(max_offset * cycle_t);
+        float offset  = -(max_offset * cycle_t);
 
         float overlap_amount = overlap ? cursor_size.X * 0.1f : 0f;
 
@@ -452,11 +451,10 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             target_pos.Y
         );
 
-        UV cursor_suv =
-            new Rect { pos = cursor_center }
-                .expand(cursor_size, new(Alignment.CENTER, Alignment.CENTER))
-                .scale(scale_factor, new(Alignment.END   , Alignment.CENTER))
-                .as_uv();
+        UV cursor_suv = new Rect { pos = cursor_center }
+            .expand(cursor_size, new(Alignment.CENTER, Alignment.CENTER))
+            .scale(scale_factor, new(Alignment.END   , Alignment.CENTER))
+            .as_uv();
 
         draw.AddImage(
             meswin,
@@ -508,7 +506,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         );
 
         if (_focus == FhSaveUiFocus.ACTIVE_SET) {
-            float text_left = text_pos.X - text_size.X / 2f;
+            float text_left   = text_pos.X - text_size.X / 2f;
             float text_margin = 33f * scale_factor.X;
 
             Vector2 cursor_target = bg_screen.center with {
@@ -536,7 +534,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         int start_idx = _scrollable_sets.get_clip_start();
 
         // Texture coordinates
-        int tex_idx = set_idx % 8;
+        int   tex_idx    = set_idx % 8;
         float tex_y_diff = 78f * tex_idx;
 
         UV button_tuv = new Rect {
@@ -553,8 +551,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         button.pos.Y += (button.size.Y + 8f) * (set_idx - start_idx);
 
         Rect button_no_shadow = button.expand(new Vector2(-6f, -5f), new(Alignment.BEGIN, Alignment.BEGIN));
+        Rect button_scaled    = button.scale_raw(scale_factor);
 
-        Rect button_scaled = button.scale_raw(scale_factor);
         UV button_suv = button_scaled.as_uv();
 
         Vector2 name_pos = button_no_shadow.left;
@@ -565,8 +563,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         // Drawing time
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
-
-        ImGuiIOPtr io = ImGui.GetIO();
+        ImGuiIOPtr    io   = ImGui.GetIO();
 
         float font_size = 36f * scale_factor.Y;
 
@@ -600,7 +597,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         Vector2 save_count_size = FhApi.Gui.draw_text(
             draw,
             save_count_pos * scale_factor,
-            has_autosave? $" + {save_count - 1} saves" : $"{save_count} saves",
+            has_autosave ? $" + {save_count - 1} saves" : $"{save_count} saves",
             font_size,
             true,
             new(Alignment.END, Alignment.CENTER)
@@ -635,8 +632,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     private void ui_setswap() {
         if (_mode != FhSaveUiMode.SET_SWAP) return;
-
-        // Drawing time
 
         int start_idx = _scrollable_sets.get_clip_start();
         int end_idx   = _scrollable_sets.get_clip_end();
@@ -722,7 +717,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         );
 
         for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
-            Vector2[] tex_uv = _savefile_border_helper.get_uvs(slice_idx);
+            Vector2[] tex_uv    = _savefile_border_helper       .get_uvs(slice_idx);
             Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
 
             draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
@@ -759,8 +754,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             float x1 = 200f * (i % 4);
             float x2 = x1 + 200f;
 
-            float y1 = 512f;
-            if (i > 3) y1 -= 200f;
+            float y1 = i > 3 ? 512f : 312f;
             float y2 = y1 - 200f;
 
             face_tuvs[i] = new UV(
@@ -777,7 +771,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                 save_rect.left.X + face_gap,
                 save_rect.bottom.Y - save_border_size.Y - face_size.Y
             ),
-
             size = face_size,
         };
 
@@ -799,8 +792,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         /* ===== Location Icon ===== */
-        string map = Encoding.UTF8.GetString(save.icon_map);
-
+        string    map     = Encoding.UTF8.GetString(save.icon_map);
         FhTexture tex_map = _map_icon_textures.GetValueOrDefault(map, _texture_map_icon_default);
 
         // if (tex_map.try_use(out ImTextureRef map_icon, out _)) {
@@ -817,7 +809,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         /* ===== Text ===== */
 
         /* ===== Header ===== */
-        float text_margin_left = 10f;
+        float text_margin_left    = 10f;
         float text_margin_between = 40f;
 
         Vector2 text_pos_left =
@@ -877,8 +869,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         /* ===== Details ===== */
         float margin_from_last_face = 31f;
-
-        float line_height = 40f;
+        float line_height           = 40f;
 
         Vector2 text_pos = save_rect.pos + new Vector2(
             face_size.X * 3 + face_gap * 2 + margin_from_last_face,
@@ -958,7 +949,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         );
 
         for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
-            Vector2[] tex_uv = _savefile_border_helper.get_uvs(slice_idx);
+            Vector2[] tex_uv    = _savefile_border_helper       .get_uvs(slice_idx);
             Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
 
             draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
@@ -1032,7 +1023,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                 track.top.X - triangle_size.X / 2f,
                 track.top.Y - triangle_gap - triangle_size.Y
             ),
-
             size = triangle_size,
         };
 
@@ -1041,7 +1031,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                 track.bottom.X - triangle_size.X / 2f,
                 track.bottom.Y + triangle_gap
             ),
-
             size = triangle_size,
         };
 
@@ -1061,7 +1050,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                 track.top_left.X + thumb_margin.X,
                 track.top_left.Y + thumb_margin.Y + thumb_progress
             ),
-
             size = thumb_size,
         };
 
