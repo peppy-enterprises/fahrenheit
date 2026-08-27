@@ -281,7 +281,9 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     /// <summary>Render the background for the save/load screen.</summary>
     private void ui_background() {
-        if (!_texture_bg.try_use(out ImTextureRef bg, out _)) return;
+        if (!_texture_bg.try_use(out ImTextureRef bg, out _)) {
+            return;
+        }
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
@@ -704,7 +706,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         if (!_texture_meswin.try_use(out ImTextureRef meswin, out _)
-         || !_texture_faces.try_use(out ImTextureRef faces, out _)
+         || !_texture_faces .try_use(out ImTextureRef faces , out _)
         ) {
             return;
         }
