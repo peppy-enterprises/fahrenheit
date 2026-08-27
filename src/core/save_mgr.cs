@@ -23,7 +23,7 @@ public enum FhSaveSystemMode {
     ALBD = 3,
 }
 
-internal interface IFhSaveExtensionApi {
+internal interface IFhSaveSystemImpl {
     /// <summary>Retrieve the current save system mode.</summary>
     /// <returns>The current mode of the save system.</returns>
     internal FhSaveSystemMode get_system_mode();
@@ -56,7 +56,7 @@ internal interface IFhSaveExtensionApi {
 /// </summary>
 public sealed class FhSaves {
 
-    internal readonly FhRuntimeHandle<IFhSaveExtensionApi> impl_handle = new();
+    internal readonly FhRuntimeHandle<IFhSaveSystemImpl> impl_handle = new();
 
 
     /* [fkelava 07/11/25 15:01]
@@ -347,57 +347,57 @@ public sealed class FhSaves {
     /// <returns>Whether the operation succeeded.</returns>
     public bool get_system_mode([NotNullWhen(true)] out FhSaveSystemMode? mode) {
         mode = null;
-        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
+        if (!impl_handle.get(out IFhSaveSystemImpl? impl))
             return false;
 
         mode = impl.get_system_mode();
         return true;
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.save"/>
+    /// <inheritdoc cref="IFhSaveSystemImpl.save"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool save(int slot) {
-        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
+        if (!impl_handle.get(out IFhSaveSystemImpl? impl))
             return false;
 
         impl.save(slot);
         return true;
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.load"/>
+    /// <inheritdoc cref="IFhSaveSystemImpl.load"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool load(int slot) {
-        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
+        if (!impl_handle.get(out IFhSaveSystemImpl? impl))
             return false;
 
         impl.load(slot);
         return true;
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.copy_albd"/>
+    /// <inheritdoc cref="IFhSaveSystemImpl.copy_albd"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool copy_albd(int slot) {
-        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
+        if (!impl_handle.get(out IFhSaveSystemImpl? impl))
             return false;
 
         impl.copy_albd(slot);
         return true;
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.exit_cancel"/>
+    /// <inheritdoc cref="IFhSaveSystemImpl.exit_cancel"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool exit_cancel() {
-        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
+        if (!impl_handle.get(out IFhSaveSystemImpl? impl))
             return false;
 
         impl.exit_cancel();
         return true;
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.exit_success"/>
+    /// <inheritdoc cref="IFhSaveSystemImpl.exit_success"/>
     /// <returns>Whether the operation succeeded.</returns>
     public bool exit_success() {
-        if (!impl_handle.get(out IFhSaveExtensionApi? impl))
+        if (!impl_handle.get(out IFhSaveSystemImpl? impl))
             return false;
 
         impl.exit_success();

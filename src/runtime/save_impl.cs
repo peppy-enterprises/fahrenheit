@@ -22,7 +22,7 @@ namespace Fahrenheit.Runtime;
 ///     Implements Fahrenheit's extended save system.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi {
+public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveSystemImpl {
 
     private int                      _load_pending_slot;
     private FhSaveSystemMode _mode;
@@ -172,12 +172,12 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
      * just kicking the ball down the curb to mod authors, who can do nothing in such cases.
      */
 
-    FhSaveSystemMode IFhSaveExtensionApi.get_system_mode() {
+    FhSaveSystemMode IFhSaveSystemImpl.get_system_mode() {
         return _mode;
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.save"/>
-    void IFhSaveExtensionApi.save(int slot) {
+    /// <inheritdoc cref="IFhSaveSystemImpl.save"/>
+    void IFhSaveSystemImpl.save(int slot) {
         slot = FhApi.Saves.remap_slot(slot);
 
         string save_path = FhApi.Saves.get_save_path_for_slot(slot);
@@ -195,8 +195,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
         signal_exit_success();
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.load"/>
-    void IFhSaveExtensionApi.load(int slot) {
+    /// <inheritdoc cref="IFhSaveSystemImpl.load"/>
+    void IFhSaveSystemImpl.load(int slot) {
         string     save_name = FhApi.Saves.get_save_path_for_slot(slot);
         Span<byte> save      = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
 
@@ -222,8 +222,8 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
         signal_exit_success(); // TODO: popup if success
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.copy_albd"/>
-    void IFhSaveExtensionApi.copy_albd(int slot) {
+    /// <inheritdoc cref="IFhSaveSystemImpl.copy_albd"/>
+    void IFhSaveSystemImpl.copy_albd(int slot) {
         string save_name = FhApi.Saves.get_save_path_for_slot(slot);
 
         //Span<byte> save = new(
@@ -238,13 +238,13 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveExtensionApi
         signal_exit_success();
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.exit_cancel"/>
-    void IFhSaveExtensionApi.exit_cancel() {
+    /// <inheritdoc cref="IFhSaveSystemImpl.exit_cancel"/>
+    void IFhSaveSystemImpl.exit_cancel() {
         signal_exit_abort();
     }
 
-    /// <inheritdoc cref="IFhSaveExtensionApi.exit_success"/>
-    void IFhSaveExtensionApi.exit_success() {
+    /// <inheritdoc cref="IFhSaveSystemImpl.exit_success"/>
+    void IFhSaveSystemImpl.exit_success() {
         signal_exit_success();
     }
 }
