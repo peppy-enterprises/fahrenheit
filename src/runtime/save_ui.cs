@@ -23,9 +23,15 @@ namespace Fahrenheit.Runtime;
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
+    private FhModuleHandle<FhSaveUiRendererX>  _handle_render_x;
+    // private FhModuleHandle<FhSaveUiRendererX2> _handle_render_x2;
+
+    private FhSaveUiRendererX?  _render_x;
+    // private FhSaveUiRendererX2? _render_x2;
+
     private class FhSaveUiSettings {
         //TODO: Change this to a Set-based dropdown once that's created.
-        public readonly FhSettingText renderer = new("renderer", FhSaves.DEFAULT_RENDERER_ID);
+        public readonly FhSettingText renderer = new("renderer", "");
     }
 
     private readonly FhSaveUiSettings _settings = new();
@@ -34,10 +40,28 @@ public sealed class FhSaveUiModule : FhModule {
         settings = new FhSettingsCategory("fhsaveui", [
             _settings.renderer,
         ]);
+
+        _handle_render_x  = new(this);
+        // _handle_render_x2 = new(this);
+    }
+
+    private string get_default_renderer_id() {
+        return FhGlobal.game_id switch {
+            FhGameId.FFX    => _render_x!.ModuleType,
+            // FhGameId.FFX2   or
+            // FhGameId.FFX2LM => _render_x2!.ModuleType,
+
+            _ => throw new NotImplementedException(),
+        };
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return true;
+        bool got_modules = _handle_render_x .try_get_module(out _render_x);
+            // && _handle_render_x2.try_get_module(out _render_x2);
+
+        _settings.renderer.set(get_default_renderer_id());
+
+        return got_modules;
     }
 
     public override void render_imgui() {
@@ -52,7 +76,7 @@ public sealed class FhSaveUiModule : FhModule {
             // So we try to fall back to default
             _logger.Warning($"Failed to find desired renderer \"{_settings.renderer.get()}\", falling back to default.");
 
-            _settings.renderer.set(FhSaves.DEFAULT_RENDERER_ID);
+            _settings.renderer.set(get_default_renderer_id());
 
             if (!FhApi.Saves.get_renderer(_settings.renderer.get(), out renderer)) {
                 // Something has gone disasterously wrong – we're missing our default renderer!

@@ -16,7 +16,7 @@ namespace Fahrenheit.Runtime;
  */
 
 [FhLoad(FhGameId.FFX)]
-public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
+public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     /// <summary>Possible open windows of the save/load menu.</summary>
     public enum FhSaveUiMode {
         /// <summary>The list of saves to save/load/compile from.</summary>
@@ -86,7 +86,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
     private bool     _scrollbar_dragging;
     private Vector2? _scrollbar_held_pos;
 
-    public FhSaveUiRendererFFX() {
+    public FhSaveUiRendererX() {
         _current_scrollable = _scrollable_saves;
 
         _savefile_border_helper = NineSliceHelper.create(
@@ -105,8 +105,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     protected override Vector2 get_ref_size() => new(1600f, 900f);
 
-    protected override string get_id() => FhSaves.DEFAULT_RENDERER_ID;
-
     protected internal override void render_ui() {
         _current_scrollable = _mode switch {
             FhSaveUiMode.SET_SWAP => _scrollable_sets,
@@ -114,6 +112,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         };
 
         handle_input();
+
         //TODO: Is this necessary?
         if (!try_load_textures()) return;
 

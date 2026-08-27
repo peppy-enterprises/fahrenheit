@@ -77,8 +77,6 @@ public sealed class FhSaves {
 
     private readonly Dictionary<string, FhSaveUiRenderer> _renderers = [];
 
-    internal const string DEFAULT_RENDERER_ID = "default";
-
     /// <summary>The name of the active set.</summary>
     public string active_set => _sm_active_set;
 

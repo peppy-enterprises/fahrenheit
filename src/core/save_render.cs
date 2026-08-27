@@ -14,8 +14,8 @@ public abstract class FhSaveUiRenderer : FhModule {
 
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        _logger.Info($"Registering new save UI renderer: {get_id()}");
-        FhApi.Saves.register_renderer(get_id(), this);
+        _logger.Info($"Registering new save UI renderer: {ModuleType}");
+        FhApi.Saves.register_renderer(ModuleType, this);
 
         return true;
     }
@@ -26,10 +26,6 @@ public abstract class FhSaveUiRenderer : FhModule {
     /// <summary>Retrieve the reference size that is used by the renderer.</summary>
     /// <returns>The reference size used by the renderer.</returns>
     protected abstract Vector2 get_ref_size();
-
-    /// <summary>Retrieved the ID of this renderer.</summary>
-    /// <returns>The ID to be used for this renderer.</returns>
-    protected abstract string get_id();
 
     /// <summary>Render the save UI.</summary>
     protected internal abstract void render_ui();
