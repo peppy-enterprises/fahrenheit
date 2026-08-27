@@ -918,7 +918,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         float font_size = 36f * scale_factor.Y;
 
         //TODO: Add localization
-        string slot_text   = save.slot == 0 ? "Autosave" : save.slot.ToString();
+        string slot_text   = save.slot == 0 ? "Autosave" : save.slot_str;
         string create_time = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
 
         Vector2 text_size = FhApi.Gui.draw_text(
