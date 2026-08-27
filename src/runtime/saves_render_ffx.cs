@@ -110,10 +110,9 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             _               => _scrollable_saves,
         };
 
-        handle_input();
-
-        //TODO: Is this necessary?
         if (!try_load_textures()) return;
+
+        handle_input();
 
         ui_background();
         ui_help();
@@ -215,6 +214,9 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     private void post_close(EventArgs e) {
         _scrollable_saves.reset();
         _scrollable_sets.reset();
+
+        unload_textures();
+
         _map_icon_textures.Clear();
     }
 
@@ -250,12 +252,12 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         }
     }
 
-    /// <summary>Attempt to load all of the textures the save/load screen requires to display properly.</summary>
+    /// <summary>Attempt to load all of the textures the renderer requires to display properly.</summary>
     /// <returns>Whether all textures have been successfully loaded.</returns>
     private bool try_load_textures() {
         if (_loaded_all_textures) return true;
 
-        FhTexture[] textures = [
+        Span<FhTexture> textures = [
             _texture_bg,
             _texture_battle,
             _texture_battle_kuang,
@@ -268,12 +270,33 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         _loaded_all_textures = true;
         foreach (FhTexture texture in textures) {
-            if (!texture.is_loaded() && !FhApi.Resources.load_game_texture_2d(texture)) {
+            if (!FhApi.Resources.load_game_texture_2d(texture)) {
                 _loaded_all_textures = false;
             }
         }
 
         return _loaded_all_textures;
+    }
+
+    /// <summary>Unload all of the textures the renderer requires to display properly.</summary>
+    private void unload_textures() {
+        Span<FhTexture> textures = [
+            _texture_bg,
+            _texture_battle,
+            _texture_battle_kuang,
+            _texture_faces,
+            _texture_meswin,
+            _texture_summonbg,
+            // _texture_map_icon_default,
+            // .. _map_icon_textures.Values,
+        ];
+
+        foreach (FhTexture texture in textures) {
+            if (FhApi.Resources.unload_texture(texture))
+                _loaded_all_textures = false;
+            else
+                _logger.Warning($"Failed to unload texture: {texture.path}");
+        }
     }
 
     private bool mouse_hovered(Rect rect) {
