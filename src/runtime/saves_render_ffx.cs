@@ -366,8 +366,8 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
             FhSaveUiMode.SAVE_LIST  or
             FhSaveUiMode.SAVE_POPUP => system_mode switch {
-                FhSaveSystemMode.LOAD => "Select save data",
                 FhSaveSystemMode.SAVE => "Select save area",
+                FhSaveSystemMode.LOAD or
                 FhSaveSystemMode.ALBD => "Select save data",
 
                 _ => "",
