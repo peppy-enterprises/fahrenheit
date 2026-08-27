@@ -24,7 +24,7 @@ namespace Fahrenheit.Runtime;
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveSystemImpl {
 
-    private int                      _load_pending_slot;
+    private int              _load_pending_slot;
     private FhSaveSystemMode _mode;
 
     public FhSaveExtensionModule() { }
@@ -178,8 +178,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveSystemImpl {
 
     /// <inheritdoc cref="IFhSaveSystemImpl.save"/>
     void IFhSaveSystemImpl.save(int slot) {
-        slot = FhApi.Saves.remap_slot(slot);
-
+               slot      = FhApi.Saves.remap_slot(slot);
         string save_path = FhApi.Saves.get_save_path_for_slot(slot);
 
         ReadOnlySpan<byte> save = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
