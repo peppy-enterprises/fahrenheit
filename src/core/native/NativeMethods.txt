@@ -23,6 +23,7 @@ HMODULE
 // Memory protection modifier
 
 VirtualProtect
+VirtualAlloc
 
 // RT: Allocator fix
 

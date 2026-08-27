@@ -62,9 +62,10 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         _init_index();
-        _init_crossload();
 
         return FhCall.Phyre_PSerialization_PStreamFile_ctor           .hook(this, h_fopen)
+            && FhCall.ClusterManager_loadPCluster                     .hook(this, h_pcluster_ld)
+            && FhCall.ClusterManager_getPClusterByName                .hook(this, h_pcluster_get)
             && FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.hook(this, h_sf_sp_set)
             && FhCall.BigFileStream_setStreamPrefix                   .hook(this, h_vbf_sp_set)
             && FhCall.BigFileStream_openFile                          .hook(this, h_vbf_fopen)
@@ -107,12 +108,24 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         }
     }
 
+    /* [fkelava 25/08/26 20:00]
+     * There's a nasty race condition hidden here. Normally, Fahrenheit initialization does not run game code. It is intended
+     * that game code does not run until all hooks have installed, to ensure no calls 'escape' hooking from an interested module.
+     *  
+     * The 'allocator fix' module wants to hook that initializer. If it doesn't, we lose its benefits. However, intra-DLL, Fahrenheit 
+     * leaves the initialization order of modules undefined. If we blithely `_init_crossload` in `init`, and this module ran `init` 
+     * before the 'allocator fix' module did, the call would go through before that module could hook it. 
+     * We therefore defer it to `fiosInitialize`, when the game sets up the primary VBF.
+     * 
+     * Note also the 'creative' use of chaining from another method, our hook of the stream prefix setter, to avoid a stack overflow.
+     */
+
     private void _init_crossload() {
         byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
         _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
 
-        FhCall.BigFileStream_ctor           .fnptr!(_ptr_vbf_secondary);
-        FhCall.BigFileStream_setStreamPrefix.fnptr!(_ptr_vbf_secondary, ptr_prefix);
+        FhCall.BigFileStream_ctor                                    .fnptr!(_ptr_vbf_secondary);
+        FhCall.BigFileStream_setStreamPrefix.chain_from(h_vbf_sp_set).fnptr!(_ptr_vbf_secondary, ptr_prefix);
         
         if (FhCall.BigFileStream_registerBigFile.fnptr!(_ptr_vbf_secondary, _ptr_vbf_secondary_path) == 0)
             throw new Exception("Failed to initialize cross-loader function. Your game data may be corrupt or missing.");
@@ -207,14 +220,15 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
     /* [fkelava 21/08/26 14:10]
      * The game has the concept of a 'stream prefix', prepended to any and all paths. For some silly reason,
-     * the default is '../../..', but it doesn't have to be. We can simplify it, which is desirable so the
-     * user need not remember it.
+     * the default is '../../..'. We can simplify it, which is desirable so the user need not remember it.
      * 
      * Note that the VBF stream prefix can't be empty. The game will take an access violation if so.
      */
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
     private void h_vbf_sp_set(BigFileStream* ptr_this, byte* ptr_stream_prefix) {
+        _init_crossload();
+
         byte* ptr_prefix = (byte*) NativeMemory.AllocZeroed((nuint) _stream_prefix.Length);
         _stream_prefix.CopyTo(new (ptr_prefix, _stream_prefix.Length));
 
@@ -227,24 +241,48 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
         FhCall.Phyre_PSerialization_PStreamFile_SetStreamPrefix.chain_from(h_sf_sp_set).fnptr!(ptr_prefix);
     }
-    
+
     /* [fkelava 22/08/26 15:20]
-     * The game internally uses a number of file addressing schemes, including, but not limited to:
-     *
-     * - host0:/ffx/master/jppc/event/obj/sc/scene1/scene1.ebp
-     * - pfs0:sizetbl.bin
-     * - /FFX_Data/GameData/PS3Data/chr/mon/m220/fp/tex/GCM/16128_0_0_8_256_128.dds.phyre
-     * - /ffx_ps2/ffx/master/new_depc
-     * - /help/test_proj/test_proj_page.sps2
-     * - ../../../ffx_ps2/ffx/proj/map/masaki/
+     * Buckle up. This is where things get bad.
      * 
-     * and has a path normalization function `fiosUnifyFilename`. Unfortunately, that function
-     * is deficient and doesn't correct a bad stream prefix on a file. Sometimes the game doesn't
-     * even bother normalizing a path before attempting a file open, which also has nasty consequences.
+     * Simplifying the stream prefix, on paper, should not be problematic. The game has a path normalizer
+     * function `fiosUnifyFilename`, so at worst we have to reimplement just that, right?
      * 
-     * We therefore shift things up a bit. We reduce `fiosUnifyFilename` to a copying stub. Instead,
-     * we run a combined normalizer at the point a file is opened, so the game can't avoid it.
+     * The game's usage of path normalization is, at best, inconsistent. It manages to fail in almost every way possible:
+     * - Blindly hardcoding the normal '../../..' stream prefix into a path.
+     * - Blindly opening a path without normalizing.
+     * - Blindly hashing a path without normalizing, then looking up tables with it.
+     * 
+     * In other words, the only reason why the path handling in the default game works _at all_ is because
+     * the hardcoded stream prefix ties together an incoherent mess of code that does not function independently.
+     * 
+     * To fix this, we have to insert path normalization in all the places the developers failed to. As you may well imagine,
+     * this is a minefield and you can never tell exactly where the whole thing will fall off the rails next.
      */
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private PCluster* h_pcluster_ld(uint ptr_this, byte* ptr_name) {
+        ReadOnlySpan<byte> buf_path            = new(ptr_name, 0x100);
+        Span        <byte> buf_path_normalized = stackalloc byte [ 0x100 ];
+
+        normalize_path(buf_path, buf_path_normalized);
+
+        fixed (byte* ptr_path_normalized = buf_path_normalized) {
+            return FhCall.ClusterManager_loadPCluster.chain_from(h_pcluster_ld).fnptr!(ptr_this, ptr_path_normalized);
+        }
+    }
+
+    [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
+    private PCluster* h_pcluster_get(uint ptr_this, byte* ptr_name) {
+        ReadOnlySpan<byte> buf_path            = new(ptr_name, 0x100);
+        Span        <byte> buf_path_normalized = stackalloc byte [ 0x100 ];
+
+        normalize_path(buf_path, buf_path_normalized);
+
+        fixed (byte* ptr_path_normalized = buf_path_normalized) {
+            return FhCall.ClusterManager_getPClusterByName.chain_from(h_pcluster_get).fnptr!(ptr_this, ptr_path_normalized);
+        }
+    }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void h_fiosUnifyFilename(byte* ptr_src, byte* ptr_dest, int size) {
@@ -253,8 +291,7 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
 
         dest.Clear();
 
-        int strlen = src.IndexOf((byte)0x00);
-        src [ .. strlen ].CopyTo(dest);
+        normalize_path(src, dest);
     }
 
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvThiscall) ] )]
@@ -262,9 +299,9 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
         VFile* rv = FhCall.BigFileStream_openFile.chain_from(h_vbf_fopen).fnptr!(ptr_this, ptr_file_name);
 
         if (rv == null) { 
-            _logger.Error($"{Marshal.PtrToStringAnsi((nint)ptr_file_name)} not found in VBF {Marshal.PtrToStringAnsi((nint)ptr_this->ptr_handle_0x10->ptr_file_path)}"); 
+            _logger.Error($"{Marshal.PtrToStringAnsi((nint)ptr_file_name)} not found in VBF {Marshal.PtrToStringAnsi((nint)ptr_this->ptr_handle_0x10->ptr_file_path)}");
         }
-        
+
         return rv;
     }
 

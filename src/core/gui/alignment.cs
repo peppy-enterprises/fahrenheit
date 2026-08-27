@@ -7,8 +7,13 @@ namespace Fahrenheit.Gui;
 
 /// <summary>Represents the alignment of some element on one axis.</summary>
 public enum Alignment {
+    /// <summary>The element should be aligned to the beginning of the axis.</summary>
     BEGIN  = 0,
+
+    /// <summary>The element should be aligned to the center of the axis.</summary>
     CENTER = 1,
+
+    /// <summary>The element should be aligned to the end of the axis.</summary>
     END    = 2,
 }
 

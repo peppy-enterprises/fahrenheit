@@ -189,7 +189,7 @@ public sealed class FhResources {
     /// </remarks>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_texture_from_disk(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(texture);
+        return texture.is_loaded() || (loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(texture));
     }
 
     /// <summary>
@@ -197,7 +197,7 @@ public sealed class FhResources {
     /// </summary>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_game_texture_2d(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_2d(texture);
+        return texture.is_loaded() || (loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_2d(texture));
     }
 
     /// <summary>
@@ -205,7 +205,7 @@ public sealed class FhResources {
     /// </summary>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_game_texture_3d(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_3d(texture);
+        return texture.is_loaded() || (loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_3d(texture));
     }
 
     /// <summary>
@@ -213,7 +213,7 @@ public sealed class FhResources {
     /// </summary>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_game_texture_cubemap(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_cubemap(texture);
+        return texture.is_loaded() || (loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_cubemap(texture));
     }
 
     /// <summary>
@@ -223,6 +223,6 @@ public sealed class FhResources {
     ///     <c>false</c> if the texture is locked or pending unload, otherwise <c>true</c>.
     /// </returns>
     public bool unload_texture(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.unload_texture(texture);
+        return !texture.is_loaded() || (loader.get_impl(out IFhResourceLoader? impl) && impl.unload_texture(texture));
     }
 }

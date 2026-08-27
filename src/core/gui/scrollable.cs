@@ -88,7 +88,7 @@ public class Scrollable {
         int old_current = current;
 
         current = (int)float.Round(value * int.Max(0, max - visible));
-        current = int.Clamp(current, 0, max - visible);
+        current = int.Clamp(current, 0, int.Max(0, max - visible));
 
         if (!is_within_clip(hovered)) {
             if (int.Sign(current - old_current) > 0) {
@@ -107,12 +107,12 @@ public class Scrollable {
         int old_current = current;
 
         current += amount;
-        current = int.Clamp(current, 0, max - visible);
+        current = int.Clamp(current, 0, int.Max(0, max - visible));
 
         if (is_within_clip(hovered)) {
             if (current != old_current) {
                 hovered += amount;
-                hovered = int.Clamp(hovered, 0, max - visible);
+                hovered = int.Clamp(hovered, 0, int.Max(0, max - visible));
             }
         }
         else {
@@ -134,7 +134,7 @@ public class Scrollable {
     /// </remarks>
     public void move_hover(int amount) {
         hovered += amount;
-        hovered = int.Clamp(hovered, 0, max - 1);
+        hovered = int.Clamp(hovered, 0, int.Max(0, max - 1));
 
         if (is_within_clip(hovered)) return;
 
