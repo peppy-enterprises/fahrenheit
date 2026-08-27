@@ -33,12 +33,4 @@ public abstract class FhSaveUiRenderer : FhModule {
 
     /// <summary>Render the save UI.</summary>
     protected internal abstract void render_ui();
-
-    /// <summary>Handle input to control the UI.</summary>
-    /// <remarks>
-    ///     This method is called after <see cref="render_ui"/> every frame.
-    ///     Due to how ImGui works, you are encouraged to handle input
-    ///     in your rendering methods as well.
-    /// </remarks>
-    protected internal abstract void handle_input();
 }

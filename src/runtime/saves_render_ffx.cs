@@ -36,8 +36,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         /// <summary>The active set button that opens the set list.</summary>
         ACTIVE_SET = 1,
-
-        //TODO: Add sorting and sort selection button
     }
 
     private FhSaveUiMode  _mode;
@@ -109,7 +107,32 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     protected override string get_id() => FhSaves.DEFAULT_RENDERER_ID;
 
-    protected internal override void handle_input() {
+    protected internal override void render_ui() {
+        _current_scrollable = _mode switch {
+            FhSaveUiMode.SET_SWAP => _scrollable_sets,
+            _                     => _scrollable_saves,
+        };
+
+        handle_input();
+        //TODO: Is this necessary?
+        if (!try_load_textures()) return;
+
+        ui_background();
+        ui_help();
+
+        if (_mode == FhSaveUiMode.SET_SWAP) {
+            ui_setswap();
+        }
+        else {
+            ui_savecount();
+            ui_savelist();
+            ui_change_set();
+        }
+
+        ui_scrollbar();
+    }
+
+    private void handle_input() {
         if (_scrollbar_dragging) return;
 
         switch (_focus) {
@@ -173,30 +196,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
                     break;
             }
         }
-    }
-
-    protected internal override void render_ui() {
-        _current_scrollable = _mode switch {
-            FhSaveUiMode.SET_SWAP => _scrollable_sets,
-            _                     => _scrollable_saves,
-        };
-
-        //TODO: Is this necessary?
-        if (!try_load_textures()) return;
-
-        ui_background();
-        ui_help();
-
-        if (_mode == FhSaveUiMode.SET_SWAP) {
-            ui_setswap();
-        }
-        else {
-            ui_savecount();
-            ui_savelist();
-            ui_change_set();
-        }
-
-        ui_scrollbar();
     }
 
     private void post_open(EventArgs e) {
@@ -935,9 +934,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         }
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
-
-        Vector2 save_topleft = new( 133f, 146f);
-        Vector2 save_size    = new(1302f, 127f);
 
         Rect save_rect = new Rect {
             pos  = new( 133f, 146f),
