@@ -300,7 +300,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     }
 
     private bool mouse_hovered(Rect rect) {
-        return ImGui.GetMouseDragDelta().LengthSquared() > 0
+        return ImGui.GetIO().MouseDelta.LengthSquared() > 0
             && FhApi.Gui.mouse_hovering(rect);
     }
 
