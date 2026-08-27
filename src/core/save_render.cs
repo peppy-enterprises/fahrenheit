@@ -12,7 +12,7 @@ public abstract class FhSaveUiRenderer : FhModule {
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         _logger.Info($"Registering new save UI renderer: {ModuleType}");
-        FhApi.Saves.register_renderer(ModuleType, this);
+        FhApi.Saves.register_renderer(this);
 
         return true;
     }

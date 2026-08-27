@@ -285,10 +285,9 @@ public sealed class FhSaves {
 
 
     /// <summary>Register a new save UI renderer for selection by the user.</summary>
-    /// <param name="id">The id of the renderer to register.</param>
     /// <param name="renderer">The new renderer to register.</param>
-    public void register_renderer(string id, FhSaveUiRenderer renderer) {
-        _renderers[id] = renderer;
+    public void register_renderer(FhSaveUiRenderer renderer) {
+        _renderers[renderer.ModuleType] = renderer;
     }
 
     /// <summary>Regenerate and retrieve the loadable sets.</summary>
