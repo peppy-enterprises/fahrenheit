@@ -144,16 +144,25 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
                 _current_scrollable.handle_input();
 
-                if (_mode == UiMode.SAVE_LIST && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
-                    if (is_saving && _current_scrollable.hovered == 0) {
-                        FhApi.Saves.save(0);
-                    }
-                    else {
-                        FhSaveDisplayData save = FhApi.Saves.display_data[_current_scrollable.hovered];
-                        execute(save.slot);
+                if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
+                    if (_mode == UiMode.SAVE_LIST) {
+                        if (is_saving && _current_scrollable.hovered == 0) {
+                            FhApi.Saves.save(0);
+                        }
+                        else {
+                            FhSaveDisplayData save = FhApi.Saves.display_data[_current_scrollable.hovered];
+                            execute(save.slot);
+                        }
+
+                        break;
                     }
 
-                    break;
+                    if (_mode == UiMode.SET_SWAP) {
+                        string hovered_set = _set_list[_current_scrollable.hovered];
+                        switch_set(hovered_set);
+
+                        break;
+                    }
                 }
 
                 break;
@@ -221,7 +230,9 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     }
 
     private void change_mode(UiMode new_mode) {
-        _current_scrollable.reset();
+        _scrollable_saves.reset();
+        _scrollable_sets.reset();
+        _focus = UiFocus.LIST;
         _mode = new_mode;
     }
 
