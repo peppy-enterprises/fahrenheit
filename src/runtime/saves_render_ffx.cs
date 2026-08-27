@@ -913,10 +913,8 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         float font_size = 36f * scale_factor.Y;
 
         //TODO: Add localization
-        string slot_text = save.slot == 0 ? "Autosave" : save.slot.ToString();
-
-        string location_name = Encoding.UTF8.GetString(save.location);
-        string create_time   = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
+        string slot_text   = save.slot == 0 ? "Autosave" : save.slot.ToString();
+        string create_time = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
 
         Vector2 text_size = FhApi.Gui.draw_text(
             draw,
@@ -938,7 +936,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         FhApi.Gui.draw_text(
             draw,
             text_pos_left * scale_factor,
-            location_name,
+            save.location,
             font_size,
             true,
             new(Alignment.BEGIN, Alignment.CENTER)
@@ -970,13 +968,10 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             header_size + margin_from_header + line_height / 2f
         );
 
-        string player_name = Encoding.UTF8.GetString(save.player_name);
-        string playtime    = Encoding.UTF8.GetString(save.play_time);
-
         FhApi.Gui.draw_text(
             draw,
             text_pos * scale_factor,
-            player_name,
+            save.player_name,
             font_size,
             true,
             new(Alignment.BEGIN, Alignment.CENTER)
@@ -987,7 +982,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         FhApi.Gui.draw_text(
             draw,
             text_pos * scale_factor,
-            playtime,
+            save.play_time,
             font_size,
             true,
             new(Alignment.BEGIN, Alignment.CENTER)

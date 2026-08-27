@@ -325,6 +325,47 @@ public unsafe class FhGui {
         );
     }
 
+    /// <inheritdoc cref="draw_text(string, float, bool, Alignment2D, uint)"/>
+    public void draw_text(
+        ReadOnlySpan<byte> text,
+        float              font_size,
+        bool               draw_shadow = true,
+        Alignment2D        align       = default,
+        uint               color       = 0xFFFFFFFF
+    ) {
+        Vector2 position = ImGui.GetContentRegionAvail();
+
+        position.X = align.h switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => position.X / 2f,
+            Alignment.END    => position.X,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position.Y = align.v switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => position.Y / 2f,
+            Alignment.END    => position.Y,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position += ImGui.GetCursorPos();
+
+        // Instead of repeating the text alignment logic here using ImGui.SetCursorPos,
+        // we call through to the draw list variant with the window's draw list.
+        draw_text(
+            ImGui.GetWindowDrawList(),
+            position,
+            text,
+            font_size,
+            draw_shadow,
+            align,
+            color
+        );
+    }
+
     /// <summary>
     ///     Draw text with a given size, alignment, and color at some position in a draw list.
     ///     Optionally, draws a shadow under the text.
@@ -356,6 +397,50 @@ public unsafe class FhGui {
         bool          draw_shadow = false,
         Alignment2D   align       = default,
         uint          color       = 0xFFFFFFFF
+    ) {
+        ImGui.PushFont(null, font_size);
+
+        Vector2 text_size = ImGui.CalcTextSize(text);
+
+        position.X -= align.h switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => text_size.X / 2f,
+            Alignment.END    => text_size.X,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position.Y -= align.v switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => text_size.Y / 2f,
+            Alignment.END    => text_size.Y,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        if (draw_shadow) {
+            // Use the alpha from the provided color
+            uint shadow_color = 0 | (color & 0xFF000000);
+
+            draw_list.AddText(position + new Vector2(2f), shadow_color, text);
+        }
+
+        draw_list.AddText(position, color, text);
+
+        ImGui.PopFont();
+
+        return text_size;
+    }
+
+    /// <inheritdoc cref="draw_text(ImDrawListPtr, Vector2, string, float, bool, Alignment2D, uint)"/>
+    public Vector2 draw_text(
+        ImDrawListPtr      draw_list,
+        Vector2            position,
+        ReadOnlySpan<byte> text,
+        float              font_size,
+        bool               draw_shadow = false,
+        Alignment2D        align       = default,
+        uint               color       = 0xFFFFFFFF
     ) {
         ImGui.PushFont(null, font_size);
 
