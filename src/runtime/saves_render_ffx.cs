@@ -767,7 +767,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
         );
 
         /* ===== Party Icons ===== */
-        UV[] face_tuvs = new UV[8];
+        Span<UV> face_tuvs = stackalloc UV[8];
 
         for (int i = 0; i < 8; i++) {
             float x1 = 200f * (i % 4);
