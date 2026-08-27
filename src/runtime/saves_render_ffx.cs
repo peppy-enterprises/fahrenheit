@@ -71,7 +71,6 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     private bool is_saving => FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode) && system_mode is FhSaveSystemMode.SAVE;
 
     private readonly NineSliceHelper  _savefile_border_helper;
-    private          NineSliceHelper? _savefile_border_screen_helper;
 
     private readonly Scrollable _scrollable_saves = new() {
         visible = 5,
@@ -677,7 +676,14 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         }
 
         _scrollable_saves.max = display_data.Count;
-        if (is_saving) _scrollable_saves.max += 1;
+        if (is_saving) {
+            _scrollable_saves.max += 1;
+        }
+        else if (display_data.Count == 0) {
+            ui_no_saves();
+            return;
+        }
+
 
         int start = _scrollable_saves.get_clip_start();
         int end   = _scrollable_saves.get_clip_end();
@@ -691,6 +697,77 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
             ui_savefile(i, save);
         }
+    }
+
+    private void ui_no_saves() {
+        if (!_texture_meswin.try_use(out ImTextureRef meswin, out _)) {
+            return;
+        }
+
+        //TODO: Add localization
+        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
+        string message = system_mode.HasValue switch {
+            true => system_mode.Value switch {
+                FhSaveSystemMode.LOAD => "No saved data. Change set or return to the main menu.",
+                FhSaveSystemMode.ALBD => "No saved data. Change set or return.",
+
+                _ => "",
+            },
+
+            _ => "",
+        };
+
+        ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
+
+        float font_size   = 36f * scale_factor.Y;
+
+        ImGui.PushFont(null, font_size);
+        Vector2 text_size = ImGui.CalcTextSize(message);
+        ImGui.PopFont();
+
+        Vector2 text_margin = new Vector2(30f, 40f) * scale_factor;
+        Vector2 window_size = text_margin * 2 + text_size;
+
+        Rect window = new Rect {
+            pos  = display_size / 2f,
+            size = Vector2.Zero,
+        }.expand(window_size, new(Alignment.CENTER, Alignment.CENTER));
+
+        uint gradient_tl = 0xFF9E4541;
+        uint gradient_tr = 0xFF91264F;
+        uint gradient_bl = 0xFF8F3950;
+        uint gradient_br = 0xFF822856;
+
+        draw.AddRectFilledMultiColor(
+            window.top_left,
+            window.bottom_right,
+            gradient_tl,
+            gradient_tr,
+            gradient_br,
+            gradient_bl
+        );
+
+        NineSliceHelper screen_border_helper = NineSliceHelper.create(
+            Vector2.One,
+            window,
+            new(9f, 9f)
+        );
+
+        for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
+            Vector2[] tex_uv    = _savefile_border_helper.get_uvs(slice_idx);
+            Vector2[] screen_uv =    screen_border_helper.get_uvs(slice_idx);
+
+            draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
+        }
+
+        FhApi.Gui.draw_text(
+            draw,
+            window.center,
+            message,
+            font_size,
+            true,
+            new(Alignment.CENTER, Alignment.CENTER)
+        );
     }
 
     private void ui_savefile(int index, FhSaveDisplayData save) {
@@ -727,15 +804,15 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         }
 
         /* ===== Border ===== */
-        _savefile_border_screen_helper = NineSliceHelper.create(
-            new(1f),
+        NineSliceHelper screen_border_helper = NineSliceHelper.create(
+            Vector2.One,
             save_rect,
             new(9f, 9f)
         );
 
         for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
-            Vector2[] tex_uv    = _savefile_border_helper       .get_uvs(slice_idx);
-            Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
+            Vector2[] tex_uv    = _savefile_border_helper.get_uvs(slice_idx);
+            Vector2[] screen_uv =    screen_border_helper.get_uvs(slice_idx);
 
             draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
         }
@@ -949,15 +1026,15 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         }
 
         /* ===== Border ===== */
-        _savefile_border_screen_helper = NineSliceHelper.create(
-            new(1f),
+        NineSliceHelper screen_border_helper = NineSliceHelper.create(
+            Vector2.One,
             save_rect,
             new(9f, 9f)
         );
 
         for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
-            Vector2[] tex_uv    = _savefile_border_helper       .get_uvs(slice_idx);
-            Vector2[] screen_uv = _savefile_border_screen_helper.get_uvs(slice_idx);
+            Vector2[] tex_uv    = _savefile_border_helper.get_uvs(slice_idx);
+            Vector2[] screen_uv =    screen_border_helper.get_uvs(slice_idx);
 
             draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
         }
