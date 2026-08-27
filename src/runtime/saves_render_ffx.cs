@@ -848,7 +848,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             float x1 = 200f * (i % 4);
             float x2 = x1 + 200f;
 
-            float y1 = i > 3 ? 512f : 312f;
+            float y1 = i > 3 ? 312f : 512f;
             float y2 = y1 - 200f;
 
             face_tuvs[i] = new UV(
