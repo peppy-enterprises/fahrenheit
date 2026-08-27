@@ -161,6 +161,9 @@ public unsafe class FhGui {
           | ImGuiWindowFlags.NoBringToFrontOnFocus
           | ImGuiWindowFlags.NoNavFocus;
 
+    /// <summary>The current display size.</summary>
+    public Vector2 display_size => ImGui.GetMainViewport().WorkSize;
+
     //TODO: Change these keys arrays to private and add ReadOnlySpan accessors
     public readonly ImGuiKey[] keys_up = [
         ImGuiKey.W,

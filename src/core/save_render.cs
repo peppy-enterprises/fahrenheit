@@ -6,11 +6,8 @@
 namespace Fahrenheit;
 
 public abstract class FhSaveUiRenderer : FhModule {
-    /// <summary>The current display size.</summary>
-    protected static Vector2 display_size => ImGui.GetMainViewport().WorkSize;
-
     /// <summary>The scale between the current and reference display sizes.</summary>
-    protected Vector2 scale_factor => display_size / get_ref_size();
+    protected Vector2 scale_factor => FhApi.Gui.display_size / get_ref_size();
 
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {

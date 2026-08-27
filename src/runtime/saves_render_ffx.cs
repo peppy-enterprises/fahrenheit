@@ -289,7 +289,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             size = new(1920f, 1024f),
         }.as_uv(_tex_bg_size);
 
-        UV screen_uv = new(Vector2.Zero, display_size);
+        UV screen_uv = new(Vector2.Zero, FhApi.Gui.display_size);
 
         draw.AddImage(bg, screen_uv.p0, screen_uv.p1, tex_uv.p0, tex_uv.p1);
     }
@@ -729,7 +729,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         Vector2 window_size = text_margin * 2 + text_size;
 
         Rect window = new Rect {
-            pos  = display_size / 2f,
+            pos  = FhApi.Gui.display_size / 2f,
             size = Vector2.Zero,
         }.expand(window_size, new(Alignment.CENTER, Alignment.CENTER));
 
