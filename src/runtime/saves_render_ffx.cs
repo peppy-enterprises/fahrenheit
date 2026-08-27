@@ -674,7 +674,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
     private void ui_savelist() {
         List<FhSaveDisplayData> display_data = FhApi.Saves.display_data;
-        if (is_saving && display_data.Count > FhApi.Saves.get_slots_used()) {
+        if (is_saving && FhApi.Saves.set_has_autosave(FhApi.Saves.active_set)) {
             display_data = display_data[1..];
         }
 
@@ -799,8 +799,7 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
 
         FhSaveHeader header = MemoryMarshal.Read<FhSaveHeader>(save.header);
 
-        byte[] chrs = header.formation[..3].ToArray();
-        foreach (int chr in chrs) {
+        foreach (int chr in header.formation[..3]) {
             if (chr == 0xFF) continue;
 
             UV tuv = face_tuvs[chr];
