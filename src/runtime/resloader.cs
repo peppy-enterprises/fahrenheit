@@ -80,7 +80,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
             return false;
         }
 
-        if (texture.is_loaded() || !texture.try_lock())
+        if (!texture.try_lock())
             return false;
 
         Hexa_TexMetadata  image_metadata = default;
@@ -119,7 +119,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
             return false;
         }
 
-        if (texture.is_loaded() || !texture.try_lock())
+        if (!texture.try_lock())
             return false;
 
         using FhPClusterScope cluster_scope = _plm!.cluster_load(tex_path);
@@ -195,7 +195,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
             return false;
         }
 
-        if (texture.is_loaded() || !texture.try_lock())
+        if (!texture.try_lock())
             return false;
 
         using FhPClusterScope cluster_scope = _plm!.cluster_load(tex_path);
@@ -239,7 +239,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
             return false;
         }
 
-        if (texture.is_loaded() || !texture.try_lock())
+        if (!texture.try_lock())
             return false;
 
         using FhPClusterScope cluster_scope = _plm!.cluster_load(tex_path);
@@ -293,9 +293,6 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
 
     bool IFhResourceLoader.unload_texture(FhTexture texture) {
         lock (_release_lock) {
-            if (!texture.is_loaded())
-                return true;
-
             return texture.try_lock() && _release_queue.Add(texture);
         }
     }
