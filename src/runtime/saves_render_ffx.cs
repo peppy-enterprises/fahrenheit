@@ -709,8 +709,6 @@ public sealed class FhSaveUiRendererFFX : FhSaveUiRenderer {
             return;
         }
 
-        // Not returning early, so let's get to drawing
-
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
         Rect save_rect = new Rect {
