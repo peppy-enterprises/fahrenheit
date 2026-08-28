@@ -21,9 +21,6 @@ namespace Fahrenheit.Runtime;
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
-    private FhModuleHandle<FhSaveUiRendererX>  _handle_render_x;
-    // private FhModuleHandle<FhSaveUiRendererX2> _handle_render_x2;
-
     private FhSaveUiRendererX?  _render_x;
     // private FhSaveUiRendererX2? _render_x2;
 
@@ -38,9 +35,6 @@ public sealed class FhSaveUiModule : FhModule {
         settings = new FhSettingsCategory("fhsaveui", [
             _settings.renderer,
         ]);
-
-        _handle_render_x  = new(this);
-        // _handle_render_x2 = new(this);
     }
 
     private string get_default_renderer_id() {
@@ -55,9 +49,9 @@ public sealed class FhSaveUiModule : FhModule {
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         bool got_modules = FhGlobal.game_id switch {
-            FhGameId.FFX    => _handle_render_x.try_get_module(out _render_x),
+            FhGameId.FFX    => new FhModuleHandle<FhSaveUiRendererX>(this) .try_get_module(out _render_x),
             // FhGameId.FFX2   or
-            // FhGameId.FFX2LM => _handle_render_x2.try_get_module(out _render_x2),
+            // FhGameId.FFX2LM => new FhModuleHandle<FhSaveUiRendererX2>(this).try_get_module(out _render_x2),
 
             _ => false,//throw new NotImplementedException(),
         };
