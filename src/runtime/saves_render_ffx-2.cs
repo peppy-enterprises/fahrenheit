@@ -212,8 +212,10 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private void post_open(EventArgs e) {
-        _mode = UiMode.SAVE_LIST;
+        _mode  = UiMode .SAVE_LIST;
         _focus = UiFocus.LIST;
+
+        _loaded_all_textures = false;
 
         populate_face_icons();
         populate_map_icons();
@@ -222,7 +224,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         _set_list.Clear();
         _set_list.AddRange(FhApi.Saves.get_sets());
 
-        _scrollable_sets.max = FhApi.Saves.get_sets().Count;
+        _scrollable_sets.max  = FhApi.Saves.get_sets().Count;
         _scrollable_saves.max = is_saving
             ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
             : FhApi.Saves.display_data.Count;
@@ -230,11 +232,14 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
     private void post_close(EventArgs e) {
         _scrollable_saves.reset();
-        _scrollable_sets.reset();
+        _scrollable_sets .reset();
 
         unload_textures();
 
-        _map_icon_textures.Clear();
+        _face_icon_textures.Clear();
+        _map_icon_textures .Clear();
+
+        _loaded_all_textures = false;
     }
 
     private void change_mode(UiMode new_mode) {
@@ -256,6 +261,14 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
     private void switch_set(string set_name) {
         FhApi.Saves.switch_active_set(set_name);
+
+        unload_textures();
+        _face_icon_textures.Clear();
+        populate_face_icons();
+        //_map_icon_textures.Clear();
+        //populate_map_icons();
+        _loaded_all_textures = false;
+        
         change_mode(UiMode.SAVE_LIST);
     }
 
@@ -1729,6 +1742,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private void ui_scrollbar() {
+        if (_mode == UiMode.SAVE_LIST && _scrollable_saves.max <= _scrollable_saves.visible
+         || _mode == UiMode.SET_SWAP  && _scrollable_sets .max <= _scrollable_sets.visible
+         ) {
+            return;
+        }
+    
         Rect track = new() {
             pos  = new(1753f, 205f),
             size = new(  17f, 754f),
