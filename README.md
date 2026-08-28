@@ -11,11 +11,8 @@ It is also the leading repository of knowledge about the games, underpinning oth
 This know-how is free for you to use, learn from, analyze, and improve.
 
 ## Here just to play?
-Grab the latest binaries from the [releases page](https://github.com/fahrenheit-crew/fahrenheit/releases).
-
-Install by unpacking the contents of a release ZIP into a folder called `fahrenheit` in your game directory (where `FFX.exe` is).
-
-Before using Fahrenheit, ensure you've carefully read its [compatibility notes](https://github.com/fahrenheit-crew/fahrenheit/wiki/Compatibility-notes).
+Grab the latest binaries from the [releases page](https://github.com/fahrenheit-crew/fahrenheit/releases), 
+then follow the [installation guide](https://github.com/fahrenheit-crew/fahrenheit/wiki/Installation-guide).
 
 ## For developers
 Read the [build, deployment and debugging guide](https://github.com/fahrenheit-crew/fahrenheit/wiki/Build,-deployment,-and-debugging) to get started.
