@@ -172,10 +172,7 @@ public class Scrollable {
     ///     of the scrollable for improved UX.
     /// </remarks>
     public void scroll_end() {
-        current = max <= visible
-            ? 0
-            : max - visible;
-
+        current = max <= visible ? 0 : max - visible;
         hovered = max - 1;
     }
 

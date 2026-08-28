@@ -753,11 +753,8 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         string message =
             FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode) switch {
                 true => system_mode switch {
-                    FhSaveSystemMode.LOAD
-                        => "No saved data. Change set or return to the main menu.",
-
-                    FhSaveSystemMode.ALBD
-                        => "No saved data. Change set or return.",
+                    FhSaveSystemMode.LOAD => "No saved data. Change set or return to the main menu.",
+                    FhSaveSystemMode.ALBD => "No saved data. Change set or return.",
 
                     _ => "",
                 },
