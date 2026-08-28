@@ -311,10 +311,10 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     /// <returns>The correct ID for the face icon.</returns>
-    private static string remap_job(byte chr_id, byte job_id) {
+    private static string remap_job(byte ply_id, byte job_id) {
         if (job_id == 0x21) return "mface_147.dds.phyre"; // She-Goon
 
-        string chr = chr_id switch {
+        string ply = ply_id switch {
             0 => "yuna",
             1 => "rikku",
             2 => "paine",
@@ -335,7 +335,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             _  => job_id
         };
 
-        return $"{chr}face_{job:D3}.dds.phyre";
+        return $"{ply}face_{job:D3}.dds.phyre";
     }
 
     private void populate_face_icons() {
@@ -346,12 +346,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
             if (FhGlobal.game_id == FhGameId.FFX2) {
                 for (int i = 0; i < 3; i++) {
-                    byte chr_id = header2.ply[i];
+                    byte ply_id = header2.ply[i];
                     byte job_id = header2.ply_jobs[i];
 
                     if (job_id < 0x01 || job_id > 0x21) continue;
 
-                    string    face      = remap_job(chr_id, job_id);
+                    string    face      = remap_job(ply_id, job_id);
                     FhTexture face_icon = new(Path.Join(MENU_FACE_DATA_DIR, face), FhTextureType.PHYRE);
 
                     _face_icon_textures.TryAdd(
@@ -361,12 +361,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                 }
             }
             else {
-                byte chr_id = header2.lm_ply;
+                byte ply_id = header2.lm_ply;
                 byte job_id = header2.lm_job;
 
                 if (job_id < 0x01 || job_id > 0x21) continue;
 
-                string    face      = remap_job(chr_id, job_id);
+                string    face      = remap_job(ply_id, job_id);
                 FhTexture face_icon = new(Path.Join(MENU_FACE_DATA_DIR, face), FhTextureType.PHYRE);
 
                 _face_icon_textures.TryAdd(
@@ -1341,7 +1341,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(save.header);
 
         for (byte i = 0; i < 3; i++) {
-            byte chr_id = header2.ply[i];
+            byte ply_id = header2.ply[i];
             byte job_id = header2.ply_jobs[i];
 
             if (job_id < 0x01 || job_id > 0x21) {
@@ -1349,7 +1349,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                 continue;
             }
 
-            string    filename = remap_job(chr_id, job_id);
+            string    filename = remap_job(ply_id, job_id);
             FhTexture portrait = _face_icon_textures.GetValueOrDefault(filename, _texture_face_icon_default);
 
             if (portrait.try_use(out ImTextureRef faces, out _)) {
@@ -1538,7 +1538,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(save.header);
 
         for (int i = 3; i >= 0; i--) {
-            byte chr_id = header2.lm_ply;
+            byte ply_id = header2.lm_ply;
             byte job_id = header2.lm_job;
 
             if (job_id < 0x01 || job_id > 0x21) {
@@ -1546,7 +1546,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                 continue;
             }
 
-            string    filename = remap_job(chr_id, job_id);
+            string    filename = remap_job(ply_id, job_id);
             FhTexture portrait = _face_icon_textures.GetValueOrDefault(filename, _texture_face_icon_default);
 
             if (portrait.try_use(out ImTextureRef faces, out _)) {
