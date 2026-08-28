@@ -1155,6 +1155,10 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     }
 
     private void ui_scrollbar() {
+        if (_current_scrollable.max <= _current_scrollable.visible) {
+            return;
+        }
+
         Rect track = new() {
             pos  = new(1461f, 174f),
             size = new(  14f, 630f),
