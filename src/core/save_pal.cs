@@ -114,31 +114,30 @@ public struct FhSaveHeader {
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct FhSaveHeader2 {
+    [InlineArray(0x3)]
+    public struct Party {
+        private byte _e0;
+    }
+
     public uint     _0x00;
     public byte     _0x04;
-    public byte     id_chr1;
-    public byte     id_chr2;
-    public byte     id_chr3;
-    public byte     level_chr1;
-    public byte     level_chr2;
-    public byte     level_chr3;
+    public Party    ply;
+    public Party    ply_levels;
     public byte     chapter;
     public byte     completion;
-    public byte     id_chr1_dress;
-    public byte     id_chr2_dress;
-    public byte     id_chr3_dress;
+    public Party    ply_jobs;
     public uint     playtime_secs;
     public uint     gil;
     public ushort   _0x18;
     public ushort   _0x1A;
     public uint     _0x1C;
     public byte     times_played;
-    public byte     id_chr_lm;
-    public byte     level_chr_lm;
-    public byte     id_job_lm;
-    public byte     level_job_lm;
+    public byte     lm_ply;
+    public byte     lm_ply_level;
+    public byte     lm_job;
+    public byte     lm_job_level;
     public byte     _0x25;
-    public byte     retry_lm;
+    public byte     lm_retry;
     public byte     _0x27;
     public FhLangId lang_id;
     public byte     _0x29;
