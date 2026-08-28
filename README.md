@@ -18,9 +18,9 @@ then follow the [installation guide](https://github.com/fahrenheit-crew/fahrenhe
 Read the [build, deployment and debugging guide](https://github.com/fahrenheit-crew/fahrenheit/wiki/Build-and-deployment-guide) to get started.
 
 ## For modders
-See the [template](https://github.com/fahrenheit-crew/fh-mods-template) to get started.
+See the [template](https://github.com/fahrenheit-crew/fh-mods-template) and [TrueRNG mod](https://github.com/fahrenheit-crew/fh-mods-truerng) to get started.
 
-## Got issues, or want to contribute?
+## Need help, or want to contribute?
 Feel free to join us in [Cid's Salvage Ship](https://discord.gg/AGx2grw9nD), a Discord server that supports Fahrenheit and related efforts.
 
 ## Looking for more?
