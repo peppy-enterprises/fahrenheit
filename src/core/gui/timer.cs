@@ -23,7 +23,7 @@ public class Timer {
     /// <summary>Whether the timer is done running.</summary>
     public bool is_done => remaining < 0.0001f;
 
-    /// <summary>The percentage of its length the timer has counted down, between 0 and 1.</summary>
+    /// <summary>The percentage of the timer's total length that has elapsed, between 0 and 1.</summary>
     public float progress => length < 0.0001f ? 1f : (1f - remaining / length);
 
     /// <summary>

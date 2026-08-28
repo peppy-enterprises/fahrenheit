@@ -17,33 +17,33 @@ public class FadeHelper : Timer {
     /// <param name="from">The color to fade from.</param>
     /// <param name="to">The color to fade to.</param>
     /// <param name="time">The time to fade between the colors for.</param>
-    /// <param name="on_end">
+    /// <param name="when_done">
     ///     Optional. If supplied, the helper will perform
     ///     this action when it is done.
     /// </param>
     public FadeHelper(
-        uint from,
-        uint to,
-        float time,
-        Action? on_end = null
-    ) : base(time, on_end) {
+        uint    from,
+        uint    to,
+        float   time,
+        Action? when_done = null
+    ) : base(time, when_done) {
 
         color_from = from;
         color_to   = to;
     }
 
     /// <summary>Restart the timer, optionally with new colors, length, and action.</summary>
-    /// <param name="from">Option. If supplied, the new starting color for the fade.</param>
-    /// <param name="to">Option. If supplied, the new ending color for the fade.</param>
+    /// <param name="from">Optional. If supplied, the new starting color for the fade.</param>
+    /// <param name="to">Optional. If supplied, the new ending color for the fade.</param>
     /// <param name="new_length">Optional. If supplied, the timer will be set to this amount.</param>
     /// <param name="when_done">
     ///     Optional. If supplied, the timer will perform
     ///     this action when it finishes running.
     /// </param>
     public void restart(
-        uint? from = null,
-        uint? to = null,
-        float? new_length = null,
+        uint?   from = null,
+        uint?   to = null,
+        float?  new_length = null,
         Action? when_done = null
     ) {
         color_from = from ?? color_from;
