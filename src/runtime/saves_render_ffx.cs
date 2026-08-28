@@ -42,8 +42,16 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     private const string MAP_ICONS_DIR  = "/FFX_Data/GameData/PS3Data/savedataicons/";
     private const string MENU_D3D11_DIR = "/FFX_Data/GameData/PS3Data/menu/D3D11/";
 
+    private const float FADE_TIME  = 0.5f;
+
     private UiMode  _mode;
     private UiFocus _focus;
+
+    private float _fade_timer;
+    private int   _fade_direction; // -1 for to black, 1 for to transparent
+    private int   _execute_after_fade = -1; // -1 for none, -2 for exit, otherwise executes on given slot
+
+    private bool is_fading => _fade_timer != 0;
 
     private readonly List<string> _set_list = [ ];
 
@@ -85,6 +93,8 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
     private bool     _scrollbar_dragging;
     private Vector2? _scrollbar_held_pos;
+
+    private bool _should_handle_input => !_scrollbar_dragging && !is_fading;
 
     public FhSaveUiRendererX() {
         _current_scrollable = _scrollable_saves;
@@ -128,6 +138,8 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         }
 
         ui_scrollbar();
+
+        ui_fade();
     }
 
     private void handle_input_list() {
@@ -156,7 +168,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
                 }
                 else {
                     FhSaveDisplayData save = FhApi.Saves.display_data[hovered];
-                    execute(save.slot);
+                    set_up_execute(save.slot);
                 }
 
                 return;
@@ -185,7 +197,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     }
 
     private void handle_input() {
-        if (_scrollbar_dragging) return;
+        if (!_should_handle_input) return;
 
         switch (_focus) {
             case UiFocus.LIST:       handle_input_list();       break;
@@ -198,7 +210,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             if (_mode == UiMode.SET_SWAP)
                 change_mode(UiMode.SAVE_LIST);
             else
-                FhApi.Saves.exit_cancel();
+                set_up_exit();
         }
     }
 
@@ -216,6 +228,9 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         _scrollable_saves.max = is_saving
             ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
             : FhApi.Saves.display_data.Count;
+
+        _fade_timer     = FADE_TIME;
+        _fade_direction = 1;
     }
 
     private void post_close(EventArgs e) {
@@ -232,6 +247,18 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         _scrollable_sets.reset();
         _focus = UiFocus.LIST;
         _mode = new_mode;
+    }
+
+    private void set_up_execute(int slot) {
+        _fade_timer         = FADE_TIME;
+        _fade_direction     = -1;
+        _execute_after_fade = slot;
+    }
+
+    private void set_up_exit() {
+        _fade_timer         = FADE_TIME;
+        _fade_direction     = -1;
+        _execute_after_fade = -2;
     }
 
     private void execute(int slot) {
@@ -309,7 +336,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     }
 
     private bool mouse_hovered(Rect rect) {
-        return !_scrollbar_dragging
+        return _should_handle_input
             && ImGui.GetIO().MouseDelta.LengthSquared() > 0
             && FhApi.Gui.mouse_hovering(rect);
     }
@@ -1032,7 +1059,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         // Handle input
         if (FhApi.Gui.mouse_clicked(save_rect.scale_raw(scale_factor))) {
-            execute(save.slot);
+            set_up_execute(save.slot);
         }
     }
 
@@ -1243,6 +1270,32 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         if (FhApi.Gui.mouse_clicked(triangle_bottom, repeat: true)) {
             _current_scrollable.move_hover(1);
+        }
+    }
+
+    private void ui_fade() {
+        float t     = _fade_timer / FADE_TIME;
+        float alpha = _fade_direction < 0 ? (1f - t) : t;
+
+        uint fade_color = (uint)((byte)(alpha * 255f) << 24);
+
+        ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
+        draw.AddRectFilled(Vector2.Zero, FhApi.Gui.display_size, fade_color);
+
+        _fade_timer -= ImGui.GetIO().DeltaTime;
+        _fade_timer = float.Clamp(_fade_timer, 0f, FADE_TIME);
+
+        if (_fade_timer == 0f) {
+            _fade_direction = 0;
+
+            if (_execute_after_fade >= 0) {
+                execute(_execute_after_fade);
+                _execute_after_fade = -1;
+            }
+            else if (_execute_after_fade == -2) {
+                FhApi.Saves.exit_cancel();
+                _execute_after_fade = -1;
+            }
         }
     }
 }
