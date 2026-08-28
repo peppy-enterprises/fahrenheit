@@ -715,11 +715,11 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             display_data = display_data[1..];
         }
 
-        _scrollable_saves.max = display_data.Count;
-        if (is_saving) {
-            _scrollable_saves.max += 1;
-        }
-        else if (display_data.Count == 0) {
+        _scrollable_saves.max = is_saving
+            ? display_data.Count + 1
+            : display_data.Count;
+
+         if (display_data.Count == 0) {
             ui_no_saves();
             return;
         }
@@ -744,17 +744,20 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         }
 
         //TODO: Add localization
-        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
-        string message = system_mode.HasValue switch {
-            true => system_mode.Value switch {
-                FhSaveSystemMode.LOAD => "No saved data. Change set or return to the main menu.",
-                FhSaveSystemMode.ALBD => "No saved data. Change set or return.",
+        string message =
+            FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode) switch {
+                true => system_mode switch {
+                    FhSaveSystemMode.LOAD
+                        => "No saved data. Change set or return to the main menu.",
+
+                    FhSaveSystemMode.ALBD
+                        => "No saved data. Change set or return.",
+
+                    _ => "",
+                },
 
                 _ => "",
-            },
-
-            _ => "",
-        };
+            };
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
