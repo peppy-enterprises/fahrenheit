@@ -216,7 +216,7 @@ public class Scrollable {
         }
 
         if (scroll_page_up) {
-            if (current == 0) {
+            if (current == 0 || max <= visible) {
                 hovered = 0;
             }
             else {
@@ -225,7 +225,7 @@ public class Scrollable {
         }
 
         if (scroll_page_down) {
-            if (current == max - visible) {
+            if (current == max - visible || max <= visible) {
                 hovered = max - 1;
             }
             else {
