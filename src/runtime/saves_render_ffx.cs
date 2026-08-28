@@ -38,15 +38,15 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         ACTIVE_SET = 1,
     }
 
+    private const string MAP_ICONS_DIR  = "/FFX_Data/GameData/PS3Data/savedataicons/";
+    private const string MENU_D3D11_DIR = "/FFX_Data/GameData/PS3Data/menu/D3D11/";
+
     private UiMode  _mode;
     private UiFocus _focus;
 
     private readonly List<string> _set_list = [ ];
 
     private bool _loaded_all_textures;
-
-    private const string MAP_ICONS_DIR  = "/FFX_Data/GameData/PS3Data/savedataicons/";
-    private const string MENU_D3D11_DIR = "/FFX_Data/GameData/PS3Data/menu/D3D11/";
 
     private readonly Dictionary<string, FhTexture> _map_icon_textures = [ ];
 
@@ -432,8 +432,8 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
     /// <summary>Render the active set name and set count.</summary>
     private void ui_savecount() {
-        string active_set = FhApi.Saves.active_set;
-        bool has_autosave = FhApi.Saves.set_has_autosave(active_set);
+        string active_set   = FhApi.Saves.active_set;
+        bool   has_autosave = FhApi.Saves.set_has_autosave(active_set);
 
         int save_count = FhApi.Saves.get_slots_used();
 
@@ -758,7 +758,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        float font_size   = 36f * scale_factor.Y;
+        float font_size = 36f * scale_factor.Y;
 
         ImGui.PushFont(null, font_size);
         Vector2 text_size = ImGui.CalcTextSize(message);
@@ -1161,7 +1161,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         float progress = _current_scrollable.get_progress();
 
         float scrollable_track_height = track.size.Y - thumb_margin.Y * 2 - thumb_size.Y;
-        float thumb_progress = progress * scrollable_track_height;
+        float thumb_progress          = progress * scrollable_track_height;
 
         Rect thumb = new() {
             pos = new(
