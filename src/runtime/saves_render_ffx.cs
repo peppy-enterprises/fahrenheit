@@ -796,7 +796,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             Vector2[] tex_uv    = _savefile_border_helper.get_uvs(slice_idx);
             Vector2[] screen_uv =    screen_border_helper.get_uvs(slice_idx);
 
-            draw.AddImage(meswin, screen_uv[0] * scale_factor, screen_uv[3] * scale_factor, tex_uv[0], tex_uv[3]);
+            draw.AddImage(meswin, screen_uv[0], screen_uv[3], tex_uv[0], tex_uv[3]);
         }
 
         FhApi.Gui.draw_text(
