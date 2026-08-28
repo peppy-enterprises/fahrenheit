@@ -51,7 +51,7 @@ public sealed class FhSaveUiModule : FhModule {
             // FhGameId.FFX2   or
             // FhGameId.FFX2LM => _render_x2!.ModuleType,
 
-            _ => throw new NotImplementedException(),
+            _ => "",//throw new NotImplementedException(),
         };
     }
 
@@ -60,6 +60,8 @@ public sealed class FhSaveUiModule : FhModule {
             FhGameId.FFX    => _handle_render_x.try_get_module(out _render_x),
             // FhGameId.FFX2   or
             // FhGameId.FFX2LM => _handle_render_x2.try_get_module(out _render_x2),
+
+            _ => false,//throw new NotImplementedException(),
         };
 
         _settings.renderer.set(get_default_renderer_id());
