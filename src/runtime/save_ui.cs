@@ -56,8 +56,11 @@ public sealed class FhSaveUiModule : FhModule {
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        bool got_modules = _handle_render_x .try_get_module(out _render_x);
-            // && _handle_render_x2.try_get_module(out _render_x2);
+        bool got_modules = FhGlobal.game_id switch {
+            FhGameId.FFX    => _handle_render_x.try_get_module(out _render_x),
+            // FhGameId.FFX2   or
+            // FhGameId.FFX2LM => _handle_render_x2.try_get_module(out _render_x2),
+        };
 
         _settings.renderer.set(get_default_renderer_id());
 
