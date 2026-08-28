@@ -721,7 +721,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                 UV ghost_suv = new Rect {
                     pos  = cursor_top_left + new Vector2(offset, 0f),
                     size = cursor_size,
-                }.scale_raw(scale_factor).as_uv();
+                }.scale(scale_factor, new(Alignment.CENTER, Alignment.CENTER)).as_uv();
 
                 uint color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
 
@@ -755,7 +755,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                 UV ghost_suv = new Rect {
                     pos  = cursor_top_left + new Vector2(offset, 0f),
                     size = cursor_size,
-                }.scale_raw(scale_factor).as_uv();
+                }.scale(scale_factor, new(Alignment.CENTER, Alignment.CENTER)).as_uv();
 
                 uint color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
 
@@ -774,7 +774,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         UV main_suv = new Rect {
             pos  = cursor_top_left + new Vector2(loop_progress * travel_dist, 0f),
             size = cursor_size,
-        }.scale_raw(scale_factor).as_uv();
+        }.scale(scale_factor, new(Alignment.CENTER, Alignment.CENTER)).as_uv();
 
         draw.AddImage(
             freetex,
