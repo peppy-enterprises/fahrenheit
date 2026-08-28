@@ -9,7 +9,6 @@ public abstract class FhSaveUiRenderer : FhModule {
     /// <summary>The scale between the current and reference display sizes.</summary>
     protected Vector2 scale_factor => FhApi.Gui.display_size / get_ref_size();
 
-
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         _logger.Info($"Registering new save UI renderer: {ModuleType}");
         FhApi.Saves.register_renderer(this);
@@ -18,7 +17,6 @@ public abstract class FhSaveUiRenderer : FhModule {
     }
 
     public sealed override void render_imgui() { }
-
 
     /// <summary>Retrieve the reference size that is used by the renderer.</summary>
     /// <returns>The reference size used by the renderer.</returns>

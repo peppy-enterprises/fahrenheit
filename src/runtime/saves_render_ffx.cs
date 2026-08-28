@@ -724,7 +724,6 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             return;
         }
 
-
         int start = _scrollable_saves.get_clip_start();
         int end   = _scrollable_saves.get_clip_end();
 

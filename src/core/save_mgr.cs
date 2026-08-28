@@ -282,7 +282,6 @@ public sealed class FhSaves {
         return _renderers.TryGetValue(id, out renderer);
     }
 
-
     /// <summary>Register a new save UI renderer for selection by the user.</summary>
     /// <param name="renderer">The new renderer to register.</param>
     public void register_renderer(FhSaveUiRenderer renderer) {
