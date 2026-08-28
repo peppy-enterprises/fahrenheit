@@ -6,6 +6,7 @@
 namespace Fahrenheit;
 
 using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
+using Renderers  = Dictionary<string, FhSaveUiRenderer>;
 
 /// <summary>Represents the current operating mode of the save system.</summary>
 public enum FhSaveSystemMode {
@@ -74,8 +75,8 @@ public sealed class FhSaves {
     private readonly string                  _sm_path_base;
     private readonly string                  _sm_path_default_set;
     private readonly List<FhSaveDisplayData> _sm_display_data;
+    private readonly Renderers               _sm_renderers;
 
-    private readonly Dictionary<string, FhSaveUiRenderer> _renderers = [];
 
     /// <summary>The name of the active set.</summary>
     public string active_set => _sm_active_set;
@@ -91,6 +92,7 @@ public sealed class FhSaves {
         _sm_sets_with_autosaves = [];
         _sm_active_set          = FhSavePal.DEFAULT_SET_NAME;
         _sm_display_data        = [];
+        _sm_renderers           = [];
 
         _sm_set_save_counts  = new() {
             { FhGameId.FFX,    [] },
@@ -279,13 +281,13 @@ public sealed class FhSaves {
     /// <param name="renderer">The renderer with the given ID.</param>
     /// <returns>Whether the operation succeeded.</returns>
     internal bool get_renderer(string id, [NotNullWhen(true)] out FhSaveUiRenderer? renderer) {
-        return _renderers.TryGetValue(id, out renderer);
+        return _sm_renderers.TryGetValue(id, out renderer);
     }
 
     /// <summary>Register a new save UI renderer for selection by the user.</summary>
     /// <param name="renderer">The new renderer to register.</param>
     public void register_renderer(FhSaveUiRenderer renderer) {
-        _renderers[renderer.ModuleType] = renderer;
+        _sm_renderers[renderer.ModuleType] = renderer;
     }
 
     /// <summary>Regenerate and retrieve the loadable sets.</summary>
