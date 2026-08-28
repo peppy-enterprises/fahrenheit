@@ -59,7 +59,6 @@ public sealed class FhSaves {
 
     internal readonly FhRuntimeHandle<IFhSaveSystemImpl> impl_handle = new();
 
-
     /* [fkelava 07/11/25 15:01]
      * Fh computes a load-order sensitive hash over all mods that declare 'separate saves'.
      * It creates a 'default' save set for that hash. The user may create manual sets.
@@ -76,7 +75,6 @@ public sealed class FhSaves {
     private readonly string                  _sm_path_default_set;
     private readonly List<FhSaveDisplayData> _sm_display_data;
     private readonly Renderers               _sm_renderers;
-
 
     /// <summary>The name of the active set.</summary>
     public string active_set => _sm_active_set;
