@@ -51,7 +51,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private UiMode  _mode;
     private UiFocus _focus;
 
-    private FadeHelper _fade = new(0, 0, 0.5f);
+    private readonly FadeHelper _fade = new(0, 0, 0.5f);
 
     private readonly List<string> _set_list = [ ];
 
@@ -687,17 +687,17 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
         UV cursor_tuv = new UV(
-            new( 10f, 572f),
-            new(175f, 480f)
+            new(  9f, 572f),
+            new(180f, 478f)
         ).map_to(_tex_freetex_size);
 
         Vector2 cursor_size = new(103f, 58f);
 
-        float   overlap_amount = overlap ? cursor_size.X * 0.1f : 0f;
+        float overlap_amount = overlap ? cursor_size.X * 0.1f : 0f;
 
-        Vector2 base_center = new(
-            target_pos.X - cursor_size.X / 2f + overlap_amount,
-            target_pos.Y + 4f
+        Vector2 cursor_top_left = new(
+            target_pos.X - cursor_size.X + overlap_amount,
+            target_pos.Y - cursor_size.Y / 2f + 4f // "+ 4f" Centers the cursor properly
         );
 
         float loop_time     = (float)(ImGui.GetTime() % 0.53f);
@@ -718,12 +718,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                     alpha *= 1f - fade_time;
                 }
 
-                uint color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
+                UV ghost_suv = new Rect {
+                    pos  = cursor_top_left + new Vector2(offset, 0f),
+                    size = cursor_size,
+                }.scale_raw(scale_factor).as_uv();
 
-                UV ghost_suv = new Rect { pos = base_center + new Vector2(offset, 0f) }
-                    .expand(cursor_size, new(Alignment.CENTER, Alignment.CENTER))
-                    .scale(scale_factor, new(Alignment.END, Alignment.CENTER))
-                    .as_uv();
+                uint color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
 
                 draw.AddImage(
                     freetex,
@@ -752,12 +752,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                     alpha *= 1f - fade_time;
                 }
 
-                uint color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
+                UV ghost_suv = new Rect {
+                    pos  = cursor_top_left + new Vector2(offset, 0f),
+                    size = cursor_size,
+                }.scale_raw(scale_factor).as_uv();
 
-                UV ghost_suv = new Rect { pos = base_center + new Vector2(offset, 0f) }
-                    .expand(cursor_size, new(Alignment.CENTER, Alignment.CENTER))
-                    .scale(scale_factor, new(Alignment.END, Alignment.CENTER))
-                    .as_uv();
+                uint color = ImGui.ColorConvertFloat4ToU32(new Vector4(1f, 1f, 1f, alpha));
 
                 draw.AddImage(
                     freetex,
@@ -770,11 +770,11 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             }
         }
 
-        // Draw Main Cursor
-        UV main_suv = new Rect { pos = base_center + new Vector2(loop_progress * travel_dist, 0f) }
-            .expand(cursor_size, new(Alignment.CENTER, Alignment.CENTER))
-            .scale(scale_factor, new(Alignment.END, Alignment.CENTER))
-            .as_uv();
+        // Main Cursor
+        UV main_suv = new Rect {
+            pos  = cursor_top_left + new Vector2(loop_progress * travel_dist, 0f),
+            size = cursor_size,
+        }.scale_raw(scale_factor).as_uv();
 
         draw.AddImage(
             freetex,
