@@ -130,83 +130,75 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         ui_scrollbar();
     }
 
+    private void handle_input_list() {
+        if (_mode == UiMode.SAVE_LIST) {
+            if (_scrollable_saves.max == 0) {
+                _focus = UiFocus.ACTIVE_SET;
+                return;
+            }
+
+            if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up)
+             && _current_scrollable.hovered == 0
+            ) {
+                _focus = UiFocus.ACTIVE_SET;
+                return;
+            }
+        }
+
+        _current_scrollable.handle_input();
+
+        if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
+            int hovered = _current_scrollable.hovered;
+
+            if (_mode == UiMode.SAVE_LIST) {
+                if (is_saving && hovered == 0) {
+                    FhApi.Saves.save(0);
+                }
+                else {
+                    FhSaveDisplayData save = FhApi.Saves.display_data[hovered];
+                    execute(save.slot);
+                }
+
+                return;
+            }
+
+            if (_mode == UiMode.SET_SWAP) {
+                string hovered_set = _set_list[hovered];
+                switch_set(hovered_set);
+
+                return;
+            }
+        }
+    }
+
+    private void handle_input_active_set() {
+        if (_mode == UiMode.SAVE_LIST && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down)) {
+            _focus = UiFocus.LIST;
+            _current_scrollable.hovered = _current_scrollable.current;
+
+            return;
+        }
+
+        if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
+            change_mode(UiMode.SET_SWAP);
+        }
+    }
+
     private void handle_input() {
         if (_scrollbar_dragging) return;
 
         switch (_focus) {
-            case UiFocus.LIST: {
-                if (_mode == UiMode.SAVE_LIST && _scrollable_saves.max == 0) {
-                    _focus = UiFocus.ACTIVE_SET;
-                    break;
-                }
-
-                if (_mode == UiMode.SAVE_LIST
-                 && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up)
-                 && _current_scrollable.hovered == 0
-                ) {
-                    _focus = UiFocus.ACTIVE_SET;
-                    break;
-                }
-
-                _current_scrollable.handle_input();
-
-                if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
-                    if (_mode == UiMode.SAVE_LIST) {
-                        if (is_saving && _current_scrollable.hovered == 0) {
-                            FhApi.Saves.save(0);
-                        }
-                        else {
-                            FhSaveDisplayData save = FhApi.Saves.display_data[_current_scrollable.hovered];
-                            execute(save.slot);
-                        }
-
-                        break;
-                    }
-
-                    if (_mode == UiMode.SET_SWAP) {
-                        string hovered_set = _set_list[_current_scrollable.hovered];
-                        switch_set(hovered_set);
-
-                        break;
-                    }
-                }
-
-                break;
-            }
-
-            case UiFocus.ACTIVE_SET: {
-                if (_mode == UiMode.SAVE_LIST
-                 && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down)
-                ) {
-                    _focus = UiFocus.LIST;
-
-                    if (_focus == UiFocus.LIST) {
-                        _current_scrollable.hovered = _current_scrollable.current;
-                    }
-
-                    break;
-                }
-
-                if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_confirm)) {
-                    change_mode(UiMode.SET_SWAP);
-                }
-
-                break;
-            }
+            case UiFocus.LIST:       handle_input_list();       break;
+            case UiFocus.ACTIVE_SET: handle_input_active_set(); break;
 
             default: throw new NotImplementedException();
         }
 
         if (FhApi.Gui.is_any_pressed(FhApi.Gui.keys_cancel)) {
-            switch (_mode) {
-                case UiMode.SET_SWAP:
-                    change_mode(UiMode.SAVE_LIST);
-                    break;
-
-                default:
-                    FhApi.Saves.exit_cancel();
-                    break;
-            }
+            if (_mode == UiMode.SET_SWAP)
+                change_mode(UiMode.SAVE_LIST);
+            else
+                FhApi.Saves.exit_cancel();
         }
     }
 
