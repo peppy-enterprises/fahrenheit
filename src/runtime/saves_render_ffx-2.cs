@@ -15,6 +15,7 @@ namespace Fahrenheit.Runtime;
  * may as well not exist past the actual calculation.
  */
 
+/// <summary>The default save UI renderer for Final Fantasy X-2/Last Mission.</summary>
 [FhLoad(FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     /// <summary>Possible open windows of the save/load menu.</summary>
@@ -38,19 +39,20 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         ACTIVE_SET = 1,
     }
 
+    private const string MAP_ICONS_DIR      = "/FFX-2_Data/GameData/PS3Data/savedataicons/";
+    private const string MENU_FACE_DATA_DIR = "/FFX-2_Data/GameData/PS3Data/menu/face_data/D3D11/";
+    private const string MENU_D3D11_DIR     = "/FFX-2_Data/GameData/PS3Data/menu/D3D11/";
+    private const string MENU_MAHOJIN_DIR   = "/FFX-2_Data/GameData/PS3Data/menu/menu_mahojin/tex/D3D11/";
+    private const string MENU_PLATE_DIR     = "/FFX-2_Data/GameData/PS3Data/menu/menu_plate/tex/D3D11/";
+
+    private const string MENU_D3D11_DIR_X   = "/ffx_data/gamedata/ps3data/menu/d3d11/";
+
     private UiMode  _mode;
     private UiFocus _focus;
 
     private readonly List<string> _set_list = [ ];
 
     private bool _loaded_all_textures;
-
-    private const string MAP_ICONS_DIR      = "/FFX-2_Data/GameData/PS3Data/savedataicons/";
-    private const string MENU_D3D11_DIR     = "/FFX-2_Data/GameData/PS3Data/menu/D3D11/";
-    private const string MENU_MAHOJIN_DIR   = "/FFX-2_Data/GameData/PS3Data/menu/menu_mahojin/tex/D3D11/";
-    private const string MENU_PLATE_DIR     = "/FFX-2_Data/GameData/PS3Data/menu/menu_plate/tex/D3D11/";
-    private const string MENU_FACE_DATA_DIR = "/FFX-2_Data/GameData/PS3Data/menu/face_data/D3D11/";
-    private const string MENU_D3D11_DIR_X   = "/ffx_data/gamedata/ps3data/menu/d3d11/";
 
     private readonly Dictionary<string, FhTexture> _face_icon_textures = [ ];
     private readonly Dictionary<string, FhTexture> _map_icon_textures  = [ ];
@@ -141,6 +143,11 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         switch (_focus) {
             case UiFocus.LIST: {
+                    if (_mode == UiMode .SAVE_LIST && _scrollable_saves.max == 0) {
+                        _focus = UiFocus.ACTIVE_SET;
+                        break;
+                    }
+
                     if (_mode == UiMode.SAVE_LIST
                      && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up)
                      && _current_scrollable.hovered == 0
@@ -268,7 +275,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         //_map_icon_textures.Clear();
         //populate_map_icons();
         _loaded_all_textures = false;
-        
+
         change_mode(UiMode.SAVE_LIST);
     }
 
@@ -615,8 +622,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
     /// <summary>Render the active set name and set count.</summary>
     private void ui_savecount() {
-        string active_set = FhApi.Saves.active_set;
-        bool has_autosave = FhApi.Saves.set_has_autosave(active_set);
+        string active_set   = FhApi.Saves.active_set;
+        bool   has_autosave = FhApi.Saves.set_has_autosave(active_set);
 
         int save_count = FhApi.Saves.get_slots_used();
 
@@ -1021,11 +1028,11 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             display_data = display_data[1..];
         }
 
-        _scrollable_saves.max = display_data.Count;
-        if (is_saving) {
-            _scrollable_saves.max += 1;
-        }
-        else if (display_data.Count == 0) {
+        _scrollable_saves.max = is_saving
+            ? display_data.Count + 1
+            : display_data.Count;
+
+        if (display_data.Count == 0) {
             ui_no_saves();
             return;
         }
@@ -1050,12 +1057,11 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         }
 
         //TODO: Add localization
-        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
         string message = "No saved data. Change set or return to the main menu.";
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        float font_size   = 36f * scale_factor.Y;
+        float font_size = 36f * scale_factor.Y;
 
         ImGui.PushFont(null, font_size);
         Vector2 text_size = ImGui.CalcTextSize(message);
@@ -1134,7 +1140,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         /* ===== Save Texture ===== */
         float header_size    = 47f;
-        float vertical_space = 4f;
+        float vertical_space =  4f;
 
         Rect header_rect = new Rect {
             pos  = save_rect.pos,
@@ -1742,12 +1748,6 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private void ui_scrollbar() {
-        if (_mode == UiMode.SAVE_LIST && _scrollable_saves.max <= _scrollable_saves.visible
-         || _mode == UiMode.SET_SWAP  && _scrollable_sets .max <= _scrollable_sets.visible
-         ) {
-            return;
-        }
-    
         Rect track = new() {
             pos  = new(1753f, 205f),
             size = new(  17f, 754f),
@@ -1789,7 +1789,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         float progress = _current_scrollable.get_progress();
 
         float scrollable_track_height = track.size.Y - thumb_margin.Y * 2 - thumb_size.Y;
-        float thumb_progress = progress * scrollable_track_height;
+        float thumb_progress          = progress * scrollable_track_height;
 
         Rect thumb = new() {
             pos = new(
