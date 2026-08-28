@@ -135,6 +135,11 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         switch (_focus) {
             case UiFocus.LIST: {
+                if (_mode == UiMode.SAVE_LIST && _scrollable_saves.max == 0) {
+                    _focus = UiFocus.ACTIVE_SET;
+                    break;
+                }
+
                 if (_mode == UiMode.SAVE_LIST
                  && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up)
                  && _current_scrollable.hovered == 0
