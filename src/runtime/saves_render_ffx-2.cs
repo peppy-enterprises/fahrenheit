@@ -45,8 +45,13 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private const string MENU_MAHOJIN_DIR   = "/FFX-2_Data/GameData/PS3Data/menu/menu_mahojin/tex/D3D11/";
     private const string MENU_PLATE_DIR     = "/FFX-2_Data/GameData/PS3Data/menu/menu_plate/tex/D3D11/";
 
+    private const uint COLOR_BLACK = 0xFF000000;
+    private const uint COLOR_TRANS = 0x00000000;
+
     private UiMode  _mode;
     private UiFocus _focus;
+
+    private FadeHelper _fade = new(0, 0, 0.5f);
 
     private readonly List<string> _set_list = [ ];
 
@@ -88,6 +93,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private bool     _scrollbar_dragging;
     private Vector2? _scrollbar_held_pos;
 
+    private bool should_handle_input => !_scrollbar_dragging && _fade.is_done;
+
     public FhSaveUiRendererX2() {
         _current_scrollable = _scrollable_saves;
     }
@@ -123,6 +130,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         }
 
         ui_scrollbar();
+
+        ui_fade();
     }
 
     private void handle_input_list() {
@@ -151,7 +160,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                 }
                 else {
                     FhSaveDisplayData save = FhApi.Saves.display_data[hovered];
-                    execute(save.slot);
+                    _fade.restart(
+                        COLOR_TRANS,
+                        COLOR_BLACK,
+                        null,
+                        () => execute(save.slot)
+                    );
                 }
 
                 return;
@@ -180,7 +194,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private void handle_input() {
-        if (_scrollbar_dragging) return;
+        if (!should_handle_input) return;
 
         switch (_focus) {
             case UiFocus.LIST: handle_input_list(); break;
@@ -193,7 +207,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             if (_mode == UiMode.SET_SWAP)
                 change_mode(UiMode.SAVE_LIST);
             else
-                FhApi.Saves.exit_cancel();
+                _fade.restart(
+                    COLOR_TRANS,
+                    COLOR_BLACK,
+                    null,
+                    () => FhApi.Saves.exit_cancel()
+                );
         }
     }
 
@@ -214,6 +233,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         _scrollable_saves.max = is_saving
             ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
             : FhApi.Saves.display_data.Count;
+
+        _fade.restart(COLOR_BLACK, COLOR_TRANS);
     }
 
     private void post_close(EventArgs e) {
@@ -420,9 +441,14 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private bool mouse_hovered(Rect rect) {
-        return !_scrollbar_dragging
+        return should_handle_input
             && ImGui.GetIO().MouseDelta.LengthSquared() > 0
             && FhApi.Gui.mouse_hovering(rect);
+    }
+
+    private bool mouse_clicked(Rect rect, ImGuiMouseButton button = ImGuiMouseButton.Left, bool repeat = false) {
+        return should_handle_input
+            && FhApi.Gui.mouse_clicked(rect, button, repeat);
     }
 
     /// <summary>Render the background for the save/load screen.</summary>
@@ -763,12 +789,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private void ui_change_set() {
         if (!_texture_x2_bg.try_use(out ImTextureRef x2_bg, out _)) return;
 
-        uint bg_color = 0x80000000; // transparent black
-
-        UV bg_tuv = new Rect {
-            pos  = new(1469f, 733f),
-            size = new( 286f, 287f),
-        }.as_uv(_tex_x2_bg_size, false);
+        ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
         Rect bg_screen = new Rect {
             pos  = new(735f, 28f),
@@ -781,40 +802,46 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             _focus = UiFocus.ACTIVE_SET;
         }
 
-        ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
-
-        // Message background
         draw.AddRectFilled(
             bg_suv.p0,
             bg_suv.p1,
-            bg_color
+            0x80000000
         );
 
-        // Gold accents on message background
-        UV accentl_suv = new Rect {
-            pos  = new(734f,  90f),
-            size = new( 60f, -60f),
-        }.scale_raw(scale_factor).as_uv();
+        UV accent_tuv = new Rect {
+            pos  = new(1469f, 733f),
+            size = new( 286f, 287f),
+        }.as_uv(_tex_x2_bg_size);
 
-        UV accentr_suv = new Rect {
-            pos  = new(1186f, 26f),
-            size = new( -60f, 60f),
-        }.scale_raw(scale_factor).as_uv();
+        Vector2 accent_size = 60f * scale_factor;
+
+        Rect accent_left = new Rect {
+            pos  = bg_screen.top_left + new Vector2(-1f, 1f) * scale_factor,
+            size = new Vector2(accent_size.X, accent_size.Y),
+        };
+
+        Rect accent_right = new Rect {
+            pos  = bg_screen.bottom_right + new Vector2(1f, -1f) * scale_factor,
+            size = new Vector2(-accent_size.X, -accent_size.Y),
+        };
+
+        UV accentl_suv = accent_left .as_uv();
+        UV accentr_suv = accent_right.as_uv();
 
         draw.AddImage(
             x2_bg,
             accentl_suv.p0,
             accentl_suv.p1,
-            bg_tuv.p0,
-            bg_tuv.p1
+            accent_tuv.p0,
+            accent_tuv.p1
         );
 
         draw.AddImage(
             x2_bg,
             accentr_suv.p0,
             accentr_suv.p1,
-            bg_tuv.p0,
-            bg_tuv.p1
+            accent_tuv.p0,
+            accent_tuv.p1
         );
 
         float   font_size = 36f * scale_factor.Y;
@@ -848,7 +875,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         // Prevent accidentally capturing input when the user is focused on an actual ImGui window
         if (ImGui.GetIO().WantCaptureMouse) return;
 
-        if (FhApi.Gui.mouse_clicked(bg_screen)) {
+        if (mouse_clicked(bg_screen)) {
             change_mode(UiMode.SET_SWAP);
         }
     }
@@ -979,7 +1006,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         // Handle input
 
-        if (!io.WantCaptureMouse && FhApi.Gui.mouse_clicked(button_scaled)) {
+        if (mouse_clicked(button_scaled)) {
             io.WantCaptureMouse = true;
             switch_set(name);
         }
@@ -1044,7 +1071,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 text_size = ImGui.CalcTextSize(message);
         ImGui.PopFont();
 
-        Vector2 text_margin = new Vector2(30f, 40f) * scale_factor;
+        Vector2 text_margin = new Vector2(60f, 40f) * scale_factor;
         Vector2 window_size = text_margin * 2 + text_size;
 
         Rect window = new Rect {
@@ -1056,6 +1083,42 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             window.top_left,
             window.bottom_right,
             0x80000000
+        );
+
+        UV accent_tuv = new Rect {
+            pos  = new(1469f, 733f),
+            size = new( 286f, 287f),
+        }.as_uv(_tex_x2_bg_size);
+
+        Vector2 accent_size = 125f * scale_factor;
+
+        Rect accent_left = new Rect {
+            pos  = window.top_left + new Vector2(-3f, 3f) * scale_factor,
+            size = new Vector2(accent_size.X, accent_size.Y),
+        };
+
+        Rect accent_right = new Rect {
+            pos  = window.bottom_right + new Vector2(2f, -4f) * scale_factor,
+            size = new Vector2(-accent_size.X, -accent_size.Y),
+        };
+
+        UV accentl_suv = accent_left .as_uv();
+        UV accentr_suv = accent_right.as_uv();
+
+        draw.AddImage(
+            x2_bg,
+            accentl_suv.p0,
+            accentl_suv.p1,
+            accent_tuv.p0,
+            accent_tuv.p1
+        );
+
+        draw.AddImage(
+            x2_bg,
+            accentr_suv.p0,
+            accentr_suv.p1,
+            accent_tuv.p0,
+            accent_tuv.p1
         );
 
         FhApi.Gui.draw_text(
@@ -1238,8 +1301,13 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         }
 
         // Handle input
-        if (FhApi.Gui.mouse_clicked(save_rect.scale_raw(scale_factor))) {
-            execute(save.slot);
+        if (mouse_clicked(save_rect.scale_raw(scale_factor))) {
+            _fade.restart(
+                COLOR_TRANS,
+                COLOR_BLACK,
+                null,
+                () => execute(save.slot)
+            );
         }
     }
 
@@ -1802,7 +1870,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         float expanded_track_height = scrollable_track_height + (track.size.X - thumb.size.X);
 
-        if (FhApi.Gui.mouse_clicked(expanded_thumb)) {
+        if (mouse_clicked(expanded_thumb)) {
             _scrollbar_dragging = true;
             _scrollbar_held_pos = ImGui.GetMousePos() - expanded_thumb.pos;
         }
@@ -1823,12 +1891,21 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             return;
         }
 
-        if (FhApi.Gui.mouse_clicked(triangle_top, repeat: true)) {
+        if (mouse_clicked(triangle_top, repeat: true)) {
             _current_scrollable.move_hover(-1);
         }
 
-        if (FhApi.Gui.mouse_clicked(triangle_bottom, repeat: true)) {
+        if (mouse_clicked(triangle_bottom, repeat: true)) {
             _current_scrollable.move_hover(1);
         }
+    }
+
+    private void ui_fade() {
+        if (_fade.is_done) return;
+
+        ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
+        draw.AddRectFilled(Vector2.Zero, FhApi.Gui.display_size, _fade.get_color());
+
+        _fade.tick(ImGui.GetIO().DeltaTime);
     }
 }
