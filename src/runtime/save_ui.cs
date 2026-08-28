@@ -88,9 +88,6 @@ public sealed class FhSaveUiModule : FhModule {
             }
         }
 
-        // Silence warnings about further uses of 'renderer' potentially being null.
-        if (renderer is null) throw new UnreachableException();
-
         if (FhSavePal.pal_get_screen_state() is FhSaveScreenState.OPEN) {
             renderer.render_ui();
         }
