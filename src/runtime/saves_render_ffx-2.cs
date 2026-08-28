@@ -310,7 +310,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         );
     }
 
-    /// <returns>The correct ID for the face icon.</returns>
+    /// <returns>The correct filename for the face icon.</returns>
     private static string remap_job(byte ply_id, byte job_id) {
         if (job_id == 0x21) return "mface_147.dds.phyre"; // She-Goon
 
