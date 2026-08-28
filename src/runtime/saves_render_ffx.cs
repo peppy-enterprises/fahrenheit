@@ -48,7 +48,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     private UiMode  _mode;
     private UiFocus _focus;
 
-    private FadeHelper _fade = new(0, 0, 0.5f);
+    private readonly FadeHelper _fade = new(0, 0, 0.5f);
 
     private readonly List<string> _set_list = [ ];
 
