@@ -94,8 +94,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     private bool should_handle_input => !_scrollbar_dragging && _fade.is_done;
 
     public FhSaveUiRendererX() {
-        _current_scrollable = _scrollable_saves;
-
+        _current_scrollable     = _scrollable_saves;
         _savefile_border_helper = NineSliceHelper.create(
             _tex_meswin_size,
             new(385f, 544f),
@@ -231,7 +230,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         _set_list.Clear();
         _set_list.AddRange(FhApi.Saves.get_sets());
 
-        _scrollable_sets.max = FhApi.Saves.get_sets().Count;
+        _scrollable_sets .max = FhApi.Saves.get_sets().Count;
         _scrollable_saves.max = is_saving
             ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
             : FhApi.Saves.display_data.Count;
@@ -241,7 +240,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
     private void post_close(EventArgs e) {
         _scrollable_saves.reset();
-        _scrollable_sets.reset();
+        _scrollable_sets .reset();
 
         unload_textures();
 
@@ -250,9 +249,9 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
     private void change_mode(UiMode new_mode) {
         _scrollable_saves.reset();
-        _scrollable_sets.reset();
+        _scrollable_sets .reset();
         _focus = UiFocus.LIST;
-        _mode = new_mode;
+        _mode  = new_mode;
     }
 
     private void execute(int slot) {
