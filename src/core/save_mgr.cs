@@ -330,8 +330,7 @@ public sealed class FhSaves {
         Interlocked.Decrement(ref _sm_lock);
     }
 
-    /// <summary>Get the number of slots used in the current set.</summary>
-    /// <remarks>This does not include the autosave.</remarks>
+    /// <summary>Get the number of slots used in the current set, not including the autosave.</summary>
     /// <returns>The number of slots used.</returns>
     public int get_slots_used() {
         return _sm_occupied_slots.Contains(0)

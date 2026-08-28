@@ -15,6 +15,7 @@ namespace Fahrenheit.Runtime;
  * may as well not exist past the actual calculation.
  */
 
+/// <summary>The default save UI renderer for Final Fantasy X.</summary>
 [FhLoad(FhGameId.FFX)]
 public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     /// <summary>Possible open windows of the save/load menu.</summary>
