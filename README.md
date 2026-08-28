@@ -15,7 +15,7 @@ Grab the latest binaries from the [releases page](https://github.com/fahrenheit-
 then follow the [installation guide](https://github.com/fahrenheit-crew/fahrenheit/wiki/Installation-guide).
 
 ## For developers
-Read the [build, deployment and debugging guide](https://github.com/fahrenheit-crew/fahrenheit/wiki/Build-and-deployment-guide) to get started.
+Read the [build, deployment and debugging guide](https://github.com/fahrenheit-crew/fahrenheit/wiki/Build-and-deployment-guide) (or `BUILD.md` locally) to get started.
 
 ## For modders
 See the [template](https://github.com/fahrenheit-crew/fh-mods-template) and [TrueRNG mod](https://github.com/fahrenheit-crew/fh-mods-truerng) to get started.
