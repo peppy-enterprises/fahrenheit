@@ -866,6 +866,13 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             _scrollable_saves.hovered = index;
         }
 
+        /* ===== Autosave Background ===== */
+        if (save.slot == 0) {
+            UV save_suv = save_rect.scale_raw(scale_factor).as_uv();
+
+            draw.AddRectFilled(save_suv.p0, save_suv.p1, 0x25FFFFFF);
+        }
+
         /* ===== Border ===== */
         NineSliceHelper screen_border_helper = NineSliceHelper.create(
             Vector2.One,
