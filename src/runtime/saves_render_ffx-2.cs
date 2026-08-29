@@ -3,6 +3,8 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
+using static Fahrenheit.FFX.Globals;
+
 namespace Fahrenheit.Runtime;
 
 /*
@@ -61,7 +63,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private readonly Dictionary<string, FhTexture> _map_icon_textures  = [ ];
 
     private readonly FhTexture _texture_face_icon_default = new(Path.Join(MENU_FACE_DATA_DIR, "mface_000.dds.phyre"), FhTextureType.PHYRE);
-    private readonly FhTexture _texture_map_icon_default  = new(Path.Join(MAP_ICONS_DIR,      "0.png"),               FhTextureType.PNG);
+    private readonly FhTexture _texture_map_icon_default  = new(Path.Join(MAP_ICONS_DIR,      "logo_j.png"),          FhTextureType.PNG);
 
     private readonly FhTexture _texture_menuback = new(Path.Join(MENU_D3D11_DIR,   "menuback.dds.phyre"),             FhTextureType.PHYRE);
     private readonly FhTexture _texture_mahojin  = new(Path.Join(MENU_MAHOJIN_DIR, "14336_19_0_0_512_512.dds.phyre"), FhTextureType.PHYRE);
@@ -220,10 +222,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         _mode  = UiMode .SAVE_LIST;
         _focus = UiFocus.LIST;
 
-        _loaded_all_textures = false;
-
         populate_face_icons();
-        populate_map_icons();
+        //populate_map_icons();
         try_load_textures();
 
         _set_list.Clear();
@@ -242,11 +242,6 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         _scrollable_sets .reset();
 
         unload_textures();
-
-        _face_icon_textures.Clear();
-        _map_icon_textures .Clear();
-
-        _loaded_all_textures = false;
     }
 
     private void change_mode(UiMode new_mode) {
@@ -258,7 +253,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
     private void execute(int slot) {
         if (!FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode)) return;
-        
+
         switch (system_mode) {
             case FhSaveSystemMode.SAVE: FhApi.Saves.save(slot); break;
             case FhSaveSystemMode.LOAD: FhApi.Saves.load(slot); break;
@@ -269,14 +264,6 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
     private void switch_set(string set_name) {
         FhApi.Saves.switch_active_set(set_name);
-
-        unload_textures();
-        _face_icon_textures.Clear();
-        populate_face_icons();
-        //_map_icon_textures.Clear();
-        //populate_map_icons();
-        _loaded_all_textures = false;
-
         change_mode(UiMode.SAVE_LIST);
     }
 
@@ -345,32 +332,21 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         foreach (FhSaveDisplayData save in FhApi.Saves.display_data) {
             FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(save.header);
 
-            if (FhGlobal.game_id == FhGameId.FFX2) {
-                for (int i = 0; i < 3; i++) {
-                    byte ply_id = header2.ply[i];
-                    byte job_id = header2.ply_jobs[i];
+            for (int i = 0; i < 3; i++) {
+                bool is_ffx2 = FhGlobal.game_id is FhGameId.FFX2;
 
-                    if (job_id < 0x01 || job_id > 0x21) continue;
-
-                    string    face      = remap_job(ply_id, job_id);
-                    FhTexture face_icon = new(Path.Join(MENU_FACE_DATA_DIR, face), FhTextureType.PHYRE);
-
-                    _face_icon_textures.TryAdd(
-                        face,
-                        face_icon
-                    );
-                }
-            }
-            else {
-                byte ply_id = header2.lm_ply;
-                byte job_id = header2.lm_job;
+                byte ply_id = is_ffx2 ? header2.ply[i]      : header2.lm_ply;
+                byte job_id = is_ffx2 ? header2.ply_jobs[i] : header2.lm_job;
 
                 if (job_id < 0x01 || job_id > 0x21) continue;
 
-                string    face      = remap_job(ply_id, job_id);
+                string face = remap_job(ply_id, job_id);
+
+                if (_face_icon_textures.TryGetValue(face, out _)) continue;
+
                 FhTexture face_icon = new(Path.Join(MENU_FACE_DATA_DIR, face), FhTextureType.PHYRE);
 
-                _face_icon_textures.TryAdd(
+                _face_icon_textures.Add(
                     face,
                     face_icon
                 );
@@ -382,10 +358,13 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         _map_icon_textures.Clear();
 
         foreach (FhSaveDisplayData save in FhApi.Saves.display_data) {
-            string    map      = Encoding.UTF8.GetString(save.icon_map);
-            FhTexture map_icon = new(Path.Join(MAP_ICONS_DIR, $"{map}.png"), FhTextureType.PNG);
+            string map = Encoding.UTF8.GetString(save.icon_map);
 
-            _map_icon_textures.TryAdd(
+            if (_map_icon_textures.TryGetValue(map, out _)) continue;
+
+            FhTexture map_icon = new(Path.Join(MAP_ICONS_DIR, $"{map}_0.png"), FhTextureType.PNG);
+
+            _map_icon_textures.Add(
                 map,
                 map_icon
             );
@@ -784,7 +763,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         );
     }
 
-    /// <summary>Render the set name.</summary>
+    /// <summary>Render the Change set button.</summary>
     private void ui_change_set() {
         if (!_texture_x2_bg.try_use(out ImTextureRef x2_bg, out _)) return;
 
@@ -1049,9 +1028,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private void ui_no_saves() {
-        if (!_texture_x2_bg.try_use(out ImTextureRef x2_bg, out _)) {
-            return;
-        }
+        if (!_texture_x2_bg.try_use(out ImTextureRef x2_bg, out _)) return;
 
         //TODO: Add localization
         string message = "No saved data. Change set or return to the main menu.";
