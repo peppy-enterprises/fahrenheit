@@ -112,6 +112,11 @@ public static partial class FhEnumExt {
             set { if (value) flags |= StatusFlags.SILENCE; else flags &= ~StatusFlags.SILENCE; }
         }
 
+        public bool darkness {
+            get { return flags.HasFlag(StatusFlags.DARKNESS); }
+            set { if (value) flags |= StatusFlags.DARKNESS; else flags &= ~StatusFlags.DARKNESS; }
+        }
+
         public bool poison {
             get { return flags.HasFlag(StatusFlags.POISON); }
             set { if (value) flags |= StatusFlags.POISON; else flags &= ~StatusFlags.POISON; }
@@ -266,9 +271,9 @@ public struct StatusDurationMap2 {
 }
 
 /// <remarks> 
-/// These flags are used in Auto Ability and MonStats structures to toggle an Auto-Status flag.
-/// They are NOT used for checking whether a character currently has the status or not; that is
-/// done by checking if the StatusDurationMap2 remaining is greater than 0.
+///     These flags are used in Auto Ability and MonStats structures to toggle an Auto-Status flag.
+///     They are NOT used for checking whether a character currently has the status or not; that is
+///     done by checking if the StatusDurationMap2 remaining is greater than 0.
 /// </remarks>
 [Flags]
 public enum StatusFlags2 : uint {
