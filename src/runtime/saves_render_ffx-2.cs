@@ -51,7 +51,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private UiMode  _mode;
     private UiFocus _focus;
 
-    private readonly FadeHelper _fade = new(0, 0, 0.35f);
+    private readonly FadeHelper _fade;
 
     private readonly List<string> _set_list = [ ];
 
@@ -97,6 +97,9 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
     public FhSaveUiRendererX2() {
         _current_scrollable = _scrollable_saves;
+
+        float fade_duration = FhGlobal.game_id is FhGameId.FFX2 ? 0.35f : 0.01f;
+        _fade = new FadeHelper(0, 0, fade_duration);
     }
 
     public override bool init(FhModContext context, FileStream global_state) {
