@@ -229,7 +229,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         _set_list.Clear();
         _set_list.AddRange(FhApi.Saves.get_sets());
 
-        _scrollable_sets .max = _set_list.Count;
+        _scrollable_sets.max = _set_list.Count;
         _scrollable_saves.max = is_saving
             ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
             : FhApi.Saves.display_data.Count;
@@ -504,8 +504,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             size = FhApi.Gui.display_size,
         };
 
-        UV screen_bounds = screen_rect.as_uv();
-        float mid_x      = screen_rect.size.X * 0.5f;
+        UV    screen_bounds = screen_rect.as_uv();
+        float mid_x         = screen_rect.size.X * 0.5f;
 
         UV left_half  = new(screen_bounds.p0, new(mid_x, screen_bounds.p1.Y));
         UV right_half = new(new(mid_x, screen_bounds.p0.Y), screen_bounds.p1);
@@ -714,7 +714,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             if (loop_progress >= 0.48f) {
                 float fade_time = (loop_progress - 0.48f) / 0.52f;
                 offset += fade_time * (travel_dist * 0.55f);
-                alpha *= 1f - fade_time;
+                alpha  *= 1f - fade_time;
             }
 
             UV ghost_suv = new Rect {
@@ -748,7 +748,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             else if (loop_progress >= 0.48f) {
                 float fade_time = (loop_progress - 0.48f) / 0.52f;
                 offset += (travel_dist * 0.20f) + (fade_time * (travel_dist * 0.55f));
-                alpha *= 1f - fade_time;
+                alpha  *= 1f - fade_time;
             }
 
             UV ghost_suv = new Rect {
@@ -879,11 +879,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private void ui_set(int set_idx, string name, int save_count) {
-        if (!_texture_plate  .try_use(out ImTextureRef plate,   out _)
-         || !_texture_freetex.try_use(out ImTextureRef freetex, out _)
-        ) {
-            return;
-        }
+        if (!_texture_plate.try_use(out ImTextureRef plate, out _)) return;
 
         int start_idx = _scrollable_sets.get_clip_start();
 
@@ -1295,9 +1291,9 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             size = new(256f, 239f),
         }.as_uv(_tex_face_size);
 
-        Vector2 face_size     = new(102f, 96f);
-        float   face_gap      = 3f;
-        float   face_offset   = 5f;
+        Vector2 face_size   = new(102f, 96f);
+        float   face_gap    = 3f;
+        float   face_offset = 5f;
 
         Rect face = new Rect {
             pos = new(
@@ -1373,9 +1369,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         float font_size = 36f * scale_factor.Y;
 
         //TODO: Add localization
-        string slot_text = save.slot == 0 ? "Autosave" : save.slot.ToString();
-
-        string create_time   = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
+        string slot_text   = save.slot == 0 ? "Autosave" : save.slot.ToString();
+        string create_time = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
 
         Vector2 text_size = FhApi.Gui.draw_text(
             draw,
@@ -1427,7 +1422,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         // This is vanilla behaviour!
         float lang_offset = FhGlobal.lang_id == FhLangId.Chinese
                          || FhGlobal.lang_id == FhLangId.Korean
-                            ? 13f : 106f;
+            ? 13f
+            : 106f;
         float end_offset = 915f;
 
         Vector2 text_pos = save_rect.pos + new Vector2(
@@ -1485,10 +1481,9 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             size = new(256f, 239f),
         }.as_uv(_tex_face_size);
 
-
-        Vector2 face_size     = new(102f, 96f);
-        float   face_gap      = 25f;
-        float   face_offset   =  6f;
+        Vector2 face_size   = new(102f, 96f);
+        float   face_gap    = 25f;
+        float   face_offset =  6f;
 
         Rect face = new Rect {
             pos = new(
@@ -1567,8 +1562,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         float font_size = 36f * scale_factor.Y;
 
         //TODO: Add localization
-        string slot_text = save.slot == 0 ? "Autosave" : save.slot.ToString();
-
+        string slot_text   = save.slot == 0 ? "Autosave" : save.slot.ToString();
         string create_time = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
 
         Vector2 text_size = FhApi.Gui.draw_text(
