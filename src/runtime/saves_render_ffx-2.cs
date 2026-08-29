@@ -1206,9 +1206,9 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         // Draw Autosave darker
         bool is_autosave = save.slot == 0 && !is_saving;
 
-        uint col_header   = is_autosave ? 0xFFB6A19F  : 0xFFC4D0D1;
-        uint col_info     = is_autosave ? 0xFFC6B1AF  : 0xFFE4F0F1;
-        uint shade_header = is_autosave ? 0x63000000U : 0x33000000U;
+        uint header_clr   = is_autosave ? 0xFFB6A19F  : 0xFFC4D0D1;
+        uint info_clr     = is_autosave ? 0xFFC6B1AF  : 0xFFE4F0F1;
+        uint header_shade = is_autosave ? 0x63000000U : 0x33000000U;
 
         draw.AddImage(
             plate,
@@ -1216,7 +1216,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             header_suv.p1,
             header_tuv.p0,
             header_tuv.p1,
-            col_header
+            header_clr
         );
 
         draw.AddImage(
@@ -1225,13 +1225,13 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             info_suv.p1,
             info_tuv.p0,
             info_tuv.p1,
-            col_info
+            info_clr
         );
 
         draw.AddRectFilled(
             header_suv.p0,
             header_suv.p1,
-            shade_header
+            header_shade
         );
 
         // Border highlights/shadows
