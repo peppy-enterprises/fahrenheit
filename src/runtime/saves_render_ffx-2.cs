@@ -257,7 +257,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     }
 
     private void execute(int slot) {
-        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
+        if (!FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode)) return;
+        
         switch (system_mode) {
             case FhSaveSystemMode.SAVE: FhApi.Saves.save(slot); break;
             case FhSaveSystemMode.LOAD: FhApi.Saves.load(slot); break;
@@ -533,6 +534,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private void ui_help() {
         if (!_texture_freetex.try_use(out ImTextureRef freetex, out _)) return;
 
+        if (!FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode)) return;
+
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
         uint bg_grad_l = 0xFF000000; // black
@@ -591,8 +594,6 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         );
 
         //TODO: Add localization
-
-        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
         string text = _mode switch {
             UiMode.SET_SWAP => "Select save set",
 
