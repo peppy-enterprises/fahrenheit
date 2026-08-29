@@ -147,12 +147,12 @@ public static partial class FhEnumExt {
             set { if (value) flags |= StatusFlags.EJECT; else flags &= ~StatusFlags.EJECT; }
         }
 
-        public bool doubleHP {
+        public bool double_HP {
             get { return flags.HasFlag(StatusFlags.DOUBLE_HP); }
             set { if (value) flags |= StatusFlags.DOUBLE_HP; else flags &= ~StatusFlags.DOUBLE_HP; }
         }
 
-        public bool doubleMP {
+        public bool double_MP {
             get { return flags.HasFlag(StatusFlags.DOUBLE_MP); }
             set { if (value) flags |= StatusFlags.DOUBLE_MP; else flags &= ~StatusFlags.DOUBLE_MP; }
         }
@@ -167,7 +167,7 @@ public static partial class FhEnumExt {
             set { if (value) flags |= StatusFlags.DAMAGE_9999; else flags &= ~StatusFlags.DAMAGE_9999; }
         }
 
-        public bool alwaysCritical {
+        public bool always_critical {
             get { return flags.HasFlag(StatusFlags.ALWAYS_CRITICAL); }
             set { if (value) flags |= StatusFlags.ALWAYS_CRITICAL; else flags &= ~StatusFlags.ALWAYS_CRITICAL; }
         }
@@ -182,7 +182,7 @@ public static partial class FhEnumExt {
             set { if (value) flags |= StatusFlags.ITCHY; else flags &= ~StatusFlags.ITCHY; }
         }
 
-        public bool autoLife {
+        public bool auto_life {
             get { return flags.HasFlag(StatusFlags.AUTO_LIFE); }
             set { if (value) flags |= StatusFlags.AUTO_LIFE; else flags &= ~StatusFlags.AUTO_LIFE; }
         }
