@@ -224,7 +224,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         _focus = UiFocus.LIST;
 
         populate_face_icons();
-        //populate_map_icons();
+        populate_map_icons();
         try_load_textures();
 
         _set_list.Clear();
@@ -538,8 +538,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             bg_grad_l
         );
 
-        uint accent_grad_l = 0xFF00bfb5; // yellow
-        uint accent_grad_r = 0x1000bfb5; // transparent yellow
+        uint accent_grad_l = 0xFF00BFB5; // yellow
+        uint accent_grad_r = 0x1000BFB5; // transparent yellow
 
         UV accent_uv = new Rect {
             pos  = new(   0f, 138f),
