@@ -1126,11 +1126,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private void ui_savefile(int index, FhSaveDisplayData save) {
         if (!_scrollable_saves.is_within_clip(index)) return;
 
-        if (!_texture_plate  .try_use(out ImTextureRef plate,   out _)
-         || !_texture_freetex.try_use(out ImTextureRef freetex, out _)
-        ) {
-            return;
-        }
+        if (!_texture_plate.try_use(out ImTextureRef plate, out _)) return;
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
