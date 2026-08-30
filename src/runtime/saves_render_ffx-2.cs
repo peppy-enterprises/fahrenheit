@@ -795,12 +795,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 accent_size = 60f * scale_factor;
 
         Rect accent_left = new Rect {
-            pos  = bg_screen.top_left + new Vector2(-1f, 1f) * scale_factor,
+            pos  = bg_screen.top_left + new Vector2(-1f, 1f),
             size = new Vector2(accent_size.X, accent_size.Y),
         };
 
         Rect accent_right = new Rect {
-            pos  = bg_screen.bottom_right + new Vector2(1f, -1f) * scale_factor,
+            pos  = bg_screen.bottom_right + new Vector2(1f, -1f),
             size = new Vector2(-accent_size.X, -accent_size.Y),
         };
 
@@ -1064,12 +1064,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 accent_size = 125f * scale_factor;
 
         Rect accent_left = new Rect {
-            pos  = window.top_left + new Vector2(-3f, 3f) * scale_factor,
+            pos  = window.top_left + new Vector2(-3f, 3f),
             size = new Vector2(accent_size.X, accent_size.Y),
         };
 
         Rect accent_right = new Rect {
-            pos  = window.bottom_right + new Vector2(2f, -4f) * scale_factor,
+            pos  = window.bottom_right + new Vector2(2f, -4f),
             size = new Vector2(-accent_size.X, -accent_size.Y),
         };
 
