@@ -229,8 +229,8 @@ public struct StatusDurationMap2 {
     public  sbyte evasion_bonus;
     public  sbyte luck_bonus;
     public  sbyte doom_counter;
-    public  sbyte nul_physical;
-    public  sbyte nul_magical;
+    public  sbyte immunity_physical_damage;
+    public  sbyte immunity_magical_damage;
     public  sbyte invincible;
     private sbyte unused1;
     private sbyte unused2;
