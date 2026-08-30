@@ -147,12 +147,12 @@ public static partial class FhEnumExt {
             set { if (value) flags |= StatusFlags.EJECT; else flags &= ~StatusFlags.EJECT; }
         }
 
-        public bool double_HP {
+        public bool double_hp {
             get { return flags.HasFlag(StatusFlags.DOUBLE_HP); }
             set { if (value) flags |= StatusFlags.DOUBLE_HP; else flags &= ~StatusFlags.DOUBLE_HP; }
         }
 
-        public bool double_MP {
+        public bool double_mp {
             get { return flags.HasFlag(StatusFlags.DOUBLE_MP); }
             set { if (value) flags |= StatusFlags.DOUBLE_MP; else flags &= ~StatusFlags.DOUBLE_MP; }
         }
@@ -162,7 +162,7 @@ public static partial class FhEnumExt {
             set { if (value) flags |= StatusFlags.SPELLSPRING; else flags &= ~StatusFlags.SPELLSPRING; }
         }
 
-        public bool damage9999 {
+        public bool damage_9999 {
             get { return flags.HasFlag(StatusFlags.DAMAGE_9999); }
             set { if (value) flags |= StatusFlags.DAMAGE_9999; else flags &= ~StatusFlags.DAMAGE_9999; }
         }
@@ -225,8 +225,8 @@ public struct StatusMap2 {
     public byte stop;
     public byte strength_up_down;
     public byte magic_up_down;
-    public byte defence_up_down;
-    public byte magic_defence_up_down;
+    public byte defense_up_down;
+    public byte magic_defense_up_down;
     public byte accuracy_up_down;
     public byte evasion_up_down;
     public byte luck_up_down;
@@ -253,8 +253,8 @@ public struct StatusDurationMap2 {
     public sbyte stop;
     public sbyte strength_up_down;
     public sbyte magic_up_down;
-    public sbyte defence_up_down;
-    public sbyte magic_defence_up_down;
+    public sbyte defense_up_down;
+    public sbyte magic_defense_up_down;
     public sbyte accuracy_up_down;
     public sbyte evasion_up_down;
     public sbyte luck_up_down;
@@ -287,8 +287,8 @@ public enum StatusFlags2 : uint {
     STOP                  = 1 << 6,
     STRENGTH_UP_DOWN      = 1 << 7,
     MAGIC_UP_DOWN         = 1 << 8,
-    DEFENCE_UP_DOWN       = 1 << 9,
-    MAGIC_DEFENCE_UP_DOWN = 1 << 10,
+    DEFENSE_UP_DOWN       = 1 << 9,
+    MAGIC_DEFENSE_UP_DOWN = 1 << 10,
     ACCURACY_UP_DOWN      = 1 << 11,
     EVASION_UP_DOWN       = 1 << 12,
     LUCK_UP_DOWN          = 1 << 13,

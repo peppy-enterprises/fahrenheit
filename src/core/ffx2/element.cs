@@ -38,7 +38,7 @@ public static partial class FhEnumExt {
             set { if (value) flags |= (ElementFlags.WATER); else flags &= ~(ElementFlags.WATER); }
         }
 
-        public bool gravityy {
+        public bool gravity {
             get { return flags.HasFlag(ElementFlags.GRAVITY); }
             set { if (value) flags |= (ElementFlags.GRAVITY); else flags &= ~(ElementFlags.GRAVITY); }
         }
