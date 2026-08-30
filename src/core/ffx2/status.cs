@@ -195,8 +195,8 @@ public struct StatusMap2 {
     public  byte stop;
     public  byte strength_bonus;
     public  byte magic_bonus;
-    public  byte defence_bonus;
-    public  byte magic_defence_bonus;
+    public  byte defense_bonus;
+    public  byte magic_defense_bonus;
     public  byte accuracy_bonus;
     public  byte evasion_bonus;
     public  byte luck_bonus;
@@ -223,8 +223,8 @@ public struct StatusDurationMap2 {
     public  sbyte stop;
     public  sbyte strength_bonus;
     public  sbyte magic_bonus;
-    public  sbyte defence_bonus;
-    public  sbyte magic_defence_bonus;
+    public  sbyte defense_bonus;
+    public  sbyte magic_defense_bonus;
     public  sbyte accuracy_bonus;
     public  sbyte evasion_bonus;
     public  sbyte luck_bonus;
@@ -257,8 +257,8 @@ public enum StatusFlags2 : uint {
     STOP                     = 1 <<  6,
     STRENGTH_BONUS           = 1 <<  7,
     MAGIC_BONUS              = 1 <<  8,
-    DEFENCE_BONUS            = 1 <<  9,
-    MAGIC_DEFENCE_BONUS      = 1 << 10,
+    DEFENSE_BONUS            = 1 <<  9,
+    MAGIC_DEFENSE_BONUS      = 1 << 10,
     ACCURACY_BONUS           = 1 << 11,
     EVASION_BONUS            = 1 << 12,
     LUCK_BONUS               = 1 << 13,
