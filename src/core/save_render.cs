@@ -47,15 +47,14 @@ public abstract class FhSaveUiRenderer : FhModule {
     }
 
     private void post_open(EventArgs e) {
-        Vector2 window_size = FhApi.Gui.display_size;
+        Vector2 window_size   = FhApi.Gui.display_size;
         float   window_aspect = window_size.X / window_size.Y;
         float   target_aspect = 16f / 9f;
 
         if (float.Abs(window_aspect - target_aspect) > 0.0001f) {
-            if (window_aspect > target_aspect)
-                aspect_helper.size = window_size with { X = window_size.Y * target_aspect };
-            else
-                aspect_helper.size = window_size with { Y = window_size.X / target_aspect };
+            aspect_helper.size = window_aspect > target_aspect
+                ? window_size with { X = window_size.Y * target_aspect }
+                : window_size with { Y = window_size.X / target_aspect };
 
             aspect_helper.pos  = (window_size - aspect_helper.size) / 2f;
         }
