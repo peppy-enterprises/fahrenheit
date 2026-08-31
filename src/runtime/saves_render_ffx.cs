@@ -230,7 +230,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         _set_list.Clear();
         _set_list.AddRange(FhApi.Saves.get_sets());
 
-        _scrollable_sets .max = FhApi.Saves.get_sets().Count;
+        _scrollable_sets .max = _set_list.Count;
         _scrollable_saves.max = is_saving
             ? FhApi.Saves.get_slots_used() + 1 // Add one for New Save Data button
             : FhApi.Saves.display_data.Count;
