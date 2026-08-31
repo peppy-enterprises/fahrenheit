@@ -274,10 +274,11 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         _map_icon_textures.Clear();
 
         foreach (FhSaveDisplayData save in FhApi.Saves.display_data) {
-            string    map      = Encoding.UTF8.GetString(save.icon_map);
-            FhTexture map_icon = new(Path.Join(MAP_ICONS_DIR, $"{map}.png"), FhTextureType.PNG);
+            string map = Encoding.UTF8.GetString(save.icon_map);
+            if (_map_icon_textures.TryGetValue(map, out _)) continue;
 
-            _map_icon_textures.TryAdd(map, map_icon);
+            FhTexture map_icon = new(Path.Join(MAP_ICONS_DIR, $"{map}.png"), FhTextureType.PNG);
+            _map_icon_textures.Add(map, map_icon);
         }
     }
 
