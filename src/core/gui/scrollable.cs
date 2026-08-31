@@ -157,6 +157,46 @@ public class Scrollable {
         }
     }
 
+    /// <summary>Scroll to the next range of visible indices.</summary>
+    /// <param name="just_pressed">Whether the page up button was just pressed.</param>
+    /// <remarks>
+    ///     If it is no longer visible, this will also set the hovered index
+    ///     to the end of the visible range for improved UX.
+    /// </remarks>
+    public void scroll_page_up(bool just_pressed) {
+        if (just_pressed && (current == 0 || max <= visible)) {
+            hovered = 0;
+            return;
+        }
+
+        current -= visible;
+        current = int.Clamp(current, 0, int.Max(0, max - visible));
+
+        if (!is_within_clip(hovered)) {
+            hovered = get_clip_start();
+        }
+    }
+
+    /// <summary>Scroll to the next range of visible indices.</summary>
+    /// <param name="just_pressed">Whether the page down button was just pressed.</param>
+    /// <remarks>
+    ///     If it is no longer visible, this will also set the hovered index
+    ///     to the end of the visible range for improved UX.
+    /// </remarks>
+    public void scroll_page_down(bool just_pressed) {
+        if (just_pressed && (current == max - visible || max <= visible)) {
+            hovered = max - 1;
+            return;
+        }
+
+        current += visible;
+        current = int.Clamp(current, 0, int.Max(0, max - visible));
+
+        if (!is_within_clip(hovered)) {
+            hovered = get_clip_end() - 1;
+        }
+    }
+
     /// <summary>Scroll to the beginning of the scrollable.</summary>
     /// <remarks>
     ///     This will also set the hovered index to the beginning
@@ -185,19 +225,22 @@ public class Scrollable {
 
         float mouse_wheel = ImGui.GetIO().MouseWheel;
 
-        bool scroll_page_up   = FhApi.Gui.is_any_pressed([ ImGuiKey.PageUp  , .. FhApi.Gui.keys_left  ], true);
-        bool scroll_page_down = FhApi.Gui.is_any_pressed([ ImGuiKey.PageDown, .. FhApi.Gui.keys_right ], true);
+        bool scroll_pg_up = FhApi.Gui.is_any_pressed([ ImGuiKey.PageUp  , .. FhApi.Gui.keys_left  ]);
+        bool scroll_pg_dn = FhApi.Gui.is_any_pressed([ ImGuiKey.PageDown, .. FhApi.Gui.keys_right ]);
+
+        bool scroll_pg_up_held = FhApi.Gui.is_any_pressed([ ImGuiKey.PageUp  , .. FhApi.Gui.keys_left  ], true);
+        bool scroll_pg_dn_held = FhApi.Gui.is_any_pressed([ ImGuiKey.PageDown, .. FhApi.Gui.keys_right ], true);
 
         bool scroll_to_start = FhApi.Gui.is_any_pressed([ ImGuiKey.Home, ImGuiKey.GamepadL2 ]);
         bool scroll_to_end   = FhApi.Gui.is_any_pressed([ ImGuiKey.End , ImGuiKey.GamepadR2 ]);
 
         ImGui.GetIO().WantCaptureKeyboard |=
-            hover_up
-         || hover_down
-         || scroll_page_up
-         || scroll_page_down
-         || scroll_to_start
-         || scroll_to_end;
+             hover_up
+         ||  hover_down
+         || (scroll_pg_up || scroll_pg_up_held)
+         || (scroll_pg_dn || scroll_pg_dn_held)
+         ||  scroll_to_start
+         ||  scroll_to_end;
 
         if (hover_up) {
             move_hover(-1);
@@ -215,22 +258,12 @@ public class Scrollable {
             scroll(1);
         }
 
-        if (scroll_page_up) {
-            if (current == 0 || max <= visible) {
-                hovered = 0;
-            }
-            else {
-                scroll(-visible);
-            }
+        if (scroll_pg_up || scroll_pg_up_held) {
+            scroll_page_up(scroll_pg_up);
         }
 
-        if (scroll_page_down) {
-            if (current == max - visible || max <= visible) {
-                hovered = max - 1;
-            }
-            else {
-                scroll(visible);
-            }
+        if (scroll_pg_dn || scroll_pg_dn_held) {
+            scroll_page_down(scroll_pg_dn);
         }
 
         if (scroll_to_start) {
