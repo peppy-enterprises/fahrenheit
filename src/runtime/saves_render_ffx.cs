@@ -331,12 +331,14 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
     private bool mouse_hovered(Rect rect) {
         return should_handle_input
+            && !ImGui.GetIO().WantCaptureMouse
             && ImGui.GetIO().MouseDelta.LengthSquared() > 0
             && FhApi.Gui.mouse_hovering(rect);
     }
 
     private bool mouse_clicked(Rect rect, ImGuiMouseButton button = ImGuiMouseButton.Left, bool repeat = false) {
         return should_handle_input
+            && !ImGui.GetIO().WantCaptureMouse
             && FhApi.Gui.mouse_clicked(rect, button, repeat);
     }
 
