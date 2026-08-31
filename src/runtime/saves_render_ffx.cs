@@ -366,6 +366,10 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             return;
         }
 
+        if (!FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode)) {
+            return;
+        }
+
         UV bg_tuv = new Rect {
             pos  = new(   0f, 425f),
             size = new(1600f,  55f),
@@ -422,8 +426,6 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         draw.AddImage(meswin, title_suv.p0, title_suv.p1, title_tuv.p0, title_tuv.p1);
 
         //TODO: Add localization
-
-        FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode);
         string text = _mode switch {
             UiMode.SET_SWAP => "Select save set",
 
@@ -433,10 +435,11 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
                 FhSaveSystemMode.LOAD or
                 FhSaveSystemMode.ALBD => "Select save data",
 
-                _ => "",
+                //TODO-C#16: Remove this, since FhSaveSystemMode should be a `closed enum`.
+                _ => throw new UnreachableException(),
             },
 
-            _ => "",
+            _ => throw new NotImplementedException(),
         };
 
         Vector2 text_pos = bg_screen.left;
@@ -767,18 +770,18 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             return;
         }
 
+        if (!FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode)) {
+            return;
+        }
+
         //TODO: Add localization
-        string message =
-            FhApi.Saves.get_system_mode(out FhSaveSystemMode? system_mode) switch {
-                true => system_mode switch {
-                    FhSaveSystemMode.LOAD => "No saved data. Change set or return to the main menu.",
-                    FhSaveSystemMode.ALBD => "No saved data. Change set or return.",
+        string message =  system_mode switch {
+            FhSaveSystemMode.LOAD => "No saved data. Change set or return to the main menu.",
+            FhSaveSystemMode.ALBD => "No saved data. Change set or return.",
 
-                    _ => "",
-                },
-
-                _ => "",
-            };
+            // When saving, we should always display "New Save Data" instead.
+            _ => throw new UnreachableException(),
+        };
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
