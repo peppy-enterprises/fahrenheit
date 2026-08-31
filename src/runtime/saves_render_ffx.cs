@@ -549,12 +549,12 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         float overlap_amount = overlap ? cursor_size.X * 0.1f : 0f;
 
         Vector2 cursor_center = new(
-            target_pos.X - cursor_size.X / 2f + overlap_amount - offset,
+            target_pos.X + (- cursor_size.X / 2f + overlap_amount - offset) * aspect_scale.X,
             target_pos.Y
         );
 
         UV cursor_suv = new Rect { pos = cursor_center }
-            .expand(cursor_size,  new(Alignment.CENTER, Alignment.CENTER))
+            .expand(cursor_size, new(Alignment.CENTER, Alignment.CENTER))
             .scale(aspect_scale, new(Alignment.END   , Alignment.CENTER))
             .as_uv();
 
