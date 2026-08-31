@@ -505,7 +505,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             ? $" + {save_count} saves"
             : $"{save_count} saves";
 
-        Vector2 text_pos = new Vector2(1435f, 120f) + _aspect_helper.pos;
+        Vector2 text_pos = new Vector2(1435f, 120f);
 
         float line_height = 32f;
         float font_size   = 36f * _aspect_scale.Y;
@@ -514,7 +514,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         Vector2 saves_text_size = FhApi.Gui.draw_text(
             draw,
-            text_pos * _aspect_scale,
+            text_pos * _aspect_scale + _aspect_helper.pos,
             save_text,
             font_size,
             true,
@@ -522,7 +522,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         );
 
         if (has_autosave) {
-            Vector2 autosave_pos = text_pos * _aspect_scale;
+            Vector2 autosave_pos = text_pos * _aspect_scale + _aspect_helper.pos;
             autosave_pos.X -= saves_text_size.X;
 
             FhApi.Gui.draw_text(
@@ -540,7 +540,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         FhApi.Gui.draw_text(
             draw,
-            second_line_pos * _aspect_scale,
+            second_line_pos * _aspect_scale + _aspect_helper.pos,
             active_set,
             font_size,
             true,
