@@ -1037,7 +1037,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         // For some reason, if the slot text is "Autosave", the margin is doubled
         if (save.slot == 0) {
-            text_pos_left.X += text_margin_between + _aspect_scale.X;
+            text_pos_left.X += text_margin_between * _aspect_scale.X;
         }
 
         FhApi.Gui.draw_text(
