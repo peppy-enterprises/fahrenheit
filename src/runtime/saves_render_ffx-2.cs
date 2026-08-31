@@ -360,11 +360,9 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         foreach (FhSaveDisplayData save in FhApi.Saves.display_data) {
             string map = Encoding.UTF8.GetString(save.icon_map);
-
             if (_map_icon_textures.TryGetValue(map, out _)) continue;
 
             FhTexture map_icon = new(Path.Join(MAP_ICONS_DIR, $"{map}_0.png"), FhTextureType.PNG);
-
             _map_icon_textures.Add(
                 map,
                 map_icon
@@ -582,17 +580,18 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                 FhSaveSystemMode.LOAD => "Select save data",
                 FhSaveSystemMode.SAVE => "Select save area",
 
-                _ => "",
+                //TODO-C#16: Remove this, since FhSaveSystemMode should be a `closed enum`.
+                _ => throw new UnreachableException(),
             },
 
-            _ => "",
+            _ => throw new NotImplementedException(),
         };
 
         Vector2 text_pos = bg_screen.left;
         text_pos.X += 240f * scale_factor.X;
         text_pos.Y -=   8f * scale_factor.Y;
 
-        float font_size = 36f * scale_factor.Y;
+        float font_size = 36f * float.Min(scale_factor.X, scale_factor.Y);
 
         FhApi.Gui.draw_text(
             draw,
@@ -619,7 +618,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 text_pos = new(1717f, 146f);
 
         float line_height = 36f;
-        float font_size   = 36f * scale_factor.Y;
+        float font_size   = 36f * float.Min(scale_factor.X, scale_factor.Y);
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
@@ -795,12 +794,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 accent_size = 60f * scale_factor;
 
         Rect accent_left = new Rect {
-            pos  = bg_screen.top_left + new Vector2(-1f, 1f),
+            pos  = bg_screen.top_left + new Vector2(-1f, 1f) * scale_factor,
             size = new Vector2(accent_size.X, accent_size.Y),
         };
 
         Rect accent_right = new Rect {
-            pos  = bg_screen.bottom_right + new Vector2(1f, -1f),
+            pos  = bg_screen.bottom_right + new Vector2(1f, -1f) * scale_factor,
             size = new Vector2(-accent_size.X, -accent_size.Y),
         };
 
@@ -823,7 +822,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             accent_tuv.p1
         );
 
-        float   font_size = 36f * scale_factor.Y;
+        float   font_size = 36f * Math.Min(scale_factor.X, scale_factor.Y);
         Vector2 text_pos  = bg_screen.center;
 
         //TODO: Add localization
@@ -897,7 +896,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
         ImGuiIOPtr    io   = ImGui.GetIO();
 
-        float font_size = 36f * scale_factor.Y;
+        float font_size = 36f * float.Min(scale_factor.X, scale_factor.Y);
 
         if (mouse_hovered(button_scaled)) {
             _focus = UiFocus.LIST;
@@ -907,7 +906,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         bool hovering = _scrollable_sets.hovered == set_idx;
 
         // Shadows behind slots
-        Vector2 shadow_offset = new(10f);
+        Vector2 shadow_offset = 10f * scale_factor;
 
         draw.AddRectFilled(
             button_suv.p0 + shadow_offset,
@@ -1036,7 +1035,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        float font_size = 36f * scale_factor.Y;
+        float font_size = 36f * float.Min(scale_factor.X, scale_factor.Y);
 
         ImGui.PushFont(null, font_size);
         Vector2 text_size = ImGui.CalcTextSize(message);
@@ -1064,12 +1063,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 accent_size = 125f * scale_factor;
 
         Rect accent_left = new Rect {
-            pos  = window.top_left + new Vector2(-3f, 3f),
+            pos  = window.top_left + new Vector2(-3f, 3f) * scale_factor,
             size = new Vector2(accent_size.X, accent_size.Y),
         };
 
         Rect accent_right = new Rect {
-            pos  = window.bottom_right + new Vector2(2f, -4f),
+            pos  = window.bottom_right + new Vector2(2f, -4f) * scale_factor,
             size = new Vector2(-accent_size.X, -accent_size.Y),
         };
 
@@ -1160,7 +1159,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         UV info_suv   = info_rect  .scale_raw(scale_factor).as_uv();
 
         // Shadows behind saves
-        Vector2 shadow_offset = new(10f);
+        Vector2 shadow_offset = 10f * scale_factor;
 
         draw.AddRectFilled(
             header_suv.p0 + shadow_offset,
@@ -1332,24 +1331,27 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         /* ===== Text ===== */
 
-        /* ===== Header ===== */
-        float header_size         = 47f;
-        float text_margin_left    = 17f;
-        float text_margin_between = 72f;
+        /* ===== Header Details ===== */
+        float border_thickness =  5f;
+        float header_size      = 47f;
+        float text_offset      = 12f;
+        float text_margin      = 72f;
+        float autosave_offset  = 23f;
 
-        Vector2 text_pos_left =
-              save_rect.pos
-            + new Vector2(text_margin_left, 22f);
+        Vector2 header_text_pos_l = save_rect.top_left + new Vector2(
+            border_thickness + text_offset,
+            (header_size / 2) - 2f // - 2f to center
+        );
 
-        float font_size = 36f * scale_factor.Y;
+        float font_size = 36f * float.Min(scale_factor.X, scale_factor.Y);
 
         //TODO: Add localization
-        string slot_text   = save.slot == 0 ? "Autosave" : save.slot.ToString();
+        string slot_text   = save.slot == 0 ? "Autosave" : save.slot_str;
         string create_time = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
 
         Vector2 text_size = FhApi.Gui.draw_text(
             draw,
-            text_pos_left * scale_factor,
+            header_text_pos_l * scale_factor,
             slot_text,
             font_size,
             true,
@@ -1357,16 +1359,14 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             save.slot == 0 ? 0xFF19D8FF : 0xFFFFFFFF // Autosave text is yellow
         );
 
-        text_pos_left.X += text_size.X + text_margin_between;
+        header_text_pos_l.X += text_size.X + text_margin;
 
         // If the slot text is "Autosave", increase the margin
-        if (save.slot == 0) {
-            text_pos_left.X += text_margin_between - 49f;
-        }
+        if (save.slot == 0) header_text_pos_l.X += autosave_offset;
 
         FhApi.Gui.draw_text(
             draw,
-            text_pos_left * scale_factor,
+            header_text_pos_l * scale_factor,
             save.location,
             font_size,
             true,
@@ -1374,41 +1374,44 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         );
 
         float map_icon_size = 255f;
-        text_margin_between = 52f;
+        text_margin = 57f;
 
-        Vector2 text_pos_right =
-              save_rect.top_right
-            + new Vector2(-(map_icon_size + text_margin_between), 22f);
+        Vector2 header_text_pos_r = save_rect.top_right + new Vector2(
+            border_thickness - map_icon_size - text_margin,
+            (header_size / 2) - 2f
+        );
 
         FhApi.Gui.draw_text(
             draw,
-            text_pos_right * scale_factor,
+            header_text_pos_r * scale_factor,
             create_time,
             font_size,
             true,
             new(Alignment.END, Alignment.CENTER)
         );
 
-        /* ===== Details ===== */
-        float margin_from_header    =  4f;
-        float margin_from_last_face = 31f;
-        float line_height           = 49f;
+        /* ===== Info Details ===== */
+        float margin_from_header    =   4f;
+        float margin_from_last_face = 132f;
+        float margin_from_map       =  57f;
+        float ck_offset             =  92f;
+        float line_height           =  49f;
 
-        // This is vanilla behaviour!
-        float lang_offset = FhGlobal.lang_id == FhLangId.Chinese
-                         || FhGlobal.lang_id == FhLangId.Korean
-            ? 13f
-            : 106f;
-        float end_offset = 915f;
-
-        Vector2 text_pos = save_rect.pos + new Vector2(
-            face_size.X * 3 + face_gap * 2 + margin_from_last_face,
+        Vector2 info_text_pos_l = save_rect.top_left + new Vector2(
+            face_offset + face_size.X * 3 + face_gap * 2 + margin_from_last_face,
             header_size + margin_from_header + line_height / 2f
         );
 
+        Vector2 info_text_pos_r = save_rect.top_right + new Vector2(
+            border_thickness - map_icon_size - margin_from_map,
+            header_size + margin_from_header + line_height / 2f
+        );
+
+        if (FhGlobal.lang_id == FhLangId.Chinese || FhGlobal.lang_id == FhLangId.Korean) info_text_pos_l.X -= ck_offset;
+
         FhApi.Gui.draw_text(
             draw,
-            new Vector2(text_pos.X + lang_offset, text_pos.Y) * scale_factor,
+            info_text_pos_l * scale_factor,
             save.player_name,
             font_size,
             true,
@@ -1417,18 +1420,19 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         FhApi.Gui.draw_text(
             draw,
-            new Vector2(text_pos.X + end_offset + 1f, text_pos.Y) * scale_factor,
+            new Vector2(info_text_pos_r.X + 1f, info_text_pos_r.Y) * scale_factor,
             save.completion,
             font_size,
             true,
             new(Alignment.END, Alignment.CENTER)
         );
 
-        text_pos.Y += line_height;
+        info_text_pos_l.Y += line_height;
+        info_text_pos_r.Y += line_height;
 
         FhApi.Gui.draw_text(
             draw,
-            new Vector2(text_pos.X + lang_offset, text_pos.Y) * scale_factor,
+            info_text_pos_l * scale_factor,
             save.chapter,
             font_size,
             true,
@@ -1437,7 +1441,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         FhApi.Gui.draw_text(
             draw,
-            new Vector2(text_pos.X + end_offset, text_pos.Y) * scale_factor,
+            info_text_pos_r * scale_factor,
             save.play_time,
             font_size,
             true,
@@ -1525,24 +1529,27 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         /* ===== Text ===== */
 
-        /* ===== Header ===== */
-        float header_size         = 47f;
-        float text_margin_left    = 17f;
-        float text_margin_between = 82f;
+        /* ===== Header Details ===== */
+        float border_thickness =  5f;
+        float header_size      = 47f;
+        float text_offset      = 12f;
+        float text_margin      = 82f;
+        float autosave_offset  = 23f;
 
-        Vector2 text_pos_left =
-              save_rect.pos
-            + new Vector2(text_margin_left, 22f);
+        Vector2 header_text_pos_l = save_rect.top_left + new Vector2(
+            border_thickness + text_offset,
+            (header_size / 2) - 2f // - 2f to center
+        );
 
-        float font_size = 36f * scale_factor.Y;
+        float font_size = 36f * float.Min(scale_factor.X, scale_factor.Y);
 
         //TODO: Add localization
-        string slot_text   = save.slot == 0 ? "Autosave" : save.slot.ToString();
+        string slot_text   = save.slot == 0 ? "Autosave" : save.slot_str;
         string create_time = save.create_time.ToString(@"yyyy\/M\/d H\:mm\:ss");
 
         Vector2 text_size = FhApi.Gui.draw_text(
             draw,
-            text_pos_left * scale_factor,
+            header_text_pos_l * scale_factor,
             slot_text,
             font_size,
             true,
@@ -1550,16 +1557,14 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             save.slot == 0 ? 0xFF19D8FF : 0xFFFFFFFF // Autosave text is yellow
         );
 
-        text_pos_left.X += text_size.X + text_margin_between;
+        header_text_pos_l.X += text_size.X + text_margin;
 
         // If the slot text is "Autosave", increase the margin
-        if (save.slot == 0) {
-            text_pos_left.X += text_margin_between - 59f;
-        }
+        if (save.slot == 0) header_text_pos_l.X += autosave_offset;
 
         FhApi.Gui.draw_text(
             draw,
-            text_pos_left * scale_factor,
+            header_text_pos_l * scale_factor,
             save.location,
             font_size,
             true,
@@ -1567,71 +1572,78 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         );
 
         float map_icon_size = 255f;
-        text_margin_between = 52f;
+        text_margin = 57f;
 
-        Vector2 text_pos_right =
-              save_rect.top_right
-            + new Vector2(-(map_icon_size + text_margin_between), 22f);
+        Vector2 header_text_pos_r = save_rect.top_right + new Vector2(
+            border_thickness - map_icon_size - text_margin,
+            (header_size / 2) - 2f
+        );
 
         FhApi.Gui.draw_text(
             draw,
-            text_pos_right * scale_factor,
+            header_text_pos_r * scale_factor,
             create_time,
             font_size,
             true,
             new(Alignment.END, Alignment.CENTER)
         );
 
-        /* ===== Details ===== */
-        float margin_from_header    =   4f;
-        float margin_from_last_face =  87f;
-        float line_height           =  49f;
-        float end_offset            = 989f;
+        /* ===== Info Details ===== */
+        float margin_from_header    =  4f;
+        float margin_from_last_face = 86f;
+        float margin_from_map       = 57f;
+        float level_offset          = 89f;
+        float line_height           = 49f;
 
-        Vector2 text_pos = save_rect.pos + new Vector2(
-            face_size.X * 3 + face_gap * 2 - margin_from_last_face,
+        Vector2 info_text_pos_l = save_rect.top_left + new Vector2(
+            face_offset + (face_gap * 3) + face_size.X + margin_from_last_face,
+            header_size + margin_from_header + line_height / 2f
+        );
+
+        Vector2 info_text_pos_r = save_rect.top_right + new Vector2(
+            border_thickness - map_icon_size - margin_from_map,
             header_size + margin_from_header + line_height / 2f
         );
 
         FhApi.Gui.draw_text(
             draw,
-            text_pos * scale_factor,
+            info_text_pos_l * scale_factor,
             save.player_name,
             font_size,
             true,
             new(Alignment.BEGIN, Alignment.CENTER)
         );
 
-        text_pos.Y += line_height;
-
-        FhApi.Gui.draw_text(
-            draw,
-            new Vector2(text_pos.X + end_offset, text_pos.Y) * scale_factor,
-            save.play_time,
-            font_size,
-            true,
-            new(Alignment.END, Alignment.CENTER)
-        );
+        info_text_pos_l.Y += line_height;
+        info_text_pos_r.Y += line_height;
 
         text_size = FhApi.Gui.draw_text(
             draw,
-            text_pos * scale_factor,
+            info_text_pos_l * scale_factor,
             save.lm_job,
             font_size,
             true,
             new(Alignment.BEGIN, Alignment.CENTER)
         );
 
-        text_margin_between = 89f;
-        text_pos.X += text_size.X + text_margin_between;
+        info_text_pos_l.X += text_size.X + level_offset;
 
         FhApi.Gui.draw_text(
             draw,
-            text_pos * scale_factor,
+            info_text_pos_l * scale_factor,
             save.lm_level,
             font_size,
             true,
             new(Alignment.BEGIN, Alignment.CENTER)
+        );
+
+        FhApi.Gui.draw_text(
+            draw,
+            info_text_pos_r * scale_factor,
+            save.play_time,
+            font_size,
+            true,
+            new(Alignment.END, Alignment.CENTER)
         );
     }
 
@@ -1653,7 +1665,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         text_pos *= scale_factor;
 
-        float font_size = 36f * scale_factor.Y;
+        float font_size = 36f * float.Min(scale_factor.X, scale_factor.Y);
 
         FhApi.Gui.draw_text(
             draw,
