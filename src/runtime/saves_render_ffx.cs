@@ -455,7 +455,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         Vector2 text_pos = bg_screen.left;
         text_pos.X += 20f * aspect_scale.X;
 
-        float font_size = 36f * aspect_scale.Y;
+        float font_size = 36f * font_scale;
 
         FhApi.Gui.draw_text(
             draw,
@@ -592,7 +592,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
         draw.AddImage(battle_kuang, bg_suv.p0, bg_suv.p1, bg_tuv.p0, bg_tuv.p1);
 
-        float   font_size = 36f * aspect_scale.Y;
+        float   font_size = 36f * font_scale;
         Vector2 text_pos  = bg_screen.center;
 
         //TODO: Add localization
@@ -665,7 +665,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
         ImGuiIOPtr    io   = ImGui.GetIO();
 
-        float font_size = 36f * aspect_scale.Y;
+        float font_size = 36f * font_scale;
 
         if (mouse_hovered(button_scaled)) {
             _focus = UiFocus.LIST;
@@ -792,7 +792,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        float font_size = 36f * aspect_scale.Y;
+        float font_size = 36f * font_scale;
 
         ImGui.PushFont(null, font_size);
         Vector2 text_size = ImGui.CalcTextSize(message);
@@ -990,7 +990,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             + save_border_size
             + new Vector2( text_margin_left, header_size / 2f);
 
-        float font_size = 36f * aspect_scale.Y;
+        float font_size = 36f * font_scale;
 
         //TODO: Add localization
         string slot_text   = save.slot == 0 ? "Autosave" : save.slot_str;
@@ -1142,7 +1142,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             header_height + (save_rect.size.Y - header_height) / 2f
         );
 
-        float font_size = 36f * aspect_scale.Y;
+        float font_size = 36f * font_scale;
 
         FhApi.Gui.draw_text(
             draw,

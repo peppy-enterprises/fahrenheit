@@ -9,7 +9,7 @@ namespace Fahrenheit;
 
 /// <summary>The base class for custom renderers of the save/load screen.</summary>
 public abstract class FhSaveUiRenderer : FhModule {
-    /// <summary>The helper used to scale Rects to the desired 16:9 aspect ratio.</summary>
+    /// <summary>The helper used to scale Rects to the forced 16:9 aspect ratio.</summary>
     protected Rect aspect_helper;
 
     /// <summary>The ratio between the current and reference display sizes.</summary>
@@ -33,8 +33,11 @@ public abstract class FhSaveUiRenderer : FhModule {
     /// </example>
     protected Vector2 scale_factor => FhApi.Gui.display_size / get_ref_size();
 
-    /// <summary>The ratio between the desired 16:9 aspect ratio and reference display sizes.</summary>
+    /// <summary>The ratio between the forced 16:9 aspect ratio and reference display sizes.</summary>
     protected Vector2 aspect_scale => aspect_helper.size;
+
+    /// <summary>The scale for font sizes at a forced 16:9 aspect ratio.</summary>
+    protected float font_scale => float.Min(aspect_scale.X, aspect_scale.Y);
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         _logger.Info($"Registering new save UI renderer: {ModuleType}");
