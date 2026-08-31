@@ -138,7 +138,7 @@ public struct Rect {
     /// <summary>Scale the rectangle to a certain aspect ratio.</summary>
     /// <param name="aspect_helper">
     ///     A <see cref="Rect"/> where: <ul>
-    ///         <li>the <c>pos</c> is equal to the offset of the screen for the desired aspect ratio,</li>
+    ///         <li>the <c>pos</c> is equal to the offset required to center the screen for the desired aspect ratio,</li>
     ///         <li>the <c>size</c> is equal to the ratio between the desired and current display size.</li>
     ///     </ul>
     /// </param>
