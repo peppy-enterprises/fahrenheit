@@ -7,25 +7,26 @@ namespace Fahrenheit.FFX2;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct StatusMap {
-    public  byte death;
-    public  byte petrification;
-    public  byte sleep;
-    public  byte silence;
-    public  byte darkness;
-    public  byte poison;
-    public  byte confusion;
-    public  byte berserk;
-    public  byte curse;
-    public  byte sentinel;
-    public  byte eject;
-    public  byte double_hp;
-    public  byte double_mp;
-    public  byte spellspring;
-    public  byte damage_9999;
-    public  byte always_critical;
-    public  byte pointless;
-    public  byte itchy;
-    public  byte auto_life;
+    public byte death;
+    public byte petrification;
+    public byte sleep;
+    public byte silence;
+    public byte darkness;
+    public byte poison;
+    public byte confusion;
+    public byte berserk;
+    public byte curse;
+    public byte sentinel;
+    public byte eject;
+    public byte double_hp;
+    public byte double_mp;
+    public byte spellspring;
+    public byte damage_9999;
+    public byte always_critical;
+    public byte pointless;
+    public byte itchy;
+    public byte auto_life;
+
     private byte unused1;
     private byte unused2;
     private byte unused3;
@@ -35,25 +36,26 @@ public struct StatusMap {
 
 [StructLayout(LayoutKind.Sequential)]
 public struct StatusDurationMap {
-    public  int death;
-    public  int petrification;
-    public  int sleep;
-    public  int silence;
-    public  int darkness;
-    public  int poison;
-    public  int confusion;
-    public  int berserk;
-    public  int curse;
-    public  int sentinel;
-    public  int eject;
-    public  int double_hp;
-    public  int double_mp;
-    public  int spellspring;
-    public  int damage_9999;
-    public  int always_critical;
-    public  int pointless;
-    public  int itchy;
-    public  int auto_life;
+    public int death;
+    public int petrification;
+    public int sleep;
+    public int silence;
+    public int darkness;
+    public int poison;
+    public int confusion;
+    public int berserk;
+    public int curse;
+    public int sentinel;
+    public int eject;
+    public int double_hp;
+    public int double_mp;
+    public int spellspring;
+    public int damage_9999;
+    public int always_critical;
+    public int pointless;
+    public int itchy;
+    public int auto_life;
+
     private int unused1;
     private int unused2;
     private int unused3;
@@ -186,24 +188,25 @@ public static partial class FhEnumExt {
 
 [StructLayout(LayoutKind.Sequential)]
 public struct StatusMap2 {
-    public  byte shell;
-    public  byte protect;
-    public  byte reflect;
-    public  byte regen;
-    public  byte haste;
-    public  byte slow;
-    public  byte stop;
-    public  byte strength_bonus;
-    public  byte magic_bonus;
-    public  byte defense_bonus;
-    public  byte magic_defense_bonus;
-    public  byte accuracy_bonus;
-    public  byte evasion_bonus;
-    public  byte luck_bonus;
-    public  byte doom_counter;
-    public  byte immunity_physical_damage;
-    public  byte immunity_magical_damage;
-    public  byte invincible;
+    public byte shell;
+    public byte protect;
+    public byte reflect;
+    public byte regen;
+    public byte haste;
+    public byte slow;
+    public byte stop;
+    public byte strength_bonus;
+    public byte magic_bonus;
+    public byte defense_bonus;
+    public byte magic_defense_bonus;
+    public byte accuracy_bonus;
+    public byte evasion_bonus;
+    public byte luck_bonus;
+    public byte doom_counter;
+    public byte immunity_physical_damage;
+    public byte immunity_magical_damage;
+    public byte invincible;
+
     private byte unused1;
     private byte unused2;
     private byte unused3;
@@ -214,24 +217,25 @@ public struct StatusMap2 {
 
 [StructLayout(LayoutKind.Sequential)]
 public struct StatusDurationMap2 {
-    public  sbyte shell;
-    public  sbyte protect;
-    public  sbyte reflect;
-    public  sbyte regen;
-    public  sbyte haste;
-    public  sbyte slow;
-    public  sbyte stop;
-    public  sbyte strength_bonus;
-    public  sbyte magic_bonus;
-    public  sbyte defense_bonus;
-    public  sbyte magic_defense_bonus;
-    public  sbyte accuracy_bonus;
-    public  sbyte evasion_bonus;
-    public  sbyte luck_bonus;
-    public  sbyte doom_counter;
-    public  sbyte immunity_physical_damage;
-    public  sbyte immunity_magical_damage;
-    public  sbyte invincible;
+    public sbyte shell;
+    public sbyte protect;
+    public sbyte reflect;
+    public sbyte regen;
+    public sbyte haste;
+    public sbyte slow;
+    public sbyte stop;
+    public sbyte strength_bonus;
+    public sbyte magic_bonus;
+    public sbyte defense_bonus;
+    public sbyte magic_defense_bonus;
+    public sbyte accuracy_bonus;
+    public sbyte evasion_bonus;
+    public sbyte luck_bonus;
+    public sbyte doom_counter;
+    public sbyte immunity_physical_damage;
+    public sbyte immunity_magical_damage;
+    public sbyte invincible;
+
     private sbyte unused1;
     private sbyte unused2;
     private sbyte unused3;

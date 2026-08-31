@@ -6,7 +6,7 @@
 namespace Fahrenheit.FFX2;
 
 /// <summary>
-///     Commands with these flags set deal quadruple daamge to the respective fiend type.
+///     Commands deal 4x damage to the respective fiend type when these flags are set.
 /// </summary>
 [Flags]
 public enum SpeciesEffectiveness : ushort {
