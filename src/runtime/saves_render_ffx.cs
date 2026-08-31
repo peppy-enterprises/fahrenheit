@@ -477,7 +477,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         Vector2 text_pos = new(1435f, 120f);
 
         float line_height = 32f;
-        float font_size   = 36f * aspect_scale.Y;
+        float font_size   = 36f * font_scale;
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
