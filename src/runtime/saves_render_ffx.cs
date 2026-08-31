@@ -15,11 +15,6 @@ namespace Fahrenheit.Runtime;
  * may as well not exist past the actual calculation.
  */
 
-file static class RectExt {
-    extension(Rect rect) {
-    }
-}
-
 /// <summary>The default save UI renderer for Final Fantasy X.</summary>
 [FhLoad(FhGameId.FFX)]
 public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
@@ -479,7 +474,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             ? $" + {save_count} saves"
             : $"{save_count} saves";
 
-        Vector2 text_pos = new Vector2(1435f, 120f);
+        Vector2 text_pos = new(1435f, 120f);
 
         float line_height = 32f;
         float font_size   = 36f * aspect_scale.Y;
