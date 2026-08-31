@@ -27,8 +27,8 @@ public sealed class FhSoftResetModule : FhModule {
             return;
 
         if (FhCall.MsBattleCheck.fnptr!() != 0) {
-            FhUtil.set_at(FhGlobal.game_id is FhGameId.FFX ? 0xD2C9F1 : 0x9F94B5, 1U);
-            FhUtil.set_at(FhGlobal.game_id is FhGameId.FFX ? 0xD2A8E0 : 0x9F78A0, 2U);
+            FhUtil.set_at<ushort>(FhUtil.select(0xD2C9F1, 0x9F94B5, 0x9F94B5), 1); // btl.battle_end_type = GAME_OVER
+            FhUtil.set_at<byte>  (FhUtil.select(0xD2A8E0, 0x9F78A0, 0x9F78A0), 2); // btl.battle_state    = END
             return;
         }
           
