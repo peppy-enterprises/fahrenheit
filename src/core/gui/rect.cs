@@ -113,6 +113,7 @@ public struct Rect {
     /// <param name="align">The alignment to scale the rectangle out from.</param>
     /// <returns>The scaled rectangle.</returns>
     /// <seealso cref="scale_raw"/>
+    /// <seealso cref="scale_to_aspect"/>
     public Rect scale(Vector2 by, Alignment2D align) {
         Vector2 old_size = size;
 
@@ -126,10 +127,28 @@ public struct Rect {
     /// <param name="by">The value to multiply the position and size by.</param>
     /// <returns>The scaled rectangle.</returns>
     /// <seealso cref="scale"/>
+    /// <seealso cref="scale_to_aspect"/>
     public Rect scale_raw(Vector2 by) {
         return new Rect {
             pos  = pos  * by,
             size = size * by,
+        };
+    }
+
+    /// <summary>Scale the rectangle to a certain aspect ratio.</summary>
+    /// <param name="aspect_helper">
+    ///     A <see cref="Rect"/> where: <ul>
+    ///         <li>the <c>pos</c> is equal to the offset of the screen for the desired aspect ratio,</li>
+    ///         <li>the <c>size</c> is equal to the ratio between the desired and current display size.</li>
+    ///     </ul>
+    /// </param>
+    /// <returns>The scaled rectangle.</returns>
+    /// <seealso cref="scale"/>
+    /// <seealso cref="scale_raw"/>
+    public Rect scale_to_aspect(Rect aspect_helper) {
+        return new Rect {
+            pos  = pos  * aspect_helper.size + aspect_helper.pos,
+            size = size * aspect_helper.size,
         };
     }
 }

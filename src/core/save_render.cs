@@ -3,10 +3,15 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
+using Fahrenheit.Gui;
+
 namespace Fahrenheit;
 
 /// <summary>The base class for custom renderers of the save/load screen.</summary>
 public abstract class FhSaveUiRenderer : FhModule {
+    /// <summary>The helper used to scale Rects to the desired 16:9 aspect ratio.</summary>
+    protected Rect aspect_helper;
+
     /// <summary>The ratio between the current and reference display sizes.</summary>
     /// <example>
     ///     To scale a rectangle from the reference size to the display size,
@@ -28,11 +33,37 @@ public abstract class FhSaveUiRenderer : FhModule {
     /// </example>
     protected Vector2 scale_factor => FhApi.Gui.display_size / get_ref_size();
 
+    /// <summary>The ratio between the desired 16:9 aspect ratio and reference display sizes.</summary>
+    protected Vector2 aspect_scale => aspect_helper.size;
+
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         _logger.Info($"Registering new save UI renderer: {ModuleType}");
         FhApi.Saves.register_renderer(this);
 
+        FhApi.Events.Common.GameLoop.PostOpenSaveMenu.subscribe(post_open);
+
         return true;
+    }
+
+    private void post_open(EventArgs e) {
+        Vector2 window_size = FhApi.Gui.display_size;
+        float   window_aspect = window_size.X / window_size.Y;
+        float   target_aspect = 16f / 9f;
+
+        if (float.Abs(window_aspect - target_aspect) > 0.0001f) {
+            if (window_aspect > target_aspect)
+                aspect_helper.size = window_size with { X = window_size.Y * target_aspect };
+            else
+                aspect_helper.size = window_size with { Y = window_size.X / target_aspect };
+
+            aspect_helper.pos  = (window_size - aspect_helper.size) / 2f;
+        }
+        else {
+            aspect_helper.size = window_size;
+            aspect_helper.pos  = Vector2.Zero;
+        }
+
+        aspect_helper.size = scale_factor * (aspect_helper.size / FhApi.Gui.display_size);
     }
 
     public sealed override void render_imgui() { }
