@@ -29,7 +29,7 @@ public abstract class FhSaveUiRenderer : FhModule {
     ///     float font_size = 36f * scale_factor.Y;
     ///     </code>
     /// </example>
-    protected Vector2 scale_factor => FhApi.Gui.display_size / get_ref_size();
+    protected Vector2 display_scale => FhApi.Gui.display_size / get_ref_size();
 
     /// <summary>The ratio between the game's forced 16:9 aspect ratio and reference display sizes.</summary>
     protected Vector2 aspect_scale => aspect_helper.size;
@@ -64,7 +64,7 @@ public abstract class FhSaveUiRenderer : FhModule {
             aspect_helper.pos  = Vector2.Zero;
         }
 
-        aspect_helper.size = scale_factor * (aspect_helper.size / FhApi.Gui.display_size);
+        aspect_helper.size = display_scale * (aspect_helper.size / FhApi.Gui.display_size);
     }
 
     public sealed override void render_imgui() { }
@@ -72,7 +72,7 @@ public abstract class FhSaveUiRenderer : FhModule {
     /// <summary>Retrieve the reference size that is used by the renderer.</summary>
     /// <remarks>
     ///     On-screen coordinates used in the renderer should first be expressed
-    ///     within these bounds, then scaled by <see cref="scale_factor"/>.
+    ///     within these bounds, then scaled by <see cref="display_scale"/>.
     /// </remarks>
     /// <returns>The reference size used by the renderer.</returns>
     protected abstract Vector2 get_ref_size();
