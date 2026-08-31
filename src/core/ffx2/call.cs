@@ -35,22 +35,22 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x1E7580) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_kyGetCursorPoint(int chr_id, int plate_id);
+    public delegate byte d_kyGetCursorPoint(uint chr_id, uint plate_id);
     public static FhMethodHandle<d_kyGetCursorPoint> kyGetCursorPoint
         => new( new FhMethodLocation("FFX-2.exe", 0x1EA770) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_kyGetJobNum();
+    public delegate ushort d_kyGetJobNum();
     public static FhMethodHandle<d_kyGetJobNum> kyGetJobNum
         => new( new FhMethodLocation("FFX-2.exe", 0x1EA7B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_kyGetJobNum2();
+    public delegate ushort d_kyGetJobNum2();
     public static FhMethodHandle<d_kyGetJobNum2> kyGetJobNum2
         => new( new FhMethodLocation("FFX-2.exe", 0x1EA810) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_kyGetJobNum3();
+    public delegate ushort d_kyGetJobNum3();
     public static FhMethodHandle<d_kyGetJobNum3> kyGetJobNum3
         => new( new FhMethodLocation("FFX-2.exe", 0x1EA8B0) );
 
@@ -60,7 +60,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x1EB2E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_kyGetUsedPoint();
+    public delegate uint d_kyGetUsedPoint();
     public static FhMethodHandle<d_kyGetUsedPoint> kyGetUsedPoint
         => new( new FhMethodLocation("FFX-2.exe", 0x1EB480) );
 
@@ -85,12 +85,12 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x20C1A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate ushort d_MsGetSaveAp(uint chr_id, uint ability_id);
+    public delegate uint d_MsGetSaveAp(uint chr_id, uint ability_id);
     public static FhMethodHandle<d_MsGetSaveAp> MsGetSaveAp
         => new( new FhMethodLocation("FFX-2.exe", 0x20C2E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate byte* d_MsGetSaveChrName(int chr_id);
+    public unsafe delegate byte* d_MsGetSaveChrName(uint chr_id);
     public static FhMethodHandle<d_MsGetSaveChrName> MsGetSaveChrName
         => new( new FhMethodLocation("FFX-2.exe", 0x20C4A0) );
 
@@ -105,7 +105,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x20C650) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsGetSaveDreSphere(uint ds_id);
+    public delegate sbyte d_MsGetSaveDreSphere(uint ds_id);
     public static FhMethodHandle<d_MsGetSaveDreSphere> MsGetSaveDreSphere
         => new( new FhMethodLocation("FFX-2.exe", 0x20C710) );
 
@@ -120,12 +120,12 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x20C950) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate ushort d_MsGetSaveLearn(uint chr_id, uint job_id);
+    public delegate uint d_MsGetSaveLearn(uint chr_id, uint job_id);
     public static FhMethodHandle<d_MsGetSaveLearn> MsGetSaveLearn
         => new( new FhMethodLocation("FFX-2.exe", 0x20CA70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate ushort d_MsGetSaveNeedAp(byte chr_id, uint ability_id);
+    public delegate uint d_MsGetSaveNeedAp(uint chr_id, uint ability_id);
     public static FhMethodHandle<d_MsGetSaveNeedAp> MsGetSaveNeedAp
         => new( new FhMethodLocation("FFX-2.exe", 0x20CB20) );
 
@@ -151,7 +151,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x20FE10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsBtlChrNumCheck(byte chr_id);
+    public delegate uint d_MsBtlChrNumCheck(uint chr_id);
     public static FhMethodHandle<d_MsBtlChrNumCheck> MsBtlChrNumCheck 
         => new( new FhMethodLocation("FFX-2.exe", 0x20FF90) );
 
@@ -161,7 +161,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x210440) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsBtlPlayerSaveNumCheck(byte chr_id);
+    public delegate uint d_MsBtlPlayerSaveNumCheck(uint chr_id);
     public static FhMethodHandle<d_MsBtlPlayerSaveNumCheck> MsBtlPlayerSaveNumCheck
         => new( new FhMethodLocation("FFX-2.exe", 0x210460) );
 
@@ -176,7 +176,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x213360) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsCalcChrLevel(byte chr_id);
+    public delegate uint d_MsCalcChrLevel(uint chr_id);
     public static FhMethodHandle<d_MsCalcChrLevel> MsCalcChrLevel
         => new( new FhMethodLocation("FFX-2.exe", 0x217140) );
 
@@ -201,7 +201,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x21C290) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate ushort d_MsGetJobNumBasic(uint chr_id);
+    public delegate uint d_MsGetJobNumBasic(uint chr_id);
     public static FhMethodHandle<d_MsGetJobNumBasic> MsGetJobNumBasic
         => new( new FhMethodLocation("FFX-2.exe", 0x21DE30) );
 
@@ -331,7 +331,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x235300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_MsCheckLearnCommand(byte chr_id, int ability_id);
+    public delegate uint d_MsCheckLearnCommand(uint chr_id, int ability_id);
     public static FhMethodHandle<d_MsCheckLearnCommand> MsCheckLearnCommand
         => new( new FhMethodLocation("FFX-2.exe", 0x235790) );
 
@@ -442,22 +442,22 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x368570) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_TOGetRtcRatio(int arg1);
+    public delegate short d_TOGetRtcRatio(uint arg1);
     public static FhMethodHandle<d_TOGetRtcRatio> TOGetRtcRatio
         => new( new FhMethodLocation("FFX-2.exe", 0x3730C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_TOGetRtcValue(int arg1);
+    public delegate short d_TOGetRtcValue(uint arg1);
     public static FhMethodHandle<d_TOGetRtcValue> TOGetRtcValue
         => new( new FhMethodLocation("FFX-2.exe", 0x3730E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate double d_offsetAdjust_X(int arg1);
+    public delegate float d_offsetAdjust_X(int arg1);
     public static FhMethodHandle<d_offsetAdjust_X> offsetAdjust_X
         => new( new FhMethodLocation("FFX-2.exe", 0x3764C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate double d_offsetAdjust_Y(int arg1);
+    public delegate float d_offsetAdjust_Y(int arg1);
     public static FhMethodHandle<d_offsetAdjust_Y> offsetAdjust_Y
         => new( new FhMethodLocation("FFX-2.exe", 0x3764E0) );
 
@@ -577,7 +577,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x3A0030) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FFX2_Set_UI_Scale(int arg1, int arg2);
+    public delegate void d_FFX2_Set_UI_Scale(float arg1, float arg2);
     public static FhMethodHandle<d_FFX2_Set_UI_Scale> FFX2_Set_UI_Scale
         => new( new FhMethodLocation("FFX-2.exe", 0x3A0060) );
 
