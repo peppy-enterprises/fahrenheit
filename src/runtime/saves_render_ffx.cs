@@ -849,7 +849,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         NineSliceHelper screen_border_helper = NineSliceHelper.create(
             Vector2.One,
             window,
-            new(9f, 9f)
+            new Vector2(9f, 9f) * _aspect_scale
         );
 
         for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
@@ -913,7 +913,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         NineSliceHelper screen_border_helper = NineSliceHelper.create(
             Vector2.One,
             save_rect.scale_to_aspect(_aspect_helper, _aspect_scale),
-            new(9f, 9f)
+            new Vector2(9f, 9f) * _aspect_scale
         );
 
         for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
@@ -1136,7 +1136,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         NineSliceHelper screen_border_helper = NineSliceHelper.create(
             Vector2.One,
             save_rect.scale_to_aspect(_aspect_helper, _aspect_scale),
-            new(9f, 9f)
+            new Vector2(9f, 9f) * _aspect_scale
         );
 
         for (int slice_idx = 0; slice_idx < 9; slice_idx++) {
