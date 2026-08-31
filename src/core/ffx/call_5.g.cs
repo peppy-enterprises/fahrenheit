@@ -3692,13 +3692,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_0086d960> FUN_0086d960 => new( new FhMethodLocation("FFX.exe", 0x46D960) );
 
     // Original after pruning:
-    // unknown undefined AtelJumpGameOver() at 0086d9a0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_AtelJumpGameOver();
-    public static FhMethodHandle<d_AtelJumpGameOver> AtelJumpGameOver => new( new FhMethodLocation("FFX.exe", 0x46D9A0) );
-
-    // Original after pruning:
     // unknown undefined FUN_0086dab0() at 0086dab0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
