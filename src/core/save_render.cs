@@ -47,6 +47,16 @@ public abstract class FhSaveUiRenderer : FhModule {
     }
 
     private void post_open(EventArgs e) {
+        /*
+         * NOTE:
+         *   Unlike in vanilla, Fahrenheit does not allow you to open the Escape menu,
+         *   and hence change your resolution, while the save UI is open.
+         *
+         *   Because of this, we can set up the aspect_helper once in PostOpenSaveMenu
+         *   instead of redoing it every frame.
+         *
+         */
+
         Vector2 window_size   = FhApi.Gui.display_size;
         float   window_aspect = window_size.X / window_size.Y;
         float   target_aspect = 16f / 9f;
