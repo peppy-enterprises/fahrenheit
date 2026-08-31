@@ -258,7 +258,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             if (window_aspect > target_aspect)
                 _aspect_helper.size = window_size with { X = window_size.Y * target_aspect };
             else
-                _aspect_helper.size = window_size with { Y = window_size.X * target_aspect };
+                _aspect_helper.size = window_size with { Y = window_size.X / target_aspect };
 
             _aspect_helper.pos  = (window_size - _aspect_helper.size) / 2f;
         }
