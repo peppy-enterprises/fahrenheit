@@ -26985,13 +26985,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_0063E010_0044D0A0();
     public static FhMethodHandle<d_FUN_0063E010_0044D0A0> FUN_0063E010_0044D0A0 => new( new FhMethodLocation(0x23E010, 0x4D0A0) );
 
-    // Fused identical entry: unknown undefined graphicDestroyFmv()
-    // at (FFX.exe+63E0E0, FFX-2.exe+44D170)
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0063E0E0_0044D170();
-    public static FhMethodHandle<d_FUN_0063E0E0_0044D170> FUN_0063E0E0_0044D170 => new( new FhMethodLocation(0x23E0E0, 0x4D170) );
-
     // Fused identical entry: unknown undefined graphicEnableHSV()
     // at (FFX.exe+6402B0, FFX-2.exe+4516A0)
 
