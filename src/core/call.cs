@@ -34,6 +34,21 @@ public static unsafe partial class FhCall {
      * circumvent it. We simply refuse to support any such scenario.
      */
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_AtelJumpGameOver();
+    public static FhMethodHandle<d_AtelJumpGameOver> AtelJumpGameOver 
+        => new( new FhMethodLocation(0x46D9A0, 0x3283A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate uint d_MsBattleCheck();
+    public static FhMethodHandle<d_MsBattleCheck> MsBattleCheck
+        => new( new FhMethodLocation(0x380D60, 0x207260) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicDestroyFmv();
+    public static FhMethodHandle<d_graphicDestroyFmv> graphicDestroyFmv
+        => new( new FhMethodLocation(0x23E0E0, 0x04D170) );
+
     // RT - File cross-loader
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
