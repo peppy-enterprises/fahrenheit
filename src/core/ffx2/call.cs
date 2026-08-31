@@ -186,7 +186,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x218B80) ) ;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsGetRndChr(int chr_id, int arg2);
+    public delegate int d_MsGetRndChr(uint chr_id, int arg2);
     public static FhMethodHandle<d_MsGetRndChr> MsGetRndChr 
         =>new( new FhMethodLocation("FFX-2.exe", 0x21ADD0) );
 
@@ -231,7 +231,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x224F90) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsGetRamChrMonster(byte chr_id);
+    public delegate uint d_MsGetRamChrMonster(uint chr_id);
     public static FhMethodHandle<d_MsGetRamChrMonster> MsGetRamChrMonster 
         => new( new FhMethodLocation("FFX-2.exe", 0x225BF0) );
 
