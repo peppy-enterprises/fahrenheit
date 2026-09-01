@@ -534,9 +534,9 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
             new( 90f, 200f)
         ).map_to(_tex_meswin_size);
 
-        Vector2 cursor_size = new(76f, 51f);
+        Vector2 cursor_size = new Vector2(76f, 51f) * aspect_scale;
 
-        float max_offset   = 13f;
+        float max_offset   = 13f * aspect_scale.X;
         float cycle_length = 0.38f;
 
         // Multiply by pi so cycle_length can be expressed in seconds.
@@ -546,13 +546,12 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
         float overlap_amount = overlap ? cursor_size.X * 0.1f : 0f;
 
         Vector2 cursor_center = new(
-            target_pos.X + (- cursor_size.X / 2f + overlap_amount - offset) * aspect_scale.X,
+            target_pos.X - cursor_size.X / 2f + overlap_amount - offset,
             target_pos.Y
         );
 
         UV cursor_suv = new Rect { pos = cursor_center }
             .expand(cursor_size, new(Alignment.CENTER, Alignment.CENTER))
-            .scale(aspect_scale, new(Alignment.END   , Alignment.CENTER))
             .as_uv();
 
         draw.AddImage(
