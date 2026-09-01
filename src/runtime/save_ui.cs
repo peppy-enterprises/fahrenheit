@@ -22,7 +22,7 @@ namespace Fahrenheit.Runtime;
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
     private FhSaveUiRendererX?  _render_x;
-    // private FhSaveUiRendererX2? _render_x2;
+    private FhSaveUiRendererX2? _render_x2;
 
     private class FhSaveUiSettings {
         //TODO: Change this to a Set-based dropdown once that's created.
@@ -39,21 +39,21 @@ public sealed class FhSaveUiModule : FhModule {
 
     private string get_default_renderer_id() {
         return FhGlobal.game_id switch {
-            FhGameId.FFX    => _render_x!.ModuleType,
-            // FhGameId.FFX2   or
-            // FhGameId.FFX2LM => _render_x2!.ModuleType,
+            FhGameId.FFX    => _render_x! .ModuleType,
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => _render_x2!.ModuleType,
 
-            _ => "",//throw new NotImplementedException(),
+            _ => throw new NotImplementedException(),
         };
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         bool got_modules = FhGlobal.game_id switch {
             FhGameId.FFX    => new FhModuleHandle<FhSaveUiRendererX>(this) .try_get_module(out _render_x),
-            // FhGameId.FFX2   or
-            // FhGameId.FFX2LM => new FhModuleHandle<FhSaveUiRendererX2>(this).try_get_module(out _render_x2),
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => new FhModuleHandle<FhSaveUiRendererX2>(this).try_get_module(out _render_x2),
 
-            _ => false,//throw new NotImplementedException(),
+            _ => throw new NotImplementedException(),
         };
 
         _settings.renderer.set(get_default_renderer_id());
