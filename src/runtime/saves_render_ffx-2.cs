@@ -340,19 +340,19 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
             bool is_lm     = FhGlobal.game_id is FhGameId.FFX2LM;
             int  num_faces = is_lm ? 1 : 3;
-            
+
             for (int i = 0; i < num_faces; i++) {
                 byte ply_id = is_lm ? header2.lm_ply : header2.ply[i];
                 byte job_id = is_lm ? header2.lm_job : header2.ply_jobs[i];
-            
-                if (job_id < 0x01 || job_id > 0x21) continue;
-            
+
+                if (job_id > 0x21) continue;
+
                 string face = remap_job(ply_id, job_id);
-            
+
                 if (_face_icon_textures.TryGetValue(face, out _)) continue;
-            
+
                 FhTexture face_icon = new(Path.Join(MENU_FACE_DATA_DIR, face), FhTextureType.PHYRE);
-            
+
                 _face_icon_textures.Add(
                     face,
                     face_icon
@@ -1293,7 +1293,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             byte ply_id = header2.ply[i];
             byte job_id = header2.ply_jobs[i];
 
-            if (job_id < 0x01 || job_id > 0x21) {
+            if (job_id > 0x21) {
                 face_suv = face_suv.move(face_screen_offset);
                 continue;
             }
@@ -1301,13 +1301,16 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             string    filename = remap_job(ply_id, job_id);
             FhTexture portrait = _face_icon_textures.GetValueOrDefault(filename, _texture_face_icon_default);
 
+            uint alpha = job_id == 0x0 ? 0xA0C0C0C0 : 0xFFFFFFFF;
+
             if (portrait.try_use(out ImTextureRef faces, out _)) {
                 draw.AddImage(
                     faces,
                     face_suv.p0,
                     face_suv.p1,
                     face_tuv.p0,
-                    face_tuv.p1
+                    face_tuv.p1,
+                    alpha
                 );
             }
 
