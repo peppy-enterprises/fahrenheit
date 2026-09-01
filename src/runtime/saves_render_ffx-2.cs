@@ -60,8 +60,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private readonly Dictionary<string, FhTexture> _face_icon_textures = [ ];
     private readonly Dictionary<string, FhTexture> _map_icon_textures  = [ ];
 
-    private readonly FhTexture _texture_face_icon_default = new(Path.Join(MENU_FACE_DATA_DIR, "yunaface_000.dds.phyre"), FhTextureType.PHYRE);
-    private readonly FhTexture _texture_map_icon_default  = new(Path.Join(MAP_ICONS_DIR,      "logo_j.png"),             FhTextureType.PNG);
+    private readonly FhTexture _texture_face_icon_default = new(Path.Join(MENU_FACE_DATA_DIR, "mface_000.dds.phyre"), FhTextureType.PHYRE);
+    private readonly FhTexture _texture_map_icon_default  = new(Path.Join(MAP_ICONS_DIR,      "logo_j.png"),          FhTextureType.PNG);
 
     private readonly FhTexture _texture_menuback = new(Path.Join(MENU_D3D11_DIR,   "menuback.dds.phyre"),             FhTextureType.PHYRE);
     private readonly FhTexture _texture_mahojin  = new(Path.Join(MENU_MAHOJIN_DIR, "14336_19_0_0_512_512.dds.phyre"), FhTextureType.PHYRE);
