@@ -225,11 +225,23 @@ public class Scrollable {
 
         float mouse_wheel = ImGui.GetIO().MouseWheel;
 
-        bool scroll_pg_up = FhApi.Gui.is_any_pressed([ ImGuiKey.PageUp  , .. FhApi.Gui.keys_left  ]);
-        bool scroll_pg_dn = FhApi.Gui.is_any_pressed([ ImGuiKey.PageDown, .. FhApi.Gui.keys_right ]);
+        ImGuiKey[] pg_up_keys = [
+            ImGuiKey.PageUp,
+            ImGuiKey.GamepadL1,
+            .. FhApi.Gui.keys_left,
+        ];
 
-        bool scroll_pg_up_held = FhApi.Gui.is_any_pressed([ ImGuiKey.PageUp  , .. FhApi.Gui.keys_left  ], true);
-        bool scroll_pg_dn_held = FhApi.Gui.is_any_pressed([ ImGuiKey.PageDown, .. FhApi.Gui.keys_right ], true);
+        ImGuiKey[] pg_dn_keys = [
+            ImGuiKey.PageDown,
+            ImGuiKey.GamepadR1,
+            .. FhApi.Gui.keys_right,
+        ];
+
+        bool scroll_pg_up = FhApi.Gui.is_any_pressed(pg_up_keys);
+        bool scroll_pg_dn = FhApi.Gui.is_any_pressed(pg_dn_keys);
+
+        bool scroll_pg_up_held = FhApi.Gui.is_any_pressed(pg_up_keys, true);
+        bool scroll_pg_dn_held = FhApi.Gui.is_any_pressed(pg_dn_keys, true);
 
         bool scroll_to_start = FhApi.Gui.is_any_pressed([ ImGuiKey.Home, ImGuiKey.GamepadL2 ]);
         bool scroll_to_end   = FhApi.Gui.is_any_pressed([ ImGuiKey.End , ImGuiKey.GamepadR2 ]);
