@@ -60,8 +60,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
     private readonly Dictionary<string, FhTexture> _face_icon_textures = [ ];
     private readonly Dictionary<string, FhTexture> _map_icon_textures  = [ ];
 
-    private readonly FhTexture _texture_face_icon_default = new(Path.Join(MENU_FACE_DATA_DIR, "mface_000.dds.phyre"), FhTextureType.PHYRE);
-    private readonly FhTexture _texture_map_icon_default  = new(Path.Join(MAP_ICONS_DIR,      "logo_j.png"),          FhTextureType.PNG);
+    private readonly FhTexture _texture_face_icon_default = new(Path.Join(MENU_FACE_DATA_DIR, "yunaface_000.dds.phyre"), FhTextureType.PHYRE);
+    private readonly FhTexture _texture_map_icon_default  = new(Path.Join(MAP_ICONS_DIR,      "logo_j.png"),             FhTextureType.PNG);
 
     private readonly FhTexture _texture_menuback = new(Path.Join(MENU_D3D11_DIR,   "menuback.dds.phyre"),             FhTextureType.PHYRE);
     private readonly FhTexture _texture_mahojin  = new(Path.Join(MENU_MAHOJIN_DIR, "14336_19_0_0_512_512.dds.phyre"), FhTextureType.PHYRE);
@@ -592,7 +592,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         Vector2 text_pos = bg_screen.left;
         text_pos.X += 240f * aspect_scale.X;
-        text_pos.Y -=   8f * aspect_scale.Y;
+        text_pos.Y -=   6f * aspect_scale.Y;
 
         float font_size = 38f * font_scale;
 
@@ -797,12 +797,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 accent_size = 60f * aspect_scale;
 
         Rect accent_left = new Rect {
-            pos  = bg_screen.top_left + new Vector2(-1f, 1f),
+            pos  = bg_screen.bottom_left + new Vector2(-2f, -58f) * aspect_scale,
             size = accent_size,
         };
 
         Rect accent_right = new Rect {
-            pos  = bg_screen.bottom_right + new Vector2(1f, -1f),
+            pos  = bg_screen.top_right + new Vector2(2f, 58f) * aspect_scale,
             size = -accent_size,
         };
 
@@ -1068,12 +1068,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 accent_size = 125f * aspect_scale;
 
         Rect accent_left = new Rect {
-            pos  = window.top_left + new Vector2(-3f, 3f),
+            pos  = window.bottom_left + new Vector2(-4f, -121f) * aspect_scale,
             size = accent_size,
         };
 
         Rect accent_right = new Rect {
-            pos  = window.bottom_right + new Vector2(2f, -4f),
+            pos  = window.top_right + new Vector2(3f, 121f) * aspect_scale,
             size = -accent_size,
         };
 
