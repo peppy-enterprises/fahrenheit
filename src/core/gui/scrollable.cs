@@ -157,11 +157,11 @@ public class Scrollable {
         }
     }
 
-    /// <summary>Scroll to the next range of visible indices.</summary>
+    /// <summary>Scroll to the previous set of visible indices.</summary>
     /// <param name="just_pressed">Whether the page up button was just pressed.</param>
     /// <remarks>
     ///     If it is no longer visible, this will also set the hovered index
-    ///     to the end of the visible range for improved UX.
+    ///     to the start of the visible range for improved UX.
     /// </remarks>
     public void scroll_page_up(bool just_pressed) {
         if (just_pressed && (current == 0 || max <= visible)) {
@@ -177,7 +177,7 @@ public class Scrollable {
         }
     }
 
-    /// <summary>Scroll to the next range of visible indices.</summary>
+    /// <summary>Scroll to the next set of visible indices.</summary>
     /// <param name="just_pressed">Whether the page down button was just pressed.</param>
     /// <remarks>
     ///     If it is no longer visible, this will also set the hovered index
