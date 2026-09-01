@@ -21,233 +21,69 @@ namespace Fahrenheit.Runtime;
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public sealed class FhSaveUiModule : FhModule {
+    private FhSaveUiRendererX?  _render_x;
+    private FhSaveUiRendererX2? _render_x2;
 
-    private readonly FhModuleHandle<FhSaveExtensionModule> _sem_handle;
-    private          FhSaveExtensionModule?                _sem;
+    private class FhSaveUiSettings {
+        //TODO: Change this to a Set-based dropdown once that's created.
+        public readonly FhSettingText renderer = new("renderer", "");
+    }
 
-    private int                   _display_index;
-    private IReadOnlySet<string>? _sets;
-    private bool                  _pressed;
+    private readonly FhSaveUiSettings _settings = new();
 
     public FhSaveUiModule() {
-        _sem_handle = new(this);
+        settings = new FhSettingsCategory("fhsaveui", [
+            _settings.renderer,
+        ]);
+    }
+
+    private string get_default_renderer_id() {
+        return FhGlobal.game_id switch {
+            FhGameId.FFX    => _render_x! .ModuleType,
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => _render_x2!.ModuleType,
+
+            _ => throw new NotImplementedException(),
+        };
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        return _sem_handle.try_get_module(out _sem);
+        bool got_modules = FhGlobal.game_id switch {
+            FhGameId.FFX    => new FhModuleHandle<FhSaveUiRendererX>(this) .try_get_module(out _render_x),
+            FhGameId.FFX2   or
+            FhGameId.FFX2LM => new FhModuleHandle<FhSaveUiRendererX2>(this).try_get_module(out _render_x2),
+
+            _ => throw new NotImplementedException(),
+        };
+
+        _settings.renderer.set(get_default_renderer_id());
+
+        return got_modules;
     }
 
     public override void render_imgui() {
-        if (FhSavePal.pal_get_screen_state() is not FhSaveScreenState.OPEN)
-            return;
-
-        /*
-         * TODO: Address the fact ImGui does not intercept input when unfocused.
-         */
-
-        if (ImGui.IsKeyPressed(ImGuiKey.Escape) || ImGui.IsKeyPressed(ImGuiKey.Backspace)) {
-            _sem!.signal_exit_abort();
+        if (FhApi.Saves.get_system_mode(out FhSaveSystemMode? mode)
+            && mode is FhSaveSystemMode.NULL
+        ) {
             return;
         }
 
-        ui_setswap();
-        ui_mainwindow();
-    }
+        if (!FhApi.Saves.get_renderer(_settings.renderer.get(), out FhSaveUiRenderer? renderer)) {
+            // Previous renderer is missing (provider mod updated and broke API?)
+            // So we try to fall back to default
+            _logger.Warning($"Failed to find desired renderer \"{_settings.renderer.get()}\", falling back to default.");
 
-    /// <summary>
-    ///     Displays the main save/load menu,
-    /// </summary>
-    private void ui_mainwindow() {
-        ImGuiIOPtr io = ImGui.GetIO();
+            _settings.renderer.set(get_default_renderer_id());
 
-        ImGui.SetNextWindowPos (new (io.DisplaySize.X * 0.008F, io.DisplaySize.Y * 0.105F));
-        ImGui.SetNextWindowSize(new (io.DisplaySize.X * 0.984F, io.DisplaySize.Y * 0.88F));
-
-        if (!ImGui.Begin("Save/Load###Fh.Runtime.SaveSystem.SaveLoadUI", FhApi.Gui.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoScrollbar) & (~ImGuiWindowFlags.NoNavFocus))) {
-            ImGui.End();
-            return;
-        }
-
-        if (_sem!.get_system_state() is FhSaveExtensionSystemState.SAVE) {
-            Vector2 size_new_save_btn = new(ImGui.GetContentRegionAvail().X, 0F);
-
-            if (ImGui.Button("New Save Data", size_new_save_btn)) {
-                _sem!.save(0);
+            if (!FhApi.Saves.get_renderer(_settings.renderer.get(), out renderer)) {
+                // Something has gone disasterously wrong – we're missing our default renderer!
+                _logger.Error("Failed to find default renderer.");
+                throw new NotImplementedException("Failed to find default renderer.");
             }
         }
 
-        List<FhSaveDisplayData> display_data = FhInternal.Saves.get_display_data();
-
-        foreach (FhSaveDisplayData save_file in display_data) {
-            ui_savefile(save_file);
+        if (FhSavePal.pal_get_screen_state() is FhSaveScreenState.OPEN) {
+            renderer.render_ui();
         }
-
-        ImGui.End();
-    }
-
-    private void ui_setswap() {
-        ImGuiIOPtr    io    = ImGui.GetIO();
-        ImGuiStylePtr style = ImGui.GetStyle();
-
-        float width_modal  = Math.Max(600, io.DisplaySize.X / 3);    // 33% margin
-        float height_modal = Math.Max(400, io.DisplaySize.Y * 0.8F); // 10% margin
-
-        ImGui.SetNextWindowPos (new ((io.DisplaySize.X - width_modal) / 2, io.DisplaySize.Y * 0.015F));
-        ImGui.SetNextWindowSize(new (width_modal,                          io.DisplaySize.Y * 0.075F));
-
-        if (!ImGui.Begin("Set Swap###Fh.Runtime.SaveSystem.SetSwap", FhApi.Gui.WINDOW_FLAGS_FULLSCREEN & (~ImGuiWindowFlags.NoNavFocus))) {
-            ImGui.End();
-            return;
-        }
-
-        string active_set      = FhInternal.Saves.get_active_set();
-        string slots_text      = $"({FhInternal.Saves.get_slots_used()} saves)";
-        string active_set_text = $"{active_set} {slots_text}";
-
-        float width_window = ImGui.GetWindowSize().X;
-        float width_text   = ImGui.CalcTextSize(active_set_text).X;
-
-        ImGui.SetCursorPosX((width_window - width_text) * 0.5f);
-        ImGui.Text(active_set_text);
-
-        FhApi.Gui.set_next_align("Change Set"u8, 0.5F, style.FramePadding.X * 2.0F);
-
-        if (ImGui.Button("Change Set"u8)) {
-            /* [fkelava 22/01/26 14:14]
-             * The save manager performs expensive disk I/O on many operations.
-             * It is important to only retrieve values from it once, not every frame.
-             */
-
-            _sets = FhInternal.Saves.get_sets();
-            ImGui.OpenPopup("Select Set"u8);
-        }
-
-        ImGui.SetNextWindowPos (new ((io.DisplaySize.X - width_modal) / 2, (io.DisplaySize.Y - height_modal) / 2));
-        ImGui.SetNextWindowSize(new (width_modal, height_modal));
-
-        if (ImGui.BeginPopupModal("Select Set")) {
-            foreach (string set in _sets!) {
-                bool is_selected = set == active_set;
-
-                if (ImGui.Selectable(set, is_selected)) {
-                    FhInternal.Saves.switch_active_set(set);
-                    ImGui.CloseCurrentPopup();
-                }
-
-                if (is_selected) ImGui.SetItemDefaultFocus();
-            }
-
-            ImGui.EndPopup();
-        };
-
-        ImGui.End();
-    }
-
-    private void ui_savefile(FhSaveDisplayData data) {
-        if (data.slot == 0 && _sem!.get_system_state() is FhSaveExtensionSystemState.SAVE)
-            return;
-
-        ImGuiStylePtr style       = ImGui.GetStyle();
-        Vector2       spacer_size = new(0F, style.FramePadding.Y);
-        Vector2       window_size = new(ImGui.GetContentRegionAvail().X, 0F);
-
-        int slot = data.slot;
-
-        // TODO: Change this to ItemSpacing instead of FramePadding
-        if (slot != 0) {
-            ImGui.Dummy(spacer_size);
-        }
-
-        Vector2 start = ImGui.GetCursorScreenPos();
-        bool hovered = slot == _display_index;
-        bool pressed = _pressed;
-        if (hovered) _pressed = false; // I'm not sure this is visible since it's delayed by (at least) 1 frame
-
-        bool is_highlighted = hovered && ImGui.IsWindowFocused();
-        bool is_selected    = is_highlighted && pressed;
-
-        ImGui.PushStyleColor(ImGuiCol.ChildBg, is_highlighted switch {
-            true when is_selected => ImGui.GetColorU32(ImGuiCol.FrameBgActive),
-            true                  => ImGui.GetColorU32(ImGuiCol.FrameBgHovered),
-            _                     => ImGui.GetColorU32(ImGuiCol.FrameBg)
-        });
-
-        if (ImGui.BeginChild($"###Slot{slot}", window_size, ImGuiChildFlags.AutoResizeY, FhApi.Gui.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
-            ImGui.PushStyleColor(ImGuiCol.ChildBg, ImGui.GetColorU32(ImGuiCol.TitleBg));
-            if (ImGui.BeginChild("##Title", window_size, ImGuiChildFlags.AutoResizeY, FhApi.Gui.WINDOW_FLAGS_FULLSCREEN | ImGuiWindowFlags.NoInputs)) {
-                ImGui.Indent();
-                ui_save_info_generic(data, slot);
-                ImGui.Unindent();
-            }
-
-            ImGui.EndChild();
-            ImGui.PopStyleColor();
-
-            ImGui.Indent();
-            switch (FhGlobal.game_id) {
-                case FhGameId.FFX:    ui_save_info_x   (data); break;
-                case FhGameId.FFX2:   ui_save_info_x2  (data); break;
-                case FhGameId.FFX2LM: ui_save_info_x2lm(data); break;
-            }
-            ImGui.Unindent();
-
-            ImGui.Dummy(spacer_size);
-        }
-        ImGui.EndChild();
-        ImGui.PopStyleColor();
-
-        Vector2 itemSize = ImGui.GetItemRectSize();
-        ImGui.SetCursorScreenPos(start);
-        ImGui.SetNextItemAllowOverlap();
-        pressed = ImGui.InvisibleButton($"###Slot{slot}.Button", itemSize, ImGuiButtonFlags.EnableNav | ImGuiButtonFlags.MouseButtonLeft);
-        if (pressed) {
-            _pressed = true;
-            switch (_sem!.get_system_state()) {
-                case FhSaveExtensionSystemState.SAVE: _sem!.save     (slot); break;
-                case FhSaveExtensionSystemState.LOAD: _sem!.load     (slot); break;
-                case FhSaveExtensionSystemState.ALBD: _sem!.load_albd(slot); break;
-            }
-        }
-        hovered = ImGui.IsItemHovered();
-        if (hovered) _display_index = slot;
-    }
-
-    private void ui_save_info_generic(FhSaveDisplayData data, int slot) {
-        ImGuiStylePtr style   = ImGui.GetStyle();
-        float         padding = style.FramePadding.X + style.IndentSpacing;
-
-        bool is_autosave = slot == 0 && _sem!.get_system_state() is not FhSaveExtensionSystemState.SAVE;
-
-        ImGui.Text(is_autosave ? "Autosave"u8 : data.slot_str);
-        ImGui.SameLine(is_autosave ? 100 : 60);
-        ImGui.Text(data.location);
-        ImGui.SameLine();
-        FhApi.Gui.set_next_align(data.create_time, 1.0F, style.FramePadding.X + style.IndentSpacing);
-        ImGui.Text(data.create_time);
-    }
-
-    private void ui_save_info_x(FhSaveDisplayData data) {
-        ImGui.Text(data.player_name);
-        ImGui.Text(data.play_time);
-    }
-
-    private void ui_save_info_x2(FhSaveDisplayData data) {
-        ImGuiStylePtr style   = ImGui.GetStyle();
-        float         padding = style.FramePadding.X + style.IndentSpacing;
-
-        ImGui.SameLine();
-        FhApi.Gui.set_next_align(data.completion, 1.0F, padding);
-        ImGui.Text(data.completion);
-        ImGui.Text(data.chapter);
-        ImGui.SameLine();
-        FhApi.Gui.set_next_align(data.play_time, 1.0F, padding);
-        ImGui.Text(data.play_time);
-    }
-
-    private void ui_save_info_x2lm(FhSaveDisplayData data) {
-        ImGui.Text("Yuna");
-        ImGui.Text(data.lm_job);
-        ImGui.SameLine(80);
-        ImGui.Text(data.lm_level);
     }
 }

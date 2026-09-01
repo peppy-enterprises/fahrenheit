@@ -190,7 +190,7 @@ internal sealed class FhLoader {
         _load_contexts[manifest.Id] = load_context;
 
         foreach (Type type in assembly.GetExportedTypes()) {
-            if (type.BaseType != typeof(FhModule)) continue;
+            if (!type.IsSubclassOf(typeof(FhModule))) continue;
 
             FhLoadAttribute? loader_args = type.GetCustomAttribute<FhLoadAttribute>();
 

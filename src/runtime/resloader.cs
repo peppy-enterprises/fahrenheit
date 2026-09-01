@@ -12,7 +12,7 @@ namespace Fahrenheit.Runtime;
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows6.1")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
-public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader, IFhPlatformUser {
+public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoaderImpl, IFhPlatformUser {
     private ID3D11Device* _p_device; // https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nn-d3d11-id3d11device
 
     private          FhPhyreLoaderModule? _plm;
@@ -25,7 +25,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        FhApi.Resources.loader.set_impl(this);
+        FhApi.Resources.impl_handle.set(this);
         FhModuleHandle<FhPhyreLoaderModule> plm_handle = new FhModuleHandle<FhPhyreLoaderModule>(this);
 
         return plm_handle.try_get_module(out _plm);
@@ -72,7 +72,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
         return true;
     }
 
-    bool IFhResourceLoader.load_texture_from_disk(FhTexture texture) {
+    bool IFhResourceLoaderImpl.load_texture_from_disk(FhTexture texture) {
         string file_path = texture.path;
 
         if (_p_device == null) {
@@ -111,7 +111,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
      * They have a special rule that the 'file path' parameter has to be in the game's canonical form.
      */
 
-    bool IFhResourceLoader.load_game_texture_2d(FhTexture texture) {
+    bool IFhResourceLoaderImpl.load_game_texture_2d(FhTexture texture) {
         string tex_path = texture.path;
 
         if (_p_device == null) {
@@ -187,7 +187,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
         return false;
     }
 
-    bool IFhResourceLoader.load_game_texture_3d(FhTexture texture) {
+    bool IFhResourceLoaderImpl.load_game_texture_3d(FhTexture texture) {
         string tex_path = texture.path;
 
         if (_p_device == null) {
@@ -231,7 +231,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
         return false;
     }
 
-    bool IFhResourceLoader.load_game_texture_cubemap(FhTexture texture) {
+    bool IFhResourceLoaderImpl.load_game_texture_cubemap(FhTexture texture) {
         string tex_path = texture.path;
 
         if (_p_device == null) {
@@ -291,7 +291,7 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoader,
     * to ensure resources are valid at all points during the current frame.
     */
 
-    bool IFhResourceLoader.unload_texture(FhTexture texture) {
+    bool IFhResourceLoaderImpl.unload_texture(FhTexture texture) {
         lock (_release_lock) {
             return texture.try_lock() && _release_queue.Add(texture);
         }

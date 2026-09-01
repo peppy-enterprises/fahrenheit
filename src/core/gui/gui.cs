@@ -149,6 +149,11 @@ public unsafe class FhGui {
         style.Colors[(int)ImGuiCol.ModalWindowDimBg]      = new Vector4(0.8f  , 0.8f  , 0.8f  , 0.35f );
     }
 
+    //TODO: Reorganize the helpers into multiple sections/files:
+    //      - Input
+    //      - DrawList
+    //      - High-level
+
     public readonly ImGuiWindowFlags WINDOW_FLAGS_FULLSCREEN =
             ImGuiWindowFlags.NoDecoration
           | ImGuiWindowFlags.NoMove
@@ -156,8 +161,10 @@ public unsafe class FhGui {
           | ImGuiWindowFlags.NoBringToFrontOnFocus
           | ImGuiWindowFlags.NoNavFocus;
 
-    //TODO: Add more constants for standardized style
+    /// <summary>The current display size.</summary>
+    public Vector2 display_size => ImGui.GetMainViewport().WorkSize;
 
+    //TODO: Change these keys arrays to private and add ReadOnlySpan accessors
     public readonly ImGuiKey[] keys_up = [
         ImGuiKey.W,
         ImGuiKey.UpArrow,
@@ -186,6 +193,21 @@ public unsafe class FhGui {
         ImGuiKey.GamepadLStickRight,
     ];
 
+    public readonly ImGuiKey[] keys_confirm = [
+        ImGuiKey.Enter,
+        FhGlobal.lang_id == FhLangId.Japanese
+            ? ImGuiKey.GamepadFaceRight
+            : ImGuiKey.GamepadFaceDown,
+    ];
+
+    public readonly ImGuiKey[] keys_cancel = [
+        ImGuiKey.Escape,
+        ImGuiKey.Backspace,
+        FhGlobal.lang_id == FhLangId.Japanese
+            ? ImGuiKey.GamepadFaceDown
+            : ImGuiKey.GamepadFaceRight,
+    ];
+
     /// <summary>
     /// Initialize values that require ImGui to be running. Called by Runtime.
     /// </summary>
@@ -195,11 +217,12 @@ public unsafe class FhGui {
     }
 
     /// <summary>Check whether any of the specified keys were pressed.</summary>
-    /// <param name="keys">Set of keys to be pressed.</param>
+    /// <param name="keys">Set of keys to be checked.</param>
+    /// <param name="repeat">Whether the method should repeatedly return <c>true</c> for held inputs.</param>
     /// <returns>Whether any of the keys were pressed.</returns>
-    public bool is_any_pressed(IEnumerable<ImGuiKey> keys) {
+    public bool is_any_pressed(IEnumerable<ImGuiKey> keys, bool repeat = false) {
         foreach (ImGuiKey key in keys) {
-            if (ImGui.IsKeyPressed(key)) {
+            if (ImGui.IsKeyPressed(key, repeat)) {
                 return true;
             }
         }
@@ -207,14 +230,47 @@ public unsafe class FhGui {
         return false;
     }
 
-    public void set_next_align(ReadOnlySpan<byte> label, float t, float padding = 0F) {
-        float size      = ImGui.CalcTextSize(label).X + padding;
-        float available = ImGui.GetContentRegionAvail().X;
-        float offset    = (available - size) * t;
-
-        if (offset > 0) {
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offset);
+    /// <summary>Check whether any of the specified keys were held down.</summary>
+    /// <param name="keys">Set of keys to be checked.</param>
+    /// <returns>Whether any of the keys were held down.</returns>
+    public bool is_any_down(IEnumerable<ImGuiKey> keys) {
+        foreach (ImGuiKey key in keys) {
+            if (ImGui.IsKeyDown(key)) {
+                return true;
+            }
         }
+
+        return false;
+    }
+
+    /// <summary>Check whether any of the specified keys were released.</summary>
+    /// <param name="keys">Set of keys to be checked.</param>
+    /// <returns>Whether any of the keys were released.</returns>
+    public bool is_any_released(IEnumerable<ImGuiKey> keys) {
+        foreach (ImGuiKey key in keys) {
+            if (ImGui.IsKeyReleased(key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>Detect whether the mouse cursor is hovering over a specified rectangle.</summary>
+    /// <param name="rect">The rect describing an area of the game window to detect the mouse cursor over.</param>
+    /// <returns>Whether the mouse cursor is hovering the specified rectangle.</returns>
+    public bool mouse_hovering(Rect rect) {
+        return ImGui.IsMouseHoveringRect(rect.pos, rect.pos + rect.size, false);
+    }
+
+    /// <summary>Detect whether the user clicked on a specified rectangle.</summary>
+    /// <param name="rect">The rect describing an area of the game window to detect mouse clicks on.</param>
+    /// <param name="button">The button of the mouse to detect clicks of.</param>
+    /// <param name="repeat">Whether the method should repeatedly return <c>true</c> for held inputs.</param>
+    /// <returns>Whether the user clicked with the button on the specified rectangle.</returns>
+    public bool mouse_clicked(Rect rect, ImGuiMouseButton button = ImGuiMouseButton.Left, bool repeat = false) {
+        return ImGui.IsMouseHoveringRect(rect.pos, rect.pos + rect.size, false)
+            && ImGui.IsMouseClicked(button, repeat);
     }
 
     /// <summary>
@@ -235,6 +291,47 @@ public unsafe class FhGui {
         bool        draw_shadow = true,
         Alignment2D align       = default,
         uint        color       = 0xFFFFFFFF
+    ) {
+        Vector2 position = ImGui.GetContentRegionAvail();
+
+        position.X = align.h switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => position.X / 2f,
+            Alignment.END    => position.X,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position.Y = align.v switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => position.Y / 2f,
+            Alignment.END    => position.Y,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position += ImGui.GetCursorPos();
+
+        // Instead of repeating the text alignment logic here using ImGui.SetCursorPos,
+        // we call through to the draw list variant with the window's draw list.
+        draw_text(
+            ImGui.GetWindowDrawList(),
+            position,
+            text,
+            font_size,
+            draw_shadow,
+            align,
+            color
+        );
+    }
+
+    /// <inheritdoc cref="draw_text(string, float, bool, Alignment2D, uint)"/>
+    public void draw_text(
+        ReadOnlySpan<byte> text,
+        float              font_size,
+        bool               draw_shadow = true,
+        Alignment2D        align       = default,
+        uint               color       = 0xFFFFFFFF
     ) {
         Vector2 position = ImGui.GetContentRegionAvail();
 
@@ -300,6 +397,50 @@ public unsafe class FhGui {
         bool          draw_shadow = false,
         Alignment2D   align       = default,
         uint          color       = 0xFFFFFFFF
+    ) {
+        ImGui.PushFont(null, font_size);
+
+        Vector2 text_size = ImGui.CalcTextSize(text);
+
+        position.X -= align.h switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => text_size.X / 2f,
+            Alignment.END    => text_size.X,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        position.Y -= align.v switch {
+            Alignment.BEGIN  => 0f,
+            Alignment.CENTER => text_size.Y / 2f,
+            Alignment.END    => text_size.Y,
+
+            _ => throw new NotImplementedException(),
+        };
+
+        if (draw_shadow) {
+            // Use the alpha from the provided color
+            uint shadow_color = 0 | (color & 0xFF000000);
+
+            draw_list.AddText(position + new Vector2(2f), shadow_color, text);
+        }
+
+        draw_list.AddText(position, color, text);
+
+        ImGui.PopFont();
+
+        return text_size;
+    }
+
+    /// <inheritdoc cref="draw_text(ImDrawListPtr, Vector2, string, float, bool, Alignment2D, uint)"/>
+    public Vector2 draw_text(
+        ImDrawListPtr      draw_list,
+        Vector2            position,
+        ReadOnlySpan<byte> text,
+        float              font_size,
+        bool               draw_shadow = false,
+        Alignment2D        align       = default,
+        uint               color       = 0xFFFFFFFF
     ) {
         ImGui.PushFont(null, font_size);
 

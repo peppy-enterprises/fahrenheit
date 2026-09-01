@@ -79,19 +79,18 @@ public unsafe struct FhSaveDataManager2 {
     public int                    operation_canceled;
 }
 
-
-[InlineArray(0x20)]
-internal struct FhSavePlayerName {
-    private byte _b;
-}
-
 /// <summary>
 ///     The save game header for FF X.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveHeader {
+public struct FhSaveHeader {
+    [InlineArray(0x20)]
+    public struct FhSavePlayerName {
+        private byte _b;
+    }
+
     [InlineArray(0x7)]
-    internal struct Formation {
+    public struct Formation {
         private byte _e0;
     }
 
@@ -114,36 +113,35 @@ internal struct FhSaveHeader {
 ///     The save game header for FF X-2.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveHeader2 {
+public struct FhSaveHeader2 {
+    [InlineArray(0x3)]
+    public struct Party {
+        private byte _e0;
+    }
+
     public uint     _0x00;
     public byte     _0x04;
-    public byte     id_chr1;
-    public byte     id_chr2;
-    public byte     id_chr3;
-    public byte     level_chr1;
-    public byte     level_chr2;
-    public byte     level_chr3;
+    public Party    ply;
+    public Party    ply_levels;
     public byte     chapter;
     public byte     completion;
-    public byte     id_chr1_dress;
-    public byte     id_chr2_dress;
-    public byte     id_chr3_dress;
+    public Party    ply_jobs;
     public uint     playtime_secs;
     public uint     gil;
-    public ushort   _0x18;
+    public ushort   id_location;
     public ushort   _0x1A;
     public uint     _0x1C;
     public byte     times_played;
-    public byte     id_chr_lm;
-    public byte     level_chr_lm;
-    public byte     id_job_lm;
-    public byte     level_job_lm;
-    public byte     _0x25;
-    public byte     retry_lm;
+    public byte     lm_ply;
+    public byte     lm_ply_level;
+    public byte     lm_job;
+    public byte     lm_job_level;
+    public byte     lm_id_location;
+    public byte     lm_retry;
     public byte     _0x27;
     public FhLangId lang_id;
     public byte     _0x29;
-    public ushort   id_location;
+    public ushort   id_map_icon;
     public byte     _0x2C;
 
     public bool is_new_game_plus => times_played > 1;
@@ -153,7 +151,7 @@ internal struct FhSaveHeader2 {
 ///     Contains the fields the game shows as part of its standard save game display.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal struct FhSaveDisplayData {
+public struct FhSaveDisplayData {
 
     /* [fkelava 19/01/26 13:14]
      * An array of these of size DEFAULT_SET_SIZE is allocated by the save UI module on boot.
@@ -164,11 +162,12 @@ internal struct FhSaveDisplayData {
      * and ImGui accept them as input. The sizes are taken from the base game.
      */
 
-    internal int slot;
+    public int    slot;
+    public string slot_str;
+
+    public DateTimeOffset create_time;
 
     public InlineArray64 <byte> header;
-    public InlineArray16 <byte> slot_str;
-    public InlineArray64 <byte> create_time;
     public InlineArray128<byte> location;
     public InlineArray128<byte> play_time;
     public InlineArray32 <byte> player_name;
@@ -189,7 +188,7 @@ internal struct FhSaveDisplayData {
 /// <summary>
 ///     Abstracts the game's save data system.
 /// </summary>
-internal static unsafe class FhSavePal {
+internal unsafe static class FhSavePal {
 
     /* [fkelava 01/01/26 15:04]
      * TODO:
