@@ -1419,7 +1419,19 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             header_size + margin_from_header + line_height / 2f
         );
 
-        if (FhGlobal.lang_id == FhLangId.Chinese || FhGlobal.lang_id == FhLangId.Korean) info_text_pos_l.X -= ck_offset;
+        // We slighty reduce the text margin and hardcode the "STORY COMPLETED" string to shorten it and prevent overlap
+        bool cjk = FhGlobal.lang_id == FhLangId.Chinese
+                || FhGlobal.lang_id == FhLangId.Japanese
+                || FhGlobal.lang_id == FhLangId.Korean;
+        
+        string completion;
+        if (cjk) {
+            info_text_pos_l.X -= ck_offset;
+            completion = $"STORY COMPLETED: {header2.completion}%";
+        }
+        else {
+            completion = Encoding.UTF8.GetString(save.completion);
+        }
 
         FhApi.Gui.draw_text(
             draw,
@@ -1432,8 +1444,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         FhApi.Gui.draw_text(
             draw,
-            new Vector2(info_text_pos_r.X + 1f, info_text_pos_r.Y) * aspect_scale + aspect_helper.pos,
-            save.completion,
+            new Vector2(info_text_pos_r.X + 2f, info_text_pos_r.Y) * aspect_scale + aspect_helper.pos,
+            completion,
             font_size,
             true,
             new(Alignment.END, Alignment.CENTER)
