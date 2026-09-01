@@ -476,6 +476,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             size = new(1226f, 1218f),
         }.scale_to_aspect(aspect_helper).as_uv();
 
+        // Draws a scissor over the screen to prevent the mahojin glyph drawing out of bounds
         draw.PushClipRect(screen_uv.p0, screen_uv.p1, false);
 
         // Background glyph
@@ -1686,7 +1687,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         Vector2 text_pos = save_rect.top_left + new Vector2(
             17f,
-            header_height + (save_rect.size.Y - header_height) / 2f - 1f
+            header_height + (save_rect.size.Y - header_height) / 2f + 3f
         );
 
         float font_size = 38f * font_scale;
