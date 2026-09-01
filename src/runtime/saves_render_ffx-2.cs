@@ -339,16 +339,22 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             FhSaveHeader2 header2 = MemoryMarshal.Read<FhSaveHeader2>(save.header);
 
             for (int i = 0; i < 3; i++) {
-                bool is_ffx2 = FhGlobal.game_id is FhGameId.FFX2;
+                bool is_lm = FhGlobal.game_id is FhGameId.FFX2LM;
 
-                byte ply_id = is_ffx2 ? header2.ply[i]      : header2.lm_ply;
-                byte job_id = is_ffx2 ? header2.ply_jobs[i] : header2.lm_job;
+                byte ply_id = is_lm ? header2.lm_ply : header2.ply[i];
+                byte job_id = is_lm ? header2.lm_job : header2.ply_jobs[i];
 
-                if (job_id < 0x01 || job_id > 0x21) continue;
+                if (job_id < 0x01 || job_id > 0x21) {
+                    if (is_lm) break;
+                    else continue;
+                }
 
                 string face = remap_job(ply_id, job_id);
 
-                if (_face_icon_textures.TryGetValue(face, out _)) continue;
+                if (_face_icon_textures.TryGetValue(face, out _)) {
+                    if (is_lm) break;
+                    else continue;
+                }
 
                 FhTexture face_icon = new(Path.Join(MENU_FACE_DATA_DIR, face), FhTextureType.PHYRE);
 
@@ -356,6 +362,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
                     face,
                     face_icon
                 );
+
+                if (is_lm) break;
             }
         }
     }
@@ -493,8 +501,8 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         float mid_x = (screen_uv.p0.X + screen_uv.p1.X) * 0.5f;
 
-        UV left_half  = new(screen_uv.p0, new(mid_x, screen_uv.p1.Y));
-        UV right_half = new(new(mid_x, screen_uv.p0.Y), screen_uv.p1);
+        UV left_half  = new(screen_uv.p0, screen_uv.p1 with { X = mid_x });
+        UV right_half = new(screen_uv.p0 with { X = mid_x }, screen_uv.p1);
 
         draw.AddRectFilledMultiColor(
             left_half.p0,
@@ -856,10 +864,6 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         }
 
         // Input handling
-
-        // Prevent accidentally capturing input when the user is focused on an actual ImGui window
-        if (ImGui.GetIO().WantCaptureMouse) return;
-
         if (mouse_clicked(bg_screen)) {
             change_mode(UiMode.SET_SWAP);
         }
@@ -1417,11 +1421,12 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             header_size + margin_from_header + line_height / 2f
         );
 
-        // We slighty reduce the text margin and hardcode the "STORY COMPLETED" string to shorten it and prevent overlap
+        // When running in CJK, we slightly reduce the text margin and hardcode
+        // the "STORY COMPLETED" string to shorten it and prevent overlap.
         bool cjk = FhGlobal.lang_id == FhLangId.Chinese
                 || FhGlobal.lang_id == FhLangId.Japanese
                 || FhGlobal.lang_id == FhLangId.Korean;
-        
+
         string completion;
         if (cjk) {
             info_text_pos_l.X -= ck_offset;
