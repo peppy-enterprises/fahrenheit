@@ -39,7 +39,7 @@ public sealed class FhSaveUiModule : FhModule {
 
     private string get_default_renderer_id() {
         return FhGlobal.game_id switch {
-            FhGameId.FFX    => _render_x!.ModuleType,
+            FhGameId.FFX    => _render_x! .ModuleType,
             FhGameId.FFX2   or
             FhGameId.FFX2LM => _render_x2!.ModuleType,
 
