@@ -21,6 +21,7 @@ global using System.Text.Json.Serialization;
 global using System.Threading;                 // Lock
 
 global using Fahrenheit.Events;
+global using Fahrenheit.Gui;
 
 global using Hexa.NET.ImGui;
 

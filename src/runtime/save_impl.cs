@@ -18,25 +18,20 @@ namespace Fahrenheit.Runtime;
  * tightly bound, this effectively meant I had to re-implement the entire save system.
  */
 
-internal enum FhSaveExtensionSystemState {
-    NULL = 0,
-    LOAD = 1,
-    SAVE = 2,
-    ALBD = 3 // FFX only; Al Bhed Compilation Sphere mode
-}
-
 /// <summary>
 ///     Implements Fahrenheit's extended save system.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public unsafe sealed class FhSaveExtensionModule : FhModule {
+public unsafe sealed class FhSaveExtensionModule : FhModule, IFhSaveSystemImpl {
 
-    private int                        _load_pending_slot;
-    private FhSaveExtensionSystemState _state;
+    private int              _load_pending_slot;
+    private FhSaveSystemMode _mode;
 
     public FhSaveExtensionModule() { }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
+        FhApi.Saves.impl_handle.set(this);
+
         bool is_ffx = FhGlobal.game_id is FhGameId.FFX;
 
         return FhCall.SaveDataManager_debugSave_Internal_6F0650.hook(this, impl_autosave)
@@ -45,8 +40,6 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
             && FhCall.SaveDataToLoad                           .hook(this, signal_enter_load)
             && (!is_ffx || FFX.FhCall.FUN_2EFFF0.hook(this, signal_enter_albd));
     }
-
-    internal FhSaveExtensionSystemState get_system_state() => _state;
 
     /* [fkelava 27/11/25 02:15]
      * These five functions are the transition points to and from the save system UI.
@@ -65,9 +58,11 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_save() {
-        FhInternal.Saves.index_active_set();
-        _state = FhSaveExtensionSystemState.SAVE;
+        FhApi.Saves.index_active_set();
+        _mode = FhSaveSystemMode.SAVE;
         FhSavePal.pal_set_system_state(FhSaveSystemState.SAVE);
+
+        FhApi.Events.Common.GameLoop.PostOpenSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -75,9 +70,11 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl) ] )]
     private void signal_enter_load() {
-        FhInternal.Saves.index_active_set();
-        _state = FhSaveExtensionSystemState.LOAD;
+        FhApi.Saves.index_active_set();
+        _mode = FhSaveSystemMode.LOAD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
+
+        FhApi.Events.Common.GameLoop.PostOpenSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -86,9 +83,11 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     [UnmanagedCallConv(CallConvs = [ typeof(CallConvCdecl ) ] )]
     private void signal_enter_albd() {
-        FhInternal.Saves.index_active_set();
-        _state = FhSaveExtensionSystemState.ALBD;
+        FhApi.Saves.index_active_set();
+        _mode = FhSaveSystemMode.ALBD;
         FhSavePal.pal_set_system_state(FhSaveSystemState.LOAD);
+
+        FhApi.Events.Common.GameLoop.PostOpenSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -96,10 +95,12 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     internal void signal_exit_abort() {
         FhSavePal.pal_set_cancel_state(1);
-        FhCall.SaveDataSaveLoadSucceed.fnptr!(_state is FhSaveExtensionSystemState.SAVE
+        FhCall.SaveDataSaveLoadSucceed.fnptr!(_mode is FhSaveSystemMode.SAVE
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
+
+        FhApi.Events.Common.GameLoop.PostCloseSaveMenu.invoke(EventArgs.Empty);
     }
 
     /// <summary>
@@ -107,10 +108,12 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
     /// </summary>
     internal void signal_exit_success() {
         FhSavePal.pal_set_cancel_state(0);
-        FhCall.SaveDataSaveLoadSucceed.fnptr!(_state is FhSaveExtensionSystemState.SAVE
+        FhCall.SaveDataSaveLoadSucceed.fnptr!(_mode is FhSaveSystemMode.SAVE
             ? FhSaveSystemState.SAVE
             : FhSaveSystemState.LOAD);
         FhSavePal.pal_set_dialog_state(FhSaveDialogState.CLOSED);
+
+        FhApi.Events.Common.GameLoop.PostCloseSaveMenu.invoke(EventArgs.Empty);
     }
 
     /* [fkelava 16/01/26 14:29]
@@ -151,7 +154,7 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         FhCall.SaveDataWriteCrc       .fnptr!(ptr);
         FhCall._SetUpDefaultSaveFolder.fnptr!();
 
-        string             save_path = FhInternal.Saves.get_save_path_for_slot(0);
+        string             save_path = FhApi.Saves.get_save_path_for_slot(0);
         ReadOnlySpan<byte> save      = new(ptr, size);
 
         using (FileStream save_stream = File.OpenWrite(save_path)) {
@@ -169,13 +172,14 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
      * just kicking the ball down the curb to mod authors, who can do nothing in such cases.
      */
 
-    /// <summary>
-    ///     Creates a save file in the slot corresponding to the
-    ///     selected <paramref name="index"/> in the save/load menu.
-    /// </summary>
-    internal void save(int index) {
-        int    slot      = FhInternal.Saves.get_slot_save(index);
-        string save_path = FhInternal.Saves.get_save_path_for_slot(slot);
+    FhSaveSystemMode IFhSaveSystemImpl.get_system_mode() {
+        return _mode;
+    }
+
+    /// <inheritdoc cref="IFhSaveSystemImpl.save"/>
+    void IFhSaveSystemImpl.save(int slot) {
+               slot      = FhApi.Saves.remap_slot(slot);
+        string save_path = FhApi.Saves.get_save_path_for_slot(slot);
 
         ReadOnlySpan<byte> save = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
         FhCall.SaveDataWriteCrc.fnptr!(FhSavePal.pal_addr_buf_save());
@@ -190,11 +194,9 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         signal_exit_success();
     }
 
-    /// <summary>
-    ///     Loads the save file in the given <paramref name="slot"/>.
-    /// </summary>
-    internal void load(int slot) {
-        string     save_name = FhInternal.Saves.get_save_path_for_slot(slot);
+    /// <inheritdoc cref="IFhSaveSystemImpl.load"/>
+    void IFhSaveSystemImpl.load(int slot) {
+        string     save_name = FhApi.Saves.get_save_path_for_slot(slot);
         Span<byte> save      = new(FhSavePal.pal_addr_buf_save(), FhSavePal.pal_sz_buf_save());
 
         // TODO: add popups on success/failure
@@ -219,12 +221,9 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         signal_exit_success(); // TODO: popup if success
     }
 
-    /// <summary>
-    ///     Performs an Al Bhed Compilation Sphere load
-    ///     from the save in the given <paramref name="slot"/>.
-    /// </summary>
-    internal void load_albd(int slot) {
-        string save_name = FhInternal.Saves.get_save_path_for_slot(slot);
+    /// <inheritdoc cref="IFhSaveSystemImpl.copy_albd"/>
+    void IFhSaveSystemImpl.copy_albd(int slot) {
+        string save_name = FhApi.Saves.get_save_path_for_slot(slot);
 
         //Span<byte> save = new(
         //    FhUtil.ptr_at<byte>(pal_addr_buf_save()),
@@ -235,6 +234,16 @@ public unsafe sealed class FhSaveExtensionModule : FhModule {
         //    save_stream.ReadExactly(save);
         //}
 
+        signal_exit_success();
+    }
+
+    /// <inheritdoc cref="IFhSaveSystemImpl.exit_cancel"/>
+    void IFhSaveSystemImpl.exit_cancel() {
+        signal_exit_abort();
+    }
+
+    /// <inheritdoc cref="IFhSaveSystemImpl.exit_success"/>
+    void IFhSaveSystemImpl.exit_success() {
         signal_exit_success();
     }
 }

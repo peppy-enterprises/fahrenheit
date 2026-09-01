@@ -78,19 +78,29 @@ public class Scrollable {
     ///     How far through the scrollable, in percent,
     ///     the new visible range of indices should be.
     /// </param>
+    /// <param name="preserve_hover">
+    ///     Whether the hovered index should be preserved
+    ///     relative to the visible range of indices.
+    /// </param>
     /// <remarks>
     ///     The new progress value will be safely clamped to between 0 and 1.
     ///     This will safely move the hovered value to fit within the new range of visible indices.
     /// </remarks>
-    public void set_progress(float value) {
+    public void set_progress(float value, bool preserve_hover = false) {
         value = float.Clamp(value, 0f, 1f);
 
         int old_current = current;
+        int hover_diff  = hovered - current;
 
         current = (int)float.Round(value * int.Max(0, max - visible));
         current = int.Clamp(current, 0, int.Max(0, max - visible));
 
-        if (!is_within_clip(hovered)) {
+        if (preserve_hover) {
+            hovered = current + hover_diff;
+            hovered = int.Clamp(hovered, 0, int.Max(0, max - 1));
+        }
+        else {
+            // Clip the hovered index to the range of visible indices so it never goes off-screen
             if (int.Sign(current - old_current) > 0) {
                 hovered = get_clip_start();
             }
@@ -147,6 +157,46 @@ public class Scrollable {
         }
     }
 
+    /// <summary>Scroll to the previous set of visible indices.</summary>
+    /// <param name="just_pressed">Whether the page up button was just pressed.</param>
+    /// <remarks>
+    ///     If it is no longer visible, this will also set the hovered index
+    ///     to the start of the visible range for improved UX.
+    /// </remarks>
+    public void scroll_page_up(bool just_pressed) {
+        if (just_pressed && (current == 0 || max <= visible)) {
+            hovered = 0;
+            return;
+        }
+
+        current -= visible;
+        current = int.Clamp(current, 0, int.Max(0, max - visible));
+
+        if (!is_within_clip(hovered)) {
+            hovered = get_clip_start();
+        }
+    }
+
+    /// <summary>Scroll to the next set of visible indices.</summary>
+    /// <param name="just_pressed">Whether the page down button was just pressed.</param>
+    /// <remarks>
+    ///     If it is no longer visible, this will also set the hovered index
+    ///     to the end of the visible range for improved UX.
+    /// </remarks>
+    public void scroll_page_down(bool just_pressed) {
+        if (just_pressed && (current == max - visible || max <= visible)) {
+            hovered = max - 1;
+            return;
+        }
+
+        current += visible;
+        current = int.Clamp(current, 0, int.Max(0, max - visible));
+
+        if (!is_within_clip(hovered)) {
+            hovered = get_clip_end() - 1;
+        }
+    }
+
     /// <summary>Scroll to the beginning of the scrollable.</summary>
     /// <remarks>
     ///     This will also set the hovered index to the beginning
@@ -162,7 +212,7 @@ public class Scrollable {
     ///     of the scrollable for improved UX.
     /// </remarks>
     public void scroll_end() {
-        current = max - visible;
+        current = max <= visible ? 0 : max - visible;
         hovered = max - 1;
     }
 
@@ -170,34 +220,39 @@ public class Scrollable {
     /// <remarks>This method should be called at most once per ImGui frame whenever desired.</remarks>
     public void handle_input() {
         // Various scrolling methods
-        bool hover_up   = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up);
-        bool hover_down = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down);
+        bool hover_up   = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_up  , true);
+        bool hover_down = FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down, true);
 
         float mouse_wheel = ImGui.GetIO().MouseWheel;
 
-        bool scroll_page_up =
-            ImGui.IsKeyPressed(ImGuiKey.PageUp)
-         || FhApi.Gui.is_any_pressed(FhApi.Gui.keys_left);
+        ImGuiKey[] pg_up_keys = [
+            ImGuiKey.PageUp,
+            ImGuiKey.GamepadL1,
+            .. FhApi.Gui.keys_left,
+        ];
 
-        bool scroll_page_down =
-            ImGui.IsKeyPressed(ImGuiKey.PageDown)
-         || FhApi.Gui.is_any_pressed(FhApi.Gui.keys_right);
+        ImGuiKey[] pg_dn_keys = [
+            ImGuiKey.PageDown,
+            ImGuiKey.GamepadR1,
+            .. FhApi.Gui.keys_right,
+        ];
 
-        bool scroll_to_start =
-            ImGui.IsKeyPressed(ImGuiKey.Home)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadL2);
+        bool scroll_pg_up = FhApi.Gui.is_any_pressed(pg_up_keys);
+        bool scroll_pg_dn = FhApi.Gui.is_any_pressed(pg_dn_keys);
 
-        bool scroll_to_end =
-            ImGui.IsKeyPressed(ImGuiKey.End)
-         || ImGui.IsKeyPressed(ImGuiKey.GamepadR2);
+        bool scroll_pg_up_held = FhApi.Gui.is_any_pressed(pg_up_keys, true);
+        bool scroll_pg_dn_held = FhApi.Gui.is_any_pressed(pg_dn_keys, true);
+
+        bool scroll_to_start = FhApi.Gui.is_any_pressed([ ImGuiKey.Home, ImGuiKey.GamepadL2 ]);
+        bool scroll_to_end   = FhApi.Gui.is_any_pressed([ ImGuiKey.End , ImGuiKey.GamepadR2 ]);
 
         ImGui.GetIO().WantCaptureKeyboard |=
-            hover_up
-         || hover_down
-         || scroll_page_up
-         || scroll_page_down
-         || scroll_to_start
-         || scroll_to_end;
+             hover_up
+         ||  hover_down
+         || (scroll_pg_up || scroll_pg_up_held)
+         || (scroll_pg_dn || scroll_pg_dn_held)
+         ||  scroll_to_start
+         ||  scroll_to_end;
 
         if (hover_up) {
             move_hover(-1);
@@ -215,22 +270,12 @@ public class Scrollable {
             scroll(1);
         }
 
-        if (scroll_page_up) {
-            if (current == 0) {
-                hovered = 0;
-            }
-            else {
-                scroll(-visible);
-            }
+        if (scroll_pg_up || scroll_pg_up_held) {
+            scroll_page_up(scroll_pg_up);
         }
 
-        if (scroll_page_down) {
-            if (current == max - visible) {
-                hovered = max - 1;
-            }
-            else {
-                scroll(visible);
-            }
+        if (scroll_pg_dn || scroll_pg_dn_held) {
+            scroll_page_down(scroll_pg_dn);
         }
 
         if (scroll_to_start) {
