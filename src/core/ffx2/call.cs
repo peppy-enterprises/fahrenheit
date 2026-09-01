@@ -105,7 +105,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x20C650) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate sbyte d_MsGetSaveDreSphere(uint ds_id);
+    public delegate int d_MsGetSaveDreSphere(uint ds_id);
     public static FhMethodHandle<d_MsGetSaveDreSphere> MsGetSaveDreSphere
         => new( new FhMethodLocation("FFX-2.exe", 0x20C710) );
 
@@ -181,7 +181,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x217140) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate sbyte d_MsCalcFirstAttack();
+    public delegate int d_MsCalcFirstAttack();
     public static FhMethodHandle<d_MsCalcFirstAttack> MsCalcFirstAttack 
         => new( new FhMethodLocation("FFX-2.exe", 0x218B80) ) ;
 
@@ -216,7 +216,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x21E290) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate ushort d_MsCheckStatCount(int arg1);
+    public delegate uint d_MsCheckStatCount(uint arg1);
     public static FhMethodHandle<d_MsCheckStatCount> MsCheckStatCount 
         => new( new FhMethodLocation("FFX-2.exe", 0x2218E0) );
 
@@ -236,7 +236,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x225BF0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsGetRamConfigChangeEffect();
+    public delegate int d_MsGetRamConfigChangeEffect();
     public static FhMethodHandle<d_MsGetRamConfigChangeEffect> MsGetRamConfigChangeEffect
         => new( new FhMethodLocation("FFX-2.exe", 0x225C90) );
 
@@ -246,7 +246,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x2275C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_MsSetRamMotionChrData(int chr_id, uint job_id);
+    public delegate void d_MsSetRamMotionChrData(uint chr_id, uint job_id);
     public static FhMethodHandle<d_MsSetRamMotionChrData> MsSetRamMotionChrData
         => new( new FhMethodLocation("FFX-2.exe", 0x227A20) );
 
@@ -301,7 +301,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x2343D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsChrAtbInit(Chr* chr, int arg2, int arg3);
+    public delegate int d_MsChrAtbInit(Chr* chr, int arg2, int arg3);
     public static FhMethodHandle<d_MsChrAtbInit> MsChrAtbInit 
         => new( new FhMethodLocation("FFX-2.exe", 0x234730) );
 
@@ -336,12 +336,12 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x235790) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsCheckDanceStatus(byte chr_id);
+    public delegate uint d_MsCheckDanceStatus(uint chr_id);
     public static FhMethodHandle<d_MsCheckDanceStatus> MsCheckDanceStatus 
         => new( new FhMethodLocation("FFX-2.exe", 0x236360) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsClearDanceStatusMotion(byte chr_id);
+    public delegate uint d_MsClearDanceStatusMotion(uint chr_id);
     public static FhMethodHandle<d_MsClearDanceStatusMotion> MsClearDanceStatusMotion 
         => new( new FhMethodLocation("FFX-2.exe", 0x236400) );
 
