@@ -69,6 +69,67 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_AtelPopMember> AtelPopMember =>
         new( new FhMethodLocation(0x46DD40, 0x3287E0) );
   
+    public unsafe delegate void d_AtelJumpGameOver();
+    public static FhMethodHandle<d_AtelJumpGameOver> AtelJumpGameOver 
+        => new( new FhMethodLocation(0x46D9A0, 0x3283A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate uint d_MsBattleCheck();
+    public static FhMethodHandle<d_MsBattleCheck> MsBattleCheck
+        => new( new FhMethodLocation(0x380D60, 0x207260) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicDestroyFmv();
+    public static FhMethodHandle<d_graphicDestroyFmv> graphicDestroyFmv
+        => new( new FhMethodLocation(0x23E0E0, 0x04D170) );
+
+    // RT - File cross-loader
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate PCluster* d_ClusterManager_getPClusterByName(uint ptr_this, byte* ptr_name);
+    internal static FhMethodHandle<d_ClusterManager_getPClusterByName> ClusterManager_getPClusterByName => 
+        new( new FhMethodLocation(0x29B5F0, 0x09E2E0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate BigFileStream* d_BigFileStream_get();
+    internal static FhMethodHandle<d_BigFileStream_get> BigFileStream_get => 
+        new( new FhMethodLocation(0x21BF70, 0x542A40) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate void d_BigFileStream_ctor(BigFileStream* ptr_this);
+    internal static FhMethodHandle<d_BigFileStream_ctor> BigFileStream_ctor =>
+        new( new FhMethodLocation(0x21BF90, 0x542A60) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate void d_BigFileStream_setStreamPrefix(BigFileStream* ptr_this, byte* ptr_stream_prefix);
+    internal static FhMethodHandle<d_BigFileStream_setStreamPrefix> BigFileStream_setStreamPrefix => 
+        new( new FhMethodLocation(0x21C560, 0x543030) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate int d_BigFileStream_registerBigFile(BigFileStream* ptr_this, byte* ptr_vbf_name);
+    internal static FhMethodHandle<d_BigFileStream_registerBigFile> BigFileStream_registerBigFile =>
+        new( new FhMethodLocation(0x21C310, 0x542DE0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate byte* d_Phyre_PSerialization_PStreamFile_GetStreamPrefix();
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_GetStreamPrefix> Phyre_PSerialization_PStreamFile_GetStreamPrefix => 
+        new( new FhMethodLocation(0x207EF0, 0x490FB0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_Phyre_PSerialization_PStreamFile_SetStreamPrefix(byte* ptr_stream_prefix);
+    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFile_SetStreamPrefix> Phyre_PSerialization_PStreamFile_SetStreamPrefix => 
+        new( new FhMethodLocation(0x207F00, 0x491090) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    internal unsafe delegate VFile* d_BigFileStream_openFile(BigFileStream* ptr_this, byte* ptr_file_name);
+    internal static FhMethodHandle<d_BigFileStream_openFile> BigFileStream_openFile => 
+        new( new FhMethodLocation(0x21C0D0, 0x542BA0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal unsafe delegate void d_fiosUnifyFilename(byte* src, byte* dest, int size);
+    internal static FhMethodHandle<d_fiosUnifyFilename> fiosUnifyFilename => 
+        new( new FhMethodLocation(0x2799D0, 0x094E90) );
+
     // RT - Allocator fix
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -229,7 +290,7 @@ public static unsafe partial class FhCall {
     // RT - Phyre loader
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate PCluster* d_ClusterManager_loadPCluster(nint ptr_this, byte* ptr_file_name);
+    internal delegate PCluster* d_ClusterManager_loadPCluster(uint ptr_this, byte* ptr_file_name);
     internal static FhMethodHandle<d_ClusterManager_loadPCluster> ClusterManager_loadPCluster
         => new( new FhMethodLocation(0x29BA80, 0x9E880) );
 
@@ -239,7 +300,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(0x223740, 0x6B3020) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate void d_ClusterManager_releasePCluster(nint ptr_this, PCluster* ptr_cluster);
+    internal delegate void d_ClusterManager_releasePCluster(uint ptr_this, PCluster* ptr_cluster);
     internal static FhMethodHandle<d_ClusterManager_releasePCluster> ClusterManager_releasePCluster
         => new( new FhMethodLocation(0x29BEF0, 0x9ED00) );
 

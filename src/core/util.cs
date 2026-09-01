@@ -10,14 +10,14 @@ public unsafe static class FhUtil {
     /// <summary>
     ///     Selects between <typeparamref name="T"/>s based on the currently executing game.
     ///     <para/>
-    ///     If no game is executing, returns <paramref name="defval"/> if non-null, else throws.
+    ///     If no game is executing, throws.
     /// </summary>
-    internal static T select<T>(T ffx, T ffx2, T ffx2lm, T? defval = default) {
+    internal static T select<T>(T ffx, T ffx2, T ffx2lm) {
         return FhGlobal.game_id switch {
             FhGameId.FFX    => ffx,
             FhGameId.FFX2   => ffx2,
             FhGameId.FFX2LM => ffx2lm,
-            _               => defval ?? throw new NotImplementedException($"no game detectable and no fallback value in select({ffx},{ffx2},{ffx2lm})"),
+            _               => throw new Exception("Attempted to `select` without a game running."),
         };
     }
 
@@ -215,6 +215,10 @@ public unsafe static class FhUtil {
             X = vec.X * 512 / 1920,
             Y = vec.Y * 416 / 1080,
         };
+    }
+
+    public static Vector2 inverse(this Vector2 vec) {
+        return new Vector2(1f) / vec;
     }
 
     public static uint as_rgba(this Vector4 vec) {

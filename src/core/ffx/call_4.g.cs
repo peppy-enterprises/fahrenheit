@@ -29516,13 +29516,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00780d40> FUN_00780d40 => new( new FhMethodLocation("FFX.exe", 0x380D40) );
 
     // Original after pruning:
-    // unknown undefined MsBattleCheck() at 00780d60
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_MsBattleCheck();
-    public static FhMethodHandle<d_MsBattleCheck> MsBattleCheck => new( new FhMethodLocation("FFX.exe", 0x380D60) );
-
-    // Original after pruning:
     // unknown undefined MsBattleChrStart() at 00780d80
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
