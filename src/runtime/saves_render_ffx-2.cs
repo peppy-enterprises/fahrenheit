@@ -1505,7 +1505,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             byte ply_id = header2.lm_ply;
             byte job_id = header2.lm_job;
 
-            if (job_id < 0x01 || job_id > 0x21) {
+            if (job_id > 0x21) {
                 face_suv = face_suv.move(face_screen_offset);
                 continue;
             }
