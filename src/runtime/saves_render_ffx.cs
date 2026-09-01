@@ -185,7 +185,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     }
 
     private void handle_input_active_set() {
-        if (_mode == UiMode.SAVE_LIST && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down)) {
+        if (_mode == UiMode.SAVE_LIST && FhApi.Gui.is_any_pressed(FhApi.Gui.keys_down) && _current_scrollable.max > 0) {
             _focus = UiFocus.LIST;
             _current_scrollable.hovered = _current_scrollable.current;
 
