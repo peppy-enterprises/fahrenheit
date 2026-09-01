@@ -40,7 +40,7 @@ public static unsafe partial class FhCall {
         new( new FhMethodLocation(0x48E6C0, 0x34C2B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_AtelGetSaveDic();
+    public delegate uint d_AtelGetSaveDic();
     public static FhMethodHandle<d_AtelGetSaveDic> AtelGetSaveDic =>
         new( new FhMethodLocation(0x46C3A0, 0x326B60) );
 
@@ -69,6 +69,7 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_AtelPopMember> AtelPopMember =>
         new( new FhMethodLocation(0x46DD40, 0x3287E0) );
   
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_AtelJumpGameOver();
     public static FhMethodHandle<d_AtelJumpGameOver> AtelJumpGameOver 
         => new( new FhMethodLocation(0x46D9A0, 0x3283A0) );

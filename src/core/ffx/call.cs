@@ -107,7 +107,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4A9920) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_FUN_008a9b30(byte ply_id);
+    public delegate uint d_FUN_008a9b30(byte ply_id);
     public static FhMethodHandle<d_FUN_008a9b30> FUN_008a9b30
         => new ( new FhMethodLocation("FFX.exe", 0x4A9B30) );
 
@@ -122,7 +122,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x505820) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int d_FUN_008a9c10();
+    public delegate uint d_FUN_008a9c10();
     public static FhMethodHandle<d_FUN_008a9c10> FUN_008a9c10
         => new ( new FhMethodLocation("FFX.exe", 0x4A9C10) );
 
@@ -197,7 +197,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x385300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsGetSavePlyJoin(byte ply_id);
+    public delegate uint d_MsGetSavePlyJoin(byte ply_id);
     public static FhMethodHandle<d_MsGetSavePlyJoin> MsGetSavePlyJoin
         => new ( new FhMethodLocation("FFX.exe", 0x385440) );
 
