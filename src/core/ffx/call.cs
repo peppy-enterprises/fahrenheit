@@ -24,17 +24,17 @@ public static partial class FhCall {
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_0000_Init
         => new( new FhMethodLocation("FFX.exe", 0x45C3E0) );
 
-    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_5021_RetInt
-        => new( new FhMethodLocation("FFX.exe", 0x679510) );
-
-    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_504C_RetInt
-        => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
-
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_0001_RetInt
         => new( new FhMethodLocation("FFX.exe", 0x45CE70) );
 
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_5010_Init
         => new( new FhMethodLocation("FFX.exe", 0x679820) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_5021_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x679510) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_504C_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     public unsafe delegate void d_PhyreScene_doDeleteMeshInstances(uint ptr_this);
@@ -182,7 +182,7 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_Sg_EffectRoutineEnable(sbyte arg1);
+    public delegate void d_Sg_EffectRoutineEnable(byte arg1);
     public static FhMethodHandle<d_Sg_EffectRoutineEnable> Sg_EffectRoutineEnable
         => new( new FhMethodLocation("FFX.exe", 0x420490) );
 
