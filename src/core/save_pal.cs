@@ -128,7 +128,7 @@ public struct FhSaveHeader2 {
     public Party    ply_jobs;
     public uint     playtime_secs;
     public uint     gil;
-    public ushort   _0x18;
+    public ushort   id_location;
     public ushort   _0x1A;
     public uint     _0x1C;
     public byte     times_played;
@@ -136,12 +136,12 @@ public struct FhSaveHeader2 {
     public byte     lm_ply_level;
     public byte     lm_job;
     public byte     lm_job_level;
-    public byte     _0x25;
+    public byte     lm_id_location;
     public byte     lm_retry;
     public byte     _0x27;
     public FhLangId lang_id;
     public byte     _0x29;
-    public ushort   id_location;
+    public ushort   id_map_icon;
     public byte     _0x2C;
 
     public bool is_new_game_plus => times_played > 1;
