@@ -267,6 +267,10 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
     private void switch_set(string set_name) {
         FhApi.Saves.switch_active_set(set_name);
+
+        populate_map_icons();
+        try_load_textures();
+
         change_mode(UiMode.SAVE_LIST);
     }
 
@@ -285,8 +289,6 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
     /// <summary>Attempt to load all of the textures the renderer requires to display properly.</summary>
     /// <returns>Whether all textures have been successfully loaded.</returns>
     private bool try_load_textures() {
-        if (_loaded_all_textures) return true;
-
         Span<FhTexture> textures = [
             _texture_bg,
             _texture_battle,
