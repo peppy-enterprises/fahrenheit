@@ -594,7 +594,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         text_pos.X += 240f * aspect_scale.X;
         text_pos.Y -=   8f * aspect_scale.Y;
 
-        float font_size = 36f * font_scale;
+        float font_size = 38f * font_scale;
 
         FhApi.Gui.draw_text(
             draw,
@@ -621,7 +621,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         Vector2 text_pos = new(1717f, 146f);
 
         float line_height = 36f;
-        float font_size   = 36f * font_scale;
+        float font_size   = 38f * font_scale;
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
@@ -697,7 +697,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             if (loop_progress >= 0.48f) {
                 float fade_time = (loop_progress - 0.48f) / 0.52f;
                 offset += fade_time * (travel_dist * 0.55f);
-                alpha *= 1f - fade_time;
+                alpha  *= 1f - fade_time;
             }
 
             UV ghost_suv = new Rect {
@@ -731,7 +731,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             else if (loop_progress >= 0.48f) {
                 float fade_time = (loop_progress - 0.48f) / 0.52f;
                 offset += (travel_dist * 0.20f) + (fade_time * (travel_dist * 0.55f));
-                alpha *= 1f - fade_time;
+                alpha  *= 1f - fade_time;
             }
 
             UV ghost_suv = new Rect {
@@ -825,7 +825,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             accent_tuv.p1
         );
 
-        float   font_size = 36f * font_scale;
+        float   font_size = 38f * font_scale;
         Vector2 text_pos  = bg_screen.center;
 
         //TODO: Add localization
@@ -901,7 +901,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
         ImGuiIOPtr    io   = ImGui.GetIO();
 
-        float font_size = 36f * font_scale;
+        float font_size = 38f * font_scale;
 
         if (mouse_hovered(button_scaled)) {
             _focus = UiFocus.LIST;
@@ -1040,7 +1040,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
         ImDrawListPtr draw = ImGui.GetBackgroundDrawList();
 
-        float font_size = 36f * font_scale;
+        float font_size = 38f * font_scale;
 
         ImGui.PushFont(null, font_size);
         Vector2 text_size = ImGui.CalcTextSize(message);
@@ -1340,15 +1340,15 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         float border_thickness =  5f;
         float header_size      = 47f;
         float text_offset      = 12f;
-        float text_margin      = 72f;
-        float autosave_offset  = 23f;
+        float text_margin      = 71f;
+        float autosave_offset  = 16f;
 
         Vector2 header_text_pos_l = save_rect.top_left + new Vector2(
             border_thickness + text_offset,
             (header_size / 2) - 2f // - 2f to center
         );
 
-        float font_size = 36f * font_scale;
+        float font_size = 38f * font_scale;
 
         //TODO: Add localization
         string slot_text   = save.slot == 0 ? "Autosave" : save.slot_str;
@@ -1539,15 +1539,15 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         float border_thickness =  5f;
         float header_size      = 47f;
         float text_offset      = 12f;
-        float text_margin      = 82f;
-        float autosave_offset  = 23f;
+        float text_margin      = 81f;
+        float autosave_offset  = 16f;
 
         Vector2 header_text_pos_l = save_rect.top_left + new Vector2(
             border_thickness + text_offset,
             (header_size / 2) - 2f // - 2f to center
         );
 
-        float font_size = 36f * font_scale;
+        float font_size = 38f * font_scale;
 
         //TODO: Add localization
         string slot_text   = save.slot == 0 ? "Autosave" : save.slot_str;
@@ -1599,7 +1599,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
         float margin_from_header    =  4f;
         float margin_from_last_face = 86f;
         float margin_from_map       = 57f;
-        float level_offset          = 89f;
+        float level_offset          = 85f;
         float line_height           = 49f;
 
         Vector2 info_text_pos_l = save_rect.top_left + new Vector2(
@@ -1671,7 +1671,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
             header_height + (save_rect.size.Y - header_height) / 2f - 1f
         );
 
-        float font_size = 36f * font_scale;
+        float font_size = 38f * font_scale;
 
         FhApi.Gui.draw_text(
             draw,
