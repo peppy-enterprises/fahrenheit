@@ -478,6 +478,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4A9820) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public delegate bool d_FUN_008cfc00();
     public static FhMethodHandle<d_FUN_008cfc00> FUN_008cfc00
         => new ( new FhMethodLocation("FFX.exe", 0x4CFC00) );
@@ -618,7 +619,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x398C20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_MsChangeWeaponInvisible(int ply_id, bool enable);
+    public delegate void d_MsChangeWeaponInvisible(int ply_id, [MarshalAs(UnmanagedType.U1)] bool enable);
     public static FhMethodHandle<d_MsChangeWeaponInvisible> MsChangeWeaponInvisible
         => new ( new FhMethodLocation("FFX.exe", 0x3AD5F0) );
 
