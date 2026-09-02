@@ -8,7 +8,7 @@ namespace Fahrenheit.FFX2.Battle;
 [StructLayout(LayoutKind.Sequential, Size = 0x14)]
 public struct DamageBuffer {
     public byte   chr_id;
-    public bool   is_alive;
+    public byte   is_alive;
     public byte   chain_count;
     public byte   unk1;
     public ushort cmd_id;
