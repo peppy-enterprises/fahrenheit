@@ -22,6 +22,9 @@ public static unsafe partial class FhCall {
     internal static FhMethodHandle<d_GetLastMissionJobName> GetLastMissionJobName
         => new( new FhMethodLocation("FFX-2.exe", 0x368570) );
 
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp
+        => new( new FhMethodLocation("FFX-2.exe", 0x319360) );
+  
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_Ch_SetMotionSpeed(uint ptr_actor, ushort speed);
     public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
