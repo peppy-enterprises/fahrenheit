@@ -628,6 +628,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
     public static FhMethodHandle<d_rcefObjProc> rcefObjProc
-        => new( new FhMethodLocation("FFX.exe", 0x3EA6C0) );
+        => new( new FhMethodLocation("FFX-2.exe", 0x3EA6C0) );
 
 }
