@@ -593,12 +593,12 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4BC300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008e67f0(uint gear_idx, float x, float y, int color_id);
+    public delegate void d_FUN_008e67f0(uint gear_idx, float x, float y, byte color_id);
     public static FhMethodHandle<d_FUN_008e67f0> FUN_008e67f0
         => new ( new FhMethodLocation("FFX.exe", 0x4E67F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_DrawCrossMenuIconWeaponName2(void* param_1, float x, float y, int color_id);
+    public delegate void d_DrawCrossMenuIconWeaponName2(void* param_1, float x, float y, byte color_id);
     public static FhMethodHandle<d_DrawCrossMenuIconWeaponName2> DrawCrossMenuIconWeaponName2
         => new ( new FhMethodLocation("FFX.exe", 0x4E6970) );
 
@@ -1537,7 +1537,7 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x505320) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_ToMakeBtlEasyFont(byte* text, float x, float y, byte alpha, float scale);
+    public unsafe delegate void d_ToMakeBtlEasyFont(byte* text, float x, float y, byte color_id, float scale);
     public static FhMethodHandle<d_ToMakeBtlEasyFont> ToMakeBtlEasyFont
         => new( new FhMethodLocation("FFX.exe", 0x505AB0) );
 
