@@ -409,7 +409,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4E67F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_DrawCrossMenuIconWeaponName2(void* param_1, float x, float y, int color_id);
+    public unsafe delegate void d_DrawCrossMenuIconWeaponName2(void* param_1, float x, float y, int color);
     public static FhMethodHandle<d_DrawCrossMenuIconWeaponName2> DrawCrossMenuIconWeaponName2
         => new ( new FhMethodLocation("FFX.exe", 0x4E6970) );
 
