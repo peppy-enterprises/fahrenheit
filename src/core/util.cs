@@ -10,20 +10,51 @@ public unsafe static class FhUtil {
     /// <summary>
     ///     Selects between <typeparamref name="T"/>s based on the currently executing game.
     ///     <para/>
-    ///     If no game is executing, returns <paramref name="defval"/> if non-null, else throws.
+    ///     If no game is executing, throws.
     /// </summary>
-    internal static T select<T>(T ffx, T ffx2, T ffx2lm, T? defval = default) {
+    internal static T select<T>(T ffx, T ffx2, T ffx2lm) {
         return FhGlobal.game_id switch {
             FhGameId.FFX    => ffx,
             FhGameId.FFX2   => ffx2,
             FhGameId.FFX2LM => ffx2lm,
-            _               => defval ?? throw new NotImplementedException($"no game detectable and no fallback value in select({ffx},{ffx2},{ffx2lm})"),
+            _               => throw new Exception("Attempted to `select` without a game running."),
         };
     }
 
-    public static T* ptr_at<T>(nint address)          where T : unmanaged { return (T*)(FhEnvironment.BaseAddr + address); }
-    public static T  get_at<T>(nint address)          where T : unmanaged { return *ptr_at<T>(address);                    }
-    public static T  set_at<T>(nint address, T value) where T : unmanaged { return *ptr_at<T>(address) = value;            }
+    /// <summary>
+    ///     Returns a pointer to <typeparamref name="T"/> at the absolute address obtained by
+    ///     adding the given offset to the base address of the running game's executable.
+    /// </summary>
+    /// <param name="offset">The offset, from the running game executable's base address, to return a pointer to <typeparamref name="T"/> at.</param>
+    /// <returns>A pointer to a value of type <typeparamref name="T"/> at the given address.</returns>
+    public static T* ptr_at<T>(nint offset) where T : unmanaged => (T*)(FhEnvironment.BaseAddr + offset);
+
+    /// <summary>
+    ///     Reads a value of type <typeparamref name="T"/> from the address obtained by adding
+    ///     the given offset to the base address of the running game's executable.
+    /// </summary>
+    /// <param name="offset">The offset, from the running game executable's base address, to read a value of type <typeparamref name="T"/> from.</param>
+    /// <returns>The current value at the given address.</returns>
+    public static T get_at<T>(nint offset) where T : unmanaged => *ptr_at<T>(offset);
+
+    /// <summary>
+    ///     Writes a given value of type <typeparamref name="T"/> to the address obtained
+    ///     by adding the given offset to the base address of the running game's executable.
+    /// </summary>
+    /// <remarks>
+    ///     The target offset must be in a writable memory region. If it is not, you must
+    ///     use a <see cref="FhVirtualProtectScope{T}"/> to avoid an <see cref="AccessViolationException"/>.
+    /// </remarks>
+    /// <param name="offset">The offset, from the running game executable's base address, to write the given value to.</param>
+    /// <param name="value">The value of type <typeparamref name="T"/> to write at the given address.</param>
+    /// <returns>The previous value at the given address.</returns>
+    public static T set_at<T>(nint offset, T value) where T : unmanaged {
+        T* ptr = ptr_at<T>(offset);
+        T  old = *ptr;
+
+        *ptr = value;
+        return old;
+    }
 
     public static void cast_to_bytes<T>(in ReadOnlySpan<T> src, in Span<byte> dest, out int bytesWritten) where T : struct {
         bytesWritten = Unsafe.SizeOf<T>() * src.Length;
@@ -184,6 +215,10 @@ public unsafe static class FhUtil {
             X = vec.X * 512 / 1920,
             Y = vec.Y * 416 / 1080,
         };
+    }
+
+    public static Vector2 inverse(this Vector2 vec) {
+        return new Vector2(1f) / vec;
     }
 
     public static uint as_rgba(this Vector4 vec) {

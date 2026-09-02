@@ -100,7 +100,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
 
         ImGuiImplWin32.SetCurrentContext(ctx);
         ImGuiImplD3D11.SetCurrentContext(ctx);
-        ImGuiImplWin32.Init(_hWnd);
+        ImGuiImplWin32.Init((nint)_hWnd);
         ImGuiImplD3D11.Init(hexa_p_device, hexa_p_device_ctx);
 
         /* [fkelava 20/06/26 17:38]
@@ -129,7 +129,7 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         pio.PlatformSetWindowFocus = (void*)Marshal.GetFunctionPointerForDelegate
             <ImGui_ImplWin32_SetWindowFocus>(h_implw32_setwindowfocus);
 
-        FhApi.ImGuiHelper.init();
+        FhApi.Gui.init();
 
         FhCall.DXGI_IDXGISwapChain_Present      (_ptr_swapchain).hook(this, h_present);
         FhCall.DXGI_IDXGISwapChain_ResizeBuffers(_ptr_swapchain).hook(this, h_resize_buffers);
@@ -228,8 +228,8 @@ public unsafe sealed class FhImguiModule : FhModule, IFhPlatformUser {
         if (Interlocked.CompareExchange(ref _rtv_generated, 1, 0) == 0) {
             ID3D11Resource* ptr_backbuffer;
 
-            fixed (ID3D11RenderTargetView** ppRTView = &_ptr_rtv) {
-            fixed (Guid*                    pIID     = &ID3D11Texture2D.IID_Guid)
+            fixed (ID3D11RenderTargetView** ppRTView = &_ptr_rtv)
+            fixed (Guid*                    pIID     = &ID3D11Texture2D.IID_Guid) {
                 _ptr_swapchain->GetBuffer(0, pIID, (void**)&ptr_backbuffer);
                 _ptr_device   ->CreateRenderTargetView(ptr_backbuffer, null, ppRTView);
                 ptr_backbuffer->Release();

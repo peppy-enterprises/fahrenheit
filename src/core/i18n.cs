@@ -13,7 +13,7 @@ namespace Fahrenheit;
  */
 using LocaleData = Dictionary<string, string>;
 
-public sealed partial class FhLocalizationManager {
+public sealed partial class FhLocalization {
 
     /* [fkelava 08/07/26 00:07]
      * For initialization, see `i18n_cctor.cs`.

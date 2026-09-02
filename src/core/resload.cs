@@ -6,7 +6,7 @@
 namespace Fahrenheit;
 
 /// <summary>
-///     Indicates the type of texture the input to <see cref="IFhResourceLoader"/> should be interpreted as.
+///     Indicates the type of texture the input to <see cref="IFhResourceLoaderImpl"/> should be interpreted as.
 /// </summary>
 public enum FhTextureType {
     NULL  = 0,
@@ -118,7 +118,7 @@ public sealed record FhTexture(string path, FhTextureType type) {
              * Testing the return value of Release is meaningless because it is not guaranteed to be precise.
              * If you believe you're leaking textures, turn on the D3D debug layer instead.
              */
-            ((ID3D11ShaderResourceView*)(void*)_tex_ref.GetTexID())->Release();
+            ((ID3D11ShaderResourceView*)(void*)_tex_ref.TexID)->Release();
         }
 
         _tex_ref      = default;
@@ -142,7 +142,7 @@ public sealed record FhTexture(string path, FhTextureType type) {
  * The internal contract between Core and RT is abstracted here to allow us to arrange it
  * differently from FhResourceLoader's public API, if need be.
  */
-internal interface IFhResourceLoader {
+internal interface IFhResourceLoaderImpl {
     /// <summary>
     ///     Attempts to load the user-requested <paramref name="texture"/> from disk.
     ///     If successful, it can be passed to ImGui for rendering.
@@ -176,9 +176,9 @@ internal interface IFhResourceLoader {
 /// <summary>
 ///     Allows for loading of resources such as images for use in ImGui code.
 /// </summary>
-public sealed class FhResourceLoader {
+public sealed class FhResources {
 
-    internal readonly FhRuntimeHandle<IFhResourceLoader> loader = new(); // RT connects here.
+    internal readonly FhRuntimeHandle<IFhResourceLoaderImpl> impl_handle = new(); // RT connects here.
 
     /// <summary>
     ///     Attempts to load the given <paramref name="texture"/> from disk.
@@ -189,7 +189,7 @@ public sealed class FhResourceLoader {
     /// </remarks>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_texture_from_disk(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_texture_from_disk(texture);
+        return texture.is_loaded() || (impl_handle.get(out IFhResourceLoaderImpl? impl) && impl.load_texture_from_disk(texture));
     }
 
     /// <summary>
@@ -197,7 +197,7 @@ public sealed class FhResourceLoader {
     /// </summary>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_game_texture_2d(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_2d(texture);
+        return texture.is_loaded() || (impl_handle.get(out IFhResourceLoaderImpl? impl) && impl.load_game_texture_2d(texture));
     }
 
     /// <summary>
@@ -205,7 +205,7 @@ public sealed class FhResourceLoader {
     /// </summary>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_game_texture_3d(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_3d(texture);
+        return texture.is_loaded() || (impl_handle.get(out IFhResourceLoaderImpl? impl) && impl.load_game_texture_3d(texture));
     }
 
     /// <summary>
@@ -213,7 +213,7 @@ public sealed class FhResourceLoader {
     /// </summary>
     /// <returns>Whether the operation succeeded and <paramref name="texture"/> can be passed to ImGui for rendering.</returns>
     public bool load_game_texture_cubemap(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.load_game_texture_cubemap(texture);
+        return texture.is_loaded() || (impl_handle.get(out IFhResourceLoaderImpl? impl) && impl.load_game_texture_cubemap(texture));
     }
 
     /// <summary>
@@ -223,6 +223,6 @@ public sealed class FhResourceLoader {
     ///     <c>false</c> if the texture is locked or pending unload, otherwise <c>true</c>.
     /// </returns>
     public bool unload_texture(FhTexture texture) {
-        return loader.get_impl(out IFhResourceLoader? impl) && impl.unload_texture(texture);
+        return !texture.is_loaded() || (impl_handle.get(out IFhResourceLoaderImpl? impl) && impl.unload_texture(texture));
     }
 }

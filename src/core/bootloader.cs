@@ -3,6 +3,7 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
+
 namespace Fahrenheit;
 
 /// <summary>
@@ -15,6 +16,7 @@ internal static class FhEnvironment {
     internal static readonly string[]     LoadOrder;
     internal static readonly FhModPaths[] ModPaths;
     internal static readonly FhManifest[] Manifests;
+    internal static readonly bool         LargeAddressAware;
 
     static FhEnvironment() {
         /* [fkelava 10/06/26 18:53]
@@ -29,11 +31,12 @@ internal static class FhEnvironment {
 
         AppDomain.CurrentDomain.FirstChanceException += FhExceptionHandler.eh_first_chance;
 
-        Finder    = new();
-        BaseAddr  = NativeLibrary.GetMainProgramHandle();
-        LoadOrder = _init_load_order();
-        ModPaths  = _init_mod_paths();
-        Manifests = _init_manifests();
+        Finder            = new();
+        BaseAddr          = NativeLibrary.GetMainProgramHandle();
+        LoadOrder         = _init_load_order();
+        ModPaths          = _init_mod_paths();
+        Manifests         = _init_manifests();
+        LargeAddressAware = _init_laa();
     }
 
     /* [fkelava 25/4/24 18:47]
@@ -48,7 +51,7 @@ internal static class FhEnvironment {
         FhApi.Mods.initialize();
 
         // post-init - may require later editing
-        FhInternal.MethodTable.commit();
+        FhInternal.Methods.commit();
     }
 
     /// <summary>
@@ -92,6 +95,15 @@ internal static class FhEnvironment {
         }
 
         return result;
+    }
+
+    /// <summary>
+    ///     Probes whether the game binary has an extended, 4GB address space.
+    /// </summary>
+    private static bool _init_laa() {
+        IMAGE_FILE_HEADER image_header = FhUtil.get_at<IMAGE_FILE_HEADER>(0x15C);
+
+        return image_header.Characteristics.HasFlag(IMAGE_FILE_CHARACTERISTICS.IMAGE_FILE_LARGE_ADDRESS_AWARE);
     }
 }
 
@@ -178,7 +190,7 @@ internal sealed class FhLoader {
         _load_contexts[manifest.Id] = load_context;
 
         foreach (Type type in assembly.GetExportedTypes()) {
-            if (type.BaseType != typeof(FhModule)) continue;
+            if (!type.IsSubclassOf(typeof(FhModule))) continue;
 
             FhLoadAttribute? loader_args = type.GetCustomAttribute<FhLoadAttribute>();
 

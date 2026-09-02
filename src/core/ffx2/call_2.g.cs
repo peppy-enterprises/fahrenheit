@@ -7073,13 +7073,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00604b60> FUN_00604b60 => new( new FhMethodLocation("FFX-2.exe", 0x204B60) );
 
     // Original after pruning:
-    // unknown undefined FUN_00604b70() at 00604b70
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00604b70();
-    public static FhMethodHandle<d_FUN_00604b70> FUN_00604b70 => new( new FhMethodLocation("FFX-2.exe", 0x204B70) );
-
-    // Original after pruning:
     // unknown undefined FUN_00604ba0() at 00604ba0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -7227,13 +7220,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_006068f0> FUN_006068f0 => new( new FhMethodLocation("FFX-2.exe", 0x2068F0) );
 
     // Original after pruning:
-    // unknown undefined FUN_00606930() at 00606930
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00606930();
-    public static FhMethodHandle<d_FUN_00606930> FUN_00606930 => new( new FhMethodLocation("FFX-2.exe", 0x206930) );
-
-    // Original after pruning:
     // unknown undefined FUN_00606c50() at 00606c50
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -7333,13 +7319,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00607210();
     public static FhMethodHandle<d_FUN_00607210> FUN_00607210 => new( new FhMethodLocation("FFX-2.exe", 0x207210) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00607260() at 00607260
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00607260();
-    public static FhMethodHandle<d_FUN_00607260> FUN_00607260 => new( new FhMethodLocation("FFX-2.exe", 0x207260) );
 
     // Original after pruning:
     // unknown undefined FUN_00607280() at 00607280
@@ -9848,13 +9827,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00616660();
     public static FhMethodHandle<d_FUN_00616660> FUN_00616660 => new( new FhMethodLocation("FFX-2.exe", 0x216660) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00616680() at 00616680
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00616680();
-    public static FhMethodHandle<d_FUN_00616680> FUN_00616680 => new( new FhMethodLocation("FFX-2.exe", 0x216680) );
 
     // Original after pruning:
     // unknown undefined FUN_00616780() at 00616780
@@ -28186,13 +28158,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_006e5680> FUN_006e5680 => new( new FhMethodLocation("FFX-2.exe", 0x2E5680) );
 
     // Original after pruning:
-    // unknown undefined FUN_006e56a0() at 006e56a0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_006e56a0();
-    public static FhMethodHandle<d_FUN_006e56a0> FUN_006e56a0 => new( new FhMethodLocation("FFX-2.exe", 0x2E56A0) );
-
-    // Original after pruning:
     // unknown undefined FUN_006e56b0() at 006e56b0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -28653,13 +28618,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_006e6390();
     public static FhMethodHandle<d_FUN_006e6390> FUN_006e6390 => new( new FhMethodLocation("FFX-2.exe", 0x2E6390) );
-
-    // Original after pruning:
-    // unknown undefined FUN_006e63b0() at 006e63b0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_006e63b0();
-    public static FhMethodHandle<d_FUN_006e63b0> FUN_006e63b0 => new( new FhMethodLocation("FFX-2.exe", 0x2E63B0) );
 
     // Original after pruning:
     // unknown undefined FUN_006e63e0() at 006e63e0
@@ -36935,13 +36893,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00728360();
     public static FhMethodHandle<d_FUN_00728360> FUN_00728360 => new( new FhMethodLocation("FFX-2.exe", 0x328360) );
-
-    // Original after pruning:
-    // unknown undefined FUN_007283a0() at 007283a0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_007283a0();
-    public static FhMethodHandle<d_FUN_007283a0> FUN_007283a0 => new( new FhMethodLocation("FFX-2.exe", 0x3283A0) );
 
     // Original after pruning:
     // unknown undefined FUN_00728530() at 00728530

@@ -408,7 +408,7 @@ internal struct PNamedSemanticDescriptor {
 ///     This type is a stub and corresponds to no Phyre type.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x80, Pack = 4)]
-internal struct PUnknown {
+public struct PUnknown {
     public nint _0x00;
     public nint _0x04;
     public nint _0x08;
@@ -609,8 +609,15 @@ internal struct PWorld { }
 /// <summary>
 ///     A file as seen by the game. Can be backed by either a VBF or OS handle.
 /// </summary>
-internal struct PStreamFile {
-    public nint handle_os;
-    public nint handle_vbf;
+internal unsafe struct PStreamFile {
+    public HANDLE handle_os;
+    public VFile* handle_vbf;
 }
 
+/* [fkelava 26/04/26 14:52]
+ * PClassDescriptor<PApplication> -> +8C9D20
+ */
+
+[StructLayout(LayoutKind.Explicit, Size = 0x3A0, Pack = 0x10)]
+public struct PApplication { }
+// this class (descriptor) has a parent; PClassDescriptor<PBase (sz 0x0, align 0x1)>

@@ -5,7 +5,7 @@
 
 namespace Fahrenheit;
 
-public enum FhLangId {
+public enum FhLangId : byte {
     Japanese = 0,
     English  = 1,
     French   = 2,

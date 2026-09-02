@@ -23,6 +23,9 @@ csharp_style_expression_bodied_accessors = false
 csharp_style_expression_bodied_lambdas = false
 csharp_style_expression_bodied_local_functions = false
 
+# Modifier order
+csharp_preferred_modifier_order = public,private,internal,protected,file,unsafe,static,extern,new,virtual,abstract,sealed,override,readonly,required,volatile,async
+
 # K&R style braces, for Evelyn
 csharp_new_line_before_open_brace = none
 

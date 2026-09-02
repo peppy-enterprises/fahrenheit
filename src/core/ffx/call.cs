@@ -20,15 +20,191 @@ namespace Fahrenheit.FFX;
 ///     An accessor for game function calls exclusive to FF X.
 /// </summary>
 public static partial class FhCall {
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate bool d_Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint filename, bool readOnly, nint arg4, nint arg5, nint arg6);
-    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_openFile> Phyre_PSerialization_PStreamFileWin32_openFile
-        => new( new FhMethodLocation("FFX.exe", 0x208100) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_0000_Init
+        => new( new FhMethodLocation("FFX.exe", 0x45C3E0) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_0001_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x45CE70) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_Init> CT_5010_Init
+        => new( new FhMethodLocation("FFX.exe", 0x679820) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_5021_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x679510) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_504C_RetInt
+        => new( new FhMethodLocation("FFX.exe", 0x6786A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate uint d_Phyre_PSerialization_PStreamFileWin32_Read(nint ptr_this, nint buffer, uint max_len);
-    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_Read> Phyre_PSerialization_PStreamFileWin32_Read
-        => new( new FhMethodLocation("FFX.exe", 0x208250) );
+    public unsafe delegate void d_PhyreScene_doDeleteMeshInstances(uint ptr_this);
+    public static FhMethodHandle<d_PhyreScene_doDeleteMeshInstances> PhyreScene_doDeleteMeshInstances
+        => new( new FhMethodLocation("FFX.exe", 0x25A7B0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    public unsafe delegate void d_DynGeoMemManager_clearDynGeoMemory(uint ptr_this);
+    public static FhMethodHandle<d_DynGeoMemManager_clearDynGeoMemory> DynGeoMemManager_clearDynGeoMemory
+        => new( new FhMethodLocation("FFX.exe", 0x2DE830) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_JobSchedule_pppPart_fillBuffer_Kick(uint param_1);
+    public static FhMethodHandle<d_JobSchedule_pppPart_fillBuffer_Kick> JobSchedule_pppPart_fillBuffer_Kick
+        => new( new FhMethodLocation("FFX.exe", 0x31EE90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_JobSchedule_pppPart_clearFillBufferReques();
+    public static FhMethodHandle<d_JobSchedule_pppPart_clearFillBufferReques> JobSchedule_pppPart_clearFillBufferRequest
+        => new( new FhMethodLocation("FFX.exe", 0x31EDB0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_ClassVFXRenderDataTable_Clear(ClassVFXRenderDataTable* ptr_this);
+    public static FhMethodHandle<d_ClassVFXRenderDataTable_Clear> ClassVFXRenderDataTable_Clear
+        => new( new FhMethodLocation("FFX.exe", 0x29F140) );
+
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    public unsafe delegate void d_ClassVFXRenderDataTable_ClearVFXDrawData(ClassVFXRenderDataTable* ptr_this);
+    public static FhMethodHandle<d_ClassVFXRenderDataTable_ClearVFXDrawData> ClassVFXRenderDataTable_ClearVFXDrawData
+        => new( new FhMethodLocation("FFX.exe", 0x29F3F0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicDynGeoMemManagerSwapBuffer(uint param_1);
+    public static FhMethodHandle<d_graphicDynGeoMemManagerSwapBuffer> graphicDynGeoMemManagerSwapBuffer
+        => new( new FhMethodLocation("FFX.exe", 0x240120) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXUpdateWithType(uint param_1, uint param_2, uint type);
+    public static FhMethodHandle<d_graphicVFXUpdateWithType> graphicVFXUpdateWithType
+        => new( new FhMethodLocation("FFX.exe", 0x245D50) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXDestroy(uint param_1, uint param_2);
+    public static FhMethodHandle<d_graphicVFXDestroy> graphicVFXDestroy
+        => new( new FhMethodLocation("FFX.exe", 0x245430) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXCreate(uint param_1, uint param_2, uint flags);
+    public static FhMethodHandle<d_graphicVFXCreate> graphicVFXCreate
+        => new( new FhMethodLocation("FFX.exe", 0x244F90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXSetVisible(uint param_1, uint param_2, uint visible);
+    public static FhMethodHandle<d_graphicVFXSetVisible> graphicVFXSetVisible
+        => new( new FhMethodLocation("FFX.exe", 0x2458C0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_graphicVFXUpdate(uint param_1, uint param_2);
+    public static FhMethodHandle<d_graphicVFXUpdate> graphicVFXUpdate
+        => new( new FhMethodLocation("FFX.exe", 0x245A50) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_hideDisplayOffParticle(uint ptr_par);
+    public static FhMethodHandle<d_hideDisplayOffParticle> hideDisplayOffParticle
+        => new( new FhMethodLocation("FFX.exe", 0x328F30) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate uint d__pppRunPartFp(uint ptr_par, byte flags);
+    public static FhMethodHandle<d__pppRunPartFp> _pppRunPartFp
+        => new( new FhMethodLocation("FFX.exe", 0x3123D0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate uint d__pppRunPart(uint ptr_par, byte flags);
+    public static FhMethodHandle<d__pppRunPart> _pppRunPart
+        => new( new FhMethodLocation("FFX.exe", 0x312330) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_op_loop_ffx_after();
+    public static FhMethodHandle<d_op_loop_ffx_after> op_loop_ffx_after
+        => new( new FhMethodLocation("FFX.exe", 0x3FF5A0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_op_loop_ffx_before();
+    public static FhMethodHandle<d_op_loop_ffx_before> op_loop_ffx_before
+        => new( new FhMethodLocation("FFX.exe", 0x3FF690) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_MsEffectStart();
+    public static FhMethodHandle<d_MsEffectStart> MsEffectStart
+        => new( new FhMethodLocation("FFX.exe", 0x388540) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_op_ot_draw();
+    public static FhMethodHandle<d_op_ot_draw> op_ot_draw
+        => new( new FhMethodLocation("FFX.exe", 0x3EC390) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_pppPartLoop();
+    public static FhMethodHandle<d_pppPartLoop> pppPartLoop
+        => new( new FhMethodLocation("FFX.exe", 0x362330) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_MsSetChrStatInfo(uint chr_id, uint stat_id, uint target_id, uint value);
+    public static FhMethodHandle<d_MsSetChrStatInfo> MsSetChrStatInfo
+        => new( new FhMethodLocation("FFX.exe", 0x3B4B80) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_FUN_003B4AA0(uint chr_id, uint stat_id, float value);
+    public static FhMethodHandle<d_FUN_003B4AA0> FUN_003B4AA0
+        => new( new FhMethodLocation("FFX.exe", 0x3B4AA0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_Ch_SetKeepFps(Actor* ptr_actor, uint keep_fps);
+    public static FhMethodHandle<d_Ch_SetKeepFps> Ch_SetKeepFps
+        => new( new FhMethodLocation("FFX.exe", 0x439BD0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
+    public static FhMethodHandle<d_rcefObjProc> rcefObjProc
+        => new( new FhMethodLocation("FFX.exe", 0x530060) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_Sg_AccSetAlpha(ushort alpha, ushort frames);
+    public static FhMethodHandle<d_Sg_AccSetAlpha> Sg_AccSetAlpha
+        => new( new FhMethodLocation("FFX.exe", 0x42BD90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate uint d_Sg_GetCurExecFrames();
+    public static FhMethodHandle<d_Sg_GetCurExecFrames> Sg_GetCurExecFrames
+        => new( new FhMethodLocation("FFX.exe", 0x42D860) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_graphicVideoUpdate();
+    public static FhMethodHandle<d_graphicVideoUpdate> graphicVideoUpdate
+        => new( new FhMethodLocation("FFX.exe", 0x245FA0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_MsEffectSetSpeed(byte chr_id, ushort speed);
+    public static FhMethodHandle<d_MsEffectSetSpeed> MsEffectSetSpeed
+        => new( new FhMethodLocation("FFX.exe", 0x3884F0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_graphicDrawMainMenuWaterEffect();
+    public static FhMethodHandle<d_graphicDrawMainMenuWaterEffect> graphicDrawMainMenuWaterEffect
+        => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_Sg_EffectRoutineEnable(byte arg1);
+    public static FhMethodHandle<d_Sg_EffectRoutineEnable> Sg_EffectRoutineEnable
+        => new( new FhMethodLocation("FFX.exe", 0x420490) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate Actor* d_AtelGetCharHandle(AtelBasicWorker* ptr_worker);
+    public static FhMethodHandle<d_AtelGetCharHandle> AtelGetCharHandle
+        => new( new FhMethodLocation("FFX.exe", 0x46AE10) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_Ch_CalcAnim(float delta);
+    public static FhMethodHandle<d_Ch_CalcAnim> Ch_CalcMain
+        => new( new FhMethodLocation("FFX.exe", 0x432E90) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_Ch_SetMotionSpeed(Actor* ptr_actor, ushort speed);
+    public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
+        => new( new FhMethodLocation("FFX.exe", 0x42B400) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_TOBtlCtrlLimitTimer();
+    public static FhMethodHandle<d_TOBtlCtrlLimitTimer> TOBtlCtrlLimitTimer
+        => new( new FhMethodLocation("FFX.exe", 0x491A30) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int d_sceClose(void* arg1);
@@ -59,11 +235,6 @@ public static partial class FhCall {
     public unsafe delegate void d_FUN_00656c90(int arg1, int arg2, char* fileName);
     public static FhMethodHandle<d_FUN_00656c90> FUN_00656c90
         => new( new FhMethodLocation("FFX.exe", 0x256C90) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_fiosUnifyFilename(nint in_string, nint out_buffer, int buffer_size);
-    public static FhMethodHandle<d_fiosUnifyFilename> fiosUnifyFilename
-        => new( new FhMethodLocation("FFX.exe", 0x2799D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     public unsafe delegate void d_LocalizationManager_Initialize(LocalizationManager* ptr_this);

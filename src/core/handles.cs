@@ -39,13 +39,13 @@ internal sealed class FhRuntimeHandle<T> {
     private readonly Lock _impl_lock = new Lock();
     private          T?   _impl;
 
-    public bool get_impl([NotNullWhen(true)] out T? impl) {
+    public bool get([NotNullWhen(true)] out T? impl) {
         lock (_impl_lock) {
             return (impl = _impl) != null;
         }
     }
 
-    public void set_impl(T impl) {
+    public void set(T impl) {
         lock (_impl_lock) {
             FhInternal.Log.Info(typeof(T).Name);
             _impl = impl;
@@ -181,7 +181,7 @@ public ref struct FhMethodHandle<T> where T : Delegate {
 
     public FhMethodHandle(FhMethodLocation location) {
         if (location.try_resolve(out _ptr_target)) {
-            fnptr = FhInternal.MethodTable.get_fnptr<T>(_ptr_target);
+            fnptr = FhInternal.Methods.get_fnptr<T>(_ptr_target);
         }
     }
 
@@ -189,7 +189,7 @@ public ref struct FhMethodHandle<T> where T : Delegate {
     ///     Retargets the handle to only execute hooks subsequent to the given <paramref name="hook"/>.
     /// </summary>
     public FhMethodHandle<T> chain_from(T hook) {
-        fnptr = FhInternal.MethodTable.get_fnptr_chain(hook);
+        fnptr = FhInternal.Methods.get_fnptr_chain(hook);
         return this;
     }
 
@@ -199,7 +199,7 @@ public ref struct FhMethodHandle<T> where T : Delegate {
     public readonly bool hook(FhModule owner, T hook) {
         FhHookContext hook_info = new(owner, hook);
 
-        return _ptr_target != 0 && FhInternal.MethodTable.fnptr_chain_add<T>(_ptr_target, hook_info);
+        return _ptr_target != 0 && FhInternal.Methods.fnptr_chain_add<T>(_ptr_target, hook_info);
     }
 }
 
@@ -221,7 +221,7 @@ internal sealed class FhMethodContext {
 /// <summary>
 ///     Keeps track of the global hook state of functions.
 /// </summary>
-internal sealed class FhMethodTable {
+internal sealed class FhMethods {
 
     private readonly static Dictionary<nint,     Delegate>        _fnptrs  = []; // Any function -> Cached delegate
     private readonly static Dictionary<nint,     FhMethodContext> _methods = []; // Original     -> All hooks (for keep-alive)
