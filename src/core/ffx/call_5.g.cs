@@ -1424,13 +1424,6 @@ public static unsafe partial class FhCall {
     public unsafe delegate void d_FUN_0085c360();
     public static FhMethodHandle<d_FUN_0085c360> FUN_0085c360 => new( new FhMethodLocation("FFX.exe", 0x45C360) );
 
-    // Original after pruning:
-    // unknown undefined FUN_0085c3e0() at 0085c3e0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0085c3e0();
-    public static FhMethodHandle<d_FUN_0085c3e0> FUN_0085c3e0 => new( new FhMethodLocation("FFX.exe", 0x45C3E0) );
-
     // Symbol skipped (deemed uninterpretable):
     // __stdcall int +CT_01D1_ret(AtelBasicWorker* work, int storage, AtelStack* stack) at 0085c400
 
@@ -1622,13 +1615,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_0085cca0();
     public static FhMethodHandle<d_FUN_0085cca0> FUN_0085cca0 => new( new FhMethodLocation("FFX.exe", 0x45CCA0) );
-
-    // Original after pruning:
-    // unknown undefined FUN_0085ce70() at 0085ce70
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0085ce70();
-    public static FhMethodHandle<d_FUN_0085ce70> FUN_0085ce70 => new( new FhMethodLocation("FFX.exe", 0x45CE70) );
 
     // Original after pruning:
     // unknown undefined FUN_0085cfe0() at 0085cfe0
@@ -3136,13 +3122,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_AtelGetCameraWorkAdrs();
     public static FhMethodHandle<d_AtelGetCameraWorkAdrs> AtelGetCameraWorkAdrs => new( new FhMethodLocation("FFX.exe", 0x46ADE0) );
-
-    // Original after pruning:
-    // __stdcall int FUN_0086ae10(AtelBasicWorker* param_1) at 0086ae10
-
-    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public unsafe delegate int d_FUN_0086ae10(nint param_1);
-    public static FhMethodHandle<d_FUN_0086ae10> FUN_0086ae10 => new( new FhMethodLocation("FFX.exe", 0x46AE10) );
 
     // Original after pruning:
     // unknown undefined FUN_0086ae20() at 0086ae20
@@ -9021,13 +9000,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_008919a0();
     public static FhMethodHandle<d_FUN_008919a0> FUN_008919a0 => new( new FhMethodLocation("FFX.exe", 0x4919A0) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00891a30() at 00891a30
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00891a30();
-    public static FhMethodHandle<d_FUN_00891a30> FUN_00891a30 => new( new FhMethodLocation("FFX.exe", 0x491A30) );
 
     // Original after pruning:
     // unknown undefined TOBtlCtrlLuluLimitWindow() at 00891af0
@@ -26759,13 +26731,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_0092ed50> FUN_0092ed50 => new( new FhMethodLocation("FFX.exe", 0x52ED50) );
 
     // Original after pruning:
-    // unknown undefined FUN_0092ee00() at 0092ee00
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0092ee00();
-    public static FhMethodHandle<d_FUN_0092ee00> FUN_0092ee00 => new( new FhMethodLocation("FFX.exe", 0x52EE00) );
-
-    // Original after pruning:
     // unknown undefined FUN_0092ee40() at 0092ee40
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -26946,13 +26911,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00930030();
     public static FhMethodHandle<d_FUN_00930030> FUN_00930030 => new( new FhMethodLocation("FFX.exe", 0x530030) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00930060() at 00930060
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00930060();
-    public static FhMethodHandle<d_FUN_00930060> FUN_00930060 => new( new FhMethodLocation("FFX.exe", 0x530060) );
 
     // Original after pruning:
     // unknown undefined FUN_00930200() at 00930200

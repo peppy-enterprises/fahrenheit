@@ -408,7 +408,7 @@ internal struct PNamedSemanticDescriptor {
 ///     This type is a stub and corresponds to no Phyre type.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Size = 0x80, Pack = 4)]
-internal struct PUnknown {
+public struct PUnknown {
     public nint _0x00;
     public nint _0x04;
     public nint _0x08;
@@ -614,3 +614,10 @@ internal unsafe struct PStreamFile {
     public VFile* handle_vbf;
 }
 
+/* [fkelava 26/04/26 14:52]
+ * PClassDescriptor<PApplication> -> +8C9D20
+ */
+
+[StructLayout(LayoutKind.Explicit, Size = 0x3A0, Pack = 0x10)]
+public struct PApplication { }
+// this class (descriptor) has a parent; PClassDescriptor<PBase (sz 0x0, align 0x1)>

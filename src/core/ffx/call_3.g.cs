@@ -30943,13 +30943,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_0061e330> FUN_0061e330 => new( new FhMethodLocation("FFX.exe", 0x21E330) );
 
     // Original after pruning:
-    // unknown undefined FUN_0061e360() at 0061e360
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0061e360();
-    public static FhMethodHandle<d_FUN_0061e360> FUN_0061e360 => new( new FhMethodLocation("FFX.exe", 0x21E360) );
-
-    // Original after pruning:
     // unknown undefined FUN_0061e390() at 0061e390
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -37568,13 +37561,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_0063e6b0> FUN_0063e6b0 => new( new FhMethodLocation("FFX.exe", 0x23E6B0) );
 
     // Original after pruning:
-    // unknown undefined graphicDrawMainMenuWaterEffect() at 0063ead0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicDrawMainMenuWaterEffect();
-    public static FhMethodHandle<d_graphicDrawMainMenuWaterEffect> graphicDrawMainMenuWaterEffect => new( new FhMethodLocation("FFX.exe", 0x23EAD0) );
-
-    // Original after pruning:
     // unknown undefined graphicDrawUIAbmapElement() at 0063eae0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -37755,13 +37741,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_graphicDynGeoMemManagerLockForRecordNumInKeLns();
     public static FhMethodHandle<d_graphicDynGeoMemManagerLockForRecordNumInKeLns> graphicDynGeoMemManagerLockForRecordNumInKeLns => new( new FhMethodLocation("FFX.exe", 0x240110) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00640120() at 00640120
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00640120();
-    public static FhMethodHandle<d_FUN_00640120> FUN_00640120 => new( new FhMethodLocation("FFX.exe", 0x240120) );
 
     // Original after pruning:
     // unknown undefined graphicDynGeoMemManagerUnlockForRecordNumInKeLns() at 00640200
@@ -38185,13 +38164,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00641e90();
     public static FhMethodHandle<d_FUN_00641e90> FUN_00641e90 => new( new FhMethodLocation("FFX.exe", 0x241E90) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00641ea0() at 00641ea0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00641ea0();
-    public static FhMethodHandle<d_FUN_00641ea0> FUN_00641ea0 => new( new FhMethodLocation("FFX.exe", 0x241EA0) );
 
     // Original after pruning:
     // unknown undefined FUN_00641f40() at 00641f40
@@ -39065,13 +39037,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00644300> FUN_00644300 => new( new FhMethodLocation("FFX.exe", 0x244300) );
 
     // Original after pruning:
-    // unknown undefined FUN_00644470() at 00644470
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00644470();
-    public static FhMethodHandle<d_FUN_00644470> FUN_00644470 => new( new FhMethodLocation("FFX.exe", 0x244470) );
-
-    // Original after pruning:
     // unknown undefined FUN_00644480() at 00644480
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -39233,25 +39198,11 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_FUN_00644f80> FUN_00644f80 => new( new FhMethodLocation("FFX.exe", 0x244F80) );
 
     // Original after pruning:
-    // unknown undefined graphicVFXCreate() at 00644f90
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicVFXCreate();
-    public static FhMethodHandle<d_graphicVFXCreate> graphicVFXCreate => new( new FhMethodLocation("FFX.exe", 0x244F90) );
-
-    // Original after pruning:
     // unknown undefined graphicVFXCreateDataBuffer() at 006451f0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_graphicVFXCreateDataBuffer();
     public static FhMethodHandle<d_graphicVFXCreateDataBuffer> graphicVFXCreateDataBuffer => new( new FhMethodLocation("FFX.exe", 0x2451F0) );
-
-    // Original after pruning:
-    // unknown undefined graphicVFXDestroy() at 00645430
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicVFXDestroy();
-    public static FhMethodHandle<d_graphicVFXDestroy> graphicVFXDestroy => new( new FhMethodLocation("FFX.exe", 0x245430) );
 
     // Original after pruning:
     // unknown undefined graphicVFXDestroyAll() at 006454c0
@@ -39359,13 +39310,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_graphicVFXSetPointLightParameters> graphicVFXSetPointLightParameters => new( new FhMethodLocation("FFX.exe", 0x245880) );
 
     // Original after pruning:
-    // unknown undefined graphicVFXSetVisible() at 006458c0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicVFXSetVisible();
-    public static FhMethodHandle<d_graphicVFXSetVisible> graphicVFXSetVisible => new( new FhMethodLocation("FFX.exe", 0x2458C0) );
-
-    // Original after pruning:
     // unknown undefined graphicVFXSetZCorrectionValue() at 00645900
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -39394,13 +39338,6 @@ public static unsafe partial class FhCall {
     public static FhMethodHandle<d_graphicVFXUnloadLevelData> graphicVFXUnloadLevelData => new( new FhMethodLocation("FFX.exe", 0x245A10) );
 
     // Original after pruning:
-    // unknown undefined graphicVFXUpdate() at 00645a50
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicVFXUpdate();
-    public static FhMethodHandle<d_graphicVFXUpdate> graphicVFXUpdate => new( new FhMethodLocation("FFX.exe", 0x245A50) );
-
-    // Original after pruning:
     // unknown undefined FUN_00645bf0() at 00645bf0
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -39420,13 +39357,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_00645c50();
     public static FhMethodHandle<d_FUN_00645c50> FUN_00645c50 => new( new FhMethodLocation("FFX.exe", 0x245C50) );
-
-    // Original after pruning:
-    // unknown undefined graphicVFXUpdateWithType() at 00645d50
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_graphicVFXUpdateWithType();
-    public static FhMethodHandle<d_graphicVFXUpdateWithType> graphicVFXUpdateWithType => new( new FhMethodLocation("FFX.exe", 0x245D50) );
 
     // Original after pruning:
     // unknown undefined graphicVFXisAtelShpInstanced() at 00645ef0
@@ -39455,13 +39385,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_graphicVideoPause();
     public static FhMethodHandle<d_graphicVideoPause> graphicVideoPause => new( new FhMethodLocation("FFX.exe", 0x245F90) );
-
-    // Original after pruning:
-    // unknown undefined FUN_00645fa0() at 00645fa0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_00645fa0();
-    public static FhMethodHandle<d_FUN_00645fa0> FUN_00645fa0 => new( new FhMethodLocation("FFX.exe", 0x245FA0) );
 
     // Original after pruning:
     // unknown undefined FUN_00645ff0() at 00645ff0
@@ -43760,13 +43683,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_FUN_0065a6e0();
     public static FhMethodHandle<d_FUN_0065a6e0> FUN_0065a6e0 => new( new FhMethodLocation("FFX.exe", 0x25A6E0) );
-
-    // Original after pruning:
-    // unknown undefined FUN_0065a7b0() at 0065a7b0
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_FUN_0065a7b0();
-    public static FhMethodHandle<d_FUN_0065a7b0> FUN_0065a7b0 => new( new FhMethodLocation("FFX.exe", 0x25A7B0) );
 
     // Original after pruning:
     // unknown undefined FUN_0065a850() at 0065a850
