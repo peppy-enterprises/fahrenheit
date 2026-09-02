@@ -673,7 +673,7 @@ public static partial class FhCall {
     public delegate uint d_TkMenuSummonEnableMask();
     public static FhMethodHandle<d_TkMenuSummonEnableMask> TkMenuSummonEnableMask
         => new ( new FhMethodLocation("FFX.exe", 0x4AB190) );
-    
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void* d_MsGetChrAbilityMap(int chr_id, void* save_param);
     public static FhMethodHandle<d_MsGetChrAbilityMap> MsGetChrAbilityMap
