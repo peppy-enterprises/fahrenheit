@@ -366,7 +366,6 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x236EB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    //6401c0 - MsCommandComplete
     public delegate uint d_MsCommandComplete(uint chr_id, int arg2, int arg3);
     public static FhMethodHandle<d_MsCommandComplete> MsCommandComplete 
         => new( new FhMethodLocation("FFX-2.exe", 0x2401C0) );
@@ -399,7 +398,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_Ch_SetMotionSpeed(uint ptr_actor, ushort speed);
     public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
-        => new(new FhMethodLocation("FFX-2.exe", 0x2E63B0));
+        => new( new FhMethodLocation("FFX-2.exe", 0x2E63B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate uint d_SndSepPlaySimple(uint arg1);
@@ -629,6 +628,6 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
     public static FhMethodHandle<d_rcefObjProc> rcefObjProc
-        => new(new FhMethodLocation("FFX.exe", 0x3EA6C0));
+        => new( new FhMethodLocation("FFX.exe", 0x3EA6C0) );
 
 }
