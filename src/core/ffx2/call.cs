@@ -24,5 +24,15 @@ public static unsafe partial class FhCall {
 
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp
         => new( new FhMethodLocation("FFX-2.exe", 0x319360) );
+  
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_Ch_SetMotionSpeed(uint ptr_actor, ushort speed);
+    public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
+        => new( new FhMethodLocation("FFX-2.exe", 0x2E63B0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
+    public static FhMethodHandle<d_rcefObjProc> rcefObjProc
+        => new( new FhMethodLocation("FFX.exe", 0x3EA6C0) );
 
 }
