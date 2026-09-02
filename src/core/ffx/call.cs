@@ -432,6 +432,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4E6AF0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public delegate bool d_MsGetSaveConfigHiragana();
     public static FhMethodHandle<d_MsGetSaveConfigHiragana> MsGetSaveConfigHiragana
         => new ( new FhMethodLocation("FFX.exe", 0x3852B0) );
@@ -497,7 +498,8 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x398BE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool d_MsGetSavePlyJoined(byte chr_id);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public delegate bool d_MsGetSavePlyJoined(byte ply_id);
     public static FhMethodHandle<d_MsGetSavePlyJoined> MsGetSavePlyJoined
         => new( new FhMethodLocation("FFX.exe", 0x385460) );
 
@@ -537,6 +539,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4D8A70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public delegate bool d_MsGetRamChrMonster(int chr_id);
     public static FhMethodHandle<d_MsGetRamChrMonster> MsGetRamChrMonster
         => new ( new FhMethodLocation("FFX.exe", 0x39AF00) );
@@ -589,12 +592,12 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4BC300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008e67f0(uint gear_idx, float x, float y, int color);
+    public delegate void d_FUN_008e67f0(uint gear_idx, float x, float y, int color_id);
     public static FhMethodHandle<d_FUN_008e67f0> FUN_008e67f0
         => new ( new FhMethodLocation("FFX.exe", 0x4E67F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_DrawCrossMenuIconWeaponName2(void* param_1, float x, float y, int color);
+    public delegate void d_FUN_008e67f0(uint gear_idx, float x, float y, int color_id);
     public static FhMethodHandle<d_DrawCrossMenuIconWeaponName2> DrawCrossMenuIconWeaponName2
         => new ( new FhMethodLocation("FFX.exe", 0x4E6970) );
 
@@ -650,6 +653,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x386BC0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public delegate bool d_FUN_00635c20(uint param_1);
     public static FhMethodHandle<d_FUN_00635c20> FUN_00635c20
         => new ( new FhMethodLocation("FFX.exe", 0x235C20) );
@@ -680,7 +684,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x385C20) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate bool d_Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint path, bool readOnly, nint arg4, nint arg5, nint arg6);
+    internal delegate int d_Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint path, bool readOnly, nint arg4, nint arg5, nint arg6);
     internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_openFile> Phyre_PSerialization_PStreamFileWin32_openFile
         => new( new FhMethodLocation("FFX.exe", 0x208100) );
 
@@ -1081,7 +1085,7 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x3A0160) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_MsWeaponName(ushort name_id, byte owner, bool unknown, ushort* model_id_pointer);
+    public unsafe delegate void d_MsWeaponName(ushort name_id, byte owner, [MarshalAs(UnmanagedType.Bool)] bool simplified, ushort* out_model_id);
     public static FhMethodHandle<d_MsWeaponName> MsWeaponName
         => new( new FhMethodLocation("FFX.exe", 0x3A0C70) );
 
