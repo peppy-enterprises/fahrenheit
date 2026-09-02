@@ -562,7 +562,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4A9810) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate short d_getScenerioFlag();
+    public delegate ushort d_getScenerioFlag();
     public static FhMethodHandle<d_getScenerioFlag> getScenerioFlag
         => new ( new FhMethodLocation("FFX.exe", 0x387420) );
 
