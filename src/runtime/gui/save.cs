@@ -3,17 +3,15 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-namespace Fahrenheit.Runtime;
+namespace Fahrenheit.Runtime.Gui;
 
 /* [fkelava 07/05/26 17:39]
- * Fahrenheit completely overrides the game's base save system to allow set functionality
- * and lifting the limit of 200 saves per set. For performance reasons, this requires
- * the game's base Flash-based Iggy UI to be bypassed. This module implements its ImGui replacement.
- *
- * Specifically, the actual save UI is implemented in ActionScript, which the game calls through to.
- * This is extremely inefficient, and computationally scales almost quadratically with the number of saves;
- * raising the set limit from 200 to 500 caused set listing times in excess of ~10s. It is almost certain
- * that the limit of 200 was chosen because it was the largest number that still performed acceptably.
+ * The game's original save UI is implemented in ActionScript, in a Flash file rendered
+ * using the Iggy library. The game interacts with it using a callback system.
+ * This is inefficient, and execution time scales almost quadratically with the number of saves.
+ * 
+ * Since we allow multiple sets of saves, each of an unlimited size, the original UI becomes too slow. 
+ * For that reason, and to permit its customization, we bypass it in favor of ImGui replacements.
  */
 
 /// <summary>

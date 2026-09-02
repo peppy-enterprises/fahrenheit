@@ -228,8 +228,8 @@ internal sealed class FhLoader {
             yield return new FhModuleContext(module, module_paths);
         }
 
-        FhInternal.Log.Info($"--- load context dump for {manifest.Id} ---");
-        FhInternal.Log.Info($"  {string.Join("\n  ", load_context.Assemblies)}");
-        FhInternal.Log.Info($"---");
+        FhInternal.Log.LogDirect($"--- load context dump for {manifest.Id} ---");
+        FhInternal.Log.LogDirect($"  {string.Join("\n  ", load_context.Assemblies)}");
+        FhInternal.Log.LogDirect($"---");
     }
 }

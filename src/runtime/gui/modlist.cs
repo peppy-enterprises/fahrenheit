@@ -3,13 +3,10 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-namespace Fahrenheit.Runtime;
+namespace Fahrenheit.Runtime.Gui;
 
 /// <summary>
-///     Executes the lifecycle methods of <see cref="FhModule"/>.<br/>
-///     Also renders the modlist on the main menu.
-///     <para/>
-///     In your module, override <see cref="FhModule.handle_input">.
+///     Renders the modlist on the main menu.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 public unsafe class FhModListDisplayModule : FhModule {
