@@ -20,7 +20,7 @@ namespace Fahrenheit.FFX2;
 public static unsafe partial class FhCall {
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public unsafe delegate void d_FUN_00534A70(int* arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int* arg7, int* arg8, int* arg9);
+    public unsafe delegate void d_FUN_00534A70(int* ptr_this, int arg2, int arg3, int arg4, int arg5, int arg6, int* arg7, int* arg8, int* arg9);
     public static FhMethodHandle<d_FUN_00534A70> FUN_00534A70
         => new( new FhMethodLocation("FFX-2.exe", 0x134A70) );
 
@@ -136,7 +136,7 @@ public static unsafe partial class FhCall {
 
     // Unofficial name
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate uint d_CalculateStats(uint chr_id, int chr_level, uint job_id, PlySave* ply_save, int* stats_);
+    public unsafe delegate uint d_CalculateStats(uint chr_id, int chr_level, uint job_id, PlySave* ptr_ply_save, int* ptr_stats);
     public static FhMethodHandle<d_CalculateStats> CalculateStats
         => new( new FhMethodLocation("FFX-2.exe", 0x20D720) );
 
@@ -221,7 +221,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x2218E0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_MsStatusEffectCheck(byte chr_id);
+    public delegate void d_MsStatusEffectCheck(uint chr_id);
     public static FhMethodHandle<d_MsStatusEffectCheck> MsStatusEffectCheck
         => new( new FhMethodLocation("FFX-2.exe", 0x223290) );
 
@@ -261,7 +261,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x2294F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int d_MsGetJobAbilityList(int chr_id, int job_id, int* arg3, int arg4);
+    public unsafe delegate ushort* d_MsGetJobAbilityList(uint chr_id, uint job_id, uint* ptr_list_length, int arg4);
     public static FhMethodHandle<d_MsGetJobAbilityList> MsGetJobAbilityList
         => new( new FhMethodLocation("FFX-2.exe", 0x229AF0) );
 
@@ -311,8 +311,8 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x2348A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_FUN_00634A20(uint chr_id, Chr* chr, uint rom_atb_speed);
-    public static FhMethodHandle<d_FUN_00634A20> FUN_00634A20 
+    public delegate uint d_MsChrSetDecTime(uint chr_id, Chr* chr, uint rom_atb_speed);
+    public static FhMethodHandle<d_MsChrSetDecTime> MsChrSetDecTime
         => new( new FhMethodLocation("FFX-2.exe", 0x234A20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -382,7 +382,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x2430F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_MsMagicCheckCommandExe(int arg1, uint arg2, Chr** arg3, int* arg4);
+    public delegate byte d_MsMagicCheckCommandExe(int arg1, uint arg2, int* arg3, int* arg4);
     public static FhMethodHandle<d_MsMagicCheckCommandExe> MsMagicCheckCommandExe 
         => new( new FhMethodLocation("FFX-2.exe", 0x244BB0) );
 
@@ -395,6 +395,11 @@ public static unsafe partial class FhCall {
     public delegate uint d_MsAutoBerserkProcess(uint chr_id, Chr* chr);
     public static FhMethodHandle<d_MsAutoBerserkProcess> MsAutoBerserkProcess 
         => new( new FhMethodLocation("FFX-2.exe", 0x249100) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_Ch_SetMotionSpeed(uint ptr_actor, ushort speed);
+    public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
+        => new(new FhMethodLocation("FFX-2.exe", 0x2E63B0));
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate uint d_SndSepPlaySimple(uint arg1);
@@ -432,7 +437,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x364680) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_TkMenuSetHelpMessage(byte* text_location);
+    public delegate void d_TkMenuSetHelpMessage(byte* ptr_text);
     public static FhMethodHandle<d_TkMenuSetHelpMessage> TkMenuSetHelpMessage
         => new( new FhMethodLocation("FFX-2.exe", 0x365B20) );
 
@@ -442,12 +447,12 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x368570) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate short d_TOGetRtcRatio(uint arg1);
+    public delegate int d_TOGetRtcRatio(uint arg1);
     public static FhMethodHandle<d_TOGetRtcRatio> TOGetRtcRatio
         => new( new FhMethodLocation("FFX-2.exe", 0x3730C0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate short d_TOGetRtcValue(uint arg1);
+    public delegate int d_TOGetRtcValue(uint arg1);
     public static FhMethodHandle<d_TOGetRtcValue> TOGetRtcValue
         => new( new FhMethodLocation("FFX-2.exe", 0x3730E0) );
 
@@ -467,7 +472,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x376910) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool d_FUN_776EC0(uint arg1, int ability_slot);
+    public delegate int d_FUN_776EC0(uint arg1, uint ability_slot);
     public static FhMethodHandle<d_FUN_776EC0> FUN_776EC0
         => new( new FhMethodLocation("FFX-2.exe", 0x376EC0) );
 
@@ -497,17 +502,17 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x3788D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_TOMenuMakeJobList(int chr_id);
+    public delegate void d_TOMenuMakeJobList(uint chr_id);
     public static FhMethodHandle<d_TOMenuMakeJobList> TOMenuMakeJobList
         => new( new FhMethodLocation("FFX-2.exe", 0x378B00) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TOMenuNextJobList();
+    public delegate int d_TOMenuNextJobList();
     public static FhMethodHandle<d_TOMenuNextJobList> TOMenuNextJobList
         => new( new FhMethodLocation("FFX-2.exe", 0x378CD0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TOMenuPrevJobList();
+    public delegate int d_TOMenuPrevJobList();
     public static FhMethodHandle<d_TOMenuPrevJobList> TOMenuPrevJobList
         => new( new FhMethodLocation("FFX-2.exe", 0x378E80) );
 
@@ -537,8 +542,8 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x37AA20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_791610(int arg1, int arg2, int arg3);
-    public static FhMethodHandle<d_FUN_791610> FUN_791610
+    public delegate void d_TODVDFileReadNonBlock(int arg1, int arg2, int arg3);
+    public static FhMethodHandle<d_TODVDFileReadNonBlock> TODVDFileReadNonBlock
         => new( new FhMethodLocation("FFX-2.exe", 0x391610) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -602,7 +607,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x3AE9B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_007AEDA0(byte* arg1, int arg2, int arg3);
+    public delegate void d_FUN_007AEDA0(byte* arg1, float arg2, float arg3);
     public static FhMethodHandle<d_FUN_007AEDA0> FUN_007AEDA0
         => new( new FhMethodLocation("FFX-2.exe", 0x3AEDA0) );
 
@@ -620,5 +625,10 @@ public static unsafe partial class FhCall {
     public delegate void d_TOMkpShape2dMenu(int x, int y, int arg3, int arg4);
     public static FhMethodHandle<d_TOMkpShape2dMenu> TOMkpShape2dMenu
         => new( new FhMethodLocation("FFX-2.exe", 0x3B1250) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_rcefObjProc(RcEffectObj* ptr_rcef_obj);
+    public static FhMethodHandle<d_rcefObjProc> rcefObjProc
+        => new(new FhMethodLocation("FFX.exe", 0x3EA6C0));
 
 }
