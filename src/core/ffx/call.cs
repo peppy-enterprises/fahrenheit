@@ -257,7 +257,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4A9A20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* text, float param_2, float param_3, byte color, float param_5, float param_6);
+    public unsafe delegate void d_ToMakeBtlEasyEdgeFont(byte* text, float x, float y, byte color_id, float scale, float param_6);
     public static FhMethodHandle<d_ToMakeBtlEasyEdgeFont> ToMakeBtlEasyEdgeFont
         => new ( new FhMethodLocation("FFX.exe", 0x505930) );
 
@@ -683,16 +683,6 @@ public static partial class FhCall {
     public unsafe delegate void* d_MsGetChrAbilityMap(int chr_id, void* save_param);
     public static FhMethodHandle<d_MsGetChrAbilityMap> MsGetChrAbilityMap
         => new ( new FhMethodLocation("FFX.exe", 0x385C20) );
-
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate int d_Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint path, bool readOnly, nint arg4, nint arg5, nint arg6);
-    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_openFile> Phyre_PSerialization_PStreamFileWin32_openFile
-        => new( new FhMethodLocation("FFX.exe", 0x208100) );
-
-    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate uint d_Phyre_PSerialization_PStreamFileWin32_Read(nint ptr_this, nint buffer, uint max_len);
-    internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_Read> Phyre_PSerialization_PStreamFileWin32_Read
-        => new( new FhMethodLocation("FFX.exe", 0x208250) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate int d_sceClose(void* arg1);
