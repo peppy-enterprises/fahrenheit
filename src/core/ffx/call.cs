@@ -227,12 +227,12 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4BDA10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsGetNextAP(int chr_id);
+    public delegate int d_MsGetNextAP(int ply_id);
     public static FhMethodHandle<d_MsGetNextAP> MsGetNextAP
         => new ( new FhMethodLocation("FFX.exe", 0x384F50) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_FUN_00785370(byte param_1);
+    public delegate int d_FUN_00785370(byte ply_id);
     public static FhMethodHandle<d_FUN_00785370> FUN_00785370
         => new ( new FhMethodLocation("FFX.exe", 0x385370) );
 
@@ -242,12 +242,12 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x3ABE10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_DrawCrossMenuIconXYWHRGBA(float param_1, float param_2, float param_3, float param_4, byte param_5, byte param_6, byte param_7, byte param_8, byte param_9);
+    public delegate void d_DrawCrossMenuIconXYWHRGBA(float x, float y, float w, float h, byte icon_idx, byte r, byte g, byte b, byte a);
     public static FhMethodHandle<d_DrawCrossMenuIconXYWHRGBA> DrawCrossMenuIconXYWHRGBA
         => new ( new FhMethodLocation("FFX.exe", 0x4E6AF0) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate uint d_MsGetSaveConfigHiragana();
+    public delegate bool d_MsGetSaveConfigHiragana();
     public static FhMethodHandle<d_MsGetSaveConfigHiragana> MsGetSaveConfigHiragana
         => new ( new FhMethodLocation("FFX.exe", 0x3852B0) );
 
@@ -262,22 +262,22 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4FDEE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_TOCheckBtlCommandUse(uint param_1, uint param_2);
+    public delegate int d_TOCheckBtlCommandUse(int chr_id, uint com_id);
     public static FhMethodHandle<d_TOCheckBtlCommandUse> TOCheckBtlCommandUse
         => new ( new FhMethodLocation("FFX.exe", 0x49AC10) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsGetCommandMP(uint chr_id, uint command);
+    public delegate int d_MsGetCommandMP(int chr_id, Command* command);
     public static FhMethodHandle<d_MsGetCommandMP> MsGetCommandMP
         => new ( new FhMethodLocation("FFX.exe", 0x38D030) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsGetRamChrHP(uint chr_id);
+    public delegate int d_MsGetRamChrHP(int chr_id);
     public static FhMethodHandle<d_MsGetRamChrHP> MsGetRamChrHP
         => new ( new FhMethodLocation("FFX.exe", 0x39ADE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsGetRamChrMP(uint chr_id);
+    public delegate int d_MsGetRamChrMP(int chr_id);
     public static FhMethodHandle<d_MsGetRamChrMP> MsGetRamChrMP
         => new ( new FhMethodLocation("FFX.exe", 0x39AE60) );
 
@@ -287,7 +287,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x504BA0) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate uint d_TkMenuGetCurrentPlayerPos();
+    public delegate int d_TkMenuGetCurrentPlayerPos();
     public static FhMethodHandle<d_TkMenuGetCurrentPlayerPos> TkMenuGetCurrentPlayerPos
         => new ( new FhMethodLocation("FFX.exe", 0x4A9820) );
 
@@ -312,12 +312,12 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x398BE0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_MsGetSavePlyJoined(byte idx);
+    public delegate bool d_MsGetSavePlyJoined(byte chr_id);
     public static FhMethodHandle<d_MsGetSavePlyJoined> MsGetSavePlyJoined
         => new( new FhMethodLocation("FFX.exe", 0x385460) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_FUN_00798aa0(uint param_1);
+    public delegate int d_FUN_00798aa0(uint aability_id);
     public static FhMethodHandle<d_FUN_00798aa0> FUN_00798aa0
         => new ( new FhMethodLocation("FFX.exe", 0x398AA0) );
 
@@ -327,37 +327,37 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4D9140) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_FUN_008a9c20(uint param_1);
+    public delegate byte d_FUN_008a9c20(int ply_id);
     public static FhMethodHandle<d_FUN_008a9c20> FUN_008a9c20
         => new ( new FhMethodLocation("FFX.exe", 0x4A9C20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate byte d_FUN_008a97d0(uint param_1);
+    public delegate byte d_FUN_008a97d0(int ply_id);
     public static FhMethodHandle<d_FUN_008a97d0> FUN_008a97d0
         => new ( new FhMethodLocation("FFX.exe", 0x4A97D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void* d_FUN_008bee40(uint param_1);
+    public unsafe delegate byte* d_FUN_008bee40(uint param_1);
     public static FhMethodHandle<d_FUN_008bee40> FUN_008bee40
         => new ( new FhMethodLocation("FFX.exe", 0x4BEE40) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_ToGetBtlEasyFontWidth(byte* text, float* ref_width, int param_3, float scale);
+    public unsafe delegate void d_ToGetBtlEasyFontWidth(byte* text, float* out_width, int param_3, float scale);
     public static FhMethodHandle<d_ToGetBtlEasyFontWidth> ToGetBtlEasyFontWidth
         => new ( new FhMethodLocation("FFX.exe", 0x505290) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008d8a70(float param_1, float param_2, int param_3);
+    public delegate void d_FUN_008d8a70(float param_1, float param_2, Equipment* gear);
     public static FhMethodHandle<d_FUN_008d8a70> FUN_008d8a70
         => new ( new FhMethodLocation("FFX.exe", 0x4D8A70) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_MsGetRamChrMonster(uint mon_id);
+    public delegate bool d_MsGetRamChrMonster(int chr_id);
     public static FhMethodHandle<d_MsGetRamChrMonster> MsGetRamChrMonster
         => new ( new FhMethodLocation("FFX.exe", 0x39AF00) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate uint d_MsLimitUp(int param_1, Chr* character, uint init_limit_add);
+    public unsafe delegate int d_MsLimitUp(int chr_id, Chr* chr, int inc_amount);
     public static FhMethodHandle<d_MsLimitUp> MsLimitUp
         => new ( new FhMethodLocation("FFX.exe", 0x3B15A0) );
 
@@ -367,7 +367,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x38BFC0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate Command* d_MsGetRomPlyCommand(uint com_id, int* out_text);
+    public unsafe delegate PCommand* d_MsGetRomPlyCommand(uint com_id, int* out_text);
     public static FhMethodHandle<d_MsGetRomPlyCommand> MsGetRomPlyCommand
         => new ( new FhMethodLocation("FFX.exe", 0x390AE0) );
 
@@ -387,8 +387,9 @@ public static partial class FhCall {
     public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp
         => new ( new FhMethodLocation("FFX.exe", 0x45C6B0) );
 
+    // Unofficial naming
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate void d_TkMenuDrawMain();
+    public delegate void d_TkMenuDrawMain(void* menu);
     public static FhMethodHandle<d_TkMenuDrawMain> TkMenuDrawMain
         => new ( new FhMethodLocation("FFX.exe", 0x4E0BA0) );
 
@@ -403,53 +404,53 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x4BC300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008e67f0(uint param_1, float param_2, float param_3, float param_4);
+    public delegate void d_FUN_008e67f0(uint gear_idx, float x, float y, int color);
     public static FhMethodHandle<d_FUN_008e67f0> FUN_008e67f0
         => new ( new FhMethodLocation("FFX.exe", 0x4E67F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_DrawCrossMenuIconWeaponName2(ushort* param_1, float param_2, float param_3, float param_4);
+    public unsafe delegate void d_DrawCrossMenuIconWeaponName2(void* param_1, float x, float y, int color_id);
     public static FhMethodHandle<d_DrawCrossMenuIconWeaponName2> DrawCrossMenuIconWeaponName2
         => new ( new FhMethodLocation("FFX.exe", 0x4E6970) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_TOBtlDrawCommandWindow(uint param_1);
+    public delegate int d_TOBtlDrawCommandWindow(void* param_1);
     public static FhMethodHandle<d_TOBtlDrawCommandWindow> TOBtlDrawCommandWindow
         => new ( new FhMethodLocation("FFX.exe", 0x49F300) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008cf800(int param_1);
+    public delegate void d_FUN_008cf800(void* param_1);
     public static FhMethodHandle<d_FUN_008cf800> FUN_008cf800
         => new ( new FhMethodLocation("FFX.exe", 0x4CF800) );
 
     // Unofficial naming
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int d_BattleRewards_AddGear(uint chr_id, ChrLoot* loot, BtlRewardData* rewards);
+    public unsafe delegate int d_BattleRewards_AddGear(int chr_id, ChrLoot* loot, BtlRewardData* rewards);
     public static FhMethodHandle<d_BattleRewards_AddGear> BattleRewards_AddGear
         => new ( new FhMethodLocation("FFX.exe", 0x398C20) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_MsChangeWeaponInvisible(uint param_1, byte param_2);
+    public delegate void d_MsChangeWeaponInvisible(int ply_id, bool enable);
     public static FhMethodHandle<d_MsChangeWeaponInvisible> MsChangeWeaponInvisible
         => new ( new FhMethodLocation("FFX.exe", 0x3AD5F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_FUN_008d85f0(int param_1, int param_2);
+    public delegate void d_FUN_008d85f0(void* param_1, int param_2);
     public static FhMethodHandle<d_FUN_008d85f0> FUN_008d85f0
         => new ( new FhMethodLocation("FFX.exe", 0x4D85F0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsLimitTypeDeathCheck(int param_1, int param_2, uint param_3, int param_4);
+    public delegate int d_MsLimitTypeDeathCheck(int attacker_id, Chr* attacker, int target_id, Chr* target);
     public static FhMethodHandle<d_MsLimitTypeDeathCheck> MsLimitTypeDeathCheck
         => new ( new FhMethodLocation("FFX.exe", 0x3B0F90) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_FUN_007b10d0(uint chr_id, uint limit_mode, int param_3);
+    public delegate int d_FUN_007b10d0(int chr_id, uint limit_mode, int param_3);
     public static FhMethodHandle<d_FUN_007b10d0> FUN_007b10d0
         => new ( new FhMethodLocation("FFX.exe", 0x3B10D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsLimitTypeTurnCheck(uint param_1, int param_2);
+    public delegate int d_MsLimitTypeTurnCheck(int chr_id, Chr* chr);
     public static FhMethodHandle<d_MsLimitTypeTurnCheck> MsLimitTypeTurnCheck
         => new ( new FhMethodLocation("FFX.exe", 0x3B13D0) );
 
@@ -464,7 +465,7 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x386BC0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_FUN_00635c20(uint param_1);
+    public delegate bool d_FUN_00635c20(uint param_1);
     public static FhMethodHandle<d_FUN_00635c20> FUN_00635c20
         => new ( new FhMethodLocation("FFX.exe", 0x235C20) );
 
@@ -474,27 +475,27 @@ public static partial class FhCall {
         => new ( new FhMethodLocation("FFX.exe", 0x3AE380) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    public delegate void d_TOBtlCtrlHelpWin(int param_1);
+    public delegate void d_TOBtlCtrlHelpWin();
     public static FhMethodHandle<d_TOBtlCtrlHelpWin> TOBtlCtrlHelpWin
         => new ( new FhMethodLocation("FFX.exe", 0x491250) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate ushort* d_TOGetSaveWindow(uint chr_id, BtlWindowType window_type, int* summonlistlength);
+    public unsafe delegate ushort* d_TOGetSaveWindow(int chr_id, BtlWindowType window_type, int* out_length);
     public static FhMethodHandle<d_TOGetSaveWindow> TOGetSaveWindow
         => new ( new FhMethodLocation("FFX.exe", 0x49B510) );
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int d_TkMenuSummonEnableMask();
+    public delegate uint d_TkMenuSummonEnableMask();
     public static FhMethodHandle<d_TkMenuSummonEnableMask> TkMenuSummonEnableMask
         => new ( new FhMethodLocation("FFX.exe", 0x4AB190) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate int* d_MsGetChrAbilityMap(uint chr_id, uint* param_2);
+    public unsafe delegate void* d_MsGetChrAbilityMap(int chr_id, void* save_param);
     public static FhMethodHandle<d_MsGetChrAbilityMap> MsGetChrAbilityMap
         => new ( new FhMethodLocation("FFX.exe", 0x385C20) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-    internal delegate bool d_Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint filename, bool readOnly, nint arg4, nint arg5, nint arg6);
+    internal delegate bool d_Phyre_PSerialization_PStreamFileWin32_openFile(nint ptr_this, nint path, bool readOnly, nint arg4, nint arg5, nint arg6);
     internal static FhMethodHandle<d_Phyre_PSerialization_PStreamFileWin32_openFile> Phyre_PSerialization_PStreamFileWin32_openFile
         => new( new FhMethodLocation("FFX.exe", 0x208100) );
 
