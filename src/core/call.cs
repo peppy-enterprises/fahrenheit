@@ -499,6 +499,11 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(0x39A0D0, 0x224CD0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int d_brnd(int rng_idx);
+    public static FhMethodHandle<d_brnd> brnd
+        => new( new FhMethodLocation(0x398900, 0x2E1290) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

@@ -483,11 +483,6 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x395AB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_brnd(int rng_idx);
-    public static FhMethodHandle<d_brnd> brnd
-        => new( new FhMethodLocation("FFX.exe", 0x398900) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate uint d_MsApUp(int chr_id, Chr* chr, int base_ap_add, uint arg4);
     public static FhMethodHandle<d_MsApUp> MsApUp
         => new( new FhMethodLocation("FFX.exe", 0x398A10) );

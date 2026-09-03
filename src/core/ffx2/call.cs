@@ -211,11 +211,6 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x21DEB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate uint d_brnd(int arg1);
-    public static FhMethodHandle<d_brnd> brnd 
-        => new( new FhMethodLocation("FFX-2.exe", 0x21E290) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate uint d_MsCheckStatCount(uint arg1);
     public static FhMethodHandle<d_MsCheckStatCount> MsCheckStatCount 
         => new( new FhMethodLocation("FFX-2.exe", 0x2218E0) );
@@ -399,6 +394,9 @@ public static unsafe partial class FhCall {
     public delegate void d_Ch_SetMotionSpeed(uint ptr_actor, ushort speed);
     public static FhMethodHandle<d_Ch_SetMotionSpeed> Ch_SetMotionSpeed
         => new( new FhMethodLocation("FFX-2.exe", 0x2E63B0) );
+
+    public static FhMethodHandle<Fahrenheit.FhCall.d_CT_RetInt> CT_RetInt_0172_fillPartyMemberMp
+        => new( new FhMethodLocation("FFX-2.exe", 0x319360) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate uint d_SndSepPlaySimple(uint arg1);
