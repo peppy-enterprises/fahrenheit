@@ -6,16 +6,18 @@
 namespace Fahrenheit.Runtime;
 
 /* [fkelava 13/11/25 22:03]
- * The game's original save system is limiting. A global limit of 200 saves exist,
- * and they cannot be separated between modsets. While applications like Mod Organizer 2
- * can retrofit set functionality to any game, we must interface with most of the
- * save system _anyway_ to provide local state callbacks.
+ * The game's original save system is a basic manager operating a Iggy-based Flash UI.
+ * It is fairly limiting. A global limit of 200 saves exist, which cannot be separated or logically organized. 
+ * 
+ * In Fahrenheit, this creates several problems for us:
+ * - We would like to let mods read and write to some local state at save/load time.
+ * - We would like to offer the ability to have multiple sets of saves.
+ * - We would like to offer the ability to save more than 200 saves per set.
+ * - We would like to offer the ability to customize the save/load user interface.
  *
- * My first attempt at doing this involved hooking the game's Flash-based Iggy UI to display custom
- * save lists. While this worked, it proved both hideously complex and untenably slow.
- *
- * A complete UI replacement in ImGui was decided instead. As the vanilla UI and save system are
- * tightly bound, this effectively meant I had to re-implement the entire save system.
+ * Instead of going the roundabout way, we simply reimplement the entire save system. Other modules
+ * can then query the system's state and actuate it to accomplish the above tasks,
+ * and we build in local state directly into the save/load actions.
  */
 
 /// <summary>

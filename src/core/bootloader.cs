@@ -154,12 +154,11 @@ internal sealed class FhLoader {
         FhInternal.Log.LogDirect($"----");
     }
 
-    /// <summary>
-    ///     Attempts to map a <see cref="AssemblyName"/> to an already loaded Fahrenheit DLL <see cref="Assembly"/>.
-    ///     <para/>
-    ///     This is because Fahrenheit mod DLLs are not permitted to bundle other mod DLLs they depend on;
-    ///     whichever version of the dependency the user actually has installed will be loaded instead.
-    /// </summary>
+    /// <summary>Retrieves an already loaded <see cref="Assembly"/> for a given <see cref="AssemblyName"/>, if one exists.</summary>
+    /// <remarks>
+    ///     Only one copy of a given Fahrenheit (core or mod) DLL may be loaded 
+    ///     in a given session, and is shared among all of its users.
+    /// </remarks>
     internal Assembly? get_shared_assembly(AssemblyName assembly_name) {
         if (!_load_contexts.TryGetValue(assembly_name.Name ?? "", out FhLoadContext? load_context)) return null;
 
@@ -228,8 +227,8 @@ internal sealed class FhLoader {
             yield return new FhModuleContext(module, module_paths);
         }
 
-        FhInternal.Log.Info($"--- load context dump for {manifest.Id} ---");
-        FhInternal.Log.Info($"  {string.Join("\n  ", load_context.Assemblies)}");
-        FhInternal.Log.Info($"---");
+        FhInternal.Log.LogDirect($"--- load context dump for {manifest.Id} ---");
+        FhInternal.Log.LogDirect($"  {string.Join("\n  ", load_context.Assemblies)}");
+        FhInternal.Log.LogDirect($"---");
     }
 }

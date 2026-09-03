@@ -7,11 +7,8 @@ namespace Fahrenheit;
 
 public unsafe static class FhUtil {
 
-    /// <summary>
-    ///     Selects between <typeparamref name="T"/>s based on the currently executing game.
-    ///     <para/>
-    ///     If no game is executing, throws.
-    /// </summary>
+    /// <summary>Selects between <typeparamref name="T"/>s based on the currently executing game.</summary>
+    /// <remarks>If no game is executing, throws.</remarks>
     internal static T select<T>(T ffx, T ffx2, T ffx2lm) {
         return FhGlobal.game_id switch {
             FhGameId.FFX    => ffx,
@@ -54,16 +51,6 @@ public unsafe static class FhUtil {
 
         *ptr = value;
         return old;
-    }
-
-    public static void cast_to_bytes<T>(in ReadOnlySpan<T> src, in Span<byte> dest, out int bytesWritten) where T : struct {
-        bytesWritten = Unsafe.SizeOf<T>() * src.Length;
-        MemoryMarshal.AsBytes(src).CopyTo(dest);
-    }
-
-    public static void cast_from_bytes<T>(in ReadOnlySpan<byte> src, in Span<T> dest, int srcLen, out int count) where T : struct {
-        count = srcLen / Unsafe.SizeOf<T>();
-        MemoryMarshal.Cast<byte, T>(src).CopyTo(dest);
     }
 
     /// <summary>
@@ -118,16 +105,6 @@ public unsafe static class FhUtil {
         if (len    <= 0 || len    >  (sizeof(T) * 8) - offset) throw new ArgumentOutOfRangeException(nameof(len));
 
         for (; len > 0; len--, offset++) { bitfield.set_bit(offset, value.get_bit(offset)); }
-    }
-
-    public static string get_timestamp_string() {
-        DateTime dt = DateTime.UtcNow;
-        return $"{dt.Year:D2}{dt.Month:D2}{dt.Day:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}";
-    }
-
-    public static string get_extended_timestamp_string() {
-        DateTime dt = DateTime.UtcNow;
-        return $"{dt.Year:D2}{dt.Month:D2}{dt.Day:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}.{dt.Millisecond:D3}";
     }
 
     internal static JsonSerializerOptions InternalJsonOpts { get; } = new JsonSerializerOptions {
@@ -197,24 +174,6 @@ public unsafe static class FhUtil {
             reader.Read();
         }
         reader.Read();
-    }
-
-    public static TDelegate get_fptr<TDelegate>(nint address) {
-        return Marshal.GetDelegateForFunctionPointer<TDelegate>(FhEnvironment.BaseAddr + address);
-    }
-
-    public static Vector2 game_remap_720p(this Vector2 vec) {
-        return new Vector2 {
-            X = vec.X * 512 / 1280,
-            Y = vec.Y * 416 / 720,
-        };
-    }
-
-    public static Vector2 game_remap_1080p(this Vector2 vec) {
-        return new Vector2 {
-            X = vec.X * 512 / 1920,
-            Y = vec.Y * 416 / 1080,
-        };
     }
 
     public static Vector2 inverse(this Vector2 vec) {

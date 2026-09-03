@@ -10,10 +10,11 @@ namespace Fahrenheit.Runtime;
  * Repacking the archives is tiresome, so we want to permit direct loading of modded files from disk.
  *
  * While the game never uses it, it has full support for native file I/O. On Windows, this manifests as HANDLEs.
- * Thus, at file load time, we can silently swap out what the game _intended_ to load for
- * a HANDLE to a file on disk, and the game will perform all necessary book-keeping for us.
+ * Thus, at file load time, we can give the game a HANDLE to a file on disk, and it will do the book-keeping for us.
+ * 
+ * As a bonus, we permit the user to load assets from the currently inactive game.
  *
- * There is a limited exception to this rule which must be handled. See `cd.cs`.
+ * Some files load under slightly different rules and need different handling. See `cd.cs`.
  */
 
 using EflIndex = Dictionary<string, string>;
@@ -144,6 +145,8 @@ public unsafe sealed class FhFileLoaderModule : FhModule {
     private PStreamFile* _crossload(PStreamFile* ptr_this, byte* ptr_path) {
         if (ptr_this->handle_vbf != null)
             return ptr_this;
+
+        FhCall.FUN_00607F10_008910A0.fnptr!(ptr_path);
 
         VFile* ptr_crossload_file = FhCall.BigFileStream_openFile.fnptr!(_ptr_vbf_secondary, ptr_path);
         ptr_this->handle_vbf = ptr_crossload_file;

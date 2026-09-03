@@ -5,6 +5,30 @@
 
 namespace Fahrenheit.Runtime;
 
+/* [fkelava 06/08/26 14:02]
+ * See generally issue #253.
+ *
+ * The game has a long-standing issue with "green screens" in FMVs and other crashes.
+ * The band-aid fix is applying the '4GB' patch. But _why_ does it happen? Can we provide a better fix?
+ *
+ * The game reserves 37.5% of the default address space (0x3000_0000 bytes)
+ * for its primary memory pool. It then commits things into it slowly over time.
+ *
+ * Reserved memory is considered used by the system regardless of how much of it is actually
+ * _committed_. The problem is that the game does not service all memory requests from the pool.
+ * For things like FMVs, there still has to be enough additional contiguous free memory to load them.
+ *
+ * This worked ten or so years ago when it was made, and it works on most other platforms
+ * because the high reaches of the address space should be entirely empty.
+ *
+ * But in the decade since, ASLR started shipping on Windows, and is the default for anything
+ * built today. The OS loads such DLLs at a random high address, breaking up the previously contiguous
+ * free space into smaller chunks. No block large enough to fit an FMV remains.
+ *
+ * The true solution is to reserve less. By deferring the moment memory is considered 'used'
+ * to the _actual point of usage_, the truth is revealed; there was never a shortage of memory.
+ */
+
 /// <summary>
 ///     Manipulates the game's allocator to improve its behavior.
 /// </summary>
@@ -28,30 +52,6 @@ public unsafe sealed class FhMallocModule : FhModule {
         return FhCall._malloc_pool_init       .hook(this, h_mpool_init)
             && FhCall._VirtualAlloc_Reserve_NA.hook(this, h_mreserve);
     }
-
-    /* [fkelava 06/08/26 14:02]
-     * See generally issue #253.
-     *
-     * Effectively, the game reserves 37.5% of the default address space (0x3000_0000 bytes)
-     * for its primary memory pool. It then commits things into it slowly over time.
-     *
-     * Reserved memory is considered used by the system regardless of how much of it is actually
-     * _committed_ (i.e. in actual use). If the game serviced all memory requests from the pool,
-     * there would be no problem, but it doesn't. For things like FMVs, there still has to be
-     * enough additional contiguous free memory to load them.
-     *
-     * This worked ten or so years ago when it was made, and it works on most other platforms
-     * because the high reaches of the address space should be entirely empty.
-     *
-     * But in the decade since, ASLR started shipping on Windows, and is the default for anything
-     * built today. When such a DLL is loaded, the OS loader will place it at a random high address.
-     * The amount of free memory hasn't changed, but it's now carved up into smaller blocks between
-     * the randomly-placed images. There is no longer a free block large enough to fit an FMV
-     * between the image at the lowest address and the game's reserved pool.
-     *
-     * The true solution is to reserve less. By deferring the moment memory is considered 'used'
-     * to the _actual point of usage_, the truth is revealed; there was never a shortage of memory.
-     */
 
     /// <summary>
     ///     Replaces the game's primary memory pool initializer.

@@ -35,6 +35,41 @@ public static unsafe partial class FhCall {
      */
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate int d_FUN_0088E6C0_0074C2B0(int param_1);
+    public static FhMethodHandle<d_FUN_0088E6C0_0074C2B0> FUN_0088E6C0_0074C2B0 =>
+        new( new FhMethodLocation(0x48E6C0, 0x34C2B0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate ushort d_AtelGetSaveDic();
+    public static FhMethodHandle<d_AtelGetSaveDic> AtelGetSaveDic =>
+        new( new FhMethodLocation(0x46C3A0, 0x326B60) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_MsSetSavePartyMember(uint param_1, uint param_2, uint param_3);
+    public static FhMethodHandle<d_MsSetSavePartyMember> MsSetSavePartyMember =>
+        new( new FhMethodLocation(0x386A10, 0x20EB20) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate int d_FUN_0088E6A0_0074C290(int param_1);
+    public static FhMethodHandle<d_FUN_0088E6A0_0074C290> FUN_0088E6A0_0074C290 =>
+        new( new FhMethodLocation(0x48E6A0, 0x34C290) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate uint d_MsGetSaveItemNum(uint param_1);
+    public static FhMethodHandle<d_MsGetSaveItemNum> MsGetSaveItemNum =>
+        new( new FhMethodLocation(0x390500, 0x220BC0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate byte d_AtelPushMember();
+    public static FhMethodHandle<d_AtelPushMember> AtelPushMember =>
+        new( new FhMethodLocation(0x46E2A0, 0x328DA0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate byte d_AtelPopMember();
+    public static FhMethodHandle<d_AtelPopMember> AtelPopMember =>
+        new( new FhMethodLocation(0x46DD40, 0x3287E0) );
+  
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void d_AtelJumpGameOver();
     public static FhMethodHandle<d_AtelJumpGameOver> AtelJumpGameOver 
         => new( new FhMethodLocation(0x46D9A0, 0x3283A0) );
@@ -50,6 +85,16 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(0x23E0E0, 0x04D170) );
 
     // RT - File cross-loader
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate int d_FUN_00607E00_00890EC0(byte* ptr_path, byte* arg2, byte* arg3);
+    public static FhMethodHandle<d_FUN_00607E00_00890EC0> FUN_00607E00_00890EC0 =>
+        new( new FhMethodLocation(0x207E00, 0x490EC0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_FUN_00607F10_008910A0(byte* ptr_path);
+    public static FhMethodHandle<d_FUN_00607F10_008910A0> FUN_00607F10_008910A0 =>
+        new( new FhMethodLocation(0x207F10, 0x4910A0) );
 
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     internal unsafe delegate PCluster* d_ClusterManager_getPClusterByName(uint ptr_this, byte* ptr_name);
