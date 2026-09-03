@@ -74,7 +74,7 @@ public sealed class FhSaves {
     private readonly string                  _sm_path_base;
     private readonly string                  _sm_path_default_set;
     private readonly List<FhSaveDisplayData> _sm_display_data;
-    private readonly UserInterfaces          _sm_user_interfaces;
+    private readonly UserInterfaces          _sm_uis;
 
     /// <summary>The name of the active set.</summary>
     public string active_set => _sm_active_set;
@@ -90,7 +90,7 @@ public sealed class FhSaves {
         _sm_sets_with_autosaves = [];
         _sm_active_set          = FhSavePal.DEFAULT_SET_NAME;
         _sm_display_data        = [];
-        _sm_user_interfaces     = [];
+        _sm_uis                 = [];
 
         _sm_set_save_counts  = new() {
             { FhGameId.FFX,    [] },
@@ -279,13 +279,13 @@ public sealed class FhSaves {
     /// <param name="ui">The UI with the given ID.</param>
     /// <returns>Whether the operation succeeded.</returns>
     internal bool get_ui(string id, [NotNullWhen(true)] out FhSaveUi? ui) {
-        return _sm_user_interfaces.TryGetValue(id, out ui);
+        return _sm_uis.TryGetValue(id, out ui);
     }
 
     /// <summary>Register a new save UI for selection by the user.</summary>
     /// <param name="ui">The new UI to register.</param>
     public void register_ui(FhSaveUi ui) {
-        _sm_user_interfaces[ui.ModuleType] = ui;
+        _sm_uis[ui.ModuleType] = ui;
     }
 
     /// <summary>Regenerate and retrieve the loadable sets.</summary>
