@@ -961,11 +961,6 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x395AB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_brnd(int rng_idx);
-    public static FhMethodHandle<d_brnd> brnd
-        => new( new FhMethodLocation("FFX.exe", 0x398900) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate uint d_MsApUp(int chr_id, Chr* chr, int base_ap_add, uint arg4);
     public static FhMethodHandle<d_MsApUp> MsApUp
         => new( new FhMethodLocation("FFX.exe", 0x398A10) );
@@ -984,11 +979,6 @@ public static partial class FhCall {
     public unsafe delegate void d_FUN_007993f0(BtlRewardData* arg1, int arg2);
     public static FhMethodHandle<d_FUN_007993f0> FUN_007993f0
         => new( new FhMethodLocation("FFX.exe", 0x3993F0) );
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsCheckRange(int arg1, int arg2, int arg3);
-    public static FhMethodHandle<d_MsCheckRange> MsCheckRange
-        => new( new FhMethodLocation("FFX.exe", 0x39A0D0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate Command* d_MsGetComData(int com_id, byte** arg2);
