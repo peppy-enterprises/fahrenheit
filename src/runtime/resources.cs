@@ -21,12 +21,12 @@ public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoaderI
 
     public FhResourceLoaderModule() {
         _release_queue = [];
-        _release_lock    = new Lock();
+        _release_lock  = new Lock();
     }
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         FhApi.Resources.impl_handle.set(this);
-        FhModuleHandle<FhPhyreLoaderModule> plm_handle = new FhModuleHandle<FhPhyreLoaderModule>(this);
+        FhModuleHandle<FhPhyreLoaderModule> plm_handle = new(this);
 
         return plm_handle.try_get_module(out _plm);
     }

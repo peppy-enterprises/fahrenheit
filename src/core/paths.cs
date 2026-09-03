@@ -45,15 +45,16 @@ internal sealed class FhFinder {
     internal readonly DirectoryInfo Saves;
 
     internal FhFinder() {
-        // If this somehow throws, we really have no business executing at all.
-        string cwd = Directory.GetCurrentDirectory();
+        // Stage 1 sets up APPCONTEXT_BASEDIRECTORY for us to retrieve here.
+        string path_fh_bin  = AppContext.BaseDirectory;
+        string path_fh_base = Directory.GetParent(path_fh_bin)!.FullName;
 
-        Binaries = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_bin));
-        Config   = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_cfg));
-        Mods     = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_mods));
-        Logs     = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_logs, FhUtil.get_timestamp_string()));
-        State    = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_state));
-        Saves    = Directory.CreateDirectory(Path.Join(cwd, "fahrenheit", _dirname_saves));
+        Binaries = Directory.CreateDirectory(path_fh_bin);
+        Config   = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_cfg));
+        Mods     = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_mods));
+        Logs     = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_logs, FhUtil.get_timestamp_string()));
+        State    = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_state));
+        Saves    = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_saves));
     }
 
     /// <summary>

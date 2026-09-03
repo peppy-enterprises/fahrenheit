@@ -236,14 +236,16 @@ static BOOL stage1_init() {
         return FALSE;
     }
 
+    std::basic_string<char_t> target_path = path_target_buf;
+    std::wcout << "Stage 1 Loader executing for: " << target_path << std::endl;
+
     HRESULT hr = PathCchRemoveFileSpec(path_target_buf, MAX_PATH);
     if (hr != S_OK) {
         std::wcerr << "PathCchRemoveFileSpec() failed, error code: " << hr << std::endl;
         return FALSE;
     }
 
-    std::basic_string<char_t> target_path = path_target_buf;
-    std::wcout << "Stage 1 Loader executing for: " << target_path << std::endl;
+    target_path = path_target_buf;
 
     // STEP 3:
     // Change the working directory to the targeted executable's location.

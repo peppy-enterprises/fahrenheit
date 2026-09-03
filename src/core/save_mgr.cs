@@ -5,8 +5,8 @@
 
 namespace Fahrenheit;
 
-using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
 using Renderers  = Dictionary<string, FhSaveUiRenderer>;
+using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
 
 /// <summary>Represents the current operating mode of the save system.</summary>
 public enum FhSaveSystemMode {
