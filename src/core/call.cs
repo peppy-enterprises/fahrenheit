@@ -86,6 +86,16 @@ public static unsafe partial class FhCall {
 
     // RT - File cross-loader
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate int d_FUN_00607E00_00890EC0(byte* ptr_path, byte* arg2, byte* arg3);
+    public static FhMethodHandle<d_FUN_00607E00_00890EC0> FUN_00607E00_00890EC0 =>
+        new( new FhMethodLocation(0x207E00, 0x490EC0) );
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void d_FUN_00607F10_008910A0(byte* ptr_path);
+    public static FhMethodHandle<d_FUN_00607F10_008910A0> FUN_00607F10_008910A0 =>
+        new( new FhMethodLocation(0x207F10, 0x4910A0) );
+
     [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
     internal unsafe delegate PCluster* d_ClusterManager_getPClusterByName(uint ptr_this, byte* ptr_name);
     internal static FhMethodHandle<d_ClusterManager_getPClusterByName> ClusterManager_getPClusterByName => 
