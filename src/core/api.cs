@@ -3,8 +3,6 @@
 // This file is part of Fahrenheit, © 2023-2026 The Fahrenheit contributors.
 // It is licensed to you under the GNU Lesser General Public License, version 3.0 or later. See COPYING, COPYING.LESSER.
 
-using Fahrenheit.Gui;
-
 /* [fkelava 23/6/25 13:47]
  * This is exclusively permitted to the runtime library so it can fulfill the contracts specified
  * in the Fahrenheit API. If you need access to something currently marked internal, open an issue
