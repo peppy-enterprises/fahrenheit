@@ -75,7 +75,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x2083B0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsAddSaveDreSphere(uint ds_id, int amount);
+    public delegate int d_MsAddSaveDreSphere(uint job_id, int amount);
     public static FhMethodHandle<d_MsAddSaveDreSphere> MsAddSaveDreSphere
         => new( new FhMethodLocation("FFX-2.exe", 0x20B260) );
 
@@ -105,7 +105,7 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation("FFX-2.exe", 0x20C650) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_MsGetSaveDreSphere(uint ds_id);
+    public delegate int d_MsGetSaveDreSphere(uint job_id);
     public static FhMethodHandle<d_MsGetSaveDreSphere> MsGetSaveDreSphere
         => new( new FhMethodLocation("FFX-2.exe", 0x20C710) );
 

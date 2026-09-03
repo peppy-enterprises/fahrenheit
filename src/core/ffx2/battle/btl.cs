@@ -11,7 +11,7 @@ public struct DamageBuffer {
     public byte   is_alive;
     public byte   chain_count;
     public byte   unk1;
-    public ushort cmd_id;
+    public ushort com_id;
     public ushort target_stat;
     public int    damage_hp;
     public int    damage_mp;

@@ -14,10 +14,11 @@ public struct ChrRam {
 
     [FieldOffset(0x0)]  public ChrName name;
     [FieldOffset(0x28)] public uint    level;
-    [FieldOffset(0x2C)] public int     max_hp;
-    [FieldOffset(0x30)] public int     max_mp;
-    [FieldOffset(0x34)] public int     base_max_hp;
-    [FieldOffset(0x38)] public int     base_max_mp;
+
+    [FieldOffset(0x2C)] public int max_hp;
+    [FieldOffset(0x30)] public int max_mp;
+    [FieldOffset(0x34)] public int base_max_hp;
+    [FieldOffset(0x38)] public int base_max_mp;
 
     [FieldOffset(0x3E)] public byte strength;
     [FieldOffset(0x3F)] public byte defense;
@@ -32,7 +33,5 @@ public struct ChrRam {
 
 [StructLayout(LayoutKind.Explicit, Size = 0x17E0)]
 public struct Chr {
-
     [FieldOffset(0x358)] public ChrRam ram;
-
 }
