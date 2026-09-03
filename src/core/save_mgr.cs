@@ -5,8 +5,8 @@
 
 namespace Fahrenheit;
 
-using Renderers  = Dictionary<string, FhSaveUiRenderer>;
-using SaveCounts = Dictionary<FhGameId, Dictionary<string, int>>;
+using SaveCounts     = Dictionary<FhGameId, Dictionary<string, int>>;
+using UserInterfaces = Dictionary<string, FhSaveUi>;
 
 /// <summary>Represents the current operating mode of the save system.</summary>
 public enum FhSaveSystemMode {
@@ -74,7 +74,7 @@ public sealed class FhSaves {
     private readonly string                  _sm_path_base;
     private readonly string                  _sm_path_default_set;
     private readonly List<FhSaveDisplayData> _sm_display_data;
-    private readonly Renderers               _sm_renderers;
+    private readonly UserInterfaces          _sm_uis;
 
     /// <summary>The name of the active set.</summary>
     public string active_set => _sm_active_set;
@@ -90,7 +90,7 @@ public sealed class FhSaves {
         _sm_sets_with_autosaves = [];
         _sm_active_set          = FhSavePal.DEFAULT_SET_NAME;
         _sm_display_data        = [];
-        _sm_renderers           = [];
+        _sm_uis                 = [];
 
         _sm_set_save_counts  = new() {
             { FhGameId.FFX,    [] },
@@ -274,18 +274,18 @@ public sealed class FhSaves {
         return target_slot;
     }
 
-    /// <summary>Get the save UI renderer associated with the given ID.</summary>
-    /// <param name="id">The ID of the desired renderer.</param>
-    /// <param name="renderer">The renderer with the given ID.</param>
+    /// <summary>Get the save UI associated with the given ID.</summary>
+    /// <param name="id">The ID of the desired UI.</param>
+    /// <param name="ui">The UI with the given ID.</param>
     /// <returns>Whether the operation succeeded.</returns>
-    internal bool get_renderer(string id, [NotNullWhen(true)] out FhSaveUiRenderer? renderer) {
-        return _sm_renderers.TryGetValue(id, out renderer);
+    internal bool get_ui(string id, [NotNullWhen(true)] out FhSaveUi? ui) {
+        return _sm_uis.TryGetValue(id, out ui);
     }
 
-    /// <summary>Register a new save UI renderer for selection by the user.</summary>
-    /// <param name="renderer">The new renderer to register.</param>
-    public void register_renderer(FhSaveUiRenderer renderer) {
-        _sm_renderers[renderer.ModuleType] = renderer;
+    /// <summary>Register a new save UI for selection by the user.</summary>
+    /// <param name="ui">The new UI to register.</param>
+    public void register_ui(FhSaveUi ui) {
+        _sm_uis[ui.ModuleType] = ui;
     }
 
     /// <summary>Regenerate and retrieve the loadable sets.</summary>

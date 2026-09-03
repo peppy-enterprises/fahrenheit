@@ -49,10 +49,13 @@ internal sealed class FhFinder {
         string path_fh_bin  = AppContext.BaseDirectory;
         string path_fh_base = Directory.GetParent(path_fh_bin)!.FullName;
 
+        DateTimeOffset dt              = TimeProvider.System.GetUtcNow();
+        string         log_folder_name = $"{dt.Year:D2}{dt.Month:D2}{dt.Day:D2}_{dt.Hour:D2}{dt.Minute:D2}{dt.Second:D2}";
+
         Binaries = Directory.CreateDirectory(path_fh_bin);
         Config   = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_cfg));
         Mods     = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_mods));
-        Logs     = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_logs, FhUtil.get_timestamp_string()));
+        Logs     = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_logs, log_folder_name));
         State    = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_state));
         Saves    = Directory.CreateDirectory(Path.Join(path_fh_base, _dirname_saves));
     }

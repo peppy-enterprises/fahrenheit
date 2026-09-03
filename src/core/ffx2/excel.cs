@@ -13,11 +13,8 @@ namespace Fahrenheit.FFX2;
  * from player command definitions to aeon stat growth curves.
  */
 
-/// <summary>
-///     The prologue of an Excel container. Describes it in enough detail to construct a reader.
-///     <para/>
-///     To iterate over its contents, use an <see cref="ExcelReader{T}"/>.
-/// </summary>
+/// <summary>The prologue of an Excel container. Describes it in enough detail to construct a reader.</summary>
+/// <remarks>To iterate over its contents, use an <see cref="ExcelReader{T}"/>.</remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct ExcelProlog {
     /// <summary>
@@ -52,18 +49,12 @@ public struct ExcelHeader {
     /// </summary>
     public uint element_size;
 
-    /// <summary>
-    ///     The combined length, in bytes, of all the elements in the section.
-    ///     <para/>
-    ///     This does not include any text which may follow the data.
-    /// </summary>
+    /// <summary>The combined length, in bytes, of all the elements in the section.</summary>
+    /// <remarks>This does not include any text which may follow the data.</remarks>
     public uint data_length;
 
-    /// <summary>
-    ///     The offset, in bytes, from the start of the container to the start of the data.
-    ///     <para/>
-    ///     In vanilla, always equivalent to the size of this header.
-    /// </summary>
+    /// <summary>The offset, in bytes, from the start of the container to the start of the data.</summary>
+    /// <remarks>In vanilla, always equivalent to the size of this header.</remarks>
     public uint data_start;
 
     /// <summary>

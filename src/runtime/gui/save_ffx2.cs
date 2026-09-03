@@ -17,7 +17,7 @@ namespace Fahrenheit.Runtime.Gui;
 
 /// <summary>The default save UI renderer for Final Fantasy X-2/Last Mission.</summary>
 [FhLoad(FhGameId.FFX2 | FhGameId.FFX2LM)]
-public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
+public sealed class FhSaveUiX2 : FhSaveUi {
     /// <summary>Possible open windows of the save/load menu.</summary>
     private enum UiMode {
         /// <summary>The list of saves to save/load/compile from.</summary>
@@ -95,7 +95,7 @@ public sealed class FhSaveUiRendererX2 : FhSaveUiRenderer {
 
     private bool should_handle_input => !_scrollbar_dragging && _fade.is_done;
 
-    public FhSaveUiRendererX2() {
+    public FhSaveUiX2() {
         _current_scrollable = _scrollable_saves;
 
         float fade_duration = FhGlobal.game_id is FhGameId.FFX2 ? 0.35f : 0.01f;

@@ -17,7 +17,7 @@ namespace Fahrenheit.Runtime.Gui;
 
 /// <summary>The default save UI renderer for Final Fantasy X.</summary>
 [FhLoad(FhGameId.FFX)]
-public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
+public sealed class FhSaveUiX : FhSaveUi {
     /// <summary>Possible open windows of the save/load menu.</summary>
     private enum UiMode {
         /// <summary>The list of saves to save/load/compile from.</summary>
@@ -93,7 +93,7 @@ public sealed class FhSaveUiRendererX : FhSaveUiRenderer {
 
     private bool should_handle_input => !_scrollbar_dragging && _fade.is_done;
 
-    public FhSaveUiRendererX() {
+    public FhSaveUiX() {
         _current_scrollable     = _scrollable_saves;
         _savefile_border_helper = NineSliceHelper.create(
             _tex_meswin_size,

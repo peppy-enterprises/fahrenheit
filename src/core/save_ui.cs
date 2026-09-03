@@ -5,8 +5,8 @@
 
 namespace Fahrenheit;
 
-/// <summary>The base class for custom renderers of the save/load screen.</summary>
-public abstract class FhSaveUiRenderer : FhModule {
+/// <summary>The base class for custom save/load user interfaces.</summary>
+public abstract class FhSaveUi : FhModule {
     /// <summary>The helper used to scale Rects to the game's forced 16:9 aspect ratio.</summary>
     protected Rect aspect_helper;
 
@@ -38,8 +38,8 @@ public abstract class FhSaveUiRenderer : FhModule {
     protected float font_scale => float.Min(aspect_scale.X, aspect_scale.Y);
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
-        _logger.Info($"Registering new save UI renderer: {ModuleType}");
-        FhApi.Saves.register_renderer(this);
+        _logger.Info($"Registering new save UI: {ModuleType}");
+        FhApi.Saves.register_ui(this);
 
         FhApi.Events.Common.GameLoop.PostOpenSaveMenu.subscribe(post_open);
 
@@ -78,12 +78,12 @@ public abstract class FhSaveUiRenderer : FhModule {
 
     public sealed override void render_imgui() { }
 
-    /// <summary>Retrieve the reference size that is used by the renderer.</summary>
+    /// <summary>Retrieve the reference size that is used by the UI.</summary>
     /// <remarks>
-    ///     On-screen coordinates used in the renderer should first be expressed
+    ///     On-screen coordinates used in the UI should first be expressed
     ///     within these bounds, then scaled by <see cref="display_scale"/>.
     /// </remarks>
-    /// <returns>The reference size used by the renderer.</returns>
+    /// <returns>The reference size used by the UI.</returns>
     protected abstract Vector2 get_ref_size();
 
     /// <summary>Render the save UI.</summary>
