@@ -500,8 +500,8 @@ public static unsafe partial class FhCall {
         => new( new FhMethodLocation(0x387450, 0x20F500) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate byte* d_AtelGetSaveDicName(ushort arg1, uint arg2);
-    internal static FhMethodHandle<d_AtelGetSaveDicName> AtelGetSaveDicName
+    public delegate byte* d_AtelGetSaveDicName(ushort arg1, uint arg2);
+    public static FhMethodHandle<d_AtelGetSaveDicName> AtelGetSaveDicName
         => new( new FhMethodLocation(0x46C3C0, 0x326B80) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -546,7 +546,7 @@ public static unsafe partial class FhCall {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int d_brnd(int rng_idx);
     public static FhMethodHandle<d_brnd> brnd
-        => new( new FhMethodLocation(0x398900, 0x2E1290) );
+        => new( new FhMethodLocation(0x398900, 0x21E290) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_CT_Init(AtelBasicWorker* work, int* storage, AtelStack* stack);

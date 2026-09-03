@@ -1286,7 +1286,7 @@ public static partial class FhCall {
         => new( new FhMethodLocation("FFX.exe", 0x4AAAB0) );
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public unsafe delegate void d_TkMsGetRomItem(uint arg1, int* arg2);
+    public unsafe delegate PCommand* d_TkMsGetRomItem(uint arg1, int* arg2);
     public static FhMethodHandle<d_TkMsGetRomItem> TkMsGetRomItem
         => new( new FhMethodLocation("FFX.exe", 0x4AB230) );
 
