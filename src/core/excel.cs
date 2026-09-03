@@ -28,10 +28,11 @@ public struct ExcelSimplifiableTextOffset {
     public ExcelTextOffset standard;
 
     /// <summary>
-    ///     The offset to the simplified text. In Japanese, this would
-    ///     have been hiragana; in Western encodings, it has no effect.
-    ///     <para/>
-    ///     This is completely unused.
+    ///     The offset to the simplified text.
     /// </summary>
+    /// <remarks>
+    ///     In Japanese, this would have been hiragana; 
+    ///     in Western encodings, it has no effect. This is completely unused.
+    /// </remarks>
     internal ExcelTextOffset simplified;
 }

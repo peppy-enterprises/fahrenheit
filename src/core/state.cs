@@ -18,12 +18,11 @@ namespace Fahrenheit;
  * Modules also have access to an analogous 'global state' file, which is not unique per save game.
  */
 
-/// <summary>
-///     Implements the 'local state' mechanism of Fahrenheit.
-///     <para/>
+/// <summary>Implements the 'local state' mechanism of Fahrenheit.</summary>
+/// <remarks>
 ///     In your module, implement <see cref="FhModule.load_local_state(FileStream, FhLocalStateInfo)"/>
 ///     and <see cref="FhModule.save_local_state(FileStream)"/>.
-/// </summary>
+/// </remarks>
 internal sealed class FhState {
 
     /// <summary>

@@ -95,9 +95,8 @@ public readonly ref struct FhMethodLocation {
     /// <summary>
     ///     Use this constructor for member functions or vtable entries of objects, such as
     ///     <see cref="IDXGISwapChain.Present(uint, DXGI_PRESENT)"/>.
-    ///     <para/>
-    ///     Unlike other constructors, no validation is performed on the input address.
     /// </summary>
+    /// <remarks>Unlike other constructors, no validation is performed on the input address.</remarks>
     public FhMethodLocation(nint abs_addr) {
         _ptr_target = abs_addr;
     }
@@ -109,9 +108,8 @@ public readonly ref struct FhMethodLocation {
 
     /// <summary>
     ///     Gets the address of the module with the given <paramref name="module_name"/>.
-    ///     <para/>
-    ///     If the module is not loaded, the return value is zero.
     /// </summary>
+    /// <remarks> If the module is not loaded, the return value is zero.</remarks>
     private static nint get_module_addr(string module_name) {
         return _s_modules.TryGetValue(module_name, out nint ptr_module)
             ? ptr_module
@@ -121,9 +119,8 @@ public readonly ref struct FhMethodLocation {
     /// <summary>
     ///     Gets the address of a named <paramref name="export"/>
     ///     in the module at address <paramref name="module_addr"/>.
-    ///     <para/>
-    ///     If it does not exist, the return value is zero.
     /// </summary>
+    /// <remarks>If it does not exist, the return value is zero.</remarks>
     private static bool get_export(nint module_addr, string export, out nint ptr_fn) {
         var key = (module_addr, export);
 
@@ -172,11 +169,11 @@ public ref struct FhMethodHandle<T> where T : Delegate {
 
     private readonly nint _ptr_target;
 
-    /// <summary>
-    ///     A pointer to the target function. By default, this includes all hooks.
-    ///     <para/>
+    /// <summary>A pointer to the target function.</summary>
+    /// <remarks>
+    ///     By default, this includes all hooks.
     ///     To execute only part of the function's call chain, use <see cref="chain_from(T)"/>.
-    /// </summary>
+    /// </remarks>
     public T? fnptr;
 
     public FhMethodHandle(FhMethodLocation location) {

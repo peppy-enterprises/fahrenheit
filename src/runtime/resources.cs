@@ -5,11 +5,8 @@
 
 namespace Fahrenheit.Runtime;
 
-/// <summary>
-///     Loads textures and other resources at runtime.
-///     <para/>
-///     In your module, call <see cref="FhApi.Resources"/>.
-/// </summary>
+/// <summary>Loads textures and other resources at runtime.</summary>
+/// <remarks>In your module, call <see cref="FhApi.Resources"/>.</remarks>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
 [SupportedOSPlatform("windows6.1")] // To satisfy CA1416 warning about invoking D3D/DXGI API which TerraFX annotates as supported only on Windows.
 public unsafe sealed class FhResourceLoaderModule : FhModule, IFhResourceLoaderImpl, IFhPlatformUser {

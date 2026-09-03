@@ -186,11 +186,10 @@ internal unsafe struct PRedBlackTreeNode<T> where T : unmanaged {
  * RTTI inheritance graph -> +79265C
  */
 
-/// <summary>
-///     Describes a unique type in the Phyre type system- its name, size, alignment, and more.
-///     <para/>
+/// <summary>Describes a unique type in the Phyre type system- its name, size, alignment, and more.</summary>
+/// <remarks>
 ///     Classes have a derived <see cref="PClassDescriptor"/> instead, providing information about their members, layout and inheritance chain.
-/// </summary>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential, Size = 0x2C, Pack = 4)]
 internal struct PType {
     public nint            vftable;

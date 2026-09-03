@@ -154,12 +154,11 @@ internal sealed class FhLoader {
         FhInternal.Log.LogDirect($"----");
     }
 
-    /// <summary>
-    ///     Attempts to map a <see cref="AssemblyName"/> to an already loaded Fahrenheit DLL <see cref="Assembly"/>.
-    ///     <para/>
+    /// <summary>Attempts to map a <see cref="AssemblyName"/> to an already loaded Fahrenheit DLL <see cref="Assembly"/>.</summary>
+    /// <remarks>
     ///     This is because Fahrenheit mod DLLs are not permitted to bundle other mod DLLs they depend on;
     ///     whichever version of the dependency the user actually has installed will be loaded instead.
-    /// </summary>
+    /// </remarks>
     internal Assembly? get_shared_assembly(AssemblyName assembly_name) {
         if (!_load_contexts.TryGetValue(assembly_name.Name ?? "", out FhLoadContext? load_context)) return null;
 
