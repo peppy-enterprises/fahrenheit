@@ -18,28 +18,28 @@ namespace Fahrenheit.Runtime.Gui;
 ///     Implements Fahrenheit's replacement save/load user interface.
 /// </summary>
 [FhLoad(FhGameId.FFX | FhGameId.FFX2 | FhGameId.FFX2LM)]
-public sealed class FhSaveUiModule : FhModule {
-    private FhSaveUiRendererX?  _render_x;
-    private FhSaveUiRendererX2? _render_x2;
+public sealed class FhSaveUiSelector : FhModule {
+    private FhSaveUiX?  _ui_x;
+    private FhSaveUiX2? _ui_x2;
 
     private class FhSaveUiSettings {
         //TODO: Change this to a Set-based dropdown once that's created.
-        public readonly FhSettingText renderer = new("renderer", "");
+        public readonly FhSettingText selected_ui = new("selected_ui", "");
     }
 
     private readonly FhSaveUiSettings _settings = new();
 
-    public FhSaveUiModule() {
+    public FhSaveUiSelector() {
         settings = new FhSettingsCategory("fhsaveui", [
-            _settings.renderer,
+            _settings.selected_ui,
         ]);
     }
 
-    private string get_default_renderer_id() {
+    private string get_default_ui_id() {
         return FhGlobal.game_id switch {
-            FhGameId.FFX    => _render_x! .ModuleType,
+            FhGameId.FFX    => _ui_x! .ModuleType,
             FhGameId.FFX2   or
-            FhGameId.FFX2LM => _render_x2!.ModuleType,
+            FhGameId.FFX2LM => _ui_x2!.ModuleType,
 
             _ => throw new NotImplementedException(),
         };
@@ -47,14 +47,14 @@ public sealed class FhSaveUiModule : FhModule {
 
     public override bool init(FhModContext mod_context, FileStream global_state_file) {
         bool got_modules = FhGlobal.game_id switch {
-            FhGameId.FFX    => new FhModuleHandle<FhSaveUiRendererX>(this) .try_get_module(out _render_x),
+            FhGameId.FFX    => new FhModuleHandle<FhSaveUiX> (this).try_get_module(out _ui_x),
             FhGameId.FFX2   or
-            FhGameId.FFX2LM => new FhModuleHandle<FhSaveUiRendererX2>(this).try_get_module(out _render_x2),
+            FhGameId.FFX2LM => new FhModuleHandle<FhSaveUiX2>(this).try_get_module(out _ui_x2),
 
             _ => throw new NotImplementedException(),
         };
 
-        _settings.renderer.set(get_default_renderer_id());
+        _settings.selected_ui.set(get_default_ui_id());
 
         return got_modules;
     }
@@ -66,22 +66,22 @@ public sealed class FhSaveUiModule : FhModule {
             return;
         }
 
-        if (!FhApi.Saves.get_renderer(_settings.renderer.get(), out FhSaveUiRenderer? renderer)) {
-            // Previous renderer is missing (provider mod updated and broke API?)
+        if (!FhApi.Saves.get_ui(_settings.selected_ui.get(), out FhSaveUi? ui)) {
+            // Previous UI is missing (provider mod updated and broke API?)
             // So we try to fall back to default
-            _logger.Warning($"Failed to find desired renderer \"{_settings.renderer.get()}\", falling back to default.");
+            _logger.Warning($"Failed to find desired save/load UI \"{_settings.selected_ui.get()}\", falling back to default.");
 
-            _settings.renderer.set(get_default_renderer_id());
+            _settings.selected_ui.set(get_default_ui_id());
 
-            if (!FhApi.Saves.get_renderer(_settings.renderer.get(), out renderer)) {
-                // Something has gone disasterously wrong – we're missing our default renderer!
-                _logger.Error("Failed to find default renderer.");
-                throw new NotImplementedException("Failed to find default renderer.");
+            if (!FhApi.Saves.get_ui(_settings.selected_ui.get(), out ui)) {
+                // Something has gone disastrously wrong – we're missing our default UI!
+                _logger.Error("Failed to find default save/load UI.");
+                throw new NotImplementedException("Failed to find default save/load UI.");
             }
         }
 
         if (FhSavePal.pal_get_screen_state() is FhSaveScreenState.OPEN) {
-            renderer.render_ui();
+            ui.render_ui();
         }
     }
 }
