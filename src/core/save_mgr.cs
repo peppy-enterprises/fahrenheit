@@ -90,7 +90,7 @@ public sealed class FhSaves {
         _sm_sets_with_autosaves = [];
         _sm_active_set          = FhSavePal.DEFAULT_SET_NAME;
         _sm_display_data        = [];
-        _sm_user_interfaces           = [];
+        _sm_user_interfaces     = [];
 
         _sm_set_save_counts  = new() {
             { FhGameId.FFX,    [] },
