@@ -32,7 +32,8 @@ public struct ExcelSimplifiableTextOffset {
     /// </summary>
     /// <remarks>
     ///     In Japanese, this would have been hiragana; 
-    ///     in Western encodings, it has no effect. This is completely unused.
+    ///     in Western encodings, it has no effect. 
+    ///     This is completely unused.
     /// </remarks>
     internal ExcelTextOffset simplified;
 }

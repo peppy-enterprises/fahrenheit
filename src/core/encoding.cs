@@ -5,6 +5,24 @@
 
 namespace Fahrenheit;
 
+/* [fkelava 03/09/26 16:30]
+ * The game uses a custom text encoding to save space on disk. Text may contain 
+ * embedded 'ops' or commands which modify its display, reference script variables, 
+ * or expand macros. This is an encoder and decoder for all languages of FF X and 
+ * non-CJK languages of FF X-2/LM; it round-trips all original game dialogue byte-perfectly,
+ * with some additional bugfixes for things which never worked in the original.
+ * 
+ * The frontend for this functionality is DEdit.
+ * 
+ * Input to this encoder is 'DEdit' or 'Fahrenheit' text syntax. It is similar, but not identical,
+ * to text syntax in the FFXDataParser. Commands are given between curly brackets, ex. {END}.
+ * 
+ * Consult the tests and `_op_*` literals in the source below for all supported syntax elements.
+ */
+
+/// <summary>
+///     The game's supported languages.
+/// </summary>
 public enum FhLangId : byte {
     Japanese = 0,
     English  = 1,
@@ -278,8 +296,8 @@ public static class FhEncoding {
         FhLangId lang
     ) {
         return lang is FhLangId.Chinese
-                        or FhLangId.Japanese
-                        or FhLangId.Korean;
+                    or FhLangId.Japanese
+                    or FhLangId.Korean;
     }
 
     /// <summary>
@@ -513,7 +531,7 @@ public static class FhEncoding {
     }
 
     /// <summary>
-    ///     Given some DEdit syntax text in <paramref name="src"/>, computes the size of the buffer required to write all indices
+    ///     Given some text in <paramref name="src"/>, computes the size of the buffer required to write all indices
     ///     of a given <paramref name="index_type"/> necessary for the game to access that text once encoded.
     /// </summary>
     /// <remarks>
@@ -545,7 +563,7 @@ public static class FhEncoding {
     /// </summary>
     /// <remarks>
     ///     <paramref name="dest"/> must be properly sized. To obtain the correct size, perform
-    ///     <see cref="compute_index_buffer_size(in ReadOnlySpan{byte}, FhTextIndexType)"/> on the source DEdit text.
+    ///     <see cref="compute_index_buffer_size(in ReadOnlySpan{byte}, FhTextIndexType)"/> on the source text.
     /// </remarks>
     public static void write_indices(
         in ReadOnlySpan<byte> src, 
@@ -661,7 +679,7 @@ public static class FhEncoding {
     }
 
     /// <summary>
-    ///     Converts a given DEdit syntax <paramref name="expression"/>- a UTF-8 byte sequence starting with
+    ///     Converts a given <paramref name="expression"/>- a UTF-8 byte sequence starting with
     ///     U+007B and ending with U+007D- to game encoding and writes it to <paramref name="dest"/>.
     /// </summary>
     /// <returns>The number of bytes written to <paramref name="dest"/>.</returns>

@@ -109,7 +109,7 @@ public readonly ref struct FhMethodLocation {
     /// <summary>
     ///     Gets the address of the module with the given <paramref name="module_name"/>.
     /// </summary>
-    /// <remarks> If the module is not loaded, the return value is zero.</remarks>
+    /// <returns>The address of the specified module, or zero if it is not loaded.</returns>
     private static nint get_module_addr(string module_name) {
         return _s_modules.TryGetValue(module_name, out nint ptr_module)
             ? ptr_module
@@ -120,7 +120,8 @@ public readonly ref struct FhMethodLocation {
     ///     Gets the address of a named <paramref name="export"/>
     ///     in the module at address <paramref name="module_addr"/>.
     /// </summary>
-    /// <remarks>If it does not exist, the return value is zero.</remarks>
+    /// <param name="ptr_fn">The pointer to the given export, or zero if it does not exist.</param>
+    /// <returns>Whether the export exists.</returns>
     private static bool get_export(nint module_addr, string export, out nint ptr_fn) {
         var key = (module_addr, export);
 
