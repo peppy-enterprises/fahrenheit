@@ -9,7 +9,7 @@ namespace Fahrenheit.FFX;
 public struct SphereGridNodeType {
     public ExcelSimplifiableTextOffset name;
     public ExcelSimplifiableTextOffset help;
-    public byte                        sphere_effect;
+    public SphereTargets               sphere_effect;
     public T_XCommandId                ability_id;
     public ushort                      amount;
     public ushort                      icon_id;
