@@ -9,7 +9,7 @@ public unsafe static class FhUtil {
 
     /// <summary>Selects between <typeparamref name="T"/>s based on the currently executing game.</summary>
     /// <remarks>If no game is executing, throws.</remarks>
-    internal static T select<T>(T ffx, T ffx2, T ffx2lm) {
+    public static T select<T>(T ffx, T ffx2, T ffx2lm) {
         return FhGlobal.game_id switch {
             FhGameId.FFX    => ffx,
             FhGameId.FFX2   => ffx2,
